@@ -16,32 +16,32 @@ Sports Social Network Capstone Project
 
 b. Program:
 - Output of this project is a website application.
-    -There are role in this system: Customer, Place Owner, Moderator
-      -	As a customer:
-        -	On web:
-          -	Choose their favorite sport
-          -	Post question on new feed.
-          -	View all sport centers.
-          -	Order field and payment online
-          -	Read news
-        -	On mobile:
-          -	Booking playfield
-          -	View new feed.
-          -	Setting notification.
-          -	Read news.
-          -	Send notification to invite friend play together.
-      -	As a Place Owner:
-        -	On web:
-          -	Manage fields
-          -	Manage orders
-          -	Manage events
-          -	Send notification about event.
-        -	On mobile:
-          -	Manage order
-          -	Manage event
-      -	Moderator:
-        - On web:	
-          -	Manage sport news.
+  - There are role in this system: Customer, Place Owner, Moderator
+    -	As a customer:
+      -	On web:
+        -	Choose their favorite sport
+        -	Post question on new feed.
+        -	View all sport centers.
+        -	Order field and payment online
+        -	Read news
+      -	On mobile:
+        -	Booking playfield
+        -	View new feed.
+        -	Setting notification.
+        -	Read news.
+        -	Send notification to invite friend play together.
+    -	As a Place Owner:
+      -	On web:
+        -	Manage fields
+        -	Manage orders
+        -	Manage events
+        -	Send notification about event.
+      -	On mobile:
+        -	Manage order
+        -	Manage event
+    - As a Moderator:
+      - On web:	
+        -	Manage sport news.
 - Technology:
   - Programming language: C# (Visual studio 2015), Android (Android studio), HTML, CSS, JavaScript, Bootstrap, JQuery...
   - Database: SQL Server(SQL Server Enterprise 2014)
@@ -51,24 +51,26 @@ b. Program:
 - [x] Create their place on this system. They can public information such as: name, address, phone number, email, detail…
 - [x] Create field: Football field, basketball court, volleyball court, tennis court.
 - [x] Upload image about diagrams.
-- [ ] This system will help place owner draw their diagram. Base on diagram, place owner can manage field easier. 
+ 
 - [x] Each field will have status such as: Free, Ordered, Repairing, Active. 
 - [x] Set price for different time. such as: 5h-10h:100.000đ; 10h-14h:120.000 ….. 
 - [x] View report at weekend or end of month.
+- [x] View Order. Confirm order(Accept/reject).
 - [ ] Create activity.
+- [ ] This system will help place owner draw their diagram. Base on diagram, place owner can manage field easier.
 
 #### Customer:
 - [x] Choose their favorite sport. Base on their favorite sport, system will choose suitable infomation on new feed
 - [x] Read sport news.
-- [ ] View video.
-- [x] This system will have feeds. User can post on this feeds and answer on another user’s post. 
-- [ ] View the tutorial about playing sport. Each tutorial will have image and video. User can do a short test about sport knowledge.
-- [ ] This system will have a ranking system. User can get higher ranking base on num of post, num of up vote, num of answer.
+- [x] This system will have feeds. User can post on this feeds or answer on another user’s post. 
 - [x] Find field nearby
 - [x] Book field and online payment. 
 - [x] Send invite to another user.
 - [x] This system will push notification user when the time set to close.
-- [x] Setting receive invitation, receive notification
+- [x] Setting receive invitation, receive notification.
+- [ ] View video.
+- [ ] View the tutorial about playing sport. Each tutorial will have image and video. User can do a short test about sport knowledge.
+- [ ] This system will have a ranking system. User can get higher ranking base on num of post, num of up vote, num of answer.
 
 #### Moderator:
 - [x] Collect and post news about sport.
