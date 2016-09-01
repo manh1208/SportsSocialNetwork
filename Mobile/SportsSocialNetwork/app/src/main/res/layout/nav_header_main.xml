@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:paddingBottom="10sp">
+
+
+    <com.capstone.sportssocialnetwork.custom.RoundedImageView
+        android:id="@+id/iv_user_avatar"
+        android:layout_width="80sp"
+        android:layout_height="80sp"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10sp"
+        android:layout_marginTop="40sp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_default_avatar" />
+
+
+    <TextView
+        android:id="@+id/txt_user_fullname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_toRightOf="@+id/iv_user_avatar"
+        android:text="Bành Thị Tủn"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+</LinearLayout>
