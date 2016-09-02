@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SkyWeb.DatVM.Mvc;
+using SportsSocialNetwork.Models.Entities.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,10 +8,14 @@ using System.Web.Mvc;
 
 namespace SportsSocialNetwork.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public ActionResult Index()
         {
+            var service = this.Service<IAspNetUserService>();
+            var users = service.Get().ToList();
+
+
             return View();
         }
 
