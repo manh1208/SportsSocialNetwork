@@ -1,5 +1,6 @@
 package com.capstone.sportssocialnetwork.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,10 @@ public class FeedFragment extends Fragment {
     }
 
     private void prepareData() {
+        View  header= ((LayoutInflater) getActivity()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
+                R.layout.item_header_feed, null, false);
+        lvFeed.addHeaderView(header);
         adapter = new FeedAdapter(getActivity(),R.layout.item_feed,new ArrayList<Feed>());
         lvFeed.setAdapter(adapter);
     }

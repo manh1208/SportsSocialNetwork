@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="20sp"
+        android:background="#d2d2d2"></RelativeLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:text="Bạn muốn trao đổi gì?"
+        android:textColor="#b3b1b1"
+        android:textAllCaps="false"
+        android:gravity="start|center_vertical"
+        android:drawableLeft="@drawable/img_avatar_small"
+        android:paddingLeft="20sp"
+        android:drawablePadding="10sp"
+        android:paddingTop="20sp"
+        android:paddingBottom="20sp"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:text="ảnh"
+        android:textColor="#000"
+        android:textAllCaps="false"
+        android:gravity="start|center_vertical"
+        android:drawableLeft="@drawable/ic_menu_camera"
+        android:paddingLeft="170sp"
+        android:drawablePadding="10sp"
+        />
+</LinearLayout>
