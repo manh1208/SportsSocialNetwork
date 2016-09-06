@@ -1,6 +1,7 @@
 package com.capstone.sportssocialnetwork.activity;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,7 @@ import com.roughike.bottombar.OnMenuTabSelectedListener;
 
 public class MainBottomBarActivity extends AppCompatActivity {
     private FrameLayout frame_main;
+    private BottomBar bottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,7 @@ public class MainBottomBarActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Trang chủ");
         initView();
         prepareView();
-        BottomBar bottomBar = BottomBar.attach(this,savedInstanceState);
+        bottomBar = BottomBar.attach(this,savedInstanceState);
         bottomBar.setItemsFromMenu(R.menu.bottom_bar_menu, new OnMenuTabSelectedListener() {
             @Override
             public void onMenuItemSelected(@IdRes int menuItemId) {
@@ -71,6 +73,12 @@ public class MainBottomBarActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.frame_menu, new FeedFragment())
                 .commit();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        bottomBar.onSaveInstanceState(outState);
     }
 
     private void initView() {
