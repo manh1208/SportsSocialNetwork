@@ -30,4 +30,5 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     compile 'com.jakewharton:butterknife:8.4.0'
+    compile 'com.roughike:bottom-bar:1.2.1'
 }
