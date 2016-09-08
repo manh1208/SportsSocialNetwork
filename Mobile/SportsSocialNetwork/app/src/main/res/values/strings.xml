@@ -6,4 +6,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_main_bottom_bar">MainBottomBarActivity</string>
+    <string name="title_activity_post">PostActivity</string>
+    <string name="title_activity_post_detail">PostDetailActivity</string>
+    <string name="title_activity_notification">NotificationActivity</string>
+    <string name="title_activity_place_detail">PlaceDetailActivity</string>
 </resources>

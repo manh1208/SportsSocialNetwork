@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150sp"
+        android:src="@drawable/placeholder"
+        android:scaleType="centerCrop"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/btn_booking_now"
+            android:orientation="vertical"
+            android:paddingLeft="20sp"
+            android:paddingTop="20sp"
+            android:paddingBottom="20sp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phú Thọ"
+                android:textColor="#000"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phường 3 - Quận Tân Bình - TP.Hồ Chí Minh"
+                android:textColor="#000"
+                android:textSize="16sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bóng đá"
+                    android:textColor="#000"
+                    android:textSize="16sp"
+                    android:padding="8sp"
+                    android:layout_margin="2sp"
+                    android:background="@drawable/background_sport"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bóng rổ"
+                    android:textColor="#000"
+                    android:textSize="16sp"
+                    android:padding="8sp"
+                    android:layout_margin="2sp"
+                    android:background="@drawable/background_sport"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bóng chuyền"
+                    android:textColor="#000"
+                    android:textSize="16sp"
+                    android:padding="8sp"
+                    android:layout_margin="2sp"
+                    android:background="@drawable/background_sport"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_booking_now"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="2sp"
+            android:text="Đặt sân"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:textAllCaps="false"
+            android:background="@drawable/button_booking"
+            />
+    </RelativeLayout>
+</LinearLayout>

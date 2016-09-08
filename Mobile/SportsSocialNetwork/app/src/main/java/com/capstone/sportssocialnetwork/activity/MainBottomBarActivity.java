@@ -45,7 +45,7 @@ public class MainBottomBarActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_booking:
                         fragment = new BookingFragment();
-                        getSupportActionBar().setTitle("Đặt sân");
+                        getSupportActionBar().setTitle("Danh sách sân");
                         break;
                     case R.id.nav_profile:
                         fragment = new ProfileFragment();

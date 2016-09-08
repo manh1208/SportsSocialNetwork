@@ -10,22 +10,22 @@ import android.widget.Button;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.PostDetailActivity;
+import com.capstone.sportssocialnetwork.model.Comment;
 import com.capstone.sportssocialnetwork.model.Feed;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by ManhNV on 9/6/16.
  */
-public class FeedAdapter extends ArrayAdapter<Feed> {
+public class CommentAdapter extends ArrayAdapter<Comment> {
     private Context mContext;
-    private List<Feed> feeds;
+    private List<Comment> comments;
 
-    public FeedAdapter(Context context, int resource, List<Feed> objects) {
+    public CommentAdapter(Context context, int resource, List<Comment> objects) {
         super(context, resource, objects);
         mContext = context;
-        feeds = objects;
+        comments = objects;
     }
 
     @Override
@@ -35,21 +35,21 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
+//        ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_feed, parent, false);
-            viewHolder = new ViewHolder(convertView);
-            convertView.setTag(viewHolder);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_comment, parent, false);
+//            viewHolder = new ViewHolder(convertView);
+//            convertView.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+//            viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.btnComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, PostDetailActivity.class);
-                mContext.startActivity(intent);
-            }
-        });
+//        viewHolder.btnComment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(mContext, PostDetailActivity.class);
+//                mContext.startActivity(intent);
+//            }
+//        });
         return convertView;
     }
 

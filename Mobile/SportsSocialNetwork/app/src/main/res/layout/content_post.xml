@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.capstone.sportssocialnetwork.activity.PostActivity"
+    android:fitsSystemWindows="true"
+    tools:showIn="@layout/activity_post"
+    >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_answer_add_image"
+            android:layout_alignParentTop="true"
+            android:descendantFocusability="blocksDescendants"
+            android:id="@+id/crollview_answer"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <LinearLayout
+                    android:layout_alignParentTop="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/layout_avatar"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20sp"
+                 >
+                    <ImageView
+                        android:layout_width="50sp"
+                        android:layout_height="50sp"
+                        android:src="@drawable/img_default_avatar"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="20sp"
+                        android:paddingTop="5sp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Nguyễn Văn Mạnh"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:textColor="#000"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <EditText
+                    android:layout_below="@+id/layout_avatar"
+                    android:id="@+id/txt_answer_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10sp"
+                    android:background="@android:color/transparent"
+                    android:gravity="start"
+                    android:hint="Bạn muốn thảo luận gì?"
+                    android:textColor="#000"
+                    android:inputType="textMultiLine"
+                    android:minLines="1"
+                    android:maxLines="10"
+                    android:textSize="18sp"
+                    android:padding="5sp"
+                    android:textCursorDrawable="@null"
+                    android:layout_marginTop="20sp"/>
+
+                <com.capstone.sportssocialnetwork.custom.CustomImage
+                    android:id="@+id/iv_answer_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txt_answer_content"
+                    android:src="@drawable/placeholder"
+                    android:scaleType="centerCrop"
+                    android:layout_marginTop="15sp"
+                    android:layout_alignParentBottom="true"
+                    android:visibility="gone" />
+
+
+            </RelativeLayout>
+        </ScrollView>
+
+        <ImageButton
+            android:id="@+id/btn_answer_add_image"
+            android:layout_width="match_parent"
+            android:layout_height="30sp"
+            android:layout_alignParentBottom="true"
+            android:background="@null"
+            android:fitsSystemWindows="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_camera"
+            android:padding="5sp"
+            android:layout_marginBottom="20sp"/>
+</RelativeLayout>
