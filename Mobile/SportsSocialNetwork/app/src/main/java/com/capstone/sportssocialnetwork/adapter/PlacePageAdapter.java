@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.capstone.sportssocialnetwork.fragment.PlaceDetailFragment;
 import com.capstone.sportssocialnetwork.fragment.PlaceFieldFragment;
+import com.capstone.sportssocialnetwork.fragment.PlaceImageFragment;
 
 import java.util.ArrayList;
 
@@ -27,13 +28,15 @@ public class PlacePageAdapter extends FragmentPagerAdapter {
                 return new PlaceDetailFragment();
             case 1:
                 return new PlaceFieldFragment();
+            case 2:
+                return new PlaceImageFragment();
         }
         return null;
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
 
     }
 
@@ -44,6 +47,8 @@ public class PlacePageAdapter extends FragmentPagerAdapter {
                 return "Thông tin chi tiết";
             case 1:
                 return "Danh sách sân";
+            case 2:
+                return "Hình ảnh";
         }
         return "";
     }
