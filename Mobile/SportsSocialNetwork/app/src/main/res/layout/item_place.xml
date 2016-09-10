@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
     <ImageView
@@ -79,8 +80,8 @@
             android:layout_centerVertical="true"
             android:padding="2sp"
             android:text="Đặt sân"
-            android:layout_marginLeft="10sp"
-            android:layout_marginRight="10sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
             android:textAllCaps="false"
             android:background="@drawable/button_booking"
             />

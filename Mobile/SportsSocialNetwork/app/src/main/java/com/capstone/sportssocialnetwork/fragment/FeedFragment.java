@@ -1,10 +1,13 @@
 package com.capstone.sportssocialnetwork.fragment;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +33,8 @@ public class FeedFragment extends Fragment {
     private FeedAdapter adapter;
     private Button btnPost;
     private View header;
+    private SearchView searchView;
+    private SearchView.OnQueryTextListener queryTextListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +90,37 @@ public class FeedFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_feed, menu);
+        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView=null;
+        if (searchItem != null) {
+            searchView = (SearchView) searchItem.getActionView();
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+            queryTextListener = new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    Log.i("onQueryTextChange", newText);
+//                    if (newText.length()<=0){
+//                        eventAdapter.setEventList(mEvents);
+//                        flag_loading =false;
+//                    }
+////                    doSearch(newText);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    Log.i("onQueryTextSubmit", query);
+//                    doSearchAPI(query);
+                    return true;
+                }
+            };
+            searchView.setOnQueryTextListener(queryTextListener);
+            searchView.onActionViewCollapsed();
+        }
     }
 
     @Override

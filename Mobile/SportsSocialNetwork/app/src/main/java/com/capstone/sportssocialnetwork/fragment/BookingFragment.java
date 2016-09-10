@@ -100,8 +100,6 @@ public class BookingFragment extends Fragment {
         int id = item.getItemId();
         switch (id){
             case R.id.menu_filter:
-                Intent intent =  new Intent(getActivity(), PlaceDetailActivity.class);
-                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
