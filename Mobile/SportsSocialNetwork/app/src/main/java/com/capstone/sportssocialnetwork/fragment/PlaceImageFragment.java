@@ -12,31 +12,31 @@ import android.view.ViewGroup;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.adapter.PlaceDetailAdapter;
-import com.capstone.sportssocialnetwork.adapter.PlaceFieldAdapter;
+import com.capstone.sportssocialnetwork.adapter.PlaceImageAdapter;
 
 /**
- * Created by ManhNV on 9/8/16.
+ * Created by ManhNV on 9/10/16.
  */
-public class PlaceFieldFragment extends Fragment {
-    RecyclerView lvPlaceField;
+public class PlaceImageFragment extends Fragment {
+    RecyclerView lvPlaceImage;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_place_field, container, false);
+        View v = inflater.inflate(R.layout.fragment_place_image, container, false);
         initView(v);
         prepareData();
         return v;
     }
     private void prepareData() {
-        PlaceFieldAdapter adapter = new PlaceFieldAdapter(getActivity());
+        PlaceImageAdapter adapter = new PlaceImageAdapter(getActivity());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        lvPlaceField.setLayoutManager(mLayoutManager);
-        lvPlaceField.setItemAnimator(new DefaultItemAnimator());
-        lvPlaceField.setAdapter(adapter);
+        lvPlaceImage.setLayoutManager(mLayoutManager);
+        lvPlaceImage.setItemAnimator(new DefaultItemAnimator());
+        lvPlaceImage.setAdapter(adapter);
     }
 
     private void initView(View v) {
-        lvPlaceField = (RecyclerView) v.findViewById(R.id.lv_place_field);
+        lvPlaceImage = (RecyclerView) v.findViewById(R.id.lv_place_image);
     }
 }
