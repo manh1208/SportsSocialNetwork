@@ -5,11 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.capstone.sportssocialnetwork.activity.PlaceDetailActivity"
-    tools:showIn="@layout/activity_place_detail">
+    tools:context="com.capstone.sportssocialnetwork.activity.ImageViewerActivity"
+    tools:showIn="@layout/activity_image_viewer">
     <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager_place_detail"
+        android:id="@+id/viewpager_default"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </android.support.v4.view.ViewPager>
+        android:layout_height="match_parent"/>
 </RelativeLayout>

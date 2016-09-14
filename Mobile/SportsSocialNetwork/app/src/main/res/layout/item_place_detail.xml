@@ -9,7 +9,7 @@
         android:background="@drawable/background_place_detail"
         android:padding="20sp"
         android:orientation="vertical"
-        android:layout_margin="10sp">
+        android:layout_margin="20sp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Users want to see results, and they want them right now. As the options for real-time applications grow, so does the demand and the need for you, the developer, to understand the variety of tools available to give users the experience they expect and deserve. This session introduces you to the real-time web techniques available to ASP.NET developers. We take a deep dive into the groundbreaking open source project known as SignalR and demonstrate how it provides a great abstraction to lower level transports like WebSockets, which will be supported natively by IIS 8. Together with the Windows Azure Service Bus, SignalR and the cloud allow for huge scaling possibilities so your users can have collaborative, real-time web, cloud, and distributed applications that work cohesively to offer real-time user experiences."
+        android:text="Users want to see results, and they want them right now. As the options for real-time applications grow, so does the demand and the need for you, the developer, to understand the variety of tools available to give users the experience they expect and deserve. This session introduces you to the real-time web techniques available to ASP.NET developers. We take a deep dive into the groundbreaking open source project known as SignalR and demonstrate how it provides a great abstraction to lower level transports like WebSockets, which will be supported natively by IIS 8. Together with the Windows Azure Service Bus, SignalR and the cloud allow for huge scaling possibilities so your users can have collaborative, real-time web, cloud, and distributed applications that work cohesively to offer real-time user experiences.Users want to see results, and they want them right now. As the options for real-time applications grow, so does the demand and the need for you, the developer, to understand the variety of tools available to give users the experience they expect and deserve. This session introduces you to the real-time web techniques available to ASP.NET developers. We take a deep dive into the groundbreaking open source project known as SignalR and demonstrate how it provides a great abstraction to lower level transports like WebSockets, which will be supported natively by IIS 8. Together with the Windows Azure Service Bus, SignalR and the cloud allow for huge scaling possibilities so your users can have collaborative, real-time web, cloud, and distributed applications that work cohesively to offer real-time user experiences."
         android:padding="5sp"
         android:textColor="#000"
         android:textSize="18sp"
