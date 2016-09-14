@@ -37,7 +37,7 @@ public class PlaceFieldAdapter extends RecyclerView.Adapter<PlaceFieldAdapter.Pl
 
     @Override
     public int getItemCount() {
-        return 1;
+        return 15;
     }
 
     public class PlaceFieldViewHolder extends RecyclerView.ViewHolder {

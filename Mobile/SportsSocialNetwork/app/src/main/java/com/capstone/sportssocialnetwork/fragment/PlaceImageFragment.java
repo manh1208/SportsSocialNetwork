@@ -9,8 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 import com.capstone.sportssocialnetwork.R;
+import com.capstone.sportssocialnetwork.adapter.ImageAdapter;
 import com.capstone.sportssocialnetwork.adapter.PlaceDetailAdapter;
 import com.capstone.sportssocialnetwork.adapter.PlaceImageAdapter;
 
@@ -18,7 +20,7 @@ import com.capstone.sportssocialnetwork.adapter.PlaceImageAdapter;
  * Created by ManhNV on 9/10/16.
  */
 public class PlaceImageFragment extends Fragment {
-    RecyclerView lvPlaceImage;
+    GridView lvPlaceImage;
 
     @Nullable
     @Override
@@ -29,14 +31,16 @@ public class PlaceImageFragment extends Fragment {
         return v;
     }
     private void prepareData() {
-        PlaceImageAdapter adapter = new PlaceImageAdapter(getActivity());
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        lvPlaceImage.setLayoutManager(mLayoutManager);
-        lvPlaceImage.setItemAnimator(new DefaultItemAnimator());
+//        PlaceImageAdapter adapter = new PlaceImageAdapter(getActivity());
+//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+//        lvPlaceImage.setLayoutManager(mLayoutManager);
+//        lvPlaceImage.setItemAnimator(new DefaultItemAnimator());
+//        lvPlaceImage.setAdapter(adapter);
+        ImageAdapter adapter = new ImageAdapter(getActivity());
         lvPlaceImage.setAdapter(adapter);
     }
 
     private void initView(View v) {
-        lvPlaceImage = (RecyclerView) v.findViewById(R.id.lv_place_image);
+        lvPlaceImage = (GridView) v.findViewById(R.id.lv_place_image);
     }
 }

@@ -3,7 +3,6 @@ package com.capstone.sportssocialnetwork.activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,18 +12,18 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.capstone.sportssocialnetwork.R;
-import com.capstone.sportssocialnetwork.adapter.PlacePageAdapter;
+import com.capstone.sportssocialnetwork.adapter.ImageViewerAdapter;
 
-public class PlaceDetailActivity extends AppCompatActivity {
+public class ImageViewerActivity extends AppCompatActivity {
+    private String[] mThumbIds;
     private ViewPager viewPager;
-    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_place_detail);
+        setContentView(R.layout.activity_image_viewer);
+        setTitle(null);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Chảo lửa");
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,29 +31,17 @@ public class PlaceDetailActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setTitle("Chảo lửa");
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
+        int position = getIntent().getIntExtra("position", 0);
+        mThumbIds = getIntent().getStringArrayExtra("listImage");
+        viewPager = (ViewPager) findViewById(R.id.viewpager_default);
+        viewPager.setAdapter(new ImageViewerAdapter(this, viewPager, mThumbIds));
+        viewPager.setCurrentItem(position);
 
-        initView();
-        prepareData();
-
-    }
-
-    private void prepareData() {
-        PlacePageAdapter adapter = new PlacePageAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(adapter);
-        tabLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                tabLayout.setupWithViewPager(viewPager);
-            }
-        });
-    }
-
-    private void initView() {
-        tabLayout = (TabLayout) findViewById(R.id.tabs_place_detail);
-        viewPager = (ViewPager) findViewById(R.id.viewpager_place_detail);
     }
 
 }
