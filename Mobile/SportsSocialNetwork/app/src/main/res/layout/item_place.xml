@@ -41,24 +41,51 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Bóng đá"
-                    android:textColor="#000"
-                    android:textSize="16sp"
-                    android:padding="8sp"
-                    android:layout_margin="2sp"
-                    android:background="@drawable/background_sport"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Bóng rổ"
-                    android:textColor="#000"
-                    android:textSize="16sp"
-                    android:padding="8sp"
-                    android:layout_margin="2sp"
-                    android:background="@drawable/background_sport"/>
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Bóng đá"-->
+                    <!--android:textColor="#000"-->
+                    <!--android:textSize="10sp"-->
+                    <!--android:paddingLeft="10sp"-->
+                    <!--android:paddingRight="10sp"-->
+                    <!--android:paddingTop="5sp"-->
+                    <!--android:paddingBottom="5sp"-->
+                    <!--android:layout_margin="2sp"-->
+                    <!--android:background="@drawable/background_sport"/>-->
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Bóng rổ"-->
+                    <!--android:textColor="#000"-->
+                    <!--android:textSize="10sp"-->
+                    <!--android:paddingLeft="10sp"-->
+                    <!--android:paddingRight="10sp"-->
+                    <!--android:paddingTop="5sp"-->
+                    <!--android:paddingBottom="5sp"-->
+                    <!--android:layout_margin="2sp"-->
+                    <!--android:background="@drawable/background_sport"/>-->
+                <ImageView
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:src="@drawable/ic_football"
+                    android:padding="5sp"/>
+                <ImageView
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:src="@drawable/ic_basketball"
+                    android:padding="5sp"/>
+
+                <ImageView
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:src="@drawable/ic_badminton"
+                    android:padding="5sp"/>
+                <ImageView
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:src="@drawable/ic_volleyball"
+                    android:padding="5sp"/>
 
             </LinearLayout>
 
