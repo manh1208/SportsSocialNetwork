@@ -1,5 +1,6 @@
 package com.capstone.sportssocialnetwork.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,7 @@ import com.capstone.sportssocialnetwork.adapter.PlacePageAdapter;
 public class PlaceDetailActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    private FloatingActionButton fabBooking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +52,19 @@ public class PlaceDetailActivity extends AppCompatActivity {
                 tabLayout.setupWithViewPager(viewPager);
             }
         });
+        fabBooking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PlaceDetailActivity.this,BookingActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initView() {
         tabLayout = (TabLayout) findViewById(R.id.tabs_place_detail);
         viewPager = (ViewPager) findViewById(R.id.viewpager_place_detail);
+        fabBooking= (FloatingActionButton) findViewById(R.id.fab_booking);
     }
 
 }
