@@ -2,9 +2,160 @@
 @model LoginViewModel
 @{
     ViewBag.Title = "Log in";
+    Layout = "";
 }
 
-<h2>@ViewBag.Title.</h2>
+<!DOCTYPE html>
+<html class="no-js before-run" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="bootstrap admin template">
+    <meta name="author" content="">
+
+    <title>Login | SSN</title>
+
+    <link rel="apple-touch-icon" href="../../Content/assets/images/apple-touch-icon.png">
+    <link rel="shortcut icon" href="../../Content/assets/images/favicon.ico">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../../Content/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../Content/assets/css/bootstrap-extend.min.css">
+    <link rel="stylesheet" href="../../Content/assets/css/site.min.css">
+
+    <link rel="stylesheet" href="../../Content/assets/vendor/animsition/animsition.css">
+    <link rel="stylesheet" href="../../Content/assets/vendor/asscrollable/asScrollable.css">
+    <link rel="stylesheet" href="../../Content/assets/vendor/switchery/switchery.css">
+    <link rel="stylesheet" href="../../Content/assets/vendor/intro-js/introjs.css">
+    <link rel="stylesheet" href="../../Content/assets/vendor/slidepanel/slidePanel.css">
+    <link rel="stylesheet" href="../../Content/assets/vendor/flag-icon-css/flag-icon.css">
+
+
+    <!-- Page -->
+    <link rel="stylesheet" href="../../Content/assets/css/pages/login.css">
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="../../Content/assets/fonts/web-icons/web-icons.min.css">
+    <link rel="stylesheet" href="../../Content/assets/fonts/brand-icons/brand-icons.min.css">
+
+
+    <!--[if lt IE 9]>
+      <script src="../../Content/assets/vendor/html5shiv/html5shiv.min.js"></script>
+      <![endif]-->
+    <!--[if lt IE 10]>
+      <script src="../../Content/assets/vendor/media-match/media.match.min.js"></script>
+      <script src="../../Content/assets/vendor/respond/respond.min.js"></script>
+      <![endif]-->
+    <!-- Scripts -->
+    <script src="../../Content/assets/vendor/modernizr/modernizr.js"></script>
+    <script src="../../Content/assets/vendor/breakpoints/breakpoints.js"></script>
+    <script>
+    Breakpoints();
+    </script>
+</head>
+<body class="page-login layout-full">
+    <!--[if lt IE 8]>
+          <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+      <![endif]-->
+    <!-- Page -->
+    <div class="page animsition vertical-align text-center" data-animsition-in="fade-in"
+         data-animsition-out="fade-out">
+        >
+        <div class="page-content vertical-align-middle">
+            <div class="brand">
+                <img class="brand-img" src="../../Content/assets/images/logo.png" alt="...">
+                <h2 class="brand-text">SPORT SOCIAL NETWORK</h2>
+            </div>
+            <p>Đăng nhập</p>
+            <form method="post" action="login.html">
+                <div class="form-group">
+                    <label class="sr-only" for="inputName">Tài khoản</label>
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder ="Tài khoản", id= "inputName" })
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="inputPassword">Mật khẩu</label>
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Mật khẩu", id = "inputPassword" })
+                    
+                </div>
+                <div class="form-group clearfix">
+                    <div class="checkbox-custom checkbox-inline pull-left">
+                        <input type="checkbox" id="inputCheckbox" name="checkbox">
+                        <label for="inputCheckbox">Nhớ tài khoản này</label>
+                    </div>
+                    <a class="pull-right" href="forgot-password.html">Quên mật khẩu?</a>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+            </form>
+            <p>Không có tài khoản? <a href="register.html">Tạo ngay</a></p>
+
+            <footer class="page-copyright">
+                <div class="social">
+                    <a href="javascript:void(0)">
+                        <i class="icon bd-twitter" aria-hidden="true"></i>
+                    </a>
+                    <a href="javascript:void(0)">
+                        <i class="icon bd-facebook" aria-hidden="true"></i>
+                    </a>
+                    <a href="javascript:void(0)">
+                        <i class="icon bd-dribbble" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <!-- End Page -->
+    <!-- Core  -->
+    <script src="../../Content/assets/vendor/jquery/jquery.js"></script>
+    <script src="../../Content/assets/vendor/bootstrap/bootstrap.js"></script>
+    <script src="../../Content/assets/vendor/animsition/jquery.animsition.js"></script>
+    <script src="../../Content/assets/vendor/asscroll/jquery-asScroll.js"></script>
+    <script src="../../Content/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
+    <script src="../../Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
+    <script src="../../Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+
+    <!-- Plugins -->
+    <script src="../../Content/assets/vendor/switchery/switchery.min.js"></script>
+    <script src="../../Content/assets/vendor/intro-js/intro.js"></script>
+    <script src="../../Content/assets/vendor/screenfull/screenfull.js"></script>
+    <script src="../../Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
+
+    <script src="../../Content/assets/vendor/jquery-placeholder/jquery.placeholder.js"></script>
+
+    <!-- Scripts -->
+    <script src="../../Content/assets/js/core.js"></script>
+    <script src="../../Content/assets/js/site.js"></script>
+
+    <script src="../../Content/assets/js/sections/menu.js"></script>
+    <script src="../../Content/assets/js/sections/menubar.js"></script>
+    <script src="../../Content/assets/js/sections/sidebar.js"></script>
+
+    <script src="../../Content/assets/js/configs/config-colors.js"></script>
+    <script src="../../Content/assets/js/configs/config-tour.js"></script>
+
+    <script src="../../Content/assets/js/components/asscrollable.js"></script>
+    <script src="../../Content/assets/js/components/animsition.js"></script>
+    <script src="../../Content/assets/js/components/slidepanel.js"></script>
+    <script src="../../Content/assets/js/components/switchery.js"></script>
+    <script src="../../Content/assets/js/components/jquery-placeholder.js"></script>
+
+    <script>
+    (function(document, window, $) {
+      'use strict';
+
+      var Site = window.Site;
+      $(document).ready(function() {
+        Site.run();
+      });
+    })(document, window, jQuery);
+    </script>
+
+</body>
+
+</html>
+
+
+<!--<h2>@ViewBag.Title.</h2>
 <div class="row">
     <div class="col-md-8">
         <section id="loginForm">
@@ -56,7 +207,7 @@
             @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
         </section>
     </div>
-</div>
+</div>-->
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

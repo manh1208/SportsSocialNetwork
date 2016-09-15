@@ -7,3 +7,6 @@
 Web/SportsSocialNetwork/SportsSocialNetwork/Database/bin/,Web/SportsSocialNetwork/SportsSocialNetwork/Database/obj/
 Web/SportsSocialNetwork/SportsSocialNetwork/Database/bin/
 Web/SportsSocialNetwork/SportsSocialNetwork/Database/obj/
+*.txt
+/Web/SportsSocialNetwork/SportsSocialNetwork/SportsSocialNetwork/obj/Debug/edmxResourcesToEmbed/Models/Entities
+*.dbmdl
