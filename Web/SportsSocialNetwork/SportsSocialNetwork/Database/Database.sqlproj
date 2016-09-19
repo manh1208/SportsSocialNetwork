@@ -67,5 +67,33 @@
     <Build Include="dbo\Tables\AspNetUserClaims.sql" />
     <Build Include="dbo\Tables\AspNetRoles.sql" />
     <Build Include="dbo\Tables\__MigrationHistory.sql" />
+    <Build Include="dbo\Tables\UserInvitation.sql" />
+    <Build Include="dbo\Tables\User.sql" />
+    <Build Include="dbo\Tables\TimeBlock.sql" />
+    <Build Include="dbo\Tables\Sport.sql" />
+    <Build Include="dbo\Tables\Rating.sql" />
+    <Build Include="dbo\Tables\PostSport.sql" />
+    <Build Include="dbo\Tables\PostComment.sql" />
+    <Build Include="dbo\Tables\Post.sql" />
+    <Build Include="dbo\Tables\PlaceImage.sql" />
+    <Build Include="dbo\Tables\Place.sql" />
+    <Build Include="dbo\Tables\Participation.sql" />
+    <Build Include="dbo\Tables\Order.sql" />
+    <Build Include="dbo\Tables\Notification.sql" />
+    <Build Include="dbo\Tables\NewsComment.sql" />
+    <Build Include="dbo\Tables\News.sql" />
+    <Build Include="dbo\Tables\Like.sql" />
+    <Build Include="dbo\Tables\Invitation.sql" />
+    <Build Include="dbo\Tables\Hobby.sql" />
+    <Build Include="dbo\Tables\GroupMember.sql" />
+    <Build Include="dbo\Tables\Group.sql" />
+    <Build Include="dbo\Tables\Follow.sql" />
+    <Build Include="dbo\Tables\FieldType.sql" />
+    <Build Include="dbo\Tables\FieldPrice.sql" />
+    <Build Include="dbo\Tables\FieldImage.sql" />
+    <Build Include="dbo\Tables\Field.sql" />
+    <Build Include="dbo\Tables\Event.sql" />
+    <Build Include="dbo\Tables\CategorySport.sql" />
+    <Build Include="dbo\Tables\Category.sql" />
   </ItemGroup>
 </Project>

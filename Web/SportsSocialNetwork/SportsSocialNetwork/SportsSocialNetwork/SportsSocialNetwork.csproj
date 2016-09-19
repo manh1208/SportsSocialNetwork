@@ -249,9 +249,153 @@
     <Compile Include="Models\Entities\AspNetUserRefined.cs">
       <DependentUpon>EntityRefinery.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Category.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\CategoryRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\CategorySport.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\CategorySportRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Entities\EntityRefinery.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Event.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\EventRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Field.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\FieldImage.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\FieldImageRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\FieldPrice.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\FieldPriceRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\FieldRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\FieldType.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\FieldTypeRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Follow.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\FollowRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Group.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\GroupMember.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\GroupMemberRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\GroupRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Hobby.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\HobbyRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Invitation.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\InvitationRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Like.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\LikeRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\News.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\NewsComment.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\NewsCommentRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\NewsRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Notification.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\NotificationRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Order.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\OrderRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Participation.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\ParticipationRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Place.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\PlaceImage.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\PlaceImageRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\PlaceRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Post.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\PostComment.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\PostCommentRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\PostRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\PostSport.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\PostSportRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Rating.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\RatingRefined.cs">
       <DependentUpon>EntityRefinery.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Repositories\AspNetRoleRepositoryGen.cs">
@@ -266,9 +410,93 @@
     <Compile Include="Models\Entities\Repositories\AspNetUserRepositoryGen.cs">
       <DependentUpon>Repositories.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Repositories\CategoryRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\CategorySportRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\EventRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\FieldImageRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\FieldPriceRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\FieldRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\FieldTypeRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\FollowRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\GroupMemberRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\GroupRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\HobbyRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\InvitationRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\LikeRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\NewsCommentRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\NewsRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\NotificationRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\OrderRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\ParticipationRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\PlaceImageRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\PlaceRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\PostCommentRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\PostRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\PostSportRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\RatingRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Entities\Repositories\Repositories.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\SportRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\TimeBlockRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\UserInvitationRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\UserRepositoryGen.cs">
       <DependentUpon>Repositories.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Services\AspNetRoleServiceGen.cs">
@@ -283,10 +511,100 @@
     <Compile Include="Models\Entities\Services\AspNetUserServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\CategoryServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\CategorySportServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\EventServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\FieldImageServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\FieldPriceServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\FieldServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\FieldTypeServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\FollowServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\GroupMemberServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\GroupServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\HobbyServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\InvitationServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\LikeServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\NewsCommentServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\NewsServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\NotificationServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\OrderServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\ParticipationServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\PlaceImageServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\PlaceServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\PostCommentServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\PostServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\PostSportServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\RatingServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Entities\Services\Services.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\SportServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\TimeBlockServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\UserInvitationServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\UserServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Sport.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\SportRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\SsnEntities.Context.cs">
       <AutoGen>True</AutoGen>
@@ -302,6 +620,24 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SsnEntities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\TimeBlock.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\TimeBlockRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\User.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\UserInvitation.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\UserInvitationRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\UserRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FileUploader.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -2033,6 +2369,7 @@
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome-4.6.3\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\font-awesome-4.6.3\HELP-US-OUT.txt" />
+    <Content Include="Content\images\logo.png" />
     <Content Include="External Lib\SkyWeb.DatVM.Data.dll" />
     <Content Include="External Lib\SkyWeb.DatVM.Mvc.dll" />
     <Content Include="favicon.ico" />

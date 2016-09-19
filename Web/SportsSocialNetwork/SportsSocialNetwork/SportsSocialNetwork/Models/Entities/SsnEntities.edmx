@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SSNModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SSNModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -56,6 +56,342 @@
           <Property Name="AccessFailedCount" Type="int" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CategorySport">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="SportId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="int" Nullable="false" />
+          <Property Name="CreatorId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
+          <Property Name="PlaceId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Image" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="Avtive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Field">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PlaceId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="FieldTypeId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FieldImage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FieldId" Type="int" Nullable="false" />
+          <Property Name="Image" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FieldPrice">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FieldId" Type="int" Nullable="false" />
+          <Property Name="TimeBlockId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FieldType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="SportId" Type="int" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Follow">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="FollowedId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Group">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="SportId" Type="int" Nullable="false" />
+          <Property Name="CoverImage" Type="nvarchar" MaxLength="255" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
+        <EntityType Name="GroupMember">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GroupId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Admin" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Hobby">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="SportId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Invitation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SenderId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="InvitationContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateDate" Type="int" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Like">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PostId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="News">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="NewsContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Image" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
+        <EntityType Name="NewsComment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="NewsId" Type="int" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Message" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="PostId" Type="int" Nullable="false" />
+          <Property Name="InvitationId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="FieldId" Type="int" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="StartTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
+          <Property Name="Note" Type="nvarchar" MaxLength="255" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="PaidType" Type="int" />
+        </EntityType>
+        <EntityType Name="Participation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EventId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="TeamName" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Place">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="District" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Ward" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="PhoneNumber" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Latitude" Type="float" Nullable="false" />
+          <Property Name="Longitude" Type="float" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="StartTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="EndTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="Approve" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PlaceImage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PlaceId" Type="int" Nullable="false" />
+          <Property Name="Image" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="PostContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" />
+          <Property Name="Image" Type="varchar" MaxLength="255" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="GroupId" Type="int" />
+        </EntityType>
+        <EntityType Name="PostComment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="PostId" Type="int" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="Image" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PostSport">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PostId" Type="int" Nullable="false" />
+          <Property Name="SportId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rating">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="PlaceId" Type="int" Nullable="false" />
+          <Property Name="Point" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sport">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TimeBlock">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StartTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="EndTime" Type="time" Precision="7" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="District" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Ward" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="AvatarImage" Type="nvarchar" MaxLength="255" />
+          <Property Name="CoverImage" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Birthday" Type="date" Nullable="false" />
+          <Property Name="Gender" Type="int" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="RoleId" Type="int" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserInvitation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="InvitationId" Type="int" Nullable="false" />
+          <Property Name="ReciverId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Accept" Type="bit" />
+        </EntityType>
+        <Association Name="FK_AspNetUsers_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategorySport_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="CategorySport" Type="Self.CategorySport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CategorySport">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategorySport_Sport">
+          <End Role="Sport" Type="Self.Sport" Multiplicity="1" />
+          <End Role="CategorySport" Type="Self.CategorySport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sport">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CategorySport">
+              <PropertyRef Name="SportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -112,12 +448,532 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Event_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Event" Type="Self.Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="CreatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Field_FieldType">
+          <End Role="FieldType" Type="Self.FieldType" Multiplicity="1" />
+          <End Role="Field" Type="Self.Field" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FieldType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Field">
+              <PropertyRef Name="FieldTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Field_Place">
+          <End Role="Place" Type="Self.Place" Multiplicity="1" />
+          <End Role="Field" Type="Self.Field" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Place">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Field">
+              <PropertyRef Name="PlaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldImage_Field">
+          <End Role="Field" Type="Self.Field" Multiplicity="1" />
+          <End Role="FieldImage" Type="Self.FieldImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Field">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldImage">
+              <PropertyRef Name="FieldId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldPrice_Field">
+          <End Role="Field" Type="Self.Field" Multiplicity="1" />
+          <End Role="FieldPrice" Type="Self.FieldPrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Field">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldPrice">
+              <PropertyRef Name="FieldId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldPrice_TimeBlock">
+          <End Role="TimeBlock" Type="Self.TimeBlock" Multiplicity="1" />
+          <End Role="FieldPrice" Type="Self.FieldPrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TimeBlock">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldPrice">
+              <PropertyRef Name="TimeBlockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldType_Sport">
+          <End Role="Sport" Type="Self.Sport" Multiplicity="1" />
+          <End Role="FieldType" Type="Self.FieldType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sport">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldType">
+              <PropertyRef Name="SportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Follow_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Follow" Type="Self.Follow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Follow">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Follow_User1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Follow" Type="Self.Follow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Follow">
+              <PropertyRef Name="FollowedId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Group_Sport">
+          <End Role="Sport" Type="Self.Sport" Multiplicity="1" />
+          <End Role="Group" Type="Self.Group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sport">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Group">
+              <PropertyRef Name="SportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GroupMember_Group">
+          <End Role="Group" Type="Self.Group" Multiplicity="1" />
+          <End Role="GroupMember" Type="Self.GroupMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GroupMember">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GroupMember_User1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="GroupMember" Type="Self.GroupMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GroupMember">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hobby_Sport">
+          <End Role="Sport" Type="Self.Sport" Multiplicity="1" />
+          <End Role="Hobby" Type="Self.Hobby" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sport">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Hobby">
+              <PropertyRef Name="SportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hobby_User1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Hobby" Type="Self.Hobby" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Hobby">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invitation_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Invitation" Type="Self.Invitation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invitation">
+              <PropertyRef Name="SenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Like_Post">
+          <End Role="Post" Type="Self.Post" Multiplicity="1" />
+          <End Role="Like" Type="Self.Like" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Like">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Like_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Like" Type="Self.Like" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Like">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_News_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="News" Type="Self.News" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="News">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_News_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="News" Type="Self.News" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="News">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NewsComment_News">
+          <End Role="News" Type="Self.News" Multiplicity="1" />
+          <End Role="NewsComment" Type="Self.NewsComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="News">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NewsComment">
+              <PropertyRef Name="NewsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NewsComment_User1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="NewsComment" Type="Self.NewsComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NewsComment">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notification_Invitation">
+          <End Role="Invitation" Type="Self.Invitation" Multiplicity="1" />
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invitation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="InvitationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notification_Post">
+          <End Role="Post" Type="Self.Post" Multiplicity="1" />
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notification_User1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Field">
+          <End Role="Field" Type="Self.Field" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Field">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="FieldId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Participation_Event">
+          <End Role="Event" Type="Self.Event" Multiplicity="1" />
+          <End Role="Participation" Type="Self.Participation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Participation">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Participation_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Participation" Type="Self.Participation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Participation">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Place_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Place" Type="Self.Place" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Place">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PlaceImage_Place">
+          <End Role="Place" Type="Self.Place" Multiplicity="1" />
+          <End Role="PlaceImage" Type="Self.PlaceImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Place">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PlaceImage">
+              <PropertyRef Name="PlaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_Group">
+          <End Role="Group" Type="Self.Group" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostComment_Post">
+          <End Role="Post" Type="Self.Post" Multiplicity="1" />
+          <End Role="PostComment" Type="Self.PostComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PostComment">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostComment_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="PostComment" Type="Self.PostComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PostComment">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostSport_Post">
+          <End Role="Post" Type="Self.Post" Multiplicity="1" />
+          <End Role="PostSport" Type="Self.PostSport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PostSport">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostSport_Sport">
+          <End Role="Sport" Type="Self.Sport" Multiplicity="1" />
+          <End Role="PostSport" Type="Self.PostSport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sport">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PostSport">
+              <PropertyRef Name="SportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rating_Place">
+          <End Role="Place" Type="Self.Place" Multiplicity="1" />
+          <End Role="Rating" Type="Self.Rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Place">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Rating">
+              <PropertyRef Name="PlaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rating_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Rating" Type="Self.Rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Rating">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInvitation_Invitation">
+          <End Role="Invitation" Type="Self.Invitation" Multiplicity="1" />
+          <End Role="UserInvitation" Type="Self.UserInvitation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invitation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInvitation">
+              <PropertyRef Name="InvitationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInvitation_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserInvitation" Type="Self.UserInvitation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInvitation">
+              <PropertyRef Name="ReciverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="SSNModelStoreContainer">
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CategorySport" EntityType="Self.CategorySport" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Field" EntityType="Self.Field" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FieldImage" EntityType="Self.FieldImage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FieldPrice" EntityType="Self.FieldPrice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FieldType" EntityType="Self.FieldType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Follow" EntityType="Self.Follow" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Group" EntityType="Self.Group" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GroupMember" EntityType="Self.GroupMember" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Hobby" EntityType="Self.Hobby" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Invitation" EntityType="Self.Invitation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Like" EntityType="Self.Like" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="News" EntityType="Self.News" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NewsComment" EntityType="Self.NewsComment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Participation" EntityType="Self.Participation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Place" EntityType="Self.Place" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PlaceImage" EntityType="Self.PlaceImage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Post" EntityType="Self.Post" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PostComment" EntityType="Self.PostComment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PostSport" EntityType="Self.PostSport" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rating" EntityType="Self.Rating" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sport" EntityType="Self.Sport" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TimeBlock" EntityType="Self.TimeBlock" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserInvitation" EntityType="Self.UserInvitation" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AspNetUsers_User" Association="Self.FK_AspNetUsers_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategorySport_Category" Association="Self.FK_CategorySport_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="CategorySport" EntitySet="CategorySport" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategorySport_Sport" Association="Self.FK_CategorySport_Sport">
+            <End Role="Sport" EntitySet="Sport" />
+            <End Role="CategorySport" EntitySet="CategorySport" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -134,9 +990,168 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
+          <AssociationSet Name="FK_Event_User" Association="Self.FK_Event_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Event" EntitySet="Event" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Field_FieldType" Association="Self.FK_Field_FieldType">
+            <End Role="FieldType" EntitySet="FieldType" />
+            <End Role="Field" EntitySet="Field" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Field_Place" Association="Self.FK_Field_Place">
+            <End Role="Place" EntitySet="Place" />
+            <End Role="Field" EntitySet="Field" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldImage_Field" Association="Self.FK_FieldImage_Field">
+            <End Role="Field" EntitySet="Field" />
+            <End Role="FieldImage" EntitySet="FieldImage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldPrice_Field" Association="Self.FK_FieldPrice_Field">
+            <End Role="Field" EntitySet="Field" />
+            <End Role="FieldPrice" EntitySet="FieldPrice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldPrice_TimeBlock" Association="Self.FK_FieldPrice_TimeBlock">
+            <End Role="TimeBlock" EntitySet="TimeBlock" />
+            <End Role="FieldPrice" EntitySet="FieldPrice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldType_Sport" Association="Self.FK_FieldType_Sport">
+            <End Role="Sport" EntitySet="Sport" />
+            <End Role="FieldType" EntitySet="FieldType" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Follow_User" Association="Self.FK_Follow_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Follow" EntitySet="Follow" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Follow_User1" Association="Self.FK_Follow_User1">
+            <End Role="User" EntitySet="User" />
+            <End Role="Follow" EntitySet="Follow" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Group_Sport" Association="Self.FK_Group_Sport">
+            <End Role="Sport" EntitySet="Sport" />
+            <End Role="Group" EntitySet="Group" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GroupMember_Group" Association="Self.FK_GroupMember_Group">
+            <End Role="Group" EntitySet="Group" />
+            <End Role="GroupMember" EntitySet="GroupMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GroupMember_User1" Association="Self.FK_GroupMember_User1">
+            <End Role="User" EntitySet="User" />
+            <End Role="GroupMember" EntitySet="GroupMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hobby_Sport" Association="Self.FK_Hobby_Sport">
+            <End Role="Sport" EntitySet="Sport" />
+            <End Role="Hobby" EntitySet="Hobby" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hobby_User1" Association="Self.FK_Hobby_User1">
+            <End Role="User" EntitySet="User" />
+            <End Role="Hobby" EntitySet="Hobby" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invitation_User" Association="Self.FK_Invitation_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Invitation" EntitySet="Invitation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Like_Post" Association="Self.FK_Like_Post">
+            <End Role="Post" EntitySet="Post" />
+            <End Role="Like" EntitySet="Like" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Like_User" Association="Self.FK_Like_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Like" EntitySet="Like" />
+          </AssociationSet>
+          <AssociationSet Name="FK_News_Category" Association="Self.FK_News_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="News" EntitySet="News" />
+          </AssociationSet>
+          <AssociationSet Name="FK_News_User" Association="Self.FK_News_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="News" EntitySet="News" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NewsComment_News" Association="Self.FK_NewsComment_News">
+            <End Role="News" EntitySet="News" />
+            <End Role="NewsComment" EntitySet="NewsComment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NewsComment_User1" Association="Self.FK_NewsComment_User1">
+            <End Role="User" EntitySet="User" />
+            <End Role="NewsComment" EntitySet="NewsComment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_Invitation" Association="Self.FK_Notification_Invitation">
+            <End Role="Invitation" EntitySet="Invitation" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_Post" Association="Self.FK_Notification_Post">
+            <End Role="Post" EntitySet="Post" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_User1" Association="Self.FK_Notification_User1">
+            <End Role="User" EntitySet="User" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Field" Association="Self.FK_Order_Field">
+            <End Role="Field" EntitySet="Field" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_User" Association="Self.FK_Order_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Participation_Event" Association="Self.FK_Participation_Event">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="Participation" EntitySet="Participation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Participation_User" Association="Self.FK_Participation_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Participation" EntitySet="Participation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Place_User" Association="Self.FK_Place_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Place" EntitySet="Place" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PlaceImage_Place" Association="Self.FK_PlaceImage_Place">
+            <End Role="Place" EntitySet="Place" />
+            <End Role="PlaceImage" EntitySet="PlaceImage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_Group" Association="Self.FK_Post_Group">
+            <End Role="Group" EntitySet="Group" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_User" Association="Self.FK_Post_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostComment_Post" Association="Self.FK_PostComment_Post">
+            <End Role="Post" EntitySet="Post" />
+            <End Role="PostComment" EntitySet="PostComment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostComment_User" Association="Self.FK_PostComment_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="PostComment" EntitySet="PostComment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostSport_Post" Association="Self.FK_PostSport_Post">
+            <End Role="Post" EntitySet="Post" />
+            <End Role="PostSport" EntitySet="PostSport" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostSport_Sport" Association="Self.FK_PostSport_Sport">
+            <End Role="Sport" EntitySet="Sport" />
+            <End Role="PostSport" EntitySet="PostSport" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rating_Place" Association="Self.FK_Rating_Place">
+            <End Role="Place" EntitySet="Place" />
+            <End Role="Rating" EntitySet="Rating" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rating_User" Association="Self.FK_Rating_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Rating" EntitySet="Rating" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInvitation_Invitation" Association="Self.FK_UserInvitation_Invitation">
+            <End Role="Invitation" EntitySet="Invitation" />
+            <End Role="UserInvitation" EntitySet="UserInvitation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInvitation_User" Association="Self.FK_UserInvitation_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserInvitation" EntitySet="UserInvitation" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SSNModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -188,6 +1203,7 @@
           <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
           <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_AspNetUsers_User" FromRole="AspNetUser" ToRole="User" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
@@ -238,7 +1254,1108 @@
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="Categories" EntityType="SSNModel.Category" />
+          <EntitySet Name="CategorySports" EntityType="SSNModel.CategorySport" />
+          <EntitySet Name="Events" EntityType="SSNModel.Event" />
+          <EntitySet Name="Fields" EntityType="SSNModel.Field" />
+          <EntitySet Name="FieldImages" EntityType="SSNModel.FieldImage" />
+          <EntitySet Name="FieldPrices" EntityType="SSNModel.FieldPrice" />
+          <EntitySet Name="FieldTypes" EntityType="SSNModel.FieldType" />
+          <EntitySet Name="Follows" EntityType="SSNModel.Follow" />
+          <EntitySet Name="Groups" EntityType="SSNModel.Group" />
+          <EntitySet Name="GroupMembers" EntityType="SSNModel.GroupMember" />
+          <EntitySet Name="Hobbies" EntityType="SSNModel.Hobby" />
+          <EntitySet Name="Invitations" EntityType="SSNModel.Invitation" />
+          <EntitySet Name="Likes" EntityType="SSNModel.Like" />
+          <EntitySet Name="News" EntityType="SSNModel.News" />
+          <EntitySet Name="NewsComments" EntityType="SSNModel.NewsComment" />
+          <EntitySet Name="Notifications" EntityType="SSNModel.Notification" />
+          <EntitySet Name="Orders" EntityType="SSNModel.Order" />
+          <EntitySet Name="Participations" EntityType="SSNModel.Participation" />
+          <EntitySet Name="Places" EntityType="SSNModel.Place" />
+          <EntitySet Name="PlaceImages" EntityType="SSNModel.PlaceImage" />
+          <EntitySet Name="Posts" EntityType="SSNModel.Post" />
+          <EntitySet Name="PostComments" EntityType="SSNModel.PostComment" />
+          <EntitySet Name="PostSports" EntityType="SSNModel.PostSport" />
+          <EntitySet Name="Ratings" EntityType="SSNModel.Rating" />
+          <EntitySet Name="Sports" EntityType="SSNModel.Sport" />
+          <EntitySet Name="TimeBlocks" EntityType="SSNModel.TimeBlock" />
+          <EntitySet Name="Users" EntityType="SSNModel.User" />
+          <EntitySet Name="UserInvitations" EntityType="SSNModel.UserInvitation" />
+          <AssociationSet Name="FK_AspNetUsers_User" Association="SSNModel.FK_AspNetUsers_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategorySport_Category" Association="SSNModel.FK_CategorySport_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="CategorySport" EntitySet="CategorySports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_News_Category" Association="SSNModel.FK_News_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="News" EntitySet="News" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategorySport_Sport" Association="SSNModel.FK_CategorySport_Sport">
+            <End Role="Sport" EntitySet="Sports" />
+            <End Role="CategorySport" EntitySet="CategorySports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Event_User" Association="SSNModel.FK_Event_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Event" EntitySet="Events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Participation_Event" Association="SSNModel.FK_Participation_Event">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="Participation" EntitySet="Participations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Field_FieldType" Association="SSNModel.FK_Field_FieldType">
+            <End Role="FieldType" EntitySet="FieldTypes" />
+            <End Role="Field" EntitySet="Fields" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Field_Place" Association="SSNModel.FK_Field_Place">
+            <End Role="Place" EntitySet="Places" />
+            <End Role="Field" EntitySet="Fields" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldImage_Field" Association="SSNModel.FK_FieldImage_Field">
+            <End Role="Field" EntitySet="Fields" />
+            <End Role="FieldImage" EntitySet="FieldImages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldPrice_Field" Association="SSNModel.FK_FieldPrice_Field">
+            <End Role="Field" EntitySet="Fields" />
+            <End Role="FieldPrice" EntitySet="FieldPrices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Field" Association="SSNModel.FK_Order_Field">
+            <End Role="Field" EntitySet="Fields" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldPrice_TimeBlock" Association="SSNModel.FK_FieldPrice_TimeBlock">
+            <End Role="TimeBlock" EntitySet="TimeBlocks" />
+            <End Role="FieldPrice" EntitySet="FieldPrices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldType_Sport" Association="SSNModel.FK_FieldType_Sport">
+            <End Role="Sport" EntitySet="Sports" />
+            <End Role="FieldType" EntitySet="FieldTypes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Follow_User" Association="SSNModel.FK_Follow_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Follow" EntitySet="Follows" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Follow_User1" Association="SSNModel.FK_Follow_User1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Follow" EntitySet="Follows" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Group_Sport" Association="SSNModel.FK_Group_Sport">
+            <End Role="Sport" EntitySet="Sports" />
+            <End Role="Group" EntitySet="Groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GroupMember_Group" Association="SSNModel.FK_GroupMember_Group">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="GroupMember" EntitySet="GroupMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_Group" Association="SSNModel.FK_Post_Group">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GroupMember_User1" Association="SSNModel.FK_GroupMember_User1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="GroupMember" EntitySet="GroupMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hobby_Sport" Association="SSNModel.FK_Hobby_Sport">
+            <End Role="Sport" EntitySet="Sports" />
+            <End Role="Hobby" EntitySet="Hobbies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Hobby_User1" Association="SSNModel.FK_Hobby_User1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Hobby" EntitySet="Hobbies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invitation_User" Association="SSNModel.FK_Invitation_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Invitation" EntitySet="Invitations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_Invitation" Association="SSNModel.FK_Notification_Invitation">
+            <End Role="Invitation" EntitySet="Invitations" />
+            <End Role="Notification" EntitySet="Notifications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInvitation_Invitation" Association="SSNModel.FK_UserInvitation_Invitation">
+            <End Role="Invitation" EntitySet="Invitations" />
+            <End Role="UserInvitation" EntitySet="UserInvitations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Like_Post" Association="SSNModel.FK_Like_Post">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Like" EntitySet="Likes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Like_User" Association="SSNModel.FK_Like_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Like" EntitySet="Likes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_News_User" Association="SSNModel.FK_News_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="News" EntitySet="News" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NewsComment_News" Association="SSNModel.FK_NewsComment_News">
+            <End Role="News" EntitySet="News" />
+            <End Role="NewsComment" EntitySet="NewsComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NewsComment_User1" Association="SSNModel.FK_NewsComment_User1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="NewsComment" EntitySet="NewsComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_Post" Association="SSNModel.FK_Notification_Post">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Notification" EntitySet="Notifications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_User1" Association="SSNModel.FK_Notification_User1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Notification" EntitySet="Notifications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_User" Association="SSNModel.FK_Order_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Participation_User" Association="SSNModel.FK_Participation_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Participation" EntitySet="Participations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Place_User" Association="SSNModel.FK_Place_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Place" EntitySet="Places" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PlaceImage_Place" Association="SSNModel.FK_PlaceImage_Place">
+            <End Role="Place" EntitySet="Places" />
+            <End Role="PlaceImage" EntitySet="PlaceImages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rating_Place" Association="SSNModel.FK_Rating_Place">
+            <End Role="Place" EntitySet="Places" />
+            <End Role="Rating" EntitySet="Ratings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_User" Association="SSNModel.FK_Post_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostComment_Post" Association="SSNModel.FK_PostComment_Post">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="PostComment" EntitySet="PostComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostSport_Post" Association="SSNModel.FK_PostSport_Post">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="PostSport" EntitySet="PostSports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostComment_User" Association="SSNModel.FK_PostComment_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="PostComment" EntitySet="PostComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostSport_Sport" Association="SSNModel.FK_PostSport_Sport">
+            <End Role="Sport" EntitySet="Sports" />
+            <End Role="PostSport" EntitySet="PostSports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rating_User" Association="SSNModel.FK_Rating_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Rating" EntitySet="Ratings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInvitation_User" Association="SSNModel.FK_UserInvitation_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserInvitation" EntitySet="UserInvitations" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CategorySports" Relationship="SSNModel.FK_CategorySport_Category" FromRole="Category" ToRole="CategorySport" />
+          <NavigationProperty Name="News" Relationship="SSNModel.FK_News_Category" FromRole="Category" ToRole="News" />
+        </EntityType>
+        <EntityType Name="CategorySport">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="SportId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="SSNModel.FK_CategorySport_Category" FromRole="CategorySport" ToRole="Category" />
+          <NavigationProperty Name="Sport" Relationship="SSNModel.FK_CategorySport_Sport" FromRole="CategorySport" ToRole="Sport" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="Int32" Nullable="false" />
+          <Property Name="CreatorId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PlaceId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="Avtive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_Event_User" FromRole="Event" ToRole="User" />
+          <NavigationProperty Name="Participations" Relationship="SSNModel.FK_Participation_Event" FromRole="Event" ToRole="Participation" />
+        </EntityType>
+        <EntityType Name="Field">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlaceId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="FieldTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="FieldType" Relationship="SSNModel.FK_Field_FieldType" FromRole="Field" ToRole="FieldType" />
+          <NavigationProperty Name="Place" Relationship="SSNModel.FK_Field_Place" FromRole="Field" ToRole="Place" />
+          <NavigationProperty Name="FieldImages" Relationship="SSNModel.FK_FieldImage_Field" FromRole="Field" ToRole="FieldImage" />
+          <NavigationProperty Name="FieldPrices" Relationship="SSNModel.FK_FieldPrice_Field" FromRole="Field" ToRole="FieldPrice" />
+          <NavigationProperty Name="Orders" Relationship="SSNModel.FK_Order_Field" FromRole="Field" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="FieldImage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FieldId" Type="Int32" Nullable="false" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Field" Relationship="SSNModel.FK_FieldImage_Field" FromRole="FieldImage" ToRole="Field" />
+        </EntityType>
+        <EntityType Name="FieldPrice">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FieldId" Type="Int32" Nullable="false" />
+          <Property Name="TimeBlockId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Field" Relationship="SSNModel.FK_FieldPrice_Field" FromRole="FieldPrice" ToRole="Field" />
+          <NavigationProperty Name="TimeBlock" Relationship="SSNModel.FK_FieldPrice_TimeBlock" FromRole="FieldPrice" ToRole="TimeBlock" />
+        </EntityType>
+        <EntityType Name="FieldType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SportId" Type="Int32" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Fields" Relationship="SSNModel.FK_Field_FieldType" FromRole="FieldType" ToRole="Field" />
+          <NavigationProperty Name="Sport" Relationship="SSNModel.FK_FieldType_Sport" FromRole="FieldType" ToRole="Sport" />
+        </EntityType>
+        <EntityType Name="Follow">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="FollowedId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_Follow_User" FromRole="Follow" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="SSNModel.FK_Follow_User1" FromRole="Follow" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Group">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SportId" Type="Int32" Nullable="false" />
+          <Property Name="CoverImage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="Sport" Relationship="SSNModel.FK_Group_Sport" FromRole="Group" ToRole="Sport" />
+          <NavigationProperty Name="GroupMembers" Relationship="SSNModel.FK_GroupMember_Group" FromRole="Group" ToRole="GroupMember" />
+          <NavigationProperty Name="Posts" Relationship="SSNModel.FK_Post_Group" FromRole="Group" ToRole="Post" />
+        </EntityType>
+        <EntityType Name="GroupMember">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Admin" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Group" Relationship="SSNModel.FK_GroupMember_Group" FromRole="GroupMember" ToRole="Group" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_GroupMember_User1" FromRole="GroupMember" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Hobby">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="SportId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Sport" Relationship="SSNModel.FK_Hobby_Sport" FromRole="Hobby" ToRole="Sport" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_Hobby_User1" FromRole="Hobby" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Invitation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SenderId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="InvitationContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="Int32" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_Invitation_User" FromRole="Invitation" ToRole="User" />
+          <NavigationProperty Name="Notifications" Relationship="SSNModel.FK_Notification_Invitation" FromRole="Invitation" ToRole="Notification" />
+          <NavigationProperty Name="UserInvitations" Relationship="SSNModel.FK_UserInvitation_Invitation" FromRole="Invitation" ToRole="UserInvitation" />
+        </EntityType>
+        <EntityType Name="Like">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PostId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Post" Relationship="SSNModel.FK_Like_Post" FromRole="Like" ToRole="Post" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_Like_User" FromRole="Like" ToRole="User" />
+        </EntityType>
+        <EntityType Name="News">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="NewsContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="Category" Relationship="SSNModel.FK_News_Category" FromRole="News" ToRole="Category" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_News_User" FromRole="News" ToRole="User" />
+          <NavigationProperty Name="NewsComments" Relationship="SSNModel.FK_NewsComment_News" FromRole="News" ToRole="NewsComment" />
+        </EntityType>
+        <EntityType Name="NewsComment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="NewsId" Type="Int32" Nullable="false" />
+          <Property Name="Comment" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="News" Relationship="SSNModel.FK_NewsComment_News" FromRole="NewsComment" ToRole="News" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_NewsComment_User1" FromRole="NewsComment" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="PostId" Type="Int32" Nullable="false" />
+          <Property Name="InvitationId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Invitation" Relationship="SSNModel.FK_Notification_Invitation" FromRole="Notification" ToRole="Invitation" />
+          <NavigationProperty Name="Post" Relationship="SSNModel.FK_Notification_Post" FromRole="Notification" ToRole="Post" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_Notification_User1" FromRole="Notification" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="FieldId" Type="Int32" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StartTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Note" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="PaidType" Type="Int32" />
+          <NavigationProperty Name="Field" Relationship="SSNModel.FK_Order_Field" FromRole="Order" ToRole="Field" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_Order_User" FromRole="Order" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Participation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EventId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="TeamName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Event" Relationship="SSNModel.FK_Participation_Event" FromRole="Participation" ToRole="Event" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_Participation_User" FromRole="Participation" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Place">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="District" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Ward" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" Nullable="false" />
+          <Property Name="Longitude" Type="Double" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="StartTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="EndTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="Approve" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Fields" Relationship="SSNModel.FK_Field_Place" FromRole="Place" ToRole="Field" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_Place_User" FromRole="Place" ToRole="User" />
+          <NavigationProperty Name="PlaceImages" Relationship="SSNModel.FK_PlaceImage_Place" FromRole="Place" ToRole="PlaceImage" />
+          <NavigationProperty Name="Ratings" Relationship="SSNModel.FK_Rating_Place" FromRole="Place" ToRole="Rating" />
+        </EntityType>
+        <EntityType Name="PlaceImage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlaceId" Type="Int32" Nullable="false" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Place" Relationship="SSNModel.FK_PlaceImage_Place" FromRole="PlaceImage" ToRole="Place" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PostContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EditDate" Type="DateTime" Precision="3" />
+          <Property Name="Image" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="GroupId" Type="Int32" />
+          <NavigationProperty Name="Group" Relationship="SSNModel.FK_Post_Group" FromRole="Post" ToRole="Group" />
+          <NavigationProperty Name="Likes" Relationship="SSNModel.FK_Like_Post" FromRole="Post" ToRole="Like" />
+          <NavigationProperty Name="Notifications" Relationship="SSNModel.FK_Notification_Post" FromRole="Post" ToRole="Notification" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_Post_User" FromRole="Post" ToRole="User" />
+          <NavigationProperty Name="PostComments" Relationship="SSNModel.FK_PostComment_Post" FromRole="Post" ToRole="PostComment" />
+          <NavigationProperty Name="PostSports" Relationship="SSNModel.FK_PostSport_Post" FromRole="Post" ToRole="PostSport" />
+        </EntityType>
+        <EntityType Name="PostComment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PostId" Type="Int32" Nullable="false" />
+          <Property Name="Comment" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Post" Relationship="SSNModel.FK_PostComment_Post" FromRole="PostComment" ToRole="Post" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_PostComment_User" FromRole="PostComment" ToRole="User" />
+        </EntityType>
+        <EntityType Name="PostSport">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PostId" Type="Int32" Nullable="false" />
+          <Property Name="SportId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Post" Relationship="SSNModel.FK_PostSport_Post" FromRole="PostSport" ToRole="Post" />
+          <NavigationProperty Name="Sport" Relationship="SSNModel.FK_PostSport_Sport" FromRole="PostSport" ToRole="Sport" />
+        </EntityType>
+        <EntityType Name="Rating">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PlaceId" Type="Int32" Nullable="false" />
+          <Property Name="Point" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Place" Relationship="SSNModel.FK_Rating_Place" FromRole="Rating" ToRole="Place" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_Rating_User" FromRole="Rating" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Sport">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CategorySports" Relationship="SSNModel.FK_CategorySport_Sport" FromRole="Sport" ToRole="CategorySport" />
+          <NavigationProperty Name="FieldTypes" Relationship="SSNModel.FK_FieldType_Sport" FromRole="Sport" ToRole="FieldType" />
+          <NavigationProperty Name="Groups" Relationship="SSNModel.FK_Group_Sport" FromRole="Sport" ToRole="Group" />
+          <NavigationProperty Name="Hobbies" Relationship="SSNModel.FK_Hobby_Sport" FromRole="Sport" ToRole="Hobby" />
+          <NavigationProperty Name="PostSports" Relationship="SSNModel.FK_PostSport_Sport" FromRole="Sport" ToRole="PostSport" />
+        </EntityType>
+        <EntityType Name="TimeBlock">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="EndTime" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="FieldPrices" Relationship="SSNModel.FK_FieldPrice_TimeBlock" FromRole="TimeBlock" ToRole="FieldPrice" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="District" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Ward" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="AvatarImage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CoverImage" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Birthday" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Gender" Type="Int32" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="RoleId" Type="Int32" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_AspNetUsers_User" FromRole="User" ToRole="AspNetUser" />
+          <NavigationProperty Name="Events" Relationship="SSNModel.FK_Event_User" FromRole="User" ToRole="Event" />
+          <NavigationProperty Name="Follows" Relationship="SSNModel.FK_Follow_User" FromRole="User" ToRole="Follow" />
+          <NavigationProperty Name="Follows1" Relationship="SSNModel.FK_Follow_User1" FromRole="User" ToRole="Follow" />
+          <NavigationProperty Name="GroupMembers" Relationship="SSNModel.FK_GroupMember_User1" FromRole="User" ToRole="GroupMember" />
+          <NavigationProperty Name="Hobbies" Relationship="SSNModel.FK_Hobby_User1" FromRole="User" ToRole="Hobby" />
+          <NavigationProperty Name="Invitations" Relationship="SSNModel.FK_Invitation_User" FromRole="User" ToRole="Invitation" />
+          <NavigationProperty Name="Likes" Relationship="SSNModel.FK_Like_User" FromRole="User" ToRole="Like" />
+          <NavigationProperty Name="News" Relationship="SSNModel.FK_News_User" FromRole="User" ToRole="News" />
+          <NavigationProperty Name="NewsComments" Relationship="SSNModel.FK_NewsComment_User1" FromRole="User" ToRole="NewsComment" />
+          <NavigationProperty Name="Notifications" Relationship="SSNModel.FK_Notification_User1" FromRole="User" ToRole="Notification" />
+          <NavigationProperty Name="Orders" Relationship="SSNModel.FK_Order_User" FromRole="User" ToRole="Order" />
+          <NavigationProperty Name="Participations" Relationship="SSNModel.FK_Participation_User" FromRole="User" ToRole="Participation" />
+          <NavigationProperty Name="Places" Relationship="SSNModel.FK_Place_User" FromRole="User" ToRole="Place" />
+          <NavigationProperty Name="Posts" Relationship="SSNModel.FK_Post_User" FromRole="User" ToRole="Post" />
+          <NavigationProperty Name="PostComments" Relationship="SSNModel.FK_PostComment_User" FromRole="User" ToRole="PostComment" />
+          <NavigationProperty Name="Ratings" Relationship="SSNModel.FK_Rating_User" FromRole="User" ToRole="Rating" />
+          <NavigationProperty Name="UserInvitations" Relationship="SSNModel.FK_UserInvitation_User" FromRole="User" ToRole="UserInvitation" />
+        </EntityType>
+        <EntityType Name="UserInvitation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="InvitationId" Type="Int32" Nullable="false" />
+          <Property Name="ReciverId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Accept" Type="Boolean" />
+          <NavigationProperty Name="Invitation" Relationship="SSNModel.FK_UserInvitation_Invitation" FromRole="UserInvitation" ToRole="Invitation" />
+          <NavigationProperty Name="User" Relationship="SSNModel.FK_UserInvitation_User" FromRole="UserInvitation" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_AspNetUsers_User">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategorySport_Category">
+          <End Type="SSNModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="SSNModel.CategorySport" Role="CategorySport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CategorySport">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_News_Category">
+          <End Type="SSNModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="SSNModel.News" Role="News" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="News">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategorySport_Sport">
+          <End Type="SSNModel.Sport" Role="Sport" Multiplicity="1" />
+          <End Type="SSNModel.CategorySport" Role="CategorySport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sport">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CategorySport">
+              <PropertyRef Name="SportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Event_User">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.Event" Role="Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="CreatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Participation_Event">
+          <End Type="SSNModel.Event" Role="Event" Multiplicity="1" />
+          <End Type="SSNModel.Participation" Role="Participation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Participation">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Field_FieldType">
+          <End Type="SSNModel.FieldType" Role="FieldType" Multiplicity="1" />
+          <End Type="SSNModel.Field" Role="Field" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FieldType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Field">
+              <PropertyRef Name="FieldTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Field_Place">
+          <End Type="SSNModel.Place" Role="Place" Multiplicity="1" />
+          <End Type="SSNModel.Field" Role="Field" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Place">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Field">
+              <PropertyRef Name="PlaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldImage_Field">
+          <End Type="SSNModel.Field" Role="Field" Multiplicity="1" />
+          <End Type="SSNModel.FieldImage" Role="FieldImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Field">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldImage">
+              <PropertyRef Name="FieldId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldPrice_Field">
+          <End Type="SSNModel.Field" Role="Field" Multiplicity="1" />
+          <End Type="SSNModel.FieldPrice" Role="FieldPrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Field">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldPrice">
+              <PropertyRef Name="FieldId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Field">
+          <End Type="SSNModel.Field" Role="Field" Multiplicity="1" />
+          <End Type="SSNModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Field">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="FieldId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldPrice_TimeBlock">
+          <End Type="SSNModel.TimeBlock" Role="TimeBlock" Multiplicity="1" />
+          <End Type="SSNModel.FieldPrice" Role="FieldPrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TimeBlock">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldPrice">
+              <PropertyRef Name="TimeBlockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldType_Sport">
+          <End Type="SSNModel.Sport" Role="Sport" Multiplicity="1" />
+          <End Type="SSNModel.FieldType" Role="FieldType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sport">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldType">
+              <PropertyRef Name="SportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Follow_User">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.Follow" Role="Follow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Follow">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Follow_User1">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.Follow" Role="Follow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Follow">
+              <PropertyRef Name="FollowedId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Group_Sport">
+          <End Type="SSNModel.Sport" Role="Sport" Multiplicity="1" />
+          <End Type="SSNModel.Group" Role="Group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sport">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Group">
+              <PropertyRef Name="SportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GroupMember_Group">
+          <End Type="SSNModel.Group" Role="Group" Multiplicity="1" />
+          <End Type="SSNModel.GroupMember" Role="GroupMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GroupMember">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_Group">
+          <End Type="SSNModel.Group" Role="Group" Multiplicity="0..1" />
+          <End Type="SSNModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GroupMember_User1">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.GroupMember" Role="GroupMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GroupMember">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hobby_Sport">
+          <End Type="SSNModel.Sport" Role="Sport" Multiplicity="1" />
+          <End Type="SSNModel.Hobby" Role="Hobby" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sport">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Hobby">
+              <PropertyRef Name="SportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Hobby_User1">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.Hobby" Role="Hobby" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Hobby">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invitation_User">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.Invitation" Role="Invitation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Invitation">
+              <PropertyRef Name="SenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notification_Invitation">
+          <End Type="SSNModel.Invitation" Role="Invitation" Multiplicity="1" />
+          <End Type="SSNModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invitation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="InvitationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInvitation_Invitation">
+          <End Type="SSNModel.Invitation" Role="Invitation" Multiplicity="1" />
+          <End Type="SSNModel.UserInvitation" Role="UserInvitation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invitation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInvitation">
+              <PropertyRef Name="InvitationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Like_Post">
+          <End Type="SSNModel.Post" Role="Post" Multiplicity="1" />
+          <End Type="SSNModel.Like" Role="Like" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Like">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Like_User">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.Like" Role="Like" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Like">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_News_User">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.News" Role="News" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="News">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NewsComment_News">
+          <End Type="SSNModel.News" Role="News" Multiplicity="1" />
+          <End Type="SSNModel.NewsComment" Role="NewsComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="News">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NewsComment">
+              <PropertyRef Name="NewsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NewsComment_User1">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.NewsComment" Role="NewsComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NewsComment">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notification_Post">
+          <End Type="SSNModel.Post" Role="Post" Multiplicity="1" />
+          <End Type="SSNModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notification_User1">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_User">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Participation_User">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.Participation" Role="Participation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Participation">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Place_User">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.Place" Role="Place" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Place">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PlaceImage_Place">
+          <End Type="SSNModel.Place" Role="Place" Multiplicity="1" />
+          <End Type="SSNModel.PlaceImage" Role="PlaceImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Place">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PlaceImage">
+              <PropertyRef Name="PlaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rating_Place">
+          <End Type="SSNModel.Place" Role="Place" Multiplicity="1" />
+          <End Type="SSNModel.Rating" Role="Rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Place">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Rating">
+              <PropertyRef Name="PlaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_User">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostComment_Post">
+          <End Type="SSNModel.Post" Role="Post" Multiplicity="1" />
+          <End Type="SSNModel.PostComment" Role="PostComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PostComment">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostSport_Post">
+          <End Type="SSNModel.Post" Role="Post" Multiplicity="1" />
+          <End Type="SSNModel.PostSport" Role="PostSport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PostSport">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostComment_User">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.PostComment" Role="PostComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PostComment">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PostSport_Sport">
+          <End Type="SSNModel.Sport" Role="Sport" Multiplicity="1" />
+          <End Type="SSNModel.PostSport" Role="PostSport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sport">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PostSport">
+              <PropertyRef Name="SportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rating_User">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.Rating" Role="Rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Rating">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInvitation_User">
+          <End Type="SSNModel.User" Role="User" Multiplicity="1" />
+          <End Type="SSNModel.UserInvitation" Role="UserInvitation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInvitation">
+              <PropertyRef Name="ReciverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -298,6 +2415,334 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="SSNModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CategorySports">
+            <EntityTypeMapping TypeName="SSNModel.CategorySport">
+              <MappingFragment StoreEntitySet="CategorySport">
+                <ScalarProperty Name="SportId" ColumnName="SportId" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Events">
+            <EntityTypeMapping TypeName="SSNModel.Event">
+              <MappingFragment StoreEntitySet="Event">
+                <ScalarProperty Name="Avtive" ColumnName="Avtive" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="PlaceId" ColumnName="PlaceId" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="CreatorId" ColumnName="CreatorId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Fields">
+            <EntityTypeMapping TypeName="SSNModel.Field">
+              <MappingFragment StoreEntitySet="Field">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="FieldTypeId" ColumnName="FieldTypeId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PlaceId" ColumnName="PlaceId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FieldImages">
+            <EntityTypeMapping TypeName="SSNModel.FieldImage">
+              <MappingFragment StoreEntitySet="FieldImage">
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="FieldId" ColumnName="FieldId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FieldPrices">
+            <EntityTypeMapping TypeName="SSNModel.FieldPrice">
+              <MappingFragment StoreEntitySet="FieldPrice">
+                <ScalarProperty Name="TimeBlockId" ColumnName="TimeBlockId" />
+                <ScalarProperty Name="FieldId" ColumnName="FieldId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FieldTypes">
+            <EntityTypeMapping TypeName="SSNModel.FieldType">
+              <MappingFragment StoreEntitySet="FieldType">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="SportId" ColumnName="SportId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Follows">
+            <EntityTypeMapping TypeName="SSNModel.Follow">
+              <MappingFragment StoreEntitySet="Follow">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="FollowedId" ColumnName="FollowedId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Groups">
+            <EntityTypeMapping TypeName="SSNModel.Group">
+              <MappingFragment StoreEntitySet="Group">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="CoverImage" ColumnName="CoverImage" />
+                <ScalarProperty Name="SportId" ColumnName="SportId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GroupMembers">
+            <EntityTypeMapping TypeName="SSNModel.GroupMember">
+              <MappingFragment StoreEntitySet="GroupMember">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Admin" ColumnName="Admin" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Hobbies">
+            <EntityTypeMapping TypeName="SSNModel.Hobby">
+              <MappingFragment StoreEntitySet="Hobby">
+                <ScalarProperty Name="SportId" ColumnName="SportId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Invitations">
+            <EntityTypeMapping TypeName="SSNModel.Invitation">
+              <MappingFragment StoreEntitySet="Invitation">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="InvitationContent" ColumnName="InvitationContent" />
+                <ScalarProperty Name="SenderId" ColumnName="SenderId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Likes">
+            <EntityTypeMapping TypeName="SSNModel.Like">
+              <MappingFragment StoreEntitySet="Like">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="News">
+            <EntityTypeMapping TypeName="SSNModel.News">
+              <MappingFragment StoreEntitySet="News">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="NewsContent" ColumnName="NewsContent" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NewsComments">
+            <EntityTypeMapping TypeName="SSNModel.NewsComment">
+              <MappingFragment StoreEntitySet="NewsComment">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="NewsId" ColumnName="NewsId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notifications">
+            <EntityTypeMapping TypeName="SSNModel.Notification">
+              <MappingFragment StoreEntitySet="Notification">
+                <ScalarProperty Name="InvitationId" ColumnName="InvitationId" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="SSNModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="PaidType" ColumnName="PaidType" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="FieldId" ColumnName="FieldId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Participations">
+            <EntityTypeMapping TypeName="SSNModel.Participation">
+              <MappingFragment StoreEntitySet="Participation">
+                <ScalarProperty Name="TeamName" ColumnName="TeamName" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Places">
+            <EntityTypeMapping TypeName="SSNModel.Place">
+              <MappingFragment StoreEntitySet="Place">
+                <ScalarProperty Name="Approve" ColumnName="Approve" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Ward" ColumnName="Ward" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlaceImages">
+            <EntityTypeMapping TypeName="SSNModel.PlaceImage">
+              <MappingFragment StoreEntitySet="PlaceImage">
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="PlaceId" ColumnName="PlaceId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Posts">
+            <EntityTypeMapping TypeName="SSNModel.Post">
+              <MappingFragment StoreEntitySet="Post">
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="PostContent" ColumnName="PostContent" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PostComments">
+            <EntityTypeMapping TypeName="SSNModel.PostComment">
+              <MappingFragment StoreEntitySet="PostComment">
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PostSports">
+            <EntityTypeMapping TypeName="SSNModel.PostSport">
+              <MappingFragment StoreEntitySet="PostSport">
+                <ScalarProperty Name="SportId" ColumnName="SportId" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ratings">
+            <EntityTypeMapping TypeName="SSNModel.Rating">
+              <MappingFragment StoreEntitySet="Rating">
+                <ScalarProperty Name="Point" ColumnName="Point" />
+                <ScalarProperty Name="PlaceId" ColumnName="PlaceId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sports">
+            <EntityTypeMapping TypeName="SSNModel.Sport">
+              <MappingFragment StoreEntitySet="Sport">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TimeBlocks">
+            <EntityTypeMapping TypeName="SSNModel.TimeBlock">
+              <MappingFragment StoreEntitySet="TimeBlock">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="SSNModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="CoverImage" ColumnName="CoverImage" />
+                <ScalarProperty Name="AvatarImage" ColumnName="AvatarImage" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Ward" ColumnName="Ward" />
+                <ScalarProperty Name="District" ColumnName="District" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserInvitations">
+            <EntityTypeMapping TypeName="SSNModel.UserInvitation">
+              <MappingFragment StoreEntitySet="UserInvitation">
+                <ScalarProperty Name="Accept" ColumnName="Accept" />
+                <ScalarProperty Name="ReciverId" ColumnName="ReciverId" />
+                <ScalarProperty Name="InvitationId" ColumnName="InvitationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
