@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[Rating] (
+    [Id]      INT            NOT NULL,
+    [UserId]  NVARCHAR (128) NOT NULL,
+    [PlaceId] INT            NOT NULL,
+    [Point]   INT            NOT NULL,
+    CONSTRAINT [PK_Rating] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_Rating_Place] FOREIGN KEY ([PlaceId]) REFERENCES [dbo].[Place] ([Id]),
+    CONSTRAINT [FK_Rating_User] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User] ([Id])
+);
+
