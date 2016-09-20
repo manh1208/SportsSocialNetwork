@@ -1,0 +1,14 @@
+﻿CREATE TABLE [dbo].[Post] (
+    [Id]          INT            IDENTITY (1, 1) NOT NULL,
+    [UserId]      NVARCHAR (128) NOT NULL,
+    [CreateDate]  DATETIME       NOT NULL,
+    [PostContent] NVARCHAR (MAX) NOT NULL,
+    [EditDate]    DATETIME       NULL,
+    [Image]       VARCHAR (255)  NULL,
+    [Active]      BIT            NOT NULL,
+    [GroupId]     INT            NULL,
+    CONSTRAINT [PK_Post] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_Post_Group] FOREIGN KEY ([GroupId]) REFERENCES [dbo].[Group] ([Id]),
+    CONSTRAINT [FK_Post_User] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User] ([Id])
+);
+
