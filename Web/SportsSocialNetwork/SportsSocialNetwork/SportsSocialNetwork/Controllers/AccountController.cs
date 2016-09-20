@@ -141,7 +141,11 @@ namespace SportsSocialNetwork.Controllers
         {
             return View();
         }
-
+        [AllowAnonymous]
+        public ActionResult UserTimeline()
+        {
+            return View();
+        }
         //
         // POST: /Account/Register
         [HttpPost]
