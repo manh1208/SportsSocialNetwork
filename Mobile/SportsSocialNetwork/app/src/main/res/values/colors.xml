@@ -3,4 +3,7 @@
     <color name="colorPrimary">#95D7AE</color>
     <color name="colorPrimaryDark">#50765e</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorProfileFrameHeader">#F2F2F2</color>
+    <color name="colorEditProfileText">#8181F7</color>
+    <color name="colorSeparator">#E6E6E6</color>
 </resources>

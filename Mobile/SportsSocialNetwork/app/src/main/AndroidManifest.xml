@@ -35,6 +35,14 @@
         <activity
             android:name=".activity.PlaceDetailActivity"
             android:label="@string/title_activity_place_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ProfileDetailActivity"
+            android:label="@string/title_activity_profile_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:label="@string/title_activity_profile"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
