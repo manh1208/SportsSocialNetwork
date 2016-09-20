@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class RatingViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.Rating>
+    public partial class RatingViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.Rating>
     {
     	
     			public virtual int Id { get; set; }
@@ -21,7 +21,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual int Point { get; set; }
     	
     	public RatingViewModel() : base() { }
-    	public RatingViewModel(SportsSocialNetwork.Models.ViewModels.Rating entity) : base(entity) { }
+    	public RatingViewModel(SportsSocialNetwork.Models.Entities.Rating entity) : base(entity) { }
     
     }
 }

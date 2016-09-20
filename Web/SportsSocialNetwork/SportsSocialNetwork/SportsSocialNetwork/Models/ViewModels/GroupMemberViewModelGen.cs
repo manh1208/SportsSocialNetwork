@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class GroupMemberViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.GroupMember>
+    public partial class GroupMemberViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.GroupMember>
     {
     	
     			public virtual int Id { get; set; }
@@ -22,7 +22,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual int Status { get; set; }
     	
     	public GroupMemberViewModel() : base() { }
-    	public GroupMemberViewModel(SportsSocialNetwork.Models.ViewModels.GroupMember entity) : base(entity) { }
+    	public GroupMemberViewModel(SportsSocialNetwork.Models.Entities.GroupMember entity) : base(entity) { }
     
     }
 }

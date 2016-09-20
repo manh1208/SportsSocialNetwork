@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class AspNetUserLoginViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.AspNetUserLogin>
+    public partial class AspNetUserLoginViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.AspNetUserLogin>
     {
     	
     			public virtual string LoginProvider { get; set; }
@@ -20,7 +20,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string UserId { get; set; }
     	
     	public AspNetUserLoginViewModel() : base() { }
-    	public AspNetUserLoginViewModel(SportsSocialNetwork.Models.ViewModels.AspNetUserLogin entity) : base(entity) { }
+    	public AspNetUserLoginViewModel(SportsSocialNetwork.Models.Entities.AspNetUserLogin entity) : base(entity) { }
     
     }
 }

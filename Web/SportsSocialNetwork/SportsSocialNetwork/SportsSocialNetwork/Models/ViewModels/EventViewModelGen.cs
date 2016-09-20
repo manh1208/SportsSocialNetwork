@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class EventViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.Event>
+    public partial class EventViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.Event>
     {
     	
     			public virtual int Id { get; set; }
@@ -27,7 +27,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual bool Avtive { get; set; }
     	
     	public EventViewModel() : base() { }
-    	public EventViewModel(SportsSocialNetwork.Models.ViewModels.Event entity) : base(entity) { }
+    	public EventViewModel(SportsSocialNetwork.Models.Entities.Event entity) : base(entity) { }
     
     }
 }

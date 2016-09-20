@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class AspNetUserViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.AspNetUser>
+    public partial class AspNetUserViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.AspNetUser>
     {
     	
     			public virtual string Id { get; set; }
@@ -29,7 +29,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string UserName { get; set; }
     	
     	public AspNetUserViewModel() : base() { }
-    	public AspNetUserViewModel(SportsSocialNetwork.Models.ViewModels.AspNetUser entity) : base(entity) { }
+    	public AspNetUserViewModel(SportsSocialNetwork.Models.Entities.AspNetUser entity) : base(entity) { }
     
     }
 }

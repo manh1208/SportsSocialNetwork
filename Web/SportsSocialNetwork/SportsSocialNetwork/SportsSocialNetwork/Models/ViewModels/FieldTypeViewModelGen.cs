@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class FieldTypeViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.FieldType>
+    public partial class FieldTypeViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.FieldType>
     {
     	
     			public virtual int Id { get; set; }
@@ -22,7 +22,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual bool Active { get; set; }
     	
     	public FieldTypeViewModel() : base() { }
-    	public FieldTypeViewModel(SportsSocialNetwork.Models.ViewModels.FieldType entity) : base(entity) { }
+    	public FieldTypeViewModel(SportsSocialNetwork.Models.Entities.FieldType entity) : base(entity) { }
     
     }
 }

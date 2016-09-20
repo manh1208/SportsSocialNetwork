@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class LikeViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.Like>
+    public partial class LikeViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.Like>
     {
     	
     			public virtual int Id { get; set; }
@@ -21,7 +21,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual System.DateTime CreateDate { get; set; }
     	
     	public LikeViewModel() : base() { }
-    	public LikeViewModel(SportsSocialNetwork.Models.ViewModels.Like entity) : base(entity) { }
+    	public LikeViewModel(SportsSocialNetwork.Models.Entities.Like entity) : base(entity) { }
     
     }
 }

@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class ParticipationViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.Participation>
+    public partial class ParticipationViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.Participation>
     {
     	
     			public virtual int Id { get; set; }
@@ -22,7 +22,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string TeamName { get; set; }
     	
     	public ParticipationViewModel() : base() { }
-    	public ParticipationViewModel(SportsSocialNetwork.Models.ViewModels.Participation entity) : base(entity) { }
+    	public ParticipationViewModel(SportsSocialNetwork.Models.Entities.Participation entity) : base(entity) { }
     
     }
 }

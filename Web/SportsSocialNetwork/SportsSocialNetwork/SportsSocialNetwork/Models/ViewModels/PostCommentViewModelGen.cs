@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class PostCommentViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.PostComment>
+    public partial class PostCommentViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.PostComment>
     {
     	
     			public virtual int Id { get; set; }
@@ -23,7 +23,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string Image { get; set; }
     	
     	public PostCommentViewModel() : base() { }
-    	public PostCommentViewModel(SportsSocialNetwork.Models.ViewModels.PostComment entity) : base(entity) { }
+    	public PostCommentViewModel(SportsSocialNetwork.Models.Entities.PostComment entity) : base(entity) { }
     
     }
 }

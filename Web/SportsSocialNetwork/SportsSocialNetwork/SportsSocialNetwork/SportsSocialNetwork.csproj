@@ -642,6 +642,107 @@
     <Compile Include="Models\FileUploader.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ViewModels\AspNetRoleViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\AspNetUserClaimViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\AspNetUserLoginViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\AspNetUserViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\CategorySportViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\CategoryViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\EventViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\FieldImageViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\FieldPriceViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\FieldTypeViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\FieldViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\FollowViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\GroupMemberViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\GroupViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\HobbyViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\InvitationViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\LikeViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\NewsCommentViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\NewsViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\NotificationViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\OrderViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\ParticipationViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\PlaceImageViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\PlaceViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\PostCommentViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\PostSportViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\PostViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\RatingViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\SportViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\TimeBlockViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\UserInvitationViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\UserViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\ViewModels.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -2398,6 +2499,10 @@
       <DependentUpon>SsnEntities.edmx</DependentUpon>
       <LastGenOutput>SsnEntities.cs</LastGenOutput>
     </Content>
+    <Content Include="Models\ViewModels\ViewModels.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ViewModels.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\ai.0.22.19-build00125.js" />
     <Content Include="Scripts\ai.0.22.19-build00125.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -2877,7 +2982,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class NewsViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.News>
+    public partial class NewsViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.News>
     {
     	
     			public virtual int Id { get; set; }
@@ -25,7 +25,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual Nullable<bool> Active { get; set; }
     	
     	public NewsViewModel() : base() { }
-    	public NewsViewModel(SportsSocialNetwork.Models.ViewModels.News entity) : base(entity) { }
+    	public NewsViewModel(SportsSocialNetwork.Models.Entities.News entity) : base(entity) { }
     
     }
 }

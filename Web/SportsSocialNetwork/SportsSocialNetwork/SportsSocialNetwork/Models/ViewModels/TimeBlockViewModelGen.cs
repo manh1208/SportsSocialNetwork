@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class TimeBlockViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.TimeBlock>
+    public partial class TimeBlockViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.TimeBlock>
     {
     	
     			public virtual int Id { get; set; }
@@ -22,7 +22,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual bool Active { get; set; }
     	
     	public TimeBlockViewModel() : base() { }
-    	public TimeBlockViewModel(SportsSocialNetwork.Models.ViewModels.TimeBlock entity) : base(entity) { }
+    	public TimeBlockViewModel(SportsSocialNetwork.Models.Entities.TimeBlock entity) : base(entity) { }
     
     }
 }

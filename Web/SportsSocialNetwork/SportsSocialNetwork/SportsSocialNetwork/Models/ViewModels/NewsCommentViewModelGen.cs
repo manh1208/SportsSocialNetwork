@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class NewsCommentViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.NewsComment>
+    public partial class NewsCommentViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.NewsComment>
     {
     	
     			public virtual int Id { get; set; }
@@ -22,7 +22,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual System.DateTime CreateDate { get; set; }
     	
     	public NewsCommentViewModel() : base() { }
-    	public NewsCommentViewModel(SportsSocialNetwork.Models.ViewModels.NewsComment entity) : base(entity) { }
+    	public NewsCommentViewModel(SportsSocialNetwork.Models.Entities.NewsComment entity) : base(entity) { }
     
     }
 }

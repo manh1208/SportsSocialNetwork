@@ -12,14 +12,14 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class SportViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.Sport>
+    public partial class SportViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.Sport>
     {
     	
     			public virtual int Id { get; set; }
     			public virtual string Name { get; set; }
     	
     	public SportViewModel() : base() { }
-    	public SportViewModel(SportsSocialNetwork.Models.ViewModels.Sport entity) : base(entity) { }
+    	public SportViewModel(SportsSocialNetwork.Models.Entities.Sport entity) : base(entity) { }
     
     }
 }

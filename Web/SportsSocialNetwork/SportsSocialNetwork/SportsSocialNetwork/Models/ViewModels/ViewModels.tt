@@ -6,7 +6,7 @@
 
 string[] ExcludedProperties = new string[] { "Active", "CreatedTime", "UpdatedTime", };
 const string inputFile = @".\..\Entities\SsnEntities.edmx";
-const string entityNamespace = "SportsSocialNetwork.Models.ViewModels";
+const string entityNamespace = "SportsSocialNetwork.Models.Entities";
 
 var textTransform = DynamicTextTransformation.Create(this);
 var code = new CodeGenerationTools(this);

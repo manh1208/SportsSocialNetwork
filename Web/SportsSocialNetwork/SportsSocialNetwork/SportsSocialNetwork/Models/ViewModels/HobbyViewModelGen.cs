@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class HobbyViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.Hobby>
+    public partial class HobbyViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.Hobby>
     {
     	
     			public virtual int Id { get; set; }
@@ -20,7 +20,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual int SportId { get; set; }
     	
     	public HobbyViewModel() : base() { }
-    	public HobbyViewModel(SportsSocialNetwork.Models.ViewModels.Hobby entity) : base(entity) { }
+    	public HobbyViewModel(SportsSocialNetwork.Models.Entities.Hobby entity) : base(entity) { }
     
     }
 }

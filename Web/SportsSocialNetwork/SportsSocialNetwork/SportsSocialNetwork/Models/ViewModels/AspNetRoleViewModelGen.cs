@@ -12,14 +12,14 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class AspNetRoleViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.AspNetRole>
+    public partial class AspNetRoleViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.AspNetRole>
     {
     	
     			public virtual string Id { get; set; }
     			public virtual string Name { get; set; }
     	
     	public AspNetRoleViewModel() : base() { }
-    	public AspNetRoleViewModel(SportsSocialNetwork.Models.ViewModels.AspNetRole entity) : base(entity) { }
+    	public AspNetRoleViewModel(SportsSocialNetwork.Models.Entities.AspNetRole entity) : base(entity) { }
     
     }
 }

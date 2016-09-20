@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class OrderViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.Order>
+    public partial class OrderViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.Order>
     {
     	
     			public virtual int Id { get; set; }
@@ -27,7 +27,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual Nullable<int> PaidType { get; set; }
     	
     	public OrderViewModel() : base() { }
-    	public OrderViewModel(SportsSocialNetwork.Models.ViewModels.Order entity) : base(entity) { }
+    	public OrderViewModel(SportsSocialNetwork.Models.Entities.Order entity) : base(entity) { }
     
     }
 }

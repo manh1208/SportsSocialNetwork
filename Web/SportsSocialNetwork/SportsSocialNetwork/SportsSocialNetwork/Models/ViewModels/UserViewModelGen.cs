@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class UserViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.User>
+    public partial class UserViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.User>
     {
     	
     			public virtual string Id { get; set; }
@@ -29,7 +29,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual System.DateTime CreateDate { get; set; }
     	
     	public UserViewModel() : base() { }
-    	public UserViewModel(SportsSocialNetwork.Models.ViewModels.User entity) : base(entity) { }
+    	public UserViewModel(SportsSocialNetwork.Models.Entities.User entity) : base(entity) { }
     
     }
 }

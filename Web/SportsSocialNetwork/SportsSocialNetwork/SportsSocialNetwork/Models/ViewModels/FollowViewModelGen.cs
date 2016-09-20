@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class FollowViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.Follow>
+    public partial class FollowViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.Follow>
     {
     	
     			public virtual int Id { get; set; }
@@ -21,7 +21,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual System.DateTime CreateDate { get; set; }
     	
     	public FollowViewModel() : base() { }
-    	public FollowViewModel(SportsSocialNetwork.Models.ViewModels.Follow entity) : base(entity) { }
+    	public FollowViewModel(SportsSocialNetwork.Models.Entities.Follow entity) : base(entity) { }
     
     }
 }

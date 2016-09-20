@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class NotificationViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.Notification>
+    public partial class NotificationViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.Notification>
     {
     	
     			public virtual int Id { get; set; }
@@ -24,7 +24,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual int InvitationId { get; set; }
     	
     	public NotificationViewModel() : base() { }
-    	public NotificationViewModel(SportsSocialNetwork.Models.ViewModels.Notification entity) : base(entity) { }
+    	public NotificationViewModel(SportsSocialNetwork.Models.Entities.Notification entity) : base(entity) { }
     
     }
 }

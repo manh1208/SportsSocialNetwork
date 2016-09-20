@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class AspNetUserClaimViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.AspNetUserClaim>
+    public partial class AspNetUserClaimViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.AspNetUserClaim>
     {
     	
     			public virtual int Id { get; set; }
@@ -21,7 +21,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string ClaimValue { get; set; }
     	
     	public AspNetUserClaimViewModel() : base() { }
-    	public AspNetUserClaimViewModel(SportsSocialNetwork.Models.ViewModels.AspNetUserClaim entity) : base(entity) { }
+    	public AspNetUserClaimViewModel(SportsSocialNetwork.Models.Entities.AspNetUserClaim entity) : base(entity) { }
     
     }
 }

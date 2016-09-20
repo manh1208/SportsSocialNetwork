@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class PlaceViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.Place>
+    public partial class PlaceViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.Place>
     {
     	
     			public virtual int Id { get; set; }
@@ -34,7 +34,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual bool Approve { get; set; }
     	
     	public PlaceViewModel() : base() { }
-    	public PlaceViewModel(SportsSocialNetwork.Models.ViewModels.Place entity) : base(entity) { }
+    	public PlaceViewModel(SportsSocialNetwork.Models.Entities.Place entity) : base(entity) { }
     
     }
 }

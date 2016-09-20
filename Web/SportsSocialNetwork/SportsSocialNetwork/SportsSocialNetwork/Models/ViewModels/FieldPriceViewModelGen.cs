@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class FieldPriceViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.ViewModels.FieldPrice>
+    public partial class FieldPriceViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.FieldPrice>
     {
     	
     			public virtual int Id { get; set; }
@@ -20,7 +20,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual int TimeBlockId { get; set; }
     	
     	public FieldPriceViewModel() : base() { }
-    	public FieldPriceViewModel(SportsSocialNetwork.Models.ViewModels.FieldPrice entity) : base(entity) { }
+    	public FieldPriceViewModel(SportsSocialNetwork.Models.Entities.FieldPrice entity) : base(entity) { }
     
     }
 }
