@@ -5,41 +5,40 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="1ef6b5014db2481fa81222318175090b" Name="Diagram1" ZoomLevel="114">
-        <EntityTypeShape EntityType="SSNModel.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.AspNetUser" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
-        <AssociationConnector Association="SSNModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.AspNetUserRoles" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="SSNModel.Category" Width="1.5" PointX="3.75" PointY="51.375" />
-        <EntityTypeShape EntityType="SSNModel.CategorySport" Width="1.5" PointX="8" PointY="29.5" />
-        <EntityTypeShape EntityType="SSNModel.Event" Width="1.5" PointX="3" PointY="37.125" />
-        <EntityTypeShape EntityType="SSNModel.Field" Width="1.5" PointX="5.25" PointY="32.25" />
-        <EntityTypeShape EntityType="SSNModel.FieldImage" Width="1.5" PointX="7.5" PointY="35.75" />
-        <EntityTypeShape EntityType="SSNModel.FieldPrice" Width="1.5" PointX="7.5" PointY="32.875" />
-        <EntityTypeShape EntityType="SSNModel.FieldType" Width="1.5" PointX="3" PointY="27.625" />
-        <EntityTypeShape EntityType="SSNModel.Follow" Width="1.5" PointX="3" PointY="41.25" />
-        <EntityTypeShape EntityType="SSNModel.Group" Width="1.5" PointX="3.75" PointY="47.75" />
-        <EntityTypeShape EntityType="SSNModel.GroupMember" Width="1.5" PointX="6" PointY="2.25" />
-        <EntityTypeShape EntityType="SSNModel.Hobby" Width="1.5" PointX="3" PointY="3.375" />
-        <EntityTypeShape EntityType="SSNModel.Invitation" Width="1.5" PointX="3" PointY="44.125" />
-        <EntityTypeShape EntityType="SSNModel.Like" Width="1.5" PointX="6" PointY="10.375" />
-        <EntityTypeShape EntityType="SSNModel.News" Width="1.5" PointX="3" PointY="8.875" />
-        <EntityTypeShape EntityType="SSNModel.NewsComment" Width="1.5" PointX="11.25" PointY="6.875" />
-        <EntityTypeShape EntityType="SSNModel.Notification" Width="1.5" PointX="11.25" PointY="23.875" />
-        <EntityTypeShape EntityType="SSNModel.Order" Width="1.5" PointX="9" PointY="0.75" />
-        <EntityTypeShape EntityType="SSNModel.Participation" Width="1.5" PointX="5.25" PointY="22" />
-        <EntityTypeShape EntityType="SSNModel.Place" Width="1.5" PointX="3" PointY="31.375" />
-        <EntityTypeShape EntityType="SSNModel.PlaceImage" Width="1.5" PointX="5.25" PointY="40" />
-        <EntityTypeShape EntityType="SSNModel.Post" Width="1.5" PointX="9" PointY="10.5" />
-        <EntityTypeShape EntityType="SSNModel.PostComment" Width="1.5" PointX="14.25" PointY="7.875" />
-        <EntityTypeShape EntityType="SSNModel.PostSport" Width="1.5" PointX="11.25" PointY="11.375" />
-        <EntityTypeShape EntityType="SSNModel.Rating" Width="1.5" PointX="5.25" PointY="19.125" />
-        <EntityTypeShape EntityType="SSNModel.Sport" Width="1.5" PointX="3.75" PointY="15.625" />
-        <EntityTypeShape EntityType="SSNModel.TimeBlock" Width="1.5" PointX="5.25" PointY="28.75" />
-        <EntityTypeShape EntityType="SSNModel.User" Width="1.5" PointX="0.75" PointY="4" />
-        <EntityTypeShape EntityType="SSNModel.UserInvitation" Width="1.5" PointX="5.25" PointY="25.25" />
+        <EntityTypeShape EntityType="SSNModel.AspNetRole" Width="1.5" PointX="0.75" PointY="33.375" />
+        <EntityTypeShape EntityType="SSNModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="22" />
+        <EntityTypeShape EntityType="SSNModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="48.75" />
+        <EntityTypeShape EntityType="SSNModel.AspNetUser" Width="1.5" PointX="3" PointY="32.125" />
+        <EntityTypeShape EntityType="SSNModel.Category" Width="1.5" PointX="0.75" PointY="22.25" />
+        <EntityTypeShape EntityType="SSNModel.CategorySport" Width="1.5" PointX="6.75" PointY="19.125" />
+        <EntityTypeShape EntityType="SSNModel.Event" Width="1.5" PointX="3" PointY="48" />
+        <EntityTypeShape EntityType="SSNModel.Field" Width="1.5" PointX="5.25" PointY="52.875" />
+        <EntityTypeShape EntityType="SSNModel.FieldImage" Width="1.5" PointX="7.5" PointY="56.375" />
+        <EntityTypeShape EntityType="SSNModel.FieldPrice" Width="1.5" PointX="7.5" PointY="53.625" />
+        <EntityTypeShape EntityType="SSNModel.FieldType" Width="1.5" PointX="3" PointY="44.375" />
+        <EntityTypeShape EntityType="SSNModel.Follow" Width="1.5" PointX="3" PointY="61.125" />
+        <EntityTypeShape EntityType="SSNModel.Group" Width="1.5" PointX="3.75" PointY="17.875" />
+        <EntityTypeShape EntityType="SSNModel.GroupMember" Width="1.5" PointX="6" PointY="25" />
+        <EntityTypeShape EntityType="SSNModel.Hobby" Width="1.5" PointX="6" PointY="28.25" />
+        <EntityTypeShape EntityType="SSNModel.Invitation" Width="1.5" PointX="3" PointY="57.875" />
+        <EntityTypeShape EntityType="SSNModel.Like" Width="1.5" PointX="8.25" PointY="29.375" />
+        <EntityTypeShape EntityType="SSNModel.News" Width="1.5" PointX="3" PointY="23.625" />
+        <EntityTypeShape EntityType="SSNModel.NewsComment" Width="1.5" PointX="8.25" PointY="26" />
+        <EntityTypeShape EntityType="SSNModel.Notification" Width="1.5" PointX="8.25" PointY="41.625" />
+        <EntityTypeShape EntityType="SSNModel.Order" Width="1.5" PointX="3" PointY="27.5" />
+        <EntityTypeShape EntityType="SSNModel.Participation" Width="1.5" PointX="5.25" PointY="37.375" />
+        <EntityTypeShape EntityType="SSNModel.Place" Width="1.5" PointX="3" PointY="52.125" />
+        <EntityTypeShape EntityType="SSNModel.PlaceImage" Width="1.5" PointX="5.25" PointY="60.75" />
+        <EntityTypeShape EntityType="SSNModel.Post" Width="1.5" PointX="6" PointY="31.375" />
+        <EntityTypeShape EntityType="SSNModel.PostComment" Width="1.5" PointX="11.25" PointY="29.125" />
+        <EntityTypeShape EntityType="SSNModel.PostSport" Width="1.5" PointX="8.25" PointY="33.25" />
+        <EntityTypeShape EntityType="SSNModel.Rating" Width="1.5" PointX="5.25" PointY="41.375" />
+        <EntityTypeShape EntityType="SSNModel.Sport" Width="1.5" PointX="1.5" PointY="18" />
+        <EntityTypeShape EntityType="SSNModel.TimeBlock" Width="1.5" PointX="5.25" PointY="57.5" />
+        <EntityTypeShape EntityType="SSNModel.User" Width="1.5" PointX="0.75" PointY="25.875" />
+        <EntityTypeShape EntityType="SSNModel.UserInvitation" Width="1.5" PointX="5.25" PointY="45" />
+        <AssociationConnector Association="SSNModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="SSNModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="SSNModel.FK_AspNetUsers_User" />
         <AssociationConnector Association="SSNModel.FK_CategorySport_Category" />
         <AssociationConnector Association="SSNModel.FK_News_Category" />
@@ -83,6 +82,7 @@
         <AssociationConnector Association="SSNModel.FK_PostSport_Sport" />
         <AssociationConnector Association="SSNModel.FK_Rating_User" />
         <AssociationConnector Association="SSNModel.FK_UserInvitation_User" />
+        <AssociationConnector Association="SSNModel.AspNetUserRoles" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
