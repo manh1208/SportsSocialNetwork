@@ -10,3 +10,4 @@ Web/SportsSocialNetwork/SportsSocialNetwork/Database/obj/
 *.txt
 /Web/SportsSocialNetwork/SportsSocialNetwork/SportsSocialNetwork/obj/Debug/edmxResourcesToEmbed/Models/Entities
 *.dbmdl
+Web/SportsSocialNetwork/SportsSocialNetwork/.vs/config/applicationhost.config
