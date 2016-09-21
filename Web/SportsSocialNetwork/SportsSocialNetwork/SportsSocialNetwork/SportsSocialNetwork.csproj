@@ -218,8 +218,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\FieldController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PlaceController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -523,6 +525,7 @@
     <Compile Include="Models\Entities\Services\FieldPriceServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\FieldService.cs" />
     <Compile Include="Models\Entities\Services\FieldServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -565,6 +568,7 @@
     <Compile Include="Models\Entities\Services\PlaceImageServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\PlaceService.cs" />
     <Compile Include="Models\Entities\Services\PlaceServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -629,6 +633,7 @@
     </Compile>
     <Compile Include="Models\FileUploader.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\JQueryDataTableParamModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ViewModels\AspNetRoleViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
@@ -2966,10 +2971,13 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Place\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-  </ItemGroup>
+    <Folder Include="Models\ViewModels\" />
+    <Folder Include="Views\Field\" />
+ </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />

@@ -1,0 +1,137 @@
+﻿@model IEnumerable<SportsSocialNetwork.Models.Entities.Place>
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    .table_image{
+    float: left;
+    width: 210px;
+    height: 160px;
+    text-align: center;
+    }
+    .table_text{
+    float: left;
+    width: 410px;
+    margin-left: 10px;
+    }
+    .table_text_title{
+    height: 40px;
+    font-weight: bold;
+    font-size: 25px;
+    }
+    .table_text_des1{
+    height: 80px;
+    }
+    .table_text_des2{
+    height: 40px;
+    }
+</style>
+<h2>Index</h2>
+<table class="table table-bordered table-striped table-fixed-header dataTable no-footer" id="listPlaceTable">
+    <thead>
+        <tr>
+            <th></th>
+            <th>DANH SÁCH SÂN</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script>
+    console.log("aaa");
+    function RefreshTable() {
+        var oTable = $("#listPlaceTable").dataTable();
+        oTable._fnPageChange(0);
+        oTable._fnAjaxUpdate();
+
+    }
+
+    function InitDatatable() {
+        $("#listPlaceTable").DataTable({
+            "bRetrieve": true,
+            "bServerSide": true,
+            "bScrollCollapse": true,
+            "bSort": true,
+            "sAjaxSource": "/Place/GetData",
+            "bProcessing": true,
+            "fnServerParams": function (aoData) {
+                aoData.push();
+            },
+            "aLengthMenu": [10, 20, 100],
+            "oLanguage": {
+                "sSearch": "Tìm kiếm:",
+                "sZeroRecords": "Không có dữ liệu phù hợp",
+                "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
+                "sEmptyTable": "Không có dữ liệu",
+                "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
+                "sLengthMenu": "Hiển thị _MENU_ dòng",
+                "sProcessing": "Đang xử lý..."
+            },
+            "aoColumnDefs": [
+                {
+                     //"sWidth" : "10%",
+                     "aTargets": [0],
+                     "bVisible": false,
+                     "bSortable": false,
+                     "mRender": function (data, type, o) {
+                         return o[0];
+
+                     }
+                 },
+                 {
+                     //"sWidth" : "10%",
+                     "aTargets": [1],
+                     "bSortable": false,
+                     "mRender": function (data, type, o) {
+                         return "<div class='table_image'><img src='" + o[1] + "' height='160' width='210'></div><div class='table_text'>" +
+                             "<div class='table_text_title'>" + o[2] + "</div><div class='table_text_des1'>" + o[3] + "</div><div class='table_text_des2'>"
+                             + 0[4] + "</div></div>";
+
+                     }
+                 },
+                 {
+                     //"sWidth" : "10%",
+                     "aTargets": [2],
+                     "bVisible": false,
+                     "bSortable": false,
+                     "mRender": function (data, type, o) {
+                         return o[2];
+                     }
+                 },
+                 {
+                     //"sWidth" : "10%",
+                     "aTargets": [3],
+                     "bSortable": false,
+                     "bVisible": false,
+                     "mRender": function (data, type, o) {
+                         return o[3];
+
+                     }
+                 },
+                  {
+                      //"sWidth" : "10%",
+                      "aTargets": [4],
+                      "bSortable": false,
+                      "bVisible": false,
+                      "mRender": function (data, type, o) {
+                          return o[4];
+
+                      }
+                  }
+            ],
+            "bAutoWidth": false
+
+        });
+    }
+
+    $(document).ready(function () {
+        InitDatatable();
+        RefreshTable();
+    });
+</script>
+
+
