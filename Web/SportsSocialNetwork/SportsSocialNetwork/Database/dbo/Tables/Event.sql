@@ -10,6 +10,8 @@
     [Status]      INT            NOT NULL,
     [Avtive]      BIT            NOT NULL,
     CONSTRAINT [PK_Event] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Event_User] FOREIGN KEY ([CreatorId]) REFERENCES [dbo].[User] ([Id])
+    CONSTRAINT [FK_Event_AspNetUsers] FOREIGN KEY ([CreatorId]) REFERENCES [dbo].[AspNetUsers] ([Id])
 );
+
+
 

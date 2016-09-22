@@ -17,6 +17,8 @@
     [EndTime]     TIME (7)       NOT NULL,
     [Approve]     BIT            NOT NULL,
     CONSTRAINT [PK_Place] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Place_User] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User] ([Id])
+    CONSTRAINT [FK_Place_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id])
 );
+
+
 

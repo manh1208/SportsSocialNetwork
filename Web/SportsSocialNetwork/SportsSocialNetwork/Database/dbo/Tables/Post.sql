@@ -8,7 +8,9 @@
     [Active]      BIT            NOT NULL,
     [GroupId]     INT            NULL,
     CONSTRAINT [PK_Post] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Post_Group] FOREIGN KEY ([GroupId]) REFERENCES [dbo].[Group] ([Id]),
-    CONSTRAINT [FK_Post_User] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User] ([Id])
+    CONSTRAINT [FK_Post_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id]),
+    CONSTRAINT [FK_Post_Group] FOREIGN KEY ([GroupId]) REFERENCES [dbo].[Group] ([Id])
 );
+
+
 

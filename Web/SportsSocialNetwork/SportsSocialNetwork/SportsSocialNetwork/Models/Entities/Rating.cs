@@ -22,15 +22,15 @@ public partial class Rating
 
     public string UserId { get; set; }
 
-    public int PlaceId { get; set; }
+    public Nullable<int> PlaceId { get; set; }
 
     public int Point { get; set; }
 
 
 
-    public virtual Place Place { get; set; }
+    public virtual AspNetUser AspNetUser { get; set; }
 
-    public virtual User User { get; set; }
+    public virtual Place Place { get; set; }
 
 }
 

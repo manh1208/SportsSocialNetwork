@@ -28,9 +28,7 @@ public partial class Follow
 
 
 
-    public virtual User User { get; set; }
-
-    public virtual User User1 { get; set; }
+    public virtual AspNetUser AspNetUser { get; set; }
 
 }
 

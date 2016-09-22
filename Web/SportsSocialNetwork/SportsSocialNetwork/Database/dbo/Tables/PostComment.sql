@@ -6,7 +6,9 @@
     [CreateDate] DATETIME       NOT NULL,
     [Image]      VARCHAR (255)  NOT NULL,
     CONSTRAINT [PK_PostComment] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_PostComment_Post] FOREIGN KEY ([PostId]) REFERENCES [dbo].[Post] ([Id]),
-    CONSTRAINT [FK_PostComment_User] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User] ([Id])
+    CONSTRAINT [FK_PostComment_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id]),
+    CONSTRAINT [FK_PostComment_Post1] FOREIGN KEY ([PostId]) REFERENCES [dbo].[Post] ([Id])
 );
+
+
 

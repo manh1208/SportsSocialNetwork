@@ -17,7 +17,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     	
     			public virtual int Id { get; set; }
     			public virtual string UserId { get; set; }
-    			public virtual int PlaceId { get; set; }
+    			public virtual Nullable<int> PlaceId { get; set; }
     			public virtual int Point { get; set; }
     	
     	public RatingViewModel() : base() { }

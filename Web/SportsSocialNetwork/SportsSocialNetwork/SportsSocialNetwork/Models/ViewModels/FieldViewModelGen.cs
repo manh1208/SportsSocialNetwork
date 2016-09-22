@@ -17,7 +17,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     	
     			public virtual int Id { get; set; }
     			public virtual int PlaceId { get; set; }
-    			public virtual int Name { get; set; }
+    			public virtual string Name { get; set; }
     			public virtual int Status { get; set; }
     			public virtual int FieldTypeId { get; set; }
     			public virtual string Description { get; set; }

@@ -35,7 +35,7 @@ public partial class Field
 
     public int PlaceId { get; set; }
 
-    public int Name { get; set; }
+    public string Name { get; set; }
 
     public int Status { get; set; }
 
