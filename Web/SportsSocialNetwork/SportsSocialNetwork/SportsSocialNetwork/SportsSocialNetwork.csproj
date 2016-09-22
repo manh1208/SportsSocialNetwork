@@ -496,9 +496,6 @@
     <Compile Include="Models\Entities\Repositories\UserInvitationRepositoryGen.cs">
       <DependentUpon>Repositories.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Entities\Repositories\UserRepositoryGen.cs">
-      <DependentUpon>Repositories.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Entities\Services\AspNetRoleServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -597,9 +594,6 @@
     <Compile Include="Models\Entities\Services\UserInvitationServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Entities\Services\UserServiceGen.cs">
-      <DependentUpon>Services.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Entities\Sport.cs">
       <DependentUpon>SsnEntities.tt</DependentUpon>
     </Compile>
@@ -627,16 +621,10 @@
     <Compile Include="Models\Entities\TimeBlockRefined.cs">
       <DependentUpon>EntityRefinery.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Entities\User.cs">
-      <DependentUpon>SsnEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Entities\UserInvitation.cs">
       <DependentUpon>SsnEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\UserInvitationRefined.cs">
-      <DependentUpon>EntityRefinery.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Entities\UserRefined.cs">
       <DependentUpon>EntityRefinery.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FileUploader.cs" />
@@ -733,9 +721,6 @@
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\UserInvitationViewModelGen.cs">
-      <DependentUpon>ViewModels.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ViewModels\UserViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\ViewModels.cs">
