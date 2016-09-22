@@ -11,9 +11,20 @@
     [LockoutEnabled]       BIT            NOT NULL,
     [AccessFailedCount]    INT            NOT NULL,
     [UserName]             NVARCHAR (256) NOT NULL,
-    CONSTRAINT [PK_dbo.AspNetUsers] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_AspNetUsers_User] FOREIGN KEY ([Id]) REFERENCES [dbo].[User] ([Id])
+    [Address]              NVARCHAR (255) NULL,
+    [City]                 NVARCHAR (255) NULL,
+    [District]             NVARCHAR (255) NULL,
+    [Ward]                 NVARCHAR (255) NULL,
+    [AvatarImage]          NVARCHAR (255) NULL,
+    [CoverImage]           NVARCHAR (255) NULL,
+    [Birthday]             DATE           NULL,
+    [Gender]               INT            NULL,
+    [CreateDate]           DATETIME       NOT NULL,
+    [Active]               BIT            NOT NULL,
+    CONSTRAINT [PK_dbo.AspNetUsers] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

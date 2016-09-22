@@ -30,9 +30,9 @@ public partial class NewsComment
 
 
 
-    public virtual News News { get; set; }
+    public virtual AspNetUser AspNetUser { get; set; }
 
-    public virtual User User { get; set; }
+    public virtual News News { get; set; }
 
 }
 

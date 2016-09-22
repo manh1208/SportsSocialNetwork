@@ -5,6 +5,8 @@
     [CreateDate]        INT            NOT NULL,
     [Active]            BIT            NOT NULL,
     CONSTRAINT [PK_Invitation] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Invitation_User] FOREIGN KEY ([SenderId]) REFERENCES [dbo].[User] ([Id])
+    CONSTRAINT [FK_Invitation_AspNetUsers] FOREIGN KEY ([SenderId]) REFERENCES [dbo].[AspNetUsers] ([Id])
 );
+
+
 

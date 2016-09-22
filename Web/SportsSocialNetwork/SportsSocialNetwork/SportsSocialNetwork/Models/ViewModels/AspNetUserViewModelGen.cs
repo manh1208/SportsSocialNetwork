@@ -27,6 +27,16 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual bool LockoutEnabled { get; set; }
     			public virtual int AccessFailedCount { get; set; }
     			public virtual string UserName { get; set; }
+    			public virtual string Address { get; set; }
+    			public virtual string City { get; set; }
+    			public virtual string District { get; set; }
+    			public virtual string Ward { get; set; }
+    			public virtual string AvatarImage { get; set; }
+    			public virtual string CoverImage { get; set; }
+    			public virtual Nullable<System.DateTime> Birthday { get; set; }
+    			public virtual Nullable<int> Gender { get; set; }
+    			public virtual System.DateTime CreateDate { get; set; }
+    			public virtual bool Active { get; set; }
     	
     	public AspNetUserViewModel() : base() { }
     	public AspNetUserViewModel(SportsSocialNetwork.Models.Entities.AspNetUser entity) : base(entity) { }

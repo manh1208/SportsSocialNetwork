@@ -92,8 +92,6 @@ public partial class SSNEntities : DbContext
 
     public virtual DbSet<TimeBlock> TimeBlocks { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
-
     public virtual DbSet<UserInvitation> UserInvitations { get; set; }
 
 }

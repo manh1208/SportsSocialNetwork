@@ -45,9 +45,9 @@ public partial class News
 
 
 
-    public virtual Category Category { get; set; }
+    public virtual AspNetUser AspNetUser { get; set; }
 
-    public virtual User User { get; set; }
+    public virtual Category Category { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 

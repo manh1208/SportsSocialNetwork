@@ -40,9 +40,9 @@ public partial class Order
 
 
 
-    public virtual Field Field { get; set; }
+    public virtual AspNetUser AspNetUser { get; set; }
 
-    public virtual User User { get; set; }
+    public virtual Field Field { get; set; }
 
 }
 

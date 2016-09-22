@@ -30,9 +30,9 @@ public partial class Participation
 
 
 
-    public virtual Event Event { get; set; }
+    public virtual AspNetUser AspNetUser { get; set; }
 
-    public virtual User User { get; set; }
+    public virtual Event Event { get; set; }
 
 }
 

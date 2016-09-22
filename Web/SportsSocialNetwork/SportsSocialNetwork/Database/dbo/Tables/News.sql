@@ -8,7 +8,9 @@
     [CategoryId]  INT            NOT NULL,
     [Active]      BIT            NULL,
     CONSTRAINT [PK_News] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_News_Category] FOREIGN KEY ([CategoryId]) REFERENCES [dbo].[Category] ([Id]),
-    CONSTRAINT [FK_News_User] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User] ([Id])
+    CONSTRAINT [FK_News_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id]),
+    CONSTRAINT [FK_News_Category] FOREIGN KEY ([CategoryId]) REFERENCES [dbo].[Category] ([Id])
 );
+
+
 

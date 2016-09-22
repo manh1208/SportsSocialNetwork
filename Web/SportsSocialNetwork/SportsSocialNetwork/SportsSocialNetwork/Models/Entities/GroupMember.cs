@@ -32,8 +32,6 @@ public partial class GroupMember
 
     public virtual Group Group { get; set; }
 
-    public virtual User User { get; set; }
-
 }
 
 }

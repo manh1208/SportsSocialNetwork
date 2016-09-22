@@ -28,9 +28,9 @@ public partial class UserInvitation
 
 
 
-    public virtual Invitation Invitation { get; set; }
+    public virtual AspNetUser AspNetUser { get; set; }
 
-    public virtual User User { get; set; }
+    public virtual Invitation Invitation { get; set; }
 
 }
 
