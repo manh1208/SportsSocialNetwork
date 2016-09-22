@@ -1,5 +1,6 @@
 ﻿using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,6 @@ namespace SportsSocialNetwork.Controllers
         {
             var service = this.Service<IAspNetUserService>();
             var users = service.Get().ToList();
-
-
             return View();
         }
 
@@ -24,6 +23,12 @@ namespace SportsSocialNetwork.Controllers
             ViewBag.Message = "Your application description page.";
 
             return View();
+        }
+
+        public JsonResult VietNam()
+        {
+            Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
+            return Json(vietnam, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Contact()
