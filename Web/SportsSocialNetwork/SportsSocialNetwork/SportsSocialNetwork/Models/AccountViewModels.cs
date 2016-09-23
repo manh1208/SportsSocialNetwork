@@ -49,13 +49,12 @@ namespace SportsSocialNetwork.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "Tên đăng nhập")]     
+        public string Username { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Mật khẩu")]
         public string Password { get; set; }
 
         [Display(Name = "Remember me?")]
@@ -64,9 +63,14 @@ namespace SportsSocialNetwork.Models
 
     public class RegisterViewModel
     {
+        public string UserID { get; set; }
         [Required]
-        [EmailAddress]
+        [Display(Name = "Username")]
+        public string Username { get; set; }
+
+        [Required]
         [Display(Name = "Email")]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Required]

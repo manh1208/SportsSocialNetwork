@@ -9,18 +9,25 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using SportsSocialNetwork.Models;
+using SportsSocialNetwork.Models.Entities;
+using SportsSocialNetwork.Models.Entities.Services;
+using SkyWeb.DatVM.Mvc;
 
 namespace SportsSocialNetwork.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
+        
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
         public AccountController()
         {
+            
         }
+
+        
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
         {
@@ -66,6 +73,7 @@ namespace SportsSocialNetwork.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        //use this func
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
@@ -75,7 +83,7 @@ namespace SportsSocialNetwork.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -90,6 +98,9 @@ namespace SportsSocialNetwork.Controllers
                     return View(model);
             }
         }
+
+
+        
 
         //
         // GET: /Account/VerifyCode
@@ -134,6 +145,7 @@ namespace SportsSocialNetwork.Controllers
             }
         }
 
+       
         //
         // GET: /Account/Register
         [AllowAnonymous]
@@ -149,28 +161,40 @@ namespace SportsSocialNetwork.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
+                var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
+                //User _newUser = new User()
+                //{
+                //    Id = user.Id,
+                //    CreateDate = DateTime.Now,
+                //};
+                //var userService = this.Service<IUserService>();
+                //userService.Create(_newUser);
+                var result =  UserManager.Create(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                //    var userService = this.Service<IAspNetUserService>();
+                //    User _newUser = userService.
+
+
+                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Login");
                 }
                 AddErrors(result);
             }
 
-            // If we got this far, something failed, redisplay form
+            //// If we got this far, something failed, redisplay form
             return View(model);
-        }
+                }
 
         //
         // GET: /Account/ConfirmEmail
