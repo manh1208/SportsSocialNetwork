@@ -1,0 +1,365 @@
+﻿@model List<SportsSocialNetwork.Models.Entities.Place>
+@{
+    ViewBag.Title = "Index";
+    //listCity
+    List<SelectListItem> listCities = new List<SelectListItem>();
+    listCities.Add(new SelectListItem
+    {
+        Text = "Hồ Chí Minh",
+        Value = "Ho Chi Minh"
+    });
+    listCities.Add(new SelectListItem
+    {
+        Text = "Hà Nội",
+        Value = "Ha Noi",
+        Selected = true
+    });
+    listCities.Add(new SelectListItem
+    {
+        Text = "Đà Nẵng",
+        Value = "Da Nang"
+    });
+
+    //listDistrict
+    List<SelectListItem> listDistricts = new List<SelectListItem>();
+    listDistricts.Add(new SelectListItem
+    {
+        Text = "Quận 1",
+        Value = "Quan 1"
+    });
+    listDistricts.Add(new SelectListItem
+    {
+        Text = "Quận 2",
+        Value = "Quan 2",
+        Selected = true
+    });
+    listDistricts.Add(new SelectListItem
+    {
+        Text = "Quận 3",
+        Value = "Quan 3"
+    });
+
+    //listWard
+    List<SelectListItem> listWards = new List<SelectListItem>();
+    listWards.Add(new SelectListItem
+    {
+        Text = "Phường 1",
+        Value = "Phuong 1"
+    });
+    listWards.Add(new SelectListItem
+    {
+        Text = "Phường 2",
+        Value = "Phuong 2",
+        Selected = true
+    });
+    listWards.Add(new SelectListItem
+    {
+        Text = "Phường 3",
+        Value = "Phuong 2"
+    });
+}
+
+<a href="/PlaceOwner/Place/CreatePlace" class="btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> Tạo mới địa điểm</a>
+
+<div>
+    <table class="table table-striped" id="listPlaceTable">
+        <thead>
+            <tr>
+                <th>Tên địa điểm</th>
+                <th>Trạng thái</th>
+                <th>Chi tiết</th>
+                <th><a href="" class="btn btn-info"><i class="icon wb-pencil" aria-hidden="true"></i>Chi tiết</a></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    function RefreshTable() {
+        var oTable = $("#listPlaceTable").dataTable();
+        oTable._fnPageChange(0);
+        oTable._fnAjaxUpdate();
+    }
+
+    function InitDatatable() {
+        $("#listBlogPostTable").DataTable({
+            "bRetrieve": true,
+            "bServerSide": true,
+            "bScrollCollapse": true,
+            "bSort": true,
+            "sAjaxSource": "/PlaceOwner/Place/getData",
+            "bProcessing": true,
+            "fnServerParams": function (aoData) {
+                aoData.push({ "name": "id", "value": @ViewBag.storeId });
+            },
+            "aLengthMenu": [10, 20, 100],
+            "oLanguage": {
+                "sSearch": "Tìm kiếm:",
+                "sZeroRecords": "Không có dữ liệu phù hợp",
+                "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
+                "sEmptyTable": "Không có dữ liệu",
+                "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
+                "sLengthMenu": "Hiển thị _MENU_ dòng",
+                "sProcessing": "Đang xử lý..."
+            },
+            "fnDrawCallback": function (settings) {
+                $(':checkbox').change(function () {
+                    if ($(this).prop('checked') == true) {
+                        $.ajax({
+                            url: "/BlogPostManage/@ViewBag.storeId/@ViewBag.storeName/BlogPost/ChangeStatus",
+                            type: 'POST',
+                            data: {
+                                'blogPostId': $(this).val(),
+                                'status': 'Activate'
+                            },
+                            dataType: 'json',
+                            success: function (result) {
+                                ReDrawDatatable("listBlogPostTable");
+                            }
+                        });
+                    } else {
+                        $.ajax({
+                            url: "/BlogPostManage/@ViewBag.storeId/@ViewBag.storeName/BlogPost/ChangeStatus",
+                            type: 'POST',
+                            data: {
+                                'blogPostId': $(this).val(),
+                                'status': 'Deactivate'
+                            },
+                            dataType: 'json',
+                            success: function (result) {
+                                ReDrawDatatable("listBlogPostTable");
+                            }
+                        });
+                    }
+                });
+            },
+            "aoColumnDefs": [
+                {
+                    "aTargets": [1],
+                    "bSortable": false,
+                    "searchable": false,
+                    "mRender": function (data, type, o) {
+                        return "<a href='/BlogCategoryManage/@ViewBag.storeId/@ViewBag.storeName/BlogCategory/Edit?id=" + o[3] + "'>"+o[4]+"</a>";
+                    }
+                },
+                 {
+                     //"sWidth" : "12%",
+                     "aTargets": [2],
+                     "bSortable": true,
+                     "mRender": function (data, type, o) {
+                         if()
+                         return "<a href='' class='btn btn-info'><i class='icon wb-pencil' aria-hidden='true'></i>Chi tiết</a>";
+                     }
+                 },
+                 {
+                     "sWidth" : "10%",
+                     "aTargets": [1],
+                     "bSortable": false,
+                     "mRender": function (data, type, o) {
+                         return  "<img src='"+o[1]+"' height='50' width='50'>";
+                     }
+                 },
+                 {
+                     "sWidth" : "3%",
+                     "aTargets": [0],
+                     "bSortable": false,
+                     "mRender": function (data, type, o) {
+                         if(o[6]){
+                             return "<input type='checkbox' name='checkboxlist' value='"+o[0]+"' checked/> ";
+                         }else{
+                             return "<input type='checkbox' name='checkboxlist' value='"+o[0]+"'/>";
+                         }
+                     }
+                 },
+                 {
+                     //"sWidth" : "10%",
+                     "aTargets": [3],
+                     "bVisible": false,
+                     "bSortable": false,
+                     "mRender": function (data, type, o) {
+                         return o[3];
+
+                     }
+                 },
+                 {
+                     "sWidth" : "15%",
+                     "aTargets": [5],
+                     "bSortable": false,
+                     "mRender": function (data, type, o) {
+                         return o[5];
+
+                     }
+                 },
+                  {
+                      "sWidth" : "10%",
+                      "aTargets": [6],
+                      "bSortable": false,
+                      "mRender": function (data, type, o) {
+                          if(o[6]){
+                              return "<p style='color: green; font-weight: bold; text-align: center'>Actived</p>";
+                          }else{
+                              return "<p style='color: red; font-weight: bold; text-align: center'>Deactived</p>";
+                          }
+
+                      }
+                  },
+                   {
+                       "sWidth" : "4%",
+                       "aTargets": [7],
+                       "bSortable": false,
+                       "mRender": function (data, type, o) {
+                           return "<a class='btn btn-danger btn-sm' onclick='Delete(" + o[7] + ")'>" +
+                            "<i class='fa fa-trash fa fa-white'></i></a>";
+
+                       }
+                   },
+
+            ],
+            "bAutoWidth": false
+
+        });
+    }
+
+    function Delete(id) {
+        bootbox.dialog({
+            title: 'Xác nhận',
+            message: "<h5>Bạn có chắc chắn xóa?</h5>",
+            buttons:
+            {
+                "ok":
+                 {
+                     "label": "<i class='fa fa-ok'></i> Đồng ý",
+                     "className": "btn-sm btn-success",
+                     "callback": function () {
+                         $.ajax({
+                             url: '/BlogPostManage/@ViewBag.storeId/@ViewBag.storeName/BlogPost/Delete',
+                             type: 'POST',
+                             data: 'id=' + id,
+                             error: function () {
+                                 ShowMessage("Không thể xóa. Xin vui lòng thử lại sau!", 1);
+                             },
+                             success: function (data) {
+                                 if (data.success) {
+                                     ReDrawDatatable("listBlogPostTable");
+                                 } else {
+                                     ShowMessage("Không thể xóa. Xin vui lòng thử lại sau!", 1);
+                                 }
+                             }
+                         });
+                     }
+                 },
+                "close":
+                 {
+                     "label": "<i class='fa fa-remove'></i> Đóng",
+                     "className": "btn-sm btn-danger",
+                     "callback": function () {
+                         bootbox.hideAll();
+                     }
+                 }
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        InitDatatable();
+        RefreshTable();
+        //loadlist();
+    });
+
+</script>
+
+
+
+@*<div>
+    <div class="col-sm-5">
+        <h1>@Model.Name</h1>
+    </div>
+    <div class="col-sm-7">
+        @{ 
+            if(Model.Active == true)
+            {
+
+            }
+        }
+    </div>
+</div>*@
+@*<div style="text-align:center;">
+    @using (Html.BeginForm("savePlace", "Place", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+    {
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Tên địa điểm</label>
+            <div class="col-sm-6">
+                @Html.TextBoxFor(p => p.Name, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Thành phố</label>
+            <div class="col-sm-6">
+                @Html.DropDownListFor(p => p.City, listCities, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Quận</label>
+            <div class="col-sm-6">
+                @Html.DropDownListFor(p => p.District, listDistricts, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Phường</label>
+            <div class="col-sm-6">
+                @Html.DropDownListFor(p => p.Ward, listWards, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Địa chỉ</label>
+            <div class="col-sm-6">
+                @Html.TextBoxFor(p => p.Address, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Email</label>
+            <div class="col-sm-6">
+                @Html.TextBoxFor(p => p.Email, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Số điện thoại</label>
+            <div class="col-sm-6">
+                @Html.TextBoxFor(p => p.PhoneNumber, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Hình ảnh</label>
+            <div class="col-sm-6">
+                <input type="file" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Giờ hoạt động</label>
+            <div class="col-sm-6">
+                <label class="control-label" style="display:block; float:left;">Từ </label>
+                @Html.TextBoxFor(p => p.StartTime, new { @class = "form-control", @style = "display:block; float:left; width:70px; margin: 0 5px;" })
+                <label class="control-label" style="display:block; float:left; margin-left:20px;">Đến </label>
+                @Html.TextBoxFor(p => p.EndTime, new { @class = "form-control", @style = "display:block; float:left; width:70px; margin: 0 5px;" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Mô tả</label>
+            <div class="col-sm-6">
+                @Html.TextAreaFor(p => p.Description, new { rows = "5", @class = "form-control" })
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div>
+            <div class="col-sm-3">
+                @Html.ActionLink("Xóa địa điểm", "deletePlace", "Place", new { id = Model.Id }, new { @class = "btn btn-danger"})
+            </div>
+            <div class="form-group col-sm-9">
+                @Html.ActionLink("Hủy bỏ", "Index", "Place", null, new { @class = "btn btn-default" })
+                <input type="submit" value="Cập nhật địa điểm" class="btn btn-info" />
+            </div>
+        </div>
+        
+    }
+</div>*@

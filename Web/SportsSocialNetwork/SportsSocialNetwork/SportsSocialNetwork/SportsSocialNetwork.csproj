@@ -217,6 +217,8 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\PlaceController.cs" />
+    <Compile Include="Areas\PlaceOwner\PlaceOwnerAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\FieldController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -2456,8 +2458,11 @@
     <Content Include="Content\assets\vendor\x-editable\images\loading.gif" />
     <Content Include="Content\assets\vendor\x-editable\x-editable.css" />
     <Content Include="Content\assets\vendor\x-editable\x-editable.min.css" />
+    <Content Include="Content\Bootbox\bootbox.min.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Clockpicker\bootstrap-clockpicker.min.js" />
+    <Content Include="Content\Clockpicker\jquery-clockpicker.css" />
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.css" />
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome-4.6.3\fonts\fontawesome-webfont.svg" />
@@ -2926,6 +2931,12 @@
     <Content Include="Content\font-awesome-4.6.3\scss\_stacked.scss" />
     <Content Include="Content\font-awesome-4.6.3\scss\_variables.scss" />
     <Content Include="Content\json\Vietnam.json" />
+    <Content Include="Areas\PlaceOwner\Views\Place\CreatePlace.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Place\Index.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\web.config" />
+    <Content Include="Areas\PlaceOwner\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Place\PlaceDetail.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Shared\_Layout.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -2938,7 +2949,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -2978,7 +2991,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Field\" />
-  </ItemGroup>
+  <Folder Include="Areas\PlaceOwner\Models\" />
+ </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />

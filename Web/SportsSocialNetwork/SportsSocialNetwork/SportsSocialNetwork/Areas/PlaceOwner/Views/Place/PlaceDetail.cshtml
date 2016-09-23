@@ -1,0 +1,212 @@
+﻿@model SportsSocialNetwork.Models.Entities.Place
+@{
+    ViewBag.Title = "Place Detail";
+
+    //listCity
+    List<SelectListItem> listCities = new List<SelectListItem>();
+    listCities.Add(new SelectListItem
+    {
+        Text = "Hồ Chí Minh",
+        Value = "Ho Chi Minh"
+    });
+    listCities.Add(new SelectListItem
+    {
+        Text = "Hà Nội",
+        Value = "Ha Noi",
+        Selected = true
+    });
+    listCities.Add(new SelectListItem
+    {
+        Text = "Đà Nẵng",
+        Value = "Da Nang"
+    });
+
+    //listDistrict
+    List<SelectListItem> listDistricts = new List<SelectListItem>();
+    listDistricts.Add(new SelectListItem
+    {
+        Text = "Quận 1",
+        Value = "Quan 1"
+    });
+    listDistricts.Add(new SelectListItem
+    {
+        Text = "Quận 2",
+        Value = "Quan 2",
+        Selected = true
+    });
+    listDistricts.Add(new SelectListItem
+    {
+        Text = "Quận 3",
+        Value = "Quan 3"
+    });
+
+    //listWard
+    List<SelectListItem> listWards = new List<SelectListItem>();
+    listWards.Add(new SelectListItem
+    {
+        Text = "Phường 1",
+        Value = "Phuong 1"
+    });
+    listWards.Add(new SelectListItem
+    {
+        Text = "Phường 2",
+        Value = "Phuong 2",
+        Selected = true
+    });
+    listWards.Add(new SelectListItem
+    {
+        Text = "Phường 3",
+        Value = "Phuong 2"
+    });
+}
+
+@section Scripts{
+    <script src="~/Content/Bootbox/bootbox.min.js"></script>
+}
+
+<style>
+    .form-horizontal .form-group {
+        margin-left: 0px;
+    }
+</style>
+
+<h2>CreatePlace</h2>
+
+<div>
+    <h3>Tạo địa điểm</h3>
+    @using (Html.BeginForm("savePlace", "Place", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+    {
+        @Html.TextBoxFor(p => p.Id, new  { @style = "display:none;"})
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Tên địa điểm</label>
+            <div class="col-sm-6">
+                @Html.TextBoxFor(p => p.Name, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Thành phố</label>
+            <div class="col-sm-6">
+                @Html.DropDownListFor(p => p.City, listCities, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Quận</label>
+            <div class="col-sm-6">
+                @Html.DropDownListFor(p => p.District, listDistricts, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Phường</label>
+            <div class="col-sm-6">
+                @Html.DropDownListFor(p => p.Ward, listWards, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Địa chỉ</label>
+            <div class="col-sm-6">
+                @Html.TextBoxFor(p => p.Address, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Email</label>
+            <div class="col-sm-6">
+                @Html.TextBoxFor(p => p.Email, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Số điện thoại</label>
+            <div class="col-sm-6">
+                @Html.TextBoxFor(p => p.PhoneNumber, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Hình ảnh</label>
+            <div class="col-sm-6">
+                <input type="file" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Giờ hoạt động</label>
+            <div class="col-sm-9">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label for="startTime" class="control-label">Từ</label>
+                        @Html.TextBoxFor(p => p.StartTime, new { @class = "form-control", @id = "startTime" })
+                    </div>
+                    <div class="form-group">
+                        <label for="endTime" class="control-label">Đến</label>
+                        @Html.TextBoxFor(p => p.EndTime, new { @class = "form-control", @id = "endTime" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Mô tả</label>
+            <div class="col-sm-6">
+                @Html.TextAreaFor(p => p.Description, new { rows = "5", @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-3">
+                <button type="button" class="btn btn-danger" onclick="deletePlace(@Model.Id)"><i class="icon wb-trash" aria-hidden="true"></i>Xóa địa điểm</button>
+            </div>
+            <div class="col-sm-9">
+                @Html.ActionLink("Hủy bỏ", "Index", "Place", null, new { @class = "btn btn-default" })
+                <input type="submit" value="Cập nhật địa điểm" class="btn btn-success" />
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    function deletePlace(id) {
+        bootbox.dialog({
+            message: "Bạn có chắc muốn xóa địa điểm này?",
+            title: "Xác nhận xóa",
+            buttons: {
+                success: {
+                    label: "Hủy",
+                    className: "btn-default",
+                    callback: function () {
+                       
+                    }
+                },
+                danger: {
+                    label: "Đồng ý",
+                    className: "btn-danger",
+                    callback: function () {
+                        $.ajax({
+                            url: "/PlaceOwner/Place/deletePlace",
+                            data: {
+                                format: 'json',
+                                id: id
+                            },
+                            error: function () {
+                                alert("Problem!")
+                            },
+                            success: function (data) {
+                                if (data === "success") {
+                                    bootbox.alert("Đã xóa thành công", function() {
+                                        location.href = "/PlaceOwner/Place";
+                                    });
+                                    
+                                }
+                            },
+                            type: 'POST'
+                        })
+                    }
+                }
+            }
+        });
+        
+    }
+</script>
+<script type="text/javascript">
+    jQuery('#startTime').clockpicker({
+        donetext: 'Xong'
+    });
+    jQuery('#endTime').clockpicker({
+        donetext: 'Xong'
+    });
+</script>
+
