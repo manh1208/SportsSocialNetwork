@@ -20,6 +20,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual int NewsId { get; set; }
     			public virtual string Comment { get; set; }
     			public virtual System.DateTime CreateDate { get; set; }
+    			public virtual bool Active { get; set; }
     	
     	public NewsCommentViewModel() : base() { }
     	public NewsCommentViewModel(SportsSocialNetwork.Models.Entities.NewsComment entity) : base(entity) { }

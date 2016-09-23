@@ -15,7 +15,7 @@ namespace SportsSocialNetwork.Models.Entities
 using System;
     using System.Collections.Generic;
     
-public partial class Like : SkyWeb.DatVM.Data.IEntity
+public partial class Like : SkyWeb.DatVM.Data.IEntity, SkyWeb.DatVM.Data.IActivable
 {
 }
 

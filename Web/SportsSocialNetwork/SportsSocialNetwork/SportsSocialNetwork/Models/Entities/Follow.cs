@@ -22,9 +22,11 @@ public partial class Follow
 
     public string UserId { get; set; }
 
-    public string FollowedId { get; set; }
+    public string FollowerId { get; set; }
 
     public System.DateTime CreateDate { get; set; }
+
+    public bool Active { get; set; }
 
 
 

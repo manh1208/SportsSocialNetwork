@@ -39,6 +39,8 @@ public partial class Sport
 
     public string Name { get; set; }
 
+    public bool Active { get; set; }
+
 
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

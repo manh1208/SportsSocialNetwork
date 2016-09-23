@@ -20,6 +20,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string UserId { get; set; }
     			public virtual bool Admin { get; set; }
     			public virtual int Status { get; set; }
+    			public virtual bool Active { get; set; }
     	
     	public GroupMemberViewModel() : base() { }
     	public GroupMemberViewModel(SportsSocialNetwork.Models.Entities.GroupMember entity) : base(entity) { }

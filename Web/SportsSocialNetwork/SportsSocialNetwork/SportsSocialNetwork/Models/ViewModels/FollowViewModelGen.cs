@@ -17,8 +17,9 @@ namespace SportsSocialNetwork.Models.ViewModels
     	
     			public virtual int Id { get; set; }
     			public virtual string UserId { get; set; }
-    			public virtual string FollowedId { get; set; }
+    			public virtual string FollowerId { get; set; }
     			public virtual System.DateTime CreateDate { get; set; }
+    			public virtual bool Active { get; set; }
     	
     	public FollowViewModel() : base() { }
     	public FollowViewModel(SportsSocialNetwork.Models.Entities.Follow entity) : base(entity) { }

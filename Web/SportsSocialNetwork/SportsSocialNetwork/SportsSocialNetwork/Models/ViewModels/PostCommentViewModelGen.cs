@@ -21,6 +21,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string Comment { get; set; }
     			public virtual System.DateTime CreateDate { get; set; }
     			public virtual string Image { get; set; }
+    			public virtual bool Active { get; set; }
     	
     	public PostCommentViewModel() : base() { }
     	public PostCommentViewModel(SportsSocialNetwork.Models.Entities.PostComment entity) : base(entity) { }

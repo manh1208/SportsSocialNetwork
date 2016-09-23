@@ -28,6 +28,8 @@ public partial class GroupMember
 
     public int Status { get; set; }
 
+    public bool Active { get; set; }
+
 
 
     public virtual Group Group { get; set; }

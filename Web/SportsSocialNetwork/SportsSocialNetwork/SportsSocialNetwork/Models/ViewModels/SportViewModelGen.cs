@@ -17,6 +17,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     	
     			public virtual int Id { get; set; }
     			public virtual string Name { get; set; }
+    			public virtual bool Active { get; set; }
     	
     	public SportViewModel() : base() { }
     	public SportViewModel(SportsSocialNetwork.Models.Entities.Sport entity) : base(entity) { }

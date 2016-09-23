@@ -30,6 +30,8 @@ public partial class PostComment
 
     public string Image { get; set; }
 
+    public bool Active { get; set; }
+
 
 
     public virtual AspNetUser AspNetUser { get; set; }

@@ -32,6 +32,8 @@ public partial class Notification
 
     public int InvitationId { get; set; }
 
+    public bool Active { get; set; }
+
 
 
     public virtual AspNetUser AspNetUser { get; set; }

@@ -141,8 +141,9 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="FollowedId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="FollowerId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Group">
           <Key>
@@ -164,6 +165,7 @@
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Admin" Type="bit" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Hobby">
           <Key>
@@ -191,6 +193,7 @@
           <Property Name="PostId" Type="int" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="News">
           <Key>
@@ -214,6 +217,7 @@
           <Property Name="NewsId" Type="int" Nullable="false" />
           <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Notification">
           <Key>
@@ -226,6 +230,7 @@
           <Property Name="Type" Type="int" Nullable="false" />
           <Property Name="PostId" Type="int" Nullable="false" />
           <Property Name="InvitationId" Type="int" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -305,6 +310,7 @@
           <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="Image" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PostSport">
           <Key>
@@ -329,6 +335,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="TimeBlock">
           <Key>
@@ -347,7 +354,8 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InvitationId" Type="int" Nullable="false" />
           <Property Name="ReciverId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="Accept" Type="bit" />
+          <Property Name="Accepted" Type="bit" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_CategorySport_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
@@ -1469,8 +1477,9 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="FollowedId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="FollowerId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Follow_AspNetUsers" FromRole="Follow" ToRole="AspNetUser" />
         </EntityType>
         <EntityType Name="Group">
@@ -1496,6 +1505,7 @@
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Admin" Type="Boolean" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Group" Relationship="SSNModel.FK_GroupMember_Group" FromRole="GroupMember" ToRole="Group" />
         </EntityType>
         <EntityType Name="Hobby">
@@ -1529,6 +1539,7 @@
           <Property Name="PostId" Type="Int32" Nullable="false" />
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Like_AspNetUsers" FromRole="Like" ToRole="AspNetUser" />
           <NavigationProperty Name="Post" Relationship="SSNModel.FK_Like_Post" FromRole="Like" ToRole="Post" />
         </EntityType>
@@ -1557,6 +1568,7 @@
           <Property Name="NewsId" Type="Int32" Nullable="false" />
           <Property Name="Comment" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_NewsComment_AspNetUsers" FromRole="NewsComment" ToRole="AspNetUser" />
           <NavigationProperty Name="News" Relationship="SSNModel.FK_NewsComment_News" FromRole="NewsComment" ToRole="News" />
         </EntityType>
@@ -1571,6 +1583,7 @@
           <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="PostId" Type="Int32" Nullable="false" />
           <Property Name="InvitationId" Type="Int32" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Notification_AspNetUsers" FromRole="Notification" ToRole="AspNetUser" />
           <NavigationProperty Name="Invitation" Relationship="SSNModel.FK_Notification_Invitation" FromRole="Notification" ToRole="Invitation" />
           <NavigationProperty Name="Post" Relationship="SSNModel.FK_Notification_Post" FromRole="Notification" ToRole="Post" />
@@ -1668,6 +1681,7 @@
           <Property Name="Comment" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Image" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_PostComment_AspNetUsers" FromRole="PostComment" ToRole="AspNetUser" />
           <NavigationProperty Name="Post" Relationship="SSNModel.FK_PostComment_Post1" FromRole="PostComment" ToRole="Post" />
         </EntityType>
@@ -1698,6 +1712,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="CategorySports" Relationship="SSNModel.FK_CategorySport_Sport" FromRole="Sport" ToRole="CategorySport" />
           <NavigationProperty Name="FieldTypes" Relationship="SSNModel.FK_FieldType_Sport" FromRole="Sport" ToRole="FieldType" />
           <NavigationProperty Name="Groups" Relationship="SSNModel.FK_Group_Sport" FromRole="Sport" ToRole="Group" />
@@ -1722,7 +1737,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="InvitationId" Type="Int32" Nullable="false" />
           <Property Name="ReciverId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="Accept" Type="Boolean" />
+          <Property Name="Accepted" Type="Boolean" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_UserInvitation_AspNetUsers" FromRole="UserInvitation" ToRole="AspNetUser" />
           <NavigationProperty Name="Invitation" Relationship="SSNModel.FK_UserInvitation_Invitation" FromRole="UserInvitation" ToRole="Invitation" />
         </EntityType>
@@ -2378,8 +2394,9 @@
           <EntitySetMapping Name="Follows">
             <EntityTypeMapping TypeName="SSNModel.Follow">
               <MappingFragment StoreEntitySet="Follow">
+                <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="FollowedId" ColumnName="FollowedId" />
+                <ScalarProperty Name="FollowerId" ColumnName="FollowerId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -2400,6 +2417,7 @@
           <EntitySetMapping Name="GroupMembers">
             <EntityTypeMapping TypeName="SSNModel.GroupMember">
               <MappingFragment StoreEntitySet="GroupMember">
+                <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Admin" ColumnName="Admin" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -2431,6 +2449,7 @@
           <EntitySetMapping Name="Likes">
             <EntityTypeMapping TypeName="SSNModel.Like">
               <MappingFragment StoreEntitySet="Like">
+                <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="PostId" ColumnName="PostId" />
@@ -2455,6 +2474,7 @@
           <EntitySetMapping Name="NewsComments">
             <EntityTypeMapping TypeName="SSNModel.NewsComment">
               <MappingFragment StoreEntitySet="NewsComment">
+                <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Comment" ColumnName="Comment" />
                 <ScalarProperty Name="NewsId" ColumnName="NewsId" />
@@ -2466,6 +2486,7 @@
           <EntitySetMapping Name="Notifications">
             <EntityTypeMapping TypeName="SSNModel.Notification">
               <MappingFragment StoreEntitySet="Notification">
+                <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="InvitationId" ColumnName="InvitationId" />
                 <ScalarProperty Name="PostId" ColumnName="PostId" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
@@ -2552,6 +2573,7 @@
           <EntitySetMapping Name="PostComments">
             <EntityTypeMapping TypeName="SSNModel.PostComment">
               <MappingFragment StoreEntitySet="PostComment">
+                <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Comment" ColumnName="Comment" />
@@ -2583,6 +2605,7 @@
           <EntitySetMapping Name="Sports">
             <EntityTypeMapping TypeName="SSNModel.Sport">
               <MappingFragment StoreEntitySet="Sport">
+                <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -2602,7 +2625,8 @@
           <EntitySetMapping Name="UserInvitations">
             <EntityTypeMapping TypeName="SSNModel.UserInvitation">
               <MappingFragment StoreEntitySet="UserInvitation">
-                <ScalarProperty Name="Accept" ColumnName="Accept" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Accepted" ColumnName="Accepted" />
                 <ScalarProperty Name="ReciverId" ColumnName="ReciverId" />
                 <ScalarProperty Name="InvitationId" ColumnName="InvitationId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

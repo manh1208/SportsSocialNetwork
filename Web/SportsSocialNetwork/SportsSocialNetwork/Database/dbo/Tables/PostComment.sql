@@ -5,10 +5,13 @@
     [Comment]    NVARCHAR (MAX) NOT NULL,
     [CreateDate] DATETIME       NOT NULL,
     [Image]      VARCHAR (255)  NOT NULL,
+    [Active]     BIT            NOT NULL,
     CONSTRAINT [PK_PostComment] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_PostComment_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id]),
     CONSTRAINT [FK_PostComment_Post1] FOREIGN KEY ([PostId]) REFERENCES [dbo].[Post] ([Id])
 );
+
+
 
 
 

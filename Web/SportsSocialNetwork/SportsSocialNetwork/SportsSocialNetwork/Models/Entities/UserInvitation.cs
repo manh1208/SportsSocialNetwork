@@ -24,7 +24,9 @@ public partial class UserInvitation
 
     public string ReciverId { get; set; }
 
-    public Nullable<bool> Accept { get; set; }
+    public bool Accepted { get; set; }
+
+    public bool Active { get; set; }
 
 
 

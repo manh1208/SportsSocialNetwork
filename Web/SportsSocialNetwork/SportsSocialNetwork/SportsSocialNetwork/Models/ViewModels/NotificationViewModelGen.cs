@@ -22,6 +22,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual int Type { get; set; }
     			public virtual int PostId { get; set; }
     			public virtual int InvitationId { get; set; }
+    			public virtual bool Active { get; set; }
     	
     	public NotificationViewModel() : base() { }
     	public NotificationViewModel(SportsSocialNetwork.Models.Entities.Notification entity) : base(entity) { }

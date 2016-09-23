@@ -28,6 +28,8 @@ public partial class NewsComment
 
     public System.DateTime CreateDate { get; set; }
 
+    public bool Active { get; set; }
+
 
 
     public virtual AspNetUser AspNetUser { get; set; }

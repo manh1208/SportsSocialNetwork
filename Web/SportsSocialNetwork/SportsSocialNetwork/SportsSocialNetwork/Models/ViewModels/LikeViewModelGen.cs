@@ -19,6 +19,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual int PostId { get; set; }
     			public virtual string UserId { get; set; }
     			public virtual System.DateTime CreateDate { get; set; }
+    			public virtual bool Active { get; set; }
     	
     	public LikeViewModel() : base() { }
     	public LikeViewModel(SportsSocialNetwork.Models.Entities.Like entity) : base(entity) { }

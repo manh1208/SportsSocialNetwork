@@ -15,7 +15,7 @@ namespace SportsSocialNetwork.Models.Entities
 using System;
     using System.Collections.Generic;
     
-public partial class UserInvitation : SkyWeb.DatVM.Data.IEntity
+public partial class UserInvitation : SkyWeb.DatVM.Data.IEntity, SkyWeb.DatVM.Data.IActivable
 {
 }
 
