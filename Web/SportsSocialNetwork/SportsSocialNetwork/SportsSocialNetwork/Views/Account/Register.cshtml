@@ -54,41 +54,48 @@
     Breakpoints();
     </script>
 </head>
+
 <body class="page-register layout-full">
     <!--[if lt IE 8]>
           <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
       <![endif]-->
     <!-- Page -->
+
     <div class="page animsition vertical-align text-center" data-animsition-in="fade-in"
          data-animsition-out="fade-out">
         <div class="page-content vertical-align-middle">
+
+
             <div class="brand">
                 <img class="brand-img" src="../../Content/assets/images/logo.png" alt="...">
                 <h2 class="brand-text">SPORT SOCIAL NETWORK</h2>
             </div>
             <p>Đăng ký tài khoản</p>
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
             <form method="post" role="form">
                 <div class="form-group">
                     <label class="sr-only" for="inputName">Tên tài khoản</label>
-                    <input type="text" class="form-control" id="inputName" placeholder="Tên tài khoản">
+                    @*<input type="text" class="form-control" id="inputName" placeholder="Tên tài khoản">*@
+                    @Html.TextBoxFor(m => m.Username, new { @class = "form-control", id = "inputName" , placeholder = "Tên tài khoản" })
                 </div>
                 <div class="form-group">
                     <label class="sr-only" for="inputEmail">Email</label>
-                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", id = "inputEmail", placeholder = "Email" })
                 </div>
                 <div class="form-group">
                     <label class="sr-only" for="inputPassword">Password</label>
-                    <input type="password" class="form-control" id="inputPassword" name="password"
-                           placeholder="Mật khẩu">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", id = "inputPassword", placeholder = "Mật khẩu" })
                 </div>
                 <div class="form-group">
                     <label class="sr-only" for="inputPasswordCheck">Retype Password</label>
-                    <input type="password" class="form-control" id="inputPasswordCheck" name="passwordCheck"
-                           placeholder="Nhập lại mật khẩu">
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class ="form-control", id= "inputPasswordCheck", placeholder ="Nhập lại mật khẩu" } )
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Đăng ký</button>
             </form>
-            <p>Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a></p>
+}
+            <p>Đã có tài khoản? @Html.ActionLink("Đăng nhập ngay", "Login") </a></p>
 
             <footer class="page-copyright">
                 <div class="social">
@@ -105,6 +112,7 @@
             </footer>
         </div>
     </div>
+    
     <!-- End Page -->
     <!-- Core  -->
     <script src="../../Content/assets/vendor/jquery/jquery.js"></script>
@@ -164,9 +172,9 @@
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(m => m.Username, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">

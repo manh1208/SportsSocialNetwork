@@ -68,26 +68,31 @@
                 <h2 class="brand-text">SPORT SOCIAL NETWORK</h2>
             </div>
             <p>Đăng nhập</p>
-            <form method="post" action="login.html">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
                 <div class="form-group">
                     <label class="sr-only" for="inputName">Tài khoản</label>
-                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder ="Tài khoản", id= "inputName" })
+                    @Html.TextBoxFor(m => m.Username, new { @class = "form-control", placeholder = "Tài khoản", id = "inputName" })
+                   
                 </div>
                 <div class="form-group">
                     <label class="sr-only" for="inputPassword">Mật khẩu</label>
                     @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Mật khẩu", id = "inputPassword" })
-                    
+                 
                 </div>
                 <div class="form-group clearfix">
                     <div class="checkbox-custom checkbox-inline pull-left">
-                        <input type="checkbox" id="inputCheckbox" name="checkbox">
-                        <label for="inputCheckbox">Nhớ tài khoản này</label>
+                        @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-control", id = "inputCheckbox" })
+                        @Html.LabelFor(m => m.RememberMe)
+                        @*<input type="checkbox" id="inputCheckbox" name="checkbox">
+                        <label for="inputCheckbox">Nhớ tài khoản này</label>*@
                     </div>
                     <a class="pull-right" href="forgot-password.html">Quên mật khẩu?</a>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
-            </form>
-            <p>Không có tài khoản? <a href="register.html">Tạo ngay</a></p>
+            }
+            <p>Không có tài khoản? @Html.ActionLink("Tạo ngay","Register")</p>
 
             <footer class="page-copyright">
                 <div class="social">
@@ -166,10 +171,10 @@
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                    @Html.LabelFor(m => m.Username, new { @class = "col-md-2 control-label" })
                     <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
