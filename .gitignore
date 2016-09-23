@@ -10,8 +10,5 @@ Web/SportsSocialNetwork/SportsSocialNetwork/Database/obj/
 *.txt
 /Web/SportsSocialNetwork/SportsSocialNetwork/SportsSocialNetwork/obj/Debug/edmxResourcesToEmbed/Models/Entities
 *.dbmdl
-<<<<<<< 90d8a18dcdfc9335e4784c8ad5111ca1fb575e0c
 Web/SportsSocialNetwork/SportsSocialNetwork/.vs/config/applicationhost.config
-=======
 Web/SportsSocialNetwork/SportsSocialNetwork/Database/Database.jfm
->>>>>>> [CuongPK] - login
