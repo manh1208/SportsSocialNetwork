@@ -1,0 +1,201 @@
+﻿@model IEnumerable<SportsSocialNetwork.Models.ViewModels.PlaceViewModel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
+}
+<style>
+    .table_image {
+        float: left;
+        width: 210px;
+        height: 160px;
+        text-align: center;
+    }
+
+    .table_text {
+        float: left;
+        width: 410px;
+        margin-left: 10px;
+    }
+
+    .table_text_title {
+        height: 40px;
+        font-weight: bold;
+        font-size: 25px;
+    }
+
+    .table_text_des1 {
+        height: 80px;
+    }
+
+    .table_text_des2 {
+        height: 40px;
+    }
+</style>
+<div class="col-md-9">
+    <div class="panel">
+        <header class="panel-heading">
+            <h3 class="panel-title">Danh sách địa điểm</h3>
+        </header>
+        <div class="panel-body">
+            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                <div class="col-sm-12">
+                    <table class="table table-hover dataTable table-striped width-full dtr-inline" data-plugin="dataTable" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-3">
+    <div class="panel" style="text-align:center">
+        <header class="panel-heading">
+            <h3 class="panel-title">Tìm kiếm địa điểm</h3>
+        </header>
+        <div class="panel-body">
+            <div class="form-group" style="padding:5%">
+                <select data-plugin="selectpicker" class="bs-select-hidden form-control input-sm" id="sport">
+                    <option value="0">Chọn môn thể thao</option>
+                    @foreach (var item in ViewBag.sportList)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group" style="border:solid">
+                <div class="form-group" style="padding:5%">
+                    <select data-plugin="selectpicker" class="bs-select-hidden form-control input-sm">
+                        <option>Chọn Tỉnh/Thành</option>
+                        <option>Ketchup</option>
+                        <option>Relish</option>
+                    </select>
+                </div>
+                <div class="form-group" style="padding:5%">
+                    <select data-plugin="selectpicker" class="bs-select-hidden form-control input-sm">
+                        <option>Chọn Quận</option>
+                        <option>Ketchup</option>
+                        <option>Relish</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" style="width:90%;" id="searchBtn">Tìm kiếm</button>
+                </div>
+                <p style="font-size:10px; color:red">Hoặc tìm xung quanh địa điểm này</p>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" style="width:90%">Tìm xung quanh bạn</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    console.log("aaa");
+    $("#searchBtn").click(function () {
+        InitDatatable();
+        RefreshTable();
+    });
+
+
+    function RefreshTable() {
+        var oTable = $("#DataTables_Table_0").dataTable();
+        oTable._fnPageChange(0);
+        oTable._fnAjaxUpdate();
+
+    }
+
+    function InitDatatable() {
+        $("#DataTables_Table_0").DataTable({
+            "bRetrieve": true,
+            "bServerSide": true,
+            "bScrollCollapse": true,
+            "bSort": true,
+            "sAjaxSource": "/Place/GetData",
+            "bProcessing": true,
+            "fnServerParams": function (aoData) {
+                aoData.push({ "name": "sportId", "value": $('#sport').val()});
+            },
+            "aLengthMenu": [10, 20, 100],
+            "oLanguage": {
+                "sSearch": "Nhập tên sân bóng hoặc địa chỉ:",
+                "sZeroRecords": "Không có dữ liệu phù hợp",
+                "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
+                "sEmptyTable": "Không có dữ liệu",
+                "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
+                "sLengthMenu": "Hiển thị _MENU_ dòng",
+                "sProcessing": "Xin đợi trong giây lát...",
+            },
+            "aoColumnDefs": [
+                {
+                     //"sWidth" : "10%",
+                     "aTargets": [0],
+                     "bVisible": false,
+                     "bSortable": false,
+                     "mRender": function (data, type, o) {
+                         return o[0];
+
+                     }
+                 },
+                 {
+                     //"sWidth" : "10%",
+                     "aTargets": [1],
+                     "bSortable": false,
+                     "mRender": function (data, type, o) {
+                         return "<div class='table_image'><img src='" + o[1] + "' height='160' width='210'></div><div class='table_text'>" +
+                             "<div class='table_text_title'>" + o[2] + "</div><div class='table_text_des1'>" + o[3] + "</div><div class='table_text_des2'>"
+                             + 0[4] + "</div></div>";
+
+                     }
+                 },
+                 {
+                     //"sWidth" : "10%",
+                     "aTargets": [2],
+                     "bVisible": false,
+                     "bSortable": false,
+                     "mRender": function (data, type, o) {
+                         return o[2];
+                     }
+                 },
+                 {
+                     //"sWidth" : "10%",
+                     "aTargets": [3],
+                     "bSortable": false,
+                     "bVisible": false,
+                     "mRender": function (data, type, o) {
+                         return o[3];
+
+                     }
+                 },
+                  {
+                      //"sWidth" : "10%",
+                      "aTargets": [4],
+                      "bSortable": false,
+                      "bVisible": false,
+                      "mRender": function (data, type, o) {
+                          return o[4];
+
+                      }
+                  }
+            ],
+            "bAutoWidth": false
+
+        });
+    }
+    $.extend($.fn.dataTableExt.oStdClasses, {
+        "sFilterInput": "form-control input-sm",
+        "sLengthSelect": "form-control input-sm"
+    });
+    $(document).ready(function () {
+        InitDatatable();
+        RefreshTable();
+    });
+    </script>
+
+
