@@ -5,17 +5,19 @@ using System.Web;
 
 namespace SportsSocialNetwork.Models.Entities.Services
 {
-    public partial interface IAspNetUserService
+    public partial interface IPlaceService
     {
+
         #region Code from here
 
 
 
-        #endregion 
+        #endregion
 
         void test();
     }
-    public partial class AspNetUserService:IAspNetUserService
+
+    public partial class PlaceService: IPlaceService
     {
         #region Code from here
 

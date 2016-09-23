@@ -1,5 +1,6 @@
 ﻿using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.ViewModels;
 using SportsSocialNetwork.Utilities;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,9 @@ namespace SportsSocialNetwork.Controllers
         {
             var service = this.Service<IAspNetUserService>();
             var users = service.Get().ToList();
+
+            var userViewModel = Mapper.Map<List<AspNetUserViewModel>>(users);
+
             return View();
         }
 

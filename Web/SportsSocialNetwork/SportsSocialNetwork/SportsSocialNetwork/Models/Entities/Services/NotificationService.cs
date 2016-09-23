@@ -4,19 +4,20 @@ using System.Linq;
 using System.Web;
 
 namespace SportsSocialNetwork.Models.Entities.Services
-{
-    public partial interface IAspNetUserService
+{ 
+    public partial interface INotificationService
     {
         #region Code from here
 
 
 
-        #endregion 
+        #endregion
 
         void test();
     }
-    public partial class AspNetUserService:IAspNetUserService
+    public partial class NotificationService : INotificationService
     {
+
         #region Code from here
 
 

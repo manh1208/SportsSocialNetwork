@@ -5,17 +5,18 @@ using System.Web;
 
 namespace SportsSocialNetwork.Models.Entities.Services
 {
-    public partial interface IAspNetUserService
+
+    public partial interface ILikeService
     {
         #region Code from here
 
 
 
-        #endregion 
+        #endregion
 
         void test();
     }
-    public partial class AspNetUserService:IAspNetUserService
+    public partial class LikeService : ILikeService
     {
         #region Code from here
 

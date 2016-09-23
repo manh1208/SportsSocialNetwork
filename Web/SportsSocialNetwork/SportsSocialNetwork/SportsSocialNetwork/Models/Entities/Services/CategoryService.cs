@@ -5,17 +5,18 @@ using System.Web;
 
 namespace SportsSocialNetwork.Models.Entities.Services
 {
-    public partial interface IAspNetUserService
+    public partial interface ICategoryService
     {
         #region Code from here
 
 
 
-        #endregion 
+        #endregion
 
         void test();
+
     }
-    public partial class AspNetUserService:IAspNetUserService
+    public partial class CategoryService: ICategoryService
     {
         #region Code from here
 
@@ -27,5 +28,6 @@ namespace SportsSocialNetwork.Models.Entities.Services
         {
 
         }
+
     }
 }
