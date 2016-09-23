@@ -589,6 +589,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\SportService.cs" />
     <Compile Include="Models\Entities\Services\SportServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -2972,12 +2973,12 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Place\Index.cshtml" />
+    <Content Include="Views\Shared\_BookingFieldLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\ViewModels\" />
     <Folder Include="Views\Field\" />
- </ItemGroup>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />

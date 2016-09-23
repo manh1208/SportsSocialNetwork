@@ -13,20 +13,26 @@ namespace SportsSocialNetwork.Controllers
     {
         // GET: Place
         private readonly IPlaceService _placeService;
+        private readonly ISportService _sportService;
 
-        public PlaceController(IPlaceService placeService)
+        public PlaceController(IPlaceService placeService, ISportService sportService)
         {
             _placeService = placeService;
+            _sportService = sportService;
         }
         public ActionResult Index()
         {
-            //var placeList = _placeService.getAllPlace();
-            //ViewBag.list = placeList;
+            var sportList = _sportService.getAllSport();
+            ViewBag.sportList = sportList;
             return View();
         }
 
-        public ActionResult GetData(JQueryDataTableParamModel param)
+        public ActionResult GetData(JQueryDataTableParamModel param, int sportId)
         {
+            /*if (sportId != 0)
+            {
+
+            }*/
             var placeList = _placeService.getAllPlace();
             IEnumerable<Place> filteredListItems;
             if (!string.IsNullOrEmpty(param.sSearch))
