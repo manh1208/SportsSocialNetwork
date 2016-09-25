@@ -9,4 +9,13 @@ namespace SportsSocialNetwork.Models.Enumerable
     {
       
     }
+
+
+    public enum UserRole
+    {
+        Member = 1,
+        PlaceOwner = 2,
+        Admin = 3,
+        Moderator = 4
+    }
 }

@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Danh sách tài khoản</h2>
+
+<div class="box">
+    <div class="box-header">
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <table id="account-table" class="table table-hover dataTable table-bordered dt-responsive nowrap" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Họ và tên</th>
+                            <th>Số điện thoại</th>
+                            <th>Email</th>
+                            <th>Username</th>
+                            <th>Quyền</th>
+                            <th>Active</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div><!-- /.box-body -->
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            initEventTable();
+        });
+     function initEventTable() {
+         var colDefs = [
+               {
+                   "aTargets": [1, 2, 3, 4, 5],
+                   "bSortable": false
+               }, {
+                   "aTargets": [6],
+                   "mRender": function (data, type, row) {
+                       var ahihibtn = '<div class="btn-group">'
+                                + '<button type="button" class="btn btn-danger btn-flat dropdown-toggle" data-toggle="dropdown" aria-expanded="false">'
+                                    + '<span class="caret"></span>'
+                                + '</button>'
+                                + '<ul class="dropdown-menu">'
+                                   + '<li><a href="#" >Chi tiết</a></li>'
+                                  + '<li><a href="#" >Chỉnh sửa</a></li>'
+                                  + '<li><a href="#" >Xóa</a></li>'
+                                + '</ul>'
+                            + '</div>';
+                      
+                       return ahihibtn;
+                   },
+                   "bSortable": false
+               }
+         ];
+         var param = {
+             colDefs: colDefs,
+             url: '@Url.Action("IndexList")',
+             data: []
+         };
+         $('#account-table').customDataTable(param);
+     }
+    </script>
+}
+

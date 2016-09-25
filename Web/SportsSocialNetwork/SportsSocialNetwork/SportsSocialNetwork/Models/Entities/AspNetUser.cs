@@ -85,6 +85,8 @@ public partial class AspNetUser
 
     public string UserName { get; set; }
 
+    public string FullName { get; set; }
+
     public string Address { get; set; }
 
     public string City { get; set; }
@@ -101,9 +103,9 @@ public partial class AspNetUser
 
     public Nullable<int> Gender { get; set; }
 
-    public System.DateTime CreateDate { get; set; }
+    public Nullable<System.DateTime> CreateDate { get; set; }
 
-    public bool Active { get; set; }
+    public Nullable<bool> Active { get; set; }
 
 
 
