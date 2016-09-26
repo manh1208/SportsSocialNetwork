@@ -248,6 +248,11 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
+    <Compile Include="Areas\Api\Controllers\FieldController.cs" />
+    <Compile Include="Areas\Api\Controllers\OrderController.cs" />
+    <Compile Include="Areas\Api\Controllers\PlaceController.cs" />
+    <Compile Include="Areas\Api\Models\OrderDetailViewModel.cs" />
+    <Compile Include="Areas\Api\Models\ResponseModel.cs" />
     <Compile Include="Areas\Moderator\ModeratorAreaRegistration.cs" />
     <Compile Include="Areas\PlaceOwner\PlaceOwnerAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -3033,8 +3038,6 @@
     <Folder Include="Areas\Admin\Controllers\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
-    <Folder Include="Areas\Api\Controllers\" />
-    <Folder Include="Areas\Api\Models\" />
     <Folder Include="Areas\Api\Views\Shared\" />
     <Folder Include="Areas\Moderator\Controllers\" />
     <Folder Include="Areas\Moderator\Models\" />
