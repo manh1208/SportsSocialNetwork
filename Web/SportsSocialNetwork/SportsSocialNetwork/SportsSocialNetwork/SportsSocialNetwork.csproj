@@ -249,6 +249,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Moderator\ModeratorAreaRegistration.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\PlaceController.cs" />
     <Compile Include="Areas\PlaceOwner\PlaceOwnerAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -3039,8 +3040,8 @@
     <Folder Include="Areas\Moderator\Controllers\" />
     <Folder Include="Areas\Moderator\Models\" />
     <Folder Include="Areas\Moderator\Views\Shared\" />
-    <Folder Include="Areas\PlaceOwner\Controllers\" />
     <Folder Include="Areas\PlaceOwner\Models\" />
+    <Folder Include="Areas\PlaceOwner\Views\Place\" />
     <Folder Include="Areas\PlaceOwner\Views\Shared\" />
     <Folder Include="Models\Hubs\" />
   </ItemGroup>
