@@ -12,6 +12,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         #region Code from here
         IQueryable<AspNetUser> GetUsers(JQueryDataTableParamModel request, out int totalRecord);
 
+        AspNetUser FindUser(string Id);
 
         #endregion 
 
@@ -40,6 +41,12 @@ namespace SportsSocialNetwork.Models.Entities.Services
                              .Take(request.iDisplayLength);
             
             return result;
+        }
+
+        public AspNetUser FindUser(string Id)
+        {
+            return this.FirstOrDefault(u => u.Id.Equals(Id));
+           
         }
 
 

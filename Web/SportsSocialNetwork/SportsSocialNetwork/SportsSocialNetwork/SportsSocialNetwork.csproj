@@ -688,6 +688,7 @@
     <Compile Include="Models\Notifications\Android.cs" />
     <Compile Include="Models\Notifications\IOS.cs" />
     <Compile Include="Models\Notifications\NotificationModel.cs" />
+    <Compile Include="Models\ViewModels\AjaxOperationResult.cs" />
     <Compile Include="Models\ViewModels\AspNetRoleViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>

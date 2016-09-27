@@ -3,31 +3,105 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Danh sách tài khoản</h2>
+<style>
+    dt, dd{
+        font-size:15px;
+        color:#000;
+    }
+    dt{
+        font-weight:bold;
+    }
+    
+</style>
+<div class="panel">
+    <div class="panel-heading">
+        <h2 class="panel-title">Danh sách tài khoản</h2>
+    </div>
+</div>
+<div class="panel">
+    <div class="panel-body">
+        <div class="box">
+            <div class="box-header">
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="account-table" class="table table-hover dataTable table-bordered dt-responsive nowrap" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Họ và tên</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Email</th>
+                                    <th>Username</th>
+                                    <th>Quyền</th>
+                                    <th>Active</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+        </div>
+    </div>
+</div>
 
-<div class="box">
-    <div class="box-header">
-    </div><!-- /.box-header -->
-    <div class="box-body">
-        <div class="row">
-            <div class="col-sm-12">
-                <table id="account-table" class="table table-hover dataTable table-bordered dt-responsive nowrap" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Họ và tên</th>
-                            <th>Số điện thoại</th>
-                            <th>Email</th>
-                            <th>Username</th>
-                            <th>Quyền</th>
-                            <th>Active</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+<div class="modal fade modal-warning" id="modalViewdetail" aria-hidden="true"
+     aria-labelledby="modalViewdetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Chi tiết tài khoản</h4>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <h4>Thông tin tài khoản
+                        </h4>
+                    </div>
+                    <div class="panel-body">
+                        <dl class="dl-horizontal">
+                            <dt>Tên đăng nhập:</dt>
+                            <dd id="modal_username">manhnv</dd>
+                            <dt>Email:</dt>
+                            <dd id="modal_email">manhnv1208@gmail.com</dd>
+                            <dt>Vai trò:</dt>
+                            <dd id="modal_role">Quản trị viên</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <h4>
+                            Thông tin cá nhân
+                        </h4>
+                    </div>
+                    <div class="panel-body">
+                        <dl class="dl-horizontal">
+                            <dt>Họ và tên:</dt>
+                            <dd id="modal_fullname">Nguyễn Văn Mạnh</dd>
+                            <dt>Số điện thoại:</dt>
+                            <dd id="modal_phonenumber">01259251208</dd>
+                            <dt>Địa chỉ:</dt>
+                            <dd id="modal_address">71/88/27 Nguyễn Bặc - Phường 3 - Quận Tân Bình - Tp. Hồ Chí Minh</dd>
+                            <dt>Ngày sinh:</dt>
+                            <dd id="modal_birthday">12/08/1994</dd>
+                            <dt >Giới tính:</dt>
+                            <dd id="modal_gender">Nam</dd>
+                        </dl>
+                    </div>
+                </div>
+             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Cập nhật</button>
             </div>
         </div>
-    </div><!-- /.box-body -->
+    </div>
 </div>
 
 @section scripts{
@@ -38,23 +112,25 @@
      function initEventTable() {
          var colDefs = [
                {
-                   "aTargets": [1, 2, 3, 4, 5],
-                   "bSortable": false
+                   "aTargets": [,2, 3, 4, 5],
+                   "bSortable": false,
                }, {
                    "aTargets": [6],
                    "mRender": function (data, type, row) {
-                       var ahihibtn = '<div class="btn-group">'
-                                + '<button type="button" class="btn btn-danger btn-flat dropdown-toggle" data-toggle="dropdown" aria-expanded="false">'
-                                    + '<span class="caret"></span>'
-                                + '</button>'
-                                + '<ul class="dropdown-menu">'
-                                   + '<li><a href="#" >Chi tiết</a></li>'
-                                  + '<li><a href="#" >Chỉnh sửa</a></li>'
-                                  + '<li><a href="#" >Xóa</a></li>'
-                                + '</ul>'
-                            + '</div>';
-                      
-                       return ahihibtn;
+                       //var ahihibtn = '<div class="btn-group">'
+                       //         + '<button type="button" class="btn btn-danger btn-flat dropdown-toggle" data-toggle="dropdown" aria-expanded="false">'
+                       //             + '<span class="caret"></span>'
+                       //         + '</button>'
+                       //         + '<ul class="dropdown-menu">'
+                       //            + '<li><a href="#" >Chi tiết</a></li>'
+                       //           + '<li><a href="#" >Chỉnh sửa</a></li>'
+                       //           + '<li><a href="#" >Xóa</a></li>'
+                       //         + '</ul>'
+                       //     + '</div>';
+                       var previewBtn = '<a class="btn btn-success" data-target="#modalViewdetail" onclick="viewDetail(\'' + data + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
+                       var updateBtn = '<a class="btn btn-warning" href="#"><i class="fa fa-pencil-square-o"></i></a>';
+                       var deleteBtn = '<a class="btn btn-danger ladda-button" data-style="zoom-in" data-plugin="ladda"  href="#"> <span class="ladda-label"><i class="fa fa-trash-o "></i></span></a>';
+                       return previewBtn + '&nbsp;' + updateBtn + '&nbsp;' + deleteBtn;
                    },
                    "bSortable": false
                }
@@ -66,6 +142,32 @@
          };
          $('#account-table').customDataTable(param);
      }
+
+        function viewDetail(id) {
+           
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetDetail")',
+                data: { id: id},
+                success: function (data) {
+                    if (data.Succeed) {
+                        document.getElementById("modal_username").innerHTML = data.AdditionalData.UserName
+                        document.getElementById("modal_email").innerHTML = data.AdditionalData.UserName
+                        document.getElementById("modal_role").innerHTML = data.AdditionalData.Role
+                        document.getElementById("modal_fullname").innerHTML = data.AdditionalData.FullName
+                        document.getElementById("modal_phonenumber").innerHTML = data.AdditionalData.PhoneNumber
+                        document.getElementById("modal_address").innerHTML = data.AdditionalData.Address
+                        document.getElementById("modal_birthday").innerHTML = data.AdditionalData.Birthday
+                        document.getElementById("modal_gender").innerHTML = data.AdditionalData.Gender
+                    } else {
+                        showErrors(result.Errors);
+                    }
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
     </script>
 }
 

@@ -30,7 +30,8 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                         a.PhoneNumber,
                         a.Email,
                         a.UserName,
-                        a.AspNetRoles.FirstOrDefault().Name
+                        a.AspNetRoles.FirstOrDefault().Name,
+                        a.Id
 
                 }).ToArray();
 
@@ -42,6 +43,23 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                 recordsTotal = totalRecord
             };
             return Json(model);
+        }
+
+        public ActionResult GetDetail(string id)
+        {
+            var result = new AjaxOperationResult<AspNetUserViewModel>();
+            var service = this.Service<IAspNetUserService>();
+            var entity =  service.FindUser(id);
+            if (entity == null)
+            {
+                this.IdNotFound();
+            }else
+            {
+                result.Succeed = true;
+                var model = Mapper.Map<AspNetUserViewModel>(entity);
+                result.AdditionalData = model;
+            }
+            return Json(result);
         }
     }
 }
