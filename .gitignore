@@ -12,3 +12,5 @@ Web/SportsSocialNetwork/SportsSocialNetwork/Database/obj/
 *.dbmdl
 Web/SportsSocialNetwork/SportsSocialNetwork/.vs/config/applicationhost.config
 Web/SportsSocialNetwork/SportsSocialNetwork/SportsSocialNetwork/obj/
+Web/SportsSocialNetwork/SportsSocialNetwork/SportsSocialNetwork/Views/Place/View.cshtml
+Web/SportsSocialNetwork/SportsSocialNetwork/Database/Database.jfm
