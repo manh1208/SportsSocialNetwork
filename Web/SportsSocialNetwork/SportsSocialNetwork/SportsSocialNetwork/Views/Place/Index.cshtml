@@ -1,7 +1,11 @@
-﻿@model IEnumerable<SportsSocialNetwork.Models.ViewModels.PlaceViewModel>
+﻿@model SportsSocialNetwork.Models.ViewModels.SearchPlaceViewModel
+@using SportsSocialNetwork.Utilities;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
+    var selectList = ViewBag.SportList as IEnumerable<SelectListItem>;
+    var provinceList = ViewBag.ProvinceList as IEnumerable<SelectListItem>;
+    var districtList = new List<SelectListItem>();
 }
 <style>
     .table_image {
@@ -62,46 +66,55 @@
             <h3 class="panel-title">Tìm kiếm địa điểm</h3>
         </header>
         <div class="panel-body">
-            <div class="form-group" style="padding:5%">
-                <select data-plugin="selectpicker" class="bs-select-hidden form-control input-sm" id="sport">
-                    <option value="0">Chọn môn thể thao</option>
-                    @foreach (var item in ViewBag.sportList)
-                    {
-                        <option value="@item.Id">@item.Name</option>
-                    }
-                </select>
+            <div class="form-group">
+                @Html.DropDownListFor(m => m.SportId, selectList, "--Chọn loại thể thao--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "sport" })
+               
             </div>
-            <div class="form-group" style="border:solid">
-                <div class="form-group" style="padding:5%">
-                    <select data-plugin="selectpicker" class="bs-select-hidden form-control input-sm">
-                        <option>Chọn Tỉnh/Thành</option>
-                        <option>Ketchup</option>
-                        <option>Relish</option>
-                    </select>
-                </div>
-                <div class="form-group" style="padding:5%">
-                    <select data-plugin="selectpicker" class="bs-select-hidden form-control input-sm">
-                        <option>Chọn Quận</option>
-                        <option>Ketchup</option>
-                        <option>Relish</option>
-                    </select>
+                <div class="form-group">
+                    @Html.DropDownListFor(m => m.Province, provinceList, "--Chọn tỉnh/thành phố--",new { @class = "bs-select-hidden form-control input-sm droplist", @id = "province" })
                 </div>
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary" style="width:90%;" id="searchBtn">Tìm kiếm</button>
+                    @Html.DropDownListFor(m => m.District, districtList, "--Chọn quận/huyện--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "district" })
                 </div>
                 <p style="font-size:10px; color:red">Hoặc tìm xung quanh địa điểm này</p>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" style="width:90%">Tìm xung quanh bạn</button>
                 </div>
-            </div>
         </div>
     </div>
     <script>
-    console.log("aaa");
-    $("#searchBtn").click(function () {
-        InitDatatable();
-        RefreshTable();
-    });
+        console.log("aaa");
+
+        $("#province").on("change", function () {
+            var provinceName = $('#province').val();
+            $.ajax({
+                url: "/Place/GetDistrict",
+                type: 'POST',
+                data: {
+                    'provinceName': provinceName,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    var ddl = $('#district');
+                    ddl.empty();
+                    $(document.createElement('option'))
+                            .attr('value', '')
+                            .text("--Chọn quận/huyện--")
+                            .appendTo(ddl);
+                    $(data).each(function () {
+                        $(document.createElement('option'))
+                            .attr('value', this.Value)
+                            .text(this.Text)
+                            .appendTo(ddl);
+                    });
+                }
+            });
+        });
+        
+        $(".droplist").on("change",function () {
+            InitDatatable();
+            RefreshTable();
+        })
 
 
     function RefreshTable() {
@@ -120,7 +133,9 @@
             "sAjaxSource": "/Place/GetData",
             "bProcessing": true,
             "fnServerParams": function (aoData) {
-                aoData.push({ "name": "sportId", "value": $('#sport').val()});
+                aoData.push({ "name": "sport", "value": $('#sport').val()},
+                    { "name": "province", "value": $('#province').val() },
+                    { "name": "district", "value": $('#district').val() });
             },
             "aLengthMenu": [10, 20, 100],
             "oLanguage": {
@@ -196,6 +211,20 @@
         InitDatatable();
         RefreshTable();
     });
+
+    function checkLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            NProgress.done();
+            sweetAlert("Oops...", "Vị trí không hỗ trợ trên trình duyệt này.", "error")
+
+        }
+    }
+    function showPosition(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+    }
     </script>
 
 
