@@ -28,9 +28,9 @@ public partial class Notification
 
     public int Type { get; set; }
 
-    public int PostId { get; set; }
+    public Nullable<int> PostId { get; set; }
 
-    public int InvitationId { get; set; }
+    public Nullable<int> InvitationId { get; set; }
 
     public bool Active { get; set; }
 

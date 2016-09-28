@@ -28,6 +28,8 @@ public partial class Field
 
         this.Orders = new HashSet<Order>();
 
+        this.TimeBlocks = new HashSet<TimeBlock>();
+
     }
 
 
@@ -62,6 +64,10 @@ public partial class Field
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Order> Orders { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<TimeBlock> TimeBlocks { get; set; }
 
 }
 

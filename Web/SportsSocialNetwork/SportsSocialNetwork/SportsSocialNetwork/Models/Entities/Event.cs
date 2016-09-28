@@ -29,7 +29,7 @@ public partial class Event
 
     public int Id { get; set; }
 
-    public int Name { get; set; }
+    public string Name { get; set; }
 
     public string CreatorId { get; set; }
 
@@ -45,7 +45,7 @@ public partial class Event
 
     public int Status { get; set; }
 
-    public bool Avtive { get; set; }
+    public bool Active { get; set; }
 
 
 

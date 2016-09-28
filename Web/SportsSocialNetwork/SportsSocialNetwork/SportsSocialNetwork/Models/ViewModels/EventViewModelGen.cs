@@ -16,7 +16,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     {
     	
     			public virtual int Id { get; set; }
-    			public virtual int Name { get; set; }
+    			public virtual string Name { get; set; }
     			public virtual string CreatorId { get; set; }
     			public virtual System.DateTime StartDate { get; set; }
     			public virtual System.DateTime EndDate { get; set; }
@@ -24,7 +24,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string Description { get; set; }
     			public virtual string Image { get; set; }
     			public virtual int Status { get; set; }
-    			public virtual bool Avtive { get; set; }
+    			public virtual bool Active { get; set; }
     	
     	public EventViewModel() : base() { }
     	public EventViewModel(SportsSocialNetwork.Models.Entities.Event entity) : base(entity) { }

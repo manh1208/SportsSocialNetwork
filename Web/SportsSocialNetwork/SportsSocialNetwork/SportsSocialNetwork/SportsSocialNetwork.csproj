@@ -248,6 +248,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
+    <Compile Include="Areas\Admin\Models\AccountDetailViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\AccountUpdateViewModel.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Moderator\ModeratorAreaRegistration.cs" />
     <Compile Include="Areas\PlaceOwner\PlaceOwnerAreaRegistration.cs" />
@@ -688,6 +690,7 @@
     <Compile Include="Models\Notifications\Android.cs" />
     <Compile Include="Models\Notifications\IOS.cs" />
     <Compile Include="Models\Notifications\NotificationModel.cs" />
+    <Compile Include="Models\Utilities\Utils.cs" />
     <Compile Include="Models\ViewModels\AjaxOperationResult.cs" />
     <Compile Include="Models\ViewModels\AspNetRoleViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
@@ -1052,6 +1055,7 @@
     <Content Include="Content\assets\js\components\masonry.js" />
     <Content Include="Content\assets\js\components\matchheight.js" />
     <Content Include="Content\assets\js\components\matchheight.min.js" />
+    <Content Include="Content\assets\js\components\material.js" />
     <Content Include="Content\assets\js\components\material.min.js" />
     <Content Include="Content\assets\js\components\nestable.min.js" />
     <Content Include="Content\assets\js\components\nprogress.min.js" />
@@ -2718,6 +2722,8 @@
     <Content Include="Content\font-awesome-4.6.3\HELP-US-OUT.txt" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\js\custom-script.js" />
+    <Content Include="Content\js\sweetAlert\sweetalert.css" />
+    <Content Include="Content\js\sweetAlert\sweetalert.min.js" />
     <Content Include="External Lib\SkyWeb.DatVM.Data.dll" />
     <Content Include="External Lib\SkyWeb.DatVM.Mvc.dll" />
     <Content Include="favicon.ico" />
@@ -3253,7 +3259,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Api\Controllers\" />
     <Folder Include="Areas\Api\Models\" />
     <Folder Include="Areas\Api\Views\Shared\" />
