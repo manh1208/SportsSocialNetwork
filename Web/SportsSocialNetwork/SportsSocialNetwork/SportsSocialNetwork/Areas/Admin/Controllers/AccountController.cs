@@ -50,20 +50,19 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
             return Json(model);
         }
 
-        [HttpPost]
-        public ActionResult GetDetail(string id)
+        public ActionResult Detail(string id)
         {
-            var result = new AjaxOperationResult<AccountDetailViewModel>();
             var service = this.Service<IAspNetUserService>();
             var entity = service.FindUser(id);
+            AccountDetailViewModel model;
             if (entity == null)
             {
                 return this.IdNotFound();
             }
             else
             {
-                result.Succeed = true;
-                var model = Mapper.Map<AccountDetailViewModel>(entity);
+              
+                model = Mapper.Map<AccountDetailViewModel>(entity);
                 Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
                 Province province = vietnam.VietNamese.Where(p => p.Name.Equals(model.City)).FirstOrDefault();
 
@@ -86,32 +85,32 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                 model.CreateAddressString();
                 model.CreateBirthdayString();
                 model.CreateRole();
+                if (model.Gender.HasValue) { 
                 model.GenderString = Utils.GetEnumDescription((Gender)model.Gender);
-                result.AdditionalData = model;
+                } 
             }
-            return Json(result);
+            return this.PartialView(model) ;
         }
 
-        [HttpPost]
-        public ActionResult PrepareUpdate(string id)
+        public ActionResult Update(string id)
         {
-            var result = new AjaxOperationResult<AccountUpdateViewModel>();
             var user_service = this.Service<IAspNetUserService>();
             var role_service = this.Service<IAspNetRoleService>();
             var entity = user_service.FindUser(id);
+            UpdateAccountViewModel detail;
             if (entity == null)
             {
                 return this.IdNotFound();
             }
             else
             {
-                var detail = Mapper.Map<AccountDetailViewModel>(entity);
-                detail.CreateAddressString();
-                detail.CreateBirthdayString();
+                detail = Mapper.Map<UpdateAccountViewModel>(entity);
+                //detail.CreateAddressString();
+                //detail.CreateBirthdayString();
                 detail.CreateRole();
                 Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
                 Province province = vietnam.VietNamese.Where(p => p.Name.Equals(detail.City)).FirstOrDefault();
-                District district = province.Districts.Where(d => d.Name.Equals(detail.District)).FirstOrDefault();
+
 
                 var provinces = vietnam.VietNamese.Select(p =>
                                 new SelectListItem
@@ -121,27 +120,8 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                                 })
                                 .OrderBy(p => p.Value);
 
-                var districts = vietnam.VietNamese.Where(p => p.Name.Equals(detail.City))
-                                               .FirstOrDefault()
-                                               .Districts
-                                               .Select(d =>
-                                               new SelectListItem
-                                               {
-                                                   Text = d.Type + " " + d.Name,
-                                                   Value = d.Name
-                                               })
-                                               .OrderBy(d => d.Value);
-                var wards = vietnam.VietNamese[0].Districts.ToList()[0]
-                                              .Wards
-                                              .Select(w =>
-                                              new SelectListItem
-                                              {
-                                                  Text = w.Type + " " + w.Name,
-                                                  Value = w.Name
-                                              })
-                                              .OrderBy(w => w.Value);
-
-
+                IOrderedEnumerable<SelectListItem> districts = new List<SelectListItem>().OrderBy(d=>d.Value);
+                IOrderedEnumerable<SelectListItem> wards =  new List<SelectListItem>().OrderBy(d => d.Value);
                 if (province != null)
                 {
                     districts = province.Districts.Select(d =>
@@ -151,6 +131,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                                                    Value = d.Name
                                                })
                                                .OrderBy(d => d.Value);
+                    District district = province.Districts.Where(d => d.Name.Equals(detail.District)).FirstOrDefault();
                     if (district != null)
                     {
                         wards = district.Wards.Select(w =>
@@ -163,27 +144,24 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                     }
                 }
 
-                var roles = role_service.Get()
+                var roles = role_service.Get().ToArray()
                                         .Select(r =>
                                         new SelectListItem
                                         {
                                             Text = r.Name,
                                             Value = r.Id
-                                        });
-
-                var model = new AccountUpdateViewModel
-                {
-                    Detail = detail,
-                    Provinces = provinces,
-                    Districts = districts,
-                    Wards = wards,
-                    Roles = roles
-                };
-                result.AdditionalData = model;
-                result.Succeed = true;
-            }
-
-            return Json(result);
+                                        }).OrderBy(r=>r.Value);
+                provinces.ToList().Add(new SelectListItem { Text = "", Value = " " });
+                districts.ToList().Add(new SelectListItem { Text = "", Value = " " });
+                wards.ToList().Add(new SelectListItem { Text = "", Value = " " });
+                roles.ToList().Add(new SelectListItem { Text = "", Value = " " });
+                ViewBag.Provinces = provinces;
+                ViewBag.Districts = districts;
+                ViewBag.Wards = wards;
+                ViewBag.Roles = roles;    
+            }                     
+                                  
+            return this.PartialView(detail);
         }
 
         [HttpPost]
@@ -191,26 +169,22 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
         {
             var result = new AjaxOperationResult<IEnumerable<SelectListItem>>();
             Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
-            var districts = vietnam.VietNamese.Where(p => p.Name.Equals(provinceName))
-                                                .FirstOrDefault()
-                                                .Districts
-                                                .Select(d =>
-                                                new SelectListItem
-                                                {
-                                                    Text = d.Type + " " + d.Name,
-                                                    Value = d.Name
-                                                })
-                                                .OrderBy(d => d.Value);
-            if (districts.Count() > 0)
+            Province province = vietnam.VietNamese.Where(p => p.Name.Equals(provinceName)).FirstOrDefault();
+            IOrderedEnumerable<SelectListItem> districts = null;
+            if (province != null)
             {
+                districts = province.Districts.Select(d =>
+                                                    new SelectListItem
+                                                    {
+                                                        Text = d.Type + " " + d.Name,
+                                                        Value = d.Name
+                                                    })
+                                                    .OrderBy(d => d.Value);
+            }
+            
                 result.Succeed = true;
                 result.AdditionalData = districts;
-            }
-            else
-            {
-                result.Succeed = false;
-
-            }
+           
 
             return Json(result);
         }
@@ -219,32 +193,32 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
         {
             var result = new AjaxOperationResult<IEnumerable<SelectListItem>>();
             Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
-            var wards = vietnam.VietNamese.Where(p => p.Name.Equals(provinceName))
-                                               .FirstOrDefault()
-                                               .Districts
-                                               .Where(d => d.Name.Equals(districtName))
-                                               .FirstOrDefault()
-                                               .Wards
-                                               .Select(w =>
-                                               new SelectListItem
-                                               {
-                                                   Text = w.Type + " " + w.Name,
-                                                   Value = w.Name
-                                               })
-                                               .OrderBy(w => w.Value);
-            if (wards.Count() > 0)
-            {
+            Province province = vietnam.VietNamese.Where(p => p.Name.Equals(provinceName)).FirstOrDefault();
+            IOrderedEnumerable<SelectListItem> wards = null;
+            if (province != null) {
+                District district = province.Districts
+                                            .Where(d => d.Name.Equals(districtName))
+                                            .FirstOrDefault();
+                if (district != null)
+                {
+                    wards =district.Wards.Select(w =>
+                                              new SelectListItem
+                                              {
+                                                  Text = w.Type + " " + w.Name,
+                                                  Value = w.Name
+                                              })
+                                              .OrderBy(w => w.Value);
+                }
+            }
+            
+          
                 result.Succeed = true;
                 result.AdditionalData = wards;
-            }
-            else
-            {
-                result.Succeed = false;
-            }
             return Json(result);
         }
 
-        public ActionResult UpdateAccount(AspNetUserViewModel model)
+        [HttpPost]
+        public ActionResult Update(UpdateAccountViewModel model)
         {
             var result = new AjaxOperationResult();
             try
@@ -269,7 +243,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
             {
                 result.Succeed = false;
             }
-            return RedirectToAction("Index");
+            return Json(result);
         }
 
         [HttpPost]

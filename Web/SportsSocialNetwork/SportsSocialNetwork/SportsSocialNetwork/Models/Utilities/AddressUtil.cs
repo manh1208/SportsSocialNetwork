@@ -13,11 +13,17 @@ namespace SportsSocialNetwork.Utilities
 
         private static AddressUtil INSTANCE = null;
         public static String PATH = "~/Content/json/Vietnam.json";
+        public Country vietnamese;
 
         private AddressUtil()
-        {
-
+        { 
         }
+
+        private AddressUtil(string path)
+        {
+            vietnamese = GetCountry(path);
+        }
+        
 
         public static AddressUtil GetINSTANCE()
         {
@@ -26,6 +32,25 @@ namespace SportsSocialNetwork.Utilities
                 INSTANCE = new AddressUtil();
             }
             return INSTANCE;
+        }
+
+        public static AddressUtil GetINSTANCE(string path)
+        {
+            if (INSTANCE == null)
+            {
+                INSTANCE = new AddressUtil();
+            }
+            return INSTANCE;
+        }
+
+        public Province GetProvince(string provinceName)
+        {
+            return vietnamese.VietNamese.Where(p => p.Name.Equals(provinceName)).FirstOrDefault();
+        }
+
+        public District GetDistrict(string provinceName,string districtName)
+        {
+            return GetProvince(provinceName).Districts.Where(d => d.Name.Equals(districtName)).FirstOrDefault();
         }
 
         public Country GetCountry(string path)

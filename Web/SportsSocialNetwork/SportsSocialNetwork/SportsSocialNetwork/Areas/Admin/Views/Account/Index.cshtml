@@ -47,60 +47,11 @@
     </div>
 </div>
 
-<div class="modal fade modal-warning" id="modalViewdetail" aria-hidden="true"
-     aria-labelledby="modalViewdetail" role="dialog" tabindex="-1">
+<div class="modal fade modal-warning" id="modelDetail" aria-hidden="true"
+     aria-labelledby="modelDetail" role="dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-                <h4 class="modal-title">Chi tiết tài khoản</h4>
-            </div>
-            <div class="modal-body" id="modalBody">
-                <div class="panel panel-bordered">
-                    <div class="panel-heading">
-                        <h4>
-                            Thông tin tài khoản
-                        </h4>
-                    </div>
-                    <div class="panel-body">
-                        <dl class="dl-horizontal">
-                            <dt>Tên đăng nhập:</dt>
-                            <dd id="modal_username"></dd>
-                            <dt>Email:</dt>
-                            <dd id="modal_email"></dd>
-                            <dt>Vai trò:</dt>
-                            <dd id="modal_role"></dd>
-                        </dl>
-                    </div>
-                </div>
-                <div class="panel panel-bordered">
-                    <div class="panel-heading">
-                        <h4>
-                            Thông tin cá nhân
-                        </h4>
-                    </div>
-                    <div class="panel-body">
-                        <dl class="dl-horizontal">
-                            <dt>Họ và tên:</dt>
-                            <dd id="modal_fullname"></dd>
-                            <dt>Số điện thoại:</dt>
-                            <dd id="modal_phonenumber"></dd>
-                            <dt>Địa chỉ:</dt>
-                            <dd id="modal_address"></dd>
-                            <dt>Ngày sinh:</dt>
-                            <dd id="modal_birthday"></dd>
-                            <dt>Giới tính:</dt>
-                            <dd id="modal_gender"></dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-               
-            </div>
+            <div id="detail-modal-container"></div>
         </div>
     </div>
 </div>
@@ -109,116 +60,11 @@
      aria-labelledby="modalViewdetail" role="dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-                <h4 class="modal-title">Cập nhật tài khoản</h4>
-            </div>
-            @using (Ajax.BeginForm("UpdateAccount", new AjaxOptions
-            {
-                InsertionMode = InsertionMode.Replace,
-                OnSuccess = "alert('onsuccess fired')"
-            }))
-            {
-                <div class="modal-body" id="modalBody">
-                    <div class="panel panel-bordered">
-                        <div class="panel-heading">
-                            <h4>
-                                Thông tin tài khoản
-                            </h4>
-                        </div>
-                        <div class="panel-body container-fluid">
-                            <input type="hidden" class="form-control" name="Id" id="updateId" />
-                            <div class="form-group form-material floating row">
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control input-lg" name="Username" id="updateUsername" />
-                                    <label class="floating-label">Tên đăng nhập</label>
-                                </div>
-                                <div class="col-sm-6">
-
-                                    <input type="email" class="form-control input-lg" name="Email" id="updateEmail" />
-                                    <label class="floating-label">Email</label>
-                                </div>
-                            </div>
-                            <div class="form-group form-material floating">
-                                @Html.DropDownList("role", Enumerable.Empty<SelectListItem>(), " ",
-                             new { @class = "form-control input-lg", @id = "updateRole" })
-                                <label class="floating-label">Vai trò</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-bordered">
-                        <div class="panel-heading">
-                            <h4>
-                                Thông tin cá nhân
-                            </h4>
-                        </div>
-                        <div class="panel-body">
-
-                            <div class="form-group form-material floating row">
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control input-lg" name="Fullname" id="updateFullName" />
-                                    <label class="floating-label">Họ và tên</label>
-                                </div>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control input-lg" name="Phonenumber" id="updatePhoneNumber" />
-                                    <label class="floating-label">Số điện thoại</label>
-                                </div>
-                            </div>
-                            <div class="form-group form-material floating row">
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control input-lg" name="Address" id="updateAddress" />
-                                    <label class="floating-label">Địa chỉ</label>
-                                </div>
-                                <div class="col-sm-6">
-                                    @Html.DropDownList("City", Enumerable.Empty<SelectListItem>(), " ",
-                         new { @class = "form-control input-lg", @id = "updateProvince" })
-                                    <label class="floating-label">Tỉnh/ TP</label>
-                                </div>
-                            </div>
-                            <div class="form-group form-material floating row">
-
-                                <div class="col-sm-6">
-                                    @Html.DropDownList("district", Enumerable.Empty<SelectListItem>(), " ",
-                         new { @class = "form-control input-lg", @id = "updateDistrict" })
-                                    <label class="floating-label">Quận/ Huyện</label>
-                                </div>
-                                <div class="col-sm-6">
-                                    @Html.DropDownList("ward", Enumerable.Empty<SelectListItem>(), " ",
-                         new { @class = "form-control input-lg", @id = "updateWard", })
-                                    <label class="floating-label">Phường/ Xã</label>
-                                </div>
-
-                            </div>
-                            <div class="form-group form-material floating row">
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control input-lg" data-plugin="datepicker" name="Birthday" id="updateBirthday" />
-                                    <label class="floating-label">Ngày sinh</label>
-                                </div>
-                                <div class="col-sm-6">
-                                    <select class="form-control input-lg" name="Gender" id="updateGender">
-                                        <option value="">&nbsp;</option>
-                                        <option value="1">Nam</option>
-                                        <option value="2">Nữ</option>
-                                        <option value="3">Khác</option>
-                                    </select>
-                                    <label class="floating-label">Giới tính</label>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Cập nhật</button>
-                </div>
-            }
+            <div id="update-modal-container"></div>
         </div>
     </div>
 </div>
+
 
 @section scripts{
     <script>
@@ -242,8 +88,8 @@
                   }, {
                       "aTargets": [6],
                       "mRender": function (data, type, row) {
-                          var previewBtn = '<a class="btn btn-success" data-target="#modalViewdetail" onclick="viewDetail(\'' + data + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
-                          var updateBtn = '<a class="btn btn-warning" data-target="#modalUpdate" data-toggle="modal" onclick="updateClick(\'' + data + '\')" href="#"><i class="fa fa-pencil-square-o"></i></a>';
+                          var previewBtn = '<a class="btn btn-success" data-target="#modalViewdetail" onclick="showDetailModal(\'' + data + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
+                          var updateBtn = '<a class="btn btn-warning" data-target="#modalUpdate" data-toggle="modal" onclick="showUpdateModal(\'' + data + '\')" href="#"><i class="fa fa-pencil-square-o"></i></a>';
                           var deleteBtn = '<a class="btn btn-danger ladda-button" data-style="zoom-in" data-plugin="ladda" onclick="showConfirmDeleteAccount(\'' + data + '\')"  href="#"> <span class="ladda-label"><i class="fa fa-trash-o "></i></span></a>';
                           return previewBtn + '&nbsp;' + updateBtn + '&nbsp;' + deleteBtn;
                       },
@@ -258,32 +104,75 @@
             $('#account-table').customDataTable(param);
         }
 
-        function viewDetail(id) {
-
+        function showDetailModal(id) {
             $.ajax({
-                type: 'POST',
-                url: '@Url.Action("GetDetail")',
+                url: '@Url.Action("Detail")',
+                type: 'Get',
                 data: { id: id },
                 success: function (data) {
-                    if (data.Succeed) {
-                        document.getElementById("modal_username").innerHTML = data.AdditionalData.UserName
-                        document.getElementById("modal_email").innerHTML = data.AdditionalData.Email
-                        document.getElementById("modal_role").innerHTML = data.AdditionalData.RoleName
-                        document.getElementById("modal_fullname").innerHTML = data.AdditionalData.FullName
-                        document.getElementById("modal_phonenumber").innerHTML = data.AdditionalData.PhoneNumber
-                        document.getElementById("modal_address").innerHTML = data.AdditionalData.AddressString
-                        document.getElementById("modal_birthday").innerHTML = data.AdditionalData.BirthdayString
-                        document.getElementById("modal_gender").innerHTML = data.AdditionalData.GenderString
-
-                    } else {
-                        showErrors(result.Errors);
-                    }
+                    $('#detail-modal-container').html(data);
+                    $('#modelDetail').modal('show');
                 },
                 error: function (error) {
                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                 }
             });
         }
+
+        function showUpdateModal(id) {
+            $.ajax({
+                url: '@Url.Action("Update")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#update-modal-container').html(data);
+                    $('#modalUpdate').modal('show');
+                    scriptForPartialView();
+
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
+        function scriptForPartialView() {
+            $("#updateProvince").on("change", function () {
+                updateDistrict();
+            });
+            $("#updateDistrict").on("change", function () {
+                updateWard();
+            });
+            $('#update-account-form').submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData(document.getElementById('update-account-form'));
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Update")',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            showMessage("Thay đổi thành công.", "success", "OK");
+                            $('#account-table').reloadDataTable();
+                        } else {
+                            showErrors(result.Errors);
+                        }
+
+                    },
+                    error: function (result) {
+
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+
+
+            });
+        }
+
 
         function showConfirmDeleteAccount(id) {
             showConfirmDeleteItem("Bạn có chắc chắn muốn xóa tài khoản này không?",
@@ -309,18 +198,6 @@
                 });
         }
 
-        function updateClick(id) {
-            updateAccount(id);
-
-        }
-
-        $("#updateProvince").on("change", function () {
-            updateDistrict();
-        });
-        $("#updateDistrict").on("change", function () {
-            updateWard();
-        });
-
         function updateWard() {
             var provinceName = $('#updateProvince').val();
             var districtName = $('#updateDistrict').val();
@@ -335,6 +212,11 @@
                 success: function (data) {
                     var ddl = $('#updateWard');
                     ddl.empty();
+                    $(document.createElement('option'))
+                                            .attr('value', '')
+                                            .text('')
+                                            .appendTo(ddl);
+                    ddl.addClass("empty");
                     $(data.AdditionalData).each(function () {
                         $(document.createElement('option'))
                             .attr('value', this.Value)
@@ -357,6 +239,11 @@
                 success: function (data) {
                     var ddl = $('#updateDistrict');
                     ddl.empty();
+                    ddl.addClass("empty");
+                    $(document.createElement('option'))
+                                            .attr('value', '')
+                                            .text('')
+                                            .appendTo(ddl);
                     $(data.AdditionalData).each(function () {
                         $(document.createElement('option'))
                             .attr('value', this.Value)
@@ -367,113 +254,6 @@
                 }
             });
         };
-
-        function updateAccount(id) {
-
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("PrepareUpdate")',
-                data: { id: id },
-                success: function (data) {
-                    if (data.Succeed) {
-                        if (data.AdditionalData.Detail.Id !== null && data.AdditionalData.Detail.Id !== '') {
-                            document.getElementById("updateId").value = data.AdditionalData.Detail.Id
-                        }
-
-                        if (data.AdditionalData.Detail.UserName !== null && data.AdditionalData.Detail.UserName !== '') {
-                            document.getElementById("updateUsername").value = data.AdditionalData.Detail.UserName
-                            $('#updateUsername').removeClass('empty');
-                        }
-                        if (data.AdditionalData.Detail.Email !== null && data.AdditionalData.Detail.Email !== '') {
-                            document.getElementById("updateEmail").value = data.AdditionalData.Detail.Email
-                            $('#updateEmail').removeClass('empty');
-                        }
-                        if (data.AdditionalData.Detail.FullName !== null && data.AdditionalData.Detail.FullName !== '') {
-                            document.getElementById("updateFullName").value = data.AdditionalData.Detail.FullName
-                            $('#updateFullName').removeClass('empty');
-                        }
-                        if (data.AdditionalData.Detail.PhoneNumber !== null && data.AdditionalData.Detail.PhoneNumber !== '') {
-                            document.getElementById("updatePhoneNumber").value = data.AdditionalData.Detail.PhoneNumber
-                            $('#updatePhoneNumber').removeClass('empty');
-                        }
-                        if (data.AdditionalData.Detail.Address !== null && data.AdditionalData.Detail.Address !== '') {
-                            document.getElementById("updateAddress").value = data.AdditionalData.Detail.Address
-                            $('#updateAddress').removeClass('empty');
-                        }
-                        if (data.AdditionalData.Detail.BirthdayString !== null && data.AdditionalData.Detail.BirthdayString !== '') {
-                            document.getElementById("updateBirthday").value = data.AdditionalData.Detail.BirthdayString
-                            $('#updateBirthday').removeClass('empty');
-                        }
-
-                        var provinceddl = $('#updateProvince');
-                        provinceddl.empty();
-                        $('#updateProvince').removeClass('empty');
-                        $(data.AdditionalData.Provinces).each(function () {
-                            var x = $(document.createElement('option'));
-                            x.attr('value', this.Value);
-                            x.text(this.Text)
-                            if (this.Value === data.AdditionalData.Detail.City) {
-                                x.attr('selected', 'selected');
-
-                            }
-                            x.appendTo(provinceddl);
-                        });
-
-                        var districtddl = $('#updateDistrict');
-                        districtddl.empty();
-                        $('#updateDistrict').removeClass('empty');
-                        $(data.AdditionalData.Districts).each(function () {
-                            var x = $(document.createElement('option'));
-                            x.attr('value', this.Value);
-                            x.text(this.Text)
-                            if (this.Value === data.AdditionalData.Detail.District) {
-                                x.attr('selected', 'selected');
-
-                            }
-                            x.appendTo(districtddl);
-                        });
-
-                        var warddll = $('#updateWard');
-                        warddll.empty();
-                        $('#updateWard').removeClass('empty');
-                        $(data.AdditionalData.Wards).each(function () {
-                            var x = $(document.createElement('option'));
-                            x.attr('value', this.Value);
-                            x.text(this.Text)
-                            if (this.Value === data.AdditionalData.Detail.Ward) {
-                                x.attr('selected', 'selected');
-
-                            }
-                            x.appendTo(warddll);
-                        });
-
-                        var roleddl = $('#updateRole');
-                        roleddl.empty();
-                        $(data.AdditionalData.Roles).each(function () {
-                            var x = $(document.createElement('option'));
-                            x.attr('value', this.Value);
-                            x.text(this.Text)
-                            if (this.Text === data.AdditionalData.Detail.RoleName.toString()) {
-                                x.attr('selected', 'selected');
-                                $('#updateRole').removeClass('empty');
-                            }
-                            x.appendTo(roleddl);
-                        });
-                        var optionValue = data.AdditionalData.Detail.Gender
-                        $("#updateGender").val(optionValue)
-                            .find("option[value=" + optionValue + "]").attr('selected', true);
-                        if (optionValue != null && optionValue > 0) {
-                            $('#updateGender').removeClass('empty');
-                        }
-                    } else {
-                        showErrors(result.Errors);
-                    }
-                },
-                error: function (error) {
-                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                }
-            });
-        }
     </script>
 }
 

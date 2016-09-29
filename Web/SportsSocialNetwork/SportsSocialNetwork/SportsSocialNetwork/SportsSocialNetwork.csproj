@@ -248,8 +248,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
-    <Compile Include="Areas\Admin\Models\AccountDetailViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\AccountUpdateViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\UpdateAccountViewModel.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Moderator\ModeratorAreaRegistration.cs" />
     <Compile Include="Areas\PlaceOwner\PlaceOwnerAreaRegistration.cs" />
@@ -541,6 +540,7 @@
     <Compile Include="Models\Entities\Services\AspNetUserLoginServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\AspNetUserRolesViewModel.cs" />
     <Compile Include="Models\Entities\Services\AspNetUserService.cs" />
     <Compile Include="Models\Entities\Services\AspNetUserServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
@@ -2716,11 +2716,13 @@
     <Content Include="Content\assets\vendor\x-editable\x-editable.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\custom-css.css" />
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.css" />
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome-4.6.3\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\font-awesome-4.6.3\HELP-US-OUT.txt" />
     <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\logo_orange.png" />
     <Content Include="Content\js\custom-script.js" />
     <Content Include="Content\js\sweetAlert\sweetalert.css" />
     <Content Include="Content\js\sweetAlert\sweetalert.min.js" />
@@ -3210,6 +3212,8 @@
     <Content Include="Content\assets\js\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\assets\js\bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\assets\js\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Areas\Admin\Views\Account\Update.cshtml" />
+    <Content Include="Areas\Admin\Views\Account\Detail.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
