@@ -284,7 +284,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
             }
             else
             {
-                service.Deactivate(user);
+                service.DeactivateUser(user);
             }
 
             return Json(result);

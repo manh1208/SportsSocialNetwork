@@ -242,16 +242,6 @@
                   }, {
                       "aTargets": [6],
                       "mRender": function (data, type, row) {
-                          //var ahihibtn = '<div class="btn-group">'
-                          //         + '<button type="button" class="btn btn-danger btn-flat dropdown-toggle" data-toggle="dropdown" aria-expanded="false">'
-                          //             + '<span class="caret"></span>'
-                          //         + '</button>'
-                          //         + '<ul class="dropdown-menu">'
-                          //            + '<li><a href="#" >Chi tiết</a></li>'
-                          //           + '<li><a href="#" >Chỉnh sửa</a></li>'
-                          //           + '<li><a href="#" >Xóa</a></li>'
-                          //         + '</ul>'
-                          //     + '</div>';
                           var previewBtn = '<a class="btn btn-success" data-target="#modalViewdetail" onclick="viewDetail(\'' + data + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
                           var updateBtn = '<a class="btn btn-warning" data-target="#modalUpdate" data-toggle="modal" onclick="updateClick(\'' + data + '\')" href="#"><i class="fa fa-pencil-square-o"></i></a>';
                           var deleteBtn = '<a class="btn btn-danger ladda-button" data-style="zoom-in" data-plugin="ladda" onclick="showConfirmDeleteAccount(\'' + data + '\')"  href="#"> <span class="ladda-label"><i class="fa fa-trash-o "></i></span></a>';
@@ -276,7 +266,6 @@
                 data: { id: id },
                 success: function (data) {
                     if (data.Succeed) {
-
                         document.getElementById("modal_username").innerHTML = data.AdditionalData.UserName
                         document.getElementById("modal_email").innerHTML = data.AdditionalData.Email
                         document.getElementById("modal_role").innerHTML = data.AdditionalData.RoleName

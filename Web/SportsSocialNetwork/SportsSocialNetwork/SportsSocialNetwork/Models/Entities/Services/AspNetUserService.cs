@@ -14,7 +14,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         AspNetUser FindUser(string Id);
 
-        #endregion 
+        void DeactivateUser(AspNetUser user);
+        #endregion
 
         void test();
     }
@@ -25,9 +26,9 @@ namespace SportsSocialNetwork.Models.Entities.Services
         public IQueryable<AspNetUser> GetUsers(JQueryDataTableParamModel request, out int totalRecord)
         {
             var filter = request.sSearch;
-            var list1 = this.GetActive();
+            var list1 = this.GetActive(u=>u.Active==true);
 
-            var list = this.GetActive(
+            var list = list1.Where(
                 u=>filter == null || 
                 u.UserName.ToLower().Contains(filter.ToLower()) ||
                 u.FullName.ToLower().Contains(filter.ToLower()) ||
@@ -47,6 +48,12 @@ namespace SportsSocialNetwork.Models.Entities.Services
         {
             return this.FirstOrDefault(u => u.Id.Equals(Id));
            
+        }
+
+        public void DeactivateUser(AspNetUser user)
+        {
+            user.Active = false;
+            this.Update(user);
         }
 
 
