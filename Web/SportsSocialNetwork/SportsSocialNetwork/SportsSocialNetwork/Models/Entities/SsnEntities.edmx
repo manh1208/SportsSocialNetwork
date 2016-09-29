@@ -63,8 +63,9 @@
           <Property Name="CoverImage" Type="nvarchar" MaxLength="255" />
           <Property Name="Birthday" Type="date" />
           <Property Name="Gender" Type="int" />
-          <Property Name="CreateDate" Type="datetime" Nullable="false" />
-          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="Fullname" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -1365,8 +1366,8 @@
           <Property Name="CoverImage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Birthday" Type="DateTime" Precision="0" />
           <Property Name="Gender" Type="Int32" />
-          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="Active" Type="Boolean" />
           <NavigationProperty Name="AspNetUserClaims" Relationship="SSNModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
           <NavigationProperty Name="AspNetUserLogins" Relationship="SSNModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
           <NavigationProperty Name="Events" Relationship="SSNModel.FK_Event_AspNetUsers" FromRole="AspNetUser" ToRole="Event" />
@@ -1385,6 +1386,7 @@
           <NavigationProperty Name="Ratings" Relationship="SSNModel.FK_Rating_AspNetUsers" FromRole="AspNetUser" ToRole="Rating" />
           <NavigationProperty Name="UserInvitations" Relationship="SSNModel.FK_UserInvitation_AspNetUsers" FromRole="AspNetUser" ToRole="UserInvitation" />
           <NavigationProperty Name="AspNetRoles" Relationship="SSNModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+          <Property Name="Fullname" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -2290,6 +2292,7 @@
           <EntitySetMapping Name="AspNetUsers">
             <EntityTypeMapping TypeName="SSNModel.AspNetUser">
               <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="Fullname" ColumnName="Fullname" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Gender" ColumnName="Gender" />

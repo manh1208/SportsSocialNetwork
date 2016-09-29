@@ -35,8 +35,9 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string CoverImage { get; set; }
     			public virtual Nullable<System.DateTime> Birthday { get; set; }
     			public virtual Nullable<int> Gender { get; set; }
-    			public virtual System.DateTime CreateDate { get; set; }
-    			public virtual bool Active { get; set; }
+    			public virtual Nullable<System.DateTime> CreateDate { get; set; }
+    			public virtual Nullable<bool> Active { get; set; }
+    			public virtual string Fullname { get; set; }
     	
     	public AspNetUserViewModel() : base() { }
     	public AspNetUserViewModel(SportsSocialNetwork.Models.Entities.AspNetUser entity) : base(entity) { }

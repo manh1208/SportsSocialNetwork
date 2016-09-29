@@ -18,7 +18,7 @@ namespace Teek.Models
 
         public FileUploader()
         {
-            var rootPath = ConfigurationManager.AppSettings["CdnRootPath"];
+            var rootPath = ConfigurationManager.AppSettings["SSNRootPath"];
             this.RelativeRootPath = rootPath.StartsWith("~") ? rootPath.Substring(1) : rootPath;
             this.RootPath = HostingEnvironment.MapPath(rootPath);
 
