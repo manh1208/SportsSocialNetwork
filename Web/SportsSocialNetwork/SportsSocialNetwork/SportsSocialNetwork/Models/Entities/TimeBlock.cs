@@ -11,44 +11,6 @@ namespace SportsSocialNetwork.Models.Entities
 {
     using System;
     using System.Collections.Generic;
-<<<<<<< HEAD
-    
-public partial class TimeBlock
-{
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    public TimeBlock()
-    {
-
-        this.FieldPrices = new HashSet<FieldPrice>();
-
-    }
-
-
-    public int Id { get; set; }
-
-    public int FieldId { get; set; }
-
-    public System.TimeSpan StartTime { get; set; }
-
-    public System.TimeSpan EndTime { get; set; }
-
-    public double Price { get; set; }
-
-    public bool Active { get; set; }
-
-
-
-    public virtual Field Field { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<FieldPrice> FieldPrices { get; set; }
-
-}
-
-}
-=======
     
     public partial class TimeBlock
     {
@@ -59,13 +21,14 @@ public partial class TimeBlock
         }
     
         public int Id { get; set; }
+        public int FieldId { get; set; }
         public System.TimeSpan StartTime { get; set; }
         public System.TimeSpan EndTime { get; set; }
         public double Price { get; set; }
         public bool Active { get; set; }
     
+        public virtual Field Field { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FieldPrice> FieldPrices { get; set; }
     }
 }
->>>>>>> dev-quyht-manageplace

@@ -2769,13 +2769,6 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EntityDeploy Include="Models\Entities\SsnEntities.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SsnEntities.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\Entities\SsnEntities.edmx.diagram">
-      <DependentUpon>SsnEntities.edmx</DependentUpon>
-    </Content>
     <Content Include="Content\assets\css\apps\desktop.ini" />
     <Content Include="Content\assets\css\dashboard\desktop.ini" />
     <Content Include="Content\assets\css\desktop.ini" />
@@ -3223,6 +3216,13 @@
     <Content Include="Areas\PlaceOwner\Views\Place\Index.cshtml" />
     <Content Include="Areas\PlaceOwner\Views\Place\CreatePlace.cshtml" />
     <Content Include="Areas\PlaceOwner\Views\Place\PlaceDetail.cshtml" />
+    <EntityDeploy Include="Models\Entities\SsnEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SsnEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Entities\SsnEntities.edmx.diagram">
+      <DependentUpon>SsnEntities.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

@@ -11,66 +11,6 @@ namespace SportsSocialNetwork.Models.Entities
 {
     using System;
     using System.Collections.Generic;
-<<<<<<< HEAD
-    
-public partial class Field
-{
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    public Field()
-    {
-
-        this.FieldImages = new HashSet<FieldImage>();
-
-        this.FieldPrices = new HashSet<FieldPrice>();
-
-        this.Orders = new HashSet<Order>();
-
-        this.TimeBlocks = new HashSet<TimeBlock>();
-
-    }
-
-
-    public int Id { get; set; }
-
-    public int PlaceId { get; set; }
-
-    public string Name { get; set; }
-
-    public int Status { get; set; }
-
-    public int FieldTypeId { get; set; }
-
-    public string Description { get; set; }
-
-    public bool Active { get; set; }
-
-
-
-    public virtual FieldType FieldType { get; set; }
-
-    public virtual Place Place { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<FieldImage> FieldImages { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<FieldPrice> FieldPrices { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<Order> Orders { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<TimeBlock> TimeBlocks { get; set; }
-
-}
-
-}
-=======
     
     public partial class Field
     {
@@ -80,6 +20,7 @@ public partial class Field
             this.FieldImages = new HashSet<FieldImage>();
             this.FieldPrices = new HashSet<FieldPrice>();
             this.Orders = new HashSet<Order>();
+            this.TimeBlocks = new HashSet<TimeBlock>();
         }
     
         public int Id { get; set; }
@@ -98,6 +39,7 @@ public partial class Field
         public virtual ICollection<FieldPrice> FieldPrices { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TimeBlock> TimeBlocks { get; set; }
     }
 }
->>>>>>> dev-quyht-manageplace
