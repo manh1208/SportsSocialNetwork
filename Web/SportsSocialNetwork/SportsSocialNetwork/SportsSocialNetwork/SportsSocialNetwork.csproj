@@ -131,6 +131,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -256,6 +257,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PlaceController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -688,7 +690,6 @@
     <Compile Include="Models\Enumerable\DbEnums.cs" />
     <Compile Include="Models\FileUploader.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\jQueryDataTableParamModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Notifications\Android.cs" />
     <Compile Include="Models\Notifications\IOS.cs" />
@@ -780,6 +781,7 @@
     <Compile Include="Models\ViewModels\RatingViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\SearchPlaceViewModel.cs" />
     <Compile Include="Models\ViewModels\SportViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -3269,6 +3271,8 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Shared\_BookingFieldLayout.cshtml" />
+    <Content Include="Views\Place\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

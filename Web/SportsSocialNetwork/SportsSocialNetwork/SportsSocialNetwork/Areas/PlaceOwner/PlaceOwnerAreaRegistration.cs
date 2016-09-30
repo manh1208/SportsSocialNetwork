@@ -17,7 +17,8 @@ namespace SportsSocialNetwork.Areas.PlaceOwner
             context.MapRoute(
                 "PlaceOwner_default",
                 "PlaceOwner/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
+                new { action = "Index", id = UrlParameter.Optional },
+                new[] { "SportsSocialNetwork.Areas.PlaceOwner.Controllers" }
             );
         }
     }

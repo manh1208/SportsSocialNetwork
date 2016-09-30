@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
@@ -36,3 +37,21 @@ Web/SportsSocialNetwork/SportsSocialNetwork/SportsSocialNetwork/obj/Debug/TempPE
 Web/SportsSocialNetwork/SportsSocialNetwork/SportsSocialNetwork/obj/Debug/TempPE/Models.Entities.SsnEntities.Designer.cs.dll
 Web/SportsSocialNetwork/SportsSocialNetwork/SportsSocialNetwork/obj/Debug/TempPE/Models.Entities.SsnEntities.cs.dll
 Web/SportsSocialNetwork/SportsSocialNetwork/SportsSocialNetwork/obj/Debug/TempPE/Models.ViewModels.ViewModels.cs.dll
+=======
+################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Web/SportsSocialNetwork/SportsSocialNetwork/SportsSocialNetwork/bin
+/
+Web/SportsSocialNetwork/SportsSocialNetwork/Database/bin/,Web/SportsSocialNetwork/SportsSocialNetwork/Database/obj/
+Web/SportsSocialNetwork/SportsSocialNetwork/Database/bin/
+Web/SportsSocialNetwork/SportsSocialNetwork/Database/obj/
+*.txt
+/Web/SportsSocialNetwork/SportsSocialNetwork/SportsSocialNetwork/obj/Debug/edmxResourcesToEmbed/Models/Entities
+*.dbmdl
+Web/SportsSocialNetwork/SportsSocialNetwork/.vs/config/applicationhost.config
+Web/SportsSocialNetwork/SportsSocialNetwork/SportsSocialNetwork/obj/
+Web/SportsSocialNetwork/SportsSocialNetwork/SportsSocialNetwork/Views/Place/View.cshtml
+Web/SportsSocialNetwork/SportsSocialNetwork/Database/Database.jfm
+>>>>>>> dev-huytv-usersearchplace

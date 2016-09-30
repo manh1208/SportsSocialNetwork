@@ -17,7 +17,8 @@ namespace SportsSocialNetwork.Areas.Moderator
             context.MapRoute(
                 "Moderator_default",
                 "Moderator/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
+                new { action = "Index", id = UrlParameter.Optional },
+                new[] { "SportsSocialNetwork.Areas.Moderator.Controllers" }
             );
         }
     }

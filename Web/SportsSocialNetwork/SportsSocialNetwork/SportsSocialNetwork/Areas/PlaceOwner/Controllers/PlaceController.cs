@@ -2,6 +2,7 @@
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -90,7 +91,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             return "false";
         }
 
-        public ActionResult GetData(jQueryDataTableParamModel param)
+        public ActionResult GetData(JQueryDataTableParamModel param)
         {
             //var blogPostList = _blogPostService.GetBlogPostbyStoreId();
             var _placeService = this.Service<IPlaceService>();

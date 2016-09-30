@@ -13,11 +13,14 @@ namespace SportsSocialNetwork.Models.Entities.Services
     {
 
         #region Code from here
-
         DataTable getLocation(string address);
         void savePlace(Place place);
+        IEnumerable<Place> getAllPlace();
+        IEnumerable<Place> getPlace(string sport, string province, string district);
 
         #endregion
+
+        void test();
 
     }
 
@@ -25,6 +28,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
     {
 
         #region Code from here
+        public IEnumerable<Place> getAllPlace()
+        {
+            return this.GetActive();
+        }
 
         public DataTable getLocation(string address)
         {
@@ -37,7 +44,6 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 {
                     DataSet dsResult = new DataSet();
                     dsResult.ReadXml(reader);
-
                     dtCoordinates.Columns.AddRange(new DataColumn[4] { new DataColumn("Id", typeof(int)),
                         new DataColumn("Address", typeof(string)),
                         new DataColumn("Latitude",typeof(string)),
@@ -51,6 +57,50 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 }
             }
             return dtCoordinates;
+        }
+
+        public IEnumerable<Place> getPlace(string sport, string province, string district)
+        {
+            IEnumerable<Place> places = new List<Place>();
+            if (sport != null && sport != "")
+            {
+                var sportId = Int32.Parse(sport);
+                if (province != null && province != "")
+                {
+                    if (district != null && district != "")
+                    {
+                        places = this.Get(p => p.Fields.Where(f => f.FieldType.SportId == sportId).ToList().Count > 0 && p.City == province && p.District == district).ToList();
+                    }
+                    else
+                    {
+                        places = this.Get(p => p.Fields.Where(f => f.FieldType.SportId == sportId).ToList().Count > 0 && p.City == province).ToList();
+                    }
+                }
+                else
+                {
+                    places = this.Get(p => p.Fields.Where(f => f.FieldType.SportId == sportId).ToList().Count > 0).ToList();
+                }
+            }
+            else
+            {
+                if (province != null && province != "")
+                {
+                    if (district != null && district != "")
+                    {
+                        places = this.Get(p => p.City == province && p.District == district).ToList();
+                    }
+                    else
+                    {
+                        places = this.Get(p => p.City == province).ToList();
+                    }
+                }
+                else
+                {
+                    places = this.getAllPlace();
+                }
+            }
+
+            return places;
         }
 
         public void savePlace(Place place)
@@ -96,5 +146,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
         }
 
         #endregion
+
+        public void test()
+        {
+
+        }
     }
 }
