@@ -1,0 +1,209 @@
+﻿@model SportsSocialNetwork.Areas.Admin.Models.UpdateAccountViewModel
+@{
+    var provinces = ViewBag.Provinces as IOrderedEnumerable<SelectListItem>;
+    var districts = ViewBag.Districts as IOrderedEnumerable<SelectListItem>;
+    var wards = ViewBag.Wards as IOrderedEnumerable<SelectListItem>;
+    var roles = ViewBag.Roles as IOrderedEnumerable<SelectListItem>;
+    var genders = new List<SelectListItem>();
+    genders.Add(new SelectListItem
+    {
+        Text = "Nam",
+        Value = "1"
+    });
+    genders.Add(new SelectListItem
+    {
+        Text = "Nữ",
+        Value = "2"
+    });
+    genders.Add(new SelectListItem
+    {
+        Text = "Khác",
+        Value = "3"
+    });
+
+}
+
+<form id="update-account-form">
+    @Html.HiddenFor(m => m.Id)
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title">Cập nhật tài khoản - @Model.FullName</h4>
+    </div>
+
+    <div class="modal-body" id="modalBody">
+        <div class="panel panel-bordered">
+            <div class="panel-heading">
+                <h4>
+                    Thông tin tài khoản
+                </h4>
+            </div>
+            <div class="panel-body container-fluid">
+
+                <div class="form-group form-material floating row">
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control input-lg", })
+                        <label class="floating-label text-black">Tên đăng nhập</label>
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control input-lg", @type = "email" })
+                        <label class="floating-label">Email</label>
+                    </div>
+                </div>
+                <div class="form-group form-material floating">
+                    @Html.DropDownListFor(m => m.RoleId, roles, " ",
+                             new { @class = "form-control input-lg", @id = "updateRole" })
+                    <label class="floating-label">Vai trò</label>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-bordered">
+            <div class="panel-heading">
+                <h4>
+                    Thông tin cá nhân
+                </h4>
+            </div>
+            <div class="panel-body">
+
+                <div class="form-group form-material floating row">
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control input-lg" })
+
+                        <label class="floating-label">Họ và tên</label>
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control input-lg" })
+                        <label class="floating-label">Số điện thoại</label>
+                    </div>
+                </div>
+                <div class="form-group form-material floating row">
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(m => m.Address, new { @class = "form-control input-lg" })
+                        <label class="floating-label">Địa chỉ</label>
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.DropDownListFor(m => m.City, provinces, " ",
+                         new { @class = "form-control input-lg", @id = "updateProvince" })
+                        <label class="floating-label">Tỉnh/ TP</label>
+                    </div>
+                </div>
+                <div class="form-group form-material floating row">
+
+                    <div class="col-sm-6">
+                        @Html.DropDownListFor(m => m.District, districts, " ",
+                         new { @class = "form-control input-lg", @id = "updateDistrict" })
+                        <label class="floating-label">Quận/ Huyện</label>
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.DropDownListFor(m => m.Ward, wards, " ",
+                         new { @class = "form-control input-lg", @id = "updateWard", })
+                        <label class="floating-label">Phường/ Xã</label>
+                    </div>
+
+                </div>
+                <div class="form-group form-material floating row">
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(m => m.Birthday, new { @class = "form-control input-lg" })
+                        <label class="floating-label">Ngày sinh</label>
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.DropDownListFor(m => m.Gender, genders, " ",
+                         new { @class = "form-control input-lg", @id = "updateGender" })
+                        <label class="floating-label">Giới tính</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
+    </div>
+</form>
+@section Scripts{
+
+    <script>
+        (function (document, window, $) {
+            'use strict';
+
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
+            });
+        })(document, window, jQuery);
+
+        $("#updateProvince").on("change", function () {
+            updateDistrict();
+        });
+        $("#updateDistrict").on("change", function () {
+            updateWard();
+        });
+
+
+        function updateWard() {
+            var provinceName = $('#updateProvince').val();
+            var districtName = $('#updateDistrict').val();
+            $.ajax({
+                url: '@Url.Action("GetWard")',
+                type: 'POST',
+                data: {
+                    'provinceName': provinceName,
+                    'districtName': districtName
+                },
+                dataType: 'json',
+                success: function (data) {
+                    var ddl = $('#updateWard');
+                    ddl.empty();
+                    $(document.createElement('option'))
+                                            .attr('value', '')
+                                            .text('')
+                                            .appendTo(ddl);
+                    ddl.addClass("empty");
+                    $(data.AdditionalData).each(function () {
+                        $(document.createElement('option'))
+                            .attr('value', this.Value)
+                            .text(this.Text)
+                            .appendTo(ddl);
+                    });
+                }
+            });
+        };
+
+        function updateDistrict() {
+            var provinceName = $('#updateProvince').val();
+            $.ajax({
+                url: '@Url.Action("GetDistrict")',
+                type: 'POST',
+                data: {
+                    'provinceName': provinceName,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    var ddl = $('#updateDistrict');
+                    ddl.empty();
+                    ddl.addClass("empty");
+                    $(document.createElement('option'))
+                                            .attr('value', '')
+                                            .text('')
+                                            .appendTo(ddl);
+                    $(data.AdditionalData).each(function () {
+                        $(document.createElement('option'))
+                            .attr('value', this.Value)
+                            .text(this.Text)
+                            .appendTo(ddl);
+                    });
+                    updateWard();
+                }
+            });
+        };
+
+
+    </script>
+}
+
+
+
