@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Device.Location;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -41,30 +42,51 @@ namespace SportsSocialNetwork.Controllers
         public ActionResult GetDistrict(string provinceName)
         {
             Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
-            var province = vietnam.VietNamese.Where(p => p.Name.Equals(provinceName)).ToList();
-            var district = province.First().Districts.ToList();
-            IEnumerable<SelectListItem> districtList = district.Select(m => new SelectListItem
+            IEnumerable<SelectListItem> districtList = new List<SelectListItem>();
+            if (provinceName != null || provinceName!="")
             {
-                Text = m.Type +" "+ m.Name,
-                Value = m.Name
-            }).OrderBy(s => s.Value).ToArray();
-
+                var province = vietnam.VietNamese.Where(p => p.Name.Equals(provinceName)).ToList();
+                if (province != null && province.Count>0)
+                {
+                    var district = province.First().Districts.ToList();
+                    districtList = district.Select(m => new SelectListItem
+                    {
+                        Text = m.Type + " " + m.Name,
+                        Value = m.Name
+                    }).OrderBy(s => s.Value).ToArray();
+                }
+                
+            }
+           
             return Json(districtList, JsonRequestBehavior.AllowGet);
         }
 
-
-        public ActionResult GetData(JQueryDataTableParamModel param, string sport, string province, string district)
+        public ActionResult GetData(JQueryDataTableParamModel param, string sport, string province, 
+            string district, string lat, string lng)
         {
             var _placeService = this.Service<IPlaceService>();
-            var placeList = _placeService.getAllPlace();
-            var sportId = -1;
-            if (sport != null && sport != "")
+            List<Place> placeList = new List<Place>();
+            
+
+            if(lat!=null && lat!="" && lng!=null && lng != "")
             {
-                sportId = Int32.Parse(sport);
-            } 
-            if(sportId != -1 || (province !=null && province != ""))
+                var places = _placeService.getAllPlace();
+                var latitude = float.Parse(lat);
+                var longtitude = float.Parse(lng);
+                var Coord = new GeoCoordinate(latitude, longtitude);
+                foreach(Place place in places)
+                {
+                    var placeCoord = new GeoCoordinate(place.Latitude, place.Longitude);
+                    var dis = Coord.GetDistanceTo(placeCoord);
+                    if (Coord.GetDistanceTo(placeCoord) < 5000)
+                    {
+                        placeList.Add(place);
+                    }
+                }
+            }
+            else
             {
-                placeList = _placeService.getPlace(sportId, province, district);
+                placeList = _placeService.getPlace(sport, province, district).ToList();
             }
             
             IEnumerable<Place> filteredListItems;
@@ -94,11 +116,14 @@ namespace SportsSocialNetwork.Controllers
             var displayedList = filteredListItems.Skip(param.iDisplayStart).Take(param.iDisplayLength);
             var result = displayedList.Select(c => new IConvertible[]{
                 c.Id,
-                c.PlaceImages.First().Image,
+                c.PlaceImages.Count == 0?"http://raovatso.net/images/no-image.jpg":c.PlaceImages.First().Image,
                 c.Name,
                 c.Description,
                 c.Address,
-                //c.Fields.First().FieldType.,
+                c.District,
+                c.City,
+                c.PhoneNumber
+                //c.Fields.Count == 0? "": c.Fields.Select(d => d.FieldType.Sport).ToString()
             }.ToArray());
 
             return Json(new

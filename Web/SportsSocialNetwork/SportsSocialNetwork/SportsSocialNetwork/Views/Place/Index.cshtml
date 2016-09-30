@@ -29,10 +29,12 @@
 
     .table_text_des1 {
         height: 80px;
+        
     }
 
     .table_text_des2 {
-        height: 40px;
+        height: 20px;
+        font-size: 12px;
     }
 </style>
 <div class="col-md-9">
@@ -46,6 +48,9 @@
                     <table class="table table-hover dataTable table-striped width-full dtr-inline" data-plugin="dataTable" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
                         <thead>
                             <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -68,18 +73,20 @@
         <div class="panel-body">
             <div class="form-group">
                 @Html.DropDownListFor(m => m.SportId, selectList, "--Chọn loại thể thao--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "sport" })
-               
+
             </div>
-                <div class="form-group">
-                    @Html.DropDownListFor(m => m.Province, provinceList, "--Chọn tỉnh/thành phố--",new { @class = "bs-select-hidden form-control input-sm droplist", @id = "province" })
-                </div>
-                <div class="form-group">
-                    @Html.DropDownListFor(m => m.District, districtList, "--Chọn quận/huyện--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "district" })
-                </div>
-                <p style="font-size:10px; color:red">Hoặc tìm xung quanh địa điểm này</p>
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary" style="width:90%">Tìm xung quanh bạn</button>
-                </div>
+            <div class="form-group">
+                @Html.DropDownListFor(m => m.Province, provinceList, "--Chọn tỉnh/thành phố--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "province" })
+            </div>
+            <div class="form-group">
+                @Html.DropDownListFor(m => m.District, districtList, "--Chọn quận/huyện--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "district" })
+            </div>
+            <p style="color:red">Hoặc tìm xung quanh</p>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" id="findAround" style="width:90%">Tìm xung quanh bạn</button>
+                <input type="hidden" id="lat" />
+                <input type="hidden" id="lng" />
+            </div>
         </div>
     </div>
     <script>
@@ -87,35 +94,43 @@
 
         $("#province").on("change", function () {
             var provinceName = $('#province').val();
-            $.ajax({
-                url: "/Place/GetDistrict",
-                type: 'POST',
-                data: {
-                    'provinceName': provinceName,
-                },
-                dataType: 'json',
-                success: function (data) {
-                    var ddl = $('#district');
-                    ddl.empty();
-                    $(document.createElement('option'))
-                            .attr('value', '')
-                            .text("--Chọn quận/huyện--")
-                            .appendTo(ddl);
-                    $(data).each(function () {
-                        $(document.createElement('option'))
-                            .attr('value', this.Value)
-                            .text(this.Text)
-                            .appendTo(ddl);
-                    });
-                }
-            });
+            var ddl = $('#district');
+            ddl.empty();
+            $(document.createElement('option'))
+                    .attr('value', '')
+                    .text("--Chọn quận/huyện--")
+                    .appendTo(ddl);
+            if (provinceName != null) {
+                $.ajax({
+                    url: "/Place/GetDistrict",
+                    type: 'POST',
+                    data: {
+                        'provinceName': provinceName,
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        $(data).each(function () {
+                            $(document.createElement('option'))
+                                .attr('value', this.Value)
+                                .text(this.Text)
+                                .appendTo(ddl);
+                        });
+                    }
+                });
+            }
         });
-        
-        $(".droplist").on("change",function () {
+
+        $(".droplist").on("change", function () {
+            $("#lat").val("");
+            $("#lng").val("");
             InitDatatable();
             RefreshTable();
         })
 
+        $("#findAround").click(function () {
+            checkLocation();
+        });
 
     function RefreshTable() {
         var oTable = $("#DataTables_Table_0").dataTable();
@@ -135,28 +150,32 @@
             "fnServerParams": function (aoData) {
                 aoData.push({ "name": "sport", "value": $('#sport').val()},
                     { "name": "province", "value": $('#province').val() },
-                    { "name": "district", "value": $('#district').val() });
+                    { "name": "district", "value": $('#district').val() },
+                    { "name": "lat", "value": $('#lat').val() },
+                    { "name": "lng", "value": $('#lng').val() });
             },
             "aLengthMenu": [10, 20, 100],
             "oLanguage": {
-                "sSearch": "Nhập tên sân bóng hoặc địa chỉ:",
+                "sSearch": "Tìm kiếm:",
                 "sZeroRecords": "Không có dữ liệu phù hợp",
                 "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
                 "sEmptyTable": "Không có dữ liệu",
                 "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
                 "sLengthMenu": "Hiển thị _MENU_ dòng",
                 "sProcessing": "Xin đợi trong giây lát...",
+                "oPaginate": {
+                    "sFirst": "Về đầu",
+                    "sLast": "Về cuối",
+                    "sNext": "Trang kế",
+                    "sPrevious": "Trang trước"
+                },
             },
             "aoColumnDefs": [
                 {
                      //"sWidth" : "10%",
-                     "aTargets": [0],
+                     "aTargets": [0,2,3,4,5,6,7],
                      "bVisible": false,
-                     "bSortable": false,
-                     "mRender": function (data, type, o) {
-                         return o[0];
-
-                     }
+                     "bSortable": false
                  },
                  {
                      //"sWidth" : "10%",
@@ -164,40 +183,12 @@
                      "bSortable": false,
                      "mRender": function (data, type, o) {
                          return "<div class='table_image'><img src='" + o[1] + "' height='160' width='210'></div><div class='table_text'>" +
-                             "<div class='table_text_title'>" + o[2] + "</div><div class='table_text_des1'>" + o[3] + "</div><div class='table_text_des2'>"
-                             + 0[4] + "</div></div>";
+                             "<div class='table_text_title'>" + o[2] + "</div><div class='table_text_des1'>" + o[3] + "</div><div class='table_text_des2'>Địa chỉ: "
+                             + o[4] + ", Quận " + o[5] + ", " + o[6] + "</div><div class='table_text_des2'>Điện thoại: "+ o[7] +"</div></div>";
 
                      }
                  },
-                 {
-                     //"sWidth" : "10%",
-                     "aTargets": [2],
-                     "bVisible": false,
-                     "bSortable": false,
-                     "mRender": function (data, type, o) {
-                         return o[2];
-                     }
-                 },
-                 {
-                     //"sWidth" : "10%",
-                     "aTargets": [3],
-                     "bSortable": false,
-                     "bVisible": false,
-                     "mRender": function (data, type, o) {
-                         return o[3];
-
-                     }
-                 },
-                  {
-                      //"sWidth" : "10%",
-                      "aTargets": [4],
-                      "bSortable": false,
-                      "bVisible": false,
-                      "mRender": function (data, type, o) {
-                          return o[4];
-
-                      }
-                  }
+                 
             ],
             "bAutoWidth": false
 
@@ -221,10 +212,69 @@
 
         }
     }
+
+    function showError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                NProgress.done();
+                swal({
+                    title: "Oops...",
+                    text: "Bạn chưa mở GPS hả!",
+                    type: "error",
+                    confirmButtonText: "Ờ"
+                }, function () {
+                    location.reload();
+                });
+
+                break;
+            case error.POSITION_UNAVAILABLE:
+                NProgress.done();
+                swal({
+                    title: "Oops...",
+                    text: "Thông tin vị trí không chính xác!",
+                    type: "error",
+                    confirmButtonText: "Ờ"
+                }, function () {
+                    location.reload();
+                });
+
+                break;
+            case error.TIMEOUT:
+                NProgress.done();
+                swal({
+                    title: "Oops...",
+                    text: "Vượt quá thời gian. Xin thử tải lại trang!",
+                    type: "error",
+                    confirmButtonText: "Ờ"
+                }, function () {
+                    location.reload();
+                });
+
+                break;
+            case error.UNKNOWN_ERROR:
+                NProgress.done();
+                swal({
+                    title: "Oops...",
+                    text: "Lỗi là gì nhỉ. Xin liên hệ BTC!",
+                    type: "error",
+                    confirmButtonText: "Ờ"
+                }, function () {
+                    location.reload();
+                });
+                break;
+        }
+    }
     function showPosition(position) {
         var lat = position.coords.latitude;
         var lng = position.coords.longitude;
+        $("#lat").val(lat);
+        $("#lng").val(lng);
+        InitDatatable();
+        RefreshTable();
     }
+
+
     </script>
+
 
 
