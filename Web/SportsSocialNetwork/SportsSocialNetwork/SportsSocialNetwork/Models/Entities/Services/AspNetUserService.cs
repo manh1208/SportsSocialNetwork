@@ -11,10 +11,11 @@ namespace SportsSocialNetwork.Models.Entities.Services
     {
         #region Code from here
         IQueryable<AspNetUser> GetUsers(JQueryDataTableParamModel request, out int totalRecord);
-
         AspNetUser FindUser(string Id);
 
         void DeactivateUser(AspNetUser user);
+
+        String FindUserName(String userId);
         #endregion
 
         void test();
@@ -22,6 +23,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
     public partial class AspNetUserService:IAspNetUserService
     {
         #region Code from here
+
 
         public IQueryable<AspNetUser> GetUsers(JQueryDataTableParamModel request, out int totalRecord)
         {
@@ -56,6 +58,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
             this.Update(user);
         }
 
+
+        public String FindUserName(String userId) {
+            return this.FirstOrDefault(x => x.Id == userId).UserName;
+        }
 
         #endregion
 
