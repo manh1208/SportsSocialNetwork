@@ -9,7 +9,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
     {
         #region Code from here
 
-
+        String FindUserName(String userId);
 
         #endregion 
 
@@ -19,7 +19,9 @@ namespace SportsSocialNetwork.Models.Entities.Services
     {
         #region Code from here
 
-
+        public String FindUserName(String userId) {
+            return this.FirstOrDefault(x => x.Id == userId).UserName;
+        }
 
         #endregion
 

@@ -14,7 +14,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         Order ChangeOrderStatus(int id, int status);
 
-        Order CreateOrder(String userId, int fieldId, DateTime startTime, DateTime endTime, String note,float price, int paidType);
+        Order CreateOrder(String userId, int fieldId, DateTime startTime, DateTime endTime, String note,double price, int? paidType);
         #endregion
 
         void test();
@@ -25,12 +25,12 @@ namespace SportsSocialNetwork.Models.Entities.Services
         #region Code from here
         public IEnumerable<Order> GetAllOrderOfPlaceOwner(String ownerId)
         {
-            return this.Get(x => x.UserId.Equals(ownerId));
+            return this.GetActive(x => x.UserId.Equals(ownerId));
         }
 
         public Order GetOrderById(int id)
         {
-            Order order = this.FirstOrDefault(x => x.Id == id);
+            Order order = this.FirstOrDefault(x=> x.Id == id);
             return order;
         }
 
@@ -46,7 +46,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return null;
         }
 
-        public Order CreateOrder(String userId, int fieldId, DateTime startTime, DateTime endTime, String note, float price, int paidType) {
+        public Order CreateOrder(String userId, int fieldId, DateTime startTime, DateTime endTime, String note, double price, int? paidType) {
             Order order = new Order();
             order.UserId = userId;
             order.FieldId = fieldId;

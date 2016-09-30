@@ -28,7 +28,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         public IEnumerable<Place> GetAll()
         {
             IEnumerable<Place> placeList;
-            placeList = this.Get();
+            placeList = this.GetActive();
             return placeList;
         }
 
@@ -45,6 +45,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         public Place ChangeStatus(int id, int status)
         {
             Place place = this.FirstOrDefault(x => x.Id == id);
+            this.Get();
             if (place != null)
             {
                 place.Status = status;
