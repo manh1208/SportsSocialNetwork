@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace SportsSocialNetwork.Areas.API.Models
+namespace SportsSocialNetwork.Models
 {
     public class ResponseModel<T>
     {

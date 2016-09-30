@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SkyWeb.DatVM.Mvc;
-using SportsSocialNetwork.Areas.API.Models;
+using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.ViewModels;
@@ -32,16 +32,14 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             try
             {
                 placeList = service.GetAll().ToList();
+                List<PlaceViewModel> viewmodel = Mapper.Map<List<PlaceViewModel>>(placeList);
+                response = new ResponseModel<List<PlaceViewModel>>(true, "Load Place List Successfully", null, viewmodel);
             }
             catch (Exception e)
             {
                 response = ResponseModel<List<PlaceViewModel>>.CreateErrorResponse("Place List failed to load!", systemError);
-                return Json(response, JsonRequestBehavior.AllowGet);
             }
 
-
-            List<PlaceViewModel> viewmodel = Mapper.Map<List<PlaceViewModel>>(placeList);
-            response = new ResponseModel<List<PlaceViewModel>>(true, "Load Place List Successfully", null, viewmodel);
             return Json(response, JsonRequestBehavior.AllowGet);
         }
 
@@ -54,8 +52,14 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             try
             {
                 Place place = service.GetPlaceById(id);
-                PlaceViewModel result = Mapper.Map<PlaceViewModel>(place);
-                response = new ResponseModel<PlaceViewModel>(true, "Place info Loaded", null, result);
+                if (place != null)
+                {
+                    PlaceViewModel result = Mapper.Map<PlaceViewModel>(place);
+                    response = new ResponseModel<PlaceViewModel>(true, "Place info Loaded", null, result);
+                }
+                else {
+                    response = ResponseModel<PlaceViewModel>.CreateErrorResponse("Place info failed to load!", systemError);
+                }
             }
             catch (Exception e)
             {
@@ -73,8 +77,14 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             try
             {
                 Place place = service.ChangeStatus(id, status);
-                PlaceViewModel result = Mapper.Map<PlaceViewModel>(place);
-                response = new ResponseModel<PlaceViewModel>(true, "Your Place's status has been updated!", null, result);
+                if (place != null)
+                {
+                    PlaceViewModel result = Mapper.Map<PlaceViewModel>(place);
+                    response = new ResponseModel<PlaceViewModel>(true, "Your Place's status has been updated!", null, result);
+                }
+                else {
+                    response = ResponseModel<PlaceViewModel>.CreateErrorResponse("Your Place's status has NOT been updated!", systemError);
+                }
             }
             catch (Exception e)
             {

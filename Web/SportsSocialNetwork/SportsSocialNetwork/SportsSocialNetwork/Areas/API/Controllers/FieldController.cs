@@ -1,5 +1,5 @@
 ﻿using SkyWeb.DatVM.Mvc;
-using SportsSocialNetwork.Areas.API.Models;
+using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.ViewModels;
@@ -52,10 +52,15 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             try {
                 Field field = service.GetFieldInfo(id);
+                if (field != null)
+                {
+                    FieldViewModel result = Mapper.Map<FieldViewModel>(field);
 
-                FieldViewModel result = Mapper.Map<FieldViewModel>(field);
-
-                response = new ResponseModel<FieldViewModel>(true, "Field detail loaded successfully", null, result);
+                    response = new ResponseModel<FieldViewModel>(true, "Field detail loaded successfully", null, result);
+                }
+                else {
+                    response = ResponseModel<FieldViewModel>.CreateErrorResponse("Field detail has failed to load!", systemError);
+                }
 
             } catch (Exception e) {
                 response = ResponseModel<FieldViewModel>.CreateErrorResponse("Field detail has failed to load!",systemError);
@@ -72,9 +77,16 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             try {
                 Field field = service.ChangeFieldStatus(id, status);
 
-                FieldViewModel result = Mapper.Map<FieldViewModel>(field);
+                if (field != null)
+                {
+                    FieldViewModel result = Mapper.Map<FieldViewModel>(field);
 
-                response = new ResponseModel<FieldViewModel>(true, "Field status changed successfully", null, result);
+                    response = new ResponseModel<FieldViewModel>(true, "Field status changed successfully", null, result);
+                }
+                else {
+                    response = ResponseModel<FieldViewModel>.CreateErrorResponse("Field status has failed to change");
+                }
+                
             } catch (Exception e) {
                 response = ResponseModel<FieldViewModel>.CreateErrorResponse("Field status has failed to change");
             }

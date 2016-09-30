@@ -249,10 +249,11 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Api\Controllers\FieldController.cs" />
+    <Compile Include="Areas\Api\Controllers\LikeController.cs" />
     <Compile Include="Areas\Api\Controllers\OrderController.cs" />
     <Compile Include="Areas\Api\Controllers\PlaceController.cs" />
-    <Compile Include="Areas\Api\Models\OrderDetailViewModel.cs" />
-    <Compile Include="Areas\Api\Models\ResponseModel.cs" />
+    <Compile Include="Areas\Api\Controllers\PostCommentController.cs" />
+    <Compile Include="Areas\Api\Controllers\PostController.cs" />
     <Compile Include="Areas\Moderator\ModeratorAreaRegistration.cs" />
     <Compile Include="Areas\PlaceOwner\PlaceOwnerAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -623,6 +624,7 @@
     <Compile Include="Models\Entities\Services\PlaceServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\PostCommentService.cs" />
     <Compile Include="Models\Entities\Services\PostCommentServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -740,6 +742,7 @@
     <Compile Include="Models\ViewModels\InvitationViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\LikeDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\LikeViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -752,6 +755,7 @@
     <Compile Include="Models\ViewModels\NotificationViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\OrderDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\OrderViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -764,9 +768,12 @@
     <Compile Include="Models\ViewModels\PlaceViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\PostCommentDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\PostCommentViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\PostDetailViewModel.cs" />
+    <Compile Include="Models\ViewModels\PostOveralViewModel.cs" />
     <Compile Include="Models\ViewModels\PostSportViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -776,6 +783,7 @@
     <Compile Include="Models\ViewModels\RatingViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\ResponseModel.cs" />
     <Compile Include="Models\ViewModels\SportViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -3038,6 +3046,10 @@
     <Folder Include="Areas\Admin\Controllers\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
+    <Folder Include="Areas\Api\Models\" />
+    <Folder Include="Areas\Api\Views\Like\" />
+    <Folder Include="Areas\Api\Views\PostComment\" />
+    <Folder Include="Areas\Api\Views\Post\" />
     <Folder Include="Areas\Api\Views\Shared\" />
     <Folder Include="Areas\Moderator\Controllers\" />
     <Folder Include="Areas\Moderator\Models\" />

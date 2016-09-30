@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace SportsSocialNetwork.Areas.Api.Models
+namespace SportsSocialNetwork.Models
 {
     public class OrderDetailViewModel : OrderViewModel
     {
@@ -19,5 +19,6 @@ namespace SportsSocialNetwork.Areas.Api.Models
             this.StartTimeString = this.StartTime.ToString();
             this.EndTimeString = this.EndTime.ToString();
         }
+
     }
 }
