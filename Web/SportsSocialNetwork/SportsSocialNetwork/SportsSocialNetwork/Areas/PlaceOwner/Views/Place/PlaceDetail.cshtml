@@ -89,31 +89,31 @@
                         </div>
                         <div class="panel-body">
                             <div class="form-group form-material floating">
-                                @Html.TextBoxFor(p => p.Name, new { @class = "form-control" })
+                                @Html.TextBoxFor(p => p.Name, new { @class = "form-control input-lg" })
                                 <label class="floating-label">Tên địa điểm</label>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.DropDownListFor(p => p.City, listCities, new { @class = "form-control" })
+                                @Html.DropDownListFor(p => p.City, listCities, new { @class = "form-control input-lg" })
                                 <label class="floating-label">Thành phố</label>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.DropDownListFor(p => p.District, listDistricts, new { @class = "form-control" })
+                                @Html.DropDownListFor(p => p.District, listDistricts, new { @class = "form-control input-lg" })
                                 <label class="floating-label">Quận</label>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.DropDownListFor(p => p.Ward, listWards, new { @class = "form-control" })
+                                @Html.DropDownListFor(p => p.Ward, listWards, new { @class = "form-control input-lg" })
                                 <label class="floating-label">Phường</label>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.TextBoxFor(p => p.Address, new { @class = "form-control" })
+                                @Html.TextBoxFor(p => p.Address, new { @class = "form-control input-lg" })
                                 <label class="floating-label">Địa chỉ</label>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.TextBoxFor(p => p.Email, new { @class = "form-control" })
+                                @Html.TextBoxFor(p => p.Email, new { @class = "form-control input-lg" })
                                 <label class="floating-label">Email</label>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.TextBoxFor(p => p.PhoneNumber, new { @class = "form-control" })
+                                @Html.TextBoxFor(p => p.PhoneNumber, new { @class = "form-control input-lg" })
                                 <label class="floating-label">Số điện thoại</label>
                             </div>
                             <div class="form-group">
@@ -125,7 +125,7 @@
                                         <label class="control-label">Từ</label>
                                     </div>
                                     <div class="col-sm-8">
-                                        @Html.TextBoxFor(p => p.StartTime, new { @class = "timepicker form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                                        @Html.TextBoxFor(p => p.StartTime, new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
@@ -133,12 +133,12 @@
                                         <label class="control-label">Đến</label>
                                     </div>
                                     <div class="col-sm-8">
-                                        @Html.TextBoxFor(p => p.EndTime, new { @class = "timepicker form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                                        @Html.TextBoxFor(p => p.EndTime, new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.TextAreaFor(p => p.Description, new { rows = "3", @class = "form-control" })
+                                @Html.TextAreaFor(p => p.Description, new { rows = "3", @class = "form-control input-lg" })
                                 <label class="floating-label">Mô tả</label>
                             </div>
                         </div>
