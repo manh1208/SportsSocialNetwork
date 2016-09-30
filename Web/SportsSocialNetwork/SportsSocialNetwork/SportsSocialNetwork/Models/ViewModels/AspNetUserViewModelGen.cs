@@ -38,6 +38,10 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual Nullable<int> Gender { get; set; }
     			public virtual Nullable<System.DateTime> CreateDate { get; set; }
     			public virtual Nullable<bool> Active { get; set; }
+<<<<<<< HEAD
+=======
+    			public virtual string Fullname { get; set; }
+>>>>>>> dev-quyht-manageplace
     	
     	public AspNetUserViewModel() : base() { }
     	public AspNetUserViewModel(SportsSocialNetwork.Models.Entities.AspNetUser entity) : base(entity) { }

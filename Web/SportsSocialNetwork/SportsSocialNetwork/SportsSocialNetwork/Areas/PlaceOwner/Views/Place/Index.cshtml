@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="panel">
+    <div class="panel-body">
+        <a href="/PlaceOwner/Place/CreatePlace" class="btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> Tạo mới địa điểm</a>
+    </div>
+</div>
+<div class="panel">
+    <div class="panel-body">
+        <table class="table table-striped" id="listPlaceTable">
+            <thead>
+                <tr>
+                    <th>Tên địa điểm</th>
+                    <th>Địa chỉ</th>
+                    <th>Trạng thái</th>
+                    <th>Chi tiết</th>
+                    @*<th><a href="" class="btn btn-info"><i class="icon wb-pencil" aria-hidden="true"></i>Chi tiết</a></th>*@
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+
+<script>
+    (function (document, window, $) {
+        'use strict';
+
+        var Site = window.Site;
+        $(document).ready(function () {
+            Site.run();
+        });
+    })(document, window, jQuery);
+
+    function RefreshTable() {
+        var oTable = $("#listPlaceTable").dataTable();
+        oTable._fnPageChange(0);
+        oTable._fnAjaxUpdate();
+    }
+
+    function InitDatatable() {
+        $("#listPlaceTable").DataTable({
+            "bRetrieve": true,
+            "bServerSide": true,
+            "bScrollCollapse": true,
+            "bSort": true,
+            "sAjaxSource": "/PlaceOwner/Place/GetData",
+            "bProcessing": true,
+            @*"fnServerParams": function (aoData) {
+                aoData.push({ "name": "id", "value": @ViewBag.storeId });
+            },*@
+            "aLengthMenu": [10, 20, 50],
+            "oLanguage": {
+                "sSearch": "Tìm kiếm:",
+                "sZeroRecords": "Không có dữ liệu phù hợp",
+                "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
+                "sEmptyTable": "Không có dữ liệu",
+                "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
+                "sLengthMenu": "Hiển thị _MENU_ dòng",
+                "sProcessing": "Đang xử lý...",
+                "oPaginate": {
+                    "sPrevious": "Trang trước",
+                    "sNext": "Trang kế"
+                }
+            },
+
+            @*"fnDrawCallback": function (settings) {
+                $(':checkbox').change(function () {
+                    if ($(this).prop('checked') == true) {
+                        $.ajax({
+                            url: "/BlogPostManage/@ViewBag.storeId/@ViewBag.storeName/BlogPost/ChangeStatus",
+                            type: 'POST',
+                            data: {
+                                'blogPostId': $(this).val(),
+                                'status': 'Activate'
+                            },
+                            dataType: 'json',
+                            success: function (result) {
+                                ReDrawDatatable("listBlogPostTable");
+                            }
+                        });
+                    } else {
+                        $.ajax({
+                            url: "/BlogPostManage/@ViewBag.storeId/@ViewBag.storeName/BlogPost/ChangeStatus",
+                            type: 'POST',
+                            data: {
+                                'blogPostId': $(this).val(),
+                                'status': 'Deactivate'
+                            },
+                            dataType: 'json',
+                            success: function (result) {
+                                ReDrawDatatable("listBlogPostTable");
+                            }
+                        });
+                    }
+                });
+            },*@
+            "aoColumnDefs": [
+                {
+                    "aTargets": [0],
+                    "mRender": function (data, type, o) {
+                        return o[1];
+                    }
+                },
+                {
+                    "aTargets": [1],
+                    "bSortable": false,
+                    "mRender": function (data, type, o) {
+                        return o[3] + ", " + o[4] + ", " + o[5] + ", " + o[6];
+                    }
+                },
+                {
+                    "aTargets": [2],
+                    "bSortable": false,
+                    "mRender": function(data, type, o) {
+                        if(o[2] == 1) {
+                            return "<div class='well well-sm well-success'>"
+                                    + "<span>Đang hoạt động</span>"
+                                    + "</div>";
+                        } else {
+                            return "<div class='well well-sm well-warning'>"
+                                    + "<span>Tạm ngưng</span>"
+                                    + "</div>";
+                        }
+                    }
+                },
+                {
+                    "aTargets": [3],
+                    "bSortable": false,
+                    "mRender": function (data, type, o) {
+                        return "<a href='/PlaceOwner/Place/PlaceDetail/"+ o[0] +"' class='btn btn-info'><i class='icon wb-pencil' aria-hidden='true'></i></a>";
+                    }
+                }
+
+            ],
+
+        });
+    }
+
+    $(document).ready(function () {
+        InitDatatable();
+        RefreshTable();
+        //loadlist();
+    });
+
+</script>
+
+    }
+

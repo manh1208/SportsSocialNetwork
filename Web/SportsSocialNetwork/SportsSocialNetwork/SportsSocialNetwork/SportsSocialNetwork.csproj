@@ -251,6 +251,7 @@
     <Compile Include="Areas\Admin\Models\UpdateAccountViewModel.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Moderator\ModeratorAreaRegistration.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\PlaceController.cs" />
     <Compile Include="Areas\PlaceOwner\PlaceOwnerAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -614,6 +615,7 @@
     <Compile Include="Models\Entities\Services\ParticipationServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\PlaceImageService.cs" />
     <Compile Include="Models\Entities\Services\PlaceImageServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -686,6 +688,7 @@
     <Compile Include="Models\Enumerable\DbEnums.cs" />
     <Compile Include="Models\FileUploader.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\jQueryDataTableParamModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Notifications\Android.cs" />
     <Compile Include="Models\Notifications\IOS.cs" />
@@ -2714,6 +2717,7 @@
     <Content Include="Content\assets\vendor\x-editable\images\loading.gif" />
     <Content Include="Content\assets\vendor\x-editable\x-editable.css" />
     <Content Include="Content\assets\vendor\x-editable\x-editable.min.css" />
+    <Content Include="Content\Bootbox\bootbox.min.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\custom-css.css" />
@@ -3214,6 +3218,11 @@
     <Content Include="Content\assets\js\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Areas\Admin\Views\Account\Update.cshtml" />
     <Content Include="Areas\Admin\Views\Account\Detail.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Place\Index.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Place\CreatePlace.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Place\PlaceDetail.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -3269,9 +3278,7 @@
     <Folder Include="Areas\Moderator\Controllers\" />
     <Folder Include="Areas\Moderator\Models\" />
     <Folder Include="Areas\Moderator\Views\Shared\" />
-    <Folder Include="Areas\PlaceOwner\Controllers\" />
     <Folder Include="Areas\PlaceOwner\Models\" />
-    <Folder Include="Areas\PlaceOwner\Views\Shared\" />
     <Folder Include="Models\Hubs\" />
   </ItemGroup>
   <ItemGroup>

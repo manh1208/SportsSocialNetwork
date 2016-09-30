@@ -66,6 +66,10 @@
           <Property Name="Gender" Type="int" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="Active" Type="bit" />
+<<<<<<< HEAD
+=======
+          <Property Name="Fullname" Type="nvarchar" MaxLength="255" />
+>>>>>>> dev-quyht-manageplace
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -1408,6 +1412,7 @@
           <NavigationProperty Name="Ratings" Relationship="SSNModel.FK_Rating_AspNetUsers" FromRole="AspNetUser" ToRole="Rating" />
           <NavigationProperty Name="UserInvitations" Relationship="SSNModel.FK_UserInvitation_AspNetUsers" FromRole="AspNetUser" ToRole="UserInvitation" />
           <NavigationProperty Name="AspNetRoles" Relationship="SSNModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+          <Property Name="Fullname" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -2328,6 +2333,7 @@
           <EntitySetMapping Name="AspNetUsers">
             <EntityTypeMapping TypeName="SSNModel.AspNetUser">
               <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="Fullname" ColumnName="Fullname" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Gender" ColumnName="Gender" />
