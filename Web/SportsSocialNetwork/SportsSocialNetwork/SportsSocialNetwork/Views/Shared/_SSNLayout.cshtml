@@ -1,0 +1,229 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html class="no-js before-run" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="bootstrap admin template">
+    <meta name="author" content="">
+
+    <title>Profile | Remark Admin Template</title>
+
+    <link rel="apple-touch-icon" href="~/Content/assets/images/apple-touch-icon.png">
+    <link rel="shortcut icon" href="~/Content/assets/images/favicon.ico">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap-extend.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/site.min.css">
+
+    <link rel="stylesheet" href="~/Content/assets/vendor/animsition/animsition.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/asscrollable/asScrollable.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/switchery/switchery.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/intro-js/introjs.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/slidepanel/slidePanel.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/flag-icon-css/flag-icon.css">
+
+
+    <!-- Page -->
+    <link rel="stylesheet" href="~/Content/assets/css/pages/profile.css">
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="~/Content/assets/fonts/web-icons/web-icons.min.css">
+    <link rel="stylesheet" href="~/Content/assets/fonts/brand-icons/brand-icons.min.css">
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
+
+
+    <script src="~/Content/assets/vendor/modernizr/modernizr.js"></script>
+    <script src="~/Content/assets/vendor/breakpoints/breakpoints.js"></script>
+    <script>
+        Breakpoints();
+    </script>
+   
+    @RenderSection("styles", false)
+</head>
+<body class="page-profile">
+    <nav class="site-navbar navbar navbar-default navbar-fixed-top navbar-mega" role="navigation">
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle hamburger hamburger-close navbar-toggle-left hided"
+                    data-toggle="menubar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="hamburger-bar"></span>
+            </button>
+            <button type="button" class="navbar-toggle collapsed" data-target="#site-navbar-collapse"
+                    data-toggle="collapse">
+                <i class="icon wb-more-horizontal" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="navbar-toggle collapsed" data-target="#site-navbar-search"
+                    data-toggle="collapse">
+                <span class="sr-only">Toggle Search</span>
+                <i class="icon wb-search" aria-hidden="true"></i>
+            </button>
+            <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
+                <img class="navbar-brand-logo" src="~/Content/assets/images/logo.png" title="Remark">
+                <span class="navbar-brand-text"> Remark</span>
+            </div>
+        </div>
+
+        <div class="navbar-container container-fluid">
+            <!-- Navbar Collapse -->
+            <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
+                <!-- Navbar Toolbar -->
+                <ul class="nav navbar-toolbar">
+                    <li class="hidden-float">
+                        <a class="icon wb-search" data-toggle="collapse" href="#site-navbar-search" role="button">
+                            <span class="sr-only">Toggle Search</span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- End Navbar Toolbar -->
+                <!-- Navbar Toolbar Right -->
+                <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" href="javascript:void(0)" title="Notifications" aria-expanded="false"
+                           data-animation="slide-bottom" role="button">
+                            <i class="icon wb-bell" aria-hidden="true"></i>
+                            <span class="badge badge-danger up">5</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media" role="menu">
+                            <li class="dropdown-menu-header" role="presentation">
+                                <h5>NOTIFICATIONS</h5>
+                                <span class="label label-round label-danger">New 5</span>
+                            </li>
+
+                            <li class="list-group" role="presentation">
+                                <div data-role="container">
+                                    <div data-role="content">
+                                        <a class="list-group-item" href="javascript:void(0)" role="menuitem">
+                                            <div class="media">
+                                                <div class="media-left padding-right-10">
+                                                    <i class="icon wb-settings bg-red-600 white icon-circle" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h6 class="media-heading">Settings updated</h6>
+                                                    <time class="media-meta" datetime="2015-06-11T14:05:00+08:00">2 days ago</time>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="dropdown-menu-footer" role="presentation">
+                                <a class="dropdown-menu-footer-btn" href="javascript:void(0)" role="button">
+                                    <i class="icon wb-settings" aria-hidden="true"></i>
+                                </a>
+                                <a href="javascript:void(0)" role="menuitem">
+                                    All notifications
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
+                           data-animation="slide-bottom" role="button">
+                            <span class="avatar avatar-online">
+                                <img src="~/Content/assets/portraits/5.jpg" alt="...">
+                                <i></i>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li role="presentation">
+                                <a href="javascript:void(0)" role="menuitem"><i class="icon wb-user" aria-hidden="true"></i> Profile</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="javascript:void(0)" role="menuitem"><i class="icon wb-payment" aria-hidden="true"></i> Billing</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="javascript:void(0)" role="menuitem"><i class="icon wb-settings" aria-hidden="true"></i> Settings</a>
+                            </li>
+                            <li class="divider" role="presentation"></li>
+                            <li role="presentation">
+                                <a href="javascript:void(0)" role="menuitem"><i class="icon wb-power" aria-hidden="true"></i> Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                </ul>
+                <!-- End Navbar Toolbar Right -->
+            </div>
+            <!-- End Navbar Collapse -->
+            <!-- Site Navbar Seach -->
+            <div class="collapse navbar-search-overlap" id="site-navbar-search">
+                <form role="search">
+                    <div class="form-group">
+                        <div class="input-search">
+                            <i class="input-search-icon wb-search" aria-hidden="true"></i>
+                            <input type="text" class="form-control" name="site-search" placeholder="Search...">
+                            <button type="button" class="input-search-close icon wb-close" data-target="#site-navbar-search"
+                                    data-toggle="collapse" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- End Site Navbar Seach -->
+        </div>
+    </nav>
+    @RenderBody()
+    <!-- End Page -->
+    <!-- Footer -->
+    <footer class="site-footer">
+        <span class="site-footer-legal">© 2015 Remark</span>
+        <div class="site-footer-right">
+            Crafted with <i class="red-600 wb wb-heart"></i> by <a href="http://themeforest.net/user/amazingSurge">amazingSurge</a>
+        </div>
+    </footer>
+
+
+    <!-- Core  -->
+    <script src="~/Content/assets/vendor/jquery/jquery.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap/bootstrap.js"></script>
+    <script src="~/Content/assets/vendor/animsition/jquery.animsition.js"></script>
+    <script src="~/Content/assets/vendor/asscroll/jquery-asScroll.js"></script>
+    <script src="~/Content/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
+    <script src="~/Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
+    <script src="~/Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+
+    <!-- Plugins -->
+    <script src="~/Content/assets/vendor/switchery/switchery.min.js"></script>
+    <script src="~/Content/assets/vendor/intro-js/intro.js"></script>
+    <script src="~/Content/assets/vendor/screenfull/screenfull.js"></script>
+    <script src="~/Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
+
+    <!-- Scripts -->
+    <script src="~/Content/assets/js/core.js"></script>
+    <script src="~/Content/assets/js/site.js"></script>
+
+    <script src="~/Content/assets/js/sections/menu.js"></script>
+    <script src="~/Content/assets/js/sections/menubar.js"></script>
+    <script src="~/Content/assets/js/sections/sidebar.js"></script>
+
+    <script src="~/Content/assets/js/configs/config-colors.js"></script>
+    <script src="~/Content/assets/js/configs/config-tour.js"></script>
+
+    <script src="~/Content/assets/js/components/asscrollable.js"></script>
+    <script src="~/Content/assets/js/components/animsition.js"></script>
+    <script src="~/Content/assets/js/components/slidepanel.min.js"></script>
+
+    <script src="~/Content/assets/js/components/switchery.js"></script>
+
+
+    <script>
+        (function (document, window, $) {
+            'use strict';
+
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
+            });
+        })(document, window, jQuery);
+    </script>
+    @RenderSection("scripts", false)
+</body>
+
+</html>
