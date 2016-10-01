@@ -40,15 +40,15 @@
                                 <label class="floating-label">Tên địa điểm</label>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.DropDownListFor(p => p.City, listCities, new { @class = "form-control input-lg" })
+                                @Html.DropDownListFor(p => p.City, listCities, new { @class = "form-control input-lg", @id = "city" })
                                 <label class="floating-label">Thành phố</label>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.DropDownListFor(p => p.District, listDistricts, new { @class = "form-control input-lg" })
+                                @Html.DropDownListFor(p => p.District, listDistricts, new { @class = "form-control input-lg", @id = "district" })
                                 <label class="floating-label">Quận</label>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.DropDownListFor(p => p.Ward, listWards, new { @class = "form-control input-lg" })
+                                @Html.DropDownListFor(p => p.Ward, listWards, new { @class = "form-control input-lg", @id = "ward" })
                                 <label class="floating-label">Phường</label>
                             </div>
                             <div class="form-group form-material floating">

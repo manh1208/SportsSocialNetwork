@@ -65,7 +65,7 @@
                                     <label class="control-label">Từ</label>
                                 </div>
                                 <div class="col-sm-8">
-                                    @Html.TextBoxFor(p => p.StartTime, new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                                    @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -73,7 +73,7 @@
                                     <label class="control-label">Đến</label>
                                 </div>
                                 <div class="col-sm-8">
-                                    @Html.TextBoxFor(p => p.EndTime, new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                                    @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
                                 </div>
                             </div>
                         </div>
