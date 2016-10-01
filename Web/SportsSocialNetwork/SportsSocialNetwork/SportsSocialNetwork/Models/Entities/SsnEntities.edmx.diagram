@@ -5,81 +5,81 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="819f7de092e84b8490998a35e9d5dbce" Name="Diagram1">
-        <EntityTypeShape EntityType="SSNModel.AspNetRole" Width="1.5" PointX="0.75" PointY="29" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="19.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="22.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.AspNetUser" Width="1.5" PointX="3" PointY="25.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.Category" Width="1.5" PointX="9" PointY="21.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.CategorySport" Width="1.5" PointX="16.25" PointY="32.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.Event" Width="1.5" PointX="5.25" PointY="24.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.Field" Width="1.5" PointX="7.5" PointY="49.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.FieldImage" Width="1.5" PointX="9.75" PointY="48.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.FieldPrice" Width="1.5" PointX="12" PointY="52.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.FieldType" Width="1.5" PointX="5.25" PointY="55.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.Follow" Width="1.5" PointX="5.25" PointY="28.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.Group" Width="1.5" PointX="9" PointY="43.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.GroupMember" Width="1.5" PointX="11.25" PointY="43.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.Hobby" Width="1.5" PointX="8.25" PointY="31.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.Invitation" Width="1.5" PointX="5.25" PointY="34.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.Like" Width="1.5" PointX="8.25" PointY="24.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.News" Width="1.5" PointX="11.25" PointY="22.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.NewsComment" Width="1.5" PointX="13.5" PointY="26.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.Notification" Width="1.5" PointX="10.5" PointY="30.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.Order" Width="1.5" PointX="8.25" PointY="35.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.Participation" Width="1.5" PointX="7.5" PointY="28.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.Place" Width="1.5" PointX="5.25" PointY="48.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.PlaceImage" Width="1.5" PointX="7.5" PointY="56.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.Post" Width="1.5" PointX="11.25" PointY="34.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.PostComment" Width="1.5" PointX="13.5" PointY="30.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.PostSport" Width="1.5" PointX="13.5" PointY="35.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.Rating" Width="1.5" PointX="7.5" PointY="39.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.Sport" Width="1.5" PointX="6.75" PointY="43.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.TimeBlock" Width="1.5" PointX="9.75" PointY="54" IsExpanded="true" />
-        <EntityTypeShape EntityType="SSNModel.UserInvitation" Width="1.5" PointX="10.5" PointY="27" IsExpanded="true" />
-        <AssociationConnector Association="SSNModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Event_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Follow_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Hobby_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Invitation_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Like_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_News_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_NewsComment_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Notification_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Order_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Participation_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Place_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Post_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_PostComment_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Rating_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_UserInvitation_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_CategorySport_Category" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_News_Category" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_CategorySport_Sport" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Participation_Event" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Field_FieldType" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Field_Place" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_FieldImage_Field" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_FieldPrice_Field" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Order_Field" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_TimeBlock_Field" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_FieldPrice_TimeBlock" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_FieldType_Sport" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Group_Sport" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_GroupMember_Group" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Post_Group" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Hobby_Sport" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Notification_Invitation" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_UserInvitation_Invitation" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Like_Post" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_NewsComment_News" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Notification_Post" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_PlaceImage_Place" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_Rating_Place" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_PostComment_Post1" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_PostSport_Post" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.FK_PostSport_Sport" ManuallyRouted="false" />
-        <AssociationConnector Association="SSNModel.AspNetUserRoles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SSNModel.AspNetRole" Width="1.5" PointX="0.75" PointY="29" />
+        <EntityTypeShape EntityType="SSNModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="31" />
+        <EntityTypeShape EntityType="SSNModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="47.75" />
+        <EntityTypeShape EntityType="SSNModel.AspNetUser" Width="1.5" PointX="3" PointY="25.25" />
+        <EntityTypeShape EntityType="SSNModel.Category" Width="1.5" PointX="8" PointY="42.75" />
+        <EntityTypeShape EntityType="SSNModel.CategorySport" Width="1.5" PointX="13.25" PointY="35.125" />
+        <EntityTypeShape EntityType="SSNModel.Event" Width="1.5" PointX="5.25" PointY="19.375" />
+        <EntityTypeShape EntityType="SSNModel.Field" Width="1.5" PointX="7.5" PointY="51.125" />
+        <EntityTypeShape EntityType="SSNModel.FieldImage" Width="1.5" PointX="9.75" PointY="56.375" />
+        <EntityTypeShape EntityType="SSNModel.FieldPrice" Width="1.5" PointX="12" PointY="51.5" />
+        <EntityTypeShape EntityType="SSNModel.FieldType" Width="1.5" PointX="5.25" PointY="43.75" />
+        <EntityTypeShape EntityType="SSNModel.Follow" Width="1.5" PointX="5.25" PointY="56.25" />
+        <EntityTypeShape EntityType="SSNModel.Group" Width="1.5" PointX="6" PointY="15.375" />
+        <EntityTypeShape EntityType="SSNModel.GroupMember" Width="1.5" PointX="8.25" PointY="15.625" />
+        <EntityTypeShape EntityType="SSNModel.Hobby" Width="1.5" PointX="5.25" PointY="24.75" />
+        <EntityTypeShape EntityType="SSNModel.Invitation" Width="1.5" PointX="5.25" PointY="37.75" />
+        <EntityTypeShape EntityType="SSNModel.Like" Width="1.5" PointX="5.25" PointY="27.625" />
+        <EntityTypeShape EntityType="SSNModel.News" Width="1.5" PointX="10.25" PointY="35.125" />
+        <EntityTypeShape EntityType="SSNModel.NewsComment" Width="1.5" PointX="15.5" PointY="27.5" />
+        <EntityTypeShape EntityType="SSNModel.Notification" Width="1.5" PointX="10.5" PointY="31.25" />
+        <EntityTypeShape EntityType="SSNModel.Order" Width="1.5" PointX="10.25" PointY="24.125" />
+        <EntityTypeShape EntityType="SSNModel.Participation" Width="1.5" PointX="7.5" PointY="25.625" />
+        <EntityTypeShape EntityType="SSNModel.Place" Width="1.5" PointX="5.25" PointY="50.25" />
+        <EntityTypeShape EntityType="SSNModel.PlaceImage" Width="1.5" PointX="7.5" PointY="60.75" />
+        <EntityTypeShape EntityType="SSNModel.Post" Width="1.5" PointX="8.25" PointY="28.875" />
+        <EntityTypeShape EntityType="SSNModel.PostComment" Width="1.5" PointX="13.5" PointY="31.375" />
+        <EntityTypeShape EntityType="SSNModel.PostSport" Width="1.5" PointX="12.5" PointY="27.75" />
+        <EntityTypeShape EntityType="SSNModel.Rating" Width="1.5" PointX="7.5" PointY="39.375" />
+        <EntityTypeShape EntityType="SSNModel.Sport" Width="1.5" PointX="3" PointY="21.5" />
+        <EntityTypeShape EntityType="SSNModel.TimeBlock" Width="1.5" PointX="9.75" PointY="50.375" />
+        <EntityTypeShape EntityType="SSNModel.UserInvitation" Width="1.5" PointX="7.5" PointY="33.625" />
+        <AssociationConnector Association="SSNModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="SSNModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="SSNModel.FK_Event_AspNetUsers" />
+        <AssociationConnector Association="SSNModel.FK_Follow_AspNetUsers" />
+        <AssociationConnector Association="SSNModel.FK_Hobby_AspNetUsers" />
+        <AssociationConnector Association="SSNModel.FK_Invitation_AspNetUsers" />
+        <AssociationConnector Association="SSNModel.FK_Like_AspNetUsers" />
+        <AssociationConnector Association="SSNModel.FK_News_AspNetUsers" />
+        <AssociationConnector Association="SSNModel.FK_NewsComment_AspNetUsers" />
+        <AssociationConnector Association="SSNModel.FK_Notification_AspNetUsers" />
+        <AssociationConnector Association="SSNModel.FK_Order_AspNetUsers" />
+        <AssociationConnector Association="SSNModel.FK_Participation_AspNetUsers" />
+        <AssociationConnector Association="SSNModel.FK_Place_AspNetUsers" />
+        <AssociationConnector Association="SSNModel.FK_Post_AspNetUsers" />
+        <AssociationConnector Association="SSNModel.FK_PostComment_AspNetUsers" />
+        <AssociationConnector Association="SSNModel.FK_Rating_AspNetUsers" />
+        <AssociationConnector Association="SSNModel.FK_UserInvitation_AspNetUsers" />
+        <AssociationConnector Association="SSNModel.FK_CategorySport_Category" />
+        <AssociationConnector Association="SSNModel.FK_News_Category" />
+        <AssociationConnector Association="SSNModel.FK_CategorySport_Sport" />
+        <AssociationConnector Association="SSNModel.FK_Participation_Event" />
+        <AssociationConnector Association="SSNModel.FK_Field_FieldType" />
+        <AssociationConnector Association="SSNModel.FK_Field_Place" />
+        <AssociationConnector Association="SSNModel.FK_FieldImage_Field" />
+        <AssociationConnector Association="SSNModel.FK_FieldPrice_Field" />
+        <AssociationConnector Association="SSNModel.FK_Order_Field" />
+        <AssociationConnector Association="SSNModel.FK_TimeBlock_Field" />
+        <AssociationConnector Association="SSNModel.FK_FieldPrice_TimeBlock" />
+        <AssociationConnector Association="SSNModel.FK_FieldType_Sport" />
+        <AssociationConnector Association="SSNModel.FK_Group_Sport" />
+        <AssociationConnector Association="SSNModel.FK_GroupMember_Group" />
+        <AssociationConnector Association="SSNModel.FK_Post_Group" />
+        <AssociationConnector Association="SSNModel.FK_Hobby_Sport" />
+        <AssociationConnector Association="SSNModel.FK_Notification_Invitation" />
+        <AssociationConnector Association="SSNModel.FK_UserInvitation_Invitation" />
+        <AssociationConnector Association="SSNModel.FK_Like_Post" />
+        <AssociationConnector Association="SSNModel.FK_NewsComment_News" />
+        <AssociationConnector Association="SSNModel.FK_Notification_Post" />
+        <AssociationConnector Association="SSNModel.FK_PlaceImage_Place" />
+        <AssociationConnector Association="SSNModel.FK_Rating_Place" />
+        <AssociationConnector Association="SSNModel.FK_PostComment_Post1" />
+        <AssociationConnector Association="SSNModel.FK_PostSport_Post" />
+        <AssociationConnector Association="SSNModel.FK_PostSport_Sport" />
+        <AssociationConnector Association="SSNModel.AspNetUserRoles" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

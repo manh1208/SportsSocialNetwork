@@ -251,6 +251,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\PlaceController.cs" />
     <Compile Include="Areas\Admin\Controllers\PlaceOwnerController.cs" />
+    <Compile Include="Areas\Admin\Models\PlaceDetailViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UpdateAccountViewModel.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Api\Controllers\FieldController.cs" />
@@ -3240,8 +3241,8 @@
       <DependentUpon>SsnEntities.edmx</DependentUpon>
     </Content>
     <Content Include="Areas\Admin\Views\PlaceOwner\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Place\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Place\Detail.cshtml" />
+    <Content Include="Areas\Admin\Views\Place\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Place\Update.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -3291,6 +3292,8 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_BookingFieldLayout.cshtml" />
     <Content Include="Views\Place\Index.cshtml" />
+    <Content Include="Views\SSN\Index.cshtml" />
+    <Content Include="Views\Shared\_SSNLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
