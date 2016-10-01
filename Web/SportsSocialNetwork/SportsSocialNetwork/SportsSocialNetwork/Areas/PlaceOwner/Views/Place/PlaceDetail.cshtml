@@ -4,9 +4,62 @@
     ViewBag.Title = "PlaceDetail";
     List<PlaceImage> placeImages = ViewBag.placeImages;
 
-    var listCities = ViewBag.provinces as IOrderedEnumerable<SelectListItem>;
-    var listDistricts = ViewBag.districts as IOrderedEnumerable<SelectListItem>;
-    var listWards = ViewBag.wards as IOrderedEnumerable<SelectListItem>;
+    //listCity
+    List<SelectListItem> listCities = new List<SelectListItem>();
+    listCities.Add(new SelectListItem
+    {
+        Text = "Hồ Chí Minh",
+        Value = "Ho Chi Minh"
+    });
+    listCities.Add(new SelectListItem
+    {
+        Text = "Hà Nội",
+        Value = "Ha Noi",
+        Selected = true
+    });
+    listCities.Add(new SelectListItem
+    {
+        Text = "Đà Nẵng",
+        Value = "Da Nang"
+    });
+
+    //listDistrict
+    List<SelectListItem> listDistricts = new List<SelectListItem>();
+    listDistricts.Add(new SelectListItem
+    {
+        Text = "Quận 1",
+        Value = "Quan 1"
+    });
+    listDistricts.Add(new SelectListItem
+    {
+        Text = "Quận 2",
+        Value = "Quan 2",
+        Selected = true
+    });
+    listDistricts.Add(new SelectListItem
+    {
+        Text = "Quận 3",
+        Value = "Quan 3"
+    });
+
+    //listWard
+    List<SelectListItem> listWards = new List<SelectListItem>();
+    listWards.Add(new SelectListItem
+    {
+        Text = "Phường 1",
+        Value = "Phuong 1"
+    });
+    listWards.Add(new SelectListItem
+    {
+        Text = "Phường 2",
+        Value = "Phuong 2",
+        Selected = true
+    });
+    listWards.Add(new SelectListItem
+    {
+        Text = "Phường 3",
+        Value = "Phuong 2"
+    });
 }
 
 
@@ -72,7 +125,7 @@
                                         <label class="control-label">Từ</label>
                                     </div>
                                     <div class="col-sm-8">
-                                        @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                                        @Html.TextBoxFor(p => p.StartTime, new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
@@ -80,7 +133,7 @@
                                         <label class="control-label">Đến</label>
                                     </div>
                                     <div class="col-sm-8">
-                                        @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                                        @Html.TextBoxFor(p => p.EndTime, new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
                                     </div>
                                 </div>
                             </div>
@@ -556,70 +609,6 @@
             }
         });
     })();
-
-    function updateWard() {
-        var provinceName = $('#city').val();
-        var districtName = $('#district').val();
-        $.ajax({
-            url: '@Url.Action("GetWard")',
-            type: 'POST',
-            data: {
-                'provinceName': provinceName,
-                'districtName': districtName
-            },
-            dataType: 'json',
-            success: function (data) {
-                var ddl = $('#ward');
-                ddl.empty();
-                $(document.createElement('option'))
-                                        .attr('value', '')
-                                        .text('')
-                                        .appendTo(ddl);
-                ddl.addClass("empty");
-                $(data.AdditionalData).each(function () {
-                    $(document.createElement('option'))
-                        .attr('value', this.Value)
-                        .text(this.Text)
-                        .appendTo(ddl);
-                });
-            }
-        });
-    };
-
-    function updateDistrict() {
-        var provinceName = $('#city').val();
-        $.ajax({
-            url: '@Url.Action("GetDistrict")',
-            type: 'POST',
-            data: {
-                'provinceName': provinceName,
-            },
-            dataType: 'json',
-            success: function (data) {
-                var ddl = $('#district');
-                ddl.empty();
-                ddl.addClass("empty");
-                $(document.createElement('option'))
-                                        .attr('value', '')
-                                        .text('')
-                                        .appendTo(ddl);
-                $(data.AdditionalData).each(function () {
-                    $(document.createElement('option'))
-                        .attr('value', this.Value)
-                        .text(this.Text)
-                        .appendTo(ddl);
-                });
-                updateWard();
-            }
-        });
-    };
-
-    $("#city").on("change", function () {
-        updateDistrict();
-    });
-    $("#district").on("change", function () {
-        updateWard();
-    });
 
 </script>
 

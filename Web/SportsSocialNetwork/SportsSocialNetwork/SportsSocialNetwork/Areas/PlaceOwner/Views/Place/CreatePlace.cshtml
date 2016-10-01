@@ -2,9 +2,62 @@
 @{
     ViewBag.Title = "CreatePlace";
 
-    var listCities = ViewBag.provinces as IOrderedEnumerable<SelectListItem>;
-    var listDistricts = ViewBag.districts as IOrderedEnumerable<SelectListItem>;
-    var listWards = ViewBag.wards as IOrderedEnumerable<SelectListItem>;
+    //listCity
+    List<SelectListItem> listCities = new List<SelectListItem>();
+    listCities.Add(new SelectListItem
+    {
+        Text = "Hồ Chí Minh",
+        Value = "Ho Chi Minh"
+    });
+    listCities.Add(new SelectListItem
+    {
+        Text = "Hà Nội",
+        Value = "Ha Noi",
+        Selected = true
+    });
+    listCities.Add(new SelectListItem
+    {
+        Text = "Đà Nẵng",
+        Value = "Da Nang"
+    });
+
+    //listDistrict
+    List<SelectListItem> listDistricts = new List<SelectListItem>();
+    listDistricts.Add(new SelectListItem
+    {
+        Text = "Quận 1",
+        Value = "Quan 1"
+    });
+    listDistricts.Add(new SelectListItem
+    {
+        Text = "Quận 2",
+        Value = "Quan 2",
+        Selected = true
+    });
+    listDistricts.Add(new SelectListItem
+    {
+        Text = "Quận 3",
+        Value = "Quan 3"
+    });
+
+    //listWard
+    List<SelectListItem> listWards = new List<SelectListItem>();
+    listWards.Add(new SelectListItem
+    {
+        Text = "Phường 1",
+        Value = "Phuong 1"
+    });
+    listWards.Add(new SelectListItem
+    {
+        Text = "Phường 2",
+        Value = "Phuong 2",
+        Selected = true
+    });
+    listWards.Add(new SelectListItem
+    {
+        Text = "Phường 3",
+        Value = "Phuong 2"
+    });
 }
 
 @*<style>
@@ -33,15 +86,15 @@
                             <label class="floating-label">Tên địa điểm</label>
                         </div>
                         <div class="form-group form-material floating">
-                            @Html.DropDownListFor(p => p.City, listCities, new { @class = "form-control input-lg", @id = "city" })
+                            @Html.DropDownListFor(p => p.City, listCities, new { @class = "form-control input-lg" })
                             <label class="floating-label">Thành phố</label>
                         </div>
                         <div class="form-group form-material floating">
-                            @Html.DropDownListFor(p => p.District, listDistricts, new { @class = "form-control input-lg", @id = "district" })
+                            @Html.DropDownListFor(p => p.District, listDistricts, new { @class = "form-control input-lg" })
                             <label class="floating-label">Quận</label>
                         </div>
                         <div class="form-group form-material floating">
-                            @Html.DropDownListFor(p => p.Ward, listWards, new { @class = "form-control input-lg", @id = "ward" })
+                            @Html.DropDownListFor(p => p.Ward, listWards, new { @class = "form-control input-lg" })
                             <label class="floating-label">Phường</label>
                         </div>
                         <div class="form-group form-material floating">
@@ -310,70 +363,6 @@
             }
         });
     })();
-
-    function updateWard() {
-        var provinceName = $('#city').val();
-        var districtName = $('#district').val();
-        $.ajax({
-            url: '@Url.Action("GetWard")',
-            type: 'POST',
-            data: {
-                'provinceName': provinceName,
-                'districtName': districtName
-            },
-            dataType: 'json',
-            success: function (data) {
-                var ddl = $('#ward');
-                ddl.empty();
-                $(document.createElement('option'))
-                                        .attr('value', '')
-                                        .text('')
-                                        .appendTo(ddl);
-                ddl.addClass("empty");
-                $(data.AdditionalData).each(function () {
-                    $(document.createElement('option'))
-                        .attr('value', this.Value)
-                        .text(this.Text)
-                        .appendTo(ddl);
-                });
-            }
-        });
-    };
-
-    function updateDistrict() {
-        var provinceName = $('#city').val();
-        $.ajax({
-            url: '@Url.Action("GetDistrict")',
-            type: 'POST',
-            data: {
-                'provinceName': provinceName,
-            },
-            dataType: 'json',
-            success: function (data) {
-                var ddl = $('#district');
-                ddl.empty();
-                ddl.addClass("empty");
-                $(document.createElement('option'))
-                                        .attr('value', '')
-                                        .text('')
-                                        .appendTo(ddl);
-                $(data.AdditionalData).each(function () {
-                    $(document.createElement('option'))
-                        .attr('value', this.Value)
-                        .text(this.Text)
-                        .appendTo(ddl);
-                });
-                updateWard();
-            }
-        });
-    };
-
-    $("#city").on("change", function () {
-        updateDistrict();
-    });
-    $("#district").on("change", function () {
-        updateWard();
-    });
 
 </script>
 
