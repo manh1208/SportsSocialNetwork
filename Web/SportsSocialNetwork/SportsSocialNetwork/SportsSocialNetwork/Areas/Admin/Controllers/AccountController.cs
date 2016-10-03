@@ -68,6 +68,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                         a.Email,
                         a.UserName,
                         a.AspNetRoles.FirstOrDefault().Name,
+                        a.Status,
                         a.Id
 
                 }).ToArray();

@@ -46,4 +46,16 @@ namespace SportsSocialNetwork.Models.Enumerable
         Repairing = 4,
 
     }
+
+    public enum UserStatus
+    {
+        [Description("Đang hoạt động")]
+        Active = 1,
+        [Description("Từ chối")]
+        Unapproved = 2,
+        [Description("Đang chờ")]
+        Pending = 3,
+        [Description("Bị cấm")]
+        Banned = 4,
+    }
 }

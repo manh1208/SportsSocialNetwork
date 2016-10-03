@@ -37,6 +37,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual Nullable<System.DateTime> Birthday { get; set; }
     			public virtual Nullable<int> Gender { get; set; }
     			public virtual Nullable<System.DateTime> CreateDate { get; set; }
+    			public virtual Nullable<int> Status { get; set; }
     			public virtual Nullable<bool> Active { get; set; }
     	
     	public AspNetUserViewModel() : base() { }

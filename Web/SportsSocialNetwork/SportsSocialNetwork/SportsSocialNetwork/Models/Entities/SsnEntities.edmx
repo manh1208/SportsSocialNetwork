@@ -65,6 +65,7 @@
           <Property Name="Birthday" Type="date" />
           <Property Name="Gender" Type="int" />
           <Property Name="CreateDate" Type="datetime" />
+          <Property Name="Status" Type="int" />
           <Property Name="Active" Type="bit" />
         </EntityType>
         <EntityType Name="Category">
@@ -1390,6 +1391,7 @@
           <Property Name="Birthday" Type="DateTime" Precision="0" />
           <Property Name="Gender" Type="Int32" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
           <Property Name="Active" Type="Boolean" />
           <NavigationProperty Name="AspNetUserClaims" Relationship="SSNModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
           <NavigationProperty Name="AspNetUserLogins" Relationship="SSNModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
@@ -2331,6 +2333,7 @@
             <EntityTypeMapping TypeName="SSNModel.AspNetUser">
               <MappingFragment StoreEntitySet="AspNetUsers">
                 <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Gender" ColumnName="Gender" />
                 <ScalarProperty Name="Birthday" ColumnName="Birthday" />
