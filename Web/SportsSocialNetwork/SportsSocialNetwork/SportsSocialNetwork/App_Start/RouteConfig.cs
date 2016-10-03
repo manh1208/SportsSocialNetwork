@@ -16,7 +16,8 @@ namespace SportsSocialNetwork
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "SSN", action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "SportsSocialNetwork.Controllers" }
             );
         }
     }

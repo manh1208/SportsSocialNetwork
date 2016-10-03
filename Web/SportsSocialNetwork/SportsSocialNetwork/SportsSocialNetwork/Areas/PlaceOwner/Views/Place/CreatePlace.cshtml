@@ -1,0 +1,373 @@
+﻿@model SportsSocialNetwork.Models.Entities.Place
+@{
+    ViewBag.Title = "CreatePlace";
+
+    //listCity
+    List<SelectListItem> listCities = new List<SelectListItem>();
+    listCities.Add(new SelectListItem
+    {
+        Text = "Hồ Chí Minh",
+        Value = "Ho Chi Minh"
+    });
+    listCities.Add(new SelectListItem
+    {
+        Text = "Hà Nội",
+        Value = "Ha Noi",
+        Selected = true
+    });
+    listCities.Add(new SelectListItem
+    {
+        Text = "Đà Nẵng",
+        Value = "Da Nang"
+    });
+
+    //listDistrict
+    List<SelectListItem> listDistricts = new List<SelectListItem>();
+    listDistricts.Add(new SelectListItem
+    {
+        Text = "Quận 1",
+        Value = "Quan 1"
+    });
+    listDistricts.Add(new SelectListItem
+    {
+        Text = "Quận 2",
+        Value = "Quan 2",
+        Selected = true
+    });
+    listDistricts.Add(new SelectListItem
+    {
+        Text = "Quận 3",
+        Value = "Quan 3"
+    });
+
+    //listWard
+    List<SelectListItem> listWards = new List<SelectListItem>();
+    listWards.Add(new SelectListItem
+    {
+        Text = "Phường 1",
+        Value = "Phuong 1"
+    });
+    listWards.Add(new SelectListItem
+    {
+        Text = "Phường 2",
+        Value = "Phuong 2",
+        Selected = true
+    });
+    listWards.Add(new SelectListItem
+    {
+        Text = "Phường 3",
+        Value = "Phuong 2"
+    });
+}
+
+@*<style>
+    .form-horizontal .form-group {
+        margin-left: 0px;
+    }
+</style>*@
+<div class="panel">
+    <div class="panel-heading">
+        <h1 class="panel-title">Tạo địa điểm</h1>
+    </div>
+</div>
+<div class="panel">
+    <div class="panel-body">
+        
+        @using (Html.BeginForm("createPlace", "Place", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "placeForm", @autocomplete = "off" }))
+        {
+            <div class="col-sm-6">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Thông tin địa điểm</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group form-material floating">
+                            @Html.TextBoxFor(p => p.Name, new { @class = "form-control input-lg" })
+                            <label class="floating-label">Tên địa điểm</label>
+                        </div>
+                        <div class="form-group form-material floating">
+                            @Html.DropDownListFor(p => p.City, listCities, new { @class = "form-control input-lg" })
+                            <label class="floating-label">Thành phố</label>
+                        </div>
+                        <div class="form-group form-material floating">
+                            @Html.DropDownListFor(p => p.District, listDistricts, new { @class = "form-control input-lg" })
+                            <label class="floating-label">Quận</label>
+                        </div>
+                        <div class="form-group form-material floating">
+                            @Html.DropDownListFor(p => p.Ward, listWards, new { @class = "form-control input-lg" })
+                            <label class="floating-label">Phường</label>
+                        </div>
+                        <div class="form-group form-material floating">
+                            @Html.TextBoxFor(p => p.Address, new { @class = "form-control input-lg" })
+                            <label class="floating-label">Địa chỉ</label>
+                        </div>
+                        <div class="form-group form-material floating">
+                            @Html.TextBoxFor(p => p.Email, new { @class = "form-control input-lg" })
+                            <label class="floating-label">Email</label>
+                        </div>
+                        <div class="form-group form-material floating">
+                            @Html.TextBoxFor(p => p.PhoneNumber, new { @class = "form-control input-lg" })
+                            <label class="floating-label">Số điện thoại</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-3">
+                                <label class="control-label">Giờ hoạt động</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="col-sm-2">
+                                    <label class="control-label">Từ</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(p => p.StartTime, new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="col-sm-2">
+                                    <label class="control-label">Đến</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(p => p.EndTime, new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-material floating">
+                            @Html.TextAreaFor(p => p.Description, new { rows = "3", @class = "form-control input-lg" })
+                            <label class="floating-label">Mô tả</label>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+            <div class="col-sm-6">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Hình ảnh về địa điểm</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group form-material floating">
+                            <input type="text" class="form-control" readonly="" />
+                            <input type="file" id="uploadImages" name="uploadImages" multiple />
+                            <label class="floating-label">Hình ảnh</label>
+                        </div>
+                        @*<div class="form-group">
+            <label class="col-sm-3 control-label">Hình ảnh</label>
+            <div class="col-sm-6 upload-form" id="exampleUploadForm" >
+                <input type="file" class="form-control" id="inputUpload" name="uploadImages" multiple />
+                <div class="uploader-inline">
+                    <h3 class="upload-instructions">
+                        Click Or Drop Files To Upload
+                    </h3>
+                </div>
+                <div class="file-wrap container-fluid">
+                    <div class="file-list row"></div>
+                </div>
+            </div>
+        </div>*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-offset-6 col-sm-4">
+                    @Html.ActionLink("Hủy bỏ", "Index", "Place", null, new { @class = "btn btn-default" })
+                    <input type="submit" value="Tạo địa điểm" class="btn btn-success" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section Scripts{
+
+<script>
+
+    (function (document, window, $) {
+        $(document).ready(function ($) {
+            Site.run();
+        });
+
+        // Example File Upload
+        // -------------------
+        $('#exampleUploadForm').fileupload({
+            //url: '../../server/fileupload/',
+            dropzone: $('#exampleUploadForm'),
+            filesContainer: $('.file-list'),
+            uploadTemplateId: false,
+            downloadTemplateId: false,
+            uploadTemplate: tmpl(
+              '{% for (var i=0, file; file=o.files[i]; i++) { %}' +
+              '<div class="file template-upload fade col-sm-6 {%=file.type.search("image") !== -1? "image" : "other-file"%}">' +
+              '<div class="file-item">' +
+              '<div class="preview vertical-align">' +
+              '<div class="file-action-wrap">' +
+              '<div class="file-action">' +
+              '{% if (!i && !o.options.autoUpload) { %}' +
+              '<i class="icon wb-upload start" data-toggle="tooltip" data-original-title="Upload file" aria-hidden="true"></i>' +
+              '{% } %}' +
+              '{% if (!i) { %}' +
+              '<i class="icon wb-close cancel" data-toggle="tooltip" data-original-title="Stop upload file" aria-hidden="true"></i>' +
+              '{% } %}' +
+              '</div>' +
+              '</div>' +
+              '</div>' +
+              '<div class="info-wrap">' +
+              '<div class="title">{%=file.name%}</div>' +
+              '</div>' +
+              '<div class="progress progress-striped active" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" role="progressbar">' +
+              '<div class="progress-bar progress-bar-success" style="width:0%;"></div>' +
+              '</div>' +
+              '</div>' +
+              '</div>' +
+              '{% } %}'
+            ),
+            downloadTemplate: tmpl(
+              '{% for (var i=0, file; file=o.files[i]; i++) { %}' +
+              '<div class="file template-download fade col-sm-6 {%=file.type.search("image") !== -1? "image" : "other-file"%}">' +
+              '<div class="file-item">' +
+              '<div class="preview vertical-align">' +
+              '<div class="file-action-wrap">' +
+              '<div class="file-action">' +
+              '<i class="icon wb-trash delete" data-toggle="tooltip" data-original-title="Delete files" aria-hidden="true"></i>' +
+              '</div>' +
+              '</div>' +
+              '<img src="{%=file.url%}"/>' +
+              '</div>' +
+              '<div class="info-wrap">' +
+              '<div class="title">{%=file.name%}</div>' +
+              '</div>' +
+              '</div>' +
+              '</div>' +
+              '{% } %}'
+            ),
+            forceResize: true,
+            previewCanvas: false,
+            previewMaxWidth: false,
+            previewMaxHeight: false,
+            previewThumbnail: false
+        }).on('fileuploadprocessalways', function (e, data) {
+            var length = data.files.length;
+
+            for (var i = 0; i < length; i++) {
+                if (!data.files[i].type.match(
+                    /^image\/(gif|jpeg|png|svg\+xml)$/)) {
+                    data.files[i].filetype = 'other-file';
+                } else {
+                    data.files[i].filetype = 'image';
+                }
+            }
+        }).on('fileuploadadded', function (e) {
+            var $this = $(e.target);
+
+            if ($this.find('.file').length > 0) {
+                $this.addClass('has-file');
+            } else {
+                $this.removeClass('has-file');
+            }
+        }).on('fileuploadfinished', function (e) {
+            var $this = $(e.target);
+
+            if ($this.find('.file').length > 0) {
+                $this.addClass('has-file');
+            } else {
+                $this.removeClass('has-file');
+            }
+        }).on('fileuploaddestroyed', function (e) {
+            var $this = $(e.target);
+
+            if ($this.find('.file').length > 0) {
+                $this.addClass('has-file');
+            } else {
+                $this.removeClass('has-file');
+            }
+        }).on('click', function (e) {
+            if ($(e.target).parents('.file').length === 0) $('#inputUpload')
+              .trigger('click');
+        });
+
+        $(document).bind('dragover', function (e) {
+            var dropZone = $('#exampleUploadForm'),
+              timeout = window.dropZoneTimeout;
+            if (!timeout) {
+                dropZone.addClass('in');
+            } else {
+                clearTimeout(timeout);
+            }
+            var found = false,
+              node = e.target;
+            do {
+                if (node === dropZone[0]) {
+                    found = true;
+                    break;
+                }
+                node = node.parentNode;
+            } while (node !== null);
+            if (found) {
+                dropZone.addClass('hover');
+            } else {
+                dropZone.removeClass('hover');
+            }
+            window.dropZoneTimeout = setTimeout(function () {
+                window.dropZoneTimeout = null;
+                dropZone.removeClass('in hover');
+            }, 100);
+        });
+
+        $('#inputUpload').on('click', function (e) {
+            e.stopPropagation();
+        });
+
+        $('#uploadlink').on('click', function (e) {
+            e.stopPropagation();
+        });
+    })(document, window, jQuery);
+
+
+
+    // Example Validataion Constraints
+    // -------------------------------
+    (function () {
+        $('#placeForm').formValidation({
+            framework: "bootstrap",
+            icon: null,
+            fields: {
+                Email: {
+                    validators: {
+                        emailAddress: {
+                            message: 'Email không đúng định dạng'
+                        }
+                    }
+                },
+                type_digits: {
+                    validators: {
+                        digits: {
+                            message: 'The value is not digits'
+                        }
+                    }
+                },
+                type_numberic: {
+                    validators: {
+                        integer: {
+                            message: 'The value is not an number'
+                        }
+                    }
+                },
+                type_date: {
+                    validators: {
+                        date: {
+                            format: 'YYYY/MM/DD'
+                        }
+                    }
+                }
+            }
+        });
+    })();
+
+</script>
+
+    }
+
+
+
+

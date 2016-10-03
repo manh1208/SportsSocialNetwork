@@ -131,6 +131,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -247,12 +248,26 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PlaceController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PlaceOwnerController.cs" />
+    <Compile Include="Areas\Admin\Models\PlaceDetailViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\UpdateAccountViewModel.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
+    <Compile Include="Areas\Api\Controllers\FieldController.cs" />
+    <Compile Include="Areas\Api\Controllers\LikeController.cs" />
+    <Compile Include="Areas\Api\Controllers\OrderController.cs" />
+    <Compile Include="Areas\Api\Controllers\PlaceController.cs" />
+    <Compile Include="Areas\Api\Controllers\PostCommentController.cs" />
+    <Compile Include="Areas\Api\Controllers\PostController.cs" />
     <Compile Include="Areas\Moderator\ModeratorAreaRegistration.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\PlaceController.cs" />
     <Compile Include="Areas\PlaceOwner\PlaceOwnerAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PlaceController.cs" />
+    <Compile Include="Controllers\SSNController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -611,6 +626,7 @@
     <Compile Include="Models\Entities\Services\ParticipationServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\PlaceImageService.cs" />
     <Compile Include="Models\Entities\Services\PlaceImageServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -618,6 +634,7 @@
     <Compile Include="Models\Entities\Services\PlaceServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\PostCommentService.cs" />
     <Compile Include="Models\Entities\Services\PostCommentServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -687,6 +704,8 @@
     <Compile Include="Models\Notifications\Android.cs" />
     <Compile Include="Models\Notifications\IOS.cs" />
     <Compile Include="Models\Notifications\NotificationModel.cs" />
+    <Compile Include="Models\Utilities\Utils.cs" />
+    <Compile Include="Models\ViewModels\AjaxOperationResult.cs" />
     <Compile Include="Models\ViewModels\AspNetRoleViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -705,6 +724,7 @@
     <Compile Include="Models\ViewModels\CategoryViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\DataTableViewModel.cs" />
     <Compile Include="Models\ViewModels\EventViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -735,6 +755,7 @@
     <Compile Include="Models\ViewModels\InvitationViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\LikeDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\LikeViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -747,6 +768,7 @@
     <Compile Include="Models\ViewModels\NotificationViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\OrderDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\OrderViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -759,9 +781,12 @@
     <Compile Include="Models\ViewModels\PlaceViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\PostCommentDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\PostCommentViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\PostDetailViewModel.cs" />
+    <Compile Include="Models\ViewModels\PostOveralViewModel.cs" />
     <Compile Include="Models\ViewModels\PostSportViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -771,6 +796,8 @@
     <Compile Include="Models\ViewModels\RatingViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\SearchPlaceViewModel.cs" />
+    <Compile Include="Models\ViewModels\ResponseModel.cs" />
     <Compile Include="Models\ViewModels\SportViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -970,6 +997,21 @@
     <Content Include="Content\assets\js\apps\media.min.js" />
     <Content Include="Content\assets\js\apps\projects.js" />
     <Content Include="Content\assets\js\apps\projects.min.js" />
+    <Content Include="Content\assets\js\bootstrap\css\bootstrap-toggle.min.css" />
+    <Content Include="Content\assets\js\bootstrap\css\bootstrap.css" />
+    <Content Include="Content\assets\js\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Content\assets\js\bootstrap\css\dataTables.bootstrap.min.css" />
+    <Content Include="Content\assets\js\bootstrap\css\responsive.bootstrap.min.css" />
+    <Content Include="Content\assets\js\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\assets\js\bootstrap\js\bootstrap-toggle.min.js" />
+    <Content Include="Content\assets\js\bootstrap\js\bootstrap.js" />
+    <Content Include="Content\assets\js\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\assets\js\bootstrap\js\dataTables.bootstrap.min.js" />
+    <Content Include="Content\assets\js\bootstrap\js\dataTables.responsive.min.js" />
+    <Content Include="Content\assets\js\bootstrap\js\dataTables.responsive.min_2.js" />
+    <Content Include="Content\assets\js\bootstrap\js\jquery.dataTables.min.js" />
+    <Content Include="Content\assets\js\bootstrap\js\npm.js" />
+    <Content Include="Content\assets\js\bootstrap\js\responsive.bootstrap.min.js" />
     <Content Include="Content\assets\js\components.js" />
     <Content Include="Content\assets\js\components.min.js" />
     <Content Include="Content\assets\js\components\ace.js" />
@@ -1034,6 +1076,7 @@
     <Content Include="Content\assets\js\components\masonry.js" />
     <Content Include="Content\assets\js\components\matchheight.js" />
     <Content Include="Content\assets\js\components\matchheight.min.js" />
+    <Content Include="Content\assets\js\components\material.js" />
     <Content Include="Content\assets\js\components\material.min.js" />
     <Content Include="Content\assets\js\components\nestable.min.js" />
     <Content Include="Content\assets\js\components\nprogress.min.js" />
@@ -1070,6 +1113,191 @@
     <Content Include="Content\assets\js\configs\config-tour.min.js" />
     <Content Include="Content\assets\js\core.js" />
     <Content Include="Content\assets\js\core.min.js" />
+    <Content Include="Content\assets\js\datatables\dataTables.bootstrap.css" />
+    <Content Include="Content\assets\js\datatables\dataTables.bootstrap.js" />
+    <Content Include="Content\assets\js\datatables\dataTables.bootstrap.min.js" />
+    <Content Include="Content\assets\js\datatables\extensions\AutoFill\css\dataTables.autoFill.css" />
+    <Content Include="Content\assets\js\datatables\extensions\AutoFill\css\dataTables.autoFill.min.css" />
+    <Content Include="Content\assets\js\datatables\extensions\AutoFill\examples\columns.html" />
+    <Content Include="Content\assets\js\datatables\extensions\AutoFill\examples\complete-callback.html" />
+    <Content Include="Content\assets\js\datatables\extensions\AutoFill\examples\fill-both.html" />
+    <Content Include="Content\assets\js\datatables\extensions\AutoFill\examples\fill-horizontal.html" />
+    <Content Include="Content\assets\js\datatables\extensions\AutoFill\examples\index.html" />
+    <Content Include="Content\assets\js\datatables\extensions\AutoFill\examples\scrolling.html" />
+    <Content Include="Content\assets\js\datatables\extensions\AutoFill\examples\simple.html" />
+    <Content Include="Content\assets\js\datatables\extensions\AutoFill\examples\step-callback.html" />
+    <Content Include="Content\assets\js\datatables\extensions\AutoFill\images\filler.png" />
+    <Content Include="Content\assets\js\datatables\extensions\AutoFill\js\dataTables.autoFill.js" />
+    <Content Include="Content\assets\js\datatables\extensions\AutoFill\js\dataTables.autoFill.min.js" />
+    <Content Include="Content\assets\js\datatables\extensions\AutoFill\Readme.txt" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\css\dataTables.colReorder.css" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\css\dataTables.colReorder.min.css" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\examples\alt_insert.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\examples\colvis.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\examples\col_filter.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\examples\fixedcolumns.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\examples\fixedheader.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\examples\index.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\examples\jqueryui.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\examples\new_init.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\examples\predefined.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\examples\realtime.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\examples\reset.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\examples\scrolling.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\examples\server_side.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\examples\simple.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\examples\state_save.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\images\insert.png" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\js\dataTables.colReorder.js" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\js\dataTables.colReorder.min.js" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\License.txt" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\css\dataTables.colVis.css" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\css\dataTables.colvis.jqueryui.css" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\css\dataTables.colVis.min.css" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\examples\button_order.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\examples\exclude_columns.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\examples\group_columns.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\examples\index.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\examples\jqueryui.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\examples\mouseover.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\examples\new_init.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\examples\restore.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\examples\simple.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\examples\text.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\examples\title_callback.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\examples\two_tables.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\examples\two_tables_identical.html" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\js\dataTables.colVis.js" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\js\dataTables.colVis.min.js" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\License.txt" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\css\dataTables.fixedColumns.css" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\css\dataTables.fixedColumns.min.css" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\examples\bootstrap.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\examples\colvis.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\examples\col_filter.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\examples\css_size.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\examples\index.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\examples\index_column.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\examples\left_right_columns.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\examples\right_column.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\examples\rowspan.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\examples\server-side-processing.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\examples\simple.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\examples\size_fixed.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\examples\size_fluid.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\examples\two_columns.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\js\dataTables.fixedColumns.js" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\js\dataTables.fixedColumns.min.js" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\License.txt" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedHeader\css\dataTables.fixedHeader.css" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedHeader\css\dataTables.fixedHeader.min.css" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedHeader\examples\header_footer.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedHeader\examples\index.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedHeader\examples\simple.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedHeader\examples\top_left_right.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedHeader\examples\two_tables.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedHeader\examples\zIndexes.html" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedHeader\js\dataTables.fixedHeader.js" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedHeader\js\dataTables.fixedHeader.min.js" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedHeader\Readme.txt" />
+    <Content Include="Content\assets\js\datatables\extensions\KeyTable\css\dataTables.keyTable.css" />
+    <Content Include="Content\assets\js\datatables\extensions\KeyTable\css\dataTables.keyTable.min.css" />
+    <Content Include="Content\assets\js\datatables\extensions\KeyTable\examples\events.html" />
+    <Content Include="Content\assets\js\datatables\extensions\KeyTable\examples\html.html" />
+    <Content Include="Content\assets\js\datatables\extensions\KeyTable\examples\index.html" />
+    <Content Include="Content\assets\js\datatables\extensions\KeyTable\examples\scrolling.html" />
+    <Content Include="Content\assets\js\datatables\extensions\KeyTable\examples\simple.html" />
+    <Content Include="Content\assets\js\datatables\extensions\KeyTable\js\dataTables.keyTable.js" />
+    <Content Include="Content\assets\js\datatables\extensions\KeyTable\js\dataTables.keyTable.min.js" />
+    <Content Include="Content\assets\js\datatables\extensions\KeyTable\Readme.txt" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\css\dataTables.responsive.css" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\child-rows\column-control.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\child-rows\custom-renderer.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\child-rows\disable-child-rows.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\child-rows\index.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\child-rows\right-column.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\child-rows\whole-row-control.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\display-control\auto.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\display-control\classes.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\display-control\complexHeader.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\display-control\fixedHeader.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\display-control\index.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\display-control\init-classes.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\index.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\initialisation\ajax.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\initialisation\className.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\initialisation\default.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\initialisation\index.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\initialisation\new.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\initialisation\option.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\styling\bootstrap.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\styling\compact.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\styling\foundation.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\styling\index.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\examples\styling\scrolling.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\js\dataTables.responsive.js" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\js\dataTables.responsive.min.js" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\License.txt" />
+    <Content Include="Content\assets\js\datatables\extensions\Scroller\css\dataTables.scroller.css" />
+    <Content Include="Content\assets\js\datatables\extensions\Scroller\css\dataTables.scroller.min.css" />
+    <Content Include="Content\assets\js\datatables\extensions\Scroller\examples\api_scrolling.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Scroller\examples\data\2500.txt" />
+    <Content Include="Content\assets\js\datatables\extensions\Scroller\examples\index.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Scroller\examples\large_js_source.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Scroller\examples\server-side_processing.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Scroller\examples\simple.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Scroller\examples\state_saving.html" />
+    <Content Include="Content\assets\js\datatables\extensions\Scroller\images\loading-background.png" />
+    <Content Include="Content\assets\js\datatables\extensions\Scroller\js\dataTables.scroller.js" />
+    <Content Include="Content\assets\js\datatables\extensions\Scroller\js\dataTables.scroller.min.js" />
+    <Content Include="Content\assets\js\datatables\extensions\Scroller\Readme.txt" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\css\dataTables.tableTools.css" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\css\dataTables.tableTools.min.css" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\ajax.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\alter_buttons.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\bootstrap.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\button_text.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\collection.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\defaults.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\index.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\jqueryui.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\multiple_tables.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\multi_instance.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\new_init.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\pdf_message.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\plug-in.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\select_column.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\select_multi.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\select_os.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\select_single.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\simple.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\examples\swf_path.html" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\collection.png" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\collection_hover.png" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\copy.png" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\copy_hover.png" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\csv.png" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\csv_hover.png" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\pdf.png" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\pdf_hover.png" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\print.png" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\print_hover.png" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\xls.png" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\xls_hover.png" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\js\dataTables.tableTools.js" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\js\dataTables.tableTools.min.js" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\swf\copy_csv_xls.swf" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\swf\copy_csv_xls_pdf.swf" />
+    <Content Include="Content\assets\js\datatables\images\sort_asc.png" />
+    <Content Include="Content\assets\js\datatables\images\sort_asc_disabled.png" />
+    <Content Include="Content\assets\js\datatables\images\sort_both.png" />
+    <Content Include="Content\assets\js\datatables\images\sort_desc.png" />
+    <Content Include="Content\assets\js\datatables\images\sort_desc_disabled.png" />
+    <Content Include="Content\assets\js\datatables\jquery.dataTables.css" />
+    <Content Include="Content\assets\js\datatables\jquery.dataTables.js" />
+    <Content Include="Content\assets\js\datatables\jquery.dataTables.min.css" />
+    <Content Include="Content\assets\js\datatables\jquery.dataTables.min.js" />
+    <Content Include="Content\assets\js\datatables\jquery.dataTables_themeroller.css" />
     <Content Include="Content\assets\js\plugins\closeable-tabs.js" />
     <Content Include="Content\assets\js\plugins\closeable-tabs.min.js" />
     <Content Include="Content\assets\js\plugins\responsive-tabs.js" />
@@ -2507,13 +2735,19 @@
     <Content Include="Content\assets\vendor\x-editable\images\loading.gif" />
     <Content Include="Content\assets\vendor\x-editable\x-editable.css" />
     <Content Include="Content\assets\vendor\x-editable\x-editable.min.css" />
+    <Content Include="Content\Bootbox\bootbox.min.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\custom-css.css" />
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.css" />
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome-4.6.3\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\font-awesome-4.6.3\HELP-US-OUT.txt" />
     <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\logo_orange.png" />
+    <Content Include="Content\js\custom-script.js" />
+    <Content Include="Content\js\sweetAlert\sweetalert.css" />
+    <Content Include="Content\js\sweetAlert\sweetalert.min.js" />
     <Content Include="External Lib\SkyWeb.DatVM.Data.dll" />
     <Content Include="External Lib\SkyWeb.DatVM.Mvc.dll" />
     <Content Include="favicon.ico" />
@@ -2552,13 +2786,6 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <EntityDeploy Include="Models\Entities\SsnEntities.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SsnEntities.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\Entities\SsnEntities.edmx.diagram">
-      <DependentUpon>SsnEntities.edmx</DependentUpon>
     </Content>
     <Content Include="Content\assets\css\apps\desktop.ini" />
     <Content Include="Content\assets\css\dashboard\desktop.ini" />
@@ -2981,6 +3208,43 @@
     <Content Include="Areas\PlaceOwner\Views\web.config" />
     <Content Include="Areas\Api\Views\web.config" />
     <Content Include="Areas\Moderator\Views\web.config" />
+    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Account\Index.cshtml" />
+    <Content Include="Content\assets\js\datatables\extensions\ColReorder\Readme.md" />
+    <Content Include="Content\assets\js\datatables\extensions\ColVis\Readme.md" />
+    <Content Include="Content\assets\js\datatables\extensions\FixedColumns\Readme.md" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\css\dataTables.responsive.scss" />
+    <Content Include="Content\assets\js\datatables\extensions\Responsive\Readme.md" />
+    <Content Include="Content\assets\js\datatables\extensions\Scroller\examples\data\ssp.php" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\psd\collection.psd" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\psd\copy document.psd" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\psd\file_types.psd" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\images\psd\printer.psd" />
+    <Content Include="Content\assets\js\datatables\extensions\TableTools\Readme.md" />
+    <Content Include="Content\assets\js\bootstrap\css\bootstrap.css.map" />
+    <Content Include="Content\assets\js\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\assets\js\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\assets\js\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\assets\js\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Areas\Admin\Views\Account\Update.cshtml" />
+    <Content Include="Areas\Admin\Views\Account\Detail.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Place\Index.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Place\CreatePlace.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Place\PlaceDetail.cshtml" />
+    <EntityDeploy Include="Models\Entities\SsnEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SsnEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Entities\SsnEntities.edmx.diagram">
+      <DependentUpon>SsnEntities.edmx</DependentUpon>
+    </Content>
+    <Content Include="Areas\Admin\Views\PlaceOwner\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Place\Detail.cshtml" />
+    <Content Include="Areas\Admin\Views\Place\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Place\Update.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -3027,21 +3291,22 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Shared\_BookingFieldLayout.cshtml" />
+    <Content Include="Views\Place\Index.cshtml" />
+    <Content Include="Views\SSN\Index.cshtml" />
+    <Content Include="Views\Shared\_SSNLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Admin\Controllers\" />
-    <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Areas\Admin\Views\Shared\" />
-    <Folder Include="Areas\Api\Controllers\" />
     <Folder Include="Areas\Api\Models\" />
+    <Folder Include="Areas\Api\Views\Like\" />
+    <Folder Include="Areas\Api\Views\PostComment\" />
+    <Folder Include="Areas\Api\Views\Post\" />
     <Folder Include="Areas\Api\Views\Shared\" />
     <Folder Include="Areas\Moderator\Controllers\" />
     <Folder Include="Areas\Moderator\Models\" />
     <Folder Include="Areas\Moderator\Views\Shared\" />
-    <Folder Include="Areas\PlaceOwner\Controllers\" />
     <Folder Include="Areas\PlaceOwner\Models\" />
-    <Folder Include="Areas\PlaceOwner\Views\Shared\" />
     <Folder Include="Models\Hubs\" />
   </ItemGroup>
   <ItemGroup>

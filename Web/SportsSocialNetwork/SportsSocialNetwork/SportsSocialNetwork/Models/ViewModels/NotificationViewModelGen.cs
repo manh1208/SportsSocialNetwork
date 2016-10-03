@@ -20,8 +20,8 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string Title { get; set; }
     			public virtual string Message { get; set; }
     			public virtual int Type { get; set; }
-    			public virtual int PostId { get; set; }
-    			public virtual int InvitationId { get; set; }
+    			public virtual Nullable<int> PostId { get; set; }
+    			public virtual Nullable<int> InvitationId { get; set; }
     			public virtual bool Active { get; set; }
     	
     	public NotificationViewModel() : base() { }

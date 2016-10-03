@@ -1,0 +1,282 @@
+﻿@using SportsSocialNetwork.Models.Enumerable;
+@using SportsSocialNetwork.Models.Utilities;
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    dt, dd {
+        font-size: 15px;
+        color: #000;
+    }
+
+    dt {
+        font-weight: bold;
+    }
+</style>
+<div class="panel">
+    <div class="panel-heading">
+        <h2 class="panel-title">Danh sách tài khoản</h2>
+    </div>
+</div>
+<div class="panel">
+    <div class="panel-body">
+        <div class="box">
+            <div class="box-header">
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="account-table" class="table table-hover dataTable table-bordered dt-responsive nowrap" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Họ và tên</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Email</th>
+                                    <th>Username</th>
+                                    <th>Quyền</th>
+                                    <th>Trạng thái</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-warning" id="modelDetail" aria-hidden="true"
+     aria-labelledby="modelDetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="detail-modal-container"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-warning" id="modalUpdate" aria-hidden="true"
+     aria-labelledby="modalViewdetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div id="update-modal-container"></div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        (function (document, window, $) {
+            'use strict';
+
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
+            });
+        })(document, window, jQuery);
+
+        $(document).ready(function () {
+            initEventTable();
+        });
+        function initEventTable() {
+            var colDefs = [
+                  {
+                      "aTargets": [1, 2, 3, 4, 5],
+                      "bSortable": false,
+                  }, {
+                      "aTargets": [6],
+                      "mRender": function (data, type, row) {
+                          var label = '';
+                          if (row[6] == parseInt('@((int)UserStatus.Active)')) {
+                              label = '<span class="label label-outline label-success label-lg">@Utils.GetEnumDescription(UserStatus.Active).ToString()</span>';
+                          } else if (row[6] == parseInt('@((int)UserStatus.Unapproved)')) {
+                              label = '<span class="label label-outline label-danger label-lg">@Utils.GetEnumDescription(UserStatus.Unapproved)</span>';
+                          } else if (row[6] == parseInt('@((int)UserStatus.Pending)')) {
+                              label = '<span class="label label-outline label-warning label-lg">@Utils.GetEnumDescription(UserStatus.Pending)</span>';
+                          } else if (row[6] == parseInt('@((int)UserStatus.Banned)')) {
+                              label = '<span class="label label-outline label-danger label-lg">@Utils.GetEnumDescription(UserStatus.Banned)</span>';
+                          } else {
+                              label = '<span class="label label-outline label-default label-lg">Không xác định</span>';
+                          }
+
+                          return label;
+                      },
+                      "bSortable": false,
+                  }
+                  ,
+                  {
+                      "aTargets": [7],
+                      "mRender": function (data, type, row) {
+                          var previewBtn = '<a class="btn btn-success" data-target="#modalViewdetail" onclick="showDetailModal(\'' + row[7] + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
+                          var updateBtn = '<a class="btn btn-warning" data-target="#modalUpdate" data-toggle="modal" onclick="showUpdateModal(\'' + row[7] + '\')" href="#"><i class="fa fa-pencil-square-o"></i></a>';
+                          var deleteBtn = '<a class="btn btn-danger ladda-button" data-style="zoom-in" data-plugin="ladda" onclick="showConfirmDeleteAccount(\'' + row[7] + '\')"  href="#"> <span class="ladda-label"><i class="fa fa-trash-o "></i></span></a>';
+                          return previewBtn + '&nbsp;' + updateBtn + '&nbsp;' + deleteBtn;
+                      },
+                      "bSortable": false
+                  }
+            ];
+            var param = {
+                colDefs: colDefs,
+                url: '@Url.Action("IndexList")',
+                data: []
+            };
+            $('#account-table').customDataTable(param);
+        }
+
+        function showDetailModal(id) {
+            $.ajax({
+                url: '@Url.Action("Detail")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#detail-modal-container').html(data);
+                    $('#modelDetail').modal('show');
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
+        function showUpdateModal(id) {
+            $.ajax({
+                url: '@Url.Action("Update")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#update-modal-container').html(data);
+                    $('#modalUpdate').modal('show');
+                    scriptForPartialView();
+
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
+        function scriptForPartialView() {
+            $("#updateProvince").on("change", function () {
+                updateDistrict();
+            });
+            $("#updateDistrict").on("change", function () {
+                updateWard();
+            });
+            $('#update-account-form').submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData(document.getElementById('update-account-form'));
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Update")',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            showMessage("Thay đổi thành công.", "success", "OK");
+                            $('#account-table').reloadDataTable();
+                        } else {
+                            showErrors(result.Errors);
+                        }
+
+                    },
+                    error: function (result) {
+
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+
+
+            });
+        }
+
+
+        function showConfirmDeleteAccount(id) {
+            showConfirmDeleteItem("Bạn có chắc chắn muốn xóa tài khoản này không?",
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("DeleteAccount")',
+                            data: { id: id },
+                            success: function (data) {
+                                $("#account-table").reloadDataTable();
+                                if (data.Succeed) {
+                                    showMessage("Xóa thành viên thành công", "success", "OK");
+                                } else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                }
+                            },
+                            error: function (error) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        });
+                    }
+                });
+        }
+
+        function updateWard() {
+            var provinceName = $('#updateProvince').val();
+            var districtName = $('#updateDistrict').val();
+            $.ajax({
+                url: '@Url.Action("GetWard")',
+                type: 'POST',
+                data: {
+                    'provinceName': provinceName,
+                    'districtName': districtName
+                },
+                dataType: 'json',
+                success: function (data) {
+                    var ddl = $('#updateWard');
+                    ddl.empty();
+                    $(document.createElement('option'))
+                                            .attr('value', '')
+                                            .text('')
+                                            .appendTo(ddl);
+                    ddl.addClass("empty");
+                    $(data.AdditionalData).each(function () {
+                        $(document.createElement('option'))
+                            .attr('value', this.Value)
+                            .text(this.Text)
+                            .appendTo(ddl);
+                    });
+                }
+            });
+        };
+
+        function updateDistrict() {
+            var provinceName = $('#updateProvince').val();
+            $.ajax({
+                url: '@Url.Action("GetDistrict")',
+                type: 'POST',
+                data: {
+                    'provinceName': provinceName,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    var ddl = $('#updateDistrict');
+                    ddl.empty();
+                    ddl.addClass("empty");
+                    $(document.createElement('option'))
+                                            .attr('value', '')
+                                            .text('')
+                                            .appendTo(ddl);
+                    $(data.AdditionalData).each(function () {
+                        $(document.createElement('option'))
+                            .attr('value', this.Value)
+                            .text(this.Text)
+                            .appendTo(ddl);
+                    });
+                    updateWard();
+                }
+            });
+        };
+    </script>
+}
+

@@ -1,0 +1,280 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.SearchPlaceViewModel
+@using SportsSocialNetwork.Utilities;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
+    var selectList = ViewBag.SportList as IEnumerable<SelectListItem>;
+    var provinceList = ViewBag.ProvinceList as IEnumerable<SelectListItem>;
+    var districtList = new List<SelectListItem>();
+}
+<style>
+    .table_image {
+        float: left;
+        width: 210px;
+        height: 160px;
+        text-align: center;
+    }
+
+    .table_text {
+        float: left;
+        width: 410px;
+        margin-left: 10px;
+    }
+
+    .table_text_title {
+        height: 40px;
+        font-weight: bold;
+        font-size: 25px;
+    }
+
+    .table_text_des1 {
+        height: 80px;
+        
+    }
+
+    .table_text_des2 {
+        height: 20px;
+        font-size: 12px;
+    }
+</style>
+<div class="col-md-9">
+    <div class="panel">
+        <header class="panel-heading">
+            <h3 class="panel-title">Danh sách địa điểm</h3>
+        </header>
+        <div class="panel-body">
+            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                <div class="col-sm-12">
+                    <table class="table table-hover dataTable table-striped width-full dtr-inline" data-plugin="dataTable" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-3">
+    <div class="panel" style="text-align:center">
+        <header class="panel-heading">
+            <h3 class="panel-title">Tìm kiếm địa điểm</h3>
+        </header>
+        <div class="panel-body">
+            <div class="form-group">
+                @Html.DropDownListFor(m => m.SportId, selectList, "--Chọn loại thể thao--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "sport" })
+
+            </div>
+            <div class="form-group">
+                @Html.DropDownListFor(m => m.Province, provinceList, "--Chọn tỉnh/thành phố--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "province" })
+            </div>
+            <div class="form-group">
+                @Html.DropDownListFor(m => m.District, districtList, "--Chọn quận/huyện--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "district" })
+            </div>
+            <p style="color:red">Hoặc tìm xung quanh</p>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" id="findAround" style="width:90%">Tìm xung quanh bạn</button>
+                <input type="hidden" id="lat" />
+                <input type="hidden" id="lng" />
+            </div>
+        </div>
+    </div>
+    <script>
+        console.log("aaa");
+
+        $("#province").on("change", function () {
+            var provinceName = $('#province').val();
+            var ddl = $('#district');
+            ddl.empty();
+            $(document.createElement('option'))
+                    .attr('value', '')
+                    .text("--Chọn quận/huyện--")
+                    .appendTo(ddl);
+            if (provinceName != null) {
+                $.ajax({
+                    url: "/Place/GetDistrict",
+                    type: 'POST',
+                    data: {
+                        'provinceName': provinceName,
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        $(data).each(function () {
+                            $(document.createElement('option'))
+                                .attr('value', this.Value)
+                                .text(this.Text)
+                                .appendTo(ddl);
+                        });
+                    }
+                });
+            }
+        });
+
+        $(".droplist").on("change", function () {
+            $("#lat").val("");
+            $("#lng").val("");
+            InitDatatable();
+            RefreshTable();
+        })
+
+        $("#findAround").click(function () {
+            checkLocation();
+        });
+
+    function RefreshTable() {
+        var oTable = $("#DataTables_Table_0").dataTable();
+        oTable._fnPageChange(0);
+        oTable._fnAjaxUpdate();
+
+    }
+
+    function InitDatatable() {
+        $("#DataTables_Table_0").DataTable({
+            "bRetrieve": true,
+            "bServerSide": true,
+            "bScrollCollapse": true,
+            "bSort": true,
+            "sAjaxSource": "/Place/GetData",
+            "bProcessing": true,
+            "fnServerParams": function (aoData) {
+                aoData.push({ "name": "sport", "value": $('#sport').val()},
+                    { "name": "province", "value": $('#province').val() },
+                    { "name": "district", "value": $('#district').val() },
+                    { "name": "lat", "value": $('#lat').val() },
+                    { "name": "lng", "value": $('#lng').val() });
+            },
+            "aLengthMenu": [10, 20, 100],
+            "oLanguage": {
+                "sSearch": "Tìm kiếm:",
+                "sZeroRecords": "Không có dữ liệu phù hợp",
+                "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
+                "sEmptyTable": "Không có dữ liệu",
+                "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
+                "sLengthMenu": "Hiển thị _MENU_ dòng",
+                "sProcessing": "Xin đợi trong giây lát...",
+                "oPaginate": {
+                    "sFirst": "Về đầu",
+                    "sLast": "Về cuối",
+                    "sNext": "Trang kế",
+                    "sPrevious": "Trang trước"
+                },
+            },
+            "aoColumnDefs": [
+                {
+                     //"sWidth" : "10%",
+                     "aTargets": [0,2,3,4,5,6,7],
+                     "bVisible": false,
+                     "bSortable": false
+                 },
+                 {
+                     //"sWidth" : "10%",
+                     "aTargets": [1],
+                     "bSortable": false,
+                     "mRender": function (data, type, o) {
+                         return "<div class='table_image'><img src='" + o[1] + "' height='160' width='210'></div><div class='table_text'>" +
+                             "<div class='table_text_title'>" + o[2] + "</div><div class='table_text_des1'>" + o[3] + "</div><div class='table_text_des2'>Địa chỉ: "
+                             + o[4] + ", Quận " + o[5] + ", " + o[6] + "</div><div class='table_text_des2'>Điện thoại: "+ o[7] +"</div></div>";
+
+                     }
+                 },
+                 
+            ],
+            "bAutoWidth": false
+
+        });
+    }
+    $.extend($.fn.dataTableExt.oStdClasses, {
+        "sFilterInput": "form-control input-sm",
+        "sLengthSelect": "form-control input-sm"
+    });
+    $(document).ready(function () {
+        InitDatatable();
+        RefreshTable();
+    });
+
+    function checkLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            NProgress.done();
+            sweetAlert("Oops...", "Vị trí không hỗ trợ trên trình duyệt này.", "error")
+
+        }
+    }
+
+    function showError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                NProgress.done();
+                swal({
+                    title: "Oops...",
+                    text: "Bạn chưa mở GPS hả!",
+                    type: "error",
+                    confirmButtonText: "Ờ"
+                }, function () {
+                    location.reload();
+                });
+
+                break;
+            case error.POSITION_UNAVAILABLE:
+                NProgress.done();
+                swal({
+                    title: "Oops...",
+                    text: "Thông tin vị trí không chính xác!",
+                    type: "error",
+                    confirmButtonText: "Ờ"
+                }, function () {
+                    location.reload();
+                });
+
+                break;
+            case error.TIMEOUT:
+                NProgress.done();
+                swal({
+                    title: "Oops...",
+                    text: "Vượt quá thời gian. Xin thử tải lại trang!",
+                    type: "error",
+                    confirmButtonText: "Ờ"
+                }, function () {
+                    location.reload();
+                });
+
+                break;
+            case error.UNKNOWN_ERROR:
+                NProgress.done();
+                swal({
+                    title: "Oops...",
+                    text: "Lỗi là gì nhỉ. Xin liên hệ BTC!",
+                    type: "error",
+                    confirmButtonText: "Ờ"
+                }, function () {
+                    location.reload();
+                });
+                break;
+        }
+    }
+    function showPosition(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        $("#lat").val(lat);
+        $("#lng").val(lng);
+        InitDatatable();
+        RefreshTable();
+    }
+
+
+    </script>
+
+
+

@@ -16,6 +16,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     {
     	
     			public virtual int Id { get; set; }
+    			public virtual int FieldId { get; set; }
     			public virtual System.TimeSpan StartTime { get; set; }
     			public virtual System.TimeSpan EndTime { get; set; }
     			public virtual double Price { get; set; }

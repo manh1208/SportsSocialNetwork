@@ -1,0 +1,53 @@
+﻿@model SportsSocialNetwork.Areas.Admin.Models.AccountDetailViewModel
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="modal-title">Chi tiết tài khoản</h4>
+</div>
+<div class="modal-body" id="modalBody">
+    <div class="panel panel-bordered">
+        <div class="panel-heading">
+            <h4>
+                Thông tin tài khoản
+            </h4>
+        </div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>Tên đăng nhập:</dt>
+                <dd>@Html.DisplayFor(m=>m.UserName)</dd>
+                <dt>Email:</dt>
+                <dd>@Html.DisplayFor(m => m.Email)</dd>
+                <dt>Vai trò:</dt>
+                <dd>@Html.DisplayFor(m => m.RoleName)</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="panel panel-bordered">
+        <div class="panel-heading">
+            <h4>
+                Thông tin cá nhân
+            </h4>
+        </div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>Họ và tên:</dt>
+                <dd>@Html.DisplayFor(m => m.FullName)</dd>
+                <dt>Số điện thoại:</dt>
+                <dd>@Html.DisplayFor(m => m.PhoneNumber)</dd>
+                <dt>Địa chỉ:</dt>
+                <dd>@Html.DisplayFor(m => m.AddressString)</dd>
+                <dt>Ngày sinh:</dt>
+                <dd>@Html.DisplayFor(m => m.BirthdayString)</dd>
+                <dt>Giới tính:</dt>
+                <dd>@Html.DisplayFor(m => m.GenderString)</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+</div>
+
