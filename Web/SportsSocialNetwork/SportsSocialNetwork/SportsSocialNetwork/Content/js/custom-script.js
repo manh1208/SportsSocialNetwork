@@ -105,9 +105,9 @@ function showConfirmMessage(text, callback) {
     swal({
         title: "",
         text: text,
-        type: "",
+        type: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#80ff00",
+        confirmButtonColor: "#3c8dbc",
         confirmButtonText: "Đồng ý",
         cancelButtonText: "Hủy bỏ",
         closeOnConfirm: false,
