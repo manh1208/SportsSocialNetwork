@@ -12,4 +12,5 @@
     <string name="title_activity_place_detail">PlaceDetailActivity</string>
     <string name="title_activity_image_viewer">ImageViewerActivity</string>
     <string name="title_activity_booking">BookingActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 </resources>

@@ -14,13 +14,12 @@ import android.widget.GridView;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.adapter.ImageAdapter;
 import com.capstone.sportssocialnetwork.adapter.PlaceDetailAdapter;
-import com.capstone.sportssocialnetwork.adapter.PlaceImageAdapter;
 
 /**
- * Created by ManhNV on 9/10/16.
+ * Created by ManhNV on 10/3/16.
  */
-public class PlaceImageFragment extends Fragment {
-    GridView lvPlaceImage;
+public class ProfileImageFragment extends Fragment {
+    GridView lvProfileImage;
 
     @Nullable
     @Override
@@ -30,17 +29,13 @@ public class PlaceImageFragment extends Fragment {
         prepareData();
         return v;
     }
+
     private void prepareData() {
-//        PlaceImageAdapter adapter = new PlaceImageAdapter(getActivity());
-//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-//        lvPlaceImage.setLayoutManager(mLayoutManager);
-//        lvPlaceImage.setItemAnimator(new DefaultItemAnimator());
-//        lvPlaceImage.setAdapter(adapter);
         ImageAdapter adapter = new ImageAdapter(getActivity());
-        lvPlaceImage.setAdapter(adapter);
+        lvProfileImage.setAdapter(adapter);
     }
 
     private void initView(View v) {
-        lvPlaceImage = (GridView) v.findViewById(R.id.lv_profile_image);
+        lvProfileImage = (GridView) v.findViewById(R.id.lv_profile_image);
     }
 }

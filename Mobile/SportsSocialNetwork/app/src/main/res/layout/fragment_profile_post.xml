@@ -4,12 +4,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ListView
-        android:id="@+id/lv_menu_profile"
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_menu_profile"
-        android:divider="@color/colorPrimary"
-        android:dividerHeight="0sp">
-    </ListView>
+        android:id="@+id/lv_profile_post"
+        android:divider="@color/separator"
+        android:dividerHeight="10sp"
+        >
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>
