@@ -14,5 +14,10 @@ namespace SportsSocialNetwork.Controllers
 
             return View();
         }
+
+        public ActionResult UserProfile()
+        {
+            return View();
+        }
     }
 }
