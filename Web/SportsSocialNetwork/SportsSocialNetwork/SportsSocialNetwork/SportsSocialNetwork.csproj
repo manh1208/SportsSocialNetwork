@@ -3289,6 +3289,7 @@
     <Content Include="Views\Place\Index.cshtml" />
     <Content Include="Views\SSN\Index.cshtml" />
     <Content Include="Views\Shared\_SSNLayout.cshtml" />
+    <Content Include="Views\SSN\UserProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
