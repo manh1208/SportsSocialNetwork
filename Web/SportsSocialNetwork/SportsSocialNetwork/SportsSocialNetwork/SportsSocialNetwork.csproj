@@ -269,6 +269,7 @@
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDetailViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\PlaceOwnerAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\FieldController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
@@ -961,6 +962,7 @@
     <Content Include="Content\assets\images\logo-blue%402x.png" />
     <Content Include="Content\assets\images\logo-blue.png" />
     <Content Include="Content\assets\images\logo.png" />
+    <Content Include="Content\assets\images\noimagefound.jpg" />
     <Content Include="Content\assets\images\poster.jpg" />
     <Content Include="Content\assets\js\angular\app.js" />
     <Content Include="Content\assets\js\angular\router.min.js" />
@@ -1344,6 +1346,12 @@
     <Content Include="Content\assets\portraits\7.jpg" />
     <Content Include="Content\assets\portraits\8.jpg" />
     <Content Include="Content\assets\portraits\9.jpg" />
+    <Content Include="Content\assets\slick\ajax-loader.gif" />
+    <Content Include="Content\assets\slick\fonts\slick.svg" />
+    <Content Include="Content\assets\slick\slick-theme.css" />
+    <Content Include="Content\assets\slick\slick.css" />
+    <Content Include="Content\assets\slick\slick.js" />
+    <Content Include="Content\assets\slick\slick.min.js" />
     <Content Include="Content\assets\vendor\ace\ace.css" />
     <Content Include="Content\assets\vendor\ace\ace.js" />
     <Content Include="Content\assets\vendor\ace\ace.min.css" />
@@ -3256,6 +3264,14 @@
     <Content Include="Areas\PlaceOwner\Views\Field\Index.cshtml" />
     <Content Include="Areas\PlaceOwner\Views\Order\Index.cshtml" />
     <Content Include="Areas\PlaceOwner\Views\Order\OrderDetail.cshtml" />
+    <Content Include="Content\assets\slick\config.rb" />
+    <Content Include="Content\assets\slick\fonts\slick.eot" />
+    <Content Include="Content\assets\slick\fonts\slick.ttf" />
+    <Content Include="Content\assets\slick\fonts\slick.woff" />
+    <Content Include="Content\assets\slick\slick-theme.less" />
+    <Content Include="Content\assets\slick\slick-theme.scss" />
+    <Content Include="Content\assets\slick\slick.less" />
+    <Content Include="Content\assets\slick\slick.scss" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -3307,6 +3323,10 @@
     <Content Include="Views\SSN\Index.cshtml" />
     <Content Include="Views\Shared\_SSNLayout.cshtml" />
     <Content Include="Views\SSN\UserProfile.cshtml" />
+    <Content Include="Views\Place\ViewDetail.cshtml" />
+    <Content Include="Views\Field\Index.cshtml" />
+    <Content Include="Views\Field\_Index.cshtml" />
+    <Content Include="Views\Place\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

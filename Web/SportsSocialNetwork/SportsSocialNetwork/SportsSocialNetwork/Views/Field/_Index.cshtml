@@ -1,0 +1,16 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.OrderViewModel
+
+<div>
+    <div class="form-group">
+        <div class="input-group">
+            <span class="input-group-addon">
+                <i class="icon wb-calendar" aria-hidden="true"></i>
+            </span>
+            <input type="text" class="form-control" data-plugin="datepicker" chơi">
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.EndTime)
+        @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true", })
+    </div>
+</div>
