@@ -15,41 +15,45 @@
 
     <title>Register | SSN</title>
 
-    <link rel="apple-touch-icon" href="../../Content/assets/images/apple-touch-icon.png">
-    <link rel="shortcut icon" href="../../Content/assets/images/favicon.ico">
+    <link rel="apple-touch-icon" href="~/Content/assets/images/apple-touch-icon.png">
+    <link rel="shortcut icon" href="~/Content/assets/images/favicon.ico">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="../../Content/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../Content/assets/css/bootstrap-extend.min.css">
-    <link rel="stylesheet" href="../../Content/assets/css/site.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap-extend.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/site.min.css">
 
-    <link rel="stylesheet" href="../../Content/assets/vendor/animsition/animsition.css">
-    <link rel="stylesheet" href="../../Content/assets/vendor/asscrollable/asScrollable.css">
-    <link rel="stylesheet" href="../../Content/assets/vendor/switchery/switchery.css">
-    <link rel="stylesheet" href="../../Content/assets/vendor/intro-js/introjs.css">
-    <link rel="stylesheet" href="../../Content/assets/vendor/slidepanel/slidePanel.css">
-    <link rel="stylesheet" href="../../Content/assets/vendor/flag-icon-css/flag-icon.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/animsition/animsition.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/asscrollable/asScrollable.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/switchery/switchery.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/intro-js/introjs.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/slidepanel/slidePanel.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/flag-icon-css/flag-icon.css">
 
+
+    <!--Lugins-->
+    <link rel="stylesheet" href="~/Content/assets/vendor/select2/select2.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-tokenfield/bootstrap-tokenfield.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-select/bootstrap-select.css">
 
     <!-- Page -->
-    <link rel="stylesheet" href="../../Content/assets/css/pages/register.css">
-
-    <!-- Fonts -->
-    <link rel="stylesheet" href="../../Content/assets/fonts/web-icons/web-icons.min.css">
-    <link rel="stylesheet" href="../../Content/assets/fonts/brand-icons/brand-icons.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/pages/register.css">    <!-- Fonts -->
+    <link rel="stylesheet" href="~/Content/assets/fonts/web-icons/web-icons.min.css">
+    <link rel="stylesheet" href="~/Content/assets/fonts/brand-icons/brand-icons.min.css">
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
 
 
     <!--[if lt IE 9]>
-      <script src="../../Content/assets/vendor/html5shiv/html5shiv.min.js"></script>
+      <script src="~/Content/assets/vendor/html5shiv/html5shiv.min.js"></script>
       <![endif]-->
     <!--[if lt IE 10]>
-      <script src="../../Content/assets/vendor/media-match/media.match.min.js"></script>
-      <script src="../../Content/assets/vendor/respond/respond.min.js"></script>
+      <script src="~/Content/assets/vendor/media-match/media.match.min.js"></script>
+      <script src="~/Content/assets/vendor/respond/respond.min.js"></script>
       <![endif]-->
     <!-- Scripts -->
-    <script src="../../Content/assets/vendor/modernizr/modernizr.js"></script>
-    <script src="../../Content/assets/vendor/breakpoints/breakpoints.js"></script>
+    <script src="~/Content/assets/vendor/modernizr/modernizr.js"></script>
+    <script src="~/Content/assets/vendor/breakpoints/breakpoints.js"></script>
     <script>
     Breakpoints();
     </script>
@@ -63,34 +67,229 @@
          data-animsition-out="fade-out">
         <div class="page-content vertical-align-middle">
             <div class="brand">
-                <img class="brand-img" src="../../Content/assets/images/logo.png" alt="...">
+                <img class="brand-img" src="~/Content/assets/images/logo.png" alt="...">
                 <h2 class="brand-text">SPORT SOCIAL NETWORK</h2>
             </div>
             <p>Đăng ký tài khoản</p>
-            <form method="post" role="form">
+            @using (Html.BeginForm("Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <font color="white" size="3">@Html.ValidationSummary(true, "", new { @class = "text-danger error-login-msg" })</font>
+                @*@Html.ValidationSummary(true, "", new { @class = "text-danger error-login-msg" })*@
+                <div align="left">
+                    <label><font color="white" size="4">Thông tin tài khoản</font></label>
+                </div>
                 <div class="form-group">
                     <label class="sr-only" for="inputName">Tên tài khoản</label>
-                    <input type="text" class="form-control" id="inputName" placeholder="Tên tài khoản">
+                    <input type="text" class="form-control" id="inputName" name="username" placeholder="Tên tài khoản(*)">
+                    @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
                     <label class="sr-only" for="inputEmail">Email</label>
-                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email">
+                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email(*)">
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
                     <label class="sr-only" for="inputPassword">Password</label>
                     <input type="password" class="form-control" id="inputPassword" name="password"
-                           placeholder="Mật khẩu">
+                           placeholder="Mật khẩu(*)">
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
                     <label class="sr-only" for="inputPasswordCheck">Retype Password</label>
-                    <input type="password" class="form-control" id="inputPasswordCheck" name="passwordCheck"
-                           placeholder="Nhập lại mật khẩu">
+                    <input type="password" class="form-control" id="inputPasswordCheck" name="ConfirmPassword"
+                           placeholder="Nhập lại mật khẩu(*)">
+                    @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Đăng ký</button>
-            </form>
-            <p>Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a></p>
+                <div align="left">
+                    <label><font color="white" size="4">Thông tin cá nhân</font></label>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="inputFullname">Họ và tên</label>
+                    <input type="text" class="form-control" id="inputFullname" name="Fullname"
+                           placeholder="Họ và tên(*)">
+                    @Html.ValidationMessageFor(m => m.Fullname, "", new { @class = "text-danger" })
+                </div>
+                <div style="padding:0">
+                    <label class="" for="inputGender">Giới tính(*):</label>
+                    <input type="radio" id="inputGender" name="gender" value="1" />Nam
+                    <input type="radio" id="inputGender" name="gender" value="0" />Nữ
+                    <input type="radio" id="inputGender" name="gender" value="2" />Khác
+                    @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
+                </div>
+                @*<div align="left" class="form-group">
+                    <label class="" for="inputHobby">Sở thích(*)</label>
+                    <input size="9" type="text" class="form-control" id="inputHobby" name="Hobby"
+                           placeholder="Bóng đá, bóng rổ,...">
+                    @Html.ValidationMessageFor(m => m.Hobby, "", new { @class = "text-danger" })
 
-            <footer class="page-copyright">
+                    <input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput" />
+                </div>*@
+
+                <!-- Example Tags Input Categorizing -->
+                <div class="example-wrap">                                                    
+                     <div class="panel">
+                        <div class="panel-heading">                          
+                            <h4 class="example-title">Sở thích:</h4>                       
+                        </div>
+                        <div class="panel-body container-fluid">
+                            @*<div class="row row-lg">*@
+                                                               
+                                    <!-- Example Tags Input Categorizing -->
+                                    <div class="example-wrap">
+                                                                                
+                                        <div class="example">
+                                            <div class="bootstrap-tagsinput"><span class="tag label label-primary">Amsterdam<span data-role="remove"></span></span> <span class="tag label label-danger">Washington<span data-role="remove"></span></span><span class="tag label label-default">Cairo<span data-role="remove"></span></span> <span class="tag label label-success">Sydney<span data-role="remove"></span></span> <span class="tag label label-warning">Beijing<span data-role="remove"></span></span>  <span class="twitter-typeahead" style="position: relative; display: inline-block;"><input type="text" class="tt-hint" readonly="" autocomplete="off" spellcheck="false" tabindex="-1" dir="ltr" style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; opacity: 1; background: none 0% 0% / auto repeat scroll padding-box border-box rgba(0, 0, 0, 0);"><input type="text" placeholder="" class="tt-input" autocomplete="off" spellcheck="false" dir="auto" style="position: relative; vertical-align: top; background-color: transparent;" size="3"><pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: Roboto, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 300; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><div class="tt-menu tt-empty" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div class="tt-dataset tt-dataset-cities"></div></div></span></div><input class="form-control" id="inputTagsCategorizing" name="inputTagsCategorizing" style="display: none;">
+                                        </div>
+                                    </div>
+                                    <!-- End Example Tags Input Categorizing -->
+                                
+                            @*</div>*@
+                        </div>
+                    </div>
+
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Tags Input
+                                <small>
+                                    <a class="example-plugin-link" href="http://timschlechter.github.io/bootstrap-tagsinput/examples/"
+                                       target="_blank">official website</a>
+                                </small>
+                            </h3>
+                        </div>
+                        <div class="panel-body container-fluid">
+                            <div class="row row-lg">
+                                <div class="col-sm-6">
+                                    <!-- Example Input Tags -->
+                                    <div class="example-wrap">
+                                        <h4 class="example-title">Input Tags</h4>
+                                        <p>
+                                            Just add <code>data-role="tagsinput"</code> to your input field
+                                            to automatically change it to a tags input field.
+                                        </p>
+                                        <div class="example">
+                                            <input class="form-control" name="tags" data-plugin="tagsinput" value="Amsterdam,Washington,Sydney,Beijing,Cairo" />
+                                        </div>
+                                    </div>
+                                    <!-- End Example Input Tags -->
+                                </div>
+                                <div class="col-sm-6">
+                                    <!-- Example Tags Input True Multi Value -->
+                                    <div class="example-wrap">
+                                        <h4 class="example-title">True Multi Value</h4>
+                                        <p>
+                                            Use a <code>&lt;select multiple /&gt;</code> as your input element
+                                            for a tags input, to gain true multivalue support. Instead of
+                                            a comma separated string, the values will be set in an array.
+                                            Existing <code>&lt;option /&gt;</code> elements will automatically
+                                            be set as tags. This makes it also possible to create tags containing
+                                            a comma.
+                                        </p>
+                                        <div class="example">
+                                            <select data-plugin="tagsinput" multiple>
+                                                <option value="Amsterdam">Amsterdam</option>
+                                                <option value="Washington">Washington</option>
+                                                <option value="Sydney">Sydney</option>
+                                                <option value="Beijing">Beijing</option>
+                                                <option value="Cairo">Cairo</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- End Example Tags Input True Multi Value -->
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-sm-6">
+                                    <!-- Example Tags Input Objects as tags -->
+                                    <div class="example-wrap">
+                                        <h4 class="example-title">Objects as tags</h4>
+                                        <p>
+                                            Instead of just adding strings as tags, bind objects to your tags.
+                                            This makes it possible to set id values in your input field's
+                                            value, instead of just the tag's text.
+                                        </p>
+                                        <div class="example">
+                                            <input class="form-control" id="inputTagsObject" name="inputTagsObject" />
+                                        </div>
+                                    </div>
+                                    <!-- End Example Tags Input Objects as tags -->
+                                </div>
+                                <div class="col-sm-6">
+                                    <!-- Example Tags Input Categorizing -->
+                                    <div class="example-wrap">
+                                        <h4 class="example-title">Categorizing tags</h4>
+                                        <p>
+                                            You can set a fixed css class for your tags, or determine dynamically
+                                            by provinding a custom function.
+                                        </p>
+                                        <div class="example">
+                                            <div class="bootstrap-tagsinput"><span class="tag label label-primary">Amsterdam<span data-role="remove"></span></span> <span class="tag label label-danger">Washington<span data-role="remove"></span></span><span class="tag label label-default">Cairo<span data-role="remove"></span></span> <span class="tag label label-success">Sydney<span data-role="remove"></span></span> <span class="tag label label-warning">Beijing<span data-role="remove"></span></span>  <span class="twitter-typeahead" style="position: relative; display: inline-block;"><input type="text" class="tt-hint" readonly="" autocomplete="off" spellcheck="false" tabindex="-1" dir="ltr" style="position: absolute; top: 0px; left: 0px; border-color: transparent; box-shadow: none; opacity: 1; background: none 0% 0% / auto repeat scroll padding-box border-box rgba(0, 0, 0, 0);"><input type="text" placeholder="" class="tt-input" autocomplete="off" spellcheck="false" dir="auto" style="position: relative; vertical-align: top; background-color: transparent;" size="3"><pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: Roboto, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 300; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><div class="tt-menu tt-empty" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;"><div class="tt-dataset tt-dataset-cities"></div></div></span></div><input class="form-control" id="inputTagsCategorizing" name="inputTagsCategorizing" style="display: none;">
+                                        </div>
+                                    </div>
+                                    <!-- End Example Tags Input Categorizing -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+
+                <div align="left">
+                    <label><font color="white" size="4">Thông tin thêm</font></label>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="inputPhoneNumber">Số điện thoại</label>
+                    <input type="text" class="form-control" id="inputPhoneNumber" name="PhoneNumber"
+                           placeholder="Số điện thoại">
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="inputAddress">Địa chỉ</label>
+                    <input type="text" class="form-control" id="inputAddress" name="Address"
+                           placeholder="Địa chỉ">
+                </div>
+                <div class="form-group" style="padding:0">
+                    <font color="black">
+                        <select name="City">
+                            <option id="inputCity" value="Sài Gòn">Sài Gòn</option>
+                            <option id="inputCity" value="Hà Nội">Hà Nội</option>
+                            <option id="inputCity" value="tỉnh Long An">tỉnh Long An</option>
+                        </select>
+                        <select name="District">
+                            <option id="inputDistrict" value="Quận 12">Quận 12</option>
+                            <option id="inputDistrict" value="Quận Thanh Xuân">Q.Thanh Xuân</option>
+                            <option id="inputDistrict" value="Huyện Bến Lức">H.Bến Lức</option>
+                        </select>
+                        <select name="Ward">
+                            <option id="inputWard" value="phường Tân Chánh Hiệp">P.Tân Chánh Hiệp</option>
+                            <option id="inputWard" value="phường Thanh Xuân Bắc">P.Thanh Xuân Bắc</option>
+                            <option id="inputWard" value="ấp Voi Lá">ấp Voi Lá</option>
+                        </select>
+
+                    </font>
+                </div>
+                <div class="form-group" style="padding:0">
+                    <div align="left">
+                        <label style="" class="" for="inputBday">Ngày sinh</label>
+                    </div>
+                    <div>
+                        <input size="6" type="date" max="data-fv-date-max" class="form-control" id="inputBday" name="Birthday" />
+                        @Html.ValidationMessageFor(m => m.Birthday, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div style="padding:0">
+                    <input size="6" type="checkbox" name="IsPlaceOwner" />Tôi là chủ sân
+                </div>
+                <br />
+                <button type="submit" class="btn btn-primary btn-block">Đăng ký</button>
+            }
+            <p>Đã có tài khoản? @Html.ActionLink("Đăng nhập ngay", "Login")</p>
+
+            @*<footer class="page-copyright">
                 <div class="social">
                     <a href="javascript:void(0)">
                         <i class="icon bd-twitter" aria-hidden="true"></i>
@@ -102,54 +301,467 @@
                         <i class="icon bd-dribbble" aria-hidden="true"></i>
                     </a>
                 </div>
-            </footer>
+            </footer>*@
         </div>
     </div>
     <!-- End Page -->
     <!-- Core  -->
-    <script src="../../Content/assets/vendor/jquery/jquery.js"></script>
-    <script src="../../Content/assets/vendor/bootstrap/bootstrap.js"></script>
-    <script src="../../Content/assets/vendor/animsition/jquery.animsition.js"></script>
-    <script src="../../Content/assets/vendor/asscroll/jquery-asScroll.js"></script>
-    <script src="../../Content/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
-    <script src="../../Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
-    <script src="../../Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+    <script src="~/Content/assets/vendor/jquery/jquery.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap/bootstrap.js"></script>
+    <script src="~/Content/assets/vendor/animsition/jquery.animsition.js"></script>
+    <script src="~/Content/assets/vendor/asscroll/jquery-asScroll.js"></script>
+    <script src="~/Content/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
+    <script src="~/Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
+    <script src="~/Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
 
     <!-- Plugins -->
-    <script src="../../Content/assets/vendor/switchery/switchery.min.js"></script>
-    <script src="../../Content/assets/vendor/intro-js/intro.js"></script>
-    <script src="../../Content/assets/vendor/screenfull/screenfull.js"></script>
-    <script src="../../Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
+    <script src="~/Content/assets/vendor/select2/select2.min.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap-tokenfield/bootstrap-tokenfield.min.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap-select/bootstrap-select.js"></script>
 
-    <script src="../../Content/assets/vendor/jquery-placeholder/jquery.placeholder.js"></script>
+    <script src="~/Content/assets/vendor/switchery/switchery.min.js"></script>
+    <script src="~/Content/assets/vendor/intro-js/intro.js"></script>
+    <script src="~/Content/assets/vendor/screenfull/screenfull.js"></script>
+    <script src="~/Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
+
+    <script src="~/Content/assets/vendor/jquery-placeholder/jquery.placeholder.js"></script>
 
     <!-- Scripts -->
-    <script src="../../Content/assets/js/core.js"></script>
-    <script src="../../Content/assets/js/site.js"></script>
+    <script src="~/Content/assets/js/components/select2.js"></script>
+    <script src="~/Content/assets/js/components/bootstrap-tokenfield.js"></script>
+    <script src="~/Content/assets/js/components/bootstrap-tagsinput.js"></script>
+    <script src="~/Content/assets/js/components/bootstrap-select.js"></script>
 
-    <script src="../../Content/assets/js/sections/menu.js"></script>
-    <script src="../../Content/assets/js/sections/menubar.js"></script>
-    <script src="../../Content/assets/js/sections/sidebar.js"></script>
 
-    <script src="../../Content/assets/js/configs/config-colors.js"></script>
-    <script src="../../Content/assets/js/configs/config-tour.js"></script>
+    <script src="~/Content/assets/js/core.js"></script>
+    <script src="~/Content/assets/js/site.js"></script>
 
-    <script src="../../Content/assets/js/components/asscrollable.js"></script>
-    <script src="../../Content/assets/js/components/animsition.js"></script>
-    <script src="../../Content/assets/js/components/slidepanel.js"></script>
-    <script src="../../Content/assets/js/components/switchery.js"></script>
-    <script src="../../Content/assets/js/components/jquery-placeholder.js"></script>
+    <script src="~/Content/assets/js/sections/menu.js"></script>
+    <script src="~/Content/assets/js/sections/menubar.js"></script>
+    <script src="~/Content/assets/js/sections/sidebar.js"></script>
+
+    <script src="~/Content/assets/js/configs/config-colors.js"></script>
+    <script src="~/Content/assets/js/configs/config-tour.js"></script>
+
+    <script src="~/Content/assets/js/components/asscrollable.js"></script>
+    <script src="~/Content/assets/js/components/animsition.js"></script>
+    <script src="~/Content/assets/js/components/slidepanel.js"></script>
+    <script src="~/Content/assets/js/components/switchery.js"></script>
+    <script src="~/Content/assets/js/components/jquery-placeholder.js"></script>
+
+    
+
+
 
     <script>
     (function(document, window, $) {
       'use strict';
-
       var Site = window.Site;
-      $(document).ready(function() {
+      $(document).ready(function($) {
         Site.run();
       });
+
+      // Example Reset Current
+      // ---------------------
+      (function() {
+        // Reset Current
+        $('#exampleTimeButton').on('click', function() {
+          $('#inputTextCurrent').timepicker('setTime', new Date());
+        });
+      })();
+
+      // Example inline datepicker
+      // ---------------------
+      (function() {
+        // Reset Current
+        $('#inlineDatepicker').datepicker();
+        $("#inlineDatepicker").on("changeDate", function(event) {
+          $("#inputHiddenInline").val(
+            $("#inlineDatepicker").datepicker('getFormattedDate')
+          );
+        });
+      })();
+
+      // Example Tokenfield With Typeahead
+      // ---------------------------------
+      (function() {
+        var engine = new Bloodhound({
+          local: [{
+            value: 'red'
+          }, {
+            value: 'blue'
+          }, {
+            value: 'green'
+          }, {
+            value: 'yellow'
+          }, {
+            value: 'violet'
+          }, {
+            value: 'brown'
+          }, {
+            value: 'purple'
+          }, {
+            value: 'black'
+          }, {
+            value: 'white'
+          }],
+          datumTokenizer: Bloodhound.tokenizers.obj.whitespace(
+            'value'),
+          queryTokenizer: Bloodhound.tokenizers.whitespace
+        });
+
+        // engine.initialize();
+
+        $('#inputTokenfieldTypeahead').tokenfield({
+          typeahead: [null, {
+            name: 'engine',
+            displayKey: 'value',
+            source: engine.ttAdapter()
+          }]
+        });
+      })();
+
+      // Example Tokenfield Events
+      // -------------------------
+      @*(function() {
+        $('#inputTokenfieldEvents')
+          .on('tokenfield:createtoken', function(e) {
+            var data = e.attrs.value.split('|');
+            e.attrs.value = data[1] || data[0];
+            e.attrs.label = data[1] ? data[0] + ' (' + data[1] + ')' :
+              data[0];
+          })
+          .on('tokenfield:createdtoken', function(e) {
+            // Über-simplistic e-mail validation
+            var re = /\S+@\S+\.\S+/;
+            var valid = re.test(e.attrs.value);
+            if (!valid) {
+              $(e.relatedTarget).addClass('invalid');
+            }
+          })
+          .on('tokenfield:edittoken', function(e) {
+            if (e.attrs.label !== e.attrs.value) {
+              var label = e.attrs.label.split(' (');
+              e.attrs.value = label[0] + '|' + e.attrs.value;
+            }
+          })
+          .on('tokenfield:removedtoken', function(e) {
+            if (e.attrs.length > 1) {
+              var values = $.map(e.attrs, function(attrs) {
+                return attrs.value;
+              });
+              alert(e.attrs.length +
+                ' tokens removed! Token values were: ' + values.join(
+                  ', '));
+            } else {
+              alert('Token removed! Token value was: ' + e.attrs.value);
+            }
+          })
+          .tokenfield();
+      })();*@
+
+      // Example Tags Input Objects as tags
+      // ----------------------------------
+      (function() {
+        var cities = new Bloodhound({
+          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          prefetch: '../../assets/data/cities.json'
+        });
+        cities.initialize();
+
+        var options = $.extend(true, {}, $.components.getDefaults(
+          "tagsinput"), {
+          itemValue: 'value',
+          itemText: 'text',
+          typeaheadjs: [{
+            hint: true,
+            highlight: true,
+            minLength: 1
+          }, {
+            name: 'cities',
+            displayKey: 'text',
+            source: cities.ttAdapter()
+          }]
+        });
+
+        var $input = $('#inputTagsObject');
+        $input.tagsinput(options);
+
+        $input.tagsinput('add', {
+          "value": 1,
+          "text": "Amsterdam",
+          "continent": "Europe"
+        });
+        $input.tagsinput('add', {
+          "value": 4,
+          "text": "Washington",
+          "continent": "America"
+        });
+        $input.tagsinput('add', {
+          "value": 7,
+          "text": "Sydney",
+          "continent": "Australia"
+        });
+        $input.tagsinput('add', {
+          "value": 10,
+          "text": "Beijing",
+          "continent": "Asia"
+        });
+        $input.tagsinput('add', {
+          "value": 13,
+          "text": "Cairo",
+          "continent": "Africa"
+        });
+      })();
+
+      // Example Tags Input Categorizing
+      // -------------------------------
+      (function() {
+        var cities = new Bloodhound({
+          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('text'),
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          prefetch: '../../assets/data/cities.json'
+        });
+        cities.initialize();
+
+        var options = $.extend(true, {}, $.components.getDefaults(
+          "tagsinput"), {
+          tagClass: function(item) {
+            switch (item.continent) {
+              case 'Europe':
+                return 'label label-primary';
+              case 'America':
+                return 'label label-danger';
+              case 'Australia':
+                return 'label label-success';
+              case 'Africa':
+                return 'label label-default';
+              case 'Asia':
+                return 'label label-warning';
+            }
+          },
+          itemValue: 'value',
+          itemText: 'text',
+          typeaheadjs: [{
+            hint: true,
+            highlight: true,
+            minLength: 1
+          }, {
+            name: 'cities',
+            displayKey: 'text',
+            source: cities.ttAdapter()
+          }]
+        });
+        var $input = $('#inputTagsCategorizing');
+
+        $input.tagsinput(options);
+
+        $input.tagsinput('add', {
+          "value": 1,
+          "text": "Amsterdam",
+          "continent": "Europe"
+        });
+        $input.tagsinput('add', {
+          "value": 4,
+          "text": "Washington",
+          "continent": "America"
+        });
+        $input.tagsinput('add', {
+          "value": 7,
+          "text": "Sydney",
+          "continent": "Australia"
+        });
+        $input.tagsinput('add', {
+          "value": 10,
+          "text": "Beijing",
+          "continent": "Asia"
+        });
+        $input.tagsinput('add', {
+          "value": 13,
+          "text": "Cairo",
+          "continent": "Africa"
+        });
+
+      })();
+
+      // Example AsSpinner
+      // -----------------
+      (function() {
+        // Custom Format
+        var options = $.extend({}, $.components.getDefaults("asSpinner"), {
+          format: function(value) {
+            return value + '%';
+          }
+        });
+
+        $('#inputSpinnerCustomFormat').asSpinner(options);
+      })();
+
+      // Example Multi-Select
+      // --------------------
+      (function() {
+        // for multi-select public methods example
+        $('.multi-select-methods').multiSelect();
+        $('#buttonSelectAll').click(function() {
+          $('.multi-select-methods').multiSelect('select_all');
+          return false;
+        });
+        $('#buttonDeselectAll').click(function() {
+          $('.multi-select-methods').multiSelect('deselect_all');
+          return false;
+        });
+        $('#buttonSelectSome').click(function() {
+          $('.multi-select-methods').multiSelect('select', ['Idaho',
+            'Montana', 'Arkansas'
+          ]);
+          return false;
+        });
+        $('#buttonDeselectSome').click(function() {
+          $('.multi-select-methods').multiSelect('select', ['Idaho',
+            'Montana', 'Arkansas'
+          ]);
+          return false;
+        });
+        $('#buttonRefresh').on('click', function() {
+          $('.multi-select-methods').multiSelect('refresh');
+          return false;
+        });
+        $('#buttonAdd').on('click', function() {
+          $('.multi-select-methods').multiSelect('addOption', {
+            value: 42,
+            text: 'test 42',
+            index: 0
+          });
+          return false;
+        });
+      })();
+
+      // Example Typeahead
+      // -----------------
+      (function() {
+        var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas',
+          'California',
+          'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia',
+          'Hawaii',
+          'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
+          'Louisiana',
+          'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+          'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada',
+          'New Hampshire',
+          'New Jersey', 'New Mexico', 'New York', 'North Carolina',
+          'North Dakota',
+          'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
+          'South Carolina', 'South Dakota', 'Tennessee', 'Texas',
+          'Utah', 'Vermont',
+          'Virginia', 'Washington', 'West Virginia', 'Wisconsin',
+          'Wyoming'
+        ];
+
+        // basic & Styled
+        // --------------
+        (function() {
+          var substringMatcher = function(strs) {
+            return function findMatches(q, cb) {
+              var matches, substrRegex;
+
+              // an array that will be populated with substring matches
+              matches = [];
+
+              // regex used to determine if a string contains the substring `q`
+              substrRegex = new RegExp(q, 'i');
+
+              // iterate through the pool of strings and for any string that
+              // contains the substring `q`, add it to the `matches` array
+              $.each(strs, function(i, str) {
+                if (substrRegex.test(str)) {
+                  matches.push(str);
+                }
+              });
+
+              cb(matches);
+            };
+          };
+
+          $('#exampleTypeaheadBasic, #exampleTypeaheadStyle').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+          }, {
+            name: 'states',
+            source: substringMatcher(states)
+          });
+        })();
+
+        // bloodhound
+        // ----------
+        (function() {
+          var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas',
+            'California',
+            'Colorado', 'Connecticut', 'Delaware', 'Florida',
+            'Georgia', 'Hawaii',
+            'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas',
+            'Kentucky', 'Louisiana',
+            'Maine', 'Maryland', 'Massachusetts', 'Michigan',
+            'Minnesota',
+            'Mississippi', 'Missouri', 'Montana', 'Nebraska',
+            'Nevada', 'New Hampshire',
+            'New Jersey', 'New Mexico', 'New York', 'North Carolina',
+            'North Dakota',
+            'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania',
+            'Rhode Island',
+            'South Carolina', 'South Dakota', 'Tennessee', 'Texas',
+            'Utah', 'Vermont',
+            'Virginia', 'Washington', 'West Virginia', 'Wisconsin',
+            'Wyoming'
+          ];
+          // constructs the suggestion engine
+          var state = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.whitespace,
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            // `states` is an array of state names defined in "The Basics"
+            local: states
+          });
+
+          $('#exampleTypeaheadBloodhound').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+          }, {
+            name: 'states',
+            source: state
+          });
+        })();
+
+        // Prefetch typeahead
+        // ----------------
+        (function() {
+          var countries = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.whitespace,
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            // url points to a json file that contains an array of country names, see
+            // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
+            prefetch: '../../assets/data/countries.json'
+          });
+
+          // passing in `null` for the `options` arguments will result in the default
+          // options being used
+          $('#exampleTypeaheadPrefetch').typeahead(null, {
+            name: 'countries',
+            source: countries
+          });
+        })();
+
+      })();
     })(document, window, jQuery);
     </script>
+
+
+    
+
+
+    
 
 </body>
 
@@ -190,4 +802,8 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        
+    </script>
 }

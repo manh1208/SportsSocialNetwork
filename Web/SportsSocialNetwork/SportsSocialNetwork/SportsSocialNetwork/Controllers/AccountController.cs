@@ -8,12 +8,16 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using SportsSocialNetwork.Models.Entities;
+using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models;
+using SkyWeb.DatVM.Mvc;
+using System.Collections.Generic;
 
 namespace SportsSocialNetwork.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -51,6 +55,9 @@ namespace SportsSocialNetwork.Controllers
                 _userManager = value;
             }
         }
+        //chay thu trang advance form
+        
+
 
         //
         // GET: /Account/Login
@@ -75,18 +82,20 @@ namespace SportsSocialNetwork.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
-                    return View("Lockout");
+                    return View("Index","Home");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Sai tên tài khoản hoặc mật khẩu, vui lòng nhập lại.");
+                    //var _messService = this.Service<IIdentityMessageService>();
+                   //string _errorMessage = "Sai tên tài khoản hoặc mật khẩu.";
                     return View(model);
             }
         }
@@ -134,6 +143,16 @@ namespace SportsSocialNetwork.Controllers
             }
         }
 
+
+      public ActionResult ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            return View();
+        }
         //
         // GET: /Account/Register
         [AllowAnonymous]
@@ -149,27 +168,105 @@ namespace SportsSocialNetwork.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            var _userService = this.Service<IAspNetUserService>();
+            if (_userService.CheckDuplicateUsername(model.Username))
+            {
+                ModelState.AddModelError("", "Tên tài khoản này đã có người sử dụng");
+            }
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Username, Email = model.Email, };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);                    
+                    AspNetUser _updatedUser = _userService.FirstOrDefault(x => x.Id == user.Id);
+                    _updatedUser.Fullname = model.Fullname;
+                    _updatedUser.Gender = model.Gender;
+                    Hobby hb = new Hobby();
+                    var _sportService = this.Service<ISportService>();
+                    Sport sp = _sportService.FirstOrDefault(x => x.Name.Contains(model.Hobby));
+                    hb.UserId = user.Id;
+                    hb.SportId = sp.Id;
+                    _updatedUser.Hobbies.Add(hb);
+                    _updatedUser.PhoneNumber = model.PhoneNumber;
+                    _updatedUser.Address = model.Address;
+                    _updatedUser.City = model.City;
+                    _updatedUser.District = model.District;
+                    _updatedUser.Ward = model.Ward;
+                    _updatedUser.Birthday = model.Birthday;
+                    _userService.Update(_updatedUser);
+                    _userService.Save();
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Login");
                 }
                 AddErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
+            ModelState.AddModelError("", "Không thể đăng ký tài khoản được. Vui lòng kiểm tra lại thông tin đã nhập hoặc liên hệ với ban quản trị để được hỗ trợ");
             return View(model);
+        }
+
+        public ActionResult UpdateProfile(string id)
+        {
+            var _hobbyService = this.Service<IHobbyService>();
+            var _userService = this.Service<IAspNetUserService>();
+            AspNetUser _updateUser = _userService.Get(id);
+            UpdateViewModel updVM = Mapper.Map<UpdateViewModel>(_updateUser);
+
+            List<Hobby> listHobby = _hobbyService.Get().ToList();
+            List<SelectListItem> listHobbies = new List<SelectListItem>();
+            foreach (var item in listHobby)
+            {
+                SelectListItem it = new SelectListItem();
+                it.Value = item.Sport.Id.ToString();
+                it.Text = item.Sport.Name;
+                listHobbies.Add(it);
+            }
+
+            
+            ViewBag.listHobbies = listHobbies;
+            return View(updVM);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateProfile(UpdateViewModel model)
+        {
+            var _hobbyService = this.Service<IHobbyService>();
+            var _userService = this.Service<IAspNetUserService>();
+
+            if (ModelState.IsValid)
+            {
+                var user = UserManager.FindById(User.Identity.GetUserId());
+                AspNetUser _updatedUser = _userService.FirstOrDefault(x => x.Id == user.Id);
+                
+                _updatedUser.UserName = model.UserName;
+                _updatedUser.Email = model.Email;
+              //  _updatedUser.PasswordHash = model.Password.GetHashCode().ToString();
+                _updatedUser.Fullname = model.Fullname;
+                _updatedUser.Gender = model.Gender;
+                _updatedUser.PhoneNumber = model.PhoneNumber;
+                _updatedUser.Address = model.Address;
+                _updatedUser.City = model.City;
+                _updatedUser.District = model.District;
+                _updatedUser.Ward = model.Ward;
+                _updatedUser.Birthday = model.Birthday;
+                _userService.Update(_updatedUser);
+                _userService.Save();
+                return View();
+            }
+            // If we got this far, something failed, redisplay form
+            ModelState.AddModelError("", "Không thể cập nhật thông tin được. Vui lòng kiểm tra lại thông tin đã nhập");
+            return View(model);
+
         }
 
         //
@@ -217,7 +314,7 @@ namespace SportsSocialNetwork.Controllers
                 // return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
-            // If we got this far, something failed, redisplay form
+            // If we got this far, something failed, redisplay form            
             return View(model);
         }
 
@@ -399,6 +496,14 @@ namespace SportsSocialNetwork.Controllers
         // GET: /Account/ExternalLoginFailure
         [AllowAnonymous]
         public ActionResult ExternalLoginFailure()
+        {
+            return View();
+        }
+
+        //chay thu trang advance
+        [AllowAnonymous]
+        
+        public ActionResult Advance()
         {
             return View();
         }

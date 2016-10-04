@@ -1,0 +1,108 @@
+﻿@model SportsSocialNetwork.Models.UpdateViewModel
+@using SportsSocialNetwork.Models.Entities
+@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "UpdateProfile";
+    List<SelectListItem> listHobbies = ViewBag.listHobbies;
+}
+
+
+<div class="panel panel-bordered">
+    <div class="panel-heading">
+        <h3 class="">Chỉnh sửa thông tin cá nhân</h3>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("UpdateProfile", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger error-login-msg" })
+            <div class="col-md-6">
+                <label style="font-size:larger">Thông tin tài khoản</label>
+                <div class="form-material floating">
+                    @*<input type="text" class="form-control empty" name="inputFloatingText">*@
+                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @readonly = true })
+                    <label class="floating-label">Tên tài khoản</label>
+                </div>
+                <div>  
+                    <label style="font-size:smaller" class="control-label">Mật khẩu</label> <br />                
+                    @Html.ActionLink("Đổi mật khẩu", "ChangePassword")                    
+                </div>
+                <div class="form-material floating">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                    <label class="floating-label">Email</label>
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-material floating">
+                    @Html.TextBoxFor(m => m.Fullname, new { @class = "form-control" })
+                    <label class="floating-label">Họ & tên</label>
+                    @Html.ValidationMessageFor(m => m.Fullname, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-material floating">
+                    @Html.TextBoxFor(m => m.Gender, new { @class = "form-control"})
+                    <label class="floating-label">Giới tính</label>
+                    @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-material floating">
+                    @*@Html.DropDownListFor(m => m.Hobby, listHobbies, new { @class = "form-control" } )*@
+                    @Html.TextBoxFor(m => m.Hobby, new { @class = "form-control"})
+                    <label class="floating-label">Sở thích</label>
+                    @Html.ValidationMessageFor(m => m.Hobby, "", new { @class = "text-danger" })
+                </div>
+               
+            </div>
+            <div class="col-md-6">
+                <label style="font-size:larger">Thông tin thêm</label>
+                <div class="form-material floating">
+                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control"})
+                    <label class="floating-label">Số điện thoại</label>
+                    @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-material floating">
+                    @Html.TextBoxFor(m => m.Address, new { @class = "form-control"})
+                    <label class="floating-label">Địa chỉ</label>
+                    @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-material floating">
+                    @Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+                    <label class="floating-label">Tỉnh/Thành phố</label>
+                    @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-material floating">
+                    @Html.TextBoxFor(m => m.District, new { @class = "form-control" })
+                    <label class="floating-label">Quận/Huyện</label>
+                    @Html.ValidationMessageFor(m => m.District, "", new { @class = "text-danger" })
+                </div>                
+                <div class="form-material floating">
+                    @Html.TextBoxFor(m => m.Ward, new { @class = "form-control" })
+                    <label class="floating-label">Phường/Xã</label>
+                    @Html.ValidationMessageFor(m => m.Ward, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-material floating">
+                    @Html.TextBoxFor(m => m.Birthday, new { @class = "form-control", data_plugin = "datepicker" })
+                    <label class="floating-label">Ngày sinh</label>
+                    @Html.ValidationMessageFor(m => m.Birthday, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-5">
+                    <button type="submit" class="btn btn-primary btn-block">Cập nhật</button>
+                </div>
+                
+            </div>
+        }
+
+
+    </div>
+</div>
+@section Scripts{
+    <script>
+    (function(document, window, $) {
+      'use strict';
+
+      var Site = window.Site;
+      $(document).ready(function() {
+        Site.run();
+      });
+    })(document, window, jQuery);
+
+</script>
+    }
+

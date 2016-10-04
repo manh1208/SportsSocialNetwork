@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity;
+<!DOCTYPE html>
 <html class="no-js before-run" lang="en">
 <head>
     <meta charset="utf-8">
@@ -9,44 +10,59 @@
 
     <title>Dashboard | Remark Admin Template</title>
 
-    <link rel="apple-touch-icon" href="../Content/assets/images/apple-touch-icon.png">
-    <link rel="shortcut icon" href="../Content/assets/images/favicon.ico">
+    <link rel="apple-touch-icon" href="~/Content/assets/images/apple-touch-icon.png">
+    <link rel="shortcut icon" href="~/Content/assets/images/favicon.ico">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="../Content/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../Content/assets/css/bootstrap-extend.min.css">
-    <link rel="stylesheet" href="../Content/assets/css/site.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap-tagsinput.css">
 
-    <link rel="stylesheet" href="../Content/assets/vendor/animsition/animsition.css">
-    <link rel="stylesheet" href="../Content/assets/vendor/asscrollable/asScrollable.css">
-    <link rel="stylesheet" href="../Content/assets/vendor/switchery/switchery.css">
-    <link rel="stylesheet" href="../Content/assets/vendor/intro-js/introjs.css">
-    <link rel="stylesheet" href="../Content/assets/vendor/slidepanel/slidePanel.css">
-    <link rel="stylesheet" href="../Content/assets/vendor/flag-icon-css/flag-icon.css">
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap-2.3.2/css/bootstrap.min.css">
+  
+    <script src="~/Content/assets/css/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap-extend.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/site.min.css">
+
+    <link rel="stylesheet" href="~/Content/assets/vendor/animsition/animsition.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/asscrollable/asScrollable.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/switchery/switchery.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/intro-js/introjs.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/slidepanel/slidePanel.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/flag-icon-css/flag-icon.css">
 
     <!-- Plugin -->
-    <link rel="stylesheet" href="../Content/assets/vendor/chartist-js/chartist.css">
-    <link rel="stylesheet" href="../Content/assets/vendor/jvectormap/jquery-jvectormap.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/chartist-js/chartist.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/jvectormap/jquery-jvectormap.css">
+
+    <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.css">
+
+    <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css">
+
+    <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-select/bootstrap-select.css">
+
+    <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.css">
+
 
     <!-- Page -->
-    <link rel="stylesheet" href="../Content/assets/css/../fonts/weather-icons/weather-icons.css">
-    <link rel="stylesheet" href="../Content/assets/css/dashboard/v1.css">
+    <link rel="stylesheet" href="~/Content/assets/css/../fonts/weather-icons/weather-icons.css">
+    <link rel="stylesheet" href="~/Content/assets/css/dashboard/v1.css">
 
     <!-- Fonts -->
-    <link rel="stylesheet" href="../Content/assets/fonts/web-icons/web-icons.min.css">
-    <link rel="stylesheet" href="../Content/assets/fonts/brand-icons/brand-icons.min.css">
-    <link rel="stylesheet" href="../Content/font-awesome-4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/Content/assets/fonts/web-icons/web-icons.min.css">
+    <link rel="stylesheet" href="~/Content/assets/fonts/brand-icons/brand-icons.min.css">
+    <link rel="stylesheet" href="~/Content/font-awesome-4.6.3/css/font-awesome.min.css">
 
     <!--[if lt IE 9]>
-      <script src="../Content/assets/vendor/html5shiv/html5shiv.min.js"></script>
+      <script src="~/Content/assets/vendor/html5shiv/html5shiv.min.js"></script>
       <![endif]-->
     <!--[if lt IE 10]>
-      <script src="../Content/assets/vendor/media-match/media.match.min.js"></script>
-      <script src="../Content/assets/vendor/respond/respond.min.js"></script>
+      <script src="~/Content/assets/vendor/media-match/media.match.min.js"></script>
+      <script src="~/Content/assets/vendor/respond/respond.min.js"></script>
       <![endif]-->
     <!-- Scripts -->
-    <script src="../Content/assets/vendor/modernizr/modernizr.js"></script>
-    <script src="../Content/assets/vendor/breakpoints/breakpoints.js"></script>
+    <script src="~/Content/assets/vendor/modernizr/modernizr.js"></script>
+    <script src="~/Content/assets/vendor/breakpoints/breakpoints.js"></script>
     <script>
     Breakpoints();
     </script>
@@ -105,7 +121,7 @@
                         <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
                            data-animation="slide-bottom" role="button">
                             <span class="avatar avatar-online">
-                                <img src="../Content/assets/portraits/5.jpg" alt="...">
+                                <img src="~/Content/assets/portraits/5.jpg" alt="...">
                                 <i></i>
                             </span>
                         </a>
@@ -212,7 +228,7 @@
                                             <div class="media">
                                                 <div class="media-left padding-right-10">
                                                     <span class="avatar avatar-sm avatar-online">
-                                                        <img src="../Content/assets/portraits/2.jpg" alt="..." />
+                                                        <img src="~/Content/assets/portraits/2.jpg" alt="..." />
                                                         <i></i>
                                                     </span>
                                                 </div>
@@ -229,7 +245,7 @@
                                             <div class="media">
                                                 <div class="media-left padding-right-10">
                                                     <span class="avatar avatar-sm avatar-off">
-                                                        <img src="../Content/assets/portraits/3.jpg" alt="..." />
+                                                        <img src="~/Content/assets/portraits/3.jpg" alt="..." />
                                                         <i></i>
                                                     </span>
                                                 </div>
@@ -246,7 +262,7 @@
                                             <div class="media">
                                                 <div class="media-left padding-right-10">
                                                     <span class="avatar avatar-sm avatar-busy">
-                                                        <img src="../Content/assets/portraits/4.jpg" alt="..." />
+                                                        <img src="~/Content/assets/portraits/4.jpg" alt="..." />
                                                         <i></i>
                                                     </span>
                                                 </div>
@@ -263,7 +279,7 @@
                                             <div class="media">
                                                 <div class="media-left padding-right-10">
                                                     <span class="avatar avatar-sm avatar-away">
-                                                        <img src="../Content/assets/portraits/5.jpg" alt="..." />
+                                                        <img src="~/Content/assets/portraits/5.jpg" alt="..." />
                                                         <i></i>
                                                     </span>
                                                 </div>
@@ -301,9 +317,16 @@
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li role="presentation">
-                                <a href="javascript:void(0)" role="menuitem">
+                                @Html.ActionLink("Đổi mật khẩu", "ChangePassword", "Account", new { id = User.Identity.GetUserId() }, null)
+                                @*<a href="javascript:void(0)" role="menuitem">
                                     <span class="fa fa-key"></span> Đổi mật khẩu
-                                </a>
+                                </a>*@
+                            </li>
+                            <li role="presentation">
+                                @Html.ActionLink("Chỉnh sửa thông tin cá nhân", "UpdateProfile", "Account", new { id = User.Identity.GetUserId() }, null)
+                                @*<a href="" role="menuitem">*@                              
+                                    @*<span class="fa fa-key"></span> Xem thông tin cá nhân*@
+                                @*</a>*@
                             </li>
                             <li role="presentation">
                                 <a href="javascript:void(0)" role="menuitem">
@@ -611,44 +634,73 @@
     </footer>
 
     <!-- Core  -->
-    <script src="../Content/assets/vendor/jquery/jquery.js"></script>
-    <script src="../Content/assets/vendor/bootstrap/bootstrap.js"></script>
-    <script src="../Content/assets/vendor/animsition/jquery.animsition.js"></script>
-    <script src="../Content/assets/vendor/asscroll/jquery-asScroll.js"></script>
-    <script src="../Content/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
-    <script src="../Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
-    <script src="../Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+    <script src="~/Content/assets/vendor/jquery/jquery.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap/bootstrap.js"></script>
+    <script src="~/Content/assets/vendor/animsition/jquery.animsition.js"></script>
+    <script src="~/Content/assets/vendor/asscroll/jquery-asScroll.js"></script>
+    <script src="~/Content/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
+    <script src="~/Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
+    <script src="~/Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
 
     <!-- Plugins -->
-    <script src="../Content/assets/vendor/switchery/switchery.min.js"></script>
-    <script src="../Content/assets/vendor/intro-js/intro.js"></script>
-    <script src="../Content/assets/vendor/screenfull/screenfull.js"></script>
-    <script src="../Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
+    <script src="~/Content/assets/vendor/select2/select2.min.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap-tokenfield/bootstrap-tokenfield.min.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap-select/bootstrap-select.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
 
-    <script src="../Content/assets/vendor/skycons/skycons.js"></script>
-    <script src="../Content/assets/vendor/chartist-js/chartist.min.js"></script>
-    <script src="../Content/assets/vendor/aspieprogress/jquery-asPieProgress.min.js"></script>
-    <script src="../Content/assets/vendor/jvectormap/jquery-jvectormap.min.js"></script>
-    <script src="../Content/assets/vendor/jvectormap/maps/jquery-jvectormap-ca-lcc-en.js"></script>
-    <script src="../Content/assets/vendor/matchheight/jquery.matchHeight-min.js"></script>
+    <script src="~/Content/assets/vendor/switchery/switchery.min.js"></script>
+    <script src="~/Content/assets/vendor/intro-js/intro.js"></script>
+    <script src="~/Content/assets/vendor/screenfull/screenfull.js"></script>
+    <script src="~/Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
+
+    <script src="~/Content/assets/vendor/skycons/skycons.js"></script>
+    <script src="~/Content/assets/vendor/chartist-js/chartist.min.js"></script>
+    <script src="~/Content/assets/vendor/aspieprogress/jquery-asPieProgress.min.js"></script>
+    <script src="~/Content/assets/vendor/jvectormap/jquery-jvectormap.min.js"></script>
+    <script src="~/Content/assets/vendor/jvectormap/maps/jquery-jvectormap-ca-lcc-en.js"></script>
+    <script src="~/Content/assets/vendor/matchheight/jquery.matchHeight-min.js"></script>
+
+    <script src="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
 
     <!-- Scripts -->
-    <script src="../Content/assets/js/core.js"></script>
-    <script src="../Content/assets/js/site.js"></script>
+    <script src="~/Content/assets/js/components/select2.js"></script>
+    <script src="~/Content/assets/js/components/bootstrap-tokenfield.js"></script>
+    <script src="~/Content/assets/js/components/bootstrap-tagsinput.js"></script>
+    <script src="~/Content/assets/js/components/bootstrap-datepicker.js"></script>
 
-    <script src="../Content/assets/js/sections/menu.js"></script>
-    <script src="../Content/assets/js/sections/menubar.js"></script>
-    <script src="../Content/assets/js/sections/sidebar.js"></script>
 
-    <script src="../Content/assets/js/configs/config-colors.js"></script>
-    <script src="../Content/assets/js/configs/config-tour.js"></script>
+    <script src="~/Content/assets/js/core.js"></script>
+    <script src="~/Content/assets/js/site.js"></script>
 
-    <script src="../Content/assets/js/components/asscrollable.js"></script>
-    <script src="../Content/assets/js/components/animsition.js"></script>
-    <script src="../Content/assets/js/components/slidepanel.js"></script>
-    <script src="../Content/assets/js/components/switchery.js"></script>
-    <script src="../Content/assets/js/components/matchheight.js"></script>
-    <script src="../Content/assets/js/components/jvectormap.js"></script>
+    <script src="~/Content/assets/js/sections/menu.js"></script>
+    <script src="~/Content/assets/js/sections/menubar.js"></script>
+    <script src="~/Content/assets/js/sections/sidebar.js"></script>
+
+    <script src="~/Content/assets/js/configs/config-colors.js"></script>
+    <script src="~/Content/assets/js/configs/config-tour.js"></script>
+
+    <script src="~/Content/assets/js/components/asscrollable.js"></script>
+    <script src="~/Content/assets/js/components/animsition.js"></script>
+    <script src="~/Content/assets/js/components/slidepanel.min.js"></script>
+    <script src="~/Content/assets/js/components/switchery.js"></script>
+    <script src="~/Content/assets/js/components/matchheight.js"></script>
+    <script src="~/Content/assets/js/components/jvectormap.min.js"></script>
+
+    <script src="~/Content/assets/js/components/material.min.js"></script>
+
+    <script src="~/Content/assets/js/components/bootstrap-datepicker.js"></script>
+
+
+    <script>
+        (function (document, window, $) {
+            'use strict';
+            var Site = window.Site;
+            $(document).ready(function ($) {
+                Site.run();
+            });
+        });
+    </script>
 
 
     </body>
