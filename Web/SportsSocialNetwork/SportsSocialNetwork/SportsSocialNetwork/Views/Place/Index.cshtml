@@ -8,6 +8,11 @@
     var districtList = new List<SelectListItem>();
 }
 <style>
+    .imgWH100{
+        width: 100%;
+        vertical-align: middle;
+        height: 100%
+    }
     .table_image {
         float: left;
         width: 210px;
@@ -89,6 +94,8 @@
             </div>
         </div>
     </div>
+    </div>
+@section Scripts{
     <script>
         console.log("aaa");
 
@@ -182,22 +189,20 @@
                      "aTargets": [1],
                      "bSortable": false,
                      "mRender": function (data, type, o) {
-                         return "<div class='table_image'><img src='" + o[1] + "' height='160' width='210'></div><div class='table_text'>" +
-                             "<div class='table_text_title'>" + o[2] + "</div><div class='table_text_des1'>" + o[3] + "</div><div class='table_text_des2'>Địa chỉ: "
+                         return "<div class='table_image'><img src='" + o[1] + "' class='imgWH100'></div><div class='table_text'>" +
+                             "<div class='table_text_title'><a href='/Place/ViewDetail/" + o[0] + "'>" + o[2] +
+                             "</a></div><div class='table_text_des1'>" + o[3] + "</div><div class='table_text_des2'>Địa chỉ: "
                              + o[4] + ", Quận " + o[5] + ", " + o[6] + "</div><div class='table_text_des2'>Điện thoại: "+ o[7] +"</div></div>";
 
                      }
                  },
-                 
+
             ],
             "bAutoWidth": false
 
         });
     }
-    $.extend($.fn.dataTableExt.oStdClasses, {
-        "sFilterInput": "form-control input-sm",
-        "sLengthSelect": "form-control input-sm"
-    });
+
     $(document).ready(function () {
         InitDatatable();
         RefreshTable();
@@ -275,6 +280,6 @@
 
 
     </script>
-
+}
 
 
