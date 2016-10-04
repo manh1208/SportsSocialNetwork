@@ -4,62 +4,9 @@
     ViewBag.Title = "PlaceDetail";
     List<PlaceImage> placeImages = ViewBag.placeImages;
 
-    //listCity
-    List<SelectListItem> listCities = new List<SelectListItem>();
-    listCities.Add(new SelectListItem
-    {
-        Text = "Hồ Chí Minh",
-        Value = "Ho Chi Minh"
-    });
-    listCities.Add(new SelectListItem
-    {
-        Text = "Hà Nội",
-        Value = "Ha Noi",
-        Selected = true
-    });
-    listCities.Add(new SelectListItem
-    {
-        Text = "Đà Nẵng",
-        Value = "Da Nang"
-    });
-
-    //listDistrict
-    List<SelectListItem> listDistricts = new List<SelectListItem>();
-    listDistricts.Add(new SelectListItem
-    {
-        Text = "Quận 1",
-        Value = "Quan 1"
-    });
-    listDistricts.Add(new SelectListItem
-    {
-        Text = "Quận 2",
-        Value = "Quan 2",
-        Selected = true
-    });
-    listDistricts.Add(new SelectListItem
-    {
-        Text = "Quận 3",
-        Value = "Quan 3"
-    });
-
-    //listWard
-    List<SelectListItem> listWards = new List<SelectListItem>();
-    listWards.Add(new SelectListItem
-    {
-        Text = "Phường 1",
-        Value = "Phuong 1"
-    });
-    listWards.Add(new SelectListItem
-    {
-        Text = "Phường 2",
-        Value = "Phuong 2",
-        Selected = true
-    });
-    listWards.Add(new SelectListItem
-    {
-        Text = "Phường 3",
-        Value = "Phuong 2"
-    });
+    var listCities = ViewBag.provinces as IOrderedEnumerable<SelectListItem>;
+    var listDistricts = ViewBag.districts as IOrderedEnumerable<SelectListItem>;
+    var listWards = ViewBag.wards as IOrderedEnumerable<SelectListItem>;
 }
 
 
@@ -72,7 +19,7 @@
 
 <div class="panel">
     <div class="panel-heading">
-        <h1 class="panel-title">Tạo địa điểm</h1>
+        <h1 class="panel-title">@Model.Name</h1>
     </div>
 </div>
 <div class="panel">
@@ -82,7 +29,7 @@
         {
             @Html.TextBoxFor(p => p.Id, new { @style = "display:none;" })
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-8">
                     <div class="panel">
                         <div class="panel-heading">
                             <h3 class="panel-title">Thông tin địa điểm</h3>
@@ -93,15 +40,15 @@
                                 <label class="floating-label">Tên địa điểm</label>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.DropDownListFor(p => p.City, listCities, new { @class = "form-control input-lg" })
+                                @Html.DropDownListFor(p => p.City, listCities, new { @class = "form-control input-lg", @id = "city" })
                                 <label class="floating-label">Thành phố</label>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.DropDownListFor(p => p.District, listDistricts, new { @class = "form-control input-lg" })
+                                @Html.DropDownListFor(p => p.District, listDistricts, new { @class = "form-control input-lg", @id = "district" })
                                 <label class="floating-label">Quận</label>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.DropDownListFor(p => p.Ward, listWards, new { @class = "form-control input-lg" })
+                                @Html.DropDownListFor(p => p.Ward, listWards, new { @class = "form-control input-lg", @id = "ward" })
                                 <label class="floating-label">Phường</label>
                             </div>
                             <div class="form-group form-material floating">
@@ -125,7 +72,7 @@
                                         <label class="control-label">Từ</label>
                                     </div>
                                     <div class="col-sm-8">
-                                        @Html.TextBoxFor(p => p.StartTime, new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                                        @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
@@ -133,7 +80,7 @@
                                         <label class="control-label">Đến</label>
                                     </div>
                                     <div class="col-sm-8">
-                                        @Html.TextBoxFor(p => p.EndTime, new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                                        @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
                                     </div>
                                 </div>
                             </div>
@@ -146,7 +93,7 @@
 
 
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="panel">
                         <div class="panel-heading">
                             <h3 class="panel-title">Hình ảnh về địa điểm</h3>
@@ -609,6 +556,70 @@
             }
         });
     })();
+
+    function updateWard() {
+        var provinceName = $('#city').val();
+        var districtName = $('#district').val();
+        $.ajax({
+            url: '@Url.Action("GetWard")',
+            type: 'POST',
+            data: {
+                'provinceName': provinceName,
+                'districtName': districtName
+            },
+            dataType: 'json',
+            success: function (data) {
+                var ddl = $('#ward');
+                ddl.empty();
+                $(document.createElement('option'))
+                                        .attr('value', '')
+                                        .text('')
+                                        .appendTo(ddl);
+                ddl.addClass("empty");
+                $(data.AdditionalData).each(function () {
+                    $(document.createElement('option'))
+                        .attr('value', this.Value)
+                        .text(this.Text)
+                        .appendTo(ddl);
+                });
+            }
+        });
+    };
+
+    function updateDistrict() {
+        var provinceName = $('#city').val();
+        $.ajax({
+            url: '@Url.Action("GetDistrict")',
+            type: 'POST',
+            data: {
+                'provinceName': provinceName,
+            },
+            dataType: 'json',
+            success: function (data) {
+                var ddl = $('#district');
+                ddl.empty();
+                ddl.addClass("empty");
+                $(document.createElement('option'))
+                                        .attr('value', '')
+                                        .text('')
+                                        .appendTo(ddl);
+                $(data.AdditionalData).each(function () {
+                    $(document.createElement('option'))
+                        .attr('value', this.Value)
+                        .text(this.Text)
+                        .appendTo(ddl);
+                });
+                updateWard();
+            }
+        });
+    };
+
+    $("#city").on("change", function () {
+        updateDistrict();
+    });
+    $("#district").on("change", function () {
+        updateWard();
+    });
 
 </script>
 

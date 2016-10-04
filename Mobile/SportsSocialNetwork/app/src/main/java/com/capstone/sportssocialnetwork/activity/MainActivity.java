@@ -90,16 +90,11 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         switch (id) {
-            case R.id.nav_home:
+            case R.id.nav_manage_place:
                 break;
-            case R.id.nav_new:
+            case R.id.nav_manage_order:
                 break;
-            case R.id.nav_booking:
-                break;
-            case R.id.nav_setting:
-                break;
-            case R.id.nav_logout:
-                break;
+
         }
 
 

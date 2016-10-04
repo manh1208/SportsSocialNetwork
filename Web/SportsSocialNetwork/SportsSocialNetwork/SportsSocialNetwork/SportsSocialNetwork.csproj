@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
@@ -249,16 +249,31 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PlaceController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PlaceOwnerController.cs" />
+    <Compile Include="Areas\Admin\Models\PlaceDetailViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UpdateAccountViewModel.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
+    <Compile Include="Areas\Api\Controllers\FieldController.cs" />
+    <Compile Include="Areas\Api\Controllers\LikeController.cs" />
+    <Compile Include="Areas\Api\Controllers\OrderController.cs" />
+    <Compile Include="Areas\Api\Controllers\PlaceController.cs" />
+    <Compile Include="Areas\Api\Controllers\PostCommentController.cs" />
+    <Compile Include="Areas\Api\Controllers\PostController.cs" />
     <Compile Include="Areas\Moderator\ModeratorAreaRegistration.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\EventController.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\FieldController.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\OrderController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\PlaceController.cs" />
+    <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDatatableViewModel.cs" />
+    <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDetailViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\PlaceOwnerAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\FieldController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
+    <Compile Include="Controllers\SSNController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -544,7 +559,6 @@
     <Compile Include="Models\Entities\Services\AspNetUserLoginServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Entities\Services\AspNetUserRolesViewModel.cs" />
     <Compile Include="Models\Entities\Services\AspNetUserService.cs" />
     <Compile Include="Models\Entities\Services\AspNetUserServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
@@ -626,6 +640,7 @@
     <Compile Include="Models\Entities\Services\PlaceServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\PostCommentService.cs" />
     <Compile Include="Models\Entities\Services\PostCommentServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -746,6 +761,7 @@
     <Compile Include="Models\ViewModels\InvitationViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\LikeDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\LikeViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -758,6 +774,7 @@
     <Compile Include="Models\ViewModels\NotificationViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\OrderDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\OrderViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -770,9 +787,12 @@
     <Compile Include="Models\ViewModels\PlaceViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\PostCommentDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\PostCommentViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\PostDetailViewModel.cs" />
+    <Compile Include="Models\ViewModels\PostOveralViewModel.cs" />
     <Compile Include="Models\ViewModels\PostSportViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -783,6 +803,7 @@
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\SearchPlaceViewModel.cs" />
+    <Compile Include="Models\ViewModels\ResponseModel.cs" />
     <Compile Include="Models\ViewModels\SportViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -3233,6 +3254,16 @@
     <Content Include="Models\Entities\SsnEntities.edmx.diagram">
       <DependentUpon>SsnEntities.edmx</DependentUpon>
     </Content>
+    <Content Include="Areas\Admin\Views\PlaceOwner\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Place\Detail.cshtml" />
+    <Content Include="Areas\Admin\Views\Place\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Place\Update.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Event\Index.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Event\EventDetail.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Event\CreateEvent.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Field\Index.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Order\Index.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Order\OrderDetail.cshtml" />
     <Content Include="Content\assets\slick\config.rb" />
     <Content Include="Content\assets\slick\fonts\slick.eot" />
     <Content Include="Content\assets\slick\fonts\slick.ttf" />
@@ -3289,6 +3320,9 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_BookingFieldLayout.cshtml" />
     <Content Include="Views\Place\Index.cshtml" />
+    <Content Include="Views\SSN\Index.cshtml" />
+    <Content Include="Views\Shared\_SSNLayout.cshtml" />
+    <Content Include="Views\SSN\UserProfile.cshtml" />
     <Content Include="Views\Place\ViewDetail.cshtml" />
     <Content Include="Views\Field\Index.cshtml" />
     <Content Include="Views\Field\_Index.cshtml" />
@@ -3296,13 +3330,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Api\Controllers\" />
     <Folder Include="Areas\Api\Models\" />
+    <Folder Include="Areas\Api\Views\Like\" />
+    <Folder Include="Areas\Api\Views\PostComment\" />
+    <Folder Include="Areas\Api\Views\Post\" />
     <Folder Include="Areas\Api\Views\Shared\" />
     <Folder Include="Areas\Moderator\Controllers\" />
     <Folder Include="Areas\Moderator\Models\" />
     <Folder Include="Areas\Moderator\Views\Shared\" />
-    <Folder Include="Areas\PlaceOwner\Models\" />
     <Folder Include="Models\Hubs\" />
   </ItemGroup>
   <ItemGroup>

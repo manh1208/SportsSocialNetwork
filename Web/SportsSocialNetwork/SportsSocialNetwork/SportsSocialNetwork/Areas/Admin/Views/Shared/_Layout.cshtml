@@ -64,7 +64,7 @@
 
     <nav class="site-navbar navbar navbar-default navbar-fixed-top navbar-mega" role="navigation">
 
-        <div class="navbar-header" style="background:#FD9700">
+        <div class="navbar-header" style="background:#f55f00">
             <button type="button" class="navbar-toggle hamburger hamburger-close navbar-toggle-left hided"
                     data-toggle="menubar">
                 <span class="sr-only">Toggle navigation</span>
@@ -198,8 +198,7 @@
             <div>
                 <div>
                     <ul class="site-menu">
-                        <li class="site-menu-category">Tài khoản</li>
-                        <li class="site-menu-item has-sub ">
+                        <li class="site-menu-item has-sub open ">
                             <a href="javascript:void(0)" data-slug="dashboard">
                                 <i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
                                 <span class="site-menu-title">Quản lý tài khoản</span>
@@ -213,43 +212,20 @@
                                     </a>
                                 </li>
                                 <li class="site-menu-item">
-                                    <a class="animsition-link" href="dashboard/v2.html" data-slug="dashboard-v2">
+                                    <a class="animsition-link" href="@Url.Action("Index","PlaceOwner")" data-slug="dashboard-v2">
                                         <i class="site-menu-icon " aria-hidden="true"></i>
                                         <span class="site-menu-title">Quản lý chủ sân</span>
                                     </a>
                                 </li>
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="dashboard/v2.html" data-slug="dashboard-v2">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Quản lý Mod</span>
-                                    </a>
-                                </li>
                             </ul>
                         </li>
-                        <li class="site-menu-category">Địa điểm</li>
-
-                        <li class="site-menu-item has-sub ">
-                            <a href="javascript:void(0)" data-slug="dashboard">
+                        <li class="site-menu-item">
+                            <a href="@Url.Action("Index","Place")" data-slug="dashboard">
                                 <i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
                                 <span class="site-menu-title">Quản lý địa điểm</span>
                             </a>
-                            <ul class="site-menu-sub">
-                                <li class="site-menu-item ">
-                                    <a class="animsition-link" href="@Url.Action("Index","Account")" data-slug="dashboard-v1">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Danh sách địa điểm</span>
-                                    </a>
-                                </li>
-                                <li class="site-menu-item ">
-                                    <a class="animsition-link" href="@Url.Action("Index","Account")" data-slug="dashboard-v1">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Địa điểm chờ duyệt</span>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>  
-                        <li class="site-menu-category">Thể thao</li>
+                           
+                        </li>
                         <li class="site-menu-item has-sub ">
                             <a href="javascript:void(0)" data-slug="dashboard">
                                 <i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
@@ -268,7 +244,7 @@
    
 
     <!-- Page -->
-    <div class="page" style="background-color:#808080">
+    <div class="page" style="font-size:1.1em">
         <div class="page-content padding-30 container-fluid">
             @RenderBody()
         </div>

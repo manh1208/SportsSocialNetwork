@@ -8,9 +8,10 @@
     [Ward]        NVARCHAR (255) NOT NULL,
     [Address]     NVARCHAR (255) NOT NULL,
     [PhoneNumber] VARCHAR (20)   NOT NULL,
-    [Description] NVARCHAR (255) NOT NULL,
+    [Description] NVARCHAR (MAX) NOT NULL,
     [Latitude]    FLOAT (53)     NOT NULL,
     [Longitude]   FLOAT (53)     NOT NULL,
+    [Avatar]      NVARCHAR (255) NOT NULL,
     [Status]      INT            NOT NULL,
     [Active]      BIT            NOT NULL,
     [StartTime]   TIME (7)       NOT NULL,
@@ -19,6 +20,8 @@
     CONSTRAINT [PK_Place] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Place_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id])
 );
+
+
 
 
 

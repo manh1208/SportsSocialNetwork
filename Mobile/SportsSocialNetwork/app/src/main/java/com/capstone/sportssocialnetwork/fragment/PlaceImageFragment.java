@@ -25,7 +25,7 @@ public class PlaceImageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_place_image, container, false);
+        View v = inflater.inflate(R.layout.fragment_profile_image, container, false);
         initView(v);
         prepareData();
         return v;
@@ -41,6 +41,6 @@ public class PlaceImageFragment extends Fragment {
     }
 
     private void initView(View v) {
-        lvPlaceImage = (GridView) v.findViewById(R.id.lv_place_image);
+        lvPlaceImage = (GridView) v.findViewById(R.id.lv_profile_image);
     }
 }

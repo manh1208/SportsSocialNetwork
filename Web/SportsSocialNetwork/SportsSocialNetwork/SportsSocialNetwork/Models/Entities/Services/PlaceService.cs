@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SportsSocialNetwork.Models.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -17,6 +18,12 @@ namespace SportsSocialNetwork.Models.Entities.Services
         void savePlace(Place place);
         IEnumerable<Place> getAllPlace();
         IEnumerable<Place> getPlace(string sport, string province, string district);
+        IEnumerable<Place> GetAll();
+
+        Place GetPlaceById(int id);
+
+        Place ChangeStatus(int id, int status);
+        IQueryable<Place> GetPlaces(JQueryDataTableParamModel request, out int totalRecord);
 
         #endregion
 
@@ -24,7 +31,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
     }
 
-    public partial class PlaceService: IPlaceService
+    public partial class PlaceService : IPlaceService
     {
 
         #region Code from here
@@ -142,7 +149,58 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 this.Update(searchPlace);
                 this.Save();
             }
+        }
 
+        public IEnumerable<Place> GetAll()
+        {
+            IEnumerable<Place> placeList;
+            placeList = this.GetActive();
+            return placeList;
+        }
+
+        public Place GetPlaceById(int id)
+        {
+            Place place = this.FirstOrDefault(x => x.Id == id);
+            if (place != null)
+            {
+                return place;
+            }
+            return null;
+        }
+
+        public Place ChangeStatus(int id, int status)
+        {
+            Place place = this.FirstOrDefault(x => x.Id == id);
+            this.Get();
+            if (place != null)
+            {
+                place.Status = status;
+                this.Save();
+                return place;
+            }
+            return null;
+        }
+
+        public IQueryable<Place> GetPlaces(JQueryDataTableParamModel request, out int totalRecord)
+        {
+            var filter = request.sSearch;
+            var list1 = this.GetActive();
+
+            var list = list1.Where(
+                u => filter == null ||
+                u.Name.ToLower().Contains(filter.ToLower()) ||
+                u.Name.ToLower().Contains(filter.ToLower()) ||
+                u.Email.ToLower().Contains(filter.ToLower())
+                );
+
+            //list = list.Where(u => u.AspNetRoles.Where(r => r.Id.Equals(UserRole.Member.ToString())).Count()>0);
+            totalRecord = list.Count();
+            var result = list.OrderBy(u => u.Name)
+                .Skip(request.iDisplayStart)
+                             .Take(request.iDisplayLength);
+
+            return result;
+          
         }
 
         #endregion

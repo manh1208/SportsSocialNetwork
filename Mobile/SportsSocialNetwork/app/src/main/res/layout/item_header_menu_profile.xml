@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="20sp"
+        android:paddingTop="10sp"
+        android:paddingBottom="10sp"
+        android:paddingRight="20sp">
+        <com.capstone.sportssocialnetwork.custom.RoundedImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="80sp"
+            android:layout_height="80sp"
+            android:src="@drawable/img_default_avatar"
+            android:scaleType="fitCenter"
+            android:padding="10sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="20sp"
+            android:layout_toRightOf="@+id/iv_avatar"
+            android:layout_centerVertical="true"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="Nguyễn Văn Mạnh"
+                android:textColor="#000"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:text="Xem trang cá nhân"
+                android:layout_marginTop="5sp"
+                android:textColor="#8b8b8b"/>
+        </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="5sp"
+        android:background="@color/separator"/>
+</LinearLayout>

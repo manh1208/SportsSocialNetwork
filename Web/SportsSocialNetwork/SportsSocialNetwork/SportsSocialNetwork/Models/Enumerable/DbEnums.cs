@@ -33,4 +33,29 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("Khác")]
         Other = 3,
     }
+
+    public enum PlaceStatus
+    {
+        [Description("Đang hoạt động")]
+        Active = 1,
+        [Description("Từ chối")]
+        Unapproved = 2,
+        [Description("Đang chờ")]
+        Pending = 3,
+        [Description("Đang sửa chữa")]
+        Repairing = 4,
+
+    }
+
+    public enum UserStatus
+    {
+        [Description("Đang hoạt động")]
+        Active = 1,
+        [Description("Từ chối")]
+        Unapproved = 2,
+        [Description("Đang chờ")]
+        Pending = 3,
+        [Description("Bị cấm")]
+        Banned = 4,
+    }
 }

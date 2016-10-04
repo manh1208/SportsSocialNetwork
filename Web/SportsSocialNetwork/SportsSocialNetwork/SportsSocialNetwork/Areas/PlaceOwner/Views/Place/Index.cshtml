@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Danh sách các địa điểm";
 }
 
 <div class="panel">
@@ -41,7 +41,7 @@
         var oTable = $("#listPlaceTable").dataTable();
         oTable._fnPageChange(0);
         oTable._fnAjaxUpdate();
-    }
+    };
 
     function InitDatatable() {
         $("#listPlaceTable").DataTable({
@@ -117,15 +117,11 @@
                 {
                     "aTargets": [2],
                     "bSortable": false,
-                    "mRender": function(data, type, o) {
-                        if(o[2] == 1) {
-                            return "<div class='well well-sm well-success'>"
-                                    + "<span>Đang hoạt động</span>"
-                                    + "</div>";
+                    "mRender": function (data, type, o) {
+                        if (o[2] == 1) {
+                            return "<span class='label label-lg label-outline label-success'>Đang hoạt động</span>";
                         } else {
-                            return "<div class='well well-sm well-warning'>"
-                                    + "<span>Tạm ngưng</span>"
-                                    + "</div>";
+                            return "<span class='label label-lg label-outline label-danger'>Đang hoạt động</span>";
                         }
                     }
                 },
@@ -133,14 +129,14 @@
                     "aTargets": [3],
                     "bSortable": false,
                     "mRender": function (data, type, o) {
-                        return "<a href='/PlaceOwner/Place/PlaceDetail/"+ o[0] +"' class='btn btn-info'><i class='icon wb-pencil' aria-hidden='true'></i></a>";
+                        return "<a href='/PlaceOwner/Place/PlaceDetail/" + o[0] + "' class='btn btn-info'><i class='icon wb-pencil' aria-hidden='true'></i></a>";
                     }
                 }
 
             ],
 
         });
-    }
+    };
 
     $(document).ready(function () {
         InitDatatable();

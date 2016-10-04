@@ -1,5 +1,9 @@
-﻿using SkyWeb.DatVM.Mvc;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
+using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Areas.Admin.Models;
+using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
@@ -11,11 +15,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace SportsSocialNetwork.Areas.Admin.Controllers
 {
     public class AccountController : BaseController
     {
+
+        private ApplicationUserManager _userManager;
+
+
+        public AccountController()
+        {
+        }
+
+        public AccountController(ApplicationUserManager userManager)
+        {
+            UserManager = userManager;
+        }
+
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+
+
         // GET: Admin/Account
         public ActionResult Index()
         {
@@ -36,6 +68,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                         a.Email,
                         a.UserName,
                         a.AspNetRoles.FirstOrDefault().Name,
+                        a.Status,
                         a.Id
 
                 }).ToArray();
@@ -224,7 +257,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
             try
             {
                 var service = this.Service<IAspNetUserService>();
-
+                
                 AspNetUser user = service.Get(model.Id);
                 user.UserName = model.UserName;
                 user.Email = model.Email;
@@ -237,9 +270,17 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                 user.Birthday = model.Birthday;
                 user.Gender = model.Gender;
                 service.Update(user);
+                
+                var roleService = this.Service<IAspNetRoleService>();
+                AspNetRole newRole = roleService.Get(model.RoleId);
+                var roles = UserManager.GetRoles(user.Id).ToArray();
+                
+                //var oldRoles = Roles.GetRolesForUser(user.UserName);
+                UserManager.RemoveFromRoles(user.Id, roles);
+                UserManager.AddToRole(user.Id, newRole.Name);
                 result.Succeed = true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 result.Succeed = false;
             }

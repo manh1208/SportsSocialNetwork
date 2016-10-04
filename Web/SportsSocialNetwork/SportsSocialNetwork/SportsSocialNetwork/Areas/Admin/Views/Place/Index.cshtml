@@ -1,0 +1,273 @@
+﻿@using SportsSocialNetwork.Models.Enumerable;
+@using SportsSocialNetwork.Models.Utilities;
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    dt, dd {
+        font-size: 15px;
+        color: #000;
+    }
+
+    dt {
+        font-weight: bold;
+    }
+    
+</style>
+<div class="panel">
+    <div class="panel-heading">
+        <h2 class="panel-title">Danh sách sân</h2>
+    </div>
+</div>
+<div class="panel">
+    <div class="panel-body">
+        <div class="box">
+            <div class="box-header">
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="account-table" class="table table-hover dataTable table-bordered dt-responsive nowrap" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tên sân</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Tên chủ sân</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                    <th>Duyệt</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-warning" id="modelDetail" aria-hidden="true"
+     aria-labelledby="modelDetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div id="detail-modal-container"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-warning" id="modalUpdate" aria-hidden="true"
+     aria-labelledby="modalViewdetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="update-modal-container"></div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        (function (document, window, $) {
+            'use strict';
+
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
+            });
+        })(document, window, jQuery);
+
+        $(document).ready(function () {
+            initEventTable();
+        });
+        function initEventTable() {
+            var colDefs = [
+                  {
+                      "aTargets": [1, 2, 3, 4],
+                      "bSortable": false,
+                  },
+                  {
+                      "aTargets": [5],
+                      "mRender": function (data, type, row) {
+                          var label = '';
+                          if (data == parseInt('@((int)PlaceStatus.Active)')) {
+                              label = '<span class="label label-outline label-success label-lg">@Utils.GetEnumDescription(PlaceStatus.Active).ToString()</span>';
+                          }else if (data == parseInt('@((int)PlaceStatus.Unapproved)')) {
+                              label = '<span class="label label-outline label-danger label-lg">@Utils.GetEnumDescription(PlaceStatus.Unapproved)</span>';
+                          }else if (data==parseInt('@((int)PlaceStatus.Pending)')){
+                              label = '<span class="label label-outline label-warning label-lg">@Utils.GetEnumDescription(PlaceStatus.Pending)</span>';
+                          } else if (data == parseInt('@((int)PlaceStatus.Repairing)')) {
+                              label = '<span class="label label-outline label-warning label-lg">@Utils.GetEnumDescription(PlaceStatus.Repairing)</span>';
+                          }
+
+                          return label;
+                      },
+                      "bSortable": false,
+                  },
+                  {
+                      "aTargets": [6],
+                      "mRender": function (data, type, row) {
+                          var previewBtn = '<a class="btn btn-success" data-target="#modalViewdetail" onclick="showDetailModal(\'' + data + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
+                          var updateBtn = '<a class="btn btn-warning" data-target="#modalUpdate" data-toggle="modal" onclick="showUpdateModal(\'' + data + '\')" href="#"><i class="fa fa-pencil-square-o"></i></a>';
+                          var deleteBtn = '<a class="btn btn-danger" data-style="zoom-in" data-plugin="ladda" onclick="showConfirmDeleteAccount(\'' + data + '\')"  href="#"> <span class="ladda-label"><i class="fa fa-trash-o "></i></span></a>';
+                          return previewBtn + '&nbsp;' + updateBtn + '&nbsp;' + deleteBtn;
+                      },
+                      "bSortable": false
+                  },
+                  {
+                      "aTargets": [7],
+                      "mRender": function (data, type, row) {
+                          var approveBtn = "";
+                          if (row[5] == parseInt('@((int)PlaceStatus.Unapproved)')) {
+                              approveBtn = '<div class="btn-group">'
+                                      + '<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" >'
+                                          + '<span class="caret"></span>'
+                                      + '</button>'
+                                      + '<ul class="dropdown-menu">'
+                                         + '<li><a href="#" onclick="approvePlace(' + row[6] + ')">Chấp nhận</a></li>'
+                                      + '</ul>'
+                                  + '</div>'
+                          } else if (row[5] == parseInt('@((int)PlaceStatus.Pending)')) {
+                              approveBtn = '<div class="btn-group">'
+                                                          + '<button type="button" class="btn btn-warning  dropdown-toggle" data-toggle="dropdown">'
+                                                              + '<span class="caret"></span>'
+                                                          + '</button>'
+                                                          + '<ul class="dropdown-menu">'
+                                                             + '<li><a href="#" onclick="approvePlace(' + row[6] + ')">Chấp nhận</a></li>'
+                                                             + '<li><a href="#" onclick="rejectPlace(' + row[6] + ')">Từ chối</a></li>'
+                                                          + '</ul>'
+                                                   + '</div>'
+                          } else {
+                              approveBtn = '<div class="btn-group">'
+                                     + '<button type="button" class="btn btn-success  dropdown-toggle" data-toggle="dropdown" >'
+                                         + '<span class="caret"></span>'
+                                     + '</button>'
+                                     + '<ul class="dropdown-menu">'
+                                        + '<li><a href="#" onclick="rejectPlace(' + row[6] + ')">Từ chối</a></li>'
+                                     + '</ul>'
+                                 + '</div>'
+                          }
+                          return approveBtn;
+                      },
+                      "bSortable": false
+                  }
+            ];
+            var param = {
+                colDefs: colDefs,
+                url: '@Url.Action("IndexList")',
+                data: []
+            };
+            $('#account-table').customDataTable(param);
+        }
+
+        function showDetailModal(id) {
+            $.ajax({
+                url: '@Url.Action("Detail")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#detail-modal-container').html(data);
+                    $('#modelDetail').modal('show');
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
+        function showUpdateModal(id) {
+            $.ajax({
+                url: '@Url.Action("Update")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#update-modal-container').html(data);
+                    $('#modalUpdate').modal('show');
+                    scriptForPartialView();
+
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
+        function showConfirmDeleteAccount(id) {
+            showConfirmDeleteItem("Bạn có chắc chắn muốn xóa tài khoản này không?",
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("Delete")',
+                            data: { id: id },
+                            success: function (data) {
+                                $("#account-table").reloadDataTable();
+                                if (data.Succeed) {
+                                    showMessage("Xóa thành viên thành công", "success", "OK");
+                                } else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                }
+                            },
+                            error: function (error) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        });
+                    }
+                });
+        }
+
+        function rejectPlace(id) {
+            showConfirmMessage("Từ chối sân này?",
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("RejectPlace")',
+                            data: { id: id },
+                            success: function (data) {
+                                $("#account-table").reloadDataTable();
+                                if (data.Succeed) {
+                                    showMessage("Từ chối sân thành công!", "success", "OK");
+                                } else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                }
+                            },
+                            error: function (error) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        });
+                    }
+                });
+        }
+
+        function approvePlace(id) {
+            showConfirmMessage("Chấp nhận sân này?",
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("ApprovePlace")',
+                            data: { id: id },
+                            success: function (data) {
+                                $("#account-table").reloadDataTable();
+                                if (data.Succeed) {
+                                    showMessage("Chấp nhận sân thành công!", "success", "OK");
+                                } else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                }
+                            },
+                            error: function (error) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        });
+                    }
+                });
+        }
+
+
+    </script>
+}
+
