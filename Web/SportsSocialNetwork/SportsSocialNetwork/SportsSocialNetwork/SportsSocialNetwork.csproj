@@ -252,7 +252,12 @@
     <Compile Include="Areas\Admin\Models\UpdateAccountViewModel.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Moderator\ModeratorAreaRegistration.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\EventController.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\FieldController.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\OrderController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\PlaceController.cs" />
+    <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDatatableViewModel.cs" />
+    <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDetailViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\PlaceOwnerAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -3225,6 +3230,12 @@
     <Content Include="Models\Entities\SsnEntities.edmx.diagram">
       <DependentUpon>SsnEntities.edmx</DependentUpon>
     </Content>
+    <Content Include="Areas\PlaceOwner\Views\Event\Index.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Event\EventDetail.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Event\CreateEvent.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Field\Index.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Order\Index.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Order\OrderDetail.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -3282,7 +3293,6 @@
     <Folder Include="Areas\Moderator\Controllers\" />
     <Folder Include="Areas\Moderator\Models\" />
     <Folder Include="Areas\Moderator\Views\Shared\" />
-    <Folder Include="Areas\PlaceOwner\Models\" />
     <Folder Include="Models\Hubs\" />
   </ItemGroup>
   <ItemGroup>

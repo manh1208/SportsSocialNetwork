@@ -1,0 +1,181 @@
+﻿
+@{
+    ViewBag.Title = "Danh sách các sự kiện";
+}
+
+<div class="panel">
+    <div class="panel-body">
+        <a href="/PlaceOwner/Event/CreateEvent" class="btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> Tạo mới sự kiện</a>
+    </div>
+</div>
+<div class="panel">
+    <div class="panel-body">
+        <table class="table table-striped" id="listEventTable">
+            <thead>
+                <tr>
+                    <th>Số thứ tự</th>
+                    <th>Tên sự kiện</th>
+                    <th>Hình ảnh</th>
+                    <th>Ngày bắt đầu</th>
+                    <th>Ngày kết thúc</th>
+                    <th>Trạng thái</th>
+                    <th>Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script>
+
+        (function (document, window, $) {
+            'use strict';
+
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
+            });
+        })(document, window, jQuery);
+
+        function RefreshTable() {
+            var oTable = $("#listEventTable").dataTable();
+            oTable._fnPageChange(0);
+            oTable._fnAjaxUpdate();
+        };
+
+        function InitDatatable() {
+            $("#listEventTable").DataTable({
+                "bRetrieve": true,
+                "bServerSide": true,
+                "bScrollCollapse": true,
+                "bSort": true,
+                "sAjaxSource": "/PlaceOwner/Event/GetData",
+                "bProcessing": true,
+                @*"fnServerParams": function (aoData) {
+                    aoData.push({ "name": "id", "value": @ViewBag.storeId });
+                },*@
+                "aLengthMenu": [10, 20, 50],
+                "oLanguage": {
+                    "sSearch": "Tìm kiếm:",
+                    "sZeroRecords": "Không có dữ liệu phù hợp",
+                    "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
+                    "sEmptyTable": "Không có dữ liệu",
+                    "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
+                    "sLengthMenu": "Hiển thị _MENU_ dòng",
+                    "sProcessing": "Đang xử lý...",
+                    "oPaginate": {
+                        "sPrevious": "Trang trước",
+                        "sNext": "Trang kế"
+                    }
+                },
+
+                @*"fnDrawCallback": function (settings) {
+                    $(':checkbox').change(function () {
+                        if ($(this).prop('checked') == true) {
+                            $.ajax({
+                                url: "/BlogPostManage/@ViewBag.storeId/@ViewBag.storeName/BlogPost/ChangeStatus",
+                                type: 'POST',
+                                data: {
+                                    'blogPostId': $(this).val(),
+                                    'status': 'Activate'
+                                },
+                                dataType: 'json',
+                                success: function (result) {
+                                    ReDrawDatatable("listBlogPostTable");
+                                }
+                            });
+                        } else {
+                            $.ajax({
+                                url: "/BlogPostManage/@ViewBag.storeId/@ViewBag.storeName/BlogPost/ChangeStatus",
+                                type: 'POST',
+                                data: {
+                                    'blogPostId': $(this).val(),
+                                    'status': 'Deactivate'
+                                },
+                                dataType: 'json',
+                                success: function (result) {
+                                    ReDrawDatatable("listBlogPostTable");
+                                }
+                            });
+                        }
+                    });
+                },*@
+                "aoColumnDefs": [
+                    {
+                        "aTargets": [0],
+                        "mRender": function (data, type, o) {
+                            var i = 0;
+                            return ++i;
+                        }
+                    },
+                    {
+                        "aTargets": [1],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            return o[1];
+                        }
+                    },
+                    {
+                        "aTargets": [2],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            return "<img src='" + o[5] + "' width='100' />";
+                        }
+                    },
+                    {
+                        "aTargets": [3],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            var date = new Date(parseInt(o[3].substr(6)));
+                            var month = parseInt(date.getMonth()) + 1;
+                            var formattedDate = date.getDate() + "/" + month + "/" + date.getFullYear();
+                            return "<p>" + formattedDate + "</p>";
+                        }
+                    },
+                    {
+                        "aTargets": [4],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            var date = new Date(parseInt(o[4].substr(6)));
+                            var month = parseInt(date.getMonth()) + 1;
+                            var formattedDate = date.getDate() + "/" + month + "/" + date.getFullYear();
+                            return "<p>" + formattedDate + "</p>";
+                        }
+                    },
+                    {
+                        "aTargets": [5],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            if (o[6] == 1) {
+                                return "<span class='label label-lg label-outline label-success'>Đang diễn ra</span>";
+                            } else {
+                                return "<span class='label label-lg label-outline label-warning'>Kết thúc</span>";
+                            }
+                        }
+                    },
+                    {
+                        "aTargets": [6],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            return "<a href='/PlaceOwner/Event/EventDetail/" + o[0] + "' class='btn btn-info'><i class='icon wb-pencil' aria-hidden='true'></i></a>";
+                        }
+                    }
+
+                ],
+
+            });
+        };
+
+        $(document).ready(function () {
+            InitDatatable();
+            RefreshTable();
+            //loadlist();
+        });
+
+    </script>
+
+    }

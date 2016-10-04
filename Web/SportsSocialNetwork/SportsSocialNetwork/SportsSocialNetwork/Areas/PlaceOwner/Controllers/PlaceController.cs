@@ -110,7 +110,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         {
             var _placeService = this.Service<IPlaceService>();
             _placeService.savePlace(place);
-            if (uploadImages != null && uploadImages.ToList().Count > 0)
+            if (uploadImages.ToList()[0] != null && uploadImages.ToList().Count > 0)
             {
                 var _placeImageService = this.Service<IPlaceImageService>();
                 _placeImageService.saveImage(place.Id, uploadImages);
