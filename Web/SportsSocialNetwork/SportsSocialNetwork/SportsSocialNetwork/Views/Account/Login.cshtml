@@ -17,7 +17,7 @@
     <title>Login | SSN</title>
 
     <link rel="apple-touch-icon" href="../../Content/assets/images/apple-touch-icon.png">
-    <link rel="shortcut icon" href="../../Content/assets/images/favicon.ico">
+    <link rel="shortcut icon" href="~/Content/images/logo_new.png">
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="../../Content/assets/css/bootstrap.min.css">
@@ -38,70 +38,78 @@
     <!-- Fonts -->
     <link rel="stylesheet" href="../../Content/assets/fonts/web-icons/web-icons.min.css">
     <link rel="stylesheet" href="../../Content/assets/fonts/brand-icons/brand-icons.min.css">
-
-
-    <!--[if lt IE 9]>
-      <script src="../../Content/assets/vendor/html5shiv/html5shiv.min.js"></script>
-      <![endif]-->
-    <!--[if lt IE 10]>
-      <script src="../../Content/assets/vendor/media-match/media.match.min.js"></script>
-      <script src="../../Content/assets/vendor/respond/respond.min.js"></script>
-      <![endif]-->
-    <!-- Scripts -->
     <script src="../../Content/assets/vendor/modernizr/modernizr.js"></script>
     <script src="../../Content/assets/vendor/breakpoints/breakpoints.js"></script>
     <script>
-    Breakpoints();
+        Breakpoints();
     </script>
+    <style>
+        p, label, a {
+            font-size: large;
+        }
+
+        .text-danger {
+            text-align: left;
+        }
+    </style>
 </head>
 <body class="page-login layout-full">
-    <!--[if lt IE 8]>
-          <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-      <![endif]-->
     <!-- Page -->
     <div class="page animsition vertical-align text-center" data-animsition-in="fade-in"
          data-animsition-out="fade-out">
         >
         <div class="page-content vertical-align-middle">
             <div class="brand">
-                <img class="brand-img" src="../../Content/assets/images/logo.png" alt="...">
+                <img class="brand-img" src="~/Content/images/logo_new.png" alt="..." style="max-width:100px">
                 <h2 class="brand-text">SPORT SOCIAL NETWORK</h2>
             </div>
-            <p>Đăng nhập</p>
-            <form method="post" action="login.html">
+            <p>Đăng nhập để bắt đầu</p>
+            <form method="post" action="@Url.Action("Login")">
+                @Html.AntiForgeryToken()
+                <div class="summary-errors alert alert-danger alert-dismissible" style="display: block; text-align:left">
+                    <button type="button" class="close" aria-label="Close" data-dismiss="alert">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    @Html.ValidationSummary()
+                </div>
+
                 <div class="form-group">
-                    <label class="sr-only" for="inputName">Tài khoản</label>
-                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder ="Tài khoản", id= "inputName" })
+                    @*<label class="sr-only" for="inputName">Tài khoản</label>*@
+
+
+                    <div class="input-group" id="inputUsername">
+                        <span class="input-group-addon">
+                            <i class="icon wb-envelope" aria-hidden="true"></i>
+                        </span>
+                        @Html.TextBoxFor(m => m.Username, new { @class = "form-control input-lg", placeholder = "Tên tài khoản", id = "inputName" })
+
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Username, "", new { @class = "help-block text-danger" })
                 </div>
                 <div class="form-group">
-                    <label class="sr-only" for="inputPassword">Mật khẩu</label>
-                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Mật khẩu", id = "inputPassword" })
-                    
+
+                    <div class="input-group" id="inputPassword">
+                        <span class="input-group-addon">
+                            <i class="icon wb-lock" aria-hidden="true"></i>
+                        </span>
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control input-lg", placeholder = "Mật khẩu", id = "inputName" })
+
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "help-block text-danger" })
+
                 </div>
                 <div class="form-group clearfix">
                     <div class="checkbox-custom checkbox-inline pull-left">
-                        <input type="checkbox" id="inputCheckbox" name="checkbox">
+                        @Html.CheckBoxFor(m => m.RememberMe, new { @id = "inputCheckbox" })
+
                         <label for="inputCheckbox">Nhớ tài khoản này</label>
                     </div>
-                    <a class="pull-right" href="forgot-password.html">Quên mật khẩu?</a>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
-            </form>
-            <p>Không có tài khoản? <a href="register.html">Tạo ngay</a></p>
+                    @Html.ActionLink("Quên mật khẩu?", "ForgotPassword", new { @class = "pull-right" })
 
-            <footer class="page-copyright">
-                <div class="social">
-                    <a href="javascript:void(0)">
-                        <i class="icon bd-twitter" aria-hidden="true"></i>
-                    </a>
-                    <a href="javascript:void(0)">
-                        <i class="icon bd-facebook" aria-hidden="true"></i>
-                    </a>
-                    <a href="javascript:void(0)">
-                        <i class="icon bd-dribbble" aria-hidden="true"></i>
-                    </a>
                 </div>
-            </footer>
+                <button type="submit" class="btn btn-primary btn-block btn-lg">Đăng nhập</button>
+            </form>
+            <p>Không có tài khoản? <a href="@Url.Action("Register")">Tạo ngay</a></p>
         </div>
     </div>
     <!-- End Page -->
@@ -118,7 +126,7 @@
     <script src="../../Content/assets/vendor/switchery/switchery.min.js"></script>
     <script src="../../Content/assets/vendor/intro-js/intro.js"></script>
     <script src="../../Content/assets/vendor/screenfull/screenfull.js"></script>
-    <script src="../../Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
+    @*<script src="../../Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>*@
 
     <script src="../../Content/assets/vendor/jquery-placeholder/jquery.placeholder.js"></script>
 
@@ -135,79 +143,59 @@
 
     <script src="../../Content/assets/js/components/asscrollable.js"></script>
     <script src="../../Content/assets/js/components/animsition.js"></script>
-    <script src="../../Content/assets/js/components/slidepanel.js"></script>
+    @*<script src="../../Content/assets/js/components/slidepanel.js"></script>*@
     <script src="../../Content/assets/js/components/switchery.js"></script>
     <script src="../../Content/assets/js/components/jquery-placeholder.js"></script>
 
     <script>
-    (function(document, window, $) {
-      'use strict';
+        (function (document, window, $) {
+            'use strict';
 
-      var Site = window.Site;
-      $(document).ready(function() {
-        Site.run();
-      });
-    })(document, window, jQuery);
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
+            });
+        })(document, window, jQuery);
+        $(document).ready(function () {
+            @if (ViewData.ModelState["LoginError"] == null){
+                <text>
+            $('.summary-errors').hide();
+            </text>
+            }else{
+               <text>
+            $('.summary-errors').show();
+            </text>
+            }
+
+            @if ((ViewData.ModelState["Username"]!=null && ViewData.ModelState["Username"].Errors.Count >0))
+            {
+                 <text>
+            $('#inputUsername').addClass("has-error")
+            </text>
+            }else
+            {
+                  <text>
+            $('#inputUsername').removeClass("has-error")
+            </text>
+            }
+            @if ((ViewData.ModelState["Password"] != null && ViewData.ModelState["Password"].Errors.Count > 0))
+            {
+                <text>
+            $('#inputPassword').addClass("has-error")
+           </text>
+            }else
+            {
+                <text>
+            $('#inputPassword').removeClass("has-error")
+          </text>
+            }
+
+        });
     </script>
 
 </body>
 
 </html>
-
-
-<!--<h2>@ViewBag.Title.</h2>
-<div class="row">
-    <div class="col-md-8">
-        <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <h4>Use a local account to log in.</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe)
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Log in" class="btn btn-default" />
-                    </div>
-                </div>
-                <p>
-                    @Html.ActionLink("Register as a new user", "Register")
-                </p>
-                @* Enable this once you have account confirmation enabled for password reset functionality
-                    <p>
-                        @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                    </p>*@
-            }
-        </section>
-    </div>
-    <div class="col-md-4">
-        <section id="socialLoginForm">
-            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-        </section>
-    </div>
-</div>-->
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

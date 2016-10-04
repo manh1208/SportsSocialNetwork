@@ -21,6 +21,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         IQueryable<AspNetUser> GetPlaceOwner(JQueryDataTableParamModel request, out int totalRecord);
 
+        AspNetUser FindUserByUserName(string username);
+
         #endregion
 
         void test();
@@ -94,6 +96,11 @@ namespace SportsSocialNetwork.Models.Entities.Services
                              .Take(request.iDisplayLength);
 
             return result;
+        }
+
+        public AspNetUser FindUserByUserName(string username)
+        {
+            return this.FirstOrDefaultActive(u => u.UserName.Equals(username));
         }
 
         #endregion
