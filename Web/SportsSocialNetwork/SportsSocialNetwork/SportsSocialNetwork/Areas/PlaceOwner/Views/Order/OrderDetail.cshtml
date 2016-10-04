@@ -1,0 +1,152 @@
+﻿@model SportsSocialNetwork.Models.Entities.Order
+@{
+    ViewBag.Title = "Chi tiết đơn đặt sân";
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="modal-title">Chi tiết đặt sân</h4>
+</div>
+<div class="modal-body">
+    <div class="panel panel-bordered">
+        <div class="panel-heading">
+            <div class="col-md-6">
+                <img src="@Model.Field.FieldImages" style="max-width:100%; max-height:100%; display:block" />
+            </div>
+            <div class="col-md-6">
+                <ul class="list-group list-group-full">
+                    <li class="list-group-item">@Model.Field.Name</li>
+                    <li class="list-group-item">Địa chỉ: @Model.Field.Place.Address</li>
+                    <li class="list-group-item">Loại sân: @Model.Field.FieldType.Name</li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Người đặt: </strong>@Model.AspNetUser.FullName</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Số điện thoại: </strong>@Model.AspNetUser.PhoneNumber</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Ngày giờ đặt: </strong>@Model.CreateDate</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Thành tiền: </strong>@Model.Price</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    @{
+                        if (Model.PaidType == 1)
+                        {
+                            <strong>Phương thức thanh toán: </strong><span class="label label-lg label-outline label-info">Online</span>
+                        }
+                        else
+                        {
+                            <strong>Phương thức thanh toán: </strong><span class="label label-lg label-outline label-dark">Tiền mặt</span>
+                        }
+                    }
+
+                </div>
+                <div class="col-md-6">
+                    @{
+                        if (Model.PaidType == 1)
+                        {
+                            <strong>Tình trạng đơn đặt sân: </strong><span class="label label-lg label-outline label-warning">Chưa thanh toán</span>
+                        }
+                        else if (Model.PaidType == 2)
+                        {
+                            <strong>Tình trạng đơn đặt sân: </strong><span class="label label-lg label-outline label-success">Đã thanh toán</span>
+                        }
+                        else
+                        {
+                            <strong>Tình trạng đơn đặt sân: </strong><span class="label label-lg label-outline label-success">Đã hủy</span>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="col-md-4">
+        <button class="btn btn-danger">Không chấp nhận</button>
+    </div>
+    <div class="col-md-4">
+        <button class="btn btn-success">Chấp nhận</button>
+    </div>
+    <div class="col-md-4">
+        <button class="btn btn-warning">Đóng đơn hàng</button>
+    </div>
+</div>
+
+
+@*<div class="panel panel-bordered">
+    <div class="panel-heading">
+        <div class="col-md-5">
+            <img src="@Model.Field.FieldImages" style="max-width:100%; max-height:100%; display:block" />
+        </div>
+        <div class="col-md-7">
+            <ul class="list-group list-group-full">
+                <li class="list-group-item">@Model.Field.Name</li>
+                <li class="list-group-item">Địa chỉ: @Model.Field.Place.Address</li>
+                <li class="list-group-item">Loại sân: @Model.Field.FieldType.Name</li>
+            </ul>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Người đặt: </strong>@Model.AspNetUser.FullName</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Số điện thoại: </strong>@Model.AspNetUser.PhoneNumber</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Ngày giờ đặt: </strong>@Model.CreateDate</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Thành tiền: </strong>@Model.Price</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                @{
+                    if (Model.PaidType == 1)
+                    {
+                        <strong>Phương thức thanh toán: </strong><span class="label label-lg label-outline label-info">Online</span>
+                    }
+                    else
+                    {
+                        <strong>Phương thức thanh toán: </strong><span class="label label-lg label-outline label-dark">Tiền mặt</span>
+                    }
+                }
+                
+            </div>
+            <div class="col-md-6">
+                @{
+                    if (Model.PaidType == 1)
+                    {
+                        <strong>Tình trạng đơn đặt sân: </strong><span class="label label-lg label-outline label-warning">Chưa thanh toán</span>
+                    }
+                    else if (Model.PaidType == 2)
+                    {
+                        <strong>Tình trạng đơn đặt sân: </strong><span class="label label-lg label-outline label-success">Đã thanh toán</span>
+                    }
+                    else
+                    {
+                        <strong>Tình trạng đơn đặt sân: </strong><span class="label label-lg label-outline label-success">Đã hủy</span>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>*@
