@@ -20,12 +20,27 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             return View();
         }
 
+        public string updateStatusOrder(int id, int status)
+        {
+            var _orderSeervice = this.Service<IOrderService>();
+            Order order = _orderSeervice.FirstOrDefault(o => o.Id == id);
+            if(order != null)
+            {
+                order.Status = status;
+                _orderSeervice.Update(order);
+                _orderSeervice.Save();
+                return "success";
+            }
+            return "false";
+        }
+
         public ActionResult OrderDetail(int id)
         {
             var _orderService = this.Service<IOrderService>();
             ////var _fieldService = this.Service<IFieldService>();
             Order order = _orderService.FirstOrDefault(o => o.Id == id);
 
+            OrderDetailViewModel model = Mapper.Map<OrderDetailViewModel>(order);
 
             //OrderDetailViewModel model;
 
@@ -34,7 +49,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             //    model = Mapper.Map<OrderDetailViewModel>(order);
             //    Field field = _fieldService.FirstOrDefault(f => f.Id == order.FieldId);
             //}
-            return this.PartialView(order);
+            return this.PartialView(model);
         }
 
         public ActionResult GetData(JQueryDataTableParamModel param)
@@ -86,7 +101,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 o.Id,
                 o.Field.Name,
                 o.AspNetUser.FullName,
-                o.CreateDate,
+                o.CreateDate.ToString("dd/MM/yyyy HH:mm"),
                 o.PaidType,
                 o.Status
             }.ToArray());

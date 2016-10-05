@@ -50,6 +50,29 @@
             });
         })(document, window, jQuery);
 
+        function updateStatus(id, status)
+        {
+            $.ajax({
+                url: '@Url.Action("updateStatusOrder")',
+                type: 'Get',
+                data: {
+                    id: id,
+                    status: status
+                },
+                success: function (data) {
+                    if (data === "success") {
+                        bootbox.alert("Cập nhật thành công");
+                        RefreshTable();
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
         function showDetailModal(id) {
             $.ajax({
                 url: '@Url.Action("OrderDetail")',
@@ -146,10 +169,11 @@
                         "aTargets": [2],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
-                            var date = new Date(parseInt(o[3].substr(6)));
-                            var month = parseInt(date.getMonth()) + 1;
-                            var formattedDate = date.getDate() + "/" + month + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
-                            return "<p>" + formattedDate + "</p>";
+                            //var date = new Date(parseInt(o[3].substr(6)));
+                            //var month = parseInt(date.getMonth()) + 1;
+                            //var formattedDate = date.getDate() + "/" + month + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+                            //return "<p>" + formattedDate + "</p>";
+                            return o[3];
                         }
                     },
                     {
@@ -194,6 +218,7 @@
             RefreshTable();
             //loadlist();
         });
+
     </script>
     
     }
