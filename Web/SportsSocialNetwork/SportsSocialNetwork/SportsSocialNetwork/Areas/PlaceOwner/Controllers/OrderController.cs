@@ -102,6 +102,8 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 o.Field.Name,
                 o.AspNetUser.FullName,
                 o.CreateDate.ToString("dd/MM/yyyy HH:mm"),
+                o.StartTime.ToString("dd/MM/yyyy HH:mm"),
+                o.EndTime.ToString("dd/MM/yyyy HH:mm"),
                 o.PaidType,
                 o.Status
             }.ToArray());

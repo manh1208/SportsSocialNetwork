@@ -1,0 +1,45 @@
+﻿@model SportsSocialNetwork.Models.Entities.Event
+@{
+    ViewBag.Title = "EventDetailModal";
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="modal-title">Chi tiết sự kiện</h4>
+</div>
+<div class="modal-body" id="modalBody">
+    <div class="row">
+        <div class="col-sm-6">
+            <img src="@Model.Image" style="max-height:100%; max-width:100%; display:block;" />
+        </div>
+        <div class="col-sm-6">
+            <div class="panel ">
+                <div class="panel-heading">
+                    <center><h2>@Model.Name</h2></center>
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <p>
+                            <span class="title">Chủ sân: </span>
+                            <span class="detail">@Model.AspNetUser.FullName</span>
+                        </p>
+                        <p>
+                            <span class="title">Thời gian: </span>
+                            <span class="detail">@Model.StartDate - @Model.EndDate</span>
+                        </p>
+                        <p>
+                            <span class="title">Mô tả:</span>
+                            <span class="detail">@Model.Description</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>
+

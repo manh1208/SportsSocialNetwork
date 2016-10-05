@@ -3258,6 +3258,7 @@
     <Content Include="Areas\PlaceOwner\Views\Order\Index.cshtml" />
     <Content Include="Areas\PlaceOwner\Views\Order\OrderDetail.cshtml" />
     <Content Include="Areas\PlaceOwner\Views\Place\ModalDetail.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Event\EventDetailModal.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
