@@ -90,7 +90,15 @@ namespace SportsSocialNetwork.Controllers
                         return RedirectToAction("Index", "Account", new { area = "Admin" });
                     }else if (user.AspNetRoles.FirstOrDefault().Id.Equals(UserRole.PlaceOwner.ToString("d")))
                     {
-                        return RedirectToAction("Index", "Place", new { area = "PlaceOwner" });
+                        if (user.Status.Value == (int)UserStatus.Active)
+                        {
+                            return RedirectToAction("Index", "Place", new { area = "PlaceOwner" });
+                        }else
+                        {
+                            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                            ModelState.AddModelError("LoginError", "Tài khoản của bạn đang chờ duyệt");
+                            return View(model);
+                        }
                     }else { 
                     return RedirectToAction("Index", "SSN");
                     }
@@ -153,6 +161,15 @@ namespace SportsSocialNetwork.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+
+            var service = this.Service<ISportService>();
+            var sports = service.GetActive()
+                            .Select(s => new SelectListItem
+                            {
+                                Text = s.Name,
+                                Value = s.Id.ToString()
+                            }).OrderBy(s=>s.Value);
+            ViewBag.Sport = sports;
             return View();
         }
 
@@ -165,23 +182,47 @@ namespace SportsSocialNetwork.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email,PhoneNumber = model.PhoneNumber };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
+                    var userService = this.Service<IAspNetUserService>();
+                    var userEntity = userService.FindUserByUserName(user.UserName);
+                    userEntity.FullName = model.FullName;
+                    userEntity.Active = true;
+                    var action = "Login";
+                    if (model.PlaceOwner != null)
+                    {
+                        userEntity.Status = (int)UserStatus.Pending;
+                        UserManager.AddToRole(userEntity.Id, Utils.GetEnumDescription(UserRole.PlaceOwner));
+                    }
+                    else
+                    {
+                        userEntity.Status = (int)UserStatus.Active;
+                        UserManager.AddToRole(userEntity.Id, Utils.GetEnumDescription(UserRole.Member));
+                    }
+                    userService.Update(userEntity);
+                    var hobbyService = this.Service<IHobbyService>();
+                    hobbyService.SaveHobbyForUser(userEntity.Id, model.Hobby);
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction(action);
                 }
-                AddErrors(result);
+                AddErrors("RegisterError", result);
             }
-
+            var sportService = this.Service<ISportService>();
+            var sports = sportService.GetActive()
+                            .Select(s => new SelectListItem
+                            {
+                                Text = s.Name,
+                                Value = s.Id.ToString()
+                            }).OrderBy(s => s.Value);
+            ViewBag.Sport = sports;
             // If we got this far, something failed, redisplay form
             return View(model);
         }
@@ -454,6 +495,22 @@ namespace SportsSocialNetwork.Controllers
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError("", error);
+            }
+        }
+
+        private void AddErrors(string key,IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                if (error.EndsWith("is already taken."))
+                {
+                    ModelState.AddModelError(key, error.Replace("is already taken.", " đã tồn tại.").Replace("Name","Tên tài khoản"));
+                }else
+                {
+
+                
+                ModelState.AddModelError(key, error);
+                }
             }
         }
 
