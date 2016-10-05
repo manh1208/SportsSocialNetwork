@@ -7,6 +7,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
+using Teek.Models;
+using SportsSocialNetwork.Models.Enumerable;
 
 namespace SportsSocialNetwork.Models.Entities.Services
 {
@@ -124,11 +126,13 @@ namespace SportsSocialNetwork.Models.Entities.Services
             if (searchPlace == null)
             {
                 place.UserId = "8955d736-4fea-45de-96ce-1ebae8265cc8";
-                place.Status = 1;
+                place.Status = (int)PlaceStatus.Pending;
                 place.Approve = false;
                 place.Active = false;
                 place.Latitude = latitude;
                 place.Longitude = longtitude;
+                place.Avatar = "";
+
                 this.Create(place);
                 this.Save();
             }
@@ -146,6 +150,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 searchPlace.Description = place.Description;
                 searchPlace.Latitude = latitude;
                 searchPlace.Longitude = longtitude;
+                searchPlace.Avatar = place.Avatar;
                 this.Update(searchPlace);
                 this.Save();
             }
