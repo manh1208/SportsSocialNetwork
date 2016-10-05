@@ -15,6 +15,10 @@
     .form-horizontal .form-group {
         margin-left: 0px;
     }
+
+    .oAvatar {
+
+    }
 </style>
 
 <div class="panel">
@@ -28,6 +32,7 @@
         @using (Html.BeginForm("updatePlace", "Place", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "placeForm", @autocomplete = "off" }))
         {
             @Html.TextBoxFor(p => p.Id, new { @style = "display:none;" })
+            //@Html.TextBoxFor(p => p.Avatar, new { @style = "display:none;" })
             <div class="row">
                 <div class="col-sm-8">
                     <div class="panel">
@@ -40,28 +45,34 @@
                                 <label class="floating-label">Tên địa điểm</label>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.DropDownListFor(p => p.City, listCities, new { @class = "form-control input-lg", @id = "city" })
-                                <label class="floating-label">Thành phố</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(p => p.Address, new { @class = "form-control input-lg" })
+                                    <label class="floating-label">Địa chỉ</label>
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.DropDownListFor(p => p.City, listCities, new { @class = "form-control input-lg", @id = "city" })
+                                    <label class="floating-label">Thành phố</label>
+                                </div>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.DropDownListFor(p => p.District, listDistricts, new { @class = "form-control input-lg", @id = "district" })
-                                <label class="floating-label">Quận</label>
+                                <div class="col-md-6">
+                                    @Html.DropDownListFor(p => p.District, listDistricts, new { @class = "form-control input-lg", @id = "district" })
+                                    <label class="floating-label">Quận</label>
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.DropDownListFor(p => p.Ward, listWards, new { @class = "form-control input-lg", @id = "ward" })
+                                    <label class="floating-label">Phường</label>
+                                </div>
                             </div>
                             <div class="form-group form-material floating">
-                                @Html.DropDownListFor(p => p.Ward, listWards, new { @class = "form-control input-lg", @id = "ward" })
-                                <label class="floating-label">Phường</label>
-                            </div>
-                            <div class="form-group form-material floating">
-                                @Html.TextBoxFor(p => p.Address, new { @class = "form-control input-lg" })
-                                <label class="floating-label">Địa chỉ</label>
-                            </div>
-                            <div class="form-group form-material floating">
-                                @Html.TextBoxFor(p => p.Email, new { @class = "form-control input-lg" })
-                                <label class="floating-label">Email</label>
-                            </div>
-                            <div class="form-group form-material floating">
-                                @Html.TextBoxFor(p => p.PhoneNumber, new { @class = "form-control input-lg" })
-                                <label class="floating-label">Số điện thoại</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(p => p.Email, new { @class = "form-control input-lg" })
+                                    <label class="floating-label">Email</label>
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(p => p.PhoneNumber, new { @class = "form-control input-lg" })
+                                    <label class="floating-label">Số điện thoại</label>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-3">
@@ -100,35 +111,56 @@
                         </div>
                         <div class="panel-body">
                             <div class="form-group form-material floating">
-                                <input type="text" class="form-control" readonly="" />
+                                <input type="text" class="form-control input-lg" readonly="" />
                                 <input type="file" id="uploadImages" name="uploadImages" multiple />
                                 <label class="floating-label">Hình ảnh</label>
                             </div>
                             <div class="container-fluid">
-                                <div class="row">
+                                <div class="row" id="pImages">
                                     @{
-                                    if (placeImages != null && placeImages.Count > 0)
-                                    {
-                                        foreach (var item in placeImages)
+                                        if (placeImages != null && placeImages.Count > 0)
                                         {
-                                                <div class="col-sm-6" id="pim_@item.Id">
-                                                    <figure class="overlay overlay-hover">
-                                                        <img style="max-height:100%; max-width:100%; display:block" src="@item.Image" />
-                                                        <figcaption class="overlay-bottom overlay-panel overlay-background overlay-slide-top overlay-fade overlay-icon">
-                                                            <a class="icon wb-close" href="javascript:void(0)" onclick="deleteImage(@item.Id)"></a>
-                                                        </figcaption>
-                                                    </figure>
-                                                </div>
+                                            foreach (var item in placeImages)
+                                            {
+                                                if (item.Image.Contains(Model.Avatar))
+                                                {
+                                                    <div class="col-sm-6 placeImage" id="pim_@item.Id">
+                                                        <div class="ribbon ribbon-badge ribbon-danger" style="z-index:10;">
+                                                            <span class="ribbon-inner">Avatar</span>
+                                                        </div>
+                                                        <figure class="overlay overlay-hover">
+                                                            <img style="max-height:100%; max-width:100%; display:block" src="@item.Image" />
+                                                            <figcaption class="overlay-bottom overlay-panel overlay-background overlay-slide-top overlay-fade overlay-icon">
+                                                                <a class="icon wb-image" href="javascript:void(0)" title="Chọn làm hình đại diện" onclick="updateAvatar(@item.Id, @Model.Id)"></a>
+                                                                <a class="icon wb-close" href="javascript:void(0)" title="Xóa hình" onclick="deleteImage(@item.Id)"></a>
+                                                            </figcaption>
+                                                        </figure>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-sm-6 placeImage" id="pim_@item.Id">
+                                                        <figure class="overlay overlay-hover">
+                                                            <img style="max-height:100%; max-width:100%; display:block" src="@item.Image" />
+                                                            <figcaption class="overlay-bottom overlay-panel overlay-background overlay-slide-top overlay-fade overlay-icon">
+                                                                <a class="icon wb-image" href="javascript:void(0)" title="Chọn làm hình đại diện" onclick="updateAvatar(@item.Id, @Model.Id)"></a>
+                                                                <a class="icon wb-close" href="javascript:void(0)" title="Xóa hình" onclick="deleteImage(@item.Id)"></a>
+                                                            </figcaption>
+                                                        </figure>
+                                                    </div>
+                                                }
+
+                                            }
                                         }
-                                    }
-                                    else
-                                    {
+                                        else
+                                        {
                                             <div class="alert alert-alt alert-warning alert-dismissible" role="alert">
                                                 <span class="alert-link">Hiện chưa có hình ảnh</span>
                                             </div>
-                                    }
+                                        }
 
                                     }
+                                    
                                 </div>
                             </div>
                             @*<div class="form-group">
@@ -162,132 +194,6 @@
         }
     </div>
 </div>
-
-@*<div class="panel panel-bordered">
-    <div class="panel-heading">
-        <h3 class="panel-title">@Model.Name</h3>
-    </div>
-    <div class="panel-body">
-        @using (Html.BeginForm("updatePlace", "Place", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
-        {
-            @Html.TextBoxFor(p => p.Id, new { @style = "display:none;" })
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Tên địa điểm</label>
-                <div class="col-sm-6">
-                    @Html.TextBoxFor(p => p.Name, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Thành phố</label>
-                <div class="col-sm-6">
-                    @Html.DropDownListFor(p => p.City, listCities, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Quận</label>
-                <div class="col-sm-6">
-                    @Html.DropDownListFor(p => p.District, listDistricts, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Phường</label>
-                <div class="col-sm-6">
-                    @Html.DropDownListFor(p => p.Ward, listWards, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Địa chỉ</label>
-                <div class="col-sm-6">
-                    @Html.TextBoxFor(p => p.Address, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Email</label>
-                <div class="col-sm-6">
-                    @Html.TextBoxFor(p => p.Email, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Số điện thoại</label>
-                <div class="col-sm-6">
-                    @Html.TextBoxFor(p => p.PhoneNumber, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Hình ảnh</label>
-                <div class="col-sm-6">
-                    <input type="file" id="uploadImages" name="uploadImages" multiple />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Hình ảnh</label>
-                <div class="col-sm-6 upload-form" id="exampleUploadForm">
-                    <input type="file" class="form-control" id="inputUpload" multiple />
-                    <div class="uploader-inline">
-                        <h3 class="upload-instructions">
-                            Click Or Drop Files To Upload
-                        </h3>
-                    </div>
-                    <div class="file-wrap container-fluid">
-                        <div class="file-list row"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-6">
-                    @{
-                        if (placeImages != null && placeImages.Count > 0)
-                        {
-                            foreach (var item in placeImages)
-                            {
-                                <div class="col-sm-6" id="pim_@item.Id">
-                                    <figure class="overlay overlay-hover">
-                                        <img src="@item.Image" />
-                                        <figcaption class="overlay-bottom overlay-panel overlay-background overlay-slide-top overlay-fade overlay-icon">
-                                            <a class="icon wb-close" href="javascript:void(0)" onclick="deleteImage(@item.Id)"></a>
-                                        </figcaption>
-                                    </figure>
-                                </div>
-                            }
-                        }
-
-                    }
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Giờ hoạt động</label>
-                <div class="col-sm-9">
-                    <div class="form-inline">
-                        <div class="form-group">
-                            <label for="startTime" class="control-label">Từ</label>
-                            @Html.TextBoxFor(p => p.StartTime, new { @class = "form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
-                        </div>
-                        <div class="form-group">
-                            <label for="endTime" class="control-label">Đến</label>
-                            @Html.TextBoxFor(p => p.EndTime, new { @class = "form-control", @id = "endTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">Mô tả</label>
-                <div class="col-sm-6">
-                    @Html.TextAreaFor(p => p.Description, new { rows = "5", @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-3">
-                    <button type="button" class="btn btn-danger" onclick="deletePlace(@Model.Id)"><i class="icon wb-trash" aria-hidden="true"></i>Xóa địa điểm</button>
-                </div>
-                <div class="col-sm-offset-4 col-sm-5">
-                    @Html.ActionLink("Hủy bỏ", "Index", "Place", null, new { @class = "btn btn-default" })
-                    <input type="submit" value="Cập nhật địa điểm" class="btn btn-success" />
-                </div>
-            </div>
-        }
-    </div>
-</div>*@
-
 
 
 @section Scripts{
@@ -433,6 +339,63 @@
             e.stopPropagation();
         });
     })(document, window, jQuery);
+
+
+    function updateAvatar(id, placeID) {
+        bootbox.dialog({
+            message: "Chọn hình này làm hình đại diện?",
+            title: "Xác nhận",
+            buttons: {
+                success: {
+                    label: "Hủy",
+                    className: "btn-default",
+                    callback: function () {
+
+                    }
+                },
+                danger: {
+                    label: "Đồng ý",
+                    className: "btn-success",
+                    callback: function () {
+                        $.ajax({
+                            url: '@Url.Action("updateAvatar")',
+                            data: {
+                                format: 'json',
+                                id: id,
+                                placeID: placeID
+                            },
+                            error: function () {
+                                bootbox.alert("Đã có lỗi xảy ra");
+                            },
+                            success: function (data) {
+                                if (data === "success") {
+                                    bootbox.alert("Thay đổi hình đại diện thành công", function () {
+                                        $('.placeImage').each(function (i, obj) {
+                                            $('.placeImage div:first').remove();
+                                        });
+                                        var ribbonAvatarDiv = document.createElement('div');
+                                        ribbonAvatarDiv.className = 'ribbon ribbon-badge ribbon-danger';
+                                        ribbonAvatarDiv.style.zIndex = '10';
+
+                                        var avatarSpan = document.createElement('span');
+                                        avatarSpan.className = 'ribbon-inner';
+                                        avatarSpan.innerText = "Avatar";
+                                        ribbonAvatarDiv.appendChild(avatarSpan);
+                                        var avatarDiv = document.getElementById('pim_' + id);
+                                        avatarDiv.appendChild(ribbonAvatarDiv);
+                                    })
+                                }
+                            },
+                            type: 'POST'
+
+                        })
+                    }
+                }
+            }
+        })
+
+        
+    };
 
 
     function deletePlace(id) {

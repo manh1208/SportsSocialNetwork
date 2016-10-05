@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
@@ -267,6 +267,7 @@
     <Compile Include="Areas\PlaceOwner\Controllers\PlaceController.cs" />
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDatatableViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDetailViewModel.cs" />
+    <Compile Include="Areas\PlaceOwner\Models\ViewModels\PlaceDetailViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\PlaceOwnerAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\FieldController.cs" />
@@ -3273,6 +3274,7 @@
     <Content Include="Content\assets\slick\slick-theme.scss" />
     <Content Include="Content\assets\slick\slick.less" />
     <Content Include="Content\assets\slick\slick.scss" />
+    <Content Include="Areas\PlaceOwner\Views\Place\ModalDetail.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

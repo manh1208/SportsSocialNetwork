@@ -1,4 +1,6 @@
-﻿using SkyWeb.DatVM.Mvc.Autofac;
+﻿using SkyWeb.DatVM.Mvc;
+using SkyWeb.DatVM.Mvc.Autofac;
+using SportsSocialNetwork.Areas.PlaceOwner.Models.ViewModels;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
@@ -14,7 +16,7 @@ using System.Web.Routing;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
-    public class PlaceController : Controller
+    public class PlaceController : BaseController
     {
         // GET: PlaceOwner/Place
         public ActionResult Index()
@@ -34,6 +36,21 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             ViewBag.districts = districts;
             ViewBag.wards = wards;
             return View();
+        }
+
+        public ActionResult ModalDetail(int id)
+        {
+            var _placeService = this.Service<IPlaceService>();
+            var _placeImageService = this.Service<IPlaceImageService>();
+
+            Place place = _placeService.FirstOrDefaultActive(p => p.Id == id);
+            List<PlaceImage> placeImages = _placeImageService.Get(i => i.PlaceId == id).ToList();
+
+            PlaceDetailViewModel model = Mapper.Map<PlaceDetailViewModel>(place);
+            model.placeImages = placeImages;
+            model.generateAddress();
+
+            return this.PartialView(model);
         }
 
         public ActionResult PlaceDetail(int? id)
@@ -101,7 +118,13 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             {
                 var _placeImageService = this.Service<IPlaceImageService>();
                 _placeImageService.saveImage(place.Id, uploadImages);
+
+                _placeImageService = this.Service<IPlaceImageService>();
+                List<PlaceImage> listImage = _placeImageService.Get(i => i.PlaceId == place.Id).ToList();
+
+                place.Avatar = listImage[0].Image;
             }
+            _placeService.savePlace(place);
             
             return RedirectToAction("Index");
         }
@@ -118,6 +141,26 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
             return RedirectToAction("PlaceDetail", new RouteValueDictionary(
                 new { controller = "Place", action = "PlaceDetail", id = place.Id }));
+        }
+
+        public string updateAvatar(int id, int placeID)
+        {
+            var _placeImageService = this.Service<IPlaceImageService>();
+            var _placeService = this.Service<IPlaceService>();
+
+            PlaceImage pi = _placeImageService.FirstOrDefault(i => i.Id == id);
+            if(pi != null)
+            {
+                Place place = _placeService.FirstOrDefaultActive(p => p.Id == placeID);
+                if(place != null)
+                {
+                    place.Avatar = pi.Image;
+                    _placeService.savePlace(place);
+                    return "success";
+                }
+                return "false";
+            }
+            return "false";
         }
 
         public string deletePlace(int id)

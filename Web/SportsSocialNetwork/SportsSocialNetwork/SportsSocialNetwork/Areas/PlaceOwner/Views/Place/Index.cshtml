@@ -1,27 +1,42 @@
-﻿
+﻿@using SportsSocialNetwork.Models.Enumerable;
+@using SportsSocialNetwork.Models.Utilities;
 @{
     ViewBag.Title = "Danh sách các địa điểm";
 }
 
 <div class="panel">
     <div class="panel-body">
-        <a href="/PlaceOwner/Place/CreatePlace" class="btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> Tạo mới địa điểm</a>
+        <div class="col-md-6">
+            <h3>Danh sách các địa điểm</h3>
+        </div>
+        <div class="col-md-6" style="text-align:right;">
+            <a href="/PlaceOwner/Place/CreatePlace" class="btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> Tạo mới địa điểm</a>
+        </div>
     </div>
 </div>
 <div class="panel">
     <div class="panel-body">
-        <table class="table table-striped" id="listPlaceTable">
+        <table class="table table-striped table-bordered table-hover" id="listPlaceTable">
             <thead>
                 <tr>
                     <th>Tên địa điểm</th>
                     <th>Địa chỉ</th>
                     <th>Trạng thái</th>
-                    <th>Chi tiết</th>
+                    <th>Thao tác</th>
                     @*<th><a href="" class="btn btn-info"><i class="icon wb-pencil" aria-hidden="true"></i>Chi tiết</a></th>*@
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
+    </div>
+</div>
+
+<div class="modal fade" id="modalPlaceDetail" aria-hidden="true"
+     aria-labelledby="modalPlaceDetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="place-detail-modal-container"></div>
+        </div>
     </div>
 </div>
 
@@ -42,6 +57,62 @@
         oTable._fnPageChange(0);
         oTable._fnAjaxUpdate();
     };
+
+    function showDetail(id) {
+        $.ajax({
+            url: '@Url.Action("ModalDetail")',
+            type: 'Get',
+            data: { id: id },
+            success: function (data) {
+                $('#place-detail-modal-container').html(data);
+                $('#modalPlaceDetail').modal('show');
+            },
+            error: function (error) {
+                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+            }
+        });
+    };
+
+    function deletePlace(id) {
+        bootbox.dialog({
+            message: "Bạn có chắc muốn xóa địa điểm này?",
+            title: "Xác nhận xóa",
+            buttons: {
+                success: {
+                    label: "Hủy",
+                    className: "btn-default",
+                    callback: function () {
+
+                    }
+                },
+                danger: {
+                    label: "Đồng ý",
+                    className: "btn-danger",
+                    callback: function () {
+                        $.ajax({
+                            url: "/PlaceOwner/Place/deletePlace",
+                            data: {
+                                format: 'json',
+                                id: id
+                            },
+                            error: function () {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            },
+                            success: function (data) {
+                                if (data === "success") {
+                                    bootbox.alert("Đã xóa thành công", function () {
+                                        location.href = "/PlaceOwner/Place";
+                                    });
+
+                                }
+                            },
+                            type: 'POST'
+                        })
+                    }
+                }
+            }
+        });
+    }
 
     function InitDatatable() {
         $("#listPlaceTable").DataTable({
@@ -118,18 +189,29 @@
                     "aTargets": [2],
                     "bSortable": false,
                     "mRender": function (data, type, o) {
-                        if (o[2] == 1) {
-                            return "<span class='label label-lg label-outline label-success'>Đang hoạt động</span>";
+                        var label = '';
+                        if (o[2] == parseInt('@((int)PlaceStatus.Active)')) {
+                            label = "<span class='label label-lg label-outline label-success'>@Utils.GetEnumDescription(PlaceStatus.Active).ToString()</span>";
+                        } else if (o[2] == parseInt('@((int)PlaceStatus.Pending)')) {
+                            label = "<span class='label label-lg label-outline label-warning'>@Utils.GetEnumDescription(PlaceStatus.Pending).ToString()</span>"
+                        } else if (o[2] == parseInt('@((int)PlaceStatus.Unapproved)')) {
+                            label = "<span class='label label-lg label-outline label-dark'>@Utils.GetEnumDescription(PlaceStatus.Unapproved).ToString()</span>"
+                        } else if (o[2] == parseInt('@((int)PlaceStatus.Repairing)')) {
+                            label = "<span class='label label-lg label-outline label-danger'>@Utils.GetEnumDescription(PlaceStatus.Repairing).ToString()</span>"
                         } else {
-                            return "<span class='label label-lg label-outline label-danger'>Đang hoạt động</span>";
+                            label = '<span class="label label-outline label-default label-lg">Không xác định</span>';
                         }
+                        return label;
                     }
                 },
                 {
                     "aTargets": [3],
                     "bSortable": false,
                     "mRender": function (data, type, o) {
-                        return "<a href='/PlaceOwner/Place/PlaceDetail/" + o[0] + "' class='btn btn-info'><i class='icon wb-pencil' aria-hidden='true'></i></a>";
+                        var viewDetailBtn = "<a href='javascript:void(0)' class='btn btn-success' data-target='#modalPlaceDetail' data-toggle='modal' onclick='showDetail("+ o[0] +")'><i class='fa fa-eye' aria-hidden='true'></i></a>";
+                        var updateBtn = "<a href='/PlaceOwner/Place/PlaceDetail/" + o[0] + "' class='btn btn-warning'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>";
+                        var deleteBtn = "<a href='javascript:void(0)' class='btn btn-danger' onclick='deletePlace(" + o[0] + ")'><i class='fa fa-trash-o ' aria-hidden='true'></i></a>";
+                        return viewDetailBtn + '&nbsp;' + updateBtn + '&nbsp;' + deleteBtn;;
                     }
                 }
 
