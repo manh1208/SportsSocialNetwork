@@ -24,12 +24,20 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             return View();
         }
 
-        public ActionResult EventDetail(int? id)
+        public ActionResult EventDetail(int id)
         {
             var _eventService = this.Service<IEventService>();
-            Event evt = _eventService.FirstOrDefault(e => e.Id == id.Value);
+            Event evt = _eventService.FirstOrDefault(e => e.Id == id);
 
-            return View(evt);
+            return this.PartialView(evt);
+        }
+
+        public ActionResult EventDetailModal(int id)
+        {
+            var _eventService = this.Service<IEventService>();
+            Event evt = _eventService.FirstOrDefault(e => e.Id == id);
+
+            return this.PartialView(evt);
         }
 
         [HttpPost]
@@ -43,11 +51,20 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
         public ActionResult updateEvent(Event evt, HttpPostedFileBase image)
         {
-            var _eventService = this.Service<IEventService>();
-            _eventService.saveEvent(evt, image);
+            var result = new AjaxOperationResult();
+            try
+            {
+                var _eventService = this.Service<IEventService>();
+                _eventService.saveEvent(evt, image);
+                result.Succeed = true;
+            }
+            catch(Exception e)
+            {
+                result.Succeed = false;
+            }
+            
 
-            return RedirectToAction("EventDetail", new RouteValueDictionary(
-                new { controller = "Event", action = "PlaceDetail", id = evt.Id }));
+            return Json(result);
         }
 
         public string deleteEvent(int id)
@@ -97,7 +114,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                     break;
             }
 
-            var displayedList = filteredListItems.Skip(param.iDisplayStart).Take(param.iDisplayLength);
+            var displayedList = filteredListItems.Skip(param.iDisplayStart).Take(param.iDisplayLength); var count = 1;
             var result = displayedList.Select(e => new IConvertible[]{
                 //c.Id,
                 //c.Image,
@@ -114,7 +131,9 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 e.StartDate,
                 e.EndDate,
                 e.Image,
-                e.Status
+                e.Status,
+                count++
+
             }.ToArray());
 
             return Json(new

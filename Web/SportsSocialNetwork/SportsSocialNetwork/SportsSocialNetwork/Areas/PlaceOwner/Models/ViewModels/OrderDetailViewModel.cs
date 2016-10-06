@@ -9,6 +9,8 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Models.ViewModels
 {
     public class OrderDetailViewModel : OrderViewModel
     {
+        public AspNetUser AspNetUser { get; set; }
         public Field Field { get; set; }
+        public FieldImage FieldImage { get; set; }
     }
 }

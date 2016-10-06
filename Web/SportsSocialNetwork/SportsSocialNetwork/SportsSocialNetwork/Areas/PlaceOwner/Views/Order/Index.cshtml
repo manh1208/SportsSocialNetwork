@@ -10,12 +10,14 @@
 </div>
 <div class="panel">
     <div class="panel-body">
-        <table class="table table-striped" id="listOrderTable">
+        <table class="table table-striped table-bordered table-hover" id="listOrderTable">
             <thead>
                 <tr>
                     <th>Sân</th>
                     <th>Người đặt</th>
                     <th>Ngày đặt</th>
+                    <th>Bắt đầu</th>
+                    <th>Kết thúc</th>
                     <th>Phương thức thanh toán</th>
                     <th>Trạng thái</th>
                     <th>Chi tiết</th>
@@ -49,6 +51,29 @@
                 Site.run();
             });
         })(document, window, jQuery);
+
+        function updateStatus(id, status)
+        {
+            $.ajax({
+                url: '@Url.Action("updateStatusOrder")',
+                type: 'Get',
+                data: {
+                    id: id,
+                    status: status
+                },
+                success: function (data) {
+                    if (data === "success") {
+                        bootbox.alert("Cập nhật thành công");
+                        RefreshTable();
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
 
         function showDetailModal(id) {
             $.ajax({
@@ -146,17 +171,32 @@
                         "aTargets": [2],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
-                            var date = new Date(parseInt(o[3].substr(6)));
-                            var month = parseInt(date.getMonth()) + 1;
-                            var formattedDate = date.getDate() + "/" + month + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
-                            return "<p>" + formattedDate + "</p>";
+                            //var date = new Date(parseInt(o[3].substr(6)));
+                            //var month = parseInt(date.getMonth()) + 1;
+                            //var formattedDate = date.getDate() + "/" + month + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+                            //return "<p>" + formattedDate + "</p>";
+                            return o[3];
                         }
                     },
                     {
                         "aTargets": [3],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
-                            if (o[4] == 1) {
+                            return o[4];
+                        }
+                    },
+                    {
+                        "aTargets": [4],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            return o[5];
+                        }
+                    },
+                    {
+                        "aTargets": [5],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            if (o[6] == 1) {
                                 return "<span class='label label-lg label-outline label-info'>Online</span>";
                             } else {
                                 return "<span class='label label-lg label-outline label-dark'>Tiền mặt</span>";
@@ -164,12 +204,12 @@
                         }
                     },
                     {
-                        "aTargets": [4],
+                        "aTargets": [6],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
-                            if (o[5] == 1) {
+                            if (o[7] == 1) {
                                 return "<span class='label label-lg label-outline label-warning'>Chưa thanh toán</span>";
-                            } else if(o[5] == 2) {
+                            } else if(o[7] == 2) {
                                 return "<span class='label label-lg label-outline label-success'>Đã thanh toán</span>";
                             } else {
                                 return "<span class='label label-lg label-outline label-danger'>Hủy</span>";
@@ -177,7 +217,7 @@
                         }
                     },
                     {
-                        "aTargets": [5],
+                        "aTargets": [7],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
                             return "<button class='btn btn-primary' onclick='showDetailModal(" + o[0] + ")' data-target='#orderDetail' data-toggle='modal' type='button'><i class='icon wb-pencil' aria-hidden='true'></i></button>";
@@ -194,6 +234,7 @@
             RefreshTable();
             //loadlist();
         });
+
     </script>
     
     }

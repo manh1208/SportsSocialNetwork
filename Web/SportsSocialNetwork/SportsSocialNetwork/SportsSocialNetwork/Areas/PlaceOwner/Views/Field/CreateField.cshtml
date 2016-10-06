@@ -1,0 +1,164 @@
+﻿@model SportsSocialNetwork.Models.Entities.Field
+@{
+    ViewBag.Title = "CreateField";
+    var selectListFieldType = ViewBag.selectListFieldType as IOrderedEnumerable<SelectListItem>;
+    selectListFieldType.ToList();
+}
+
+<div class="panel">
+    <div class="panel-heading">
+        <h3 class="panel-title">Tạo sân mới</h3>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-body">
+        @using (Html.BeginForm("saveField", "Field", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "placeForm", @autocomplete = "off" }))
+        {
+            <div class="col-md-6">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Thông tin sân</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group form-material floating">
+                            @Html.TextBoxFor(f => f.Name, new { @class = "form-control input-lg" })
+                            <label class="floating-label">Tên địa điểm</label>
+                        </div>
+                        <div class="form-group form-material floating">
+                            @Html.DropDownListFor(f => f.FieldTypeId, selectListFieldType, new { @class = "form-control input-lg" })
+                            <label class="floating-label">Loại sân</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-3">
+                                <label class="control-label">Giờ hoạt động</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="col-sm-2">
+                                    <label class="control-label">Từ</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(f => f.Place.StartTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="col-sm-2">
+                                    <label class="control-label">Đến</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(f => f.Place.EndTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="form-group form-material floating">
+                            @Html.TextBoxFor(f => f.Name, new { @class = "form-control input-lg" })
+                            <label class="floating-label">Khung giá</label>
+                        </div>*@
+                        <div class="form-group form-material floating">
+                            @Html.TextAreaFor(f => f.Description, new { @class = "form-control input-lg" })
+                            <label class="floating-label">Mô tả</label>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-md-6">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Hình ảnh về sân</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group form-material floating">
+                            <input type="text" class="form-control input-lg" readonly="" />
+                            <input type="file" id="uploadImages" name="uploadImages" multiple />
+                            <label class="floating-label">Hình ảnh</label>
+                        </div>
+                        @*<div class="form-group">
+                    <label class="col-sm-3 control-label">Hình ảnh</label>
+                    <div class="col-sm-6 upload-form" id="exampleUploadForm" >
+                        <input type="file" class="form-control" id="inputUpload" name="uploadImages" multiple />
+                        <div class="uploader-inline">
+                            <h3 class="upload-instructions">
+                                Click Or Drop Files To Upload
+                            </h3>
+                        </div>
+                        <div class="file-wrap container-fluid">
+                            <div class="file-list row"></div>
+                        </div>
+                    </div>
+                </div>*@
+                        <h3>Khung giá</h3>
+                        <div>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Nhập khung giá</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-offset-6 col-sm-4">
+                    @Html.ActionLink("Hủy bỏ", "Index", "Field", null, new { @class = "btn btn-default" })
+                    <input type="submit" value="Tạo địa điểm" class="btn btn-success" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-center">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thêm khung giá</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-md-3">Từ</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-3">Đến</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">Gía</span>
+                            <input type="text" class="form-control" placeholder="">
+                            <span class="input-group-addon">/H</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-success" onclick="addTimeSlot()">Thêm khung giá</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    
+<script>
+    (function(document, window, $) {
+      'use strict';
+
+      var Site = window.Site;
+      $(document).ready(function() {
+        Site.run();
+      });
+    })(document, window, jQuery);
+</script>
+
+
+    }
