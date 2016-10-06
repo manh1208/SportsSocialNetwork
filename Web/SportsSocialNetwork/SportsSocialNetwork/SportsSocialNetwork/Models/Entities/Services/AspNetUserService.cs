@@ -13,9 +13,15 @@ namespace SportsSocialNetwork.Models.Entities.Services
         IQueryable<AspNetUser> GetUsers(JQueryDataTableParamModel request, out int totalRecord);
         AspNetUser FindUser(string Id);
 
+        AspNetUser UpdateUser(AspNetUser userInfo);
+
         void DeactivateUser(AspNetUser user);
 
         String FindUserName(String userId);
+
+        String ChangeAvatar(String userId, String image);
+
+        String ChangeCover(String userId, String image);
         #endregion
 
         void test();
@@ -61,6 +67,36 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         public String FindUserName(String userId) {
             return this.FirstOrDefault(x => x.Id == userId).UserName;
+        }
+
+        public AspNetUser UpdateUser(AspNetUser userInfo) {
+            AspNetUser user = this.FirstOrDefaultActive(x=> x.Id == userInfo.Id);
+            user.Birthday = userInfo.Birthday;
+            user.City = userInfo.City;
+            user.District = userInfo.District;
+            user.Ward = userInfo.Ward;
+            user.Email = userInfo.Email;
+            user.Gender = userInfo.Gender;
+            user.FullName = userInfo.FullName;
+            user.Address = userInfo.Address;
+            user.PhoneNumber = userInfo.PhoneNumber;
+            this.Update(user);
+            return user;
+        }
+
+        public String ChangeAvatar(String userId,String image) {
+            AspNetUser user = FirstOrDefaultActive(x=> x.Id==userId);
+            user.AvatarImage = image;
+            this.Update(user);
+            return user.AvatarImage;
+        }
+
+        public String ChangeCover(String userId, String image)
+        {
+            AspNetUser user = FirstOrDefaultActive(x => x.Id == userId);
+            user.CoverImage = image;
+            this.Update(user);
+            return user.CoverImage;
         }
 
         #endregion

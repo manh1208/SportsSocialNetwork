@@ -12,6 +12,9 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         Post GetPostById(int id);
 
+        Post CreatePost(Post model);
+
+        Post EditPost(Post model, bool imageChanged);
         #endregion
 
         void test();
@@ -27,6 +30,25 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         public Post GetPostById(int id) {
             return this.FirstOrDefaultActive(x => x.Id == id);
+        }
+
+        public Post CreatePost(Post model) {
+            model.CreateDate = DateTime.Now;
+            model.Active = true;
+            this.Create(model);
+            return model;
+        }
+
+        public Post EditPost(Post model,bool imageChanged) {
+            Post post = FirstOrDefaultActive(x => x.Id == model.Id);
+            post.PostContent = model.PostContent;
+            post.EditDate = DateTime.Now;
+            if (imageChanged)
+            {
+                post.Image = model.Image;
+            }
+            this.Update(post);
+            return post;
         }
 
 
