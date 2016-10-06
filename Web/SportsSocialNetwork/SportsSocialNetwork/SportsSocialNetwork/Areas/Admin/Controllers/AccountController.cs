@@ -304,5 +304,61 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
 
             return Json(result);
         }
+
+        [HttpPost]
+        public ActionResult BanUser(string id)
+        {
+            var result = new AjaxOperationResult();
+            var service = this.Service<IAspNetUserService>();
+            var user = service.Get(id);
+            if (user == null)
+            {
+                return this.IdNotFound();
+            }
+            else
+            {
+                try
+                {
+
+                    user.Status = (int)UserStatus.Banned;
+                    service.Update(user);
+                    result.Succeed = true;
+                }
+                catch (Exception)
+                {
+                    result.Succeed = false;
+                }
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult UnBanUser(string id)
+        {
+            var result = new AjaxOperationResult();
+            var service = this.Service<IAspNetUserService>();
+            var user = service.Get(id);
+            if (user == null)
+            {
+                return this.IdNotFound();
+            }
+            else
+            {
+                try
+                {
+
+                    user.Status = (int)UserStatus.Active;
+                    service.Update(user);
+                    result.Succeed = true;
+                }
+                catch (Exception)
+                {
+                    result.Succeed = false;
+                }
+            }
+
+            return Json(result);
+        }
     }
 }

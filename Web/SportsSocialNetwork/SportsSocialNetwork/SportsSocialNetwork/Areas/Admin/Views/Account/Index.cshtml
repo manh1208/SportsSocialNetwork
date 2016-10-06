@@ -37,7 +37,8 @@
                                     <th>Username</th>
                                     <th>Quyền</th>
                                     <th>Trạng thái</th>
-                                    <th>Hành động</th>
+                                    <th>Thao tác</th>
+                                    <th>Duyệt</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -115,6 +116,34 @@
                           var updateBtn = '<a class="btn btn-warning" data-target="#modalUpdate" data-toggle="modal" onclick="showUpdateModal(\'' + row[7] + '\')" href="#"><i class="fa fa-pencil-square-o"></i></a>';
                           var deleteBtn = '<a class="btn btn-danger ladda-button" data-style="zoom-in" data-plugin="ladda" onclick="showConfirmDeleteAccount(\'' + row[7] + '\')"  href="#"> <span class="ladda-label"><i class="fa fa-trash-o "></i></span></a>';
                           return previewBtn + '&nbsp;' + updateBtn + '&nbsp;' + deleteBtn;
+                      },
+                      "bSortable": false
+                  },
+
+                  {
+                      "aTargets": [8],
+                      "mRender": function (data, type, row) {
+                          var approveBtn = "";
+                          if (row[6] == parseInt('@((int)UserStatus.Banned)')) {
+                              approveBtn = '<div class="btn-group">'
+                                      + '<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" >'
+                                          + '<span class="caret"></span>'
+                                      + '</button>'
+                                      + '<ul class="dropdown-menu">'
+                                         + '<li><a href="#" onclick="unbanUser(\'' + row[7] + '\')">Bỏ cấm</a></li>'
+                                      + '</ul>'
+                                  + '</div>'
+                          } else  {
+                              approveBtn = '<div class="btn-group">'
+                                                          + '<button type="button" class="btn btn-success  dropdown-toggle" data-toggle="dropdown">'
+                                                              + '<span class="caret"></span>'
+                                                          + '</button>'
+                                                          + '<ul class="dropdown-menu">'
+                                                             + '<li><a href="#" onclick="banUser(\'' + row[7] + '\')">Cấm</a></li>'
+                                                          + '</ul>'
+                                                   + '</div>'
+                          }
+                          return approveBtn;
                       },
                       "bSortable": false
                   }
@@ -195,6 +224,55 @@
 
             });
         }
+
+        function banUser(id) {
+            showConfirmMessage("Cấm thành viên này?",
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("BanUser")',
+                            data: { id: id },
+                            success: function (data) {
+                                $("#account-table").reloadDataTable();
+                                if (data.Succeed) {
+                                    showMessage("Cấm thành viên thành công!", "success", "OK");
+                                } else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                }
+                            },
+                            error: function (error) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        });
+                    }
+                });
+        };
+
+        function unbanUser(id) {
+            showConfirmMessage("BỏCấm thành viên này?",
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("UnBanUser")',
+                            data: { id: id },
+                            success: function (data) {
+                                $("#account-table").reloadDataTable();
+                                if (data.Succeed) {
+                                    showMessage("Bỏ cấm thành viên thành công!", "success", "OK");
+                                } else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                }
+                            },
+                            error: function (error) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        });
+                    }
+                });
+        };
+
 
 
         function showConfirmDeleteAccount(id) {
