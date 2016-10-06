@@ -1,0 +1,35 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.OrderViewModel
+
+@using (Html.BeginForm("ConfirmOrder", "Order", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
+{ 
+        @Html.HiddenFor(p => p.FieldId)
+        <div class="form-group">
+            <label>Ngày chơi</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="icon wb-calendar" aria-hidden="true"></i>
+                </span>
+                @Html.TextBoxFor(p => p.CreateDate, "{0:dd-MM-yyyy}", new { @class = "form-control", @id = "playDate", @data_plugin = "datepicker", @Value = "" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Giờ chơi</label>
+            <div class="input-daterange">
+                <div class="input-group">
+                    <span class="input-group-addon">Từ</span>
+                    @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value= "", @Placeholder = "HH:MM"})
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">đến</span>
+                    @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker form-control", @id = "endTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value="", @Placeholder = "HH:MM" })
+                </div>
+            </div>
+            </div>
+            <div class="form-group">
+                <label>Ghi chú</label>
+                @Html.TextAreaFor(p => p.Note, new { @class = "form-control", @id = "note", @rows = 3 })
+            </div>
+        <div class="form-group">
+            <input type="submit" value="Đặt sân" class="btn btn-primary" />
+        </div>
+}

@@ -30,39 +30,39 @@
                     <ol class="carousel-indicators carousel-indicators-fall">
 
                         @foreach (var item in ViewBag.fieldImages)
+                        {
+                            if (count == 0)
                             {
-                                if (count == 0)
-                                {
                             <li class="active" data-slide-to="@count" data-target="#exampleCarouselDefault"></li>
-                                    count = count + 1;
-                                }
-                                else
-                                {
-                            <li class="" data-slide-to="@count" data-target="#exampleCarouselDefault"></li>
-                                    count = count + 1;
-                                }
+                                count = count + 1;
                             }
+                            else
+                            {
+                            <li class="" data-slide-to="@count" data-target="#exampleCarouselDefault"></li>
+                                count = count + 1;
+                            }
+                        }
 
                     </ol>
                     <div class="carousel-inner" role="listbox">
                         @foreach (var item in ViewBag.fieldImages)
+                        {
+                            if (imgIndex == 0)
                             {
-                                if (imgIndex == 0)
-                                {
                             <div class="item active" style="height:300px">
                                 <img class="imgWH100" src="@item.Image" alt="..." />
                             </div>
-                                    imgIndex = imgIndex + 1;
-                                }
-                                else
-                                {
+                                imgIndex = imgIndex + 1;
+                            }
+                            else
+                            {
                             <div class="item" style="height:300px">
                                 <img class="imgWH100" src="@item.Image" alt="..." />
                             </div>
-                                    imgIndex = imgIndex + 1;
-                                }
-
+                                imgIndex = imgIndex + 1;
                             }
+
+                        }
                     </div>
                     <a class="left carousel-control" href="#exampleCarouselDefault" role="button" data-slide="prev">
                         <span class="icon wb-chevron-left" aria-hidden="true"></span>
@@ -90,9 +90,12 @@
 <div class="col-md-6" style="float:left">
     <div class="panel col-md-12">
         <h3 style="text-align:center"><span class="label label-primary">Đặt sân</span></h3>
-        <div class="panel-body" style="padding-top:50px">
+        <div class="panel-body">
             <div class="page-content">
-                <button class="btn btn-primary" id="checkCalendar">Xem lịch sân</button>
+                <div style="text-align:center; margin-bottom:10px">
+                    <button type="button" class="btn btn-warning" id="checkCalendar"><i class="icon wb-calendar" aria-hidden="true"></i> Kiểm tra lịch của sân này</button>
+                </div>
+                @{Html.RenderAction("_Index", "Order", new {id=Model.Id });}
             </div>
         </div>
     </div>
@@ -100,7 +103,7 @@
 
 <div class="modal fade" id="calendarForm" aria-hidden="true" aria-labelledby="CalendarForm"
      role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <form class="modal-content" action="#" method="post" role="form">
             <div class="modal-header">
                 <button type="button" class="close" aria-hidden="true" data-dismiss="modal">×</button>
@@ -119,9 +122,16 @@
         </form>
     </div>
 </div>
-
+@section Scripts{
 <script>
+    (function (document, window, $) {
+        'use strict';
+        var Site = window.Site;
+        $(document).ready(function ($) {
+            Site.run();
+        });
 
+    })(document, window, jQuery);
     $(document).ready(function ($) {
         $(".regular").slick({
             dots: true,
@@ -170,14 +180,10 @@
                 right: 'agendaWeek,agendaDay'
             },
             defaultDate: today,
-            selectable: true,
-            selectHelper: true,
-            select: function () {
-                $('#addNewEvent').modal('show');
-            },
             events:"@Url.Action("GetSchedule",new { id = Model.Id})",
             lang: 'vi',
-            defaultView: 'agendaWeek'
+            defaultView: 'agendaWeek',
+            allDaySlot: false
         };
 
         var _options;
@@ -191,5 +197,5 @@
     }
 
 </script>
-
+}
 

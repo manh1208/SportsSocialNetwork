@@ -33,7 +33,9 @@ namespace SportsSocialNetwork.Controllers
             var _orderService = this.Service<IOrderService>();
             List<Order> orders = _orderService.Get(p => p.FieldId == id).ToList();
             List<OrderViewModel> orderList = Mapper.Map<List<OrderViewModel>>(orders);
-            return Json(orderList.Select(f => new { title = f.Id,start=f.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"),end=f.EndTime.ToString("yyyy-MM-ddTHH:mm:ss") }), JsonRequestBehavior.AllowGet );
+            return Json(orderList.Select(f => new { title = "Đã được đặt",start=f.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"),end=f.EndTime.ToString("yyyy-MM-ddTHH:mm:ss") }), JsonRequestBehavior.AllowGet );
         }
+
+        
     }
 }

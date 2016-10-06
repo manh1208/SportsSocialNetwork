@@ -1,0 +1,94 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.OrderViewModel
+
+@{
+    ViewBag.Title = "ConfirmOrder";
+    Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
+}
+<style>
+    .imgWH100 {
+        width: 100%;
+        vertical-align: middle;
+        height: 100%;
+    }
+</style>
+
+<div class="panel padding-top-20">
+    <div class="panel-body container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-12">
+                    <h4 style="height:100px;width:100px">
+                        <img class="margin-right-10 imgWH100" src="http://i57.servimg.com/u/f57/16/18/15/10/1104.png"
+                             alt="...">
+                    </h4>
+                </div>
+                <address>
+                    <abbr title="Name">Khách hàng:</abbr>&nbsp;&nbsp;@User.Identity.Name
+                </address>
+            </div>
+            <div class="col-md-4 col-md-offset-5 text-right">
+                <h4>Thông tin đặt sân</h4>
+                <span>Ngày đặt: @Model.CreateDate.ToShortDateString()</span>
+                <address>
+                    <br> Tại địa điểm:
+                    <br>
+                    <span class="font-size-20">@ViewBag.place.Name</span>
+                    <br>
+                    @ViewBag.place.Address, Quận @ViewBag.place.District, @ViewBag.place.City
+                </address>
+            </div>
+        </div>
+
+        <div class="page-invoice-table table-responsive">
+            <table class="table table-hover text-right">
+                <thead>
+                    <tr>
+                        <th class="text-center">Tên sân</th>
+                        <th class="text-right">Ngày sử dụng</th>
+                        <th class="text-right">Thời gian sử dụng</th>
+                        <th class="text-right">Giá tiền(vnd)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">
+                            @ViewBag.field.Name
+                        </td>
+                        <td>
+                            @ViewBag.playDate.ToShortDateString()
+                        </td>
+                        <td>
+                            @Model.StartTime.ToShortTimeString() - @Model.EndTime.ToShortTimeString()
+                        </td>
+                        <td>
+                            @Model.Price
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4 col-md-offset-8 text-right clearfix">
+            <div class="pull-right">
+                <p>
+                    Ghi chú:
+                    <br>
+                    <span class="text-right">@Model.Note</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="text-right">
+            <button type="submit" class="btn btn-animate btn-animate-side btn-primary">
+                <span>
+                    <i class="icon wb-shopping-cart" aria-hidden="true"></i> Proceed
+                    to payment
+                </span>
+            </button>
+            <button type="button" class="btn btn-animate btn-animate-side btn-default btn-outline"
+                    onclick="javascript:window.print();">
+                <span><i class="icon wb-print" aria-hidden="true"></i> Print</span>
+            </button>
+        </div>
+    </div>
+</div>
+<!-- End Panel -->

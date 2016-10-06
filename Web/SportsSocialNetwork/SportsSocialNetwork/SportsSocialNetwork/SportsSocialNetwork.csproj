@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
@@ -272,6 +272,7 @@
     <Compile Include="Controllers\FieldController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
     <Compile Include="Controllers\SSNController.cs" />
     <Compile Include="Global.asax.cs">
@@ -664,6 +665,7 @@
     <Compile Include="Models\Entities\Services\SportServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\TimeBlockService.cs" />
     <Compile Include="Models\Entities\Services\TimeBlockServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -3325,8 +3327,9 @@
     <Content Include="Views\SSN\UserProfile.cshtml" />
     <Content Include="Views\Place\ViewDetail.cshtml" />
     <Content Include="Views\Field\Index.cshtml" />
-    <Content Include="Views\Field\_Index.cshtml" />
     <Content Include="Views\Place\Test.cshtml" />
+    <Content Include="Views\Order\_Index.cshtml" />
+    <Content Include="Views\Order\ConfirmOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
