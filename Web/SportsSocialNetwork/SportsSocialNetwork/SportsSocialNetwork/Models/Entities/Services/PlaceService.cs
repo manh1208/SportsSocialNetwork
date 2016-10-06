@@ -150,7 +150,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 searchPlace.Description = place.Description;
                 searchPlace.Latitude = latitude;
                 searchPlace.Longitude = longtitude;
-                searchPlace.Avatar = place.Avatar;
+                //searchPlace.Avatar = place.Avatar;
                 this.Update(searchPlace);
                 this.Save();
             }

@@ -18,6 +18,19 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             return View();
         }
 
+        public ActionResult CreateField()
+        {
+            var _fieldTypeService = this.Service<IFieldTypeService>();
+            List<FieldType> listFieldType = _fieldTypeService.Get().ToList();
+            IOrderedEnumerable<SelectListItem> selectListFieldType = new List<SelectListItem>().OrderBy(d => d.Value);
+
+            foreach (var item in listFieldType)
+            {
+                selectListFieldType.ToList().Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+            }
+            ViewBag.selectListFieldType = selectListFieldType;
+            return View();
+        }
         
     }
 }

@@ -64,6 +64,48 @@
             });
         })(document, window, jQuery);
 
+        function deleteEventModal(id) {
+            bootbox.dialog({
+                message: "Bạn có chắc muốn xóa sự kiện này?",
+                title: "Xác nhận xóa",
+                buttons: {
+                    success: {
+                        label: "Hủy",
+                        className: "btn-default",
+                        callback: function () {
+
+                        }
+                    },
+                    danger: {
+                        label: "Đồng ý",
+                        className: "btn-danger",
+                        callback: function () {
+                            $.ajax({
+                                url: "/PlaceOwner/Event/deleteEvent",
+                                data: {
+                                    format: 'json',
+                                    id: id
+                                },
+                                error: function () {
+                                    alert("Problem!")
+                                },
+                                success: function (data) {
+                                    if (data === "success") {
+                                        bootbox.alert("Đã xóa thành công", function () {
+                                            $('#updateEventModal').modal('toggle');
+                                            RefreshTable();
+                                        });
+
+                                    }
+                                },
+                                type: 'POST'
+                            })
+                        }
+                    }
+                }
+            });
+        };
+
         function deleteEvent(id) {
             bootbox.dialog({
                 message: "Bạn có chắc muốn xóa sự kiện này?",
@@ -107,90 +149,21 @@
 
         function scriptForPartialView() {
 
-            $('#delBtn').click(function (id) {
-                console.log(id)
-                bootbox.dialog({
-                    message: "Bạn có chắc muốn xóa sự kiện này?",
-                    title: "Xác nhận xóa",
-                    buttons: {
-                        success: {
-                            label: "Hủy",
-                            className: "btn-default",
-                            callback: function () {
+            (function (document, window, $) {
+                'use strict';
 
-                            }
-                        },
-                        danger: {
-                            label: "Đồng ý",
-                            className: "btn-danger",
-                            callback: function () {
-                                $.ajax({
-                                    url: "/PlaceOwner/Event/deleteEvent",
-                                    data: {
-                                        format: 'json',
-                                        id: id
-                                    },
-                                    error: function () {
-                                        alert("Problem!")
-                                    },
-                                    success: function (data) {
-                                        if (data === "success") {
-                                            bootbox.alert("Đã xóa thành công", function () {
-                                                $('#updateEventModal').modal('toggle');
-                                                RefreshTable();
-                                            });
-
-                                        }
-                                    },
-                                    type: 'POST'
-                                })
-                            }
-                        }
-                    }
+                var Site = window.Site;
+                $(document).ready(function () {
+                    Site.run();
                 });
-            })
+            })(document, window, jQuery);
 
-            function deleteEventModal(id) {
-                bootbox.dialog({
-                    message: "Bạn có chắc muốn xóa sự kiện này?",
-                    title: "Xác nhận xóa",
-                    buttons: {
-                        success: {
-                            label: "Hủy",
-                            className: "btn-default",
-                            callback: function () {
+            'use strict';
 
-                            }
-                        },
-                        danger: {
-                            label: "Đồng ý",
-                            className: "btn-danger",
-                            callback: function () {
-                                $.ajax({
-                                    url: "/PlaceOwner/Event/deleteEvent",
-                                    data: {
-                                        format: 'json',
-                                        id: id
-                                    },
-                                    error: function () {
-                                        alert("Problem!")
-                                    },
-                                    success: function (data) {
-                                        if (data === "success") {
-                                            bootbox.alert("Đã xóa thành công", function () {
-                                                $('#updateEventModal').modal('toggle');
-                                                RefreshTable();
-                                            });
-
-                                        }
-                                    },
-                                    type: 'POST'
-                                })
-                            }
-                        }
-                    }
-                });
-            };
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
+            });
 
             $('#eventForm').submit(function (e) {
                 e.preventDefault();
@@ -263,6 +236,7 @@
         };
 
         function InitDatatable() {
+            var count = 1;
             $("#listEventTable").DataTable({
                 "bRetrieve": true,
                 "bServerSide": true,
@@ -323,7 +297,7 @@
                     {
                         "aTargets": [0],
                         "mRender": function (data, type, o) {
-                            return 1;
+                            return count++;
                         }
                     },
                     {

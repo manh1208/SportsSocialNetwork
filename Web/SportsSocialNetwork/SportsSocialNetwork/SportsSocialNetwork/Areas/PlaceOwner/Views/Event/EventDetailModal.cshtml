@@ -15,7 +15,23 @@
             <img src="@Model.Image" style="max-height:100%; max-width:100%; display:block;" />
         </div>
         <div class="col-sm-6">
-            <div class="panel ">
+            <center><h2>@Model.Name</h2></center>
+            <div>
+                <p>
+                    <span class="title">Chủ sân: </span>
+                    <span class="detail">@Model.AspNetUser.FullName</span>
+                </p>
+                <p>
+                    <span class="title">Thời gian: </span><br />
+                    <span class="detail">Từ: @Model.StartDate</span><br />
+                    <span class="detail">Đến: @Model.EndDate</span>
+                </p>
+                <p>
+                    <span class="title">Mô tả:</span>
+                    <span class="detail">@Model.Description</span>
+                </p>
+            </div>
+            @*<div class="panel ">
                 <div class="panel-heading">
                     <center><h2>@Model.Name</h2></center>
                 </div>
@@ -26,7 +42,7 @@
                             <span class="detail">@Model.AspNetUser.FullName</span>
                         </p>
                         <p>
-                            <span class="title">Thời gian: </span>
+                            <span class="title">Thời gian: </span><br />
                             <span class="detail">@Model.StartDate - @Model.EndDate</span>
                         </p>
                         <p>
@@ -35,7 +51,7 @@
                         </p>
                     </div>
                 </div>
-            </div>
+            </div>*@
         </div>
     </div>
 </div>

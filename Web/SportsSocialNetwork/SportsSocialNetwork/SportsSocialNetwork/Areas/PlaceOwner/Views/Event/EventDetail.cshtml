@@ -56,7 +56,7 @@
         </div>
         <div class="modal-footer">
             <div class="col-md-5 text-left">
-                @*<button type="button" class="btn btn-danger" id="delBtn" onclick="deleteEventModal(@Model.Id)"><i class="icon wb-trash" aria-hidden="true"></i>Xóa sự kiện</button>*@
+                <button type="button" class="btn btn-danger" id="delBtn" onclick="deleteEventModal(@Model.Id)"><i class="icon wb-trash" aria-hidden="true"></i>Xóa sự kiện</button>
             </div>
             <div class="col-md-7 text-right">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
@@ -119,3 +119,16 @@
 </div>*@
 
 
+@section Scripts{
+    <script>
+    (function(document, window, $) {
+      'use strict';
+
+      var Site = window.Site;
+      $(document).ready(function() {
+        Site.run();
+      });
+    })(document, window, jQuery);
+</script>
+
+    }

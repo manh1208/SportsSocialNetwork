@@ -114,7 +114,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                     break;
             }
 
-            var displayedList = filteredListItems.Skip(param.iDisplayStart).Take(param.iDisplayLength);
+            var displayedList = filteredListItems.Skip(param.iDisplayStart).Take(param.iDisplayLength); var count = 1;
             var result = displayedList.Select(e => new IConvertible[]{
                 //c.Id,
                 //c.Image,
@@ -131,7 +131,8 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 e.StartDate,
                 e.EndDate,
                 e.Image,
-                e.Status
+                e.Status,
+                count++
 
             }.ToArray());
 
