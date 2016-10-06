@@ -4,13 +4,15 @@
     [CreateDate]  DATETIME       NOT NULL,
     [Title]       NVARCHAR (255) NOT NULL,
     [NewsContent] NVARCHAR (MAX) NOT NULL,
-    [Image]       NVARCHAR (255) NOT NULL,
+    [Image]       NVARCHAR (MAX) NOT NULL,
     [CategoryId]  INT            NOT NULL,
     [Active]      BIT            NULL,
     CONSTRAINT [PK_News] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_News_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id]),
     CONSTRAINT [FK_News_Category] FOREIGN KEY ([CategoryId]) REFERENCES [dbo].[Category] ([Id])
 );
+
+
 
 
 

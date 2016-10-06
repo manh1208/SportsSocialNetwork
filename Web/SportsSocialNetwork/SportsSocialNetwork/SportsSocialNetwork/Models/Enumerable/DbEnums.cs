@@ -6,11 +6,7 @@ using System.Web;
 
 namespace SportsSocialNetwork.Models.Enumerable
 {
-    public enum OrderStatus
-    {
-      
-    }
-
+    
 
     public enum UserRole
     {
@@ -58,4 +54,28 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("Bị cấm")]
         Banned = 4,
     }
+
+    public enum FieldStatus
+    {
+        [Description("Đang hoạt động")]
+        Active = 1,
+        [Description("Đang sửa chữa")]
+        Repairing = 2,
+        [Description("Ngừng hoạt động")]
+        Deactive = 3,
+    }
+
+    public enum OrderStatus
+    {
+        [Description("Đang chờ")]
+        Pending = 1,
+        [Description("Đã chấp nhận")]
+        Approved = 2,
+        [Description("Không chấp nhận")]
+        Unapproved = 3,
+        [Description("Hủy")]
+        Cancel = 4,
+    }
+
+
 }
