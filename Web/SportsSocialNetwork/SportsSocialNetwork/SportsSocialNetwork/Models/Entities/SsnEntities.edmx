@@ -117,7 +117,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FieldId" Type="int" Nullable="false" />
-          <Property Name="Image" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Image" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="FieldPrice">
           <Key>
@@ -126,6 +126,17 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FieldId" Type="int" Nullable="false" />
           <Property Name="TimeBlockId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FieldSchedule">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FieldId" Type="int" Nullable="false" />
+          <Property Name="StartTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="FieldType">
           <Key>
@@ -155,7 +166,8 @@
           <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
           <Property Name="SportId" Type="int" Nullable="false" />
-          <Property Name="CoverImage" Type="nvarchar" MaxLength="255" />
+          <Property Name="CoverImage" Type="nvarchar(max)" />
+          <Property Name="Avatar" Type="nvarchar(max)" />
           <Property Name="Active" Type="bit" />
         </EntityType>
         <EntityType Name="GroupMember">
@@ -206,7 +218,7 @@
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="NewsContent" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Image" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Image" Type="nvarchar(max)" Nullable="false" />
           <Property Name="CategoryId" Type="int" Nullable="false" />
           <Property Name="Active" Type="bit" />
         </EntityType>
@@ -227,8 +239,8 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="Title" Type="nvarchar" MaxLength="255" Nullable="false" />
-          <Property Name="Message" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Type" Type="int" Nullable="false" />
           <Property Name="PostId" Type="int" />
           <Property Name="InvitationId" Type="int" />
@@ -244,7 +256,7 @@
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="StartTime" Type="datetime" Nullable="false" />
           <Property Name="EndTime" Type="datetime" Nullable="false" />
-          <Property Name="Note" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Note" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Price" Type="float" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="PaidType" Type="int" />
@@ -288,7 +300,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PlaceId" Type="int" Nullable="false" />
-          <Property Name="Image" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Image" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="Post">
           <Key>
@@ -299,7 +311,7 @@
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="PostContent" Type="nvarchar(max)" Nullable="false" />
           <Property Name="EditDate" Type="datetime" />
-          <Property Name="Image" Type="varchar" MaxLength="255" />
+          <Property Name="Image" Type="nvarchar(max)" />
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="GroupId" Type="int" />
         </EntityType>
@@ -312,7 +324,7 @@
           <Property Name="PostId" Type="int" Nullable="false" />
           <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
-          <Property Name="Image" Type="varchar" MaxLength="255" />
+          <Property Name="Image" Type="nvarchar(max)" />
           <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PostSport">
@@ -338,6 +350,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="TimeBlock">
@@ -510,6 +523,18 @@
             </Principal>
             <Dependent Role="FieldPrice">
               <PropertyRef Name="TimeBlockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldSchedule_Field">
+          <End Role="Field" Type="Self.Field" Multiplicity="1" />
+          <End Role="FieldSchedule" Type="Self.FieldSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Field">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldSchedule">
+              <PropertyRef Name="FieldId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -921,6 +946,7 @@
           <EntitySet Name="Field" EntityType="Self.Field" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FieldImage" EntityType="Self.FieldImage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FieldPrice" EntityType="Self.FieldPrice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FieldSchedule" EntityType="Self.FieldSchedule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FieldType" EntityType="Self.FieldType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Follow" EntityType="Self.Follow" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Group" EntityType="Self.Group" Schema="dbo" store:Type="Tables" />
@@ -989,6 +1015,10 @@
           <AssociationSet Name="FK_FieldPrice_TimeBlock" Association="Self.FK_FieldPrice_TimeBlock">
             <End Role="TimeBlock" EntitySet="TimeBlock" />
             <End Role="FieldPrice" EntitySet="FieldPrice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldSchedule_Field" Association="Self.FK_FieldSchedule_Field">
+            <End Role="Field" EntitySet="Field" />
+            <End Role="FieldSchedule" EntitySet="FieldSchedule" />
           </AssociationSet>
           <AssociationSet Name="FK_FieldType_Sport" Association="Self.FK_FieldType_Sport">
             <End Role="Sport" EntitySet="Sport" />
@@ -1138,6 +1168,7 @@
           <EntitySet Name="Fields" EntityType="SSNModel.Field" />
           <EntitySet Name="FieldImages" EntityType="SSNModel.FieldImage" />
           <EntitySet Name="FieldPrices" EntityType="SSNModel.FieldPrice" />
+          <EntitySet Name="FieldSchedules" EntityType="SSNModel.FieldSchedule" />
           <EntitySet Name="FieldTypes" EntityType="SSNModel.FieldType" />
           <EntitySet Name="Follows" EntityType="SSNModel.Follow" />
           <EntitySet Name="Groups" EntityType="SSNModel.Group" />
@@ -1258,6 +1289,10 @@
           <AssociationSet Name="FK_FieldPrice_Field" Association="SSNModel.FK_FieldPrice_Field">
             <End Role="Field" EntitySet="Fields" />
             <End Role="FieldPrice" EntitySet="FieldPrices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldSchedule_Field" Association="SSNModel.FK_FieldSchedule_Field">
+            <End Role="Field" EntitySet="Fields" />
+            <End Role="FieldSchedule" EntitySet="FieldSchedules" />
           </AssociationSet>
           <AssociationSet Name="FK_Order_Field" Association="SSNModel.FK_Order_Field">
             <End Role="Field" EntitySet="Fields" />
@@ -1464,6 +1499,7 @@
           <NavigationProperty Name="Place" Relationship="SSNModel.FK_Field_Place" FromRole="Field" ToRole="Place" />
           <NavigationProperty Name="FieldImages" Relationship="SSNModel.FK_FieldImage_Field" FromRole="Field" ToRole="FieldImage" />
           <NavigationProperty Name="FieldPrices" Relationship="SSNModel.FK_FieldPrice_Field" FromRole="Field" ToRole="FieldPrice" />
+          <NavigationProperty Name="FieldSchedules" Relationship="SSNModel.FK_FieldSchedule_Field" FromRole="Field" ToRole="FieldSchedule" />
           <NavigationProperty Name="Orders" Relationship="SSNModel.FK_Order_Field" FromRole="Field" ToRole="Order" />
           <NavigationProperty Name="TimeBlocks" Relationship="SSNModel.FK_TimeBlock_Field" FromRole="Field" ToRole="TimeBlock" />
         </EntityType>
@@ -1473,7 +1509,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FieldId" Type="Int32" Nullable="false" />
-          <Property Name="Image" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Field" Relationship="SSNModel.FK_FieldImage_Field" FromRole="FieldImage" ToRole="Field" />
         </EntityType>
         <EntityType Name="FieldPrice">
@@ -1485,6 +1521,18 @@
           <Property Name="TimeBlockId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Field" Relationship="SSNModel.FK_FieldPrice_Field" FromRole="FieldPrice" ToRole="Field" />
           <NavigationProperty Name="TimeBlock" Relationship="SSNModel.FK_FieldPrice_TimeBlock" FromRole="FieldPrice" ToRole="TimeBlock" />
+        </EntityType>
+        <EntityType Name="FieldSchedule">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FieldId" Type="Int32" Nullable="false" />
+          <Property Name="StartTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Field" Relationship="SSNModel.FK_FieldSchedule_Field" FromRole="FieldSchedule" ToRole="Field" />
         </EntityType>
         <EntityType Name="FieldType">
           <Key>
@@ -1517,7 +1565,8 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="SportId" Type="Int32" Nullable="false" />
-          <Property Name="CoverImage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CoverImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Avatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="Boolean" />
           <NavigationProperty Name="Sport" Relationship="SSNModel.FK_Group_Sport" FromRole="Group" ToRole="Sport" />
           <NavigationProperty Name="GroupMembers" Relationship="SSNModel.FK_GroupMember_Group" FromRole="Group" ToRole="GroupMember" />
@@ -1579,7 +1628,7 @@
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Title" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="NewsContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Image" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CategoryId" Type="Int32" Nullable="false" />
           <Property Name="Active" Type="Boolean" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_News_AspNetUsers" FromRole="News" ToRole="AspNetUser" />
@@ -1605,8 +1654,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Message" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="PostId" Type="Int32" />
           <Property Name="InvitationId" Type="Int32" />
@@ -1625,7 +1674,7 @@
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="StartTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="EndTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Note" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Price" Type="Double" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="PaidType" Type="Int32" />
@@ -1677,7 +1726,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PlaceId" Type="Int32" Nullable="false" />
-          <Property Name="Image" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Place" Relationship="SSNModel.FK_PlaceImage_Place" FromRole="PlaceImage" ToRole="Place" />
         </EntityType>
         <EntityType Name="Post">
@@ -1689,7 +1738,7 @@
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="PostContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="EditDate" Type="DateTime" Precision="3" />
-          <Property Name="Image" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <Property Name="GroupId" Type="Int32" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Post_AspNetUsers" FromRole="Post" ToRole="AspNetUser" />
@@ -1708,7 +1757,7 @@
           <Property Name="PostId" Type="Int32" Nullable="false" />
           <Property Name="Comment" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Image" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_PostComment_AspNetUsers" FromRole="PostComment" ToRole="AspNetUser" />
           <NavigationProperty Name="Post" Relationship="SSNModel.FK_PostComment_Post1" FromRole="PostComment" ToRole="Post" />
@@ -1740,6 +1789,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="CategorySports" Relationship="SSNModel.FK_CategorySport_Sport" FromRole="Sport" ToRole="CategorySport" />
           <NavigationProperty Name="FieldTypes" Relationship="SSNModel.FK_FieldType_Sport" FromRole="Sport" ToRole="FieldType" />
@@ -2072,6 +2122,18 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="FieldPrice">
+              <PropertyRef Name="FieldId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldSchedule_Field">
+          <End Type="SSNModel.Field" Role="Field" Multiplicity="1" />
+          <End Type="SSNModel.FieldSchedule" Role="FieldSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Field">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldSchedule">
               <PropertyRef Name="FieldId" />
             </Dependent>
           </ReferentialConstraint>
@@ -2424,6 +2486,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="FieldSchedules">
+            <EntityTypeMapping TypeName="SSNModel.FieldSchedule">
+              <MappingFragment StoreEntitySet="FieldSchedule">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="FieldId" ColumnName="FieldId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="FieldTypes">
             <EntityTypeMapping TypeName="SSNModel.FieldType">
               <MappingFragment StoreEntitySet="FieldType">
@@ -2450,6 +2524,7 @@
             <EntityTypeMapping TypeName="SSNModel.Group">
               <MappingFragment StoreEntitySet="Group">
                 <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
                 <ScalarProperty Name="CoverImage" ColumnName="CoverImage" />
                 <ScalarProperty Name="SportId" ColumnName="SportId" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -2651,6 +2726,7 @@
             <EntityTypeMapping TypeName="SSNModel.Sport">
               <MappingFragment StoreEntitySet="Sport">
                 <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

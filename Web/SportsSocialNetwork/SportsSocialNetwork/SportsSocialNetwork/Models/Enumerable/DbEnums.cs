@@ -27,7 +27,7 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("Nữ")]
         Female = 2,
         [Description("Khác")]
-        Other = 3,
+        Other = 3
     }
 
     public enum PlaceStatus
@@ -39,7 +39,7 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("Đang chờ")]
         Pending = 3,
         [Description("Đang sửa chữa")]
-        Repairing = 4,
+        Repairing = 4
 
     }
 
@@ -52,7 +52,7 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("Đang chờ")]
         Pending = 3,
         [Description("Bị cấm")]
-        Banned = 4,
+        Banned = 4
     }
 
     public enum FieldStatus
@@ -62,7 +62,7 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("Đang sửa chữa")]
         Repairing = 2,
         [Description("Ngừng hoạt động")]
-        Deactive = 3,
+        Deactive = 3
     }
 
     public enum OrderStatus
@@ -74,7 +74,19 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("Không chấp nhận")]
         Unapproved = 3,
         [Description("Hủy")]
-        Cancel = 4,
+        Cancel = 4
+    }
+
+    public enum FieldScheduleStatus
+    {
+        [Description("Sửa chửa")]
+        Repair = 1,
+        [Description("Đã được đặt")]
+        Booked = 2,
+        [Description("Sự kiện")]
+        Event = 3,
+        [Description("Khác")]
+        Other = 4
     }
 
 

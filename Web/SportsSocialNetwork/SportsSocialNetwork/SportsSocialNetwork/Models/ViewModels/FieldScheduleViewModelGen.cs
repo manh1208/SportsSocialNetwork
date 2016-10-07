@@ -12,19 +12,18 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class GroupViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.Group>
+    public partial class FieldScheduleViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.FieldSchedule>
     {
     	
     			public virtual int Id { get; set; }
-    			public virtual string Name { get; set; }
+    			public virtual int FieldId { get; set; }
+    			public virtual System.DateTime StartTime { get; set; }
+    			public virtual System.DateTime EndTime { get; set; }
+    			public virtual int Type { get; set; }
     			public virtual string Description { get; set; }
-    			public virtual int SportId { get; set; }
-    			public virtual string CoverImage { get; set; }
-    			public virtual string Avatar { get; set; }
-    			public virtual Nullable<bool> Active { get; set; }
     	
-    	public GroupViewModel() : base() { }
-    	public GroupViewModel(SportsSocialNetwork.Models.Entities.Group entity) : base(entity) { }
+    	public FieldScheduleViewModel() : base() { }
+    	public FieldScheduleViewModel(SportsSocialNetwork.Models.Entities.FieldSchedule entity) : base(entity) { }
     
     }
 }
