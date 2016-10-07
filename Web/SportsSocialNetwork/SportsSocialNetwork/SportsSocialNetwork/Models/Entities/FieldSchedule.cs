@@ -20,6 +20,7 @@ namespace SportsSocialNetwork.Models.Entities
         public System.DateTime EndTime { get; set; }
         public int Type { get; set; }
         public string Description { get; set; }
+        public bool Active { get; set; }
     
         public virtual Field Field { get; set; }
     }

@@ -5,7 +5,10 @@
     [EndTime]     DATETIME       NOT NULL,
     [Type]        INT            NOT NULL,
     [Description] NVARCHAR (MAX) NULL,
+    [Active]      BIT            NOT NULL,
     CONSTRAINT [PK_FieldSchedule] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_FieldSchedule_Field] FOREIGN KEY ([FieldId]) REFERENCES [dbo].[Field] ([Id])
 );
+
+
 

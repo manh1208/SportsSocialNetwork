@@ -21,6 +21,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual System.DateTime EndTime { get; set; }
     			public virtual int Type { get; set; }
     			public virtual string Description { get; set; }
+    			public virtual bool Active { get; set; }
     	
     	public FieldScheduleViewModel() : base() { }
     	public FieldScheduleViewModel(SportsSocialNetwork.Models.Entities.FieldSchedule entity) : base(entity) { }

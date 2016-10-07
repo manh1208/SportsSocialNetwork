@@ -137,6 +137,7 @@
           <Property Name="EndTime" Type="datetime" Nullable="false" />
           <Property Name="Type" Type="int" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="FieldType">
           <Key>
@@ -1532,6 +1533,7 @@
           <Property Name="EndTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Field" Relationship="SSNModel.FK_FieldSchedule_Field" FromRole="FieldSchedule" ToRole="Field" />
         </EntityType>
         <EntityType Name="FieldType">
@@ -2489,6 +2491,7 @@
           <EntitySetMapping Name="FieldSchedules">
             <EntityTypeMapping TypeName="SSNModel.FieldSchedule">
               <MappingFragment StoreEntitySet="FieldSchedule">
+                <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="EndTime" ColumnName="EndTime" />
