@@ -1,0 +1,278 @@
+﻿@using SportsSocialNetwork.Models.Enumerable;
+@using SportsSocialNetwork.Models.Utilities;
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<style>
+    dt, dd {
+        font-size: 15px;
+        color: #000;
+    }
+
+    dt {
+        font-weight: bold;
+    }
+
+    .button {
+        background-color: #008CBA; /* blue */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+    }
+</style>
+
+<div class="panel">
+    <div class="panel-body">
+        <div class="col-md-6">
+            <h3>Danh sách các môn thể thao</h3>
+        </div>
+        <div class="col-md-6 text-right">
+            <a class="btn btn-primary" onclick="showCreateModal()" href="javascript:void(0)">Thêm môn thể thao mới</a>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-body">
+        <div class="box">
+            <div class="box-header">
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="sport-table" class="table table-hover dataTable table-bordered dt-responsive nowrap" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Số thứ tự</th>
+                                    <th>Môn thể thao</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-warning" id="modelDetail" aria-hidden="true"
+     aria-labelledby="modelDetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div id="detail-modal-container"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-warning" id="modalCreate" aria-hidden="true"
+     aria-labelledby="modalCreate" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div id="create-modal-container"></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade modal-warning" id="modalUpdate" aria-hidden="true"
+     aria-labelledby="modalViewdetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div id="update-modal-container"></div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        (function (document, window, $) {
+            'use strict';
+
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
+            });
+        })(document, window, jQuery);
+
+        //load init datatable function
+        $(document).ready(function () {
+            initEventTable();
+        });
+
+        //init datatable
+        function initEventTable() {
+            var colDefs = [
+                  {
+                      "aTargets": [1],
+                      "bSortable": false,
+                  },
+
+                  {
+                      "aTargets": [2],
+                      "mRender": function (data, type, row) {
+                          //var previewBtn = '<a class="btn btn-success" data-target="#modalViewdetail" onclick="showDetailModal(\'' + row[2] + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
+                          var previewBtn = '<a class="btn btn-success" data-target="#modalViewdetail" onclick="showDetailModal(\'' + data + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
+                          var updateBtn = '<a class="btn btn-warning" data-target="#modalUpdate" data-toggle="modal" onclick="showUpdateModal(\'' + data + '\')" href="#"><i class="fa fa-pencil-square-o"></i></a>';
+                          var deactiveBtn = '<a class="btn btn-danger" data-style="zoom-in" data-plugin="ladda" onclick="deactiveSport(\'' + data + '\')"  href="#"> <span class="ladda-label"><i class="fa fa-trash-o "></i></span></a>';
+                          return previewBtn + '&nbsp;' + updateBtn + '&nbsp;' + deactiveBtn;
+                      },
+                      "bSortable": false
+                  },
+            ];
+            var param = {
+                colDefs: colDefs,
+                url: '@Url.Action("IndexList")',
+                data: []
+            };
+            $('#sport-table').customDataTable(param);
+        }
+
+        //show detail popup
+        function showDetailModal(id) {
+            $.ajax({
+                url: '@Url.Action("Detail")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#detail-modal-container').html(data);
+                    $('#modelDetail').modal('show');
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+        //show sport create popup
+        function showCreateModal() {
+            $.ajax({
+                url: '@Url.Action("Create")',
+                type: 'Get',
+                dataType: "html",
+                //luc khoi tao 1 sport moi thi ko có id
+                success: function (data) {
+                    $('#create-modal-container').html(data);
+                    $('#modalCreate').modal('show');
+                    scriptForPartialView();//de thuc hien java script goi controller xu ly thao tac create
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
+
+        //show sport update popup
+        function showUpdateModal(id) {
+            $.ajax({
+                url: '@Url.Action("Update")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#update-modal-container').html(data);
+                    $('#modalUpdate').modal('show');
+                    scriptForPartialView();
+
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
+        //this function will change the status from active to deactive
+        function deactiveSport(id) {
+            showConfirmDeleteItem("Bạn có chắc chắn muốn xóa môn thể thao này không?",
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("Deactive")',
+                            data: { id: id },
+                            success: function (data) {
+                                $("#sport-table").reloadDataTable();
+                                if (data.Succeed) {
+                                    showMessage("Xóa thành công", "success", "OK");
+                                } else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                }
+                            },
+                            error: function (error) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        });
+                    }
+                });
+        }
+
+        //function nay de goi controller thuc hien cac thao tac xu ly update, create
+        function scriptForPartialView() {
+            //update sport function
+            $('#update-sport-form').submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData(document.getElementById('update-sport-form'));
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Update")',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            showMessage("Cập nhật thành công.", "success", "OK");
+                            $('#modalUpdate').modal('hide');
+                            $('#sport-table').reloadDataTable();
+                        } else {
+                            showErrors(result.Errors);
+
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+            });
+
+            //create sport
+            $('#create-sport-form').submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData(document.getElementById('create-sport-form'));
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Create")',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            showMessage("Thêm mới thành công.", "success", "OK");
+                            $('#modalCreate').modal('hide');
+                            $('#sport-table').reloadDataTable();
+                        } else {
+                            showErrors(result.Errors);
+                            showMessage("Không tạo được. Vui lòng nhập lại", "error", "OK");
+                        }
+
+                    },
+                    error: function (result) {
+
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+            });
+        }
+    </script>
+}
+

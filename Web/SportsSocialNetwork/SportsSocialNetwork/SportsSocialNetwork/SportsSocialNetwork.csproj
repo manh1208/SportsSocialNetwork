@@ -251,6 +251,7 @@
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
     <Compile Include="Areas\Admin\Controllers\PlaceController.cs" />
     <Compile Include="Areas\Admin\Controllers\PlaceOwnerController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SportsController.cs" />
     <Compile Include="Areas\Admin\Models\PlaceDetailViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UpdateAccountViewModel.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
@@ -3245,6 +3246,10 @@
     <Content Include="Areas\Admin\Views\Place\Detail.cshtml" />
     <Content Include="Areas\Admin\Views\Place\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Place\Update.cshtml" />
+    <Content Include="Areas\Admin\Views\Sports\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Sports\Detail.cshtml" />
+    <Content Include="Areas\Admin\Views\Sports\Update.cshtml" />
+    <Content Include="Areas\Admin\Views\Sports\Create.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

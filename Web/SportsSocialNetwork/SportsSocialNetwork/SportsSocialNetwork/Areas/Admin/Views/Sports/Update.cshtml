@@ -1,0 +1,67 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.SportViewModel
+@{ 
+    ViewBag.title = "Update";
+}
+<style>
+    dt, dd {
+        <style> dt, dd;
+    }
+
+    {
+        font-size: 1.1em;
+    }
+
+    .title, .detail {
+        font-size: 1.1em;
+        color: #000;
+    }
+
+    .title {
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .detail {
+        margin-left: 2px;
+    }
+</style>
+
+
+<form id="update-sport-form">
+    @Html.HiddenFor(m => m.Id)
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title">Cập nhật</h4>
+    </div>
+    <div class="modal-body" id="modalBody">
+        <div class="row">
+            <div class="panel ">
+                <div class="panel-heading">
+                    <center><h4>Cập nhật môn thể thao</h4></center>
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <p>
+                            <span class="title">Môn: </span>
+                            @Html.EditorFor(m => m.Name, new { @class = "form-control input-lg border=0", @id = "updateSportName" })
+                            
+                        </p>
+                        <p>
+                            <span class="title">Id: </span>
+                            <span class="detail">@Model.Id</span>
+                        </p>
+                    </div>                   
+                </div>
+            </div>            
+        </div>
+    </div>   
+    <div class="modal-footer">
+        <td><button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button></td>
+        <td><button type="submit" class="btn btn-default">Cập nhật</button></td>
+    </div>
+</form>
+
+
+  
