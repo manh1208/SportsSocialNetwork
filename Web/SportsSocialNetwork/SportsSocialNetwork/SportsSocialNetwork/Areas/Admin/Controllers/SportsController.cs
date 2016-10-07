@@ -91,7 +91,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
         public ActionResult Update(int id)
         {
             var service = this.Service<ISportService>();
-            Sport sport = service.GetSportById(id);
+            Sport sport = service.Get(id);
             SportViewModel updatedSport;
             if(sport == null)
             {
