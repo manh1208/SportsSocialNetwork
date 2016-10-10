@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:padding="10sp">
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thông tin liên hệ"
+            android:textSize="25sp"
+            />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15sp">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sân Phú Thọ"
+                android:textSize="20sp"
+                android:hint="Tên sân"
+                android:paddingTop="5sp"
+                android:paddingBottom="5sp"
+                android:layout_marginTop="2sp"
+                android:layout_marginBottom="2sp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="01259251208"
+                android:textSize="20sp"
+                android:hint="Số điện thoại"
+                android:paddingTop="5sp"
+                android:paddingBottom="5sp"
+                android:layout_marginTop="2sp"
+                android:layout_marginBottom="2sp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ChaoluaFulsal@ssn.com"
+                android:textSize="20sp"
+                android:hint="Email"
+                android:paddingTop="5sp"
+                android:paddingBottom="5sp"
+                android:layout_marginTop="2sp"
+                android:layout_marginBottom="2sp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="10/10 Tô Ký - Phường 10 - Quận 12 - TP. Hồ Chí Minh"
+                android:textSize="20sp"
+                android:hint="Địa chỉ"
+                android:paddingTop="5sp"
+                android:paddingBottom="5sp"
+                android:layout_marginTop="2sp"
+                android:layout_marginBottom="2sp"
+                />
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mô tả"
+            android:textSize="25sp"
+            android:padding="10sp"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15sp"
+        android:paddingRight="15sp">
+
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Users want to see results, and they want them right now. As the options for real-time applications grow, so does the demand and the need for you, the developer, to understand the variety of tools available to give users the experience they expect and deserve. This session introduces you to the real-time web techniques available to ASP.NET developers. We take a deep dive into the groundbreaking open source project known as SignalR and demonstrate how it provides a great abstraction to lower level transports like WebSockets, which will be supported natively by IIS 8. Together with the Windows Azure Service Bus, SignalR and the cloud allow for huge scaling possibilities so your users can have collaborative, real-time web, cloud, and distributed applications that work cohesively to offer real-time user experiences.Users want to see results, and they want them right now. As the options for real-time applications grow, so does the demand and the need for you, the developer, to understand the variety of tools available to give users the experience they expect and deserve. This session introduces you to the real-time web techniques available to ASP.NET developers. We take a deep dive into the groundbreaking open source project known as SignalR and demonstrate how it provides a great abstraction to lower level transports like WebSockets, which will be supported natively by IIS 8. Together with the Windows Azure Service Bus, SignalR and the cloud allow for huge scaling possibilities so your users can have collaborative, real-time web, cloud, and distributed applications that work cohesively to offer real-time user experiences."
+            android:padding="10sp"
+            android:textColor="#000"
+            android:textSize="18sp"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

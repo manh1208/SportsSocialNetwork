@@ -46,7 +46,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             Place place = _placeService.FirstOrDefaultActive(p => p.Id == id);
             List<PlaceImage> placeImages = _placeImageService.Get(i => i.PlaceId == id).ToList();
 
-            PlaceDetailViewModel model = Mapper.Map<PlaceDetailViewModel>(place);
+            Models.ViewModels.PlaceDetailViewModel model = Mapper.Map<Models.ViewModels.PlaceDetailViewModel>(place);
             model.placeImages = placeImages;
             model.generateAddress();
 

@@ -15,6 +15,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
         IQueryable<AspNetUser> GetUsers(JQueryDataTableParamModel request, out int totalRecord);
         AspNetUser FindUser(string Id);
 
+        IEnumerable<AspNetUser> FindUserByName(String name, int skip, int take);
+
+        AspNetUser UpdateUser(AspNetUser userInfo);
+
         void DeactivateUser(AspNetUser user);
 
         String FindUserName(String userId);
@@ -22,6 +26,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
         IQueryable<AspNetUser> GetPlaceOwner(JQueryDataTableParamModel request, out int totalRecord);
 
         AspNetUser FindUserByUserName(string username);
+
+        String ChangeAvatar(String userId, String image);
+
+        String ChangeCover(String userId, String image);
 
         #endregion
 
@@ -57,6 +65,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
         {
             return this.FirstOrDefault(u => u.Id.Equals(Id));
            
+        }
+
+        public IEnumerable<AspNetUser> FindUserByName(String name, int skip, int take) {
+            return GetActive(x=> x.FullName.Contains(name)).OrderBy(x => x.FullName).Skip(skip).Take(take);
         }
 
         public void DeactivateUser(AspNetUser user)
@@ -101,6 +113,36 @@ namespace SportsSocialNetwork.Models.Entities.Services
         public AspNetUser FindUserByUserName(string username)
         {
             return this.FirstOrDefaultActive(u => u.UserName.Equals(username));
+        }
+
+        public AspNetUser UpdateUser(AspNetUser userInfo) {
+            AspNetUser user = this.FirstOrDefaultActive(x=> x.Id == userInfo.Id);
+            user.Birthday = userInfo.Birthday;
+            user.City = userInfo.City;
+            user.District = userInfo.District;
+            user.Ward = userInfo.Ward;
+            user.Email = userInfo.Email;
+            user.Gender = userInfo.Gender;
+            user.FullName = userInfo.FullName;
+            user.Address = userInfo.Address;
+            user.PhoneNumber = userInfo.PhoneNumber;
+            this.Update(user);
+            return user;
+        }
+
+        public String ChangeAvatar(String userId,String image) {
+            AspNetUser user = FirstOrDefaultActive(x=> x.Id==userId);
+            user.AvatarImage = image;
+            this.Update(user);
+            return user.AvatarImage;
+        }
+
+        public String ChangeCover(String userId, String image)
+        {
+            AspNetUser user = FirstOrDefaultActive(x => x.Id == userId);
+            user.CoverImage = image;
+            this.Update(user);
+            return user.CoverImage;
         }
 
         #endregion

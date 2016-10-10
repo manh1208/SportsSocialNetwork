@@ -255,7 +255,11 @@
     <Compile Include="Areas\Admin\Models\PlaceDetailViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UpdateAccountViewModel.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
+    <Compile Include="Areas\Api\Controllers\AspNetUserController.cs" />
     <Compile Include="Areas\Api\Controllers\FieldController.cs" />
+    <Compile Include="Areas\Api\Controllers\FollowController.cs" />
+    <Compile Include="Areas\Api\Controllers\GroupController.cs" />
+    <Compile Include="Areas\Api\Controllers\GroupMemberController.cs" />
     <Compile Include="Areas\Api\Controllers\LikeController.cs" />
     <Compile Include="Areas\Api\Controllers\OrderController.cs" />
     <Compile Include="Areas\Api\Controllers\PlaceController.cs" />
@@ -738,6 +742,7 @@
     <Compile Include="Models\ViewModels\AspNetUserLoginViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\AspNetUserOveralViewModel.cs" />
     <Compile Include="Models\ViewModels\AspNetUserViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -754,6 +759,7 @@
     <Compile Include="Models\ViewModels\FieldImageViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\FieldDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\FieldPriceViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -769,6 +775,8 @@
     <Compile Include="Models\ViewModels\FollowViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\GroupCreateModel.cs" />
+    <Compile Include="Models\ViewModels\GroupDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\GroupMemberViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -801,6 +809,8 @@
     <Compile Include="Models\ViewModels\ParticipationViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\PlaceDetailViewModel.cs" />
+    <Compile Include="Models\ViewModels\PlaceOveralViewModel.cs" />
     <Compile Include="Models\ViewModels\PlaceImageViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -816,6 +826,7 @@
     <Compile Include="Models\ViewModels\PostSportViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\PostUploadViewModel.cs" />
     <Compile Include="Models\ViewModels\PostViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -3362,6 +3373,10 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Api\Models\" />
+    <Folder Include="Areas\Api\Views\AspNetUser\" />
+    <Folder Include="Areas\Api\Views\Follow\" />
+    <Folder Include="Areas\Api\Views\GroupMember\" />
+    <Folder Include="Areas\Api\Views\Group\" />
     <Folder Include="Areas\Api\Views\Like\" />
     <Folder Include="Areas\Api\Views\PostComment\" />
     <Folder Include="Areas\Api\Views\Post\" />

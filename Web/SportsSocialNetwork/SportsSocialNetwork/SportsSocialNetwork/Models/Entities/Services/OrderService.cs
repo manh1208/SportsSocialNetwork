@@ -8,9 +8,11 @@ namespace SportsSocialNetwork.Models.Entities.Services
     public partial interface IOrderService
     {
         #region Code from here
-        IEnumerable<Order> GetAllOrderOfPlaceOwner(String ownerId);
+        IEnumerable<Order> GetAllOrderOfUser(String ownerId);
 
         Order GetOrderById(int id);
+
+        IEnumerable<Order> GetAllOrderByFieldId(int fieldId);
 
         Order ChangeOrderStatus(int id, int status);
         bool checkOrderTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime);
@@ -24,7 +26,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
     public partial class OrderService: IOrderService
     {
         #region Code from here
-        public IEnumerable<Order> GetAllOrderOfPlaceOwner(String ownerId)
+        public IEnumerable<Order> GetAllOrderOfUser(String ownerId)
         {
             return this.GetActive(x => x.UserId.Equals(ownerId));
         }
@@ -87,6 +89,15 @@ namespace SportsSocialNetwork.Models.Entities.Services
             }
             
         }
+        public IEnumerable<Order> GetAllOrderByFieldId(int fieldId) {
+            return this.GetActive(x=> x.FieldId == fieldId);
+        }
+
+
+        //private float CalculatePrice(Order order)
+        //{
+        //    float price = order.EndTime.Hour - order.StartTime.Hour;
+        //}
         #endregion
 
         public void test()

@@ -17,7 +17,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
 
         [HttpPost]
-        public ActionResult ShowAllOrder(String ownerId)
+        public ActionResult ShowAllOrderOfUser(String userId)
         {
             ResponseModel<List<OrderDetailViewModel>> response = null;
 
@@ -27,9 +27,9 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             try
             {
-                orderList = service.GetAllOrderOfPlaceOwner(ownerId).ToList<Order>();
+                orderList = service.GetAllOrderOfUser(userId).ToList<Order>();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 response = ResponseModel<List<OrderDetailViewModel>>.CreateErrorResponse("Your orders have failed to load!", systemError);
                 return Json(response, JsonRequestBehavior.AllowGet);
@@ -45,6 +45,48 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             response = new ResponseModel<List<OrderDetailViewModel>>(true, "Your orders have been loaded!", null, result);
 
             return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult ShowAllOrderOfPlaceOwner(String ownerId) {
+            var placeService = this.Service<IPlaceService>();
+
+            var orderService = this.Service<IOrderService>();
+
+            var fieldService = this.Service<IFieldService>();
+
+            ResponseModel<List<OrderViewModel>> response = null;
+
+            try {
+                List<Place> placeList = placeService.FindAllPlaceOfPlaceOwner(ownerId).ToList();
+
+                List<Field> fieldList = new List<Field>();
+
+                List<Order> orderList = new List<Order>();
+
+                foreach (var place in placeList)
+                {
+                    fieldList = fieldList.Concat(fieldService.FindAllFieldsOfPlace(place.Id)).ToList();
+                }
+
+                foreach (var field in fieldList)
+                {
+                    
+                    orderList = orderList.Concat(orderService.GetAllOrderByFieldId(field.Id)).ToList();
+                }
+
+                List<OrderViewModel> result = Mapper.Map<List<OrderViewModel>>(orderList);
+
+                response = new ResponseModel<List<OrderViewModel>>(true, "All your orders have been loaded!", null, result);
+
+            } catch (Exception) {
+                response = ResponseModel<List<OrderViewModel>>.CreateErrorResponse("Orders have NOT been loaded!",systemError);
+            }
+
+
+            return Json(response);
+
+
         }
 
         [HttpPost]
@@ -66,7 +108,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 response = new ResponseModel<OrderDetailViewModel>(true, "Order Detail", null, result);
             }
 
-            catch (Exception e)
+            catch (Exception)
             {
                 response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Can not load Order Detail", systemError);
             }
@@ -96,7 +138,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 response = new ResponseModel<OrderDetailViewModel>(true, "Your order status has been changed", null, result);
             }
 
-            catch (Exception e)
+            catch (Exception)
             {
                 response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Your order status has NOT been changed", systemError);
             }
@@ -122,7 +164,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 response = new ResponseModel<OrderDetailViewModel>(true, "Order created successfully", null, result);
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Your order has NOT been created", systemError);
             }

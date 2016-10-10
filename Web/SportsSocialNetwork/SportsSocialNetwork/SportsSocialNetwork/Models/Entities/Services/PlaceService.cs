@@ -20,12 +20,14 @@ namespace SportsSocialNetwork.Models.Entities.Services
         void savePlace(Place place);
         IEnumerable<Place> getAllPlace();
         IEnumerable<Place> getPlace(string sport, string province, string district);
-        IEnumerable<Place> GetAll();
+        IEnumerable<Place> GetAll(int skip, int take);
 
         Place GetPlaceById(int id);
 
         Place ChangeStatus(int id, int status);
         IQueryable<Place> GetPlaces(JQueryDataTableParamModel request, out int totalRecord);
+
+        IEnumerable<Place> FindAllPlaceOfPlaceOwner(String userId);
 
         #endregion
 
@@ -156,10 +158,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
             }
         }
 
-        public IEnumerable<Place> GetAll()
+        public IEnumerable<Place> GetAll(int skip, int take)
         {
             IEnumerable<Place> placeList;
-            placeList = this.GetActive();
+            placeList = this.GetActive().OrderBy(x=> x.Ratings.Count ).Skip(skip).Take(take);
             return placeList;
         }
 
@@ -205,7 +207,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
                              .Take(request.iDisplayLength);
 
             return result;
-          
+        }
+
+        public IEnumerable<Place> FindAllPlaceOfPlaceOwner(String userId) {
+            return this.GetActive(x=> x.UserId==userId);
         }
 
         #endregion

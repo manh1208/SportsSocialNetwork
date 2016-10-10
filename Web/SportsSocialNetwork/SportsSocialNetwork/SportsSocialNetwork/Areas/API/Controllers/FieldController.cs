@@ -18,7 +18,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         [HttpPost]
         public ActionResult ShowFieldList(int placeId)
         {
-            ResponseModel<List<FieldViewModel>> response = null;
+            ResponseModel<List<FieldDetailViewModel>> response = null;
 
             var service = this.Service<IFieldService>();
 
@@ -29,24 +29,38 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
                 fieldList = service.GetFieldList(placeId).ToList<Field>();
 
+                List<FieldDetailViewModel> result = Mapper.Map<List<FieldDetailViewModel>>(fieldList);
+
+                foreach (var field in fieldList)
+                {
+                    FieldImage image = field.FieldImages.FirstOrDefault();
+                    if (image != null)
+                    {
+                        foreach (var overalField in result)
+                        {
+                            if (image.FieldId == overalField.Id)
+                            {
+                                overalField.Avatar = image.Image;
+                            }
+                        }
+                    }
+                }
+
+                response = new ResponseModel<List<FieldDetailViewModel>>(true, "Field list loaded successfully", null, result);
+
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
-                response = ResponseModel<List<FieldViewModel>>.CreateErrorResponse("Field list failed to load", systemError);
-                return Json(response);
+                response = ResponseModel<List<FieldDetailViewModel>>.CreateErrorResponse("Field list failed to load", systemError);
             }
-
-            List<FieldViewModel> result = Mapper.Map<List<FieldViewModel>>(fieldList);
-
-            response = new ResponseModel<List<FieldViewModel>>(true, "Field list loaded successfully", null, result);
 
             return Json(response);
         }
 
         [HttpPost]
         public ActionResult ShowFieldDetail(int id) {
-            ResponseModel<FieldViewModel> response = null;
+            ResponseModel<FieldDetailViewModel> response = null;
 
             var service = this.Service<IFieldService>();
 
@@ -54,16 +68,26 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 Field field = service.GetFieldInfo(id);
                 if (field != null)
                 {
-                    FieldViewModel result = Mapper.Map<FieldViewModel>(field);
+                    FieldDetailViewModel result = Mapper.Map<FieldDetailViewModel>(field);
 
-                    response = new ResponseModel<FieldViewModel>(true, "Field detail loaded successfully", null, result);
+                    List<FieldImage> images= field.FieldImages.ToList<FieldImage>();
+
+                    List<String> imageList = new List<string>();
+
+                    foreach (var image in images) {
+                        imageList.Add(image.Image);
+                    }
+
+                    result.imageList = imageList;
+
+                    response = new ResponseModel<FieldDetailViewModel>(true, "Field detail loaded successfully", null, result);
                 }
                 else {
-                    response = ResponseModel<FieldViewModel>.CreateErrorResponse("Field detail has failed to load!", systemError);
+                    response = ResponseModel<FieldDetailViewModel>.CreateErrorResponse("Field detail has failed to load!", systemError);
                 }
 
-            } catch (Exception e) {
-                response = ResponseModel<FieldViewModel>.CreateErrorResponse("Field detail has failed to load!",systemError);
+            } catch (Exception) {
+                response = ResponseModel<FieldDetailViewModel>.CreateErrorResponse("Field detail has failed to load!",systemError);
             }
 
             return Json(response);
@@ -87,7 +111,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                     response = ResponseModel<FieldViewModel>.CreateErrorResponse("Field status has failed to change");
                 }
                 
-            } catch (Exception e) {
+            } catch (Exception) {
                 response = ResponseModel<FieldViewModel>.CreateErrorResponse("Field status has failed to change");
             }
 

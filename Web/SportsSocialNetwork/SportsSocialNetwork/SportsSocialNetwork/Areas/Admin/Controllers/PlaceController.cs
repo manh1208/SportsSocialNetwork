@@ -53,7 +53,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
 
         public ActionResult Detail(int id)
         {
-            var model = new PlaceDetailViewModel();
+            var model = new Models.PlaceDetailViewModel();
             var service = this.Service<IPlaceService>();
             var place = service.Get(id);
             if (place == null)
@@ -61,7 +61,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                 return this.IdNotFound();
             }else
             {
-                model = Mapper.Map<PlaceDetailViewModel>(place);
+                model = Mapper.Map<Models.PlaceDetailViewModel>(place);
                 model.CreateAddressString();
             }
             return this.PartialView(model);

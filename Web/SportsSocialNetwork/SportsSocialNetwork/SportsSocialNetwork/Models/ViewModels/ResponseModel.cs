@@ -7,7 +7,7 @@ namespace SportsSocialNetwork.Models
 {
     public class ResponseModel<T>
     {
-        public bool Suscess { get; set; }
+        public bool Succeed { get; set; }
 
         public String Message { get; set; }
 
@@ -17,7 +17,7 @@ namespace SportsSocialNetwork.Models
 
         public ResponseModel(bool success, String message, List<String> errorList, T data)
         {
-            this.Suscess = success;
+            this.Succeed = success;
             this.Message = message;
             this.Errors = errorList;
             this.Data = data;
@@ -26,7 +26,7 @@ namespace SportsSocialNetwork.Models
 
         public ResponseModel(bool success, String message, List<String> errorList)
         {
-            this.Suscess = success;
+            this.Succeed = success;
             this.Message = message;
             this.Errors = errorList;
 

@@ -15,6 +15,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         Field ChangeFieldStatus(int id, int status);
 
+        IEnumerable<Field> FindAllFieldsOfPlace(int id);
+
         #endregion
 
 
@@ -45,7 +47,9 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return field;
         }
 
-
+        public IEnumerable<Field> FindAllFieldsOfPlace(int id) {
+            return this.GetActive(x => x.PlaceId == id);
+        }
 
         #endregion
 
