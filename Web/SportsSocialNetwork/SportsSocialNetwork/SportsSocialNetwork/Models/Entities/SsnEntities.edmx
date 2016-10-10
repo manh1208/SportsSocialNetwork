@@ -266,6 +266,9 @@
           <Property Name="OnlinePaymentMethod" Type="nvarchar(max)" />
           <Property Name="BankCode" Type="nvarchar(max)" />
           <Property Name="TransactionTime" Type="datetime" />
+          <Property Name="PayerName" Type="nvarchar(max)" />
+          <Property Name="PayerPhone" Type="nvarchar" MaxLength="255" />
+          <Property Name="PayerEmail" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="Participation">
           <Key>
@@ -1690,6 +1693,9 @@
           <Property Name="OnlinePaymentMethod" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="BankCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TransactionTime" Type="DateTime" Precision="3" />
+          <Property Name="PayerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PayerPhone" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PayerEmail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Order_AspNetUsers" FromRole="Order" ToRole="AspNetUser" />
           <NavigationProperty Name="Field" Relationship="SSNModel.FK_Order_Field" FromRole="Order" ToRole="Field" />
         </EntityType>
@@ -2632,6 +2638,9 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="SSNModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="PayerEmail" ColumnName="PayerEmail" />
+                <ScalarProperty Name="PayerPhone" ColumnName="PayerPhone" />
+                <ScalarProperty Name="PayerName" ColumnName="PayerName" />
                 <ScalarProperty Name="TransactionTime" ColumnName="TransactionTime" />
                 <ScalarProperty Name="BankCode" ColumnName="BankCode" />
                 <ScalarProperty Name="OnlinePaymentMethod" ColumnName="OnlinePaymentMethod" />
