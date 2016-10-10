@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using SportsSocialNetwork.Areas.PlaceOwner.Models.ViewModels;
+using System.Threading.Tasks;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -246,6 +247,11 @@ namespace SportsSocialNetwork.Controllers
                     success = false
                 });
             }
+        }
+
+        public ActionResult NganLuong()
+        {
+            return View();
         }
     }
 }
