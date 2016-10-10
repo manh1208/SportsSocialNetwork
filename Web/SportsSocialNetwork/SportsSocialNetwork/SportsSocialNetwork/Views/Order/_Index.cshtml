@@ -1,35 +1,112 @@
 ﻿@model SportsSocialNetwork.Models.ViewModels.OrderViewModel
 
-@using (Html.BeginForm("ConfirmOrder", "Order", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal" }))
-{ 
-        @Html.HiddenFor(p => p.FieldId)
-        <div class="form-group">
-            <label>Ngày chơi</label>
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <i class="icon wb-calendar" aria-hidden="true"></i>
-                </span>
-                @Html.TextBoxFor(p => p.CreateDate, "{0:dd-MM-yyyy}", new { @class = "form-control", @id = "playDate", @data_plugin = "datepicker", @Value = "" })
-            </div>
+@using (Html.BeginForm("ConfirmOrder", "Order", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "orderForm" }))
+{
+    @Html.HiddenFor(p => p.FieldId)
+    <div class="summary-errors alert alert-danger alert-dismissible" style="display: none; text-align:left; padding:0px 0px 0px 10px" id="error" >
+        <ul>
+            <li style="display: none" id="error1">
+                <span style="color:red; font-size:12px">Thời gian không hợp lệ</span>
+            </li>
+            <li style="display: none" id="error2">
+                <span style="color:red; font-size:12px">Thời gian không nằm trong các khung giờ</span>
+            </li>
+            <li style="display: none" id="error3">
+                <span style="color:red; font-size:12px">Thời gian này đã đươc đặt</span>
+            </li>
+        </ul>
+</div>
+    <div class="form-group">
+        <label>Ngày chơi</label>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="icon wb-calendar" aria-hidden="true"></i></span>
+            @Html.TextBoxFor(p => p.CreateDate, "{0:dd-MM-yyyy}", new { @class = "form-control filterInput", @id = "playDate", @data_plugin = "datepicker", @Value = "" })
         </div>
+    </div>
         <div class="form-group">
             <label>Giờ chơi</label>
             <div class="input-daterange">
                 <div class="input-group">
                     <span class="input-group-addon">Từ</span>
-                    @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value= "", @Placeholder = "HH:MM"})
+                    @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">đến</span>
-                    @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker form-control", @id = "endTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value="", @Placeholder = "HH:MM" })
+                    @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker form-control", @id = "endTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
                 </div>
             </div>
-            </div>
+        </div>
             <div class="form-group">
                 <label>Ghi chú</label>
                 @Html.TextAreaFor(p => p.Note, new { @class = "form-control", @id = "note", @rows = 3 })
             </div>
-        <div class="form-group">
-            <input type="submit" value="Đặt sân" class="btn btn-primary" />
-        </div>
+            <div class="form-group text-right">
+                <input type="submit" value="Đặt sân" class="btn btn-primary" />
+            </div>
 }
+
+<script>
+    $('#orderForm').submit(function () {
+        var startTime = $("#startTime").val();
+        var endTime = $("#endTime").val();
+        var error = false;
+        var hasErrorContent = false;
+        var errorStr ="";
+        if (startTime >= endTime) {
+            error = true;
+            hasErrorContent = true;
+            $("#error1").show();
+        }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CheckTimeValidInTimeBlock")',
+            async: false,
+            data: {"fieldId" : @Model.FieldId,
+                "startTime": startTime,
+                "endTime" : endTime},
+            success: function (result) {
+                if (!result.Succeed) {
+                    error = true;
+                    hasErrorContent = true;
+                    $("#error2").show();
+                }
+            },
+            error: function (result) {
+                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                error = true;
+            },
+        });
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("CheckOrderTimeExist")',
+            async: false,
+            data: {"fieldId" : @Model.FieldId,
+                "startTime": startTime,
+                "endTime" : endTime},
+            success: function (result) {
+                if (!result.Succeed) {
+                    error = true;
+                    hasErrorContent = true;
+                    $("#error3").show();
+                }
+            },
+            error: function (result) {
+                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                error = true;
+            },
+        });
+
+        if (error) {
+            if(hasErrorContent){
+                $("#error").show();
+            }
+            return false;
+        }
+    });
+
+    console.log("aa");
+</script>
+
+
+

@@ -723,6 +723,7 @@
     <Compile Include="Models\FileUploader.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\NganLuong.cs" />
     <Compile Include="Models\Notifications\Android.cs" />
     <Compile Include="Models\Notifications\IOS.cs" />
     <Compile Include="Models\Notifications\NotificationModel.cs" />
@@ -3355,6 +3356,8 @@
     <Content Include="Views\Place\Test.cshtml" />
     <Content Include="Views\Order\_Index.cshtml" />
     <Content Include="Views\Order\ConfirmOrder.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
+    <Content Include="Views\Order\OrderDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

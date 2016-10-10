@@ -19,7 +19,7 @@
 </style>
 <div class="col-md-6" style="float:left">
     <div class="panel col-md-12">
-        <h3 style="text-align:center"><span class="label label-primary">@Model.Name</span></h3>
+        <h3 style="text-align:center">@Model.Name</h3>
         <div class="panel-body" style="padding-top:10px">
             <div class="example-wrap">
                 @if (ViewBag.fieldImages != null)
@@ -82,6 +82,14 @@
                 </div>
                 }
                 <p>@Model.Description</p>
+                <div class="input-daterange">
+                    <div class="input-group">
+                        <button type="button" class="btn btn-primary col-md-12" id="checkPrice"><i class="fa fa-usd" aria-hidden="true"></i> Bảng giá các khung giờ</button>
+                    </div>
+                    <div class="input-group">
+                        <button type="button" class="btn btn-warning col-md-12" id="checkCalendar"><i class="icon wb-calendar" aria-hidden="true"></i> Kiểm tra lịch đặt sân</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -89,15 +97,55 @@
 
 <div class="col-md-6" style="float:left">
     <div class="panel col-md-12">
-        <h3 style="text-align:center"><span class="label label-primary">Đặt sân</span></h3>
+        <h3 style="text-align:center">Đặt sân</h3>
         <div class="panel-body">
-            <div class="page-content">
-                <div style="text-align:center; margin-bottom:10px">
-                    <button type="button" class="btn btn-warning" id="checkCalendar"><i class="icon wb-calendar" aria-hidden="true"></i> Kiểm tra lịch của sân này</button>
-                </div>
+            <div class="page-content padding-top-0">
                 @{Html.RenderAction("_Index", "Order", new {id=Model.Id });}
             </div>
         </div>
+    </div>
+</div>
+<div class="modal fade" id="priceForm" aria-hidden="true" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <form class="modal-content" action="#" method="post" role="form">
+            <div class="modal-header">
+                <button type="button" class="close" aria-hidden="true" data-dismiss="modal">×</button>
+                <h4 class="modal-title">Bảng giá</h4>
+            </div>
+            <div class="modal-body">
+                @if (ViewBag.timeBlocks != null)
+                {
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Khung giờ</th>
+                                    <th>Giá tiền(vnd)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var item in ViewBag.timeBlocks)
+                                {
+                                <tr>
+                                    <td>@item.StartTime - @item.EndTime</td>
+                                    <td>@item.Price</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }else
+                {
+                    <span>Hiện tại chưa có bảng giá tham khảo</span>
+                }
+
+            </div>
+            <div class="modal-footer">
+                <div class="form-actions">
+                    <button class="btn btn-primary" data-dismiss="modal" type="button">Đóng</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -151,6 +199,9 @@
 
     $('#checkCalendar').on('click', function () {
         $('#calendarForm').modal('show');
+    });
+    $('#checkPrice').on('click', function () {
+        $('#priceForm').modal('show');
     });
 
     $('#calendarForm').on('shown.bs.modal', function () {

@@ -18,12 +18,18 @@ namespace SportsSocialNetwork.Controllers
         {
             var _fieldService = this.Service<IFieldService>();
             var _fieldImageService = this.Service<IFieldImageService>();
+            var _timeBlockService = this.Service<ITimeBlockService>();
             var entity = _fieldService.FirstOrDefaultActive(p => p.Id == id.Value);
             var fields = new FieldViewModel(entity);
-            List<FieldImage> fieldImages = _fieldImageService.Get(p => p.FieldId == id.Value).ToList();
+            List<FieldImage> fieldImages = _fieldImageService.GetActive(p => p.FieldId == id.Value).ToList();
             if (fieldImages.Count > 0)
             {
                 ViewBag.fieldImages = fieldImages;
+            }
+            List<TimeBlock> timeBlocks = _timeBlockService.GetActive(p => p.FieldId == id.Value).ToList();
+            if(timeBlocks.Count > 0)
+            {
+                ViewBag.timeBlocks = timeBlocks;
             }
             return View(fields);
         }
@@ -31,7 +37,7 @@ namespace SportsSocialNetwork.Controllers
         {
             //nen tao 1 bang quan ly gio san rieng, gio dung tam bang order
             var _orderService = this.Service<IOrderService>();
-            List<Order> orders = _orderService.Get(p => p.FieldId == id).ToList();
+            List<Order> orders = _orderService.GetActive(p => p.FieldId == id).ToList();
             List<OrderViewModel> orderList = Mapper.Map<List<OrderViewModel>>(orders);
             return Json(orderList.Select(f => new { title = "Đã được đặt",start=f.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"),end=f.EndTime.ToString("yyyy-MM-ddTHH:mm:ss") }), JsonRequestBehavior.AllowGet );
         }
