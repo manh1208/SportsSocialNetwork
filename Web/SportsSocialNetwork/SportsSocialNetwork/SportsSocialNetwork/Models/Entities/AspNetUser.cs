@@ -58,6 +58,7 @@ namespace SportsSocialNetwork.Models.Entities
         public string CoverImage { get; set; }
         public Nullable<System.DateTime> Birthday { get; set; }
         public Nullable<int> Gender { get; set; }
+        public string NganLuongAccount { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<bool> Active { get; set; }

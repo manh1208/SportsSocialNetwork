@@ -64,6 +64,7 @@
           <Property Name="CoverImage" Type="nvarchar" MaxLength="255" />
           <Property Name="Birthday" Type="date" />
           <Property Name="Gender" Type="int" />
+          <Property Name="NganLuongAccount" Type="nvarchar(max)" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="Status" Type="int" />
           <Property Name="Active" Type="bit" />
@@ -1434,6 +1435,7 @@
           <Property Name="CoverImage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Birthday" Type="DateTime" Precision="0" />
           <Property Name="Gender" Type="Int32" />
+          <Property Name="NganLuongAccount" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Int32" />
           <Property Name="Active" Type="Boolean" />
@@ -2415,6 +2417,7 @@
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="NganLuongAccount" ColumnName="NganLuongAccount" />
                 <ScalarProperty Name="Gender" ColumnName="Gender" />
                 <ScalarProperty Name="Birthday" ColumnName="Birthday" />
                 <ScalarProperty Name="CoverImage" ColumnName="CoverImage" />
