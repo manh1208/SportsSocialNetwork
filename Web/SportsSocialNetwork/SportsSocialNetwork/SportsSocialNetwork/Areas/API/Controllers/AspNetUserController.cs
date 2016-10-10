@@ -19,32 +19,61 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
         private String userImagePath = "UserImage\\CuongPK";
 
+        [HttpGet]
+        public ActionResult FindUser(String name, int skip, int take) {
+            var service = this.Service<IAspNetUserService>();
+
+            ResponseModel<List<AspNetUserOveralViewModel>> response = null;
+
+            try {
+                List<AspNetUser> userList = service.FindUserByName(name, skip, take).ToList();
+
+                List<AspNetUserOveralViewModel> result = Mapper.Map<List<AspNetUserOveralViewModel>>(userList);
+
+                response = new ResponseModel<List<AspNetUserOveralViewModel>>(true, "Result list:", null, result);
+            } catch (Exception) {
+                response = ResponseModel<List<AspNetUserOveralViewModel>>.CreateErrorResponse("Failed to load result!", systemError);
+            }
+
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
-        public ActionResult ShowProfile(String userId) {
+        public ActionResult ShowProfile(String userId, String currentUserId) {
             var service = this.Service<IAspNetUserService>();
 
             AspNetUser user = null;
 
-            ResponseModel<AspNetUserViewModel> response = null;
+            ResponseModel<AspNetUserOveralViewModel> response = null;
 
             try {
                 user = service.FindUser(userId);
 
                 if (user != null)
                 {
-                    AspNetUserViewModel result = Mapper.Map<AspNetUserViewModel>(user);
+                    AspNetUserOveralViewModel result = Mapper.Map<AspNetUserOveralViewModel>(user);
 
-                    response = new ResponseModel<AspNetUserViewModel>(true, "Profile has been successfully loaded!", null, result);
+                    Follow follow=user.Follows.FirstOrDefault(x=> x.UserId== userId && x.FollowerId==currentUserId && x.Active==true);
+
+                    if (follow != null)
+                    {
+                        result.Followed = true;
+                    }
+                    else {
+                        result.Followed = false;
+                    }
+
+                    response = new ResponseModel<AspNetUserOveralViewModel>(true, "Profile has been successfully loaded!", null, result);
                 }
                 else
                 {
-                    response = ResponseModel<AspNetUserViewModel>.CreateErrorResponse("Your profile has failed to load!", systemError);
+                    response = ResponseModel<AspNetUserOveralViewModel>.CreateErrorResponse("Your profile has failed to load!", systemError);
                 }
                 
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                response = ResponseModel<AspNetUserViewModel>.CreateErrorResponse("Your profile has failed to load!", systemError);
+                response = ResponseModel<AspNetUserOveralViewModel>.CreateErrorResponse("Your profile has failed to load!", systemError);
             }
 
             return Json(response);
@@ -56,7 +85,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             AspNetUser user = null;
 
-            ResponseModel<AspNetUserViewModel> response = null;
+            ResponseModel<AspNetUserOveralViewModel> response = null;
 
             List<String> errorList = new List<string>();
 
@@ -69,20 +98,20 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                     {
                         user = service.UpdateUser(userInfo);
 
-                        AspNetUserViewModel result = Mapper.Map<AspNetUserViewModel>(user);
+                        AspNetUserOveralViewModel result = Mapper.Map<AspNetUserOveralViewModel>(user);
 
-                        response = new ResponseModel<AspNetUserViewModel>(true, "Your profile has been updated!", null, result);
+                        response = new ResponseModel<AspNetUserOveralViewModel>(true, "Your profile has been updated!", null, result);
                     }
                     else {
-                        response = new ResponseModel<AspNetUserViewModel>(false, "Your profile has failed to update!", errorList);
+                        response = new ResponseModel<AspNetUserOveralViewModel>(false, "Your profile has failed to update!", errorList);
                     }
 
                 }
                 else {
-                    response = ResponseModel<AspNetUserViewModel>.CreateErrorResponse("Your profile has failed to update!", systemError);
+                    response = ResponseModel<AspNetUserOveralViewModel>.CreateErrorResponse("Your profile has failed to update!", systemError);
                 }
-            } catch (Exception e) {
-                response = ResponseModel<AspNetUserViewModel>.CreateErrorResponse("Your profile has failed to update!", systemError);
+            } catch (Exception) {
+                response = ResponseModel<AspNetUserOveralViewModel>.CreateErrorResponse("Your profile has failed to update!", systemError);
             }
 
             return Json(response);

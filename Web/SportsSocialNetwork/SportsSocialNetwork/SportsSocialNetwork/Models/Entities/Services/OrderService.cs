@@ -8,9 +8,11 @@ namespace SportsSocialNetwork.Models.Entities.Services
     public partial interface IOrderService
     {
         #region Code from here
-        IEnumerable<Order> GetAllOrderOfPlaceOwner(String ownerId);
+        IEnumerable<Order> GetAllOrderOfUser(String ownerId);
 
         Order GetOrderById(int id);
+
+        IEnumerable<Order> GetAllOrderByFieldId(int fieldId);
 
         Order ChangeOrderStatus(int id, int status);
 
@@ -23,7 +25,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
     public partial class OrderService: IOrderService
     {
         #region Code from here
-        public IEnumerable<Order> GetAllOrderOfPlaceOwner(String ownerId)
+        public IEnumerable<Order> GetAllOrderOfUser(String ownerId)
         {
             return this.GetActive(x => x.UserId.Equals(ownerId));
         }
@@ -61,6 +63,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
             this.Save();
             return order;
            
+        }
+
+        public IEnumerable<Order> GetAllOrderByFieldId(int fieldId) {
+            return this.GetActive(x=> x.FieldId == fieldId);
         }
 
 

@@ -8,7 +8,9 @@ namespace SportsSocialNetwork.Models.Entities.Services
     public partial interface IPostService
     {
         #region Code from here
-        IEnumerable<Post> GetAll();
+        IEnumerable<Post> GetAll(int skip, int take);
+
+        IEnumerable<Post> GetAllPostsOfGroup(int groupId, int skip, int take);
 
         Post GetPostById(int id);
 
@@ -23,9 +25,13 @@ namespace SportsSocialNetwork.Models.Entities.Services
     public partial class PostService : IPostService
     {
         #region Code from here
-        public IEnumerable<Post> GetAll() {
-            IEnumerable<Post> postList = this.GetActive();
+        public IEnumerable<Post> GetAll(int skip, int take) {
+            IEnumerable<Post> postList = this.GetActive().OrderBy(x=> x.EditDate==null? x.CreateDate: x.EditDate).Skip(skip).Take(take);
             return postList;
+        }
+
+        public IEnumerable<Post> GetAllPostsOfGroup(int groupId, int skip, int take) {
+            return this.GetActive(x=> x.GroupId==groupId).OrderBy(x => x.EditDate == null ? x.CreateDate : x.EditDate).Skip(skip).Take(take);
         }
 
         public Post GetPostById(int id) {

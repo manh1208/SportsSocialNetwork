@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Teek.Models;
 using static System.Net.WebRequestMethods;
 
 namespace SportsSocialNetwork.Areas.Api.Controllers
@@ -16,14 +17,25 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
     {
         private String systemError = "An error has occured!";
 
+        private String userImagePath = "UserImage\\CuongPK";
+
         [HttpPost]
-        public ActionResult Comment(int postId, String userId, String content ) {
+        public ActionResult Comment(int postId, String userId, String content , HttpPostedFileBase image) {
             var service = this.Service<IPostCommentService>();
 
             ResponseModel<PostCommentViewModel> response = null;
 
             try {
-                PostComment comment = service.Comment(postId, userId, content);
+                String commentImage = null;
+
+                if (image != null) {
+                    FileUploader uploader = new FileUploader();
+
+                    commentImage = uploader.UploadImage(image, userImagePath);
+                }
+
+                PostComment comment = service.Comment(postId, userId, content,commentImage);
+
 
                 PostCommentDetailViewModel result = Mapper.Map<PostCommentDetailViewModel>(comment);
 
@@ -31,7 +43,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 response = new ResponseModel<PostCommentViewModel>(true, "Commented successfully", null, result);
 
-            } catch (Exception e) {
+            } catch (Exception) {
                 response = ResponseModel<PostCommentViewModel>.CreateErrorResponse("Failed to comment",systemError);
             }
             return Json(response);

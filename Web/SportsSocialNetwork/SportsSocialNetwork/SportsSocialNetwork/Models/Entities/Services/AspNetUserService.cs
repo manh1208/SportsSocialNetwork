@@ -13,6 +13,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         IQueryable<AspNetUser> GetUsers(JQueryDataTableParamModel request, out int totalRecord);
         AspNetUser FindUser(string Id);
 
+        IEnumerable<AspNetUser> FindUserByName(String name, int skip, int take);
+
         AspNetUser UpdateUser(AspNetUser userInfo);
 
         void DeactivateUser(AspNetUser user);
@@ -56,6 +58,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
         {
             return this.FirstOrDefault(u => u.Id.Equals(Id));
            
+        }
+
+        public IEnumerable<AspNetUser> FindUserByName(String name, int skip, int take) {
+            return GetActive(x=> x.FullName.Contains(name)).OrderBy(x => x.FullName).Skip(skip).Take(take);
         }
 
         public void DeactivateUser(AspNetUser user)

@@ -15,16 +15,22 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         private String systemError = "An error has occured!";
 
         [HttpPost]
-        public ActionResult LikePost(int postId, String userId)
+        public ActionResult LikeUnlikePost(int postId, String userId)
         {
             var service = this.Service<ILikeService>();
 
             ResponseModel<Like> response = null;
             try
             {
-                service.LikePost(postId, userId);
+                bool result= service.LikeUnlikePost(postId, userId);
 
-                response = new ResponseModel<Like>(true, "Liked", null);
+                if (result)
+                {
+                    response = new ResponseModel<Like>(true, "Liked", null);
+                }
+                else {
+                    response = new ResponseModel<Like>(true, "Unliked", null);
+                }
             }
             catch (Exception)
             {
