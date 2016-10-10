@@ -3,6 +3,7 @@ package com.capstone.sportssocialnetwork.fragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,8 +23,19 @@ import com.capstone.sportssocialnetwork.activity.NotificationActivity;
 import com.capstone.sportssocialnetwork.activity.PostActivity;
 import com.capstone.sportssocialnetwork.adapter.FeedAdapter;
 import com.capstone.sportssocialnetwork.model.Feed;
+import com.capstone.sportssocialnetwork.model.ResponseModel;
+import com.capstone.sportssocialnetwork.service.ISocialNetworkService;
+import com.capstone.sportssocialnetwork.service.RestService;
+import com.capstone.sportssocialnetwork.utils.DataUtils;
+import com.capstone.sportssocialnetwork.utils.SharePreferentName;
+import com.capstone.sportssocialnetwork.utils.Utilities;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by ManhNV on 9/6/16.
@@ -35,6 +47,9 @@ public class FeedFragment extends Fragment {
     private View header;
     private SearchView searchView;
     private SearchView.OnQueryTextListener queryTextListener;
+    private RestService service;
+    private ISocialNetworkService sSNService;
+    private String userId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,8 +64,11 @@ public class FeedFragment extends Fragment {
         initView(v);
         prepareData();
         event();
+        reloadData();
         return v;
     }
+
+
 
     private void event() {
         btnPost.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +92,10 @@ public class FeedFragment extends Fragment {
     }
 
     private void initView(View v) {
+        service = new RestService();
+        sSNService = service.getSocialNetworkService();
+        userId = DataUtils.getINSTANCE(getActivity()).getPreferences()
+                .getString(SharePreferentName.SHARE_USER_ID,"");
         lvFeed = (ListView) v.findViewById(R.id.lv_list_feed);
         header = ((LayoutInflater) getActivity()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
@@ -126,7 +148,6 @@ public class FeedFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.menu_notice:
@@ -135,5 +156,27 @@ public class FeedFragment extends Fragment {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void reloadData() {
+        Call<ResponseModel<List<Feed>>> callback = sSNService.getAllPost(userId);
+        callback.enqueue(new Callback<ResponseModel<List<Feed>>>() {
+            @Override
+            public void onResponse(Call<ResponseModel<List<Feed>>> call, Response<ResponseModel<List<Feed>>> response) {
+                if (response.isSuccessful()){
+                    ResponseModel<List<Feed>> responseModel = response.body();
+                    if (responseModel.isSucceed()){
+                        adapter.setFeeds(responseModel.getData());
+                    }else{
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseModel<List<Feed>>> call, Throwable t) {
+
+            }
+        });
     }
 }

@@ -53,6 +53,11 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
         return convertView;
     }
 
+    public void setFeeds(List<Feed> feeds) {
+        this.feeds = feeds;
+        notifyDataSetChanged();
+    }
+
     private final class ViewHolder {
         Button btnComment;
         Button btnLike;
