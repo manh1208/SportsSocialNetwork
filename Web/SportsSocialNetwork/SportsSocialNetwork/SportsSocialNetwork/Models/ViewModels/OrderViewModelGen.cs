@@ -25,6 +25,11 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual double Price { get; set; }
     			public virtual int Status { get; set; }
     			public virtual Nullable<int> PaidType { get; set; }
+    			public virtual string Token { get; set; }
+    			public virtual string OrderCode { get; set; }
+    			public virtual string OnlinePaymentMethod { get; set; }
+    			public virtual string BankCode { get; set; }
+    			public virtual Nullable<System.DateTime> TransactionTime { get; set; }
     	
     	public OrderViewModel() : base() { }
     	public OrderViewModel(SportsSocialNetwork.Models.Entities.Order entity) : base(entity) { }

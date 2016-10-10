@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.capstone.sportssocialnetwork.activity.LoginActivity"
+    tools:showIn="@layout/activity_login">
+    <ImageView
+        android:id="@+id/login_logo"
+        android:layout_width="100sp"
+        android:layout_height="100sp"
+        android:src="@drawable/image_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50sp"/>
+
+    <LinearLayout
+        android:id="@+id/layout_input"
+        android:layout_below="@id/login_logo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50sp"
+        android:layout_marginRight="50sp"
+        android:layout_marginTop="50sp"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/txt_login_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tên tài khoản"
+            android:inputType="text"
+            android:textColor="#000"
+            android:textSize="20sp"/>
+        <EditText
+            android:id="@+id/txt_login_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Mật khẩu"
+            android:inputType="textPassword"
+            android:textColor="#000"
+            android:textSize="20sp"
+            android:layout_marginTop="20sp"/>
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Đăng nhập"
+            android:layout_margin="50sp"
+            android:layout_marginTop="50sp"
+            android:background="@drawable/button_login"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            />
+    </LinearLayout>
+
+
+</RelativeLayout>
