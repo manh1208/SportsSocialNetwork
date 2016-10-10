@@ -24,6 +24,11 @@ namespace SportsSocialNetwork.Models.Entities
         public double Price { get; set; }
         public int Status { get; set; }
         public Nullable<int> PaidType { get; set; }
+        public string Token { get; set; }
+        public string OrderCode { get; set; }
+        public string OnlinePaymentMethod { get; set; }
+        public string BankCode { get; set; }
+        public Nullable<System.DateTime> TransactionTime { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual Field Field { get; set; }
