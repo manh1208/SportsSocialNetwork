@@ -139,6 +139,41 @@ namespace SportsSocialNetwork.Controllers
         {
             return View();
         }
+
+        public ActionResult btnSubmit_Click(object sender, EventArgs e)
+        {
+            String return_url = "http://localhost:26011/Place/verifyOrder";
+            String transaction_info = "DEMO";
+            String order_code = DateTime.Now.ToString("yyyyMMddHHmmss");
+            String receiver = "viethuystudy@gmail.com";//Tài khoản nhận tiền 
+            String price = "20000";
+            NL_Checkout nl = new NL_Checkout();
+            String url;
+            url = nl.buildCheckoutUrl(return_url, receiver, transaction_info, order_code, price);
+            return Redirect(url);
+        }
+
+        public ActionResult verifyOrder(object sender, EventArgs e)
+        {
+            String transaction_info = Request.QueryString["transaction_info"];
+            String order_code = Request.QueryString["order_code"];
+            String payment_id = Request.QueryString["payment_id"];
+            String payment_type = Request.QueryString["payment_type"];
+            String secure_code = Request.QueryString["secure_code"];
+            String price = Request.QueryString["price"];
+            String error_text = Request.QueryString["error_text"];
+            NL_Checkout nl = new NL_Checkout();
+            bool check = nl.verifyPaymentUrl(transaction_info, order_code, price, payment_id, payment_type, error_text, secure_code);
+            if (check)
+            {
+                return Redirect("https://www.google.co.jp/");
+            }
+            else
+            {
+                return Redirect("https://www.facebook.com/");
+            }
+        }
+
         public ActionResult ViewDetail(int? id)
         {
             var _placeService = this.Service<IPlaceService>();

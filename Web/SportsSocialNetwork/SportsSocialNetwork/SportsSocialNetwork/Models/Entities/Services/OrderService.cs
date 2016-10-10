@@ -13,6 +13,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         Order GetOrderById(int id);
 
         Order ChangeOrderStatus(int id, int status);
+        bool checkOrderTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime);
 
         Order CreateOrder(String userId, int fieldId, DateTime startTime, DateTime endTime, String note,double price, int? paidType);
         #endregion
@@ -63,11 +64,29 @@ namespace SportsSocialNetwork.Models.Entities.Services
            
         }
 
-
-        //private float CalculatePrice(Order order)
-        //{
-        //    float price = order.EndTime.Hour - order.StartTime.Hour;
-        //}
+        public bool checkOrderTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime)
+        {
+            IEnumerable<Order> orders = this.GetActive(p => p.FieldId == fieldId).OrderBy(p => p.StartTime).ToList();
+            bool isValid = true;
+            foreach(var order in orders)
+            {
+                if((startTime>=order.StartTime.TimeOfDay && startTime< order.EndTime.TimeOfDay) || 
+                    (endTime>order.StartTime.TimeOfDay && endTime<=order.EndTime.TimeOfDay) ||
+                    (startTime<=order.StartTime.TimeOfDay && endTime >= order.EndTime.TimeOfDay))
+                {
+                    isValid = false;
+                    break;
+                }
+            }
+            if (isValid)
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+            
+        }
         #endregion
 
         public void test()
