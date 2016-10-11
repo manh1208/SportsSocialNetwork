@@ -4,6 +4,8 @@ using SportsSocialNetwork.Areas.PlaceOwner.Models.ViewModels;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using SportsSocialNetwork.Utilities;
 using System;
@@ -100,10 +102,15 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             districts.ToList().Add(new SelectListItem { Text = "", Value = " " });
             wards.ToList().Add(new SelectListItem { Text = "", Value = " " });
 
+            List<SelectListItem> statuss = new List<SelectListItem>();
+            statuss.Add(new SelectListItem { Text = Utils.GetEnumDescription(PlaceStatus.Active), Value = Convert.ToString((int)PlaceStatus.Active) });
+            statuss.Add(new SelectListItem { Text = Utils.GetEnumDescription(PlaceStatus.Repairing), Value = Convert.ToString((int)PlaceStatus.Repairing) });
+
             ViewBag.placeImages = placeImages;
             ViewBag.provinces = provinces;
             ViewBag.districts = districts;
             ViewBag.wards = wards;
+            ViewBag.statusList = statuss;
 
             return View(place);
         }
@@ -114,7 +121,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         {
             var _placeService = this.Service<IPlaceService>();
             _placeService.savePlace(place);
-            if(uploadImages != null && uploadImages.ToList().Count > 0)
+            if(uploadImages.ToList()[0] != null && uploadImages.ToList().Count > 0)
             {
                 var _placeImageService = this.Service<IPlaceImageService>();
                 _placeImageService.saveImage(place.Id, uploadImages);
@@ -189,9 +196,10 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
         public ActionResult GetData(JQueryDataTableParamModel param)
         {
+            string userID = Request["userID"];
             //var blogPostList = _blogPostService.GetBlogPostbyStoreId();
             var _placeService = this.Service<IPlaceService>();
-            var placeList = _placeService.GetActive();
+            var placeList = _placeService.GetActive(p => p.UserId.Equals(userID));
             //IEnumerable<BlogPost> filteredListItems;
             IEnumerable<Place> filteredListItems;
             if (!string.IsNullOrEmpty(param.sSearch))

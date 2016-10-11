@@ -31,6 +31,10 @@
 
     <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.css">
 
+    <link href="~/Content/js/sweetAlert/sweetalert.css" rel="stylesheet" />
+
+    <link href="~/Content/css/custom-css.css" rel="stylesheet" />
+
     <!--Clock Picker-->
     <link rel="stylesheet" href="~/Content/assets/vendor/clockpicker/clockpicker.css">
 
@@ -50,6 +54,7 @@
     <link rel="stylesheet" href="~/Content/assets/fonts/web-icons/web-icons.min.css">
     <link rel="stylesheet" href="~/Content/assets/fonts/brand-icons/brand-icons.min.css">
     <link rel="stylesheet" href="~/Content/font-awesome-4.6.3/css/font-awesome.min.css">
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
 
     
 
@@ -375,173 +380,28 @@
             <div>
                 <div>
                     <ul class="site-menu">
-                        @*<li class="site-menu-category">General</li>
-                        <li class="site-menu-item has-sub active open">
-                            <a href="javascript:void(0)" data-slug="dashboard">
+                        <li class="site-menu-item open">
+                            <a href="@Url.Action("index","Place")" data-slug="dashboard">
                                 <i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
-                                <span class="site-menu-title">Dashboard</span>
-                                <div class="site-menu-badge">
-                                    <span class="badge badge-success">2</span>
-                                </div>
+                                <span class="site-menu-title">Quản lý địa điểm</span>
+
                             </a>
-                            <ul class="site-menu-sub">
-                                <li class="site-menu-item active">
-                                    <a class="animsition-link" href="index.html" data-slug="dashboard-v1">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Dashboard v1</span>
-                                    </a>
-                                </li>
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="dashboard/v2.html" data-slug="dashboard-v2">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Dashboard v2</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>*@
-                      
-                        <li class="site-menu-category">Các địa điểm</li>
-                        <li class="site-menu-item has-sub">
-                            <a href="javascript:void(0)" data-slug="uikit">
-                                <i class="site-menu-icon wb-flag" aria-hidden="true"></i>
-                                <span class="site-menu-title">Obama</span>
-                                @*<span class="site-menu-arrow"></span>*@
+                        </li>
+                        <li class="site-menu-item">
+                            <a href="@Url.Action("index","Order")" data-slug="dashboard">
+                                <i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
+                                <span class="site-menu-title">Quản lý đặt sân</span>
+
                             </a>
-                            @*<ul class="site-menu-sub">
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="uikit/buttons.html" data-slug="uikit-buttons">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Buttons</span>
-                                    </a>
-                                </li>
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="uikit/colors.html" data-slug="uikit-colors">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Colors</span>
-                                    </a>
-                                </li>
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="uikit/dropdowns.html" data-slug="uikit-dropdowns">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Dropdowns</span>
-                                    </a>
-                                </li>
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="uikit/list.html" data-slug="uikit-list">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">List</span>
-                                    </a>
-                                </li>
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="uikit/icons.html" data-slug="uikit-icons">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Icons</span>
-                                    </a>
-                                </li>
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="uikit/images.html" data-slug="uikit-images">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Images</span>
-                                    </a>
-                                </li>
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="uikit/carousel.html" data-slug="uikit-carousel">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Carousel</span>
-                                    </a>
-                                </li>
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="uikit/modals.html" data-slug="uikit-modals">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Modals</span>
-                                    </a>
-                                </li>
-                                <li class="site-menu-item has-sub">
-                                    <a href="javascript:void(0)" data-slug="uikit-panel">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Panel</span>
-                                        <span class="site-menu-arrow"></span>
-                                    </a>
-                                    <ul class="site-menu-sub">
-                                        <li class="site-menu-item">
-                                            <a class="animsition-link" href="uikit/panel-structure.html" data-slug="uikit-panel-structure">
-                                                <i class="site-menu-icon " aria-hidden="true"></i>
-                                                <span class="site-menu-title">Panel Structure</span>
-                                            </a>
-                                        </li>
-                                        <li class="site-menu-item">
-                                            <a class="animsition-link" href="uikit/panel-actions.html" data-slug="uikit-panel-actions">
-                                                <i class="site-menu-icon " aria-hidden="true"></i>
-                                                <span class="site-menu-title">Panel Actions</span>
-                                            </a>
-                                        </li>
-                                        <li class="site-menu-item">
-                                            <a class="animsition-link" href="uikit/panel-portlets.html" data-slug="uikit-panel-portlets">
-                                                <i class="site-menu-icon " aria-hidden="true"></i>
-                                                <span class="site-menu-title">Panel Portlets</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="uikit/progress-bars.html" data-slug="uikit-progress-bars">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Progress Bars</span>
-                                    </a>
-                                </li>
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="uikit/badges-labels.html" data-slug="uikit-badges-labels">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Badges &amp; Labels</span>
-                                    </a>
-                                </li>
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="uikit/tooltip-popover.html" data-slug="uikit-tooltip-popover">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Tooltip &amp; Popover</span>
-                                    </a>
-                                </li>
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="uikit/tabs-accordions.html" data-slug="uikit-tabs-accordions">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Tabs &amp; Accordions</span>
-                                    </a>
-                                </li>
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="uikit/typography.html" data-slug="uikit-typography">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Typography</span>
-                                        <div class="site-menu-badge">
-                                            <span class="badge badge-primary">5</span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="site-menu-item">
-                                    <a class="animsition-link" href="uikit/utilities.html" data-slug="uikit-utilities">
-                                        <i class="site-menu-icon " aria-hidden="true"></i>
-                                        <span class="site-menu-title">Utilties</span>
-                                    </a>
-                                </li>
-                            </ul>*@
+                        </li>
+                        <li class="site-menu-item">
+                            <a href="@Url.Action("index","Event")" data-slug="dashboard">
+                                <i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
+                                <span class="site-menu-title">Quản lý sự kiện</span>
+
+                            </a>
                         </li>
                     </ul>
-
-                    @*<div class="site-menubar-section">
-                        <h5>
-                            Milestone
-                            <span class="pull-right">30%</span>
-                        </h5>
-                        <div class="progress progress-xs">
-                            <div class="progress-bar active" style="width: 30%;" role="progressbar"></div>
-                        </div>
-                        <h5>
-                            Release
-                            <span class="pull-right">60%</span>
-                        </h5>
-                        <div class="progress progress-xs">
-                            <div class="progress-bar progress-bar-warning" style="width: 60%;" role="progressbar"></div>
-                        </div>
-                    </div>*@
                 </div>
             </div>
         </div>
@@ -698,6 +558,10 @@
     <script src="~/Content/assets/js/components/material.min.js"></script>
 
     <script src="~/Content/assets/js/components/bootstrap-datepicker.js"></script>
+
+    <script src="~/Content/js/custom-script.js"></script>
+
+    <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
 
     </body>
 @RenderSection("Scripts", false)

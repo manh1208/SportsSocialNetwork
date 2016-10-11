@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
+using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Utilities;
+using Microsoft.AspNet.Identity;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
@@ -21,6 +23,23 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
         public ActionResult CreateEvent()
         {
+            var _placeService = this.Service<IPlaceService>();
+            string curUserID = User.Identity.GetUserId();
+            List<Place> places = _placeService.GetActive(p => p.UserId.Equals(curUserID)).ToList();
+            List<SelectListItem> sPlaces = new List<SelectListItem>();
+            if (places != null && places.Count > 0)
+            {
+                foreach (var item in places)
+                {
+                    sPlaces.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+            else
+            {
+                sPlaces.Add(new SelectListItem { Text = "Hiện chưa có địa điểm", Value = "" });
+            }
+            
+            ViewBag.places = sPlaces;
             return View();
         }
 
@@ -28,7 +47,31 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         {
             var _eventService = this.Service<IEventService>();
             Event evt = _eventService.FirstOrDefault(e => e.Id == id);
+            List<SelectListItem> statuss = new List<SelectListItem>();
 
+            foreach (EventStatus item in Enum.GetValues(typeof(EventStatus)))
+            {
+                statuss.Add(new SelectListItem { Value = Convert.ToString((int)item), Text = Utils.GetEnumDescription(item)});
+            }
+
+            var _placeService = this.Service<IPlaceService>();
+            string userID = User.Identity.GetUserId();
+            List<Place> places = _placeService.GetActive(p => p.UserId.Contains(userID)).ToList();
+            List<SelectListItem> sPlaces = new List<SelectListItem>();
+            if (places != null && places.Count > 0)
+            {
+                foreach (var item in places)
+                {
+                    sPlaces.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+            else
+            {
+                sPlaces.Add(new SelectListItem { Text = "Hiện chưa có địa điểm", Value = "" });
+            }
+
+            ViewBag.statusList = statuss;
+            ViewBag.places = sPlaces;
             return this.PartialView(evt);
         }
 

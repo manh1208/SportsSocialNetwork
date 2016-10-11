@@ -1,0 +1,561 @@
+﻿@model SportsSocialNetwork.Models.Entities.Field
+@using SportsSocialNetwork.Models.Entities;
+@{
+    ViewBag.Title = "FieldDetail";
+    List<SelectListItem> selectListFieldType = ViewBag.selectListFieldType;
+    List<FieldImage> fieldImages = ViewBag.fieldImages;
+    List<TimeBlock> timeBlocks = ViewBag.timeBlocks;
+    List<SelectListItem> statusList = ViewBag.statusList;
+}
+
+
+<div class="panel">
+    <div class="panel-heading">
+        <h3 class="panel-title">@Model.Name</h3>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-body">
+        @using (Html.BeginForm("updateField", "Field", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "fieldForm", @autocomplete = "off" }))
+        {
+            <div class="row">
+                @Html.TextBoxFor(f => f.Id, new { @style = "display:none;" })
+                @Html.TextBoxFor(f => f.PlaceId, new { @style = "display:none;" })
+                <div class="col-md-6">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Thông tin sân</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group form-material floating">
+                                @Html.TextBoxFor(f => f.Name, new { @class = "form-control input-lg" })
+                                <label class="floating-label">Tên sân</label>
+                            </div>
+                            <div class="form-group form-material floating">
+                                @Html.DropDownListFor(f => f.FieldTypeId, selectListFieldType, new { @class = "form-control input-lg" })
+                                <label class="floating-label">Loại sân</label>
+                            </div>
+                            <div class="form-group form-material floating">
+                                @Html.DropDownListFor(f => f.Status, statusList, new { @class = "form-control input-lg" })
+                                <label class="floating-label">Trạng thái</label>
+                            </div>
+                            @*<div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label class="control-label">Giờ hoạt động</label>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="col-sm-2">
+                                            <label class="control-label">Từ</label>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            @Html.TextBoxFor(f => f.Place.StartTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="col-sm-2">
+                                            <label class="control-label">Đến</label>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            @Html.TextBoxFor(f => f.Place.EndTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                                        </div>
+                                    </div>
+                                </div>*@
+                            @*<div class="form-group form-material floating">
+                                    @Html.TextBoxFor(f => f.Name, new { @class = "form-control input-lg" })
+                                    <label class="floating-label">Khung giá</label>
+                                </div>*@
+                            <div class="form-group form-material floating">
+                                @Html.TextAreaFor(f => f.Description, new { rows = "3", @class = "form-control input-lg" })
+                                <label class="floating-label">Mô tả</label>
+                            </div>
+
+                            <div class="form-group" id="tempTS">
+                                <label class="control-label">Khung giá</label>
+                                @{
+                                foreach (var item in timeBlocks)
+                                {
+                            <div class="row">
+                                <div class="col-xs-3" style="padding:0 0 0 15px;">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Từ</span>
+                                        <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" id="sstTime" name="" disabled="disabled" value="@item.StartTime" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-3" style="padding:0;">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Đến</span>
+                                        <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" id="senTime" disabled="disabled" value="@item.EndTime" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-3" style="padding:0;">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Giá</span>
+                                        <input type="text" class="form-control input-lg" id="stsPrice" name="Price" disabled="disabled" value="@item.Price" />
+                                    </div>
+                                </div>
+                                <input type="hidden" value="@item.Id" />
+                                <div class="col-xs-3">
+                                    <button type="button" class="btn btn-pure btn-primary icon wb-pencil editbtn" onclick=""></button>
+                                    <button type="button" class="btn btn-pure btn-danger icon wb-close removebtn" onclick=""></button>
+                                </div>
+                            </div>
+
+                                }
+                                }
+
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="input-daterange">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Từ</span>
+                                                <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" id="stTime" />
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">Đến</span>
+                                                <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" id="enTime" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Giá</span>
+                                            <input type="text" class="form-control input-lg" id="tsPrice" />
+                                            <span class="input-group-addon">VND</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <button type="button" class="btn btn-icon btn-default" style="margin-top:3px;" onclick="addTempTS()"><i class="fa fa-plus"></i></button>
+                                    </div>
+                                    <select id="timeSlot" name="timeSlot" multiple hidden>
+                                        @{
+                                        foreach (var item in timeBlocks)
+                                        {
+                                            var vtb = item.StartTime + "_" + item.EndTime + "_" + item.Price + "_" + item.Id;
+                                            <option value="@vtb" selected></option>
+                                        }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Hình ảnh về sân</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group form-material floating">
+                                <input type="text" class="form-control input-lg" readonly="" />
+                                <input type="file" id="uploadImages" name="uploadImages" multiple />
+                                <label class="floating-label">Hình ảnh</label>
+                            </div>
+                            <div class="container-fluid">
+                                <div class="row" id="pImages">
+                                    @{
+                                        if (fieldImages != null && fieldImages.Count > 0)
+                                        {
+                                            foreach (var item in fieldImages)
+                                            {
+                                                <div class="col-sm-6 placeImage" id="pim_@item.Id">
+                                                    <figure class="overlay overlay-hover">
+                                                        <img style="max-height:100%; max-width:100%; display:block" src="@item.Image" />
+                                                        <figcaption class="overlay-bottom overlay-panel overlay-background overlay-slide-top overlay-fade overlay-icon">
+                                                            <a class="icon wb-close" href="javascript:void(0)" title="Xóa hình" onclick="deleteImage(@item.Id)"></a>
+                                                        </figcaption>
+                                                    </figure>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-alt alert-warning alert-dismissible" role="alert">
+                                                <span class="alert-link">Hiện chưa có hình ảnh</span>
+                                            </div>
+                                        }
+
+                                    }
+
+                                </div>
+                            </div>
+
+                            @*<div class="form-group">
+                                    <label class="col-sm-3 control-label">Hình ảnh</label>
+                                    <div class="col-sm-6 upload-form" id="exampleUploadForm" >
+                                        <input type="file" class="form-control" id="inputUpload" name="uploadImages" multiple />
+                                        <div class="uploader-inline">
+                                            <h3 class="upload-instructions">
+                                                Click Or Drop Files To Upload
+                                            </h3>
+                                        </div>
+                                        <div class="file-wrap container-fluid">
+                                            <div class="file-list row"></div>
+                                        </div>
+                                    </div>
+                                </div>*@
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <button type="button" class="btn btn-danger" onclick="deleteField(@Model.Id)"><i class="icon wb-trash" aria-hidden="true"></i>Xóa sân</button>
+                </div>
+                <div class="col-sm-offset-4 col-sm-5">
+                    @Html.ActionLink("Hủy bỏ", "Index", "Field", null, new { @class = "btn btn-default" })
+                    <input type="submit" id="submitBtn" value="Cập nhật sân" class="btn btn-success" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script>
+    var searchValue = "";
+
+    (function(document, window, $) {
+      'use strict';
+
+      var Site = window.Site;
+      $(document).ready(function() {
+        Site.run();
+      });
+    })(document, window, jQuery);
+
+    $('body').on('focus', ".timepicker", function () {
+        $(this).clockpicker();
+    })
+
+    $(document).on('click', ".editbtn", function () {
+        var sValue = "";
+        this.removeAttribute("class");
+        this.setAttribute("class", "btn btn-pure btn-primary icon wb-check savebtn");
+        var outerDiv = $(this).parent().parent();
+        $(outerDiv).find("input").each(function () {
+            sValue += this.value + "_";
+            console.log(sValue);
+            this.removeAttribute("disabled");
+        })
+        searchValue = sValue.substring(0, sValue.lastIndexOf("_"));
+    })
+
+    $(document).on('click', ".savebtn", function () {
+        var editValue = "";
+
+        this.removeAttribute("class");
+        this.setAttribute("class", "btn btn-pure btn-primary icon wb-pencil editbtn");
+        var outerDiv = $(this).parent().parent();
+        $(outerDiv).find("input").each(function () {
+            editValue += this.value + "_";
+            this.setAttribute("disabled", "disabled");
+        })
+        var eValue = editValue.substring(0, editValue.lastIndexOf("_"));
+        $("#timeSlot option[value='" + searchValue + "']").val(eValue);
+    })
+
+    $(document).on('click', ".removebtn", function () {
+
+        var dValue = "";
+        var outerDiv = $(this).parent().parent();
+        $(outerDiv).find("input").each(function () {
+            dValue += this.value+"_";
+        })
+        var sdValue = dValue.substring(0, dValue.lastIndexOf("_"));
+
+        //console.log(sdValue);
+        bootbox.dialog({
+            message: "Bạn có chắc muốn xóa ?",
+            title: "Xác nhận xóa",
+            buttons: {
+                danger: {
+                    label: "Hủy",
+                    className: "btn-default",
+                    callback: function () {
+
+                    }
+                },
+                success: {
+                    label: "Đồng ý",
+                    className: "btn-danger",
+                    callback: function () {
+                        $.ajax({
+                            url: '@Url.Action("deleteTimeBlock")',
+                            data: {
+                                format: 'json',
+                                timeblock: sdValue
+                            },
+                            error: function () {
+                                alert("Problem!")
+                            },
+                            success: function (data) {
+                                if (data.Succeed) {
+                                    $("#timeSlot option[value='" + sdValue + "']").remove();
+                                    $(outerDiv).remove();
+                                } else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                }
+                            },
+                            type: 'POST'
+                        })
+                    }
+                }
+            }
+        })
+    })
+
+    function addTempTS() {
+        console.log("11");
+        var startTime = $("#stTime").val();
+        var endTime = $("#enTime").val();
+        var price = $("#tsPrice").val();
+
+        //var tempTS = document.getElementById("#tempTS");
+        var ts = "<div class='row'>"
+                                + "<div class='col-xs-3' style='padding:0 0 0 15px;'>"
+                                    + "<div class='input-group'>"
+                                        + "<span class='input-group-addon'>Từ</span>"
+                                        + "<input type='text' class='timepicker form-control input-lg' data-plugin='clockpicker' data-autoclose='true' id='sstTime' disabled='disabled' value='" + startTime + "'/>"
+                                    + "</div>"
+                                + "</div>"
+                                + "<div class='col-xs-3' style='padding:0;'>"
+                                    + "<div class='input-group'>"
+                                        + "<span class='input-group-addon'>Đến</span>"
+                                        + "<input type='text' class='timepicker form-control input-lg' data-plugin='clockpicker' data-autoclose='true' id='senTime' disabled='disabled' value='" + endTime + "'/>"
+                                    + "</div>"
+                                + "</div>"
+                                + "<div class='col-xs-3' style='padding:0;'>"
+                                    + "<div class='input-group'>"
+                                        + "<span class='input-group-addon'>Giá</span>"
+                                        + "<input type='text' class='form-control input-lg' id='stsPrice' disabled='disabled' value='" + price + "'/>"
+                                    + "</div>"
+                                + "</div>"
+                                + "<div class='col-xs-3'>"
+                                    + "<button type='button' class='btn btn-pure btn-primary icon wb-pencil editbtn' onclick=''></button>"
+                                    + "<button type='button' class='btn btn-pure btn-danger icon wb-close removebtn' onclick=''></button>"
+                                + "</div>"
+                            + "</div>";
+        $("#tempTS").append(ts);
+
+        var oValue = startTime + "_" + endTime + "_" + price;
+        var oOption = "<option value='" + oValue + "' selected></option>"
+        $("#timeSlot").append(oOption);
+
+        $("#stTime").val("");
+        $("#enTime").val("");
+        $("#tsPrice").val("");
+    }
+
+    function deleteImage(id) {
+        bootbox.dialog({
+            message: "Bạn có chắc muốn xóa hình này?",
+            title: "Xác nhận xóa",
+            buttons: {
+                success: {
+                    label: "Hủy",
+                    className: "btn-default",
+                    callback: function () {
+
+                    }
+                },
+                danger: {
+                    label: "Xóa",
+                    className: "btn-danger",
+                    callback: function () {
+                        $.ajax({
+                            url: '@Url.Action("deleteImage")',
+                            data: {
+                                format: 'json',
+                                id: id
+                            },
+                            error: function () {
+                                alert("Problem!")
+                            },
+                            success: function (data) {
+                                if (data === "success") {
+                                    bootbox.alert("Đã xóa thành công", function () {
+                                        var el = document.getElementById("pim_" + id);
+                                        el.parentNode.removeChild(el);
+                                    });
+
+                                }
+                            },
+                            type: 'POST'
+                        })
+                    }
+                }
+            }
+        });
+    }
+
+
+        function deleteField(id) {
+        showConfirmDeleteItem("Bạn có chắc chắn muốn xóa sân này không?",
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("deleteField")',
+                        data: { id: id },
+                        success: function (data) {
+                            if (data === "success") {
+                                //showMessage("Xóa địa điểm thành công", "success", "OK");
+                                location.href = '@Url.Action("FieldList", "Field", new { id = Model.PlaceId})'
+                            }
+                            else {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        },
+                        error: function (error) {
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        }
+                    });
+                }
+            });
+    }
+
+
+    // Example Validataion Full
+      // ------------------------
+      (function() {
+          $('#fieldForm').formValidation({
+          framework: "bootstrap",
+          button: {
+            selector: '#submitBtn',
+            disabled: 'disabled'
+          },
+          icon: null,
+          fields: {
+              Name: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Tên sân không được trống'
+                      }
+                  }
+              },
+              FieldTypeId: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Hãy chọn một loại sân'
+                      }
+                  }
+              },
+              Price: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Giá tiền không được trống'
+                      },
+                      digits: {
+                          message: 'Giá trị nhập phải là số'
+                      }
+                  }
+              },
+            //username: {
+            //  validators: {
+            //    notEmpty: {
+            //      message: 'The username is required'
+            //    },
+            //    stringLength: {
+            //      min: 6,
+            //      max: 30
+            //    },
+            //    regexp: {
+            //      regexp: /^[a-zA-Z0-9]+$/
+            //    }
+            //  }
+            //},
+            //email: {
+            //  validators: {
+            //    notEmpty: {
+            //      message: 'The username is required'
+            //    },
+            //    emailAddress: {
+            //      message: 'The email address is not valid'
+            //    }
+            //  }
+            //},
+            //password: {
+            //  validators: {
+            //    notEmpty: {
+            //      message: 'The password is required'
+            //    },
+            //    stringLength: {
+            //      min: 8
+            //    }
+            //  }
+            //},
+            //birthday: {
+            //  validators: {
+            //    notEmpty: {
+            //      message: 'The birthday is required'
+            //    },
+            //    date: {
+            //      format: 'YYYY/MM/DD'
+            //    }
+            //  }
+            //},
+            //github: {
+            //  validators: {
+            //    url: {
+            //      message: 'The url is not valid'
+            //    }
+            //  }
+            //},
+            //skills: {
+            //  validators: {
+            //    notEmpty: {
+            //      message: 'The skills is required'
+            //    },
+            //    stringLength: {
+            //      max: 300
+            //    }
+            //  }
+            //},
+            //porto_is: {
+            //  validators: {
+            //    notEmpty: {
+            //      message: 'Please specify at least one'
+            //    }
+            //  }
+            //},
+            //'for[]': {
+            //  validators: {
+            //    notEmpty: {
+            //      message: 'Please specify at least one'
+            //    }
+            //  }
+            //},
+            //company: {
+            //  validators: {
+            //    notEmpty: {
+            //      message: 'Please company'
+            //    }
+            //  }
+            //},
+            //browsers: {
+            //  validators: {
+            //    notEmpty: {
+            //      message: 'Please specify at least one browser you use daily for development'
+            //    }
+            //  }
+            //}
+          }
+        });
+      })();
+
+
+
+    </script>
+
+
+}

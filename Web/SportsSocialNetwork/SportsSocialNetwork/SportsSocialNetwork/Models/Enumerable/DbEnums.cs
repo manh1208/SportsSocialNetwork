@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -89,5 +89,11 @@ namespace SportsSocialNetwork.Models.Enumerable
         Other = 4
     }
 
-
+    public enum EventStatus
+    {
+        [Description("Đang diễn ra")]
+        Operating = 1,
+        [Description("Kết thúc")]
+        Closed = 0
+    }
 }

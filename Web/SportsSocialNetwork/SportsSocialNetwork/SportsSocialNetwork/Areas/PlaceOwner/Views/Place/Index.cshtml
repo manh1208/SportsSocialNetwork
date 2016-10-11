@@ -1,5 +1,6 @@
 ﻿@using SportsSocialNetwork.Models.Enumerable;
 @using SportsSocialNetwork.Models.Utilities;
+@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Danh sách các địa điểm";
 }
@@ -74,45 +75,70 @@
     };
 
     function deletePlace(id) {
-        bootbox.dialog({
-            message: "Bạn có chắc muốn xóa địa điểm này?",
-            title: "Xác nhận xóa",
-            buttons: {
-                success: {
-                    label: "Hủy",
-                    className: "btn-default",
-                    callback: function () {
-
-                    }
-                },
-                danger: {
-                    label: "Đồng ý",
-                    className: "btn-danger",
-                    callback: function () {
-                        $.ajax({
-                            url: "/PlaceOwner/Place/deletePlace",
-                            data: {
-                                format: 'json',
-                                id: id
-                            },
-                            error: function () {
+        showConfirmDeleteItem("Bạn có chắc chắn muốn xóa địa điểm này không?",
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("deletePlace")',
+                        data: { id: id },
+                        success: function (data) {
+                            if (data === "success") {
+                                RefreshTable();
+                                showMessage("Xóa địa điểm thành công", "success", "OK");
+                            }
+                            else {
                                 showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                            },
-                            success: function (data) {
-                                if (data === "success") {
-                                    bootbox.alert("Đã xóa thành công", function () {
-                                        location.href = "/PlaceOwner/Place";
-                                    });
-
-                                }
-                            },
-                            type: 'POST'
-                        })
-                    }
+                            }
+                        },
+                        error: function (error) {
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        }
+                    });
                 }
-            }
-        });
+            });
     }
+
+    //function deletePlace(id) {
+    //    bootbox.dialog({
+    //        message: "Bạn có chắc muốn xóa địa điểm này?",
+    //        title: "Xác nhận xóa",
+    //        buttons: {
+    //            success: {
+    //                label: "Hủy",
+    //                className: "btn-default",
+    //                callback: function () {
+
+    //                }
+    //            },
+    //            danger: {
+    //                label: "Đồng ý",
+    //                className: "btn-danger",
+    //                callback: function () {
+    //                    $.ajax({
+    //                        url: "/PlaceOwner/Place/deletePlace",
+    //                        data: {
+    //                            format: 'json',
+    //                            id: id
+    //                        },
+    //                        error: function () {
+    //                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+    //                        },
+    //                        success: function (data) {
+    //                            if (data === "success") {
+    //                                bootbox.alert("Đã xóa thành công", function () {
+    //                                    location.href = "/PlaceOwner/Place";
+    //                                });
+
+    //                            }
+    //                        },
+    //                        type: 'POST'
+    //                    })
+    //                }
+    //            }
+    //        }
+    //    });
+    //}
 
     function InitDatatable() {
         $("#listPlaceTable").DataTable({
@@ -122,9 +148,9 @@
             "bSort": true,
             "sAjaxSource": "/PlaceOwner/Place/GetData",
             "bProcessing": true,
-            @*"fnServerParams": function (aoData) {
-                aoData.push({ "name": "id", "value": @ViewBag.storeId });
-            },*@
+            "fnServerParams": function (aoData) {
+                aoData.push({ "name": "userID", "value": '@User.Identity.GetUserId()' })
+            },
             "aLengthMenu": [10, 20, 50],
             "oLanguage": {
                 "sSearch": "Tìm kiếm:",
@@ -211,7 +237,8 @@
                         var viewDetailBtn = "<a href='javascript:void(0)' class='btn btn-success' data-target='#modalPlaceDetail' data-toggle='modal' onclick='showDetail("+ o[0] +")'><i class='fa fa-eye' aria-hidden='true'></i></a>";
                         var updateBtn = "<a href='/PlaceOwner/Place/PlaceDetail/" + o[0] + "' class='btn btn-warning'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>";
                         var deleteBtn = "<a href='javascript:void(0)' class='btn btn-danger' onclick='deletePlace(" + o[0] + ")'><i class='fa fa-trash-o ' aria-hidden='true'></i></a>";
-                        return viewDetailBtn + '&nbsp;' + updateBtn + '&nbsp;' + deleteBtn;;
+                        var viewFieldBtn = "<a href='/PlaceOwner/Field/FieldList/" + o[0] + "' class='btn btn-info'><i class='icon wb-map' aria-hidden='true'></i></a>";
+                        return viewDetailBtn + '&nbsp;' + updateBtn + '&nbsp;' + deleteBtn + '&nbsp' + viewFieldBtn;
                     }
                 }
 

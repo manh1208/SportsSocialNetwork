@@ -1,7 +1,14 @@
-﻿
+﻿@using SportsSocialNetwork.Models.Enumerable;
+@using SportsSocialNetwork.Models.Utilities;
 @{
     ViewBag.Title = "Danh sách các sự kiện";
 }
+
+<style>
+    .datepicker {
+        z-index: 1151 !important;
+    }
+</style>
 
 <div class="panel">
     <div class="panel-body">
@@ -54,6 +61,7 @@
 @section Scripts{
 
     <script>
+        var count = 1;
 
         (function (document, window, $) {
             'use strict';
@@ -64,87 +72,138 @@
             });
         })(document, window, jQuery);
 
+        $('body').on('focus', ".datepicker", function () {
+            $(this).datepicker();
+        })
+
         function deleteEventModal(id) {
-            bootbox.dialog({
-                message: "Bạn có chắc muốn xóa sự kiện này?",
-                title: "Xác nhận xóa",
-                buttons: {
-                    success: {
-                        label: "Hủy",
-                        className: "btn-default",
-                        callback: function () {
 
+            showConfirmDeleteItem("Bạn có chắc chắn muốn xóa sự kiện này không?",
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("deleteEvent")',
+                        data: { id: id },
+                        success: function (data) {
+                            if (data === "success") {
+                                //showMessage("Xóa địa điểm thành công", "success", "OK");
+                                location.href = '@Url.Action("index")'
+                            }
+                            else {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        },
+                        error: function (error) {
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                         }
-                    },
-                    danger: {
-                        label: "Đồng ý",
-                        className: "btn-danger",
-                        callback: function () {
-                            $.ajax({
-                                url: "/PlaceOwner/Event/deleteEvent",
-                                data: {
-                                    format: 'json',
-                                    id: id
-                                },
-                                error: function () {
-                                    alert("Problem!")
-                                },
-                                success: function (data) {
-                                    if (data === "success") {
-                                        bootbox.alert("Đã xóa thành công", function () {
-                                            $('#updateEventModal').modal('toggle');
-                                            RefreshTable();
-                                        });
-
-                                    }
-                                },
-                                type: 'POST'
-                            })
-                        }
-                    }
+                    });
                 }
             });
+
+            //bootbox.dialog({
+            //    message: "Bạn có chắc muốn xóa sự kiện này?",
+            //    title: "Xác nhận xóa",
+            //    buttons: {
+            //        success: {
+            //            label: "Hủy",
+            //            className: "btn-default",
+            //            callback: function () {
+
+            //            }
+            //        },
+            //        danger: {
+            //            label: "Đồng ý",
+            //            className: "btn-danger",
+            //            callback: function () {
+            //                $.ajax({
+            //                    url: "/PlaceOwner/Event/deleteEvent",
+            //                    data: {
+            //                        format: 'json',
+            //                        id: id
+            //                    },
+            //                    error: function () {
+            //                        alert("Problem!")
+            //                    },
+            //                    success: function (data) {
+            //                        if (data === "success") {
+            //                            bootbox.alert("Đã xóa thành công", function () {
+            //                                $('#updateEventModal').modal('toggle');
+            //                                RefreshTable();
+            //                            });
+
+            //                        }
+            //                    },
+            //                    type: 'POST'
+            //                })
+            //            }
+            //        }
+            //    }
+            //});
         };
 
         function deleteEvent(id) {
-            bootbox.dialog({
-                message: "Bạn có chắc muốn xóa sự kiện này?",
-                title: "Xác nhận xóa",
-                buttons: {
-                    success: {
-                        label: "Hủy",
-                        className: "btn-default",
-                        callback: function () {
-
+            showConfirmDeleteItem("Bạn có chắc chắn muốn xóa sự kiện này không?",
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("deleteEvent")',
+                        data: { id: id },
+                        success: function (data) {
+                            if (data === "success") {
+                                showMessage("Xóa địa điểm thành công", "success", "OK");
+                                RefreshTable();
+                            }
+                            else {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        },
+                        error: function (error) {
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                         }
-                    },
-                    danger: {
-                        label: "Đồng ý",
-                        className: "btn-danger",
-                        callback: function () {
-                            $.ajax({
-                                url: "/PlaceOwner/Event/deleteEvent",
-                                data: {
-                                    format: 'json',
-                                    id: id
-                                },
-                                error: function () {
-                                    alert("Problem!")
-                                },
-                                success: function (data) {
-                                    if (data === "success") {
-                                        bootbox.alert("Đã xóa thành công", function () {
-                                            RefreshTable();
-                                        });
-
-                                    }
-                                },
-                                type: 'POST'
-                            })
-                        }
-                    }
+                    });
                 }
             });
+
+            //bootbox.dialog({
+            //    message: "Bạn có chắc muốn xóa sự kiện này?",
+            //    title: "Xác nhận xóa",
+            //    buttons: {
+            //        success: {
+            //            label: "Hủy",
+            //            className: "btn-default",
+            //            callback: function () {
+
+            //            }
+            //        },
+            //        danger: {
+            //            label: "Đồng ý",
+            //            className: "btn-danger",
+            //            callback: function () {
+            //                $.ajax({
+            //                    url: "/PlaceOwner/Event/deleteEvent",
+            //                    data: {
+            //                        format: 'json',
+            //                        id: id
+            //                    },
+            //                    error: function () {
+            //                        alert("Problem!")
+            //                    },
+            //                    success: function (data) {
+            //                        if (data === "success") {
+            //                            bootbox.alert("Đã xóa thành công", function () {
+            //                                RefreshTable();
+            //                            });
+
+            //                        }
+            //                    },
+            //                    type: 'POST'
+            //                })
+            //            }
+            //        }
+            //    }
+            //});
         }
 
         function scriptForPartialView() {
@@ -157,13 +216,6 @@
                     Site.run();
                 });
             })(document, window, jQuery);
-
-            'use strict';
-
-            var Site = window.Site;
-            $(document).ready(function () {
-                Site.run();
-            });
 
             $('#eventForm').submit(function (e) {
                 e.preventDefault();
@@ -178,11 +230,10 @@
                     processData: false,
                     success: function (result) {
                         if (result.Succeed) {
-                            bootbox.alert("Cập nhật thành công", function () {
-                                $('#updateEventModal').modal('toggle');
-                                RefreshTable();
-                            })
-                            
+                            showMessage("Cập nhật thành công", "success", "OK");
+                            $('#updateEventModal').modal('toggle');
+                            RefreshTable();
+
                         } else {
                             showErrors(result.Errors);
                         }
@@ -230,13 +281,14 @@
         }
 
         function RefreshTable() {
+            count = 1;
             var oTable = $("#listEventTable").dataTable();
             oTable._fnPageChange(0);
             oTable._fnAjaxUpdate();
         };
 
         function InitDatatable() {
-            var count = 1;
+            
             $("#listEventTable").DataTable({
                 "bRetrieve": true,
                 "bServerSide": true,
@@ -338,11 +390,15 @@
                         "aTargets": [5],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
-                            if (o[6] == 1) {
-                                return "<span class='label label-lg label-outline label-success'>Đang diễn ra</span>";
+                            var label = '';
+                            if (o[6] == parseInt('@((int)EventStatus.Operating)')) {
+                                label = "<span class='label label-lg label-outline label-success'>@Utils.GetEnumDescription(EventStatus.Operating).ToString()</span>";
+                            } else if (o[6] == parseInt('@((int)EventStatus.Closed)')) {
+                                label = "<span class='label label-lg label-outline label-dark'>@Utils.GetEnumDescription(EventStatus.Closed).ToString()</span>"
                             } else {
-                                return "<span class='label label-lg label-outline label-warning'>Kết thúc</span>";
+                                label = '<span class="label label-outline label-default label-lg">Không xác định</span>';
                             }
+                            return label;
                         }
                     },
                     {

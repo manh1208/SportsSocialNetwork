@@ -7,6 +7,7 @@
     var listCities = ViewBag.provinces as IOrderedEnumerable<SelectListItem>;
     var listDistricts = ViewBag.districts as IOrderedEnumerable<SelectListItem>;
     var listWards = ViewBag.wards as IOrderedEnumerable<SelectListItem>;
+    List<SelectListItem> statusList = ViewBag.statusList;
 }
 
 
@@ -41,8 +42,14 @@
                         </div>
                         <div class="panel-body">
                             <div class="form-group form-material floating">
-                                @Html.TextBoxFor(p => p.Name, new { @class = "form-control input-lg" })
-                                <label class="floating-label">Tên địa điểm</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(p => p.Name, new { @class = "form-control input-lg" })
+                                    <label class="floating-label">Tên địa điểm</label>
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.DropDownListFor(p => p.Status, statusList, new { @class = "form-control input-lg" })
+                                    <label class="floating-label">Trạng thái</label>
+                                </div>
                             </div>
                             <div class="form-group form-material floating">
                                 <div class="col-md-6">
@@ -188,7 +195,7 @@
                 </div>
                 <div class="col-sm-offset-4 col-sm-5">
                     @Html.ActionLink("Hủy bỏ", "Index", "Place", null, new { @class = "btn btn-default" })
-                    <input type="submit" value="Cập nhật" class="btn btn-success" />
+                    <input type="submit" id="submitBtn" value="Cập nhật" class="btn btn-success" />
                 </div>
             </div>
         }
@@ -342,7 +349,43 @@
 
 
     function updateAvatar(id, placeID) {
-        bootbox.dialog({
+
+        showConfirmMessage("Chọn hình này làm hình đại diện?",
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("updateAvatar")',
+                        data: { id: id, placeID: placeID },
+                        success: function (data) {
+                            if (data === "success") {
+                                showMessage("Thay đổi hình đại diện thành công", "success", "OK");
+                                $('.placeImage').each(function (i, obj) {
+                                    $('.placeImage div:first').remove();
+                                });
+                                var ribbonAvatarDiv = document.createElement('div');
+                                ribbonAvatarDiv.className = 'ribbon ribbon-badge ribbon-danger';
+                                ribbonAvatarDiv.style.zIndex = '10';
+
+                                var avatarSpan = document.createElement('span');
+                                avatarSpan.className = 'ribbon-inner';
+                                avatarSpan.innerText = "Avatar";
+                                ribbonAvatarDiv.appendChild(avatarSpan);
+                                var avatarDiv = document.getElementById('pim_' + id);
+                                avatarDiv.appendChild(ribbonAvatarDiv);
+                            }
+                            else {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        },
+                        error: function (error) {
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        }
+                    });
+                }
+            });
+
+        @*bootbox.dialog({
             message: "Chọn hình này làm hình đại diện?",
             title: "Xác nhận",
             buttons: {
@@ -392,93 +435,100 @@
                     }
                 }
             }
-        })
+        })*@
 
-        
+
     };
 
 
     function deletePlace(id) {
-        bootbox.dialog({
-            message: "Bạn có chắc muốn xóa địa điểm này?",
-            title: "Xác nhận xóa",
-            buttons: {
-                success: {
-                    label: "Hủy",
-                    className: "btn-default",
-                    callback: function () {
-
-                    }
-                },
-                danger: {
-                    label: "Đồng ý",
-                    className: "btn-danger",
-                    callback: function () {
-                        $.ajax({
-                            url: "/PlaceOwner/Place/deletePlace",
-                            data: {
-                                format: 'json',
-                                id: id
-                            },
-                            error: function () {
-                                alert("Problem!")
-                            },
-                            success: function (data) {
-                                if (data === "success") {
-                                    bootbox.alert("Đã xóa thành công", function () {
-                                        location.href = "/PlaceOwner/Place";
-                                    });
-
-                                }
-                            },
-                            type: 'POST'
-                        })
-                    }
+        showConfirmDeleteItem("Bạn có chắc chắn muốn xóa địa điểm này không?",
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("deletePlace")',
+                        data: { id: id },
+                        success: function (data) {
+                            if (data === "success") {
+                                //showMessage("Xóa địa điểm thành công", "success", "OK");
+                                location.href = '@Url.Action("index")'
+                            }
+                            else {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        },
+                        error: function (error) {
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        }
+                    });
                 }
-            }
-        });
+            });
     }
 
     function deleteImage(id) {
-            bootbox.dialog({
-                message: "Bạn có chắc muốn xóa hình này?",
-                title: "Xác nhận xóa",
-                buttons: {
-                    success: {
-                        label: "Hủy",
-                        className: "btn-default",
-                        callback: function () {
-
+        showConfirmDeleteItem("Bạn có chắc chắn muốn xóa hình này không?",
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("deleteImage")',
+                        data: { id: id },
+                        success: function (data) {
+                            if (data === "success") {
+                                showMessage("Đã xóa thành công", "success", "OK");
+                                var el = document.getElementById("pim_" + id);
+                                el.parentNode.removeChild(el);
+                            }
+                            else {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        },
+                        error: function (error) {
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                         }
-                    },
-                    danger: {
-                        label: "Xóa",
-                        className: "btn-danger",
-                        callback: function () {
-                            $.ajax({
-                                url: "/PlaceOwner/Place/deleteImage",
-                                data: {
-                                    format: 'json',
-                                    id: id
-                                },
-                                error: function () {
-                                    alert("Problem!")
-                                },
-                                success: function (data) {
-                                    if (data === "success") {
-                                        bootbox.alert("Đã xóa thành công", function () {
-                                            var el = document.getElementById("pim_" + id);
-                                            el.parentNode.removeChild(el);
-                                        });
-
-                                    }
-                                },
-                                type: 'POST'
-                            })
-                        }
-                    }
+                    });
                 }
             });
+            //bootbox.dialog({
+            //    message: "Bạn có chắc muốn xóa hình này?",
+            //    title: "Xác nhận xóa",
+            //    buttons: {
+            //        success: {
+            //            label: "Hủy",
+            //            className: "btn-default",
+            //            callback: function () {
+
+            //            }
+            //        },
+            //        danger: {
+            //            label: "Xóa",
+            //            className: "btn-danger",
+            //            callback: function () {
+            //                $.ajax({
+            //                    url: "/PlaceOwner/Place/deleteImage",
+            //                    data: {
+            //                        format: 'json',
+            //                        id: id
+            //                    },
+            //                    error: function () {
+            //                        alert("Problem!")
+            //                    },
+            //                    success: function (data) {
+            //                        if (data === "success") {
+            //                            bootbox.alert("Đã xóa thành công", function () {
+            //                                var el = document.getElementById("pim_" + id);
+            //                                el.parentNode.removeChild(el);
+            //                            });
+
+            //                        }
+            //                    },
+            //                    type: 'POST'
+            //                })
+            //            }
+            //        }
+            //    }
+            //});
     }
 
     // Example Validataion Constraints

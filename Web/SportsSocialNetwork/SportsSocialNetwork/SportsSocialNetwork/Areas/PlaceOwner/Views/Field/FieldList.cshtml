@@ -1,0 +1,118 @@
+﻿@model SportsSocialNetwork.Models.Entities.Place
+@using SportsSocialNetwork.Models.Entities;
+@{
+    ViewBag.Title = "FieldList";
+    List<Field> fields = ViewBag.fields;
+}
+
+<div class="panel">
+    <div class="panel-body">
+        <div class="col-sm-6">
+            <h3>@Model.Name - Danh sách sân</h3>
+        </div>
+        <div class="col-sm-6 text-right">
+            <a href="/PlaceOwner/Field/CreateField/@Model.Id" class="btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> Tạo mới sân</a>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-body">
+        @{ 
+            if(fields == null || fields.Count <= 0)
+            {
+                <h2>Hiện địa điểm này chưa có sân nào!</h2>
+            }
+            else
+            {
+                <div class="row">
+                    @{
+                        foreach (var item in fields)
+                        {
+                            <div class="col-sm-4">
+                                <div class="pricing-list">
+                                    <div class="pricing-title">
+                                        @item.Name
+                                    </div>
+                                    <div class="pricing-price">
+                                        <img src="@item.FieldImages.ToList()[0].Image" style="display:block; max-height:100%;max-width:100%;" />
+                                    </div>
+                                    <div class="pricing-footer">
+                                        <button type="button" class="btn btn-success" onclick="showDetail(@item.Id)"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                        <a href="/PlaceOwner/Field/FieldDetail/@item.Id" class="btn btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                        <button type="button" class="btn btn-danger" onclick="deleteField(@item.Id)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="fieldDetail" aria-hidden="true"
+     aria-labelledby="fieldDetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="field-detail-modal-container"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    
+    <script>
+        (function (document, window, $) {
+            'use strict';
+
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
+            });
+        })(document, window, jQuery);
+
+        function showDetail(id) {
+            $.ajax({
+                url: '@Url.Action("FieldInfoModal")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#field-detail-modal-container').html(data);
+                    $('#fieldDetail').modal('show');
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+
+        }
+
+        function deleteField(id) {
+        showConfirmDeleteItem("Bạn có chắc chắn muốn xóa sân này không?",
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("deleteField")',
+                        data: { id: id },
+                        success: function (data) {
+                            if (data === "success") {
+                                //showMessage("Xóa địa điểm thành công", "success", "OK");
+                                location.href = location.href;
+                            }
+                            else {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        },
+                        error: function (error) {
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        }
+                    });
+                }
+            });
+    }
+    </script>
+
+    }

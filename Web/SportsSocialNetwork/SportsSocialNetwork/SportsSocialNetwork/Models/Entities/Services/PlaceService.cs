@@ -127,7 +127,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
             Place searchPlace = this.FirstOrDefaultActive(p => p.Id == place.Id);
             if (searchPlace == null)
             {
-                place.UserId = "8955d736-4fea-45de-96ce-1ebae8265cc8";
+                //place.UserId = "8955d736-4fea-45de-96ce-1ebae8265cc8";
                 place.Status = (int)PlaceStatus.Pending;
                 place.Approve = false;
                 place.Active = false;
@@ -152,6 +152,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 searchPlace.Description = place.Description;
                 searchPlace.Latitude = latitude;
                 searchPlace.Longitude = longtitude;
+                searchPlace.Status = place.Status;
                 //searchPlace.Avatar = place.Avatar;
                 this.Update(searchPlace);
                 this.Save();
