@@ -81,7 +81,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         }
 
         [HttpPost]
-        public ActionResult ShowPostDetail(int postId, String currentUserId)
+        public ActionResult ShowPostDetail(int postId, String currentUserId, int skip, int take)
         {
             var postService = this.Service<IPostService>();
 
@@ -97,7 +97,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 PreparePostOveralData(overal, currentUserId);
 
-                PostDetailViewModel result = PreparePostDetailData(overal);
+                PostDetailViewModel result = PreparePostDetailData(overal,skip,take);
 
                 response = new ResponseModel<PostDetailViewModel>(true, "Post detail has been loaded!", null, result);
 
@@ -220,7 +220,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             p.CreateDateStrings();
         }
 
-        public PostDetailViewModel PreparePostDetailData(PostOveralViewModel post)
+        public PostDetailViewModel PreparePostDetailData(PostOveralViewModel post,int skip, int take)
         {
 
             var likeService = this.Service<ILikeService>();
@@ -231,7 +231,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             result.Post = post;
 
-            List<PostComment> commentList = commentService.GetCommentListByPostId(post.Id).ToList<PostComment>();
+            List<PostComment> commentList = commentService.GetCommentListByPostId(post.Id,skip,take).ToList<PostComment>();
             List<PostCommentDetailViewModel> commentListResult = Mapper.Map<List<PostCommentDetailViewModel>>(commentList);
             foreach (var c in commentListResult)
             {
