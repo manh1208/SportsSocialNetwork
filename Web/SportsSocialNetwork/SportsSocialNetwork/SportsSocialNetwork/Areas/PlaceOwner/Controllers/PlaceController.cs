@@ -114,7 +114,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         {
             var _placeService = this.Service<IPlaceService>();
             _placeService.savePlace(place);
-            if(uploadImages != null && uploadImages.ToList().Count > 0)
+            if(uploadImages.ToList()[0] != null && uploadImages.ToList().Count > 0)
             {
                 var _placeImageService = this.Service<IPlaceImageService>();
                 _placeImageService.saveImage(place.Id, uploadImages);
@@ -189,9 +189,10 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
         public ActionResult GetData(JQueryDataTableParamModel param)
         {
+            string userID = Request["userID"];
             //var blogPostList = _blogPostService.GetBlogPostbyStoreId();
             var _placeService = this.Service<IPlaceService>();
-            var placeList = _placeService.GetActive();
+            var placeList = _placeService.GetActive(p => p.UserId.Equals(userID));
             //IEnumerable<BlogPost> filteredListItems;
             IEnumerable<Place> filteredListItems;
             if (!string.IsNullOrEmpty(param.sSearch))

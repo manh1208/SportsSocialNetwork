@@ -1,6 +1,8 @@
 ﻿@model SportsSocialNetwork.Models.Entities.Event
 @{
     ViewBag.Title = "EventDetail";
+    List<SelectListItem> status = ViewBag.status;
+    List<SelectListItem> places = ViewBag.places;
 }
 
 <form class="form-horizontal" id="eventForm" method="post" autocomplete="off">
@@ -22,12 +24,20 @@
                 <label class="floating-label">Tên sự kiện</label>
             </div>
             <div class="form-group form-material floating">
-                @Html.TextBoxFor(e => e.StartDate, "{0:MM/dd/yyyy}", new { @class = "form-control input-lg", @data_plugin = "datepicker" })
+                @Html.DropDownListFor(e => e.PlaceId, places, new { @class = "form-control input-lg" })
+                <label class="floating-label">Địa điểm</label>
+            </div>
+            <div class="form-group form-material floating">
+                @Html.TextBoxFor(e => e.StartDate, "{0:MM/dd/yyyy}", new { @class = "form-control input-lg datepicker", @data_plugin = "datepicker" })
                 <label class="floating-label">Ngày bắt đầu</label>
             </div>
             <div class="form-group form-material floating">
-                @Html.TextBoxFor(e => e.EndDate, "{0:MM/dd/yyyy}", new { @class = "form-control input-lg", @data_plugin = "datepicker" })
+                @Html.TextBoxFor(e => e.EndDate, "{0:MM/dd/yyyy}", new { @class = "form-control input-lg datepicker", @data_plugin = "datepicker" })
                 <label class="floating-label">Ngày kết thúc</label>
+            </div>
+            <div class="form-group form-material floating">
+                @Html.DropDownListFor(e => e.Status, status, new { @class = "form-control input-lg" })
+                <label class="floating-label">Trạng thái</label>
             </div>
             <div class="form-group form-material floating">
                 <input type="text" class="form-control input-lg" readonly="" />
@@ -117,6 +127,12 @@
         </div>
     </div>
 </div>*@
+
+<style>
+    .datepicker {
+        z-index: 1151 !important;
+    }
+</style>
 
 
 @section Scripts{

@@ -1,8 +1,8 @@
 ﻿@model SportsSocialNetwork.Models.Entities.Field
 @{
     ViewBag.Title = "CreateField";
-    var selectListFieldType = ViewBag.selectListFieldType as IOrderedEnumerable<SelectListItem>;
-    selectListFieldType.ToList();
+    List<SelectListItem> selectListFieldType = ViewBag.selectListFieldType;
+    int placeId = ViewBag.placeId;
 }
 
 <div class="panel">
@@ -13,8 +13,9 @@
 
 <div class="panel">
     <div class="panel-body">
-        @using (Html.BeginForm("saveField", "Field", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "placeForm", @autocomplete = "off" }))
+        @using (Html.BeginForm("createField", "Field", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "fieldForm", @autocomplete = "off" }))
         {
+            <input type="hidden" name="PlaceId" value="@placeId" />
             <div class="col-md-6">
                 <div class="panel">
                     <div class="panel-heading">
@@ -23,13 +24,13 @@
                     <div class="panel-body">
                         <div class="form-group form-material floating">
                             @Html.TextBoxFor(f => f.Name, new { @class = "form-control input-lg" })
-                            <label class="floating-label">Tên địa điểm</label>
+                            <label class="floating-label">Tên sân</label>
                         </div>
                         <div class="form-group form-material floating">
                             @Html.DropDownListFor(f => f.FieldTypeId, selectListFieldType, new { @class = "form-control input-lg" })
                             <label class="floating-label">Loại sân</label>
                         </div>
-                        <div class="form-group">
+                        @*<div class="form-group">
                             <div class="col-sm-3">
                                 <label class="control-label">Giờ hoạt động</label>
                             </div>
@@ -49,14 +50,47 @@
                                     @Html.TextBoxFor(f => f.Place.EndTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
                         @*<div class="form-group form-material floating">
                             @Html.TextBoxFor(f => f.Name, new { @class = "form-control input-lg" })
                             <label class="floating-label">Khung giá</label>
                         </div>*@
                         <div class="form-group form-material floating">
-                            @Html.TextAreaFor(f => f.Description, new { @class = "form-control input-lg" })
+                            @Html.TextAreaFor(f => f.Description, new { rows = "3", @class = "form-control input-lg" })
                             <label class="floating-label">Mô tả</label>
+                        </div>
+                        
+                        <div class="form-group" id="tempTS">
+                            <label class="control-label">Khung giá</label>
+                       
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="input-daterange">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Từ</span>
+                                            <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" id="stTime" />
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Đến</span>
+                                            <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" id="enTime" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Giá</span>
+                                        <input type="text" class="form-control input-lg" id="tsPrice" />
+                                        <span class="input-group-addon">VND</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <button type="button" class="btn btn-icon btn-default" style="margin-top:3px;" onclick="addTempTS()"><i class="fa fa-plus"></i></button>
+                                </div>
+                                <select id="timeSlot" name="timeSlot" multiple hidden>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -87,69 +121,28 @@
                         </div>
                     </div>
                 </div>*@
-                        <h3>Khung giá</h3>
-                        <div>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Nhập khung giá</button>
-                        </div>
+                        
+
+                        
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-offset-6 col-sm-4">
                     @Html.ActionLink("Hủy bỏ", "Index", "Field", null, new { @class = "btn btn-default" })
-                    <input type="submit" value="Tạo địa điểm" class="btn btn-success" />
+                    <input type="submit" id="submitBtn" value="Tạo sân" class="btn btn-success" />
                 </div>
             </div>
         }
     </div>
 </div>
 
-<div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-center">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Thêm khung giá</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="col-md-3">Từ</label>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-md-3">Đến</label>
-                        <div class="col-md-9">
-                            <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon">Gía</span>
-                            <input type="text" class="form-control" placeholder="">
-                            <span class="input-group-addon">/H</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                <button type="button" class="btn btn-success" onclick="addTimeSlot()">Thêm khung giá</button>
-            </div>
-        </div>
-
-    </div>
-</div>
 
 @section Scripts{
     
 <script>
+    var searchValue = "";
+
     (function(document, window, $) {
       'use strict';
 
@@ -158,6 +151,240 @@
         Site.run();
       });
     })(document, window, jQuery);
+
+    $('body').on('focus', ".timepicker", function () {
+        $(this).clockpicker();
+    })
+
+    $(document).on('click', ".editbtn", function () {
+        var sValue = "";
+        this.removeAttribute("class");
+        this.setAttribute("class", "btn btn-pure btn-primary icon wb-check savebtn");
+        var outerDiv = $(this).parent().parent();
+        $(outerDiv).find("input").each(function () {
+            sValue += this.value + "_";
+            console.log(sValue);
+            this.removeAttribute("disabled");
+        })
+        searchValue = sValue.substring(0, sValue.lastIndexOf("_"));
+    })
+
+    $(document).on('click', ".savebtn", function () {
+        var editValue = "";
+
+        this.removeAttribute("class");
+        this.setAttribute("class", "btn btn-pure btn-primary icon wb-pencil editbtn");
+        var outerDiv = $(this).parent().parent();
+        $(outerDiv).find("input").each(function () {
+            editValue += this.value + "_";
+            this.setAttribute("disabled", "disabled");
+        })
+        var eValue = editValue.substring(0, editValue.lastIndexOf("_"));
+        $("#timeSlot option[value='" + searchValue + "']").val(eValue);
+    })
+
+    $(document).on('click', ".removebtn", function () {
+
+        var dValue = "";
+        var outerDiv = $(this).parent().parent();
+        $(outerDiv).find("input").each(function () {
+            dValue += this.value+"_";
+        })
+        var sdValue = dValue.substring(0, dValue.lastIndexOf("_"));
+
+        console.log(sdValue);
+        bootbox.dialog({
+            message: "Bạn có chắc muốn xóa ?",
+            title: "Xác nhận xóa",
+            buttons: {
+                danger: {
+                    label: "Hủy",
+                    className: "btn-default",
+                    callback: function () {
+
+                    }
+                },
+                success: {
+                    label: "Đồng ý",
+                    className: "btn-danger",
+                    callback: function () {
+                        $("#timeSlot option[value='" + sdValue + "']").remove();
+                        $(outerDiv).remove();
+
+                    }
+                }
+            }
+        });
+        
+    })
+
+    function addTempTS() {
+        console.log("11");
+        var startTime = $("#stTime").val();
+        var endTime = $("#enTime").val();
+        var price = $("#tsPrice").val();
+
+        //var tempTS = document.getElementById("#tempTS");
+        var ts = "<div class='row' id='ts1'>"
+                                + "<div class='col-xs-3' style='padding:0 0 0 15px;'>"
+                                    + "<div class='input-group'>"
+                                        + "<span class='input-group-addon'>Từ</span>"
+                                        + "<input type='text' class='timepicker form-control input-lg' data-plugin='clockpicker' data-autoclose='true' id='sstTime' disabled='disabled' value='" + startTime + "'/>"
+                                    + "</div>"
+                                + "</div>"
+                                + "<div class='col-xs-3' style='padding:0;'>"
+                                    + "<div class='input-group'>"
+                                        + "<span class='input-group-addon'>Đến</span>"
+                                        + "<input type='text' class='timepicker form-control input-lg' data-plugin='clockpicker' data-autoclose='true' id='senTime' disabled='disabled' value='" + endTime + "'/>"
+                                    + "</div>"
+                                + "</div>"
+                                + "<div class='col-xs-3' style='padding:0;'>"
+                                    + "<div class='input-group'>"
+                                        + "<span class='input-group-addon'>Giá</span>"
+                                        + "<input type='text' class='form-control input-lg' id='stsPrice' disabled='disabled' value='" + price + "'/>"
+                                    + "</div>"
+                                + "</div>"
+                                + "<div class='col-xs-3'>"
+                                    + "<button type='button' class='btn btn-pure btn-primary icon wb-pencil editbtn' onclick=''></button>"
+                                    + "<button type='button' class='btn btn-pure btn-danger icon wb-close removebtn' onclick=''></button>"
+                                + "</div>"
+                            + "</div>";
+        $("#tempTS").append(ts);
+
+        var oValue = startTime + "_" + endTime + "_" + price;
+        var oOption = "<option value='" + oValue + "' selected></option>"
+        $("#timeSlot").append(oOption);
+
+        $("#stTime").val("");
+        $("#enTime").val("");
+        $("#tsPrice").val("");
+    }
+
+    (function () {
+        $('#fieldForm').formValidation({
+            framework: "bootstrap",
+            button: {
+                selector: '#submitBtn',
+                disabled: 'disabled'
+            },
+            icon: null,
+            fields: {
+                Name: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Tên sân không được trống'
+                        }
+                    }
+                },
+                FieldTypeId: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Hãy chọn một loại sân'
+                        }
+                    }
+                },
+                Price: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Giá tiền không được trống'
+                        },
+                        digits: {
+                            message: 'Giá trị nhập phải là số'
+                        }
+                    }
+                },
+                //username: {
+                //  validators: {
+                //    notEmpty: {
+                //      message: 'The username is required'
+                //    },
+                //    stringLength: {
+                //      min: 6,
+                //      max: 30
+                //    },
+                //    regexp: {
+                //      regexp: /^[a-zA-Z0-9]+$/
+                //    }
+                //  }
+                //},
+                //email: {
+                //  validators: {
+                //    notEmpty: {
+                //      message: 'The username is required'
+                //    },
+                //    emailAddress: {
+                //      message: 'The email address is not valid'
+                //    }
+                //  }
+                //},
+                //password: {
+                //  validators: {
+                //    notEmpty: {
+                //      message: 'The password is required'
+                //    },
+                //    stringLength: {
+                //      min: 8
+                //    }
+                //  }
+                //},
+                //birthday: {
+                //  validators: {
+                //    notEmpty: {
+                //      message: 'The birthday is required'
+                //    },
+                //    date: {
+                //      format: 'YYYY/MM/DD'
+                //    }
+                //  }
+                //},
+                //github: {
+                //  validators: {
+                //    url: {
+                //      message: 'The url is not valid'
+                //    }
+                //  }
+                //},
+                //skills: {
+                //  validators: {
+                //    notEmpty: {
+                //      message: 'The skills is required'
+                //    },
+                //    stringLength: {
+                //      max: 300
+                //    }
+                //  }
+                //},
+                //porto_is: {
+                //  validators: {
+                //    notEmpty: {
+                //      message: 'Please specify at least one'
+                //    }
+                //  }
+                //},
+                //'for[]': {
+                //  validators: {
+                //    notEmpty: {
+                //      message: 'Please specify at least one'
+                //    }
+                //  }
+                //},
+                //company: {
+                //  validators: {
+                //    notEmpty: {
+                //      message: 'Please company'
+                //    }
+                //  }
+                //},
+                //browsers: {
+                //  validators: {
+                //    notEmpty: {
+                //      message: 'Please specify at least one browser you use daily for development'
+                //    }
+                //  }
+                //}
+            }
+        });
+    })();
 </script>
 
 

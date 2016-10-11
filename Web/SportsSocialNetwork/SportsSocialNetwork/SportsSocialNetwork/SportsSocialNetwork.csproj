@@ -577,9 +577,11 @@
     <Compile Include="Models\Entities\Services\EventServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\FieldImageService.cs" />
     <Compile Include="Models\Entities\Services\FieldImageServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\FieldPriceService.cs" />
     <Compile Include="Models\Entities\Services\FieldPriceServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -3279,6 +3281,9 @@
     <Content Include="Areas\PlaceOwner\Views\Place\ModalDetail.cshtml" />
     <Content Include="Areas\PlaceOwner\Views\Event\EventDetailModal.cshtml" />
     <Content Include="Areas\PlaceOwner\Views\Field\CreateField.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Field\FieldDetail.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Field\FieldList.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Field\FieldInfoModal.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

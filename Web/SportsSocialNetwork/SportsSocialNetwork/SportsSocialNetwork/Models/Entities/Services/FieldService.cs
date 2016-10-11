@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using SportsSocialNetwork.Models.Enumerable;
 
 namespace SportsSocialNetwork.Models.Entities.Services
 {
@@ -14,6 +15,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         Field GetFieldInfo(int id);
 
         Field ChangeFieldStatus(int id, int status);
+
+        void saveField(Field field);
 
         #endregion
 
@@ -45,7 +48,26 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return field;
         }
 
+        public void saveField(Field field)
+        {
+            Field searchField = this.FirstOrDefault(f => f.Id == field.Id);
 
+            if(searchField == null)
+            {
+                field.Status = (int)PlaceStatus.Active;
+                this.Create(field);
+                this.Save();
+            }
+            else
+            {
+                searchField.Name = field.Name;
+                searchField.FieldTypeId = field.FieldTypeId;
+                searchField.Description = field.Description;
+                searchField.Status = field.Status;
+                this.Update(searchField);
+                this.Save();
+            }
+        }
 
         #endregion
 

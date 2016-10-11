@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Teek.Models;
+using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Utilities;
 
 namespace SportsSocialNetwork.Models.Entities.Services
 {
@@ -28,8 +30,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
             if(searchEvent == null)
             {
                 evt.PlaceId = 1008;
-                evt.CreatorId = "8955d736-4fea-45de-96ce-1ebae8265cc8";
-                evt.Status = 1;
+                //evt.CreatorId = "8955d736-4fea-45de-96ce-1ebae8265cc8";
+                evt.Status = (int)EventStatus.Operating;
 
                 //save image
                 if(image != null)

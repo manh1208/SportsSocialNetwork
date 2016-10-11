@@ -58,4 +58,12 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("Bị cấm")]
         Banned = 4,
     }
+
+    public enum EventStatus
+    {
+        [Description("Đang diễn ra")]
+        Operating = 1,
+        [Description("Kết thúc")]
+        Closed = 0
+    }
 }

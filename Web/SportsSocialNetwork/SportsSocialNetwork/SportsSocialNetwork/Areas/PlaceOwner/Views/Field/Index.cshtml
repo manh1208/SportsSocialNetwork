@@ -1,7 +1,39 @@
-﻿
+﻿@model SportsSocialNetwork.Models.Entities.Place
+@using SportsSocialNetwork.Models.Entities;
 @{
     ViewBag.Title = "Index";
+    List<Field> fields = ViewBag.fields;
 }
 
-<h2>Index</h2>
+<div class="panel">
+    <div class="panel-heading">
+        <h1 class="panel-title">@Model.Name - Danh sách sân</h1>
+    </div>
+</div>
 
+<div class="panel">
+    <div class="panel-body">
+        <div class="row">
+            @{
+                foreach (var item in fields)
+                {
+                    <div class="col-sm-4">
+                        <div class="pricing-list">
+                            <div class="pricing-title">
+                                @item.Name
+                            </div>
+                            <div class="pricing-price">
+                                <img src="@item.FieldImages.ToList()[0].Image" style="display:block; max-height:100%;max-width:100%;" />
+                            </div>
+                            <div class="pricing-footer">
+                                <button type="button" class="btn btn-success"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                <button type="button" class="btn btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                                <button type="button" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

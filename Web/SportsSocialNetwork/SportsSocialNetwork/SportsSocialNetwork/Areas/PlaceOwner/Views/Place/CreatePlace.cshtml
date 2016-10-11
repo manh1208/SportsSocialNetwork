@@ -1,4 +1,5 @@
 ﻿@model SportsSocialNetwork.Models.Entities.Place
+@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "CreatePlace";
 
@@ -23,6 +24,7 @@
         
         @using (Html.BeginForm("createPlace", "Place", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "placeForm", @autocomplete = "off" }))
         {
+            <input type="hidden" value="@User.Identity.GetUserId()" name="UserId" />
             <div class="col-sm-6">
                 <div class="panel">
                     <div class="panel-heading">
@@ -36,21 +38,21 @@
                         <div class="form-group form-material floating">
                             <div class="col-md-6">
                                 @Html.TextBoxFor(p => p.Address, new { @class = "form-control input-lg" })
-                                <label class="floating-label">Địa chỉ</label>
+                                <label class="floating-label">Địa chỉ - Đường</label>
                             </div>
                             <div class="col-md-6">
                                 @Html.DropDownListFor(p => p.City, listCities, "" , new { @class = "form-control input-lg", @id = "city" })
-                                <label class="floating-label">Thành phố</label>
+                                <label class="floating-label">Tỉnh/Thành phố</label>
                             </div>
                         </div>
                         <div class="form-group form-material floating">
                             <div class="col-md-6">
                                 @Html.DropDownListFor(p => p.District, listDistricts, new { @class = "form-control input-lg", @id = "district" })
-                                <label class="floating-label">Quận</label>
+                                <label class="floating-label">Quận/Huyện</label>
                             </div>
                             <div class="col-md-6">
                                 @Html.DropDownListFor(p => p.Ward, listWards, new { @class = "form-control input-lg", @id = "ward" })
-                                <label class="floating-label">Phường</label>
+                                <label class="floating-label">Phường/Xã</label>
                             </div>
                         </div>
                         <div class="form-group form-material floating">

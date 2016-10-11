@@ -63,7 +63,7 @@
                 },
                 success: function (data) {
                     if (data === "success") {
-                        bootbox.alert("Cập nhật thành công");
+                        showMessage("Cập nhật thành công", "success", "OK");
                         RefreshTable();
                     } else {
                         showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");

@@ -1,0 +1,109 @@
+﻿@model SportsSocialNetwork.Models.Entities.Field
+@{
+    ViewBag.Title = "FieldInfoModal";
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="modal-title">Chi tiết sân</h4>
+</div>
+<div class="modal-body" id="modalBody">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="carousel slide" id="exampleCarouselDefault" data-ride="carousel">
+                <ol class="carousel-indicators carousel-indicators-fall">
+                    @{
+                        for (int i = 0; i < Model.FieldImages.ToList().Count; i++)
+                        {
+                            if (i == 0)
+                            {
+                                <li class="active" data-slide-to="0" data-target="#exampleCarouselDefault"></li>
+                            }
+                            else
+                            {
+                                <li class="" data-slide-to="0" data-target="#exampleCarouselDefault"></li>
+                            }
+
+                        }
+                    }
+                </ol>
+                <div class="carousel-inner" role="listbox">
+                    @{
+                        for (int i = 0; i < Model.FieldImages.ToList().Count; i++)
+                        {
+                            if (i == 0)
+                            {
+                                <div class="item active">
+                                    <img class="width-full" src="@Model.FieldImages.ToList()[i].Image" alt="..." />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="item">
+                                    <img class="width-full" src="@Model.FieldImages.ToList()[i].Image" alt="..." />
+                                </div>
+                            }
+
+                        }
+                    }
+                </div>
+                <a class="left carousel-control" href="#exampleCarouselDefault" role="button" data-slide="prev">
+                    <span class="icon wb-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#exampleCarouselDefault" role="button"
+                   data-slide="next">
+                    <span class="icon wb-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <center><h2>@Model.Name</h2></center>
+            <div>
+                @*<p>
+                    <span class="title">Chủ sân: </span>
+                    <span class="detail">@Model.Place.AspNetUser.FullName</span>
+                </p>*@
+                <p>
+                    <span class="title">Loại sân: </span>
+                    <span class="detail">@Model.FieldType.Name</span><br />
+                </p>
+                @*<p>
+                        <span class="title">Địa điểm: </span>
+                        <span class="detail">@Model.p</span>
+                    </p>*@
+                <p>
+                    <span class="title">Mô tả:</span>
+                    <span class="detail">@Model.Description</span>
+                </p>
+            </div>
+            @*<div class="panel ">
+                    <div class="panel-heading">
+                        <center><h2>@Model.Name</h2></center>
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <p>
+                                <span class="title">Chủ sân: </span>
+                                <span class="detail">@Model.AspNetUser.FullName</span>
+                            </p>
+                            <p>
+                                <span class="title">Thời gian: </span><br />
+                                <span class="detail">@Model.StartDate - @Model.EndDate</span>
+                            </p>
+                            <p>
+                                <span class="title">Mô tả:</span>
+                                <span class="detail">@Model.Description</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>*@
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>
