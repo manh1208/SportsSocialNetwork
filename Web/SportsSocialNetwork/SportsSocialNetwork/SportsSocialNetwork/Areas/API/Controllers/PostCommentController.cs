@@ -20,10 +20,36 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         private String userImagePath = "UserImage\\CuongPK";
 
         [HttpPost]
+        public ActionResult GetComment(int postId, int skip, int take) {
+            var service = this.Service<IPostCommentService>();
+
+            ResponseModel<List<PostCommentDetailViewModel>> response = null;
+
+            try {
+                List<PostComment> commentList= service.GetCommentListByPostId(postId,skip,take).ToList();
+
+                List<PostCommentDetailViewModel> result = Mapper.Map<List<PostCommentDetailViewModel>>(commentList);
+
+                foreach(var comment in result)
+                {
+                    PreparePostCommentDetailViewModel(comment);
+                }
+
+                response = new ResponseModel<List<PostCommentDetailViewModel>>(true,"Comment list loaded",null, result);
+
+
+            } catch (Exception) {
+                response = ResponseModel<List<PostCommentDetailViewModel>>.CreateErrorResponse("Failed to load comments", systemError);
+            }
+
+            return Json(response);
+        }
+
+        [HttpPost]
         public ActionResult Comment(int postId, String userId, String content , HttpPostedFileBase image) {
             var service = this.Service<IPostCommentService>();
 
-            ResponseModel<PostCommentViewModel> response = null;
+            ResponseModel<PostCommentDetailViewModel> response = null;
 
             try {
                 String commentImage = null;
@@ -41,10 +67,10 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 PreparePostCommentDetailViewModel(result);
 
-                response = new ResponseModel<PostCommentViewModel>(true, "Commented successfully", null, result);
+                response = new ResponseModel<PostCommentDetailViewModel>(true, "Commented successfully", null, result);
 
             } catch (Exception) {
-                response = ResponseModel<PostCommentViewModel>.CreateErrorResponse("Failed to comment",systemError);
+                response = ResponseModel<PostCommentDetailViewModel>.CreateErrorResponse("Failed to comment",systemError);
             }
             return Json(response);
         }

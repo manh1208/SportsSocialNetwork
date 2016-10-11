@@ -138,7 +138,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             {
                 String path = uploader.UploadImage(image, userImagePath);
 
-                String result = service.ChangeCoverImage(id, path);
+                String result = service.ChangeCoverImage(groupId, path);
 
                 response = new ResponseModel<String>(true, "Cover image has been changed!", null, result);
             }
