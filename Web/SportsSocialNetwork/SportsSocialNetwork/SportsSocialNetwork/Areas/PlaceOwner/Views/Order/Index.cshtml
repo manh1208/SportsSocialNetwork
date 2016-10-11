@@ -1,0 +1,240 @@
+﻿
+@{
+    ViewBag.Title = "Quản lí đặt sân";
+}
+
+<div class="panel">
+    <div class="panel-body">
+        <h1>Quản lí đặt sân</h1>
+    </div>
+</div>
+<div class="panel">
+    <div class="panel-body">
+        <table class="table table-striped table-bordered table-hover" id="listOrderTable">
+            <thead>
+                <tr>
+                    <th>Sân</th>
+                    <th>Người đặt</th>
+                    <th>Ngày đặt</th>
+                    <th>Bắt đầu</th>
+                    <th>Kết thúc</th>
+                    <th>Phương thức thanh toán</th>
+                    <th>Trạng thái</th>
+                    <th>Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="orderDetail" aria-hidden="true"
+     aria-labelledby="orderDetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="order-detail-modal-container"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts{
+
+    <script>
+        (function (document, window, $) {
+            'use strict';
+
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
+            });
+        })(document, window, jQuery);
+
+        function updateStatus(id, status)
+        {
+            $.ajax({
+                url: '@Url.Action("updateStatusOrder")',
+                type: 'Get',
+                data: {
+                    id: id,
+                    status: status
+                },
+                success: function (data) {
+                    if (data === "success") {
+                        bootbox.alert("Cập nhật thành công");
+                        RefreshTable();
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
+        function showDetailModal(id) {
+            $.ajax({
+                url: '@Url.Action("OrderDetail")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#order-detail-modal-container').html(data);
+                    $('#orderDetail').modal('show');
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
+        function RefreshTable() {
+            var oTable = $("#listOrderTable").dataTable();
+            oTable._fnPageChange(0);
+            oTable._fnAjaxUpdate();
+        };
+
+        function InitDatatable() {
+            $("#listOrderTable").DataTable({
+                "bRetrieve": true,
+                "bServerSide": true,
+                "bScrollCollapse": true,
+                "bSort": true,
+                "sAjaxSource": "/PlaceOwner/Order/GetData",
+                "bProcessing": true,
+                @*"fnServerParams": function (aoData) {
+                    aoData.push({ "name": "id", "value": @ViewBag.storeId });
+                },*@
+                "aLengthMenu": [10, 20, 50],
+                "oLanguage": {
+                    "sSearch": "Tìm kiếm:",
+                    "sZeroRecords": "Không có dữ liệu phù hợp",
+                    "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
+                    "sEmptyTable": "Không có dữ liệu",
+                    "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
+                    "sLengthMenu": "Hiển thị _MENU_ dòng",
+                    "sProcessing": "Đang xử lý...",
+                    "oPaginate": {
+                        "sPrevious": "Trang trước",
+                        "sNext": "Trang kế"
+                    }
+                },
+
+                @*"fnDrawCallback": function (settings) {
+                    $(':checkbox').change(function () {
+                        if ($(this).prop('checked') == true) {
+                            $.ajax({
+                                url: "/BlogPostManage/@ViewBag.storeId/@ViewBag.storeName/BlogPost/ChangeStatus",
+                                type: 'POST',
+                                data: {
+                                    'blogPostId': $(this).val(),
+                                    'status': 'Activate'
+                                },
+                                dataType: 'json',
+                                success: function (result) {
+                                    ReDrawDatatable("listBlogPostTable");
+                                }
+                            });
+                        } else {
+                            $.ajax({
+                                url: "/BlogPostManage/@ViewBag.storeId/@ViewBag.storeName/BlogPost/ChangeStatus",
+                                type: 'POST',
+                                data: {
+                                    'blogPostId': $(this).val(),
+                                    'status': 'Deactivate'
+                                },
+                                dataType: 'json',
+                                success: function (result) {
+                                    ReDrawDatatable("listBlogPostTable");
+                                }
+                            });
+                        }
+                    });
+                },*@
+                "aoColumnDefs": [
+                    {
+                        "aTargets": [0],
+                        "mRender": function (data, type, o) {
+                            return o[1];
+                        }
+                    },
+                    {
+                        "aTargets": [1],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            return o[2];
+                        }
+                    },
+                    {
+                        "aTargets": [2],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            //var date = new Date(parseInt(o[3].substr(6)));
+                            //var month = parseInt(date.getMonth()) + 1;
+                            //var formattedDate = date.getDate() + "/" + month + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+                            //return "<p>" + formattedDate + "</p>";
+                            return o[3];
+                        }
+                    },
+                    {
+                        "aTargets": [3],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            return o[4];
+                        }
+                    },
+                    {
+                        "aTargets": [4],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            return o[5];
+                        }
+                    },
+                    {
+                        "aTargets": [5],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            if (o[6] == 1) {
+                                return "<span class='label label-lg label-outline label-info'>Online</span>";
+                            } else {
+                                return "<span class='label label-lg label-outline label-dark'>Tiền mặt</span>";
+                            }
+                        }
+                    },
+                    {
+                        "aTargets": [6],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            if (o[7] == 1) {
+                                return "<span class='label label-lg label-outline label-warning'>Chưa thanh toán</span>";
+                            } else if(o[7] == 2) {
+                                return "<span class='label label-lg label-outline label-success'>Đã thanh toán</span>";
+                            } else {
+                                return "<span class='label label-lg label-outline label-danger'>Hủy</span>";
+                            }
+                        }
+                    },
+                    {
+                        "aTargets": [7],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            return "<button class='btn btn-primary' onclick='showDetailModal(" + o[0] + ")' data-target='#orderDetail' data-toggle='modal' type='button'><i class='icon wb-pencil' aria-hidden='true'></i></button>";
+                        }
+                    }
+
+                ],
+
+            });
+        };
+
+        $(document).ready(function () {
+            InitDatatable();
+            RefreshTable();
+            //loadlist();
+        });
+
+    </script>
+    
+    }

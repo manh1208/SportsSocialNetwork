@@ -1,0 +1,252 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.FieldViewModel
+
+@{
+    ViewBag.Title = "FieldDetail";
+    Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
+}
+<style>
+    .imgWH100 {
+        width: 100%;
+        vertical-align: middle;
+        height: 100%;
+    }
+
+    .example {
+        position: relative;
+        padding: 10px;
+        border: 1px solid;
+    }
+</style>
+<div class="col-md-6" style="float:left">
+    <div class="panel col-md-12">
+        <h3 style="text-align:center">@Model.Name</h3>
+        <div class="panel-body" style="padding-top:10px">
+            <div class="example-wrap">
+                @if (ViewBag.fieldImages != null)
+                {
+                    var count = 0;
+                    var imgIndex = 0;
+                <div class="carousel slide" id="exampleCarouselDefault" data-ride="carousel">
+                    <ol class="carousel-indicators carousel-indicators-fall">
+
+                        @foreach (var item in ViewBag.fieldImages)
+                        {
+                            if (count == 0)
+                            {
+                            <li class="active" data-slide-to="@count" data-target="#exampleCarouselDefault"></li>
+                                count = count + 1;
+                            }
+                            else
+                            {
+                            <li class="" data-slide-to="@count" data-target="#exampleCarouselDefault"></li>
+                                count = count + 1;
+                            }
+                        }
+
+                    </ol>
+                    <div class="carousel-inner" role="listbox">
+                        @foreach (var item in ViewBag.fieldImages)
+                        {
+                            if (imgIndex == 0)
+                            {
+                            <div class="item active" style="height:300px">
+                                <img class="imgWH100" src="@item.Image" alt="..." />
+                            </div>
+                                imgIndex = imgIndex + 1;
+                            }
+                            else
+                            {
+                            <div class="item" style="height:300px">
+                                <img class="imgWH100" src="@item.Image" alt="..." />
+                            </div>
+                                imgIndex = imgIndex + 1;
+                            }
+
+                        }
+                    </div>
+                    <a class="left carousel-control" href="#exampleCarouselDefault" role="button" data-slide="prev">
+                        <span class="icon wb-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#exampleCarouselDefault" role="button"
+                       data-slide="next">
+                        <span class="icon wb-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+                }
+                else
+                {
+                <div class="item" style="height:300px">
+                    <img class="imgWH100" src="~/Content/assets/images/noimagefound.jpg" alt="..." />
+                </div>
+                }
+                <p>@Model.Description</p>
+                <div class="input-daterange">
+                    <div class="input-group">
+                        <button type="button" class="btn btn-primary col-md-12" id="checkPrice"><i class="fa fa-usd" aria-hidden="true"></i> Bảng giá các khung giờ</button>
+                    </div>
+                    <div class="input-group">
+                        <button type="button" class="btn btn-warning col-md-12" id="checkCalendar"><i class="icon wb-calendar" aria-hidden="true"></i> Kiểm tra lịch đặt sân</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-6" style="float:left">
+    <div class="panel col-md-12">
+        <h3 style="text-align:center">Đặt sân</h3>
+        <div class="panel-body">
+            <div class="page-content padding-top-0">
+                @{Html.RenderAction("_Index", "Order", new {id=Model.Id });}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="priceForm" aria-hidden="true" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <form class="modal-content" action="#" method="post" role="form">
+            <div class="modal-header">
+                <button type="button" class="close" aria-hidden="true" data-dismiss="modal">×</button>
+                <h4 class="modal-title">Bảng giá</h4>
+            </div>
+            <div class="modal-body">
+                @if (ViewBag.timeBlocks != null)
+                {
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Khung giờ</th>
+                                    <th>Giá tiền(vnd)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var item in ViewBag.timeBlocks)
+                                {
+                                <tr>
+                                    <td>@item.StartTime - @item.EndTime</td>
+                                    <td>@item.Price</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }else
+                {
+                    <span>Hiện tại chưa có bảng giá tham khảo</span>
+                }
+
+            </div>
+            <div class="modal-footer">
+                <div class="form-actions">
+                    <button class="btn btn-primary" data-dismiss="modal" type="button">Đóng</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="calendarForm" aria-hidden="true" aria-labelledby="CalendarForm"
+     role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <form class="modal-content" action="#" method="post" role="form">
+            <div class="modal-header">
+                <button type="button" class="close" aria-hidden="true" data-dismiss="modal">×</button>
+                <h4 class="modal-title">Lịch sân</h4>
+            </div>
+            <div class="modal-body">
+                <div id="calendar">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-actions">
+                    <button class="btn btn-primary" data-dismiss="modal" type="button">Đóng</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts{
+<script>
+    (function (document, window, $) {
+        'use strict';
+        var Site = window.Site;
+        $(document).ready(function ($) {
+            Site.run();
+        });
+
+    })(document, window, jQuery);
+    $(document).ready(function ($) {
+        $(".regular").slick({
+            dots: true,
+            infinite: true,
+            slidesToShow: 3,
+            slidesToScroll: 3
+        });
+
+        $('#exampleMultipleItems').slick({
+            infinite: true,
+            slidesToShow: 3,
+            slidesToScroll: 3
+        });
+        handleFullcalendar();
+        
+    });
+
+    $('#checkCalendar').on('click', function () {
+        $('#calendarForm').modal('show');
+    });
+    $('#checkPrice').on('click', function () {
+        $('#priceForm').modal('show');
+    });
+
+    $('#calendarForm').on('shown.bs.modal', function () {
+        handleFullcalendar();
+    });
+
+    function handleFullcalendar() {
+        console.log("3");
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+
+        today = yyyy + '/' + mm + '/' + dd;
+        var my_options = {
+            header: {
+                left: null,
+                center: 'prev,title,next',
+                right: 'agendaWeek,agendaDay'
+            },
+            defaultDate: today,
+            events:"@Url.Action("GetSchedule",new { id = Model.Id})",
+            lang: 'vi',
+            defaultView: 'agendaWeek',
+            allDaySlot: false
+        };
+
+        var _options;
+        var my_options_mobile = $.extend({}, my_options);
+
+        my_options_mobile.aspectRatio = 0.5;
+        _options = $(window).outerWidth() < 667 ? my_options_mobile : my_options;
+
+        $('#calendar').fullCalendar(_options);
+        $('#calendar').fullCalendar('render');
+    }
+
+</script>
+}
+

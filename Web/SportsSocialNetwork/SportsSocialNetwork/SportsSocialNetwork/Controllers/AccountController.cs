@@ -9,11 +9,15 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using SportsSocialNetwork.Models;
+using SportsSocialNetwork.Models.Utilities;
+using SportsSocialNetwork.Models.Enumerable;
+using SkyWeb.DatVM.Mvc;
+using SportsSocialNetwork.Models.Entities.Services;
 
 namespace SportsSocialNetwork.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -22,7 +26,7 @@ namespace SportsSocialNetwork.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,9 +38,9 @@ namespace SportsSocialNetwork.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -66,7 +70,7 @@ namespace SportsSocialNetwork.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -75,18 +79,36 @@ namespace SportsSocialNetwork.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    var service = this.Service<IAspNetUserService>();
+                    var user = service.FindUserByUserName(model.Username);
+                    if (user.AspNetRoles.FirstOrDefault().Id.Equals( UserRole.Admin.ToString("d")))
+                    {
+                        return RedirectToAction("Index", "Account", new { area = "Admin" });
+                    }else if (user.AspNetRoles.FirstOrDefault().Id.Equals(UserRole.PlaceOwner.ToString("d")))
+                    {
+                        if (user.Status.Value == (int)UserStatus.Active)
+                        {
+                            return RedirectToAction("Index", "Place", new { area = "PlaceOwner" });
+                        }else
+                        {
+                            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                            ModelState.AddModelError("LoginError", "Tài khoản của bạn đang chờ duyệt");
+                            return View(model);
+                        }
+                    }else { 
+                    return RedirectToAction("Index", "SSN");
+                    }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                //return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("LoginError", "Đăng nhập không thành công");
                     return View(model);
             }
         }
@@ -120,7 +142,7 @@ namespace SportsSocialNetwork.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -139,6 +161,15 @@ namespace SportsSocialNetwork.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+
+            var service = this.Service<ISportService>();
+            var sports = service.GetActive()
+                            .Select(s => new SelectListItem
+                            {
+                                Text = s.Name,
+                                Value = s.Id.ToString()
+                            }).OrderBy(s=>s.Value);
+            ViewBag.Sport = sports;
             return View();
         }
 
@@ -151,23 +182,47 @@ namespace SportsSocialNetwork.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email,PhoneNumber = model.PhoneNumber };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
+                    var userService = this.Service<IAspNetUserService>();
+                    var userEntity = userService.FindUserByUserName(user.UserName);
+                    userEntity.FullName = model.FullName;
+                    userEntity.Active = true;
+                    var action = "Login";
+                    if (model.PlaceOwner != null)
+                    {
+                        userEntity.Status = (int)UserStatus.Pending;
+                        UserManager.AddToRole(userEntity.Id, Utils.GetEnumDescription(UserRole.PlaceOwner));
+                    }
+                    else
+                    {
+                        userEntity.Status = (int)UserStatus.Active;
+                        UserManager.AddToRole(userEntity.Id, Utils.GetEnumDescription(UserRole.Member));
+                    }
+                    userService.Update(userEntity);
+                    var hobbyService = this.Service<IHobbyService>();
+                    hobbyService.SaveHobbyForUser(userEntity.Id, model.Hobby);
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction(action);
                 }
-                AddErrors(result);
+                AddErrors("RegisterError", result);
             }
-
+            var sportService = this.Service<ISportService>();
+            var sports = sportService.GetActive()
+                            .Select(s => new SelectListItem
+                            {
+                                Text = s.Name,
+                                Value = s.Id.ToString()
+                            }).OrderBy(s => s.Value);
+            ViewBag.Sport = sports;
             // If we got this far, something failed, redisplay form
             return View(model);
         }
@@ -440,6 +495,22 @@ namespace SportsSocialNetwork.Controllers
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError("", error);
+            }
+        }
+
+        private void AddErrors(string key,IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                if (error.EndsWith("is already taken."))
+                {
+                    ModelState.AddModelError(key, error.Replace("is already taken.", " đã tồn tại.").Replace("Name","Tên tài khoản"));
+                }else
+                {
+
+                
+                ModelState.AddModelError(key, error);
+                }
             }
         }
 

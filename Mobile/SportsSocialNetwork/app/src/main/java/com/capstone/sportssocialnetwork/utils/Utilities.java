@@ -3,6 +3,7 @@ package com.capstone.sportssocialnetwork.utils;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -25,6 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Utilities {
+
 
     public static Date getDateTime(String s, String format) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat(format);

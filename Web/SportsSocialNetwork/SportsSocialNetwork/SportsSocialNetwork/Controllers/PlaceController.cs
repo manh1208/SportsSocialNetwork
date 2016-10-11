@@ -134,5 +134,67 @@ namespace SportsSocialNetwork.Controllers
                 aaData = result
             }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult Test()
+        {
+            return View();
+        }
+
+        public ActionResult btnSubmit_Click(object sender, EventArgs e)
+        {
+            String return_url = "http://localhost:26011/Place/verifyOrder";
+            String transaction_info = "DEMO";
+            String order_code = DateTime.Now.ToString("yyyyMMddHHmmss");
+            String receiver = "viethuystudy@gmail.com";//Tài khoản nhận tiền 
+            String price = "20000";
+            NL_Checkout nl = new NL_Checkout();
+            String url;
+            url = nl.buildCheckoutUrl(return_url, receiver, transaction_info, order_code, price);
+            return Redirect(url);
+        }
+
+        public ActionResult verifyOrder(object sender, EventArgs e)
+        {
+            String transaction_info = Request.QueryString["transaction_info"];
+            String order_code = Request.QueryString["order_code"];
+            String payment_id = Request.QueryString["payment_id"];
+            String payment_type = Request.QueryString["payment_type"];
+            String secure_code = Request.QueryString["secure_code"];
+            String price = Request.QueryString["price"];
+            String error_text = Request.QueryString["error_text"];
+            NL_Checkout nl = new NL_Checkout();
+            bool check = nl.verifyPaymentUrl(transaction_info, order_code, price, payment_id, payment_type, error_text, secure_code);
+            if (check)
+            {
+                return Redirect("https://www.google.co.jp/");
+            }
+            else
+            {
+                return Redirect("https://www.facebook.com/");
+            }
+        }
+
+        public ActionResult ViewDetail(int? id)
+        {
+            var _placeService = this.Service<IPlaceService>();
+            var entity = _placeService.FirstOrDefaultActive(p => p.Id == id.Value);
+            var place = new PlaceViewModel(entity);
+            var _placeImageService = this.Service<IPlaceImageService>();
+            var _placeFieldService = this.Service<IFieldService>();
+            var _placeEventService = this.Service<IEventService>();
+            List<PlaceImage> placeImages = _placeImageService.Get(p => p.PlaceId == id.Value).ToList();
+            List<Field> placeFields = _placeFieldService.Get(p => p.PlaceId == id.Value).ToList();
+            List<Event> placeEvents = _placeEventService.Get(p => p.PlaceId == id.Value).ToList();
+            Event lastestEvent = new Event();
+            if (placeEvents!=null && placeEvents.Count > 0)
+            {
+                lastestEvent = placeEvents.First();
+            }
+            ViewBag.placeImages = placeImages;
+            ViewBag.placeFields = placeFields;
+            ViewBag.lastestEvent = lastestEvent;
+            return View(place);
+        }
     }
+    
 }

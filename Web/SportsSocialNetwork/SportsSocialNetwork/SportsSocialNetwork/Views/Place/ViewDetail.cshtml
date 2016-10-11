@@ -1,0 +1,224 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.PlaceViewModel
+
+@{
+    ViewBag.Title = "ViewDetail";
+    Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
+}
+<style>
+    .imgWH100 {
+        width: 100%;
+        vertical-align: middle;
+        height: 100%;
+    }
+
+    .imgW100 {
+        width: 100%;
+        vertical-align: middle;
+        height: auto;
+    }
+
+    .example {
+        position: relative;
+        padding: 10px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+        .example .scrollable-horizontal .scrollable-content {
+            width: 1400px;
+        }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .slider {
+        width: 100%;
+        margin: 100px auto;
+    }
+
+    .slick-slide {
+        margin: 0px 20px;
+    }
+
+        .slick-slide img {
+            width: 100%;
+        }
+
+    .slick-prev:before,
+    .slick-next:before {
+        color: black;
+    }
+
+    .items {
+        width: 100%;
+    }
+
+    .owl-carousel-shortcode .item {
+        text-align: center;
+    }
+
+    .slider {
+        margin: 0 0 30px;
+        text-align: center;
+    }
+
+        .slider a {
+            width: 100%;
+            border: 5px solid #fff;
+            height: 150px;
+        }
+</style>
+
+<div class="col-md-9" style="float:left">
+    <div class="panel col-md-12">
+        <div class="panel-body" style="padding-top:50px">
+            <div class="row padding15">
+                <div class="col-md-12">
+                    <div class="col-md-6" style="float:left">
+                        <div class="overlay-container">
+                            <img title="Nhà thi đấu Phú Thọ" src="http://cdn.diachiso.vn/images/420x280/2011/7/28/nha-thi-dau-phu-tho.jpg" class='imgW100'>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="float:left">
+                        <h2 class="detail_title">@Model.Name</h2>
+                        <p>
+                            <i class="fa fa-map-marker" title="Địa chỉ"></i> @Model.Address, Quận @Model.District, @Model.City
+                        </p>
+                        <p><i class="fa fa-phone" title="Điện thoại"></i> @Model.PhoneNumber </p>
+
+                        <p>
+                            <i class="fa fa-envelope-o" title="Time"></i> @Model.Email
+                        </p>
+                        <p>
+                            <i class="fa fa-clock-o" title="Time"></i> @Model.StartTime.ToString() -@Model.EndTime.ToString()
+                        </p>
+                        <p>
+                            <i class="fa fa-exclamation-circle" title="status"></i> Status Status
+                            <button type="button" class="btn btn-block btn-success" style="margin-top:5px">Đặt ngay!</button>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-12" style="padding:10px">
+                    @Model.Description
+                </div>
+                <div class="col-md-12">
+                    <iframe class="imgW100"
+                            frameborder="0" style="border:0; height:300px"
+                            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDpvwUBhfVHfHInMF96nlTNiQhdRespJN0
+    &q=@Model.Latitude,@Model.Longitude" allowfullscreen></iframe>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="panel col-md-12">
+        <h4 class="panel-title">Hình ảnh</h4>
+        <section class="regular slider">
+            @foreach (var item in ViewBag.placeImages)
+            {
+                <div>
+                    <a class="inline-block" href="@item.Image" title="@Model.Name"><img src="@item.Image" class='imgWH100 img-rounded'></a>
+                </div>
+
+            }
+        </section>
+    </div>
+
+
+</div>
+<div class="col-md-3" style="float:left">
+    <div class="panel">
+        <div class="panel-body" style="padding:20px 5px 10px 5px">
+            <h3 style="text-align:center"><span class="label label-primary">Các sân tại địa điểm</span></h3>
+            <div class="example-wrap">
+                <div class="example">
+                    <div class="height-150" data-plugin="scrollable">
+                        <div data-role="container">
+                            <div data-role="content" >
+                                <ul class="list-group list-group-dividered list-group-full">
+                                    @if (ViewBag.placeFields != null)
+                                    {
+                                        foreach (var item in ViewBag.placeFields)
+                                        {
+                                            <li class="list-group-item"><a href='/Field/Index/@item.Id'><p style="text-align:center"> @item.Name</p></a></li>
+
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (ViewBag.lastestEvent != null)
+            {
+        <div class="masonry-item">
+            <!-- Widget -->
+            <div class="widget widget-article widget-shadow">
+                <div class="widget-header cover overlay overlay-hover">
+                    <img class="cover-image overlay-scale" src="@ViewBag.lastestEvent.Image" alt="">
+                </div>
+                <div class="widget-body" style="text-align:center">
+                    <p>Sự kiện đang diễn ra</p>
+                    <h3 class="widget-title">@ViewBag.lastestEvent.Name</h3>
+                    <div class="widget-body-footer">
+                        <a class="btn btn-outline btn-default" href="javascript:void(0)">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+            <!-- End Widget -->
+        </div>
+    }
+    else
+    {
+
+    }
+</div>
+@section Scripts{
+    <script>
+
+        (function (document, window, $) {
+            'use strict';
+            var Site = window.Site;
+            $(document).ready(function ($) {
+                Site.run();
+            });
+
+        })(document, window, jQuery);
+
+
+        $(document).ready(function () {
+            $(".regular").slick({
+                dots: true,
+                infinite: true,
+                slidesToShow: 3,
+                slidesToScroll: 3
+            });
+
+            $('#exampleGallery').magnificPopup({
+                delegate: 'a',
+                type: 'image',
+                tLoading: 'Loading image #%curr%...',
+                mainClass: 'mfp-img-mobile',
+                gallery: {
+                    enabled: true,
+                    navigateByImgClick: true,
+                    preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+                },
+                image: {
+                    tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
+                    titleSrc: function (item) {
+                        return item.el.attr('title') +
+                          '<small>by amazingSurge</small>';
+                    }
+                }
+            });
+        });
+
+    </script>
+}

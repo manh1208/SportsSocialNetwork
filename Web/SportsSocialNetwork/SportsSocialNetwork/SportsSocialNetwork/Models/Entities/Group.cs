@@ -26,6 +26,7 @@ namespace SportsSocialNetwork.Models.Entities
         public string Description { get; set; }
         public int SportId { get; set; }
         public string CoverImage { get; set; }
+        public string Avatar { get; set; }
         public Nullable<bool> Active { get; set; }
     
         public virtual Sport Sport { get; set; }

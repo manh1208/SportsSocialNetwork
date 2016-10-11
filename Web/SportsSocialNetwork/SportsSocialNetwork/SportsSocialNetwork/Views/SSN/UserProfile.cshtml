@@ -1,0 +1,373 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_SSNLayout.cshtml";
+}
+@section styles {
+    <link href="~/Content/assets/vendor/magnific-popup/magnific-popup.css" rel="stylesheet" />
+    <style>
+        body {
+            background: whitesmoke;
+            font-family: sans-serif;
+            font-size: 15px;
+        }
+
+        .after-run .site-menubar-fold .page, .after-run .site-menubar-fold .site-footer {
+            margin-left: 0;
+        }
+
+        .after-run .site-menubar-unfold .page, .after-run .site-menubar-unfold .site-footer {
+            margin-left: 0;
+        }
+
+        .page-aside-inner {
+            max-width: 600px;
+        }
+
+        .page-main .panel-body {
+            padding-top: 0;
+        }
+
+        .page-main .page-content {
+            padding: 10px;
+            padding-right: 0px;
+        }
+
+        .panel {
+            margin-bottom: 10px;
+        }
+
+            .panel.panel-cover {
+                margin: 0px;
+            }
+
+        .page-aside {
+            top: 10px;
+        }
+
+            .page-aside .widget-header {
+                padding-top: 0px;
+            }
+
+        .panel-cover img {
+            height: 150px;
+        }
+
+        .status-panel {
+            padding-top: 5px;
+            text-align: right;
+        }
+
+            .status-panel textarea {
+                border: none;
+                border-bottom: 1px whitesmoke solid;
+                resize: none;
+            }
+
+        @@media(max-width: 768px) {
+            .page-aside-inner {
+                position: unset;
+            }
+
+            .page-main .page-content {
+                padding: 10px;
+            }
+        }
+    </style>
+}
+
+
+
+<div class="container">
+    <div class="panel panel-cover"
+         style="background-image: url('/Content/assets/example-images/dashboard-header.jpg');
+                padding-top: 30%; background-position:center">
+
+    </div>
+    <!-- Page -->
+    <div class="page animsition">
+        <div class="page-aside">
+            <div class="page-aside-switch">
+                <i class="icon wb-chevron-left" aria-hidden="true"></i>
+                <i class="icon wb-chevron-right" aria-hidden="true"></i>
+            </div>
+            <div class="page-aside-inner">
+                <section class="page-aside-section">
+                    <div class="widget widget-shadow text-center">
+                        <div class="widget-header">
+                            <div class="widget-header-content">
+                                <a class="avatar avatar-lg" href="javascript:void(0)">
+                                    <img src="~/Content/assets/portraits/5.jpg" alt="...">
+                                </a>
+                                <br />
+                                <button type="button" class="btn btn-primary">Follow</button>
+                            </div>
+                        </div>
+                        <div class="widget-footer">
+                            <div class="row no-space">
+                                <div class="col-xs-4">
+                                    <strong class="profile-stat-count">260</strong>
+                                    <span>Follower</span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <strong class="profile-stat-count">180</strong>
+                                    <span>Following</span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <strong class="profile-stat-count">2000</strong>
+                                    <span>Tweets</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h5 class="page-aside-title">Filter</h5>
+                    <div class="list-group">
+                        <a class="list-group-item" href="javascript:void(0)"><i class="icon wb-image" aria-hidden="true"></i>Images</a>
+                        <a class="list-group-item" href="javascript:void(0)"><i class="icon wb-volume-high" aria-hidden="true"></i>Audio</a>
+                        <a class="list-group-item" href="javascript:void(0)"><i class="icon wb-camera" aria-hidden="true"></i>Video</a>
+                        <a class="list-group-item" href="javascript:void(0)"><i class="icon wb-file" aria-hidden="true"></i>Notes</a>
+                        <a class="list-group-item" href="javascript:void(0)"><i class="icon wb-link-intact" aria-hidden="true"></i>Links</a>
+                        <a class="list-group-item" href="javascript:void(0)"><i class="icon wb-order" aria-hidden="true"></i>Files</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div class="page-main">
+            <div class="page-content">
+
+                <div class="panel status-panel">
+                    <textarea class="form-control" placeholder="Ban dang nghi gi?" rows="3"></textarea>
+                    <button type="button" style="width: 80px" class="btn btn-round btn-sm btn-primary">Đăng</button>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-body">
+                        <ul class="nav nav-tabs nav-tabs-line" data-plugin="nav-tabs" role="tablist">
+                            <li class="active" role="presentation">
+                                <a data-toggle="tab" href="#activities" aria-controls="activities"
+                                   role="tab">Timeline<span class="badge badge-danger">5</span></a>
+                            </li>
+                            <li role="presentation"><a data-toggle="tab" href="#profile" aria-controls="profile" role="tab">Photos</a></li>
+
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="activities" role="tabpanel">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <a class="avatar" href="javascript:void(0)">
+                                                    <img class="img-responsive" src="~/Content/assets/portraits/2.jpg"
+                                                         alt="...">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <h4 class="media-heading">
+                                                    Ida Fleming
+                                                    <span>posted an updated</span>
+                                                </h4>
+                                                <small>active 14 minutes ago</small>
+                                                <div class="profile-brief">“Check if it can be corrected with overflow : hidden”</div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+
+                                    <li class="list-group-item">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <a class="avatar" href="javascript:void(0)">
+                                                    <img class="img-responsive" src="~/Content/assets/portraits/4.jpg"
+                                                         alt="...">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <h4 class="media-heading">
+                                                    Owen Hunt
+                                                    <span>posted a new note</span>
+                                                </h4>
+                                                <small>active 14 minutes ago</small>
+                                                <div class="profile-brief">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                                    Integer nec odio. Praesent libero. Sed cursus ante
+                                                    dapibus diam. Sed nisi. Nulla quis sem at nibh elementum
+                                                    imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce
+                                                    nec tellus sed augue semper porta. Mauris massa.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li class="list-group-item">
+                                        <div class="media media-lg">
+                                            <div class="media-left">
+                                                <a class="avatar" href="javascript:void(0)">
+                                                    <img class="img-responsive" src="~/Content/assets/portraits/5.jpg"
+                                                         alt="...">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <h4 class="media-heading">
+                                                    Terrance Arnold
+                                                    <span>posted a new photo</span>
+                                                </h4>
+                                                <small>active 14 minutes ago</small>
+                                                <div class="profile-brief">
+                                                    <div class="media">
+                                                        <a class="media-left">
+                                                            <img class="media-object" src="~/Content/assets/photos/placeholder.png" alt="...">
+                                                        </a>
+                                                        <div class="media-body padding-left-20">
+                                                            <h4 class="media-heading">Getting Started</h4>
+                                                            <p>
+                                                                Lorem ipsum dolor sit amet, consectetur adipiscing
+                                                                elit. Integer nec odio. Praesent libero. Sed
+                                                                cursus ante dapibus diam. Sed nisi. Nulla quis
+                                                                sem at nibh elementum imperdiet. Duis sagittis
+                                                                ipsum. Praesent mauris.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li class="list-group-item">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <a class="avatar" href="javascript:void(0)">
+                                                    <img class="img-responsive" src="~/Content/assets/portraits/2.jpg"
+                                                         alt="...">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <h4 class="media-heading">
+                                                    Ida Fleming
+                                                    <span>posted an new activity comment</span>
+                                                </h4>
+                                                <small>active 14 minutes ago</small>
+                                                <div class="profile-brief">
+                                                    Cras sit amet nibh libero, in gravida nulla. Nulla vel
+                                                    metus.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li class="list-group-item">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <a class="avatar" href="javascript:void(0)">
+                                                    <img class="img-responsive" src="~/Content/assets/portraits/3.jpg"
+                                                         alt="...">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <h4 class="media-heading">
+                                                    Julius
+                                                    <span>posted an updated</span>
+                                                </h4>
+                                                <small>active 14 minutes ago</small>
+                                                <div class="profile-brief">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                                    Integer nec odio. Praesent libero. Sed cursus ante
+                                                    dapibus diam.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <a class="btn btn-block btn-default profile-readMore" href="javascript:void(0)"
+                                   role="button">Show more</a>
+                            </div>
+
+                            <div class="tab-pane" id="profile" role="tabpanel">
+                                <div class="example" id="exampleGallery">
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <a class="inline-block" href="~/Content/assets/example-images/landing/designer.png" title="view-4">
+                                                <img class="img-responsive" src="~/Content/assets/example-images/landing/designer.png" />
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a class="inline-block" href="~/Content/assets/example-images/landing/apps-mailbox.png" title="view-5">
+                                                <img class="img-responsive" src="~/Content/assets/example-images/landing/apps-mailbox.png" />
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a class="inline-block" href="~/Content/assets/example-images/landing/home.png" title="view-6">
+                                                <img class="img-responsive" src="~/Content/assets/example-images/landing/home.png" />
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a class="inline-block" href="~/Content/assets/photos/placeholder.png" title="view-6">
+                                                <img class="img-responsive" src="~/Content/assets/photos/placeholder.png" alt="..." />
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <a class="inline-block" href="~/Content/assets/photos/placeholder.png" title="view-6">
+                                                <img class="img-responsive" src="~/Content/assets/photos/placeholder.png" alt="..." />
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a class="inline-block" href="~/Content/assets/photos/placeholder.png" title="view-6">
+                                                <img class="img-responsive" src="~/Content/assets/photos/placeholder.png" alt="..." />
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a class="inline-block" href="~/Content/assets/photos/placeholder.png" title="view-6">
+                                                <img class="img-responsive" src="~/Content/assets/photos/placeholder.png" alt="..." />
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a class="inline-block" href="~/Content/assets/photos/placeholder.png" title="view-6">
+                                                <img class="img-responsive" src="~/Content/assets/photos/placeholder.png" alt="..." />
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/assets/vendor/magnific-popup/jquery.magnific-popup.js"></script>
+    <script>
+        $('#exampleGallery').magnificPopup({
+            delegate: 'a',
+            type: 'image',
+            tLoading: 'Loading image #%curr%...',
+            mainClass: 'mfp-img-mobile',
+            gallery: {
+                enabled: true,
+                navigateByImgClick: true,
+                preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+            },
+            image: {
+                tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
+                titleSrc: function (item) {
+                    return item.el.attr('title') +
+                      '<small>by amazingSurge</small>';
+                }
+            }
+        });
+
+        $('.open-popup-link').magnificPopup({
+            type: 'inline',
+            midClick: true // allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source.
+        });
+
+    </script>
+}
+

@@ -1,0 +1,69 @@
+﻿
+@{
+    
+    Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
+}
+
+
+        <div class="page-content calendar-container padding-horizontal-30 container-fluid">
+            <div class="row">
+                
+                <div class="col-md-9">
+                    <div class="panel">
+                        <div class="padding-30" id="calendar"></div>
+                    </div>
+                </div>
+                <input type="button" value="Thanh toán" class="btn btn-danger" onclick="location.href='@Url.Action("btnSubmit_Click")'">
+            </div>
+        </div>
+
+
+    <script>
+        $(document).ready(function () {
+            handleFullcalendar();
+        });
+        function handleFullcalendar() {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
+
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+
+            today = yyyy + '/' + mm + '/' + dd;
+            var my_events = [{
+                title: 'All Day Event',
+                start: '2016-10-01'
+            }];
+            var my_options = {
+                header: {
+                    left: null,
+                    center: 'prev,title,next',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                defaultDate: today,
+                selectable: true,
+                selectHelper: true,
+                select: function () {
+                    $('#addNewEvent').modal('show');
+                },
+                events: my_events,
+                lang: 'vi'
+            };
+
+            var _options;
+            var my_options_mobile = $.extend({}, my_options);
+
+            my_options_mobile.aspectRatio = 0.5;
+            _options = $(window).outerWidth() < 667 ? my_options_mobile : my_options;
+
+            $('#calendar').fullCalendar(_options);
+        }
+    </script>
+

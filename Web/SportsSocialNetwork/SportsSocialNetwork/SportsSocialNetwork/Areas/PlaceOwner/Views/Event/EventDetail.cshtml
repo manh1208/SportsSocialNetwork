@@ -1,0 +1,134 @@
+﻿@model SportsSocialNetwork.Models.Entities.Event
+@{
+    ViewBag.Title = "EventDetail";
+}
+
+<form class="form-horizontal" id="eventForm" method="post" autocomplete="off">
+
+    @*@using (Html.BeginForm("updateEvent", "Event", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "eventForm", @autocomplete = "off" }))
+            {*@
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">Chi tiết sự kiện</h4>
+        </div>
+        <div class="modal-body" id="modalBody" style="padding: 0 40px;">
+
+
+            @Html.TextBoxFor(e => e.Id, new { @style = "display:none;" })
+            <div class="form-group form-material floating">
+                @Html.TextBoxFor(e => e.Name, new { @class = "form-control input-lg" })
+                <label class="floating-label">Tên sự kiện</label>
+            </div>
+            <div class="form-group form-material floating">
+                @Html.TextBoxFor(e => e.StartDate, "{0:MM/dd/yyyy}", new { @class = "form-control input-lg", @data_plugin = "datepicker" })
+                <label class="floating-label">Ngày bắt đầu</label>
+            </div>
+            <div class="form-group form-material floating">
+                @Html.TextBoxFor(e => e.EndDate, "{0:MM/dd/yyyy}", new { @class = "form-control input-lg", @data_plugin = "datepicker" })
+                <label class="floating-label">Ngày kết thúc</label>
+            </div>
+            <div class="form-group form-material floating">
+                <input type="text" class="form-control input-lg" readonly="" />
+                <input type="file" id="image" name="image" />
+                <label class="floating-label">Hình ảnh</label>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3">
+                    <img style="max-height:100%; max-width:100%; display:block" src="@Model.Image" />
+                </div>
+            </div>
+            <div class="form-group form-material floating">
+                @Html.TextAreaFor(e => e.Description, new { rows = "3", @class = "form-control input-lg" })
+                <label class="floating-label">Mô tả</label>
+            </div>
+            @*<div class="form-group">
+                    <div class="col-md-5">
+                        <button type="button" class="btn btn-danger" onclick="deleteEvent(@Model.Id)"><i class="icon wb-trash" aria-hidden="true"></i>Xóa sự kiện</button>
+                    </div>
+                    <div class="col-md-7 text-right">
+                        @Html.ActionLink("Hủy bỏ", "Index", "Event", null, new { @class = "btn btn-default" })
+                        <input type="submit" value="Cập nhật sự kiện" class="btn btn-success" />
+                    </div>
+                </div>*@
+
+        </div>
+        <div class="modal-footer">
+            <div class="col-md-5 text-left">
+                <button type="button" class="btn btn-danger" id="delBtn" onclick="deleteEventModal(@Model.Id)"><i class="icon wb-trash" aria-hidden="true"></i>Xóa sự kiện</button>
+            </div>
+            <div class="col-md-7 text-right">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="submit" class="btn btn-success">Cập nhật sự kiện</button>
+            </div>
+        </div>
+    @*}*@
+</form>
+
+@*<div class="panel">
+    <div class="panel-heading">
+        <h1 class="panel-title">Tạo sự kiện</h1>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-body">
+        <div class="col-md-6 col-md-offset-3">
+            @using (Html.BeginForm("updateEvent", "Event", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "eventForm", @autocomplete = "off" }))
+            {
+                @Html.TextBoxFor(e => e.Id, new { @style = "display:none;" })
+                <div class="form-group form-material floating">
+                    @Html.TextBoxFor(e => e.Name, new { @class = "form-control input-lg" })
+                    <label class="floating-label">Tên sự kiện</label>
+                </div>
+                <div class="form-group form-material floating">
+                    @Html.TextBoxFor(e => e.StartDate, "{0:MM/dd/yyyy}", new { @class = "form-control input-lg", @data_plugin = "datepicker" })
+                    <label class="floating-label">Ngày bắt đầu</label>
+                </div>
+                <div class="form-group form-material floating">
+                    @Html.TextBoxFor(e => e.EndDate, "{0:MM/dd/yyyy}", new { @class = "form-control input-lg", @data_plugin = "datepicker" })
+                    <label class="floating-label">Ngày kết thúc</label>
+                </div>
+                <div class="form-group form-material floating">
+                    <input type="text" class="form-control input-lg" readonly="" />
+                    <input type="file" id="image" name="image" />
+                    <label class="floating-label">Hình ảnh</label>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <img style="max-height:100%; max-width:100%; display:block" src="@Model.Image" />
+                    </div>
+                </div>
+                <div class="form-group form-material floating">
+                    @Html.TextAreaFor(e => e.Description, new { rows = "3", @class = "form-control input-lg" })
+                    <label class="floating-label">Mô tả</label>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-5">
+                        <button type="button" class="btn btn-danger" onclick="deleteEvent(@Model.Id)"><i class="icon wb-trash" aria-hidden="true"></i>Xóa sự kiện</button>
+                    </div>
+                    <div class="col-md-7">
+                        @Html.ActionLink("Hủy bỏ", "Index", "Event", null, new { @class = "btn btn-default" })
+                        <input type="submit" value="Cập nhật sự kiện" class="btn btn-success" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>*@
+
+
+@section Scripts{
+    <script>
+    (function(document, window, $) {
+      'use strict';
+
+      var Site = window.Site;
+      $(document).ready(function() {
+        Site.run();
+      });
+    })(document, window, jQuery);
+</script>
+
+    }

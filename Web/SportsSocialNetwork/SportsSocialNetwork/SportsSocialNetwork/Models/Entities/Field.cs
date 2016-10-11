@@ -19,6 +19,7 @@ namespace SportsSocialNetwork.Models.Entities
         {
             this.FieldImages = new HashSet<FieldImage>();
             this.FieldPrices = new HashSet<FieldPrice>();
+            this.FieldSchedules = new HashSet<FieldSchedule>();
             this.Orders = new HashSet<Order>();
             this.TimeBlocks = new HashSet<TimeBlock>();
         }
@@ -37,6 +38,8 @@ namespace SportsSocialNetwork.Models.Entities
         public virtual ICollection<FieldImage> FieldImages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FieldPrice> FieldPrices { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FieldSchedule> FieldSchedules { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

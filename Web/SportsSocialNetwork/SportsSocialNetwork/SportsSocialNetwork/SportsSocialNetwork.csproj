@@ -249,6 +249,10 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PlaceController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PlaceOwnerController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SportsController.cs" />
+    <Compile Include="Areas\Admin\Models\PlaceDetailViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UpdateAccountViewModel.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Api\Controllers\AspNetUserController.cs" />
@@ -262,12 +266,21 @@
     <Compile Include="Areas\Api\Controllers\PostCommentController.cs" />
     <Compile Include="Areas\Api\Controllers\PostController.cs" />
     <Compile Include="Areas\Moderator\ModeratorAreaRegistration.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\EventController.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\FieldController.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\OrderController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\PlaceController.cs" />
+    <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDatatableViewModel.cs" />
+    <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDetailViewModel.cs" />
+    <Compile Include="Areas\PlaceOwner\Models\ViewModels\PlaceDetailViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\PlaceOwnerAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\FieldController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
+    <Compile Include="Controllers\SSNController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -336,6 +349,12 @@
       <DependentUpon>EntityRefinery.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\FieldRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\FieldSchedule.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\FieldScheduleRefined.cs">
       <DependentUpon>EntityRefinery.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\FieldType.cs">
@@ -476,6 +495,9 @@
     <Compile Include="Models\Entities\Repositories\FieldRepositoryGen.cs">
       <DependentUpon>Repositories.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Repositories\FieldScheduleRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Entities\Repositories\FieldTypeRepositoryGen.cs">
       <DependentUpon>Repositories.tt</DependentUpon>
     </Compile>
@@ -553,7 +575,6 @@
     <Compile Include="Models\Entities\Services\AspNetUserLoginServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Entities\Services\AspNetUserRolesViewModel.cs" />
     <Compile Include="Models\Entities\Services\AspNetUserService.cs" />
     <Compile Include="Models\Entities\Services\AspNetUserServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
@@ -574,6 +595,9 @@
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Services\FieldPriceServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\FieldScheduleServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Services\FieldService.cs" />
@@ -659,6 +683,7 @@
     <Compile Include="Models\Entities\Services\SportServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\TimeBlockService.cs" />
     <Compile Include="Models\Entities\Services\TimeBlockServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -702,6 +727,7 @@
     <Compile Include="Models\FileUploader.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\NganLuong.cs" />
     <Compile Include="Models\Notifications\Android.cs" />
     <Compile Include="Models\Notifications\IOS.cs" />
     <Compile Include="Models\Notifications\NotificationModel.cs" />
@@ -735,6 +761,9 @@
     </Compile>
     <Compile Include="Models\ViewModels\FieldDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\FieldPriceViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\FieldScheduleViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\FieldTypeViewModelGen.cs">
@@ -964,6 +993,7 @@
     <Content Include="Content\assets\images\logo-blue%402x.png" />
     <Content Include="Content\assets\images\logo-blue.png" />
     <Content Include="Content\assets\images\logo.png" />
+    <Content Include="Content\assets\images\noimagefound.jpg" />
     <Content Include="Content\assets\images\poster.jpg" />
     <Content Include="Content\assets\js\angular\app.js" />
     <Content Include="Content\assets\js\angular\router.min.js" />
@@ -1347,6 +1377,12 @@
     <Content Include="Content\assets\portraits\7.jpg" />
     <Content Include="Content\assets\portraits\8.jpg" />
     <Content Include="Content\assets\portraits\9.jpg" />
+    <Content Include="Content\assets\slick\ajax-loader.gif" />
+    <Content Include="Content\assets\slick\fonts\slick.svg" />
+    <Content Include="Content\assets\slick\slick-theme.css" />
+    <Content Include="Content\assets\slick\slick.css" />
+    <Content Include="Content\assets\slick\slick.js" />
+    <Content Include="Content\assets\slick\slick.min.js" />
     <Content Include="Content\assets\vendor\ace\ace.css" />
     <Content Include="Content\assets\vendor\ace\ace.js" />
     <Content Include="Content\assets\vendor\ace\ace.min.css" />
@@ -2752,6 +2788,7 @@
     <Content Include="Content\font-awesome-4.6.3\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\font-awesome-4.6.3\HELP-US-OUT.txt" />
     <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\logo_new.png" />
     <Content Include="Content\images\logo_orange.png" />
     <Content Include="Content\js\custom-script.js" />
     <Content Include="Content\js\sweetAlert\sweetalert.css" />
@@ -3249,6 +3286,31 @@
     <Content Include="Models\Entities\SsnEntities.edmx.diagram">
       <DependentUpon>SsnEntities.edmx</DependentUpon>
     </Content>
+    <Content Include="Areas\Admin\Views\PlaceOwner\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Place\Detail.cshtml" />
+    <Content Include="Areas\Admin\Views\Place\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Place\Update.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Event\Index.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Event\EventDetail.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Event\CreateEvent.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Field\Index.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Order\Index.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Order\OrderDetail.cshtml" />
+    <Content Include="Content\assets\slick\config.rb" />
+    <Content Include="Content\assets\slick\fonts\slick.eot" />
+    <Content Include="Content\assets\slick\fonts\slick.ttf" />
+    <Content Include="Content\assets\slick\fonts\slick.woff" />
+    <Content Include="Content\assets\slick\slick-theme.less" />
+    <Content Include="Content\assets\slick\slick-theme.scss" />
+    <Content Include="Content\assets\slick\slick.less" />
+    <Content Include="Content\assets\slick\slick.scss" />
+    <Content Include="Areas\PlaceOwner\Views\Place\ModalDetail.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Event\EventDetailModal.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Field\CreateField.cshtml" />
+    <Content Include="Areas\Admin\Views\Sports\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Sports\Detail.cshtml" />
+    <Content Include="Areas\Admin\Views\Sports\Update.cshtml" />
+    <Content Include="Areas\Admin\Views\Sports\Create.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -3297,6 +3359,16 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_BookingFieldLayout.cshtml" />
     <Content Include="Views\Place\Index.cshtml" />
+    <Content Include="Views\SSN\Index.cshtml" />
+    <Content Include="Views\Shared\_SSNLayout.cshtml" />
+    <Content Include="Views\SSN\UserProfile.cshtml" />
+    <Content Include="Views\Place\ViewDetail.cshtml" />
+    <Content Include="Views\Field\Index.cshtml" />
+    <Content Include="Views\Place\Test.cshtml" />
+    <Content Include="Views\Order\_Index.cshtml" />
+    <Content Include="Views\Order\ConfirmOrder.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
+    <Content Include="Views\Order\OrderDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3312,7 +3384,6 @@
     <Folder Include="Areas\Moderator\Controllers\" />
     <Folder Include="Areas\Moderator\Models\" />
     <Folder Include="Areas\Moderator\Views\Shared\" />
-    <Folder Include="Areas\PlaceOwner\Models\" />
     <Folder Include="Models\Hubs\" />
   </ItemGroup>
   <ItemGroup>

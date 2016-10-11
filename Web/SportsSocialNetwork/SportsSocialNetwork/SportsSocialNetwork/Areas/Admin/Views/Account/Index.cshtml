@@ -1,4 +1,5 @@
 ﻿@using SportsSocialNetwork.Models.Enumerable;
+@using SportsSocialNetwork.Models.Utilities;
 @{
     ViewBag.Title = "Index";
 }
@@ -35,7 +36,9 @@
                                     <th>Email</th>
                                     <th>Username</th>
                                     <th>Quyền</th>
-                                    <th>Active</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                    <th>Duyệt</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -58,7 +61,7 @@
 
 <div class="modal fade modal-warning" id="modalUpdate" aria-hidden="true"
      aria-labelledby="modalViewdetail" role="dialog" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div id="update-modal-container"></div>
         </div>
@@ -83,15 +86,64 @@
         function initEventTable() {
             var colDefs = [
                   {
-                      "aTargets": [, 2, 3, 4, 5],
+                      "aTargets": [1, 2, 3, 4, 5],
                       "bSortable": false,
                   }, {
                       "aTargets": [6],
                       "mRender": function (data, type, row) {
-                          var previewBtn = '<a class="btn btn-success" data-target="#modalViewdetail" onclick="showDetailModal(\'' + data + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
-                          var updateBtn = '<a class="btn btn-warning" data-target="#modalUpdate" data-toggle="modal" onclick="showUpdateModal(\'' + data + '\')" href="#"><i class="fa fa-pencil-square-o"></i></a>';
-                          var deleteBtn = '<a class="btn btn-danger ladda-button" data-style="zoom-in" data-plugin="ladda" onclick="showConfirmDeleteAccount(\'' + data + '\')"  href="#"> <span class="ladda-label"><i class="fa fa-trash-o "></i></span></a>';
+                          var label = '';
+                          if (row[6] == parseInt('@((int)UserStatus.Active)')) {
+                              label = '<span class="label label-outline label-success label-lg">@Utils.GetEnumDescription(UserStatus.Active).ToString()</span>';
+                          } else if (row[6] == parseInt('@((int)UserStatus.Unapproved)')) {
+                              label = '<span class="label label-outline label-danger label-lg">@Utils.GetEnumDescription(UserStatus.Unapproved)</span>';
+                          } else if (row[6] == parseInt('@((int)UserStatus.Pending)')) {
+                              label = '<span class="label label-outline label-warning label-lg">@Utils.GetEnumDescription(UserStatus.Pending)</span>';
+                          } else if (row[6] == parseInt('@((int)UserStatus.Banned)')) {
+                              label = '<span class="label label-outline label-danger label-lg">@Utils.GetEnumDescription(UserStatus.Banned)</span>';
+                          } else {
+                              label = '<span class="label label-outline label-default label-lg">Không xác định</span>';
+                          }
+
+                          return label;
+                      },
+                      "bSortable": false,
+                  }
+                  ,
+                  {
+                      "aTargets": [7],
+                      "mRender": function (data, type, row) {
+                          var previewBtn = '<a class="btn btn-success" data-target="#modalViewdetail" onclick="showDetailModal(\'' + row[7] + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
+                          var updateBtn = '<a class="btn btn-warning" data-target="#modalUpdate" data-toggle="modal" onclick="showUpdateModal(\'' + row[7] + '\')" href="#"><i class="fa fa-pencil-square-o"></i></a>';
+                          var deleteBtn = '<a class="btn btn-danger ladda-button" data-style="zoom-in" data-plugin="ladda" onclick="showConfirmDeleteAccount(\'' + row[7] + '\')"  href="#"> <span class="ladda-label"><i class="fa fa-trash-o "></i></span></a>';
                           return previewBtn + '&nbsp;' + updateBtn + '&nbsp;' + deleteBtn;
+                      },
+                      "bSortable": false
+                  },
+
+                  {
+                      "aTargets": [8],
+                      "mRender": function (data, type, row) {
+                          var approveBtn = "";
+                          if (row[6] == parseInt('@((int)UserStatus.Banned)')) {
+                              approveBtn = '<div class="btn-group">'
+                                      + '<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" >'
+                                          + '<span class="caret"></span>'
+                                      + '</button>'
+                                      + '<ul class="dropdown-menu">'
+                                         + '<li><a href="#" onclick="unbanUser(\'' + row[7] + '\')">Bỏ cấm</a></li>'
+                                      + '</ul>'
+                                  + '</div>'
+                          } else  {
+                              approveBtn = '<div class="btn-group">'
+                                                          + '<button type="button" class="btn btn-success  dropdown-toggle" data-toggle="dropdown">'
+                                                              + '<span class="caret"></span>'
+                                                          + '</button>'
+                                                          + '<ul class="dropdown-menu">'
+                                                             + '<li><a href="#" onclick="banUser(\'' + row[7] + '\')">Cấm</a></li>'
+                                                          + '</ul>'
+                                                   + '</div>'
+                          }
+                          return approveBtn;
                       },
                       "bSortable": false
                   }
@@ -172,6 +224,55 @@
 
             });
         }
+
+        function banUser(id) {
+            showConfirmMessage("Cấm thành viên này?",
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("BanUser")',
+                            data: { id: id },
+                            success: function (data) {
+                                $("#account-table").reloadDataTable();
+                                if (data.Succeed) {
+                                    showMessage("Cấm thành viên thành công!", "success", "OK");
+                                } else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                }
+                            },
+                            error: function (error) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        });
+                    }
+                });
+        };
+
+        function unbanUser(id) {
+            showConfirmMessage("BỏCấm thành viên này?",
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("UnBanUser")',
+                            data: { id: id },
+                            success: function (data) {
+                                $("#account-table").reloadDataTable();
+                                if (data.Succeed) {
+                                    showMessage("Bỏ cấm thành viên thành công!", "success", "OK");
+                                } else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                }
+                            },
+                            error: function (error) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        });
+                    }
+                });
+        };
+
 
 
         function showConfirmDeleteAccount(id) {

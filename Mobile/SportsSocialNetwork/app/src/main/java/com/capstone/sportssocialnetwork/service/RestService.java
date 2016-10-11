@@ -12,6 +12,7 @@ public class RestService {
     private final String url = "http://192.169.150.68";
     private Retrofit retrofit;
     private ISampleService sampleService;
+    private ISocialNetworkService socialNetworkService;
 
     public RestService() {
         Gson gson = new GsonBuilder()
@@ -28,9 +29,14 @@ public class RestService {
                 .client(httpClient.build())
                 .build();
         sampleService = retrofit.create(ISampleService.class);
+        socialNetworkService = retrofit.create(ISocialNetworkService.class);
     }
 
     public ISampleService getSampleService() {
         return sampleService;
+    }
+
+    public ISocialNetworkService getSocialNetworkService() {
+        return socialNetworkService;
     }
 }

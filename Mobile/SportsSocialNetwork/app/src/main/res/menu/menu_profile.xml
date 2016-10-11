@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_setting"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_filter"
+        android:title="Cài đặt"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/menu_logout"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_filter"
+        android:title="Đăng xuất"
+        app:showAsAction="collapseActionView" />
+</menu>

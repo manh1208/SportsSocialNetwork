@@ -20,10 +20,16 @@
     [CoverImage]           NVARCHAR (255) NULL,
     [Birthday]             DATE           NULL,
     [Gender]               INT            NULL,
+    [NganLuongAccount]     NVARCHAR (MAX) NULL,
     [CreateDate]           DATETIME       NULL,
+    [Status]               INT            NULL,
     [Active]               BIT            NULL,
     CONSTRAINT [PK_dbo.AspNetUsers] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
+
+
 
 
 

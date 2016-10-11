@@ -20,6 +20,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string Description { get; set; }
     			public virtual int SportId { get; set; }
     			public virtual string CoverImage { get; set; }
+    			public virtual string Avatar { get; set; }
     			public virtual Nullable<bool> Active { get; set; }
     	
     	public GroupViewModel() : base() { }

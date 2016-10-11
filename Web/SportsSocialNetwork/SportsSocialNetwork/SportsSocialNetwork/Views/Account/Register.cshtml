@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Register";
     Layout = "";
+    var sport = ViewBag.Sport as IEnumerable<SelectListItem>;
 }
 
 <!DOCTYPE html>
@@ -15,44 +16,90 @@
 
     <title>Register | SSN</title>
 
-    <link rel="apple-touch-icon" href="../../Content/assets/images/apple-touch-icon.png">
-    <link rel="shortcut icon" href="../../Content/assets/images/favicon.ico">
+    <link rel="apple-touch-icon" href="~/Content/assets/images/apple-touch-icon.png">
+    <link rel="shortcut icon" href="~/Content/images/logo_new.png">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="../../Content/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../Content/assets/css/bootstrap-extend.min.css">
-    <link rel="stylesheet" href="../../Content/assets/css/site.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap-extend.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/site.min.css">
 
-    <link rel="stylesheet" href="../../Content/assets/vendor/animsition/animsition.css">
-    <link rel="stylesheet" href="../../Content/assets/vendor/asscrollable/asScrollable.css">
-    <link rel="stylesheet" href="../../Content/assets/vendor/switchery/switchery.css">
-    <link rel="stylesheet" href="../../Content/assets/vendor/intro-js/introjs.css">
-    <link rel="stylesheet" href="../../Content/assets/vendor/slidepanel/slidePanel.css">
-    <link rel="stylesheet" href="../../Content/assets/vendor/flag-icon-css/flag-icon.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/animsition/animsition.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/asscrollable/asScrollable.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/switchery/switchery.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/intro-js/introjs.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/slidepanel/slidePanel.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/flag-icon-css/flag-icon.css">
 
 
     <!-- Page -->
-    <link rel="stylesheet" href="../../Content/assets/css/pages/register.css">
+    <link rel="stylesheet" href="~/Content/assets/css/pages/register.css">
 
     <!-- Fonts -->
-    <link rel="stylesheet" href="../../Content/assets/fonts/web-icons/web-icons.min.css">
-    <link rel="stylesheet" href="../../Content/assets/fonts/brand-icons/brand-icons.min.css">
+    <link rel="stylesheet" href="~/Content/assets/fonts/web-icons/web-icons.min.css">
+    <link rel="stylesheet" href="~/Content/assets/fonts/brand-icons/brand-icons.min.css">
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
 
 
+    <!-- Plugin -->
+    <link rel="stylesheet" href="~/Content/assets/vendor/select2/select2.css">
+    
     <!--[if lt IE 9]>
-      <script src="../../Content/assets/vendor/html5shiv/html5shiv.min.js"></script>
+      <script src="~/Content/assets/vendor/html5shiv/html5shiv.min.js"></script>
       <![endif]-->
     <!--[if lt IE 10]>
-      <script src="../../Content/assets/vendor/media-match/media.match.min.js"></script>
-      <script src="../../Content/assets/vendor/respond/respond.min.js"></script>
+      <script src="~/Content/assets/vendor/media-match/media.match.min.js"></script>
+      <script src="~/Content/assets/vendor/respond/respond.min.js"></script>
       <![endif]-->
     <!-- Scripts -->
-    <script src="../../Content/assets/vendor/modernizr/modernizr.js"></script>
-    <script src="../../Content/assets/vendor/breakpoints/breakpoints.js"></script>
+    <script src="~/Content/assets/vendor/modernizr/modernizr.js"></script>
+    <script src="~/Content/assets/vendor/breakpoints/breakpoints.js"></script>
     <script>
-    Breakpoints();
+        Breakpoints();
     </script>
+    <style>
+        p, label, a {
+            font-size: large;
+            color:white
+        }
+
+        .text-danger {
+            text-align: left;
+        }
+
+        .panel-title {
+            color:  white;
+            text-align: left;
+            padding: 7px 1px;
+        }
+
+        .col-sm-6 {
+            padding-left: 2px;
+            padding-right: 2px;
+        }
+
+        .page-content {
+            padding: 21px 0px;
+        }
+
+        .panel {
+            padding-left: 50px;
+            padding-right: 50px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .summary-errors {
+            width: 40%;
+            margin: auto;
+        }
+        .page-register {
+            color:#76838f;
+        }
+       
+    </style>
 </head>
 <body class="page-register layout-full">
     <!--[if lt IE 8]>
@@ -61,94 +108,270 @@
     <!-- Page -->
     <div class="page animsition vertical-align text-center" data-animsition-in="fade-in"
          data-animsition-out="fade-out">
-        <div class="page-content vertical-align-middle">
+        <div class="page-content vertical-align-middle" style="width:1000px;">
             <div class="brand">
-                <img class="brand-img" src="../../Content/assets/images/logo.png" alt="...">
-                <h2 class="brand-text">SPORT SOCIAL NETWORK</h2>
+                <img class="brand-img" src="~/Content/images/logo_new.png" alt="..." style="max-width:100px;padding:0">
+                <h1 class="brand-text">SPORT SOCIAL NETWORK</h1>
             </div>
-            <p>Đăng ký tài khoản</p>
             <form method="post" role="form">
-                <div class="form-group">
-                    <label class="sr-only" for="inputName">Tên tài khoản</label>
-                    <input type="text" class="form-control" id="inputName" placeholder="Tên tài khoản">
+                @Html.AntiForgeryToken()
+                <div style="text-align:center;width:1000px">
+                    <div class="summary-errors alert alert-danger alert-dismissible" style="display: block; text-align:left">
+                        <button type="button" class="close" aria-label="Close" data-dismiss="alert">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        @Html.ValidationSummary()
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="sr-only" for="inputEmail">Email</label>
-                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email">
-                </div>
-                <div class="form-group">
-                    <label class="sr-only" for="inputPassword">Password</label>
-                    <input type="password" class="form-control" id="inputPassword" name="password"
-                           placeholder="Mật khẩu">
-                </div>
-                <div class="form-group">
-                    <label class="sr-only" for="inputPasswordCheck">Retype Password</label>
-                    <input type="password" class="form-control" id="inputPasswordCheck" name="passwordCheck"
-                           placeholder="Nhập lại mật khẩu">
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Đăng ký</button>
-            </form>
-            <p>Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a></p>
+                <div class="row" style="width:1000px">
+                    <div class="panel panel-transparent col-sm-6">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Thông tin tài khoản</h3>
+                        </div>
+                        <div class="form-group">
 
-            <footer class="page-copyright">
-                <div class="social">
-                    <a href="javascript:void(0)">
-                        <i class="icon bd-twitter" aria-hidden="true"></i>
-                    </a>
-                    <a href="javascript:void(0)">
-                        <i class="icon bd-facebook" aria-hidden="true"></i>
-                    </a>
-                    <a href="javascript:void(0)">
-                        <i class="icon bd-dribbble" aria-hidden="true"></i>
-                    </a>
+                            <div class="input-group" id="inputUserName">
+                                <span class="input-group-addon">
+                                    <i class="icon wb-user" aria-hidden="true"></i>
+                                </span>
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control input-lg", placeholder = "Tên tài khoản", id = "inputName" })
+
+                            </div>
+                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "help-block text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group" id="inputEmail">
+                                <span class="input-group-addon">
+                                    <i class="icon wb-envelope" aria-hidden="true"></i>
+                                </span>
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control input-lg", placeholder = "Email", id = "inputName" })
+
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "help-block text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group" id="inputPassword">
+                                <span class="input-group-addon">
+                                    <i class="icon wb-lock" aria-hidden="true"></i>
+                                </span>
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control input-lg", placeholder = "Mật khẩu", id = "inputName" })
+
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "help-block text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group" id="inputConfirmPassword">
+                                <span class="input-group-addon">
+                                    <i class="icon wb-lock" aria-hidden="true"></i>
+                                </span>
+                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control input-lg", placeholder = "Nhập lại Mật khẩu", id = "inputName" })
+
+                            </div>
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "help-block text-danger" })
+                        </div>
+
+                    </div>
+                    <div class="panel panel-transparent col-sm-6">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Thông tin cá nhân</h3>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group" id="inputFullName">
+                                <span class="input-group-addon">
+                                    <i class="icon wb-info-circle" aria-hidden="true"></i>
+                                </span>
+                                @Html.TextBoxFor(m => m.FullName, new { @class = "form-control input-lg", placeholder = "Họ và tên", id = "inputName" })
+
+                            </div>
+                            @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "help-block text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group" id="inputPhoneNumber">
+                                <span class="input-group-addon">
+                                    <i class="icon wb-info-circle" aria-hidden="true"></i>
+                                </span>
+                                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control input-lg", placeholder = "Số điện thoại", id = "inputName" })
+
+                            </div>
+                            @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "help-block text-danger" })
+                        </div>
+                        <div class="form-group">
+                            
+                                <div class="select2-primary">
+                                    @Html.ListBoxFor(m=>m.Hobby, sport,new { @class="form-control", multiple="multiple", data_plugin="select2", placeholder = "Chọn môn thể thao yêu thích" })
+                                    
+                                </div>
+                            
+                            @Html.ValidationMessageFor(m => m.Hobby, "", new { @class = "help-block text-danger" })
+                        </div>
+                        <div class="form-group" style="text-align:left">
+                            <div class="checkbox-custom checkbox-primary">
+
+                                <input type="checkbox" id="inputUnchecked" name="PlaceOwner" >
+                                <label for="inputUnchecked">Tôi là chủ sân</label>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-            </footer>
+                <div class="row" style="width:1000px">
+                    <div class="col-sm-4 col-sm-offset-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-lg" style="width:100%;">Đăng ký</button>
+                    </div>
+                </div>
+                <br />
+                <div class="row" style="width:1000px">
+                    <div class="col-sm-4 col-sm-offset-4">
+                        <p>Đã có tài khoản? <a href="@Url.Action("Login")">Đăng nhập ngay</a></p>
+                    </div>
+                </div>
+
+            </form>
+
+
+
         </div>
     </div>
     <!-- End Page -->
     <!-- Core  -->
-    <script src="../../Content/assets/vendor/jquery/jquery.js"></script>
-    <script src="../../Content/assets/vendor/bootstrap/bootstrap.js"></script>
-    <script src="../../Content/assets/vendor/animsition/jquery.animsition.js"></script>
-    <script src="../../Content/assets/vendor/asscroll/jquery-asScroll.js"></script>
-    <script src="../../Content/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
-    <script src="../../Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
-    <script src="../../Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+    <script src="~/Content/assets/vendor/jquery/jquery.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap/bootstrap.js"></script>
+    <script src="~/Content/assets/vendor/animsition/jquery.animsition.js"></script>
+    <script src="~/Content/assets/vendor/asscroll/jquery-asScroll.js"></script>
+    <script src="~/Content/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
+    <script src="~/Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
+    <script src="~/Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
 
     <!-- Plugins -->
-    <script src="../../Content/assets/vendor/switchery/switchery.min.js"></script>
-    <script src="../../Content/assets/vendor/intro-js/intro.js"></script>
-    <script src="../../Content/assets/vendor/screenfull/screenfull.js"></script>
-    <script src="../../Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
+    <script src="~/Content/assets/vendor/switchery/switchery.min.js"></script>
+    <script src="~/Content/assets/vendor/intro-js/intro.js"></script>
+    <script src="~/Content/assets/vendor/screenfull/screenfull.js"></script>
+    <script src="~/Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
 
-    <script src="../../Content/assets/vendor/jquery-placeholder/jquery.placeholder.js"></script>
-
+    <script src="~/Content/assets/vendor/jquery-placeholder/jquery.placeholder.js"></script>
+    <script src="~/Content/assets/vendor/select2/select2.min.js"></script>
     <!-- Scripts -->
-    <script src="../../Content/assets/js/core.js"></script>
-    <script src="../../Content/assets/js/site.js"></script>
+    <script src="~/Content/assets/js/core.js"></script>
+    <script src="~/Content/assets/js/site.js"></script>
 
-    <script src="../../Content/assets/js/sections/menu.js"></script>
-    <script src="../../Content/assets/js/sections/menubar.js"></script>
-    <script src="../../Content/assets/js/sections/sidebar.js"></script>
+    <script src="~/Content/assets/js/sections/menu.js"></script>
+    <script src="~/Content/assets/js/sections/menubar.js"></script>
+    <script src="~/Content/assets/js/sections/sidebar.js"></script>
 
-    <script src="../../Content/assets/js/configs/config-colors.js"></script>
-    <script src="../../Content/assets/js/configs/config-tour.js"></script>
+    <script src="~/Content/assets/js/configs/config-colors.js"></script>
+    <script src="~/Content/assets/js/configs/config-tour.js"></script>
 
-    <script src="../../Content/assets/js/components/asscrollable.js"></script>
-    <script src="../../Content/assets/js/components/animsition.js"></script>
-    <script src="../../Content/assets/js/components/slidepanel.js"></script>
-    <script src="../../Content/assets/js/components/switchery.js"></script>
-    <script src="../../Content/assets/js/components/jquery-placeholder.js"></script>
+    
+    <script src="~/Content/assets/js/components/asscrollable.js"></script>
+    <script src="~/Content/assets/js/components/animsition.js"></script>
+    <script src="~/Content/assets/js/components/switchery.js"></script>
+    <script src="~/Content/assets/js/components/select2.js"></script>
+
 
     <script>
-    (function(document, window, $) {
-      'use strict';
+        (function (document, window, $) {
+            'use strict';
 
-      var Site = window.Site;
-      $(document).ready(function() {
-        Site.run();
-      });
-    })(document, window, jQuery);
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
+            });
+        })(document, window, jQuery);
+
+        $(document).ready(function () {
+            @if (ViewData.ModelState["RegisterError"] == null){
+           <text>
+            $('.summary-errors').hide();
+            </text>
+       }else{
+           <text>
+            $('.summary-errors').show();
+            </text>
+       }
+
+            @if ((ViewData.ModelState["Username"]!=null && ViewData.ModelState["Username"].Errors.Count >0))
+       {
+           <text>
+            $('#inputUserName').addClass("has-error")
+            </text>
+       }else
+       {
+           <text>
+            $('#inputUserName').removeClass("has-error")
+            </text>
+       }
+            @if ((ViewData.ModelState["Password"] != null && ViewData.ModelState["Password"].Errors.Count > 0))
+       {
+           <text>
+            $('#inputPassword').addClass("has-error")
+            </text>
+       }else
+       {
+           <text>
+            $('#inputPassword').removeClass("has-error")
+            </text>
+       }
+              @if ((ViewData.ModelState["ConfirmPassword"] != null && ViewData.ModelState["ConfirmPassword"].Errors.Count > 0))
+              {
+                  <text>
+            $('#inputConfirmPassword').addClass("has-error")
+                   </text>
+              }else
+              {
+                  <text>
+            $('#inputConfirmPassword').removeClass("has-error")
+                   </text>
+              }
+
+               @if ((ViewData.ModelState["Email"] != null && ViewData.ModelState["Email"].Errors.Count > 0))
+               {
+                   <text>
+            $('#inputEmail').addClass("has-error")
+                    </text>
+               }else
+               {
+                   <text>
+            $('#inputEmail').removeClass("has-error")
+                    </text>
+               }
+
+               @if ((ViewData.ModelState["FullName"] != null && ViewData.ModelState["FullName"].Errors.Count > 0))
+               {
+                   <text>
+            $('#inputFullName').addClass("has-error")
+                    </text>
+               }else
+               {
+                   <text>
+            $('#inputFullName').removeClass("has-error")
+                    </text>
+               }
+
+           @if ((ViewData.ModelState["PhoneNumber"] != null && ViewData.ModelState["PhoneNumber"].Errors.Count > 0))
+           {
+               <text>
+            $('#inputPhoneNumber').addClass("has-error")
+                </text>
+           }else
+           {
+               <text>
+            $('#inputPhoneNumber').removeClass("has-error")
+            </text>
+           }
+
+              @if ((ViewData.ModelState["Hobby"] != null && ViewData.ModelState["Hobby"].Errors.Count > 0))
+              {
+                  <text>
+            $('#inputHobby').addClass("has-error")
+                   </text>
+              }else
+              {
+                  <text>
+            $('#inputHobby').removeClass("has-error")
+                   </text>
+              }
+
+        });
     </script>
 
 </body>
@@ -187,7 +410,6 @@
         </div>
     </div>
 }-->
-
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

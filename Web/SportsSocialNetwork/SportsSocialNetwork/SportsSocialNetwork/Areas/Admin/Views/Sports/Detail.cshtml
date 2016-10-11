@@ -1,0 +1,80 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.SportViewModel
+@{
+    ViewBag.Title = "Detail";
+}
+
+
+<style>
+    dt, dd {
+        font-size: 1.1em;
+    }
+
+    .title, .detail {
+        font-size: 1.1em;
+        color: #000;
+    }
+
+    .title {
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .detail {
+        margin-left: 2px;
+    }
+</style>
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="modal-title">Chi tiết</h4>
+</div>
+<div class="modal-body" id="modalBody">
+    <div class="row">
+        @*<div class="col-sm-6">
+                <div class="carousel slide" id="exampleCarouselDefault" data-ride="carousel">
+                    <ol class="carousel-indicators carousel-indicators-fall">
+                        <li class="active" data-slide-to="0" data-target="#exampleCarouselDefault"></li>
+                        <li class="" data-slide-to="1" data-target="#exampleCarouselDefault"></li>
+                        <li class="" data-slide-to="2" data-target="#exampleCarouselDefault"></li>
+                    </ol>
+                    <div class="carousel-inner" role="listbox">
+
+                    </div>
+                    <a class="left carousel-control" href="#exampleCarouselDefault" role="button" data-slide="prev">
+                        <span class="icon wb-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#exampleCarouselDefault" role="button"
+                       data-slide="next">
+                        <span class="icon wb-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>*@
+        <div>
+            <div class="panel">
+                <div class="panel-heading">
+                    <center><h4>Chi tiết môn thể thao</h4></center>
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <p>
+                            <span class="title">Môn: </span>
+                            <span class="detail">@Model.Name</span>
+                        </p>
+                        <p>
+                            <span class="title">Id: </span>
+                            <span class="detail">@Model.Id</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+</div>

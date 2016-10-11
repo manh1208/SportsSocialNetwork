@@ -15,6 +15,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         IEnumerable<Order> GetAllOrderByFieldId(int fieldId);
 
         Order ChangeOrderStatus(int id, int status);
+        bool checkOrderTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime);
 
         Order CreateOrder(String userId, int fieldId, DateTime startTime, DateTime endTime, String note,double price, int? paidType);
         #endregion
@@ -65,6 +66,29 @@ namespace SportsSocialNetwork.Models.Entities.Services
            
         }
 
+        public bool checkOrderTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime)
+        {
+            IEnumerable<Order> orders = this.GetActive(p => p.FieldId == fieldId).OrderBy(p => p.StartTime).ToList();
+            bool isValid = true;
+            foreach(var order in orders)
+            {
+                if((startTime>=order.StartTime.TimeOfDay && startTime< order.EndTime.TimeOfDay) || 
+                    (endTime>order.StartTime.TimeOfDay && endTime<=order.EndTime.TimeOfDay) ||
+                    (startTime<=order.StartTime.TimeOfDay && endTime >= order.EndTime.TimeOfDay))
+                {
+                    isValid = false;
+                    break;
+                }
+            }
+            if (isValid)
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+            
+        }
         public IEnumerable<Order> GetAllOrderByFieldId(int fieldId) {
             return this.GetActive(x=> x.FieldId == fieldId);
         }

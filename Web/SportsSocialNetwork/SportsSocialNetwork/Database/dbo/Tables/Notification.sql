@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [dbo].[Notification] (
     [Id]           INT            IDENTITY (1, 1) NOT NULL,
     [UserId]       NVARCHAR (128) NOT NULL,
-    [Title]        NVARCHAR (255) NOT NULL,
-    [Message]      NVARCHAR (255) NOT NULL,
+    [Title]        NVARCHAR (MAX) NOT NULL,
+    [Message]      NVARCHAR (MAX) NOT NULL,
     [Type]         INT            NOT NULL,
     [PostId]       INT            NULL,
     [InvitationId] INT            NULL,
@@ -12,6 +12,8 @@
     CONSTRAINT [FK_Notification_Invitation] FOREIGN KEY ([InvitationId]) REFERENCES [dbo].[Invitation] ([Id]),
     CONSTRAINT [FK_Notification_Post] FOREIGN KEY ([PostId]) REFERENCES [dbo].[Post] ([Id])
 );
+
+
 
 
 

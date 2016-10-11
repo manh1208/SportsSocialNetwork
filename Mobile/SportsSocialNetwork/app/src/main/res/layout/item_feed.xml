@@ -9,7 +9,7 @@
         android:orientation="horizontal"
         android:padding="20sp">
         <com.capstone.sportssocialnetwork.custom.RoundedImageView
-            android:id="@+id/iv_avatar"
+            android:id="@+id/iv_feed_avatar"
             android:layout_width="50sp"
             android:layout_height="50sp"
             android:src="@drawable/img_default_avatar"/>
@@ -18,10 +18,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginLeft="20sp"
-            android:layout_toRightOf="@+id/iv_avatar"
+            android:layout_toRightOf="@+id/iv_feed_avatar"
             android:layout_toLeftOf="@+id/iv_menu_down"
             android:paddingTop="5sp">
         <TextView
+            android:id="@+id/txt_feed_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nguyễn Văn Mạnh"
@@ -29,19 +30,23 @@
             android:textStyle="bold"
             android:textColor="#000"/>
             <TextView
+                android:id="@+id/txt_feed_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="10 giờ trước"
                 android:textSize="12sp"
                 android:layout_marginTop="5sp"/>
         </LinearLayout>
-        <ImageView
+        <ImageButton
+
             android:layout_alignParentRight="true"
-            android:id="@+id/iv_menu_down"
+            android:id="@+id/btn_feed_menu_down"
             android:layout_width="20sp"
             android:layout_height="20sp"
             android:src="@drawable/ic_down"
-            android:padding="5sp"/>
+            android:scaleType="fitCenter"
+            android:padding="5sp"
+            android:background="@null"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -50,6 +55,7 @@
         android:paddingRight="20sp"
         android:paddingBottom="20sp">
         <TextView
+            android:id="@+id/txt_feed_post_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="ahihidadasjdalkjshdlfjkhasdf"
@@ -57,6 +63,7 @@
             />
     </RelativeLayout>
     <com.capstone.sportssocialnetwork.custom.CustomImage
+        android:id="@+id/iv_feed_post_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/placeholder"/>
@@ -75,6 +82,7 @@
             android:layout_height="15sp"
             android:src="@drawable/ic_num_like"/>
             <TextView
+                android:id="@+id/txt_feed_num_of_like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="12"
@@ -89,6 +97,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true">
             <TextView
+                android:id="@+id/txt_feed_num_of_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="100 bình luận"/>
@@ -109,6 +118,7 @@
             android:drawableLeft="@drawable/ic_like"
             android:paddingLeft="60sp"
             android:drawablePadding="10sp"
+
             android:textAlignment="textStart"
             />
         <Button
