@@ -47,11 +47,11 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         {
             var _eventService = this.Service<IEventService>();
             Event evt = _eventService.FirstOrDefault(e => e.Id == id);
-            List<SelectListItem> status = new List<SelectListItem>();
+            List<SelectListItem> statuss = new List<SelectListItem>();
 
             foreach (EventStatus item in Enum.GetValues(typeof(EventStatus)))
             {
-                status.Add(new SelectListItem { Value = Convert.ToString((int)item), Text = Utils.GetEnumDescription(item)});
+                statuss.Add(new SelectListItem { Value = Convert.ToString((int)item), Text = Utils.GetEnumDescription(item)});
             }
 
             var _placeService = this.Service<IPlaceService>();
@@ -70,7 +70,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 sPlaces.Add(new SelectListItem { Text = "Hiện chưa có địa điểm", Value = "" });
             }
 
-            ViewBag.status = status;
+            ViewBag.statusList = statuss;
             ViewBag.places = sPlaces;
             return this.PartialView(evt);
         }

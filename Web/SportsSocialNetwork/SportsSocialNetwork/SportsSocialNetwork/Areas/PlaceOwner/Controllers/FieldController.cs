@@ -8,6 +8,8 @@ using SportsSocialNetwork.Models.ViewModels;
 using SkyWeb.DatVM.Mvc.Autofac;
 using SportsSocialNetwork.Models.Entities;
 using System.Web.Routing;
+using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Utilities;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
@@ -62,6 +64,9 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             List<TimeBlock> timeBlocks = _timeBlockService.Get(t => t.FieldId == id.Value).ToList();
             List<FieldType> listFieldType = _fieldTypeService.Get().ToList();
             List<SelectListItem> selectListFieldType = new List<SelectListItem>();
+            List<SelectListItem> statuss = new List<SelectListItem>();
+            statuss.Add(new SelectListItem { Text = Utils.GetEnumDescription(PlaceStatus.Active), Value = Convert.ToString((int)PlaceStatus.Active) });
+            statuss.Add(new SelectListItem { Text = Utils.GetEnumDescription(PlaceStatus.Repairing), Value = Convert.ToString((int)PlaceStatus.Repairing) });
             selectListFieldType.Add(new SelectListItem { Text = "", Value = "" });
 
             foreach (var item in listFieldType)
@@ -72,6 +77,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             ViewBag.selectListFieldType = selectListFieldType;
             ViewBag.fieldImages = fieldImages;
             ViewBag.timeBlocks = timeBlocks;
+            ViewBag.statusList = statuss;
 
             return View(field);
         }

@@ -7,6 +7,7 @@
     var listCities = ViewBag.provinces as IOrderedEnumerable<SelectListItem>;
     var listDistricts = ViewBag.districts as IOrderedEnumerable<SelectListItem>;
     var listWards = ViewBag.wards as IOrderedEnumerable<SelectListItem>;
+    List<SelectListItem> statusList = ViewBag.statusList;
 }
 
 
@@ -41,8 +42,14 @@
                         </div>
                         <div class="panel-body">
                             <div class="form-group form-material floating">
-                                @Html.TextBoxFor(p => p.Name, new { @class = "form-control input-lg" })
-                                <label class="floating-label">Tên địa điểm</label>
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(p => p.Name, new { @class = "form-control input-lg" })
+                                    <label class="floating-label">Tên địa điểm</label>
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.DropDownListFor(p => p.Status, statusList, new { @class = "form-control input-lg" })
+                                    <label class="floating-label">Trạng thái</label>
+                                </div>
                             </div>
                             <div class="form-group form-material floating">
                                 <div class="col-md-6">

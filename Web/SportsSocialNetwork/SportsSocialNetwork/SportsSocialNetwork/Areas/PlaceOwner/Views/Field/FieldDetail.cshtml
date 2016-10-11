@@ -5,6 +5,7 @@
     List<SelectListItem> selectListFieldType = ViewBag.selectListFieldType;
     List<FieldImage> fieldImages = ViewBag.fieldImages;
     List<TimeBlock> timeBlocks = ViewBag.timeBlocks;
+    List<SelectListItem> statusList = ViewBag.statusList;
 }
 
 
@@ -34,6 +35,10 @@
                             <div class="form-group form-material floating">
                                 @Html.DropDownListFor(f => f.FieldTypeId, selectListFieldType, new { @class = "form-control input-lg" })
                                 <label class="floating-label">Loại sân</label>
+                            </div>
+                            <div class="form-group form-material floating">
+                                @Html.DropDownListFor(f => f.Status, statusList, new { @class = "form-control input-lg" })
+                                <label class="floating-label">Trạng thái</label>
                             </div>
                             @*<div class="form-group">
                                     <div class="col-sm-3">

@@ -4,6 +4,8 @@ using SportsSocialNetwork.Areas.PlaceOwner.Models.ViewModels;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using SportsSocialNetwork.Utilities;
 using System;
@@ -100,10 +102,15 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             districts.ToList().Add(new SelectListItem { Text = "", Value = " " });
             wards.ToList().Add(new SelectListItem { Text = "", Value = " " });
 
+            List<SelectListItem> statuss = new List<SelectListItem>();
+            statuss.Add(new SelectListItem { Text = Utils.GetEnumDescription(PlaceStatus.Active), Value = Convert.ToString((int)PlaceStatus.Active) });
+            statuss.Add(new SelectListItem { Text = Utils.GetEnumDescription(PlaceStatus.Repairing), Value = Convert.ToString((int)PlaceStatus.Repairing) });
+
             ViewBag.placeImages = placeImages;
             ViewBag.provinces = provinces;
             ViewBag.districts = districts;
             ViewBag.wards = wards;
+            ViewBag.statusList = statuss;
 
             return View(place);
         }
