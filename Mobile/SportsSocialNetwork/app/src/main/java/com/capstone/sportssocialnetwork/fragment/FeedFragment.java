@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,8 +16,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.NotificationActivity;
@@ -41,15 +44,21 @@ import retrofit2.Response;
  * Created by ManhNV on 9/6/16.
  */
 public class FeedFragment extends Fragment {
-    private ListView lvFeed;
+    private static final String TAG = "FeedFragment";
+    private ViewHolder viewHolder;
     private FeedAdapter adapter;
-    private Button btnPost;
-    private View header;
     private SearchView searchView;
     private SearchView.OnQueryTextListener queryTextListener;
     private RestService service;
     private ISocialNetworkService sSNService;
     private String userId;
+    private static final int MAX_TAKE = 5;
+    private int skip;
+    private int take;
+    private boolean isFull;
+    private boolean flag_loading;
+    private List<Feed> mFeeds;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,14 +73,12 @@ public class FeedFragment extends Fragment {
         initView(v);
         prepareData();
         event();
-        reloadData();
         return v;
     }
 
 
-
     private void event() {
-        btnPost.setOnClickListener(new View.OnClickListener() {
+        viewHolder.btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), PostActivity.class);
@@ -79,28 +86,70 @@ public class FeedFragment extends Fragment {
             }
         });
 
+        viewHolder.lvFeed.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem + visibleItemCount >= totalItemCount-1 && totalItemCount >1) {
+                    if (!flag_loading && !isFull) {
+                        Log.i(TAG,"scroll");
+                        loadData();
+                    } else {
+                        removeFooter();
+                    }
+                }
+            }
+        });
+
+        viewHolder.layoutRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+//                Toast.makeText(mContext, "Refresh", Toast.LENGTH_SHORT).show();
+                reloadAllFeed();
+            }
+        });
+
     }
 
     private void prepareData() {
-
-
-        lvFeed.addHeaderView(header);
-        adapter = new FeedAdapter(getActivity(), R.layout.item_feed, new ArrayList<Feed>());
-        lvFeed.setAdapter(adapter);
+        mFeeds = new ArrayList<>();
+//        if (viewHolder.lvFeed.getFooterViewsCount() <= 0)
+//            viewHolder.lvFeed.addFooterView(viewHolder.footer);
+        viewHolder.lvFeed.addHeaderView(viewHolder.header);
+        adapter = new FeedAdapter(getActivity(), R.layout.item_feed, mFeeds);
+        viewHolder.lvFeed.setAdapter(adapter);
 
 
     }
 
+    private void init() {
+        skip = 0;
+        take = MAX_TAKE;
+        flag_loading = false;
+        isFull = false;
+    }
+
+    private void reloadAllFeed() {
+        init();
+//        if (viewHolder.lvFeed.getFooterViewsCount() <= 0)
+//            viewHolder.lvFeed.addFooterView(viewHolder.footer);
+//        adapter.notifyDataSetChanged();
+        if (!flag_loading) {
+            Log.i(TAG,"Resume");
+            loadData();
+        }
+    }
+
     private void initView(View v) {
+        viewHolder = new ViewHolder(v);
         service = new RestService();
         sSNService = service.getSocialNetworkService();
         userId = DataUtils.getINSTANCE(getActivity()).getPreferences()
-                .getString(SharePreferentName.SHARE_USER_ID,"");
-        lvFeed = (ListView) v.findViewById(R.id.lv_list_feed);
-        header = ((LayoutInflater) getActivity()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
-                R.layout.item_header_feed, null, false);
-        btnPost = (Button) header.findViewById(R.id.btn_feed_post);
+                .getString(SharePreferentName.SHARE_USER_ID, "");
+
     }
 
     @Override
@@ -114,7 +163,7 @@ public class FeedFragment extends Fragment {
         inflater.inflate(R.menu.menu_feed, menu);
         MenuItem searchItem = menu.findItem(R.id.menu_search);
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        searchView=null;
+        searchView = null;
         if (searchItem != null) {
             searchView = (SearchView) searchItem.getActionView();
         }
@@ -158,25 +207,79 @@ public class FeedFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void reloadData() {
-        Call<ResponseModel<List<Feed>>> callback = sSNService.getAllPost(userId);
+    private void loadData() {
+        flag_loading = true;
+        Call<ResponseModel<List<Feed>>> callback = service.getSocialNetworkService().getAllPost(userId, take, skip);
         callback.enqueue(new Callback<ResponseModel<List<Feed>>>() {
             @Override
             public void onResponse(Call<ResponseModel<List<Feed>>> call, Response<ResponseModel<List<Feed>>> response) {
-                if (response.isSuccessful()){
-                    ResponseModel<List<Feed>> responseModel = response.body();
-                    if (responseModel.isSucceed()){
-                        adapter.setFeeds(responseModel.getData());
-                    }else{
-
-                    }
+//                mFeeds = response.body().getData();
+                if (viewHolder.layoutRefresh.isRefreshing()) {
+                    viewHolder.layoutRefresh.setRefreshing(false);
                 }
+//                flag_loading = false;
+//                if (response.isSuccessful()) {
+//                    ResponseModel<List<Feed>> responseModel = response.body();
+//                    if (responseModel.isSucceed()) {
+//                        if (responseModel.getData() != null && responseModel.getData().size() > 0) {
+//                            Toast.makeText(getActivity(), "Load thành công", Toast.LENGTH_SHORT).show();
+//                            adapter.setAppendFeed(responseModel.getData());
+//                            if (adapter.getCount() < (skip + take)) {
+//                                isFull = true;
+//                                removeFooter();
+//                            }
+//
+//                            skip = skip + take;
+//                        } else {
+//                            isFull = true;
+//                            removeFooter();
+//                        }
+//                    } else {
+//                        removeFooter();
+//                        Log.i(TAG, responseModel.getErrorsString());
+//                    }
+//                }
             }
 
             @Override
             public void onFailure(Call<ResponseModel<List<Feed>>> call, Throwable t) {
-
+                if (viewHolder.layoutRefresh.isRefreshing()) {
+                    viewHolder.layoutRefresh.setRefreshing(false);
+                }
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void removeFooter() {
+//        viewHolder.lvFeed.removeFooterView(viewHolder.footer);
+    }
+
+    private final class ViewHolder {
+        ListView lvFeed;
+        Button btnPost;
+        View header;
+        SwipeRefreshLayout layoutRefresh;
+        View footer;
+
+        ViewHolder(View v) {
+            lvFeed = (ListView) v.findViewById(R.id.lv_list_feed);
+            header = ((LayoutInflater) getActivity()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
+                    R.layout.item_header_feed, null, false);
+            footer = ((LayoutInflater) getActivity()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
+                    R.layout.item_load_more, null, false);
+
+            btnPost = (Button) header.findViewById(R.id.btn_feed_post);
+            layoutRefresh = (SwipeRefreshLayout) v.findViewById(R.id.layout_refresh);
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reloadAllFeed();
     }
 }

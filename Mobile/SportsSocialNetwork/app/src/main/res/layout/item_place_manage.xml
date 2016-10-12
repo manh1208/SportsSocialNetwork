@@ -49,25 +49,25 @@
             android:layout_marginBottom="5sp"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btn_place_detail"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="10sp"
-                android:layout_marginRight="10sp"
-                android:background="@color/blue"
-                android:text="Chi tiết"/>
+            <!--<Button-->
+                <!--android:id="@+id/btn_place_detail"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_marginLeft="10sp"-->
+                <!--android:layout_marginRight="10sp"-->
+                <!--android:background="@color/blue"-->
+                <!--android:text="Chi tiết"/>-->
 
-            <Button
-                android:id="@+id/btn_delete_place"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="10sp"
-                android:layout_marginRight="10sp"
-                android:background="@color/red"
-                android:text="Xóa"/>
+            <!--<Button-->
+                <!--android:id="@+id/btn_delete_place"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_marginLeft="10sp"-->
+                <!--android:layout_marginRight="10sp"-->
+                <!--android:background="@color/red"-->
+                <!--android:text="Xóa"/>-->
         </LinearLayout>
 
     </LinearLayout>

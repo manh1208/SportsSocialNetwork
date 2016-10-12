@@ -4,11 +4,16 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layout_refresh">
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/lv_list_feed"
         tools:listitem="@layout/item_feed"
         android:divider="#d2d2d2"
-        android:dividerHeight="10sp"></ListView>
+        android:dividerHeight="10sp"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

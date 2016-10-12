@@ -1,5 +1,6 @@
 package com.capstone.sportssocialnetwork.service;
 
+import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -9,7 +10,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestService {
-    private final String url = "http://192.169.150.68";
+    private final String url = DataUtils.URL;
     private Retrofit retrofit;
     private ISampleService sampleService;
     private ISocialNetworkService socialNetworkService;

@@ -32,6 +32,7 @@
                     android:paddingLeft="20sp"
                  >
                     <ImageView
+                        android:id="@+id/iv_new_post_avatar"
                         android:layout_width="50sp"
                         android:layout_height="50sp"
                         android:src="@drawable/img_default_avatar"/>
@@ -42,6 +43,7 @@
                         android:layout_marginLeft="20sp"
                         android:paddingTop="5sp">
                         <TextView
+                            android:id="@+id/txt_new_post_name"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="Nguyễn Văn Mạnh"
@@ -55,7 +57,7 @@
 
                 <EditText
                     android:layout_below="@+id/layout_avatar"
-                    android:id="@+id/txt_answer_content"
+                    android:id="@+id/txt_new_post_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10sp"
@@ -72,7 +74,7 @@
                     android:layout_marginTop="20sp"/>
 
                 <com.capstone.sportssocialnetwork.custom.CustomImage
-                    android:id="@+id/iv_answer_image"
+                    android:id="@+id/iv_new_post_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txt_answer_content"
@@ -87,7 +89,7 @@
         </ScrollView>
 
         <ImageButton
-            android:id="@+id/btn_answer_add_image"
+            android:id="@+id/btn_new_post_camera"
             android:layout_width="match_parent"
             android:layout_height="30sp"
             android:layout_alignParentBottom="true"

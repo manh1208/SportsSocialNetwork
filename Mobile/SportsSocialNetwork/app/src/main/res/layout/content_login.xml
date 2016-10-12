@@ -43,12 +43,16 @@
             android:layout_marginTop="20sp"/>
         <Button
             android:id="@+id/btn_login"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Đăng nhập"
-            android:layout_margin="50sp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="50sp"
             android:background="@drawable/button_login"
+            android:paddingLeft="20sp"
+            android:paddingRight="20sp"
+            android:paddingTop="10sp"
+            android:paddingBottom="10sp"
             android:textColor="#fff"
             android:textSize="20sp"
             />
