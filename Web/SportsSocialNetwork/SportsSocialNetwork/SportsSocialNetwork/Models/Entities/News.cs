@@ -27,7 +27,7 @@ namespace SportsSocialNetwork.Models.Entities
         public string NewsContent { get; set; }
         public string Image { get; set; }
         public int CategoryId { get; set; }
-        public Nullable<bool> Active { get; set; }
+        public bool Active { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual Category Category { get; set; }

@@ -146,7 +146,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Description" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" />
           <Property Name="SportId" Type="int" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
@@ -222,7 +222,7 @@
           <Property Name="NewsContent" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Image" Type="nvarchar(max)" Nullable="false" />
           <Property Name="CategoryId" Type="int" Nullable="false" />
-          <Property Name="Active" Type="bit" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="NewsComment">
           <Key>
@@ -258,14 +258,11 @@
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="StartTime" Type="datetime" Nullable="false" />
           <Property Name="EndTime" Type="datetime" Nullable="false" />
-          <Property Name="Note" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Note" Type="nvarchar(max)" />
           <Property Name="Price" Type="float" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="PaidType" Type="int" />
-          <Property Name="Token" Type="nvarchar(max)" />
           <Property Name="OrderCode" Type="nvarchar(max)" />
-          <Property Name="OnlinePaymentMethod" Type="nvarchar(max)" />
-          <Property Name="BankCode" Type="nvarchar(max)" />
           <Property Name="TransactionTime" Type="datetime" />
           <Property Name="PayerName" Type="nvarchar(max)" />
           <Property Name="PayerPhone" Type="nvarchar" MaxLength="255" />
@@ -295,8 +292,8 @@
           <Property Name="Address" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="PhoneNumber" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Latitude" Type="float" Nullable="false" />
-          <Property Name="Longitude" Type="float" Nullable="false" />
+          <Property Name="Latitude" Type="float" />
+          <Property Name="Longitude" Type="float" />
           <Property Name="Avatar" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
@@ -351,7 +348,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="PlaceId" Type="int" />
+          <Property Name="PlaceId" Type="int" Nullable="false" />
           <Property Name="Point" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Sport">
@@ -897,7 +894,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Rating_Place">
-          <End Role="Place" Type="Self.Place" Multiplicity="0..1" />
+          <End Role="Place" Type="Self.Place" Multiplicity="1" />
           <End Role="Rating" Type="Self.Rating" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Place">
@@ -1552,7 +1549,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="SportId" Type="Int32" Nullable="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Fields" Relationship="SSNModel.FK_Field_FieldType" FromRole="FieldType" ToRole="Field" />
@@ -1642,7 +1639,7 @@
           <Property Name="NewsContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CategoryId" Type="Int32" Nullable="false" />
-          <Property Name="Active" Type="Boolean" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_News_AspNetUsers" FromRole="News" ToRole="AspNetUser" />
           <NavigationProperty Name="Category" Relationship="SSNModel.FK_News_Category" FromRole="News" ToRole="Category" />
           <NavigationProperty Name="NewsComments" Relationship="SSNModel.FK_NewsComment_News" FromRole="News" ToRole="NewsComment" />
@@ -1686,14 +1683,11 @@
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="StartTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="EndTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Note" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Price" Type="Double" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="PaidType" Type="Int32" />
-          <Property Name="Token" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="OrderCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OnlinePaymentMethod" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="BankCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TransactionTime" Type="DateTime" Precision="3" />
           <Property Name="PayerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PayerPhone" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
@@ -1727,8 +1721,8 @@
           <Property Name="Address" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="PhoneNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Latitude" Type="Double" Nullable="false" />
-          <Property Name="Longitude" Type="Double" Nullable="false" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" />
           <Property Name="Avatar" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
@@ -1798,7 +1792,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="PlaceId" Type="Int32" />
+          <Property Name="PlaceId" Type="Int32" Nullable="false" />
           <Property Name="Point" Type="Int32" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Rating_AspNetUsers" FromRole="Rating" ToRole="AspNetUser" />
           <NavigationProperty Name="Place" Relationship="SSNModel.FK_Rating_Place" FromRole="Rating" ToRole="Place" />
@@ -2327,7 +2321,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Rating_Place">
-          <End Type="SSNModel.Place" Role="Place" Multiplicity="0..1" />
+          <End Type="SSNModel.Place" Role="Place" Multiplicity="1" />
           <End Type="SSNModel.Rating" Role="Rating" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Place">
@@ -2645,10 +2639,7 @@
                 <ScalarProperty Name="PayerPhone" ColumnName="PayerPhone" />
                 <ScalarProperty Name="PayerName" ColumnName="PayerName" />
                 <ScalarProperty Name="TransactionTime" ColumnName="TransactionTime" />
-                <ScalarProperty Name="BankCode" ColumnName="BankCode" />
-                <ScalarProperty Name="OnlinePaymentMethod" ColumnName="OnlinePaymentMethod" />
                 <ScalarProperty Name="OrderCode" ColumnName="OrderCode" />
-                <ScalarProperty Name="Token" ColumnName="Token" />
                 <ScalarProperty Name="PaidType" ColumnName="PaidType" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Price" ColumnName="Price" />

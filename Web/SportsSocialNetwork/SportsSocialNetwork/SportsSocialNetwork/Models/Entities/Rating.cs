@@ -16,7 +16,7 @@ namespace SportsSocialNetwork.Models.Entities
     {
         public int Id { get; set; }
         public string UserId { get; set; }
-        public Nullable<int> PlaceId { get; set; }
+        public int PlaceId { get; set; }
         public int Point { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }

@@ -140,7 +140,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                     var Coord = new GeoCoordinate(latitude, longtitude);
                     foreach (Place place in places)
                     {
-                        var placeCoord = new GeoCoordinate(place.Latitude, place.Longitude);
+                        var placeCoord = new GeoCoordinate(place.Latitude.Value, place.Longitude.Value);
                         var dis = Coord.GetDistanceTo(placeCoord);
                         if (Coord.GetDistanceTo(placeCoord) < 5000)
                         {
