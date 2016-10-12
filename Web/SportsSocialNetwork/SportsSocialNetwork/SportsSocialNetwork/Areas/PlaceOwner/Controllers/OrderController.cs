@@ -12,6 +12,7 @@ using System.Web.Mvc;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
+    [Authorize(Roles = "Chủ sân")]
     public class OrderController : BaseController
     {
         // GET: PlaceOwner/Order

@@ -73,7 +73,7 @@
                                 <div class="col-sm-2">
                                     <label class="control-label">Từ</label>
                                 </div>
-                                <div class="col-sm-8">
+                                <div class="col-sm-8" id="stDate">
                                     @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
                                 </div>
                             </div>
@@ -127,7 +127,7 @@
             <div class="row">
                 <div class="col-sm-offset-6 col-sm-4">
                     @Html.ActionLink("Hủy bỏ", "Index", "Place", null, new { @class = "btn btn-default" })
-                    <input type="submit" value="Tạo địa điểm" class="btn btn-success" />
+                    <input type="submit" id="submitBtn" value="Tạo địa điểm" class="btn btn-success" />
                 </div>
             </div>
         }
@@ -142,6 +142,11 @@
     (function (document, window, $) {
         $(document).ready(function ($) {
             Site.run();
+            $('#stDate').on('changeDate', function (e) {
+            // Revalidate the date field
+                $('#placeForm').formValidation('revalidateField', 'stDate');
+            });
+
         });
 
         // Example File Upload
@@ -281,24 +286,96 @@
 
 
 
+
+
     // Example Validataion Constraints
     // -------------------------------
     (function () {
         $('#placeForm').formValidation({
             framework: "bootstrap",
+            button: {
+                selector: '#submitBtn',
+                disabled: 'disabled'
+            },
             icon: null,
             fields: {
+                Name: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Tên địa điểm không được trống'
+                        }
+                    }
+                },
+                Address: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Địa chỉ không được trống'
+                        }
+                    }
+                },
+                City: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Tỉnh/Thành phố không được trống'
+                        }
+                    }
+                },
+                District: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Quận/Huyện không được trống'
+                        }
+                    }
+                },
+                Ward: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Phường/Xã không được trống'
+                        }
+                    }
+                },
                 Email: {
                     validators: {
+                        notEmpty: {
+                            message: 'Email không được trống'
+                        },
                         emailAddress: {
                             message: 'Email không đúng định dạng'
                         }
                     }
                 },
-                type_digits: {
+                PhoneNumber: {
                     validators: {
-                        digits: {
-                            message: 'The value is not digits'
+                        notEmpty: {
+                            message: 'Số điện thoại không được trống'
+                        },
+                        integer: {
+                            message: 'Số điện thoại phải là số'
+                        },
+                        stringLength: {
+                            min: 10,
+                            message: 'Số điện thoại phải từ 10 số trở lên'
+                        }
+                    }
+                },
+                StartTime: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Giờ bắt đầu không được trống'
+                        }
+                    }
+                },
+                EndTime: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Giờ kết thúc không được trống'
+                        }
+                    }
+                },
+                Description: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Mô tả không được trống'
                         }
                     }
                 },

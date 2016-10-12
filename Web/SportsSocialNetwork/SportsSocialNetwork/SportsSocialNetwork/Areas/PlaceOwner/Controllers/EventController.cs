@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
+    [Authorize(Roles = "Chủ sân")]
     public class EventController : Controller
     {
         // GET: PlaceOwner/Event

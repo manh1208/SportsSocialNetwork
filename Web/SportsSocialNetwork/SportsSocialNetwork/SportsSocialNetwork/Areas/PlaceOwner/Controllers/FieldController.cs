@@ -13,6 +13,7 @@ using SportsSocialNetwork.Models.Utilities;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
+    [Authorize(Roles = "Chủ sân")]
     public class FieldController : Controller
     {
         // GET: PlaceOwner/Field
