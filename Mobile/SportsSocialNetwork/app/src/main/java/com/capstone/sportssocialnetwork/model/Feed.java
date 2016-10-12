@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName;
  * Created by ManhNV on 9/6/16.
  */
 public class Feed extends Post {
+    @SerializedName("AspNetUser")
+    private User user;
     @SerializedName("CreateDateString")
     private String createDateString;
     @SerializedName("EditDateString")
@@ -65,5 +67,13 @@ public class Feed extends Post {
 
     public void setLiked(boolean liked) {
         this.liked = liked;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -64,8 +64,8 @@ public class PlaceManageAdapter extends ArrayAdapter<Place> {
     private class ViewHolder{
         Button btnPlaceDetail,btnDeletePlace;
         public ViewHolder(View v){
-            btnPlaceDetail = (Button) v.findViewById(R.id.btn_place_detail);
-            btnDeletePlace = (Button) v.findViewById(R.id.btn_delete_place);
+//            btnPlaceDetail = (Button) v.findViewById(R.id.btn_place_detail);
+//            btnDeletePlace = (Button) v.findViewById(R.id.btn_delete_place);
         }
     }
 }

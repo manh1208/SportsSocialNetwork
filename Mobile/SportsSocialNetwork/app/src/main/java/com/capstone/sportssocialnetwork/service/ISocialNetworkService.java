@@ -17,5 +17,7 @@ import retrofit2.http.Query;
 public interface ISocialNetworkService {
 
     @POST("api/post/showallpost")
-    Call<ResponseModel<List<Feed>>> getAllPost(@Query("currentUserId") String currentUserId);
+    Call<ResponseModel<List<Feed>>> getAllPost(@Query("currentUserId") String currentUserId,
+                                               @Query("take")int take,
+                                                @Query("skip")int skip);
 }
