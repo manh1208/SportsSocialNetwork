@@ -16,7 +16,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
 {
 
 
-    [Authorize(Roles = IdentityMultipleRoles.PlaceOwner)]
+    [Authorize(Roles = IdentityMultipleRoles.Admin)]
     public class PlaceController : BaseController
     {
         // GET: Admin/Place

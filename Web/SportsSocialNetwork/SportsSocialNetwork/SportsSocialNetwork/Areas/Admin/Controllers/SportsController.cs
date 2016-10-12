@@ -9,9 +9,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using SportsSocialNetwork.Models.Identity;
 
 namespace SportsSocialNetwork.Areas.Admin.Controllers
 {
+    [Authorize(Roles = IdentityMultipleRoles.Admin)]
     public class SportsController : BaseController
     {
         // GET: Admin/Sports
