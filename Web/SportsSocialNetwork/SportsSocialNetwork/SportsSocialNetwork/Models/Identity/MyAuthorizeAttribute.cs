@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace SportsSocialNetwork.Models.Identity
 {
@@ -19,11 +20,9 @@ namespace SportsSocialNetwork.Models.Identity
             {
                 // The user is not in any of the listed roles => 
                 // show the unauthorized view
-                filterContext.Result = new ViewResult
-                {
-                    ViewName = "~/View/Errors/NoPermission.cshtml"
-                };
-            }
+                filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Errors", action = "NoPermission", area = "" }));
+
+            }   
             else
             {
                 base.HandleUnauthorizedRequest(filterContext);

@@ -13,7 +13,7 @@ using SportsSocialNetwork.Models.Identity;
 
 namespace SportsSocialNetwork.Areas.Admin.Controllers
 {
-    [Authorize(Roles = IdentityMultipleRoles.Admin)]
+    [MyAuthorize(Roles = IdentityMultipleRoles.Admin)]
     public class SportsController : BaseController
     {
         // GET: Admin/Sports

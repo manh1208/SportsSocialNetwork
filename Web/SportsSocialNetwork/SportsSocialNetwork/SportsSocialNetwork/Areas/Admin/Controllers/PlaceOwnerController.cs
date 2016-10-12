@@ -15,7 +15,7 @@ using System.Web.Security;
 
 namespace SportsSocialNetwork.Areas.Admin.Controllers
 {
-    [Authorize(Roles = IdentityMultipleRoles.Admin)]
+    [MyAuthorize(Roles = IdentityMultipleRoles.Admin)]
     public class PlaceOwnerController : BaseController
     {
         private ApplicationUserManager _userManager;
