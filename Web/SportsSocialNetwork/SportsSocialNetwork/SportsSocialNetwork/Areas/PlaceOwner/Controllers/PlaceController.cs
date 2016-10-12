@@ -18,6 +18,7 @@ using System.Web.Routing;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
+    //[Authorize(Roles = "Chủ sân")]
     public class PlaceController : BaseController
     {
         // GET: PlaceOwner/Place
