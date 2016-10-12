@@ -7,7 +7,6 @@ namespace SportsSocialNetwork.Models.ViewModels
 {
     public class PlaceOveralViewModel: PlaceViewModel
     {
-        public String Avatar { get; set; }
 
     }
 }

@@ -15,7 +15,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 {
     public class PostCommentController : BaseController
     {
-        private String systemError = "An error has occured!";
+        private String systemError = "Đã có lỗi xảy ra!";
 
         private String userImagePath = "UserImage\\CuongPK";
 
@@ -78,8 +78,6 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         public void PreparePostCommentDetailViewModel(PostCommentDetailViewModel p)
         {
             var userService = this.Service<IAspNetUserService>();
-
-            p.CommentedUserName = userService.FindUserName(p.UserId);
 
             p.CreateDateString = p.CreateDate.ToString();
 

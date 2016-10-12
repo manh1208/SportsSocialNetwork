@@ -24,7 +24,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         [System.Web.Mvc.HttpGet]
         public ActionResult ShowAllPlaces(int skip, int take)
         {
-            ResponseModel<List<PlaceOveralViewModel>> response = null;
+            ResponseModel<List<PlaceViewModel>> response = null;
 
             var service = this.Service<IPlaceService>();
 
@@ -33,28 +33,14 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             try
             {
                 placeList = service.GetAll(skip,take).ToList();
-                List<PlaceOveralViewModel> result = Mapper.Map<List<PlaceOveralViewModel>>(placeList);
+                List<PlaceViewModel> result = Mapper.Map<List<PlaceViewModel>>(placeList);
 
-                foreach (var place in placeList)
-                {
-                    PlaceImage image = place.PlaceImages.FirstOrDefault();
-                    if (image != null)
-                    {
-                        foreach (var detailPlace in result)
-                        {
-                            if (image.PlaceId == detailPlace.Id)
-                            {
-                                detailPlace.Avatar = image.Image;
-                            }
-                        }
-                    }
-                }
 
-                response = new ResponseModel<List<PlaceOveralViewModel>>(true, "Load Place List Successfully", null, result);
+                response = new ResponseModel<List<PlaceViewModel>>(true, "Load Place List Successfully", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<List<PlaceOveralViewModel>>.CreateErrorResponse("Place List failed to load!", systemError);
+                response = ResponseModel<List<PlaceViewModel>>.CreateErrorResponse("Place List failed to load!", systemError);
             }
 
             return Json(response, JsonRequestBehavior.AllowGet);
@@ -72,17 +58,6 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 if (place != null)
                 {
                     PlaceDetailViewModel result = Mapper.Map<PlaceDetailViewModel>(place);
-
-                    List<PlaceImage> images = place.PlaceImages.ToList<PlaceImage>();
-
-                    List<String> imageList = new List<string>();
-
-                    foreach (var image in images)
-                    {
-                        imageList.Add(image.Image);
-                    }
-
-                    result.imageList = imageList;
 
                     response = new ResponseModel<PlaceDetailViewModel>(true, "Place info Loaded", null, result);
                 }

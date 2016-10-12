@@ -9,7 +9,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     {
         public String Avatar { get; set; }
 
-        public List<String> imageList { get; set; }
+        public List<FieldImageViewModel> FieldImages { get; set; }
 
     }
 }

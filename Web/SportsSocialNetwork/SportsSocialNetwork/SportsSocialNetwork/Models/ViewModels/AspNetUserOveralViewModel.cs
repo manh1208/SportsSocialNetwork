@@ -24,5 +24,7 @@ namespace SportsSocialNetwork.Models.ViewModels
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<bool> Active { get; set; }
         public bool Followed { get; set; }
+        public int FollowCount { get; set; }
+        public int NewsCount { get; set; }
     }
 }

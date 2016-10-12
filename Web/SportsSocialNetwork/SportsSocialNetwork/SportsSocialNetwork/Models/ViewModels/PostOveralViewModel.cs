@@ -10,7 +10,7 @@ namespace SportsSocialNetwork.Models
     {
         public String CreateDateString { get; set; }
         public String EditDateString { get; set; }
-        public String UserName { get; set; }
+        public AspNetUserOveralViewModel AspNetUser { get; set; }
         public int LikeCount { get; set; }
         public int CommentCount { get; set; }
         public bool Liked { get; set; }

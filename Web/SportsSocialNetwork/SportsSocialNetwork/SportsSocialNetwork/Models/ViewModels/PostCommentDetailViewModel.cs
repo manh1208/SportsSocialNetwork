@@ -8,7 +8,7 @@ namespace SportsSocialNetwork.Models
 {
     public class PostCommentDetailViewModel : PostCommentViewModel
     {
-        public String CommentedUserName { get; set; }
+        public AspNetUserOveralViewModel AspNetUser { get; set; }
 
         public String CreateDateString { get; set; }
     }

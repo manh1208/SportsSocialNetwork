@@ -7,6 +7,6 @@ namespace SportsSocialNetwork.Models.ViewModels
 {
     public class PlaceDetailViewModel: PlaceViewModel
     {
-        public List<String> imageList { get; set; }
+        public List<PlaceImageViewModel> PlaceImages { get; set; }
     }
 }
