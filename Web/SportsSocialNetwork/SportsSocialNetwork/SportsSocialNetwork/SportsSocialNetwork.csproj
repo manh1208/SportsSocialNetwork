@@ -275,6 +275,7 @@
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\PlaceDetailViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\PlaceOwnerAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\FieldController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -728,6 +729,8 @@
     <Compile Include="Models\Enumerable\DbEnums.cs" />
     <Compile Include="Models\FileUploader.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Identity\IdentityRoles.cs" />
+    <Compile Include="Models\Identity\MyAuthorizeAttribute.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\NganLuong.cs" />
     <Compile Include="Models\Notifications\Android.cs" />
@@ -3374,6 +3377,9 @@
     <Content Include="Views\Order\ConfirmOrder.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Order\OrderDetail.cshtml" />
+    <Content Include="Views\Errors\PageNotFound.cshtml" />
+    <Content Include="Views\Errors\NoPermission.cshtml" />
+    <Content Include="Views\Errors\DataError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

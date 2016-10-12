@@ -4,6 +4,7 @@ using SportsSocialNetwork.Areas.Admin.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Identity;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,9 @@ using System.Web.Mvc;
 
 namespace SportsSocialNetwork.Areas.Admin.Controllers
 {
+
+
+    [Authorize(Roles = IdentityMultipleRoles.PlaceOwner)]
     public class PlaceController : BaseController
     {
         // GET: Admin/Place

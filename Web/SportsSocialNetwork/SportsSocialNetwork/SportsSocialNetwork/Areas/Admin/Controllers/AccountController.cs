@@ -7,6 +7,7 @@ using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Identity;
 using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using SportsSocialNetwork.Utilities;
@@ -19,6 +20,7 @@ using System.Web.Security;
 
 namespace SportsSocialNetwork.Areas.Admin.Controllers
 {
+    [Authorize(Roles = IdentityMultipleRoles.Admin)]
     public class AccountController : BaseController
     {
 

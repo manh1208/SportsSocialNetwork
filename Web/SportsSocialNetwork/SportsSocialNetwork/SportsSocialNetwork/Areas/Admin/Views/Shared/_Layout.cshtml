@@ -167,9 +167,12 @@
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li role="presentation">
-                                <a href="#" role="menuitem">
-                                    <span class="icon wb-power"></span> Đăng xuất
-                                </a>
+                                <form action="@Url.Action("LogOff","Account", new { area = "" })" method="post" id="form-log-out">
+                                    @Html.AntiForgeryToken()
+                                    <a href="#" role="menuitem" onclick="logout()">
+                                        <span class="icon wb-power"></span> Đăng xuất
+                                    </a>
+                                </form>
                             </li>
                         </ul>
                     </li>
@@ -314,6 +317,11 @@
     <script src="~/Content/assets/js/components/bootstrap-datepicker.js"></script>
     <script src="~/Content/assets/js/components/jt-timepicker.js"></script>
     <script src="~/Content/assets/js/components/datepair-js.js"></script>
+    <script>
+       function logout(){
+           $("#form-log-out").submit();
+        }
+    </script>
     </body>
 @RenderSection("Scripts", false)
 

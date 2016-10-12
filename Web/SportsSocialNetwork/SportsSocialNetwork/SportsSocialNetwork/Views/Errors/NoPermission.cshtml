@@ -1,0 +1,126 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html class="no-js before-run" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="bootstrap admin template">
+    <meta name="author" content="">
+
+    <title>403 | SSN</title>
+
+    <link rel="apple-touch-icon" href="~/Content/assets/images/apple-touch-icon.png">
+    <link rel="shortcut icon" href="~/Content/images/logo_orange.png">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap-extend.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/site.min.css">
+
+    <link rel="stylesheet" href="~/Content/assets/vendor/animsition/animsition.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/asscrollable/asScrollable.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/switchery/switchery.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/intro-js/introjs.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/slidepanel/slidePanel.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/flag-icon-css/flag-icon.css">
+
+
+    <!-- Page -->
+    <link rel="stylesheet" href="~/Content/assets/css/pages/errors.css">
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="~/Content/assets/fonts/web-icons/web-icons.min.css">
+    <link rel="stylesheet" href="~/Content/assets/fonts/brand-icons/brand-icons.min.css">
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
+
+
+    <!--[if lt IE 9]>
+      <script src="~/Content/assets/vendor/html5shiv/html5shiv.min.js"></script>
+      <![endif]-->
+    <!--[if lt IE 10]>
+      <script src="~/Content/assets/vendor/media-match/media.match.min.js"></script>
+      <script src="~/Content/assets/vendor/respond/respond.min.js"></script>
+      <![endif]-->
+    <!-- Scripts -->
+    <script src="~/Content/assets/vendor/modernizr/modernizr.js"></script>
+    <script src="~/Content/assets/vendor/breakpoints/breakpoints.js"></script>
+    <script>
+    Breakpoints();
+    </script>
+</head>
+<body class="page-error page-error-404 layout-full">
+    <!--[if lt IE 8]>
+          <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+      <![endif]-->
+    <!-- Page -->
+    <div class="page animsition vertical-align text-center" data-animsition-in="fade-in"
+         data-animsition-out="fade-out">
+        <div class="page-content vertical-align-middle">
+            <img class="error-mark animation-slide-top" src="~/Content/assets/images/403.png" alt="...">
+            <h2>Bạn không có quyền truy cập vào trang này!</h2>
+            <a class="btn btn-primary btn-round" href="javascript(0)" onclick="goBack()">Trờ về</a>
+
+            <footer class="page-copyright">
+                <p>SPORT SOCIAL NETWORK</p>
+                <p>© 2016. All RIGHT RESERVED.</p>
+
+            </footer>
+        </div>
+    </div>
+    <!-- End Page -->
+    <!-- Core  -->
+    <script src="~/Content/assets/vendor/jquery/jquery.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap/bootstrap.js"></script>
+    <script src="~/Content/assets/vendor/animsition/jquery.animsition.js"></script>
+    <script src="~/Content/assets/vendor/asscroll/jquery-asScroll.js"></script>
+    <script src="~/Content/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
+    <script src="~/Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
+    <script src="~/Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+
+    <!-- Plugins -->
+    <script src="~/Content/assets/vendor/switchery/switchery.min.js"></script>
+    <script src="~/Content/assets/vendor/intro-js/intro.js"></script>
+    <script src="~/Content/assets/vendor/screenfull/screenfull.js"></script>
+    <script src="~/Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
+
+
+    <!-- Scripts -->
+    <script src="~/Content/assets/js/core.js"></script>
+    <script src="~/Content/assets/js/site.js"></script>
+
+    <script src="~/Content/assets/js/sections/menu.js"></script>
+    <script src="~/Content/assets/js/sections/menubar.js"></script>
+    <script src="~/Content/assets/js/sections/sidebar.js"></script>
+
+    <script src="~/Content/assets/js/configs/config-colors.js"></script>
+    <script src="~/Content/assets/js/configs/config-tour.js"></script>
+
+    <script src="~/Content/assets/js/components/asscrollable.js"></script>
+    <script src="~/Content/assets/js/components/animsition.js"></script>
+    <script src="~/Content/assets/js/components/slidepanel.js"></script>
+    <script src="~/Content/assets/js/components/switchery.js"></script>
+
+
+    <script>
+    (function(document, window, $) {
+      'use strict';
+
+      var Site = window.Site;
+      $(document).ready(function() {
+        Site.run();
+      });
+    })(document, window, jQuery);
+    function goBack() {
+        window.history.back();
+    }
+    </script>
+
+</body>
+
+</html>
+
