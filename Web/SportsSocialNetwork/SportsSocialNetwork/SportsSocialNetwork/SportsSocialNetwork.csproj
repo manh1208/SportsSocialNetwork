@@ -3370,6 +3370,7 @@
     <Content Include="Views\Order\ConfirmOrder.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Order\OrderDetail.cshtml" />
+    <Content Include="Views\Shared\_groupLayout.cshtml" />
     <Content Include="Views\Group\Index.cshtml" />
     <Content Include="Views\Group\test.cshtml" />
   </ItemGroup>
