@@ -31,7 +31,8 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                 .Select(a => new IConvertible[] {
                         count++,
                         a.Name,                       
-                        a.Id
+                        a.Description,
+                        a.Id,
                 }).ToArray();
 
             var model = new
@@ -113,6 +114,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                 var service = this.Service<ISportService>();
                 Sport sport = service.Get(model.Id);
                 sport.Name = model.Name;
+                sport.Description = model.Description;
                 service.Update(sport);
                 service.Save();     
                 result.Succeed = true;

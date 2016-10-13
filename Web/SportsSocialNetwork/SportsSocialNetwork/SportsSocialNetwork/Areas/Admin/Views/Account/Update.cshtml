@@ -44,16 +44,16 @@
 
                 <div class="form-group form-material floating row">
                     <div class="col-sm-6">
-                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control input-lg", })
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control input-lg", @readonly = true })
                         <label class="floating-label text-black">Tên đăng nhập</label>
                     </div>
                     <div class="col-sm-6">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control input-lg", @type = "email" })
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control input-lg", @type = "email", @readonly = true })
                         <label class="floating-label">Email</label>
                     </div>
                 </div>
                 <div class="form-group form-material floating">
-                    @Html.DropDownListFor(m => m.RoleId, roles, " ",
+                    @Html.DropDownListFor(m => m.RoleId, roles,
                              new { @class = "form-control input-lg", @id = "updateRole" })
                     <label class="floating-label">Vai trò</label>
                 </div>
@@ -69,23 +69,24 @@
 
                 <div class="form-group form-material floating row">
                     <div class="col-sm-6">
-                        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control input-lg" })
+                        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control input-lg", @readonly = true })
 
                         <label class="floating-label">Họ và tên</label>
                     </div>
                     <div class="col-sm-6">
-                        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control input-lg" })
+                        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control input-lg", @readonly = true })
                         <label class="floating-label">Số điện thoại</label>
                     </div>
                 </div>
                 <div class="form-group form-material floating row">
                     <div class="col-sm-6">
-                        @Html.TextBoxFor(m => m.Address, new { @class = "form-control input-lg" })
+                        @Html.TextBoxFor(m => m.Address, new { @class = "form-control input-lg", @readonly = true })
                         <label class="floating-label">Địa chỉ</label>
                     </div>
                     <div class="col-sm-6">
                         @Html.DropDownListFor(m => m.City, provinces, " ",
-                         new { @class = "form-control input-lg", @id = "updateProvince" })
+                         new { @class = "form-control input-lg", @id = "updateProvince", @disabled = "disabled"})
+                        @Html.HiddenFor(m => m.City, provinces)
                         <label class="floating-label">Tỉnh/ TP</label>
                     </div>
                 </div>
@@ -93,24 +94,29 @@
 
                     <div class="col-sm-6">
                         @Html.DropDownListFor(m => m.District, districts, " ",
-                         new { @class = "form-control input-lg", @id = "updateDistrict" })
+                         new { @class = "form-control input-lg", @id = "updateDistrict", @disabled = "disabled" })
+                        @Html.HiddenFor(m => m.District, districts)
                         <label class="floating-label">Quận/ Huyện</label>
                     </div>
                     <div class="col-sm-6">
                         @Html.DropDownListFor(m => m.Ward, wards, " ",
-                         new { @class = "form-control input-lg", @id = "updateWard", })
+                         new { @class = "form-control input-lg", @id = "updateWard", @disabled = "disabled" })
+                        @Html.HiddenFor(m => m.Ward, wards)
                         <label class="floating-label">Phường/ Xã</label>
                     </div>
 
                 </div>
                 <div class="form-group form-material floating row">
-                    <div class="col-sm-6">
-                        @Html.TextBoxFor(m => m.Birthday, new { @class = "form-control input-lg" })
+                    <div class="col-sm-6">                        
+                        @Html.TextBoxFor(m => m.Birthday, "{0:dd/MM/yyyy}", new { @class = "form-control input-lg datepicker", @data_plugin ="datepicker", @name = "birthDay", @data_autoclose="true", @disabled = "disabled"})
+                        @Html.HiddenFor(m => m.Birthday)
+                        @*<input type="text" class="datepicker form-control" name="StartDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" />*@
                         <label class="floating-label">Ngày sinh</label>
                     </div>
                     <div class="col-sm-6">
                         @Html.DropDownListFor(m => m.Gender, genders, " ",
-                         new { @class = "form-control input-lg", @id = "updateGender" })
+                         new { @class = "form-control input-lg", @id = "updateGender", @disabled = "disabled" })
+                        @Html.HiddenFor(m => m.Gender, genders)
                         <label class="floating-label">Giới tính</label>
                     </div>
                 </div>

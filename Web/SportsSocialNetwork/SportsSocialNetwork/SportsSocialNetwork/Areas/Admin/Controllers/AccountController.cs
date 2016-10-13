@@ -127,6 +127,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
 
         public ActionResult Update(string id)
         {
+           // DateTime birthDay = DateTime.Parse(Request["birthDay"]);
             var user_service = this.Service<IAspNetUserService>();
             var role_service = this.Service<IAspNetRoleService>();
             var entity = user_service.FindUser(id);
@@ -187,7 +188,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                 provinces.ToList().Add(new SelectListItem { Text = "", Value = " " });
                 districts.ToList().Add(new SelectListItem { Text = "", Value = " " });
                 wards.ToList().Add(new SelectListItem { Text = "", Value = " " });
-                roles.ToList().Add(new SelectListItem { Text = "", Value = " " });
+                //roles.ToList().Add(new SelectListItem { Text = "", Value = " " });
                 ViewBag.Provinces = provinces;
                 ViewBag.Districts = districts;
                 ViewBag.Wards = wards;
@@ -198,7 +199,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetDistrict(string provinceName)
+        public ActionResult GetDistrict(string provinceName) //lam theo cai nay
         {
             var result = new AjaxOperationResult<IEnumerable<SelectListItem>>();
             Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
@@ -206,11 +207,12 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
             IOrderedEnumerable<SelectListItem> districts = null;
             if (province != null)
             {
+                //tao ra 1 mang select list item
                 districts = province.Districts.Select(d =>
                                                     new SelectListItem
                                                     {
-                                                        Text = d.Type + " " + d.Name,
-                                                        Value = d.Name
+                                                        Text = d.Type + " " + d.Name,//hien len tren dropdown list
+                                                        Value = d.Name //value tra ve cho minh
                                                     })
                                                     .OrderBy(d => d.Value);
             }

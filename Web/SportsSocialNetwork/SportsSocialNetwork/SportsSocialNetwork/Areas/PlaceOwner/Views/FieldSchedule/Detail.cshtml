@@ -1,0 +1,90 @@
+﻿@model SportsSocialNetwork.Areas.PlaceOwner.Models.ViewModels.FieldScheduleDetailViewModel
+@using SportsSocialNetwork.Models.Enumerable;
+@using SportsSocialNetwork.Models.Utilities;
+@{
+    ViewBag.Title = "Detail";
+}
+
+<style>
+    dt, dd {
+        font-size: 1.1em;
+    }
+
+    .title, .detail {
+        font-size: 1.1em;
+        color: #000;
+    }
+
+    .title {
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .detail {
+        margin-left: 2px;
+    }
+</style>
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="modal-title">Chi tiết</h4>
+</div>
+<div class="modal-body" id="modalBody">
+    <div class="row">       
+        <div>
+            <div class="panel">                
+                <div class="panel-body">
+                    <div>
+                        <p>
+                            <span class="title">Địa điểm: </span>
+                            <span class="detail">@Model.Field.Place.Name</span>
+                        </p>
+                        <p>
+                            <span class="title">Sân: </span>
+                            <span class="detail">@Model.Field.Name</span>
+                        </p>
+                        <p>
+                            <span class="title">Loại:</span>
+                            @{
+                                if (Model.Type == (int)FieldScheduleStatus.Booked)
+                                {
+                                    <span class="detail">@Utils.GetEnumDescription(FieldScheduleStatus.Booked)</span>
+                                }
+                                else if (Model.Type == (int)FieldScheduleStatus.Event)
+                                {
+                                    <span class="detail">@Utils.GetEnumDescription(FieldScheduleStatus.Event)</span>
+                                }
+                                else if (Model.Type == (int)FieldScheduleStatus.Repair)
+                                {
+                                    <span class="detail">@Utils.GetEnumDescription(FieldScheduleStatus.Repair)</span>
+                                }
+                                else if (Model.Type == (int)FieldScheduleStatus.Other)
+                                {
+                                    <span class="detail">@Utils.GetEnumDescription(FieldScheduleStatus.Other)</span>
+                                }
+                            }
+                        </p>                        
+                        <p>
+                            <span class="title">Thời gian: </span> <br />
+                            <span class="title">Từ: </span>
+                            <span class="detail">@Model.StartTime.ToString()</span>
+                            <span class="title">  Đến: </span>
+                            <span class="detail">@Model.EndTime.ToString()</span>
+                        </p>
+                        <p>
+                            <span class="title">Mô tả:</span>
+                            <span class="detail">@Model.Field.FieldType.Description</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+</div>
+

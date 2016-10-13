@@ -94,5 +94,6 @@
     <Build Include="dbo\Tables\Event.sql" />
     <Build Include="dbo\Tables\CategorySport.sql" />
     <Build Include="dbo\Tables\Category.sql" />
+    <Build Include="dbo\Tables\FieldSchedule.sql" />
   </ItemGroup>
 </Project>
