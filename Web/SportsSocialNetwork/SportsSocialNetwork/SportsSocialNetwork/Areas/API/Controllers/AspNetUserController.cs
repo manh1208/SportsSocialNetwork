@@ -27,7 +27,6 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
-        //Login 
         public AspNetUserController() { }
 
         public AspNetUserController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -59,7 +58,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 _userManager = value;
             }
         }
-        //
+        
 
 
         [HttpGet]

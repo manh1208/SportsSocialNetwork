@@ -10,6 +10,5 @@ namespace SportsSocialNetwork.Models
     {
         public String LikedUserName { get; set; }
         public String CreateDateString { get; set; }
-
     }
 }

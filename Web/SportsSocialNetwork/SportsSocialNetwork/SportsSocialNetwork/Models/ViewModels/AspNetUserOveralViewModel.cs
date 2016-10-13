@@ -19,9 +19,9 @@ namespace SportsSocialNetwork.Models.ViewModels
         public string AvatarImage { get; set; }
         public string CoverImage { get; set; }
         public List<HobbyViewModel> Hobbies { get; set; }
-        public Nullable<System.DateTime> Birthday { get; set; }
+        public String Birthday { get; set; }
         public Nullable<int> Gender { get; set; }
-        public Nullable<System.DateTime> CreateDate { get; set; }
+        public String CreateDate { get; set; }
         public Nullable<bool> Active { get; set; }
         public bool Followed { get; set; }
         public int FollowCount { get; set; }

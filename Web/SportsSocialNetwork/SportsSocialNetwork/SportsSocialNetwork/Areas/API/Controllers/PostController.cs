@@ -35,10 +35,10 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 List<PostOveralViewModel> result = Mapper.Map<List<PostOveralViewModel>>(postList);
 
-                foreach (var p in result)
-                {
-                    PreparePostOveralData(p, currentUserId);
-                }
+                //foreach (var p in result)
+                //{
+                //    PreparePostOveralData(p, currentUserId);
+                //}
 
                 response = new ResponseModel<List<PostOveralViewModel>>(true, "Post list loaded!", null, result);
             }
@@ -65,10 +65,10 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 List<PostOveralViewModel> result = Mapper.Map<List<PostOveralViewModel>>(postList);
 
-                foreach (var p in result)
-                {
-                    PreparePostOveralData(p, currentUserId);
-                }
+                //foreach (var p in result)
+                //{
+                //    PreparePostOveralData(p, currentUserId);
+                //}
 
                 response = new ResponseModel<List<PostOveralViewModel>>(true, "Group posts loaded!", null, result);
             }
@@ -117,7 +117,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             PostOveralViewModel result = null;
 
-            ResponseModel<PostViewModel> response = null;
+            ResponseModel<PostOveralViewModel> response = null;
 
             try
             {
@@ -136,13 +136,13 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 result = Mapper.Map<PostOveralViewModel>(post);
 
-                PreparePostOveralData(result, post.UserId);
+                //PreparePostOveralData(result, post.UserId);
 
-                response = new ResponseModel<PostViewModel>(true, "Post created", null, result);
+                response = new ResponseModel<PostOveralViewModel>(true, "Post created", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<PostViewModel>.CreateErrorResponse("Post failed!", systemError);
+                response = ResponseModel<PostOveralViewModel>.CreateErrorResponse("Post failed!", systemError);
             }
 
             return Json(response);
@@ -213,7 +213,6 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
 
 
-            p.CreateDateStrings();
         }
 
         public PostDetailViewModel PreparePostDetailData(PostOveralViewModel post,int skip, int take)
@@ -229,43 +228,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             List<PostComment> commentList = commentService.GetCommentListByPostId(post.Id,skip,take).ToList<PostComment>();
             List<PostCommentDetailViewModel> commentListResult = Mapper.Map<List<PostCommentDetailViewModel>>(commentList);
-            foreach (var c in commentListResult)
-            {
-                PreparePostCommentDetailViewModel(c);
-            }
             result.CommentList = commentListResult;
-
-            List<Like> likeList = likeService.GetLikeListByPostId(post.Id).ToList<Like>();
-            List<LikeDetailViewModel> likeListResult = Mapper.Map<List<LikeDetailViewModel>>(likeList);
-            foreach (var l in likeListResult)
-            {
-                PrepareLikeDetailViewModel(l);
-            }
-
-            result.LikeList = likeListResult;
-
             return result;
-
-
         }
-
-        public void PrepareLikeDetailViewModel(LikeDetailViewModel l)
-        {
-            var userService = this.Service<IAspNetUserService>();
-
-            l.LikedUserName = userService.FindUserName(l.UserId);
-
-            l.CreateDateString = l.CreateDate.ToString();
-
-        }
-
-        public void PreparePostCommentDetailViewModel(PostCommentDetailViewModel p)
-        {
-            var userService = this.Service<IAspNetUserService>();
-
-            p.CreateDateString = p.CreateDate.ToString();
-
-        }
-
     }
 }

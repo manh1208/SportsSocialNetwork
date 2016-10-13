@@ -30,11 +30,6 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 List<PostCommentDetailViewModel> result = Mapper.Map<List<PostCommentDetailViewModel>>(commentList);
 
-                foreach(var comment in result)
-                {
-                    PreparePostCommentDetailViewModel(comment);
-                }
-
                 response = new ResponseModel<List<PostCommentDetailViewModel>>(true,"Comment list loaded",null, result);
 
 
@@ -65,22 +60,12 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 PostCommentDetailViewModel result = Mapper.Map<PostCommentDetailViewModel>(comment);
 
-                PreparePostCommentDetailViewModel(result);
-
                 response = new ResponseModel<PostCommentDetailViewModel>(true, "Commented successfully", null, result);
 
             } catch (Exception) {
                 response = ResponseModel<PostCommentDetailViewModel>.CreateErrorResponse("Failed to comment",systemError);
             }
             return Json(response);
-        }
-
-        public void PreparePostCommentDetailViewModel(PostCommentDetailViewModel p)
-        {
-            var userService = this.Service<IAspNetUserService>();
-
-            p.CreateDateString = p.CreateDate.ToString();
-
         }
     }
 }

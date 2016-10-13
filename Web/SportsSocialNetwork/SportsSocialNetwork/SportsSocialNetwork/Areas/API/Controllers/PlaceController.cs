@@ -14,7 +14,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 {
     public class PlaceController : BaseController
     {
-        private String systemError = "An error has occured!";
+        private String systemError = "Đã có lỗi xảy ra!";
 
         public PlaceController(IPlaceService placeService)
         {
@@ -24,7 +24,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         [System.Web.Mvc.HttpGet]
         public ActionResult ShowAllPlaces(int skip, int take)
         {
-            ResponseModel<List<PlaceViewModel>> response = null;
+            ResponseModel<List<PlaceOveralViewModel>> response = null;
 
             var service = this.Service<IPlaceService>();
 
@@ -32,15 +32,26 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             try
             {
-                placeList = service.GetAll(skip,take).ToList();
-                List<PlaceViewModel> result = Mapper.Map<List<PlaceViewModel>>(placeList);
+                placeList = service.GetAll(skip, take).ToList();
+                List<PlaceOveralViewModel> result = Mapper.Map<List<PlaceOveralViewModel>>(placeList);
 
+                foreach (var place in placeList)
+                {
+                    foreach (var r in result)
+                    {
+                        if (r.Id == place.Id)
+                        {
+                            r.SportList = GetAllSportOfPlace(place);
+                        }
 
-                response = new ResponseModel<List<PlaceViewModel>>(true, "Load Place List Successfully", null, result);
+                    }
+                }
+
+                response = new ResponseModel<List<PlaceOveralViewModel>>(true, "Load Place List Successfully", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<List<PlaceViewModel>>.CreateErrorResponse("Place List failed to load!", systemError);
+                response = ResponseModel<List<PlaceOveralViewModel>>.CreateErrorResponse("Place List failed to load!", systemError);
             }
 
             return Json(response, JsonRequestBehavior.AllowGet);
@@ -61,7 +72,8 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
                     response = new ResponseModel<PlaceDetailViewModel>(true, "Place info Loaded", null, result);
                 }
-                else {
+                else
+                {
                     response = ResponseModel<PlaceDetailViewModel>.CreateErrorResponse("Place info failed to load!", systemError);
                 }
             }
@@ -86,7 +98,8 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                     PlaceViewModel result = Mapper.Map<PlaceViewModel>(place);
                     response = new ResponseModel<PlaceViewModel>(true, "Your Place's status has been updated!", null, result);
                 }
-                else {
+                else
+                {
                     response = ResponseModel<PlaceViewModel>.CreateErrorResponse("Your Place's status has NOT been updated!", systemError);
                 }
             }
@@ -99,14 +112,16 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
         [HttpPost]
         public ActionResult findSurroundingPlace(string sport, string province,
-            string district, string lat, string lng) {
+            string district, string lat, string lng)
+        {
             var placeService = this.Service<IPlaceService>();
 
             List<Place> placeList = new List<Place>();
 
             ResponseModel<List<PlaceViewModel>> response = null;
 
-            try {
+            try
+            {
                 if (lat != null && lat != "" && lng != null && lng != "")
                 {
                     var places = placeService.getAllPlace();
@@ -122,7 +137,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                             placeList.Add(place);
                         }
                     }
-                    
+
                 }
                 else
                 {
@@ -132,10 +147,41 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 List<PlaceViewModel> result = Mapper.Map<List<PlaceViewModel>>(placeList);
 
                 response = new ResponseModel<List<PlaceViewModel>>(true, "Here are places that you want!", null, result);
-            } catch (Exception) {
-                response = ResponseModel<List<PlaceViewModel>>.CreateErrorResponse("Can not find result",systemError);
+            }
+            catch (Exception)
+            {
+                response = ResponseModel<List<PlaceViewModel>>.CreateErrorResponse("Can not find result", systemError);
             }
             return Json(response);
+        }
+
+        private List<SportViewModel> GetAllSportOfPlace(Place place)
+        {
+            List<SportViewModel> sportList = new List<SportViewModel>();
+
+            List<Field> fieldList = place.Fields.ToList();
+
+            foreach (var field in fieldList)
+            {
+                SportViewModel sport = Mapper.Map<SportViewModel>(field.FieldType.Sport);
+                if (sportList.Count == 0)
+                {
+                    sportList.Add(sport);
+                }
+                else
+                {
+                    for (int i = 0; i < sportList.Count; i++)
+                    {
+                        var s = sportList[i];
+                        if (s.Id != sport.Id)
+                        {
+                            sportList.Add(sport);
+                        }
+                    }
+                }
+            }
+
+            return sportList;
         }
     }
 }

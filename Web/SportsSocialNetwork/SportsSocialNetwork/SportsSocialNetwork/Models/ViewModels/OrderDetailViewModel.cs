@@ -6,19 +6,25 @@ using System.Web;
 
 namespace SportsSocialNetwork.Models
 {
-    public class OrderDetailViewModel : OrderViewModel
+    public class OrderDetailViewModel
     {
-        public String CreateDateString { get; set; }
-
-        public String StartTimeString { get; set; }
-
-        public String EndTimeString { get; set; }
-
-        public void CreateDateStrings() {
-            this.CreateDateString = this.CreateDate.ToString();
-            this.StartTimeString = this.StartTime.ToString();
-            this.EndTimeString = this.EndTime.ToString();
-        }
-
+        public int Id { get; set; }
+        public string UserId { get; set; }
+        public int FieldId { get; set; }
+        public String CreateDate { get; set; }
+        public String StartTime { get; set; }
+        public String EndTime { get; set; }
+        public string Note { get; set; }
+        public double Price { get; set; }
+        public int Status { get; set; }
+        public Nullable<int> PaidType { get; set; }
+        public string Token { get; set; }
+        public string OrderCode { get; set; }
+        public string OnlinePaymentMethod { get; set; }
+        public string BankCode { get; set; }
+        public Nullable<System.DateTime> TransactionTime { get; set; }
+        public string PayerName { get; set; }
+        public string PayerPhone { get; set; }
+        public string PayerEmail { get; set; }
     }
 }

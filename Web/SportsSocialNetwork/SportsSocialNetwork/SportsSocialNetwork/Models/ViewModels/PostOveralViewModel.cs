@@ -6,19 +6,19 @@ using System.Web;
 
 namespace SportsSocialNetwork.Models
 {
-    public class PostOveralViewModel : PostViewModel
+    public class PostOveralViewModel
     {
-        public String CreateDateString { get; set; }
-        public String EditDateString { get; set; }
+        public int Id { get; set; }
+        public string UserId { get; set; }
+        public String CreateDate { get; set; }
+        public string PostContent { get; set; }
+        public String EditDate { get; set; }
+        public string Image { get; set; }
+        public bool Active { get; set; }
+        public Nullable<int> GroupId { get; set; }
         public AspNetUserOveralViewModel AspNetUser { get; set; }
         public int LikeCount { get; set; }
         public int CommentCount { get; set; }
         public bool Liked { get; set; }
-
-        public void CreateDateStrings()
-        {
-            this.CreateDateString = this.CreateDate.ToString();
-            this.EditDateString = this.EditDate.ToString();
-        }
     }
 }

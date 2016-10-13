@@ -9,11 +9,6 @@ namespace SportsSocialNetwork.Models
     public class PostDetailViewModel
     {
         public PostOveralViewModel Post { get; set; }
-
         public List<PostCommentDetailViewModel> CommentList { get; set; }
-
-        public List<LikeDetailViewModel> LikeList { get; set; }
-
-
     }
 }

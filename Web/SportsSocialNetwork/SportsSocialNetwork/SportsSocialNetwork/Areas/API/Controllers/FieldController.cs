@@ -13,7 +13,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 {
     public class FieldController : BaseController
     {
-        private String systemError = "An error has occured!";
+        private String systemError = "Đã có lỗi xảy ra!";
 
         [HttpPost]
         public ActionResult ShowFieldList(int placeId)
