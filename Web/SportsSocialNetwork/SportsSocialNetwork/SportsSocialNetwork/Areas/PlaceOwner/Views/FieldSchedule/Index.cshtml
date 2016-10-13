@@ -3,57 +3,62 @@
 @{
     ViewBag.Title = "Index";
 }
-
-
 <style>
-   
-    .narrow {
-        padding: 5px;
-        border: 1px solid;
-        width: 8em;
-    }
-    
-    .breakAll {
-        word-break: break-all;
-    }
-  
-
-     dt, dd {
-        font-size: 15px;
-        color: #000;
+    .datepicker.datepicker-dropdown.dropdown-menu.datepicker-oritent-left.dataTable-orient-bottom {
+        top:43%;
     }
 
-    dt {
-        font-weight: bold;
-    }
+        .timepicker {
+            z-index: 5000 !important;
+        }
 
-    .button {
-        background-color: #008CBA; /* blue */
-        border: none;
-        color: white;
-        padding: 15px 32px;
+        .narrow {
+            padding: 5px;
+            border: 1px solid;
+            width: 8em;
+        }
+
+        .breakAll {
+            word-break: break-all;
+        }
+
+
+        dt, dd {
+            font-size: 15px;
+            color: #000;
+        }
+
+        dt {
+            font-weight: bold;
+        }
+
+        .button {
+            background-color: #008CBA; /* blue */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        #sport-table {
+            word-wrap: break-word;
+        }
+
+        /*p.alignCenter {
         text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-    }
-
-    #sport-table {
-        word-wrap : break-word;
-    }
-
-    /*p.alignCenter {
-    text-align: center;
-}*/
+    }*/
 </style>
 
 <div class="panel">
     <div class="panel-body">
         <div class="col-md-6">
-            <h3>Danh sách các môn thể thao</h3>
+            <h3>Danh sách các lịch đặt sân</h3>
         </div>
         <div class="col-md-6 text-right">
-            <a class="btn btn-primary" onclick="showCreateModal()" href="javascript:void(0)">Thêm môn thể thao mới</a>
+            <a class="btn btn-primary" onclick="showCreateModal()" href="javascript:void(0)">Thêm lịch đặt sân</a>
         </div>
     </div>
 </div>
@@ -66,12 +71,14 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <table id="sport-table" class="table table-hover dataTable table-bordered dt-responsive nowrap" cellspacing="0">
+                        <table id="fieldschedule-table" class="table table-hover dataTable table-bordered dt-responsive nowrap" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th class="breakAll narrow">Số thứ tự</th>
-                                    <th class="breakAll narrow">Môn thể thao</th>
-                                    <th class="breakAll narrow">Mô tả</th>
+                                    <th class="breakAll narrow">Tên sân</th>
+                                    <th class="breakAll narrow">Thời gian bắt đầu</th>
+                                    <th class="breakAll narrow">Thời gian kết thúc</th>
+                                    <th class="breakAll narrow">Loại</th>
                                     <th class="breakAll narrow">Thao tác</th>
                                 </tr>
                             </thead>
@@ -86,7 +93,7 @@
 
 <div class="modal fade modal-warning" id="modelDetail" aria-hidden="true"
      aria-labelledby="modelDetail" role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div id="detail-modal-container"></div>
         </div>
@@ -95,7 +102,7 @@
 
 <div class="modal fade modal-warning" id="modalCreate" aria-hidden="true"
      aria-labelledby="modalCreate" role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div id="create-modal-container"></div>
         </div>
@@ -105,7 +112,7 @@
 
 <div class="modal fade modal-warning" id="modalUpdate" aria-hidden="true"
      aria-labelledby="modalViewdetail" role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div id="update-modal-container"></div>
         </div>
@@ -122,8 +129,8 @@
             $(document).ready(function () {
                 Site.run();
             });
-        })(document, window, jQuery);    
-        
+        })(document, window, jQuery);
+
 
         //load init datatable function
         $(document).ready(function () {
@@ -133,18 +140,39 @@
         //init datatable
         function initEventTable() {
             var colDefs = [
-                  {                      
-                      "aTargets": [1,2],
+                  {
+                      "aTargets": [1, 2, 3],
                       "bSortable": false,
                   },
 
                   {
-                      "aTargets": [3],
+                      "aTargets": [4],
+                      "mRender": function (data, type, row) {
+                          var label = '';
+                          if (row[4] == parseInt('@((int)FieldScheduleStatus.Repair)')) {
+                              label = '<span class="label label-outline label-success label-lg">@Utils.GetEnumDescription(FieldScheduleStatus.Repair).ToString()</span>';
+                          } else if (row[4] == parseInt('@((int)FieldScheduleStatus.Booked)')) {
+                              label = '<span class="label label-outline label-danger label-lg">@Utils.GetEnumDescription(FieldScheduleStatus.Booked)</span>';
+                          } else if (row[4] == parseInt('@((int)FieldScheduleStatus.Event)')) {
+                              label = '<span class="label label-outline label-warning label-lg">@Utils.GetEnumDescription(FieldScheduleStatus.Event)</span>';
+                          } else if (row[4] == parseInt('@((int)FieldScheduleStatus.Other)')) {
+                              label = '<span class="label label-outline label-primary label-lg">@Utils.GetEnumDescription(FieldScheduleStatus.Other)</span>';
+                          } else {
+                              label = '<span class="label label-outline label-default label-lg">Chưa có</span>';
+                          }
+
+                          return label;
+                      },
+                      "bSortable": false,
+                  },
+
+                  {
+                      "aTargets": [5],
                       "mRender": function (data, type, row) {
                           //var previewBtn = '<a class="btn btn-success" data-target="#modalViewdetail" onclick="showDetailModal(\'' + row[2] + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
                           var previewBtn = '<a class="btn btn-success" data-target="#modalViewdetail" onclick="showDetailModal(\'' + data + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
                           var updateBtn = '<a class="btn btn-warning" data-target="#modalUpdate" data-toggle="modal" onclick="showUpdateModal(\'' + data + '\')" href="#"><i class="fa fa-pencil-square-o"></i></a>';
-                          var deactiveBtn = '<a class="btn btn-danger" data-style="zoom-in" data-plugin="ladda" onclick="deactiveSport(\'' + data + '\')"  href="#"> <span class="ladda-label"><i class="fa fa-trash-o "></i></span></a>';
+                          var deactiveBtn = '<a class="btn btn-danger" data-style="zoom-in" data-plugin="ladda" onclick="deactiveSchedule(\'' + data + '\')"  href="#"> <span class="ladda-label"><i class="fa fa-trash-o "></i></span></a>';
                           return previewBtn + '&nbsp;' + updateBtn + '&nbsp;' + deactiveBtn;
                       },
                       "bSortable": false
@@ -155,8 +183,8 @@
                 url: '@Url.Action("IndexList")',
                 data: []
             };
-            $('#sport-table').customDataTable(param);
-            
+            $('#fieldschedule-table').customDataTable(param);
+
         }
 
         //show detail popup
@@ -211,8 +239,8 @@
         }
 
         //this function will change the status from active to deactive
-        function deactiveSport(id) {
-            showConfirmDeleteItem("Bạn có chắc chắn muốn xóa môn thể thao này không?",
+        function deactiveSchedule(id) {
+            showConfirmDeleteItem("Bạn có chắc chắn muốn xóa lịch đặt này không?",
                 function (isConfirm) {
                     if (isConfirm) {
                         $.ajax({
@@ -220,7 +248,7 @@
                             url: '@Url.Action("Deactive")',
                             data: { id: id },
                             success: function (data) {
-                                $("#sport-table").reloadDataTable();
+                                $("#fieldschedule-table").reloadDataTable();
                                 if (data.Succeed) {
                                     showMessage("Xóa thành công", "success", "OK");
                                 } else {
@@ -238,9 +266,9 @@
         //function nay de goi controller thuc hien cac thao tac xu ly update, create
         function scriptForPartialView() {
             //update sport function
-            $('#update-sport-form').submit(function (e) {
+            $('#update-form').submit(function (e) {
                 e.preventDefault();
-                var formData = new FormData(document.getElementById('update-sport-form'));
+                var formData = new FormData(document.getElementById('update-form'));
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("Update")',
@@ -253,7 +281,7 @@
                         if (result.Succeed) {
                             showMessage("Cập nhật thành công.", "success", "OK");
                             $('#modalUpdate').modal('hide');
-                            $('#sport-table').reloadDataTable();
+                            $('#fieldschedule-table').reloadDataTable();
                         } else {
                             showErrors(result.Errors);
                             showMessage("Không thể cập nhật.", "error", "OK");
@@ -262,14 +290,15 @@
                     },
                     error: function (result) {
                         showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        $('#modalUpdate').modal('hide');
                     },
                 });
             });
 
             //create sport
-            $('#create-sport-form').submit(function (e) {
+            $('#create-form').submit(function (e) {
                 e.preventDefault();
-                var formData = new FormData(document.getElementById('create-sport-form'));
+                var formData = new FormData(document.getElementById('create-form'));
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("Create")',
@@ -282,7 +311,7 @@
                         if (result.Succeed) {
                             showMessage("Thêm mới thành công.", "success", "OK");
                             $('#modalCreate').modal('hide');
-                            $('#sport-table').reloadDataTable();
+                            $('#fieldschedule-table').reloadDataTable();
                         } else {
                             showErrors(result.Errors);
                             showMessage("Không tạo được. Vui lòng nhập lại", "error", "OK");
@@ -296,6 +325,19 @@
                 });
             });
         }
+
+        $('body').on('focus', ".timepicker", function () {
+            $(this).clockpicker();
+        })
+        $('body').on('focus', ".datepicker", function () {
+            $(this).datepicker();
+        })
+        $('body').on('focus', ".datepair-date", function () {
+            $(this).datepair();
+        })
+        $('body').on('focus', ".datepair-time", function () {
+            $(this).datepair();
+        })
     </script>
 }
 

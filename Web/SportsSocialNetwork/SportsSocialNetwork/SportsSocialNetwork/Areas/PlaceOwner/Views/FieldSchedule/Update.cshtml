@@ -1,0 +1,159 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.FieldScheduleViewModel
+@{
+    ViewBag.Title = "Update";
+    List<SelectListItem> scheduleType = ViewBag.scheduleType;
+    List<SelectListItem> selectListField = ViewBag.selectListField;
+
+    DateTime startDay = ViewBag.startDay;
+    DateTime endDay = ViewBag.endDay;
+    TimeSpan startTime = ViewBag.startTime;
+    TimeSpan endTime =  ViewBag.endTime;
+}
+<style>
+    .clockpicker-popover {
+        z-index: 999999;
+    }
+
+    .timepicker {
+        z-index: 5000 !important;
+        position: absolute;
+    }
+
+    dt, dd {
+        font-size: 1.1em;
+    }
+
+    .title, .detail {
+        font-size: 1.1em;
+        color: #000;
+    }
+
+    .title {
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .detail {
+        margin-left: 2px;
+    }
+
+    .bootstrap-select {
+        width: 100% !important;
+    }
+
+    .datepair-wrap {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .input-daterange-wrap {
+        float: left;
+    }
+
+    .input-daterange-to {
+        float: left;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+    }
+</style>
+
+
+<form id="update-form">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title">Cập nhật</h4>
+    </div>
+    <div class="modal-body" style="padding-bottom:0;" id="modalBody">
+        <div class="row">
+            <div class="panel " style="margin-bottom:0;">
+                <div class="panel-body">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Chọn sân</label>
+                            @Html.DropDownListFor(m => m.FieldId, selectListField, new { @class = "form-control input-lg" })
+                        </div>
+                        <label class="control-label">Từ ngày: </label>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="icon wb-calendar" aria-hidden="true"></i>
+                                </span>
+                                <input type="text" class="datepicker form-control" name="StartDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" value="@startDay.ToString("dd/MM/yyyy")" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Đến ngày: </label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="icon wb-calendar" aria-hidden="true"></i>
+                                </span>
+                                <input type="text" class="datepicker form-control" name="EndDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" value="@endDay.ToString("dd/MM/yyyy")" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label">Loại</label>
+                            @Html.DropDownListFor(m => m.Type, scheduleType, new { @class = "form-control input-lg" })
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group">
+                                <div>
+                                    <label class="control-label">Giờ:</label>
+                                </div>
+                                <div class="col-sm-10 input-group">
+                                    <span class="input-group-addon">
+                                        <i class="icon wb-time" aria-hidden="true"></i>
+                                    </span>
+                                    <input type="text" name="StartTime" class="timepicker form-control" data-placement="right" data-align="top" data-plugin="clockpicker" data-autoclose="true" value="@startTime.ToString(@"hh\:mm")"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div>
+                                    <label class="control-label">Giờ:</label>
+                                </div>
+                                <div class="col-sm-10 input-group clockpicker-wrap">
+                                    <span class="input-group-addon">
+                                        <i class="icon wb-time" aria-hidden="true"></i>
+                                    </span>
+                                    <input type="text" name="EndTime" class="timepicker form-control" data-placement="right" data-align="top" data-plugin="clockpicker" data-autoclose="true" value="@endTime.ToString(@"hh\:mm")"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">                       
+                        <div>
+                            <label class="control-label">Mô tả</label>
+                        </div>
+                        <div>
+                            @Html.TextAreaFor(m => m.Description, new { @style = "width:100%" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+        <button type="submit" class="btn btn-default">Cập nhật lịch</button>
+    </div>
+</form>
+@section Scripts{
+
+    <script>
+        (function (document, window, $) {
+            'use strict';
+
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
+            });
+        })(document, window, jQuery);
+
+    </script>
+}
+

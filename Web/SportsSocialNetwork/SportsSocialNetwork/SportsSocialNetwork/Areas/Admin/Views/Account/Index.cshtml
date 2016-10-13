@@ -209,6 +209,7 @@
                     success: function (result) {
                         if (result.Succeed) {
                             showMessage("Thay đổi thành công.", "success", "OK");
+                            $('#modalUpdate').modal('hide');
                             $('#account-table').reloadDataTable();
                         } else {
                             showErrors(result.Errors);
@@ -355,6 +356,19 @@
                 }
             });
         };
+
+        $('body').on('focus', ".timepicker", function () {
+            $(this).clockpicker();
+        })
+        $('body').on('focus', ".datepicker", function () {
+            $(this).datepicker();
+        })
+        $('body').on('focus', ".datepair-date", function () {
+            $(this).datepair();
+        })
+        $('body').on('focus', ".datepair-time", function () {
+            $(this).datepair();
+        })
     </script>
 }
 

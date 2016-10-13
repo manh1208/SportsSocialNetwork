@@ -111,9 +111,9 @@
                       "aTargets": [6],
                       "mRender": function (data, type, row) {
                           var previewBtn = '<a class="btn btn-success" data-target="#modalViewdetail" onclick="showDetailModal(\'' + data + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
-                          var updateBtn = '<a class="btn btn-warning" data-target="#modalUpdate" data-toggle="modal" onclick="showUpdateModal(\'' + data + '\')" href="#"><i class="fa fa-pencil-square-o"></i></a>';
+                          //var updateBtn = '<a class="btn btn-warning" data-target="#modalUpdate" data-toggle="modal" onclick="showUpdateModal(\'' + data + '\')" href="#"><i class="fa fa-pencil-square-o"></i></a>';
                           var deleteBtn = '<a class="btn btn-danger" data-style="zoom-in" data-plugin="ladda" onclick="showConfirmDeleteAccount(\'' + data + '\')"  href="#"> <span class="ladda-label"><i class="fa fa-trash-o "></i></span></a>';
-                          return previewBtn + '&nbsp;' + updateBtn + '&nbsp;' + deleteBtn;
+                          return previewBtn + '&nbsp;' + deleteBtn;
                       },
                       "bSortable": false
                   },
