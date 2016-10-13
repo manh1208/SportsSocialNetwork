@@ -14,6 +14,8 @@ public class RestService {
     private Retrofit retrofit;
     private ISampleService sampleService;
     private ISocialNetworkService socialNetworkService;
+    private IAccountService accountService;
+    private IPlaceService placeService;
 
     public RestService() {
         Gson gson = new GsonBuilder()
@@ -31,6 +33,9 @@ public class RestService {
                 .build();
         sampleService = retrofit.create(ISampleService.class);
         socialNetworkService = retrofit.create(ISocialNetworkService.class);
+        accountService = retrofit.create(IAccountService.class);
+        placeService = retrofit.create(IPlaceService.class);
+
     }
 
     public ISampleService getSampleService() {
@@ -39,5 +44,13 @@ public class RestService {
 
     public ISocialNetworkService getSocialNetworkService() {
         return socialNetworkService;
+    }
+
+    public IAccountService getAccountService() {
+        return accountService;
+    }
+
+    public IPlaceService getPlaceService() {
+        return placeService;
     }
 }

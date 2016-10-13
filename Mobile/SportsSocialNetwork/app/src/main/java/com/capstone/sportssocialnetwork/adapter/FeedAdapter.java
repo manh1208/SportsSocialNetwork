@@ -162,12 +162,12 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
 
     public void setAppendFeed(List<Feed> data) {
         feeds.addAll(data);
-//        notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     public void loadNew() {
-        feeds = new ArrayList<>();
-//        notifyDataSetChanged();
+        feeds.clear();
+        notifyDataSetChanged();
     }
 
 

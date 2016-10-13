@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:paddingLeft="20sp"
+        android:paddingRight="20sp"
+        android:background="@color/colorPrimary">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lọc"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20sp"
+        android:paddingRight="20sp"
+        >
+
+        <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="30sp"
+        >
+        </Spinner>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="30sp"
+            ></Spinner>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="30sp"
+            ></Spinner>
+
+    </LinearLayout>
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:text="Tìm sân quanh tôi"-->
+        <!--android:paddingLeft="20sp"-->
+        <!--android:paddingRight="20sp"-->
+        <!--android:paddingTop="10sp"-->
+        <!--android:paddingBottom="10sp"-->
+        <!--android:layout_marginTop="20sp"-->
+        <!--android:textSize="18sp"-->
+        <!--android:textAllCaps="false"-->
+        <!--android:textColor="#fff"-->
+        <!--android:background="@drawable/button_find_nearby"-->
+        />
+</LinearLayout>

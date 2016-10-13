@@ -15,23 +15,33 @@ import java.util.ArrayList;
  * Created by ManhNV on 9/8/16.
  */
 public class PlacePageAdapter extends FragmentPagerAdapter {
+    private int placeId;
 
-
-    public PlacePageAdapter(FragmentManager fm) {
+    public PlacePageAdapter(FragmentManager fm, int placeId) {
         super(fm);
+        this.placeId = placeId;
     }
 
     @Override
     public Fragment getItem(int position) {
+        Fragment fragment  = null;
         switch (position){
             case 0:
-                return new PlaceDetailFragment();
+                fragment =  new PlaceDetailFragment();
+                break;
             case 1:
-                return new PlaceFieldFragment();
+                fragment = new PlaceFieldFragment();
+                break;
             case 2:
-                return new PlaceImageFragment();
+                fragment =  new PlaceImageFragment();
+                break;
         }
-        return null;
+        if (fragment!=null) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("placeId", placeId);
+            fragment.setArguments(bundle);
+        }
+        return fragment;
     }
 
     @Override

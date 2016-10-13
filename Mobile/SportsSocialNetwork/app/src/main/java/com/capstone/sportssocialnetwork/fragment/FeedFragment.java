@@ -3,7 +3,6 @@ package com.capstone.sportssocialnetwork.fragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,12 +25,11 @@ import com.capstone.sportssocialnetwork.activity.NotificationActivity;
 import com.capstone.sportssocialnetwork.activity.PostActivity;
 import com.capstone.sportssocialnetwork.adapter.FeedAdapter;
 import com.capstone.sportssocialnetwork.model.Feed;
-import com.capstone.sportssocialnetwork.model.ResponseModel;
+import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.ISocialNetworkService;
 import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.capstone.sportssocialnetwork.utils.SharePreferentName;
-import com.capstone.sportssocialnetwork.utils.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +55,6 @@ public class FeedFragment extends Fragment {
     private int take;
     private boolean isFull;
     private boolean flag_loading;
-    private List<Feed> mFeeds;
 
 
     @Override
@@ -115,11 +112,10 @@ public class FeedFragment extends Fragment {
     }
 
     private void prepareData() {
-        mFeeds = new ArrayList<>();
 //        if (viewHolder.lvFeed.getFooterViewsCount() <= 0)
 //            viewHolder.lvFeed.addFooterView(viewHolder.footer);
         viewHolder.lvFeed.addHeaderView(viewHolder.header);
-        adapter = new FeedAdapter(getActivity(), R.layout.item_feed, mFeeds);
+        adapter = new FeedAdapter(getActivity(), R.layout.item_feed, new ArrayList<Feed>());
         viewHolder.lvFeed.setAdapter(adapter);
 
 
@@ -130,6 +126,7 @@ public class FeedFragment extends Fragment {
         take = MAX_TAKE;
         flag_loading = false;
         isFull = false;
+        adapter.loadNew();
     }
 
     private void reloadAllFeed() {
@@ -217,28 +214,28 @@ public class FeedFragment extends Fragment {
                 if (viewHolder.layoutRefresh.isRefreshing()) {
                     viewHolder.layoutRefresh.setRefreshing(false);
                 }
-//                flag_loading = false;
-//                if (response.isSuccessful()) {
-//                    ResponseModel<List<Feed>> responseModel = response.body();
-//                    if (responseModel.isSucceed()) {
-//                        if (responseModel.getData() != null && responseModel.getData().size() > 0) {
+                flag_loading = false;
+                if (response.isSuccessful()) {
+                    ResponseModel<List<Feed>> responseModel = response.body();
+                    if (responseModel.isSucceed()) {
+                        if (responseModel.getData() != null && responseModel.getData().size() > 0) {
 //                            Toast.makeText(getActivity(), "Load thành công", Toast.LENGTH_SHORT).show();
-//                            adapter.setAppendFeed(responseModel.getData());
-//                            if (adapter.getCount() < (skip + take)) {
-//                                isFull = true;
-//                                removeFooter();
-//                            }
-//
-//                            skip = skip + take;
-//                        } else {
-//                            isFull = true;
-//                            removeFooter();
-//                        }
-//                    } else {
-//                        removeFooter();
-//                        Log.i(TAG, responseModel.getErrorsString());
-//                    }
-//                }
+                            adapter.setAppendFeed(responseModel.getData());
+                            if (adapter.getCount() < (skip + take)) {
+                                isFull = true;
+                                removeFooter();
+                            }
+
+                            skip = skip + take;
+                        } else {
+                            isFull = true;
+                            removeFooter();
+                        }
+                    } else {
+                        removeFooter();
+                        Log.i(TAG, responseModel.getErrorsString());
+                    }
+                }
             }
 
             @Override
@@ -246,7 +243,7 @@ public class FeedFragment extends Fragment {
                 if (viewHolder.layoutRefresh.isRefreshing()) {
                     viewHolder.layoutRefresh.setRefreshing(false);
                 }
-                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Lỗi server", Toast.LENGTH_SHORT).show();
             }
         });
     }

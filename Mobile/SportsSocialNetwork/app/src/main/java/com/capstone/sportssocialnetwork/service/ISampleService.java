@@ -1,7 +1,7 @@
 package com.capstone.sportssocialnetwork.service;
 
 
-import com.capstone.sportssocialnetwork.model.ResponseModel;
+import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.model.SampleModel;
 
 import retrofit2.Call;
