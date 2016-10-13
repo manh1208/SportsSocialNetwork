@@ -56,9 +56,25 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
         public ActionResult GetData(JQueryDataTableParamModel param)
         {
+            string userID = Request["userID"];
             //var blogPostList = _blogPostService.GetBlogPostbyStoreId();
             var _orderService = this.Service<IOrderService>();
-            var orderList = _orderService.GetActive();
+            var _placeSerivce = this.Service<IPlaceService>();
+            var _fieldService = this.Service<IFieldService>();
+
+            List<Place> placeList = _placeSerivce.Get(p => p.UserId == userID).ToList();
+            List<Field> fieldList =  new List<Field>();
+            foreach (var item in placeList)
+            {
+                fieldList.AddRange(_fieldService.Get(f => f.PlaceId == item.Id).ToList());
+            }
+
+            //var orderList = _orderService.GetActive();
+            List<Order> orderList = new List<Order>();
+            foreach (var item in fieldList)
+            {
+                orderList.AddRange(_orderService.Get(o => o.FieldId == item.Id).ToList());
+            }
             //IEnumerable<BlogPost> filteredListItems;
             IEnumerable<Order> filteredListItems;
             if (!string.IsNullOrEmpty(param.sSearch))

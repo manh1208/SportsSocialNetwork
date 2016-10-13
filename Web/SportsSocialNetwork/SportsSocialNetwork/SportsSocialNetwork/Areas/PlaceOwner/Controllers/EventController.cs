@@ -126,9 +126,13 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
         public ActionResult GetData(JQueryDataTableParamModel param)
         {
+            string userID = Request["userID"];
             //var blogPostList = _blogPostService.GetBlogPostbyStoreId();
             var _eventService = this.Service<IEventService>();
-            var eventList = _eventService.GetActive();
+
+            var eventList = _eventService.GetActive(e => e.CreatorId == userID).ToList();
+
+            
             //IEnumerable<BlogPost> filteredListItems;
             IEnumerable<Event> filteredListItems;
             if (!string.IsNullOrEmpty(param.sSearch))

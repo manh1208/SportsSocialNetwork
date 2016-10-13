@@ -1,8 +1,9 @@
 ﻿@model SportsSocialNetwork.Models.Entities.Field
+@using SportsSocialNetwork.Models.Entities;
 @{
     ViewBag.Title = "CreateField";
     List<SelectListItem> selectListFieldType = ViewBag.selectListFieldType;
-    int placeId = ViewBag.placeId;
+    Place curPlace = ViewBag.curPlace;
 }
 
 <div class="panel">
@@ -15,7 +16,7 @@
     <div class="panel-body">
         @using (Html.BeginForm("createField", "Field", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "fieldForm", @autocomplete = "off" }))
         {
-            <input type="hidden" name="PlaceId" value="@placeId" />
+            <input type="hidden" name="PlaceId" value="@curPlace.Id" />
             <div class="col-md-6">
                 <div class="panel">
                     <div class="panel-heading">
@@ -59,9 +60,14 @@
                             @Html.TextAreaFor(f => f.Description, new { rows = "3", @class = "form-control input-lg" })
                             <label class="floating-label">Mô tả</label>
                         </div>
+
+                        <div class="form-group">
+                            <label class="control-label font-size-20">Giờ hoạt động: </label>
+                            <span class="font-size-20">@curPlace.StartTime.ToString(@"hh\:mm") - @curPlace.EndTime.ToString(@"hh\:mm")</span>
+                        </div>
                         
                         <div class="form-group" id="tempTS">
-                            <label class="control-label">Khung giá</label>
+                            <label class="control-label font-size-18">Khung giá</label>
                        
                         </div>
                         <div class="form-group">
@@ -90,6 +96,9 @@
                                 </div>
                                 <select id="timeSlot" name="timeSlot" multiple hidden>
                                 </select>
+                            </div>
+                            <div class="row" id="notiTB">
+                                
                             </div>
                         </div>
                     </div>
@@ -129,7 +138,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-offset-6 col-sm-4">
-                    @Html.ActionLink("Hủy bỏ", "Index", "Field", null, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Hủy bỏ", "FieldList", "Field", new { id = curPlace.Id}, new { @class = "btn btn-default" })
                     <input type="submit" id="submitBtn" value="Tạo sân" class="btn btn-success" />
                 </div>
             </div>
@@ -143,13 +152,13 @@
 <script>
     var searchValue = "";
 
-    (function(document, window, $) {
-      'use strict';
+    (function (document, window, $) {
+        'use strict';
 
-      var Site = window.Site;
-      $(document).ready(function() {
-        Site.run();
-      });
+        var Site = window.Site;
+        $(document).ready(function () {
+            Site.run();
+        });
     })(document, window, jQuery);
 
     $('body').on('focus', ".timepicker", function () {
@@ -188,35 +197,93 @@
         var dValue = "";
         var outerDiv = $(this).parent().parent();
         $(outerDiv).find("input").each(function () {
-            dValue += this.value+"_";
+            dValue += this.value + "_";
         })
         var sdValue = dValue.substring(0, dValue.lastIndexOf("_"));
 
-        console.log(sdValue);
-        bootbox.dialog({
-            message: "Bạn có chắc muốn xóa ?",
-            title: "Xác nhận xóa",
-            buttons: {
-                danger: {
-                    label: "Hủy",
-                    className: "btn-default",
-                    callback: function () {
-
+        showConfirmDeleteItem("Bạn có chắc chắn muốn xóa không?",
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("deleteTimeBlock")',
+                            data: { timeblock: sdValue },
+                            success: function (data) {
+                                if (data.Succeed) {
+                                    showMessage("Đã xóa thành công", "success", "OK");
+                                    $("#timeSlot option[value='" + sdValue + "']").remove();
+                                    $(outerDiv).remove();
+                                }
+                                else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                }
+                            },
+                            error: function (error) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        });
                     }
-                },
-                success: {
-                    label: "Đồng ý",
-                    className: "btn-danger",
-                    callback: function () {
-                        $("#timeSlot option[value='" + sdValue + "']").remove();
-                        $(outerDiv).remove();
+                });
 
+        //console.log(sdValue);
+        //bootbox.dialog({
+        //    message: "Bạn có chắc muốn xóa ?",
+        //    title: "Xác nhận xóa",
+        //    buttons: {
+        //        danger: {
+        //            label: "Hủy",
+        //            className: "btn-default",
+        //            callback: function () {
+
+        //            }
+        //        },
+        //        success: {
+        //            label: "Đồng ý",
+        //            className: "btn-danger",
+        //            callback: function () {
+        //                $("#timeSlot option[value='" + sdValue + "']").remove();
+        //                $(outerDiv).remove();
+
+        //            }
+        //        }
+        //    }
+        //});
+
+    })
+
+    function checkValidTimeBlock(startTime, endTime, compareTime) {
+        var placeActiveStarttime = '@curPlace.StartTime.ToString(@"hh\:mm")';
+        var placeActiveEndTime = '@curPlace.EndTime.ToString(@"hh\:mm")';
+
+        if (startTime < endTime) {
+
+            if (compareTime == null) {
+                if ((startTime >= placeActiveStarttime && startTime < placeActiveEndTime) && (endTime > placeActiveStarttime && endTime <= placeActiveEndTime)) {
+                    return true;
+                } else {
+
+                    return false;
+                }
+            } else {
+                var arrayTime = compareTime.split("_");
+                var cStartTime = arrayTime[0];
+                var cEndTime = arrayTime[1];
+
+                if ((startTime >= placeActiveStarttime && startTime <= placeActiveEndTime) && (endTime >= placeActiveStarttime && endTime <= placeActiveEndTime)) {
+                    if (startTime >= cEndTime) {
+                        return true;
+                    } else {
+                        return false;
                     }
+                } else {
+                    return false;
                 }
             }
-        });
-        
-    })
+
+        } else {
+            return false;
+        }
+    }
 
     function addTempTS() {
         console.log("11");
@@ -224,40 +291,54 @@
         var endTime = $("#enTime").val();
         var price = $("#tsPrice").val();
 
-        //var tempTS = document.getElementById("#tempTS");
-        var ts = "<div class='row' id='ts1'>"
-                                + "<div class='col-xs-3' style='padding:0 0 0 15px;'>"
-                                    + "<div class='input-group'>"
-                                        + "<span class='input-group-addon'>Từ</span>"
-                                        + "<input type='text' class='timepicker form-control input-lg' data-plugin='clockpicker' data-autoclose='true' id='sstTime' disabled='disabled' value='" + startTime + "'/>"
+        //check valid timeblock
+        //get the last time block
+        var lastTimeBlock = $('#timeSlot option:last-child').val();
+        console.log(lastTimeBlock);
+        //compare and process
+        if (checkValidTimeBlock(startTime, endTime, lastTimeBlock) == false) {
+            var noti = "<p class='alert alert-danger'>Khung giá nhập không phù hợp</p>";
+            $("#notiTB").empty();
+            $("#notiTB").append(noti);
+        } else {
+            $("#notiTB").empty();
+            //var tempTS = document.getElementById("#tempTS");
+            var ts = "<div class='row' id='ts1'>"
+                                    + "<div class='col-xs-3' style='padding:0 0 0 15px;'>"
+                                        + "<div class='input-group'>"
+                                            + "<span class='input-group-addon'>Từ</span>"
+                                            + "<input type='text' class='timepicker form-control input-lg' data-plugin='clockpicker' data-autoclose='true' id='sstTime' disabled='disabled' value='" + startTime + "'/>"
+                                        + "</div>"
                                     + "</div>"
-                                + "</div>"
-                                + "<div class='col-xs-3' style='padding:0;'>"
-                                    + "<div class='input-group'>"
-                                        + "<span class='input-group-addon'>Đến</span>"
-                                        + "<input type='text' class='timepicker form-control input-lg' data-plugin='clockpicker' data-autoclose='true' id='senTime' disabled='disabled' value='" + endTime + "'/>"
+                                    + "<div class='col-xs-3' style='padding:0;'>"
+                                        + "<div class='input-group'>"
+                                            + "<span class='input-group-addon'>Đến</span>"
+                                            + "<input type='text' class='timepicker form-control input-lg' data-plugin='clockpicker' data-autoclose='true' id='senTime' disabled='disabled' value='" + endTime + "'/>"
+                                        + "</div>"
                                     + "</div>"
-                                + "</div>"
-                                + "<div class='col-xs-3' style='padding:0;'>"
-                                    + "<div class='input-group'>"
-                                        + "<span class='input-group-addon'>Giá</span>"
-                                        + "<input type='text' class='form-control input-lg' id='stsPrice' disabled='disabled' value='" + price + "'/>"
+                                    + "<div class='col-xs-3' style='padding:0;'>"
+                                        + "<div class='input-group'>"
+                                            + "<span class='input-group-addon'>Giá</span>"
+                                            + "<input type='text' class='form-control input-lg' id='stsPrice' disabled='disabled' value='" + price + "'/>"
+                                        + "</div>"
                                     + "</div>"
-                                + "</div>"
-                                + "<div class='col-xs-3'>"
-                                    + "<button type='button' class='btn btn-pure btn-primary icon wb-pencil editbtn' onclick=''></button>"
-                                    + "<button type='button' class='btn btn-pure btn-danger icon wb-close removebtn' onclick=''></button>"
-                                + "</div>"
-                            + "</div>";
-        $("#tempTS").append(ts);
+                                    + "<div class='col-xs-3'>"
+                                        + "<button type='button' class='btn btn-pure btn-primary icon wb-pencil editbtn' onclick=''></button>"
+                                        + "<button type='button' class='btn btn-pure btn-danger icon wb-close removebtn' onclick=''></button>"
+                                    + "</div>"
+                                + "</div>";
+            $("#tempTS").append(ts);
 
-        var oValue = startTime + "_" + endTime + "_" + price;
-        var oOption = "<option value='" + oValue + "' selected></option>"
-        $("#timeSlot").append(oOption);
+            var oValue = startTime + "_" + endTime + "_" + price;
+            var oOption = "<option value='" + oValue + "' selected></option>"
+            $("#timeSlot").append(oOption);
 
-        $("#stTime").val("");
-        $("#enTime").val("");
-        $("#tsPrice").val("");
+            $("#stTime").val("");
+            $("#enTime").val("");
+            $("#tsPrice").val("");
+        }
+
+
     }
 
     (function () {

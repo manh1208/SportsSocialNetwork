@@ -1,5 +1,6 @@
 ﻿@using SportsSocialNetwork.Models.Enumerable;
 @using SportsSocialNetwork.Models.Utilities;
+@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Danh sách các sự kiện";
 }
@@ -288,7 +289,7 @@
         };
 
         function InitDatatable() {
-            
+
             $("#listEventTable").DataTable({
                 "bRetrieve": true,
                 "bServerSide": true,
@@ -296,9 +297,9 @@
                 "bSort": true,
                 "sAjaxSource": "/PlaceOwner/Event/GetData",
                 "bProcessing": true,
-                @*"fnServerParams": function (aoData) {
-                    aoData.push({ "name": "id", "value": @ViewBag.storeId });
-                },*@
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "userID", "value": '@User.Identity.GetUserId()' });
+                },
                 "aLengthMenu": [10, 20, 50],
                 "oLanguage": {
                     "sSearch": "Tìm kiếm:",

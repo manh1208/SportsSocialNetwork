@@ -1,4 +1,4 @@
-﻿
+﻿@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Quản lí đặt sân";
 }
@@ -104,9 +104,9 @@
                 "bSort": true,
                 "sAjaxSource": "/PlaceOwner/Order/GetData",
                 "bProcessing": true,
-                @*"fnServerParams": function (aoData) {
-                    aoData.push({ "name": "id", "value": @ViewBag.storeId });
-                },*@
+                "fnServerParams": function (aoData) {
+                    aoData.push({ "name": "userID", "value": '@User.Identity.GetUserId()' });
+                },
                 "aLengthMenu": [10, 20, 50],
                 "oLanguage": {
                     "sSearch": "Tìm kiếm:",
