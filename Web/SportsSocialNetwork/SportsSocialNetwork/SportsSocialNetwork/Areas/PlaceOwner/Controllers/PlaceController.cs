@@ -5,7 +5,6 @@ using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
-using SportsSocialNetwork.Models.Identity;
 using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using SportsSocialNetwork.Utilities;
@@ -19,7 +18,7 @@ using System.Web.Routing;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
-    [Authorize(Roles = IdentityMultipleRoles.PlaceOwner)]
+    //[Authorize(Roles = "Chủ sân")]
     public class PlaceController : BaseController
     {
         // GET: PlaceOwner/Place
