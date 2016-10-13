@@ -11,7 +11,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 {
     public class FollowController : BaseController
     {
-        private String systemError = "An error has occured!";
+        private String systemError = "Đã có lỗi xảy ra!";
 
         [HttpPost]
         public ActionResult FollowUnfollowUser(String userId, String followerId) {
