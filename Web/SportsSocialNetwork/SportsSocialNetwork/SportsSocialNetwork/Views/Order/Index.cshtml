@@ -15,6 +15,7 @@
         <table class="table table-striped table-bordered table-hover" id="DataTables_Table_0">
             <thead>
                 <tr>
+                    <th>Mã đặt sân</th>
                     <th>Tên sân</th>
                     <th>Thời gian đặt</th>
                     <th>Thời gian sử dụng</th>
@@ -66,6 +67,7 @@
                     if (data === "success") {
                         showMessage("Hủy đặt sân thành công.", "success", "OK");
                         RefreshTable();
+                        $('#orderDetail').modal('hide');
                     } else {
                         showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                     }
@@ -138,40 +140,53 @@
                         "aTargets": [2],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
-                            return o[3] +' - '+ o[5]+', Ngày '+ o[4];
+                            return o[3];
                         }
                     },
                     {
-                        "aTargets": [3, 4],
-                        "bSortable": false,
-                        "bVisible": false
-                    },
-                    {
-                        "aTargets": [5],
+                        "aTargets": [3],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
-                            if (o[6] == 0) {
-                                return "<span class='label label-lg label-outline label-primary'>Online</span>";
-                            } else if (o[6] == 1) {
-                                return "<span class='label label-lg label-outline label-dark'>Tiền mặt</span>";
-                            }
+                            return o[4] +' - '+ o[6]+', Ngày '+ o[5];
                         }
+                    },
+                    {
+                        "aTargets": [4, 5],
+                        "bSortable": false,
+                        "bVisible": false
                     },
                     {
                         "aTargets": [6],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
                             if (o[7] == 1) {
-                                return "<span class='label label-lg label-outline label-warning'>Chưa thanh toán</span>";
-                            } else if(o[7] == 2) {
-                                return "<span class='label label-lg label-outline label-success'>Đã thanh toán</span>";
-                            } else {
-                                return "<span class='label label-lg label-outline label-danger'>Đã Hủy</span>";
+                                return "<span class='label label-lg label-outline label-dark'>Online-Chưa thanh toán</span>";
+                            } else if (o[7] == 2) {
+                                return "<span class='label label-lg label-outline label-dark'>Tiền mặt-Chưa thanh toán</span>";
+                            } else if (o[7] == 3) {
+                                return "<span class='label label-lg label-outline label-success'>Tiền mặt-Đã thanh toán</span>";
+                            } else if (o[7] == 4) {
+                                return "<span class='label label-lg label-outline label-primary'>Online-Đã thanh toán</span>";
                             }
                         }
                     },
                     {
                         "aTargets": [7],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            if (o[8] == 1) {
+                                return "<span class='label label-lg label-outline label-warning'>Đang chờ duyệt</span>";
+                            } else if(o[8] == 2) {
+                                return "<span class='label label-lg label-outline label-success'>Đã được chấp nhận</span>";
+                            } else if (o[8] == 3) {
+                                return "<span class='label label-lg label-outline label-danger'>Không được chấp nhận</span>";
+                            } else {
+                                return "<span class='label label-lg label-outline label-dark'>Đã hủy</span>";
+                            }
+                        }
+                    },
+                    {
+                        "aTargets": [8],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
                             return "<button class='btn btn-primary' onclick='showDetailModal(" + o[0] + ")' data-target='#orderDetail' data-toggle='modal' type='button'><i class='icon wb-pencil' aria-hidden='true'></i></button>";

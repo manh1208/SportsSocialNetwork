@@ -1,0 +1,15 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.OrderViewModel
+
+@{
+    ViewBag.Title = "BookFieldSuccessful";
+    Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
+}
+
+<div class="panel padding-15" style="height:300px">
+    <h3>Đặt sân thành công</h3>
+    Mã đơn đặt sân của bạn: @Model.OrderCode (Vui lòng mang theo mã này khi đến sân)
+    <br>
+    Xem <a href="@Url.Action("Index","Order")"> lịch sử đặt sân</a>
+    hoặc quay về <a href="@Url.Action("Index","Place")"> trang chủ</a>
+</div>
+

@@ -1,8 +1,9 @@
 ﻿@model SportsSocialNetwork.Models.ViewModels.PlaceViewModel
-
+@using SportsSocialNetwork.Models.ViewModels
 @{
     ViewBag.Title = "ViewDetail";
     Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
+    var fieldSportList = ViewBag.fieldSport as List<FieldSportViewModel>;
 }
 <style>
     .imgWH100 {
@@ -95,7 +96,7 @@
                         </p>
                         <p>
                             <i class="fa fa-exclamation-circle" title="status"></i> Status Status
-                            <button type="button" class="btn btn-block btn-success" style="margin-top:5px">Đặt ngay!</button>
+                            <a href="@Url.Action("BookFieldNow","Order", new { placeId = Model.Id})" class="btn btn-block btn-success" style="margin-top:5px">Đặt ngay!</a>
                         </p>
                     </div>
                 </div>
@@ -138,11 +139,11 @@
                         <div data-role="container">
                             <div data-role="content" >
                                 <ul class="list-group list-group-dividered list-group-full">
-                                    @if (ViewBag.placeFields != null)
+                                    @if (fieldSportList != null)
                                     {
-                                        foreach (var item in ViewBag.placeFields)
+                                        foreach (var item in fieldSportList)
                                         {
-                                            <li class="list-group-item"><a href='/Field/Index/@item.Id'><p style="text-align:center"> @item.Name</p></a></li>
+                                            <li class="list-group-item"><a style="display:block" href='/Field/Index/@item.FieldId'><p style="text-align:center;padding:0px;margin:0px"> @item.FieldName</p><p style="text-align:center;font-size:15px;padding:0px;margin:0px">(@item.Sport)</p></a></li>
 
                                         }
                                     }

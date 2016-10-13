@@ -27,7 +27,7 @@ public class NL_Checkout
         return md5String;
     }
 
-    public String buildCheckoutUrl(String return_url, String receiver, String transaction_info, String order_code, String price)
+    public String buildCheckoutUrl(String return_url, String cancel_url, String receiver, String transaction_info, String order_code, String price)
     {
         // Tạo biến secure code 
         String secure_code = "";
@@ -62,6 +62,8 @@ public class NL_Checkout
         ht.Add("price", price);
 
         ht.Add("secure_code", this.GetMD5Hash(secure_code));
+
+        ht.Add("cancel_url", HttpUtility.UrlEncode(cancel_url).ToLower());
 
         // Tạo url redirect 
         String redirect_url = this.nganluong_url;

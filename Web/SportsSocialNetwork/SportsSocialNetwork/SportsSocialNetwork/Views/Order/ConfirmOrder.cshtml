@@ -11,112 +11,92 @@
         height: 100%;
     }
 </style>
-@using (Html.BeginForm("CallPayment", "Order", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "orderForm" }))
-{
-<div class="panel padding-top-20 col-md-offset-2 col-md-8">
-    <div class="panel-body container-fluid">
-        <div class="row">
-            <div class="col-md-5">
-                <div class="col-md-12">
-                    <div class="col-md-9">
-                        <h4 style="height:100px;width:100px">
-                            <img class="margin-right-10 imgWH100" src="@ViewBag.avatar"
-                                 alt="...">
-                        </h4>
-                    </div>
-                </div>
-                <address>
-                    <abbr title="Name">Khách hàng:</abbr>&nbsp;&nbsp;@User.Identity.Name
-                </address>
-            </div>
-            <div class="col-md-5 col-md-offset-2 text-right">
+
+<div class="panel padding-top-20 col-md-offset-1 col-md-10">
+    <div class="summary-errors alert alert-danger alert-dismissible" style="display: none; text-align:left; padding:0px 0px 0px 10px" id="error">
+        <ul>
+            <li style="display: none" id="error1">
+                <span style="color:red; font-size:12px">Thời gian không nằm trong các khung giờ</span>
+            </li>
+            <li style="display: none" id="error2">
+                <span style="color:red; font-size:12px">Thời gian này sân kín</span>
+            </li>
+        </ul>
+    </div>
+    <form id="onlineform" action="@Url.Action("btnSubmit_Click", "Order")" method="get" class="form-horizontal">
+        <div class="panel-body container-fluid">
+            <div class="col-md-12 form-horizontal">
                 @Html.HiddenFor(p => p.FieldId)
                 @Html.HiddenFor(p => p.StartTime)
                 @Html.HiddenFor(p => p.EndTime)
                 @Html.HiddenFor(p => p.Note)
                 @Html.HiddenFor(p => p.CreateDate)
                 @Html.HiddenFor(p => p.Price)
-                <h4>Thông tin đặt sân</h4>
-                <address>Địa điểm:
-                    <br>
-                    <span class="font-size-20">@ViewBag.place.Name</span>
-                    <br>
-                    <span class="font-size-12">(@ViewBag.place.Address, Quận @ViewBag.place.District, @ViewBag.place.City)</span>
-                </address>
+                @Html.HiddenFor(p => p.UserId)
+                <h3 style="text-align:center">Thông tin đặt sân</h3>
+                <div class="form-group padding-top-10">
+                    <label for="name" class="col-md-4 control-label">Họ Tên:</label>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(p => p.PayerName, new { @class = "form-control", @id = "name", @Value = @ViewBag.user.FullName })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="col-md-4 control-label">Email:</label>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(p => p.PayerEmail, new { @class = "form-control", @id = "email", @Value = @ViewBag.user.Email })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone" class="col-md-4 control-label">Số Điện thoại:</label>
+                    <div class="col-md-4">
+                        @Html.TextBoxFor(p => p.PayerPhone, new { @class = "form-control", @id = "phone", @Value = @ViewBag.user.PhoneNumber })
+                    </div>
+                </div>
+                <div class="page-invoice-table table-responsive">
+                    <table class="table table-hover text-right">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Tên sân</th>
+                                <th class="text-center">Thời gian sử dụng</th>
+                                <th class="text-right">Thành tiền(vnd)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center">
+                                    @ViewBag.field.Name
+                                </td>
+                                <td class="text-center">
+                                    @Model.StartTime.ToShortTimeString() - @Model.EndTime.ToShortTimeString(), Ngày @ViewBag.playDate.ToString("dd-MM-yyyy")
+                                </td>
+                                <td>
+                                    @Model.Price
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-
-        <div class="page-invoice-table table-responsive">
-            <table class="table table-hover text-right">
-                <thead>
-                    <tr>
-                        <th class="text-center">Tên sân</th>
-                        <th class="text-center">Thời gian sử dụng</th>
-                        <th class="text-right">Thành tiền(vnd)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="text-center">
-                            @ViewBag.field.Name
-                        </td>
-                        <td class="text-center">
-                            @Model.StartTime.ToShortTimeString() - @Model.EndTime.ToShortTimeString(), Ngày @ViewBag.playDate.ToString("dd-MM-yyyy")
-                        </td>
-                        <td>
-                            @Model.Price
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-md-4 col-md-offset-8 text-right clearfix">
-            
-        </div>
-        <div class="col-md-12 padding-0">
-            <div class="col-md-7 padding-0">
-                    @if (Model.Note != "" && Model.Note != null)
-                    {
-                        <p style="font-weight:bold">
-                            Ghi chú:
-                            </p>
-                            <span class="text-right">@Model.Note</span>
-                    }
-                    
-                </div>
-            <div class="text-right col-md-5 padding-0">
-                <div class="form-group col-md-12 padding-0">
-                    <p style="font-weight:bold">Phương thức thanh toán:</p>
-                    <div class="radio-custom radio-default radio-inline">
-                        @Html.RadioButtonFor(model => model.PaidType, 0, new { @class = "paymentRadio", @checked = "" })
-                        @Html.Label("paidType", "Online")
-                    </div>
-                    <div class="radio-custom radio-default radio-inline">
-                        @Html.RadioButtonFor(model => model.PaidType, 1, new { @class = "paymentRadio" })
-                        @Html.Label("paidType", "Tiền mặt")
-                    </div>
-                </div>
-                <div class="form-group col-md-12 padding-0">
-                    <button type="button" class="btn btn-primary" id="createOrder">
-                        <span> Xác nhận</span>
-                    </button>
-                    <button type="button" class="btn btn-info" id="viewOrderHistory">
-                        <span> Xem lịch sử đặt sân</span>
-                    </button>
-                    <button type="button" class="btn btn-default btn-outline"
-                            onclick="window.history.back();">
-                        <span>Quay lại</span>
-                    </button>
-                    </div>
-                </div>
-            <form id="onlineform" action="@Url.Action("Payment", "Payment")" method="get" class="form-horizontal">
-                <input type="hidden" name="ticketId" />
-                <input type="hidden" name="eventId" />
-                <input type="hidden" name="userId" />
+            <div class="col-md-12 padding-0">
+                @if (Model.Note != "" && Model.Note != null)
+            {
+                    <p style="font-weight:bold">
+                        Ghi chú:
+                    </p>
+                    <span class="text-right">@Model.Note</span>
+                    <br>
+                }
+                <p style="font-weight:bold">Phương thức thanh toán:</p>
                 <ul class="list-content">
-                    <li class="active">
+                    <li>
                         <label>
-                            <input required type="radio" value="NL" name="option_payment" />
+                            @Html.RadioButtonFor(p => p.PaidType, 2, new { @checked = true })
+                            Thanh toán bằng tiền mặt tại sân
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            @Html.RadioButtonFor(p => p.PaidType , 1)
                             Thanh toán bằng Ví điện tử NgânLượng
                         </label>
                         <div class="boxContent">
@@ -125,268 +105,113 @@
                             </p>
                         </div>
                     </li>
-                    <li>
-                        <label><input type="radio" value="ATM_ONLINE" name="option_payment" /> Thanh toán online bằng thẻ ngân hàng nội địa</label>
-                        <div class="boxContent">
-                            <p>
-                                <i>
-                                    <span style="color:#ff5a00;font-weight:bold;text-decoration:underline;">Lưu ý</span>: Bạn cần đăng ký Internet-Banking hoặc dịch vụ thanh toán trực tuyến tại ngân hàng trước khi thực hiện.
-                                </i>
-                            </p>
-
-                            <ul class="cardList clearfix">
-
-                                <li class="bank-online-methods ">
-                                    <label for="vcb_ck_on">
-                                        <i class="VCB" title="Ngân hàng TMCP Ngoại Thương Việt Nam"></i>
-                                        <input type="radio" value="VCB" name="bankcode" id="vcb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="vnbc_ck_on">
-                                        <i class="DAB" title="Ngân hàng Đông Á"></i>
-                                        <input type="radio" value="DAB" name="bankcode" id="vnbc_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="tcb_ck_on">
-                                        <i class="TCB" title="Ngân hàng Kỹ Thương"></i>
-                                        <input type="radio" value="TCB" name="bankcode" id="tcb_ck_on" />
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="sml_atm_mb_ck_on">
-                                        <i class="MB" title="Ngân hàng Quân Đội"></i>
-                                        <input type="radio" value="MB" name="bankcode" id="sml_atm_mb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="shb_ck_on">
-                                        <i class="SHB" title="Ngân hàng Sài Gòn - Hà Nội"></i>
-                                        <input type="radio" value="SHB" name="bankcode" id="shb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="sml_atm_vib_ck_on">
-                                        <i class="VIB" title="Ngân hàng Quốc tế"></i>
-                                        <input type="radio" value="VIB" name="bankcode" id="sml_atm_vib_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="sml_atm_vtb_ck_on">
-                                        <i class="ICB" title="Ngân hàng Công Thương Việt Nam"></i>
-                                        <input type="radio" value="ICB" name="bankcode" id="sml_atm_vtb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="sml_atm_exb_ck_on">
-                                        <i class="EXB" title="Ngân hàng Xuất Nhập Khẩu"></i>
-                                        <input type="radio" value="EXB" name="bankcode" id="sml_atm_exb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="sml_atm_acb_ck_on">
-                                        <i class="ACB" title="Ngân hàng Á Châu"></i>
-                                        <input type="radio" value="ACB" name="bankcode" id="sml_atm_acb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="sml_atm_hdb_ck_on">
-                                        <i class="HDB" title="Ngân hàng Phát triển Nhà TPHCM"></i>
-                                        <input type="radio" value="HDB" name="bankcode" id="sml_atm_hdb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="sml_atm_msb_ck_on">
-                                        <i class="MSB" title="Ngân hàng Hàng Hải"></i>
-                                        <input type="radio" value="MSB" name="bankcode" id="sml_atm_msb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="sml_atm_nvb_ck_on">
-                                        <i class="NVB" title="Ngân hàng Nam Việt"></i>
-                                        <input type="radio" value="NVB" name="bankcode" id="sml_atm_nvb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="sml_atm_vab_ck_on">
-                                        <i class="VAB" title="Ngân hàng Việt Á"></i>
-                                        <input type="radio" value="VAB" name="bankcode" id="sml_atm_vab_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="sml_atm_vpb_ck_on">
-                                        <i class="VPB" title="Ngân Hàng Việt Nam Thịnh Vượng"></i>
-                                        <input type="radio" value="VPB" name="bankcode" id="sml_atm_vpb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="sml_atm_scb_ck_on">
-                                        <i class="SCB" title="Ngân hàng Sài Gòn Thương tín"></i>
-                                        <input type="radio" value="SCB" name="bankcode" id="sml_atm_scb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="ojb_ck_on">
-                                        <i class="OJB" title="Ngân hàng Đại Dương"></i>
-                                        <input type="radio" value="OJB" name="bankcode" id="ojb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="bnt_atm_pgb_ck_on">
-                                        <i class="PGB" title="Ngân hàng Xăng dầu Petrolimex"></i>
-                                        <input type="radio" value="PGB" name="bankcode" id="bnt_atm_pgb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="bnt_atm_gpb_ck_on">
-                                        <i class="GPB" title="Ngân hàng TMCP Dầu khí Toàn Cầu"></i>
-                                        <input type="radio" value="GPB" name="bankcode" id="bnt_atm_gpb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="bnt_atm_agb_ck_on">
-                                        <i class="AGB" title="Ngân hàng Nông nghiệp &amp; Phát triển nông thôn"></i>
-                                        <input type="radio" value="AGB" name="bankcode" id="bnt_atm_agb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="bnt_atm_sgb_ck_on">
-                                        <i class="SGB" title="Ngân hàng Sài Gòn Công Thương"></i>
-                                        <input type="radio" value="SGB" name="bankcode" id="bnt_atm_sgb_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="bnt_atm_nab_ck_on">
-                                        <i class="NAB" title="Ngân hàng Nam Á"></i>
-                                        <input type="radio" value="NAB" name="bankcode" id="bnt_atm_nab_ck_on" />
-
-                                    </label>
-                                </li>
-
-                                <li class="bank-online-methods ">
-                                    <label for="sml_atm_bab_ck_on">
-                                        <i class="BAB" title="Ngân hàng Bắc Á"></i>
-                                        <input type="radio" value="BAB" name="bankcode" id="sml_atm_bab_ck_on" />
-
-                                    </label>
-                                </li>
-
-                            </ul>
-
-                        </div>
-                    </li>
-                    <li>
-                        <label><input type="radio" value="VISA" name="option_payment" /> Thanh toán bằng thẻ Visa hoặc MasterCard</label>
-
-                    </li>
                 </ul>
+                <div class="form-group col-md-12 text-center">
+                    <input type="submit" class="btn btn-primary" id="createOrder" value="Xác nhận">
+                    <button type="button" class="btn btn-default btn-outline"
+                            onclick="window.history.back();">
+                        <span>Quay lại</span>
+                    </button>
+                </div>
 
-                <div class="form-group">
-                    <label for="name" class="col-sm-2 control-label">Họ Tên:</label>
-                    <div class="col-sm-10">
-                        <input required type="text" class="form-control" name="name" id="name" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="email" class="col-sm-2 control-label">Email:</label>
-                    <div class="col-sm-10">
-                        <input required type="email" class="form-control" name="email" id="email" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="phone" class="col-sm-2 control-label">Số Điện thoại:</label>
-                    <div class="col-sm-10">
-                        <input required type="number" class="form-control" name="phone" id="phone" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <input type="submit" class="btn btn-danger btn-flat" value="Thanh toán" />
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
+    </form>    
 </div>
-}
+
 @section Scripts{
-<script>
-    $(document).ready(function () {
-        $("#viewOrderHistory").hide();
-    });
-    $('input[name="option_payment"]').bind('click', function () {
-        $('.list-content li').removeClass('active');
-        $(this).parent().parent('li').addClass('active');
-    });
-    $("#createOrder").click(function () {
-        var paidType = $('[name="PaidType"]:checked').val();
-        if(paidType == 0){
-            //waiting
-        }else{
+    <script>
+        $('input[name="PaidType"]').bind('click', function () {
+            $('.list-content li').removeClass('active');
+            $(this).parent().parent('li').addClass('active');
+        });
+
+        $('#onlineform').submit(function () {
+            var startTime = $("#StartTime").val();
+            var endTime = $("#EndTime").val();
+            var playDate = @ViewBag.playDate;
+            var error = false;
+            $("#error").hide();
+            $("#error1").hide();
+            $("#error2").hide();
+            var hasErrorContent = false;
             $.ajax({
-                url: "CreateOrder",
                 type: 'POST',
-                data: {
-                    'fieldId': @Model.FieldId,
-                    'startTime': '@Model.StartTime.ToString("hh:mm:ss")',
-                    'endTime': '@Model.EndTime.ToString("hh:mm:ss")',
-                    'note': '@Model.Note',
-                    'price': @Model.Price,
-                    'paidType': paidType,
-                    'useDate': '@ViewBag.playDate.ToShortDateString()',
-                },
-                dataType: 'json',
+                url: '@Url.Action("CheckTimeValidInTimeBlock")',
+                async: false,
+                data: {"fieldId" : @Model.FieldId,
+                    "startTime": startTime,
+                    "endTime" : endTime},
                 success: function (result) {
-                    $("#createOrder").hide();
-                    $("#viewOrderHistory").show();
-                    $('.paymentRadio').attr("disabled", true);
-                    showMessage("Đặt sân thành công!", "success", "OK");
+                    if (!result.Succeed) {
+                        error = true;
+                        hasErrorContent = true;
+                        $("#error1").show();
+                    }
                 },
-                error: function (error) {
+                error: function (result) {
                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                }
+                    error = true;
+                },
             });
-        }
-    });
-</script>    
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CheckOrderTimeExist")',
+                async: false,
+                data: {"fieldId" : @Model.FieldId,
+                    "startTime": startTime,
+                    "endTime" : endTime,
+                    "playDate" : playDate},
+                success: function (result) {
+                    if (!result.Succeed) {
+                        error = true;
+                        hasErrorContent = true;
+                        $("#error2").show();
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    error = true;
+                },
+            });
+
+            if (error) {
+                if(hasErrorContent){
+                    $("#error").show();
+                }
+                return false;
+            }
+        });
+        @*$("#createOrder").click(function () {
+            var paidType = $('[name="option_payment"]:checked').val();
+            if(paidType == 0){
+                //waiting
+            }else{
+                $.ajax({
+                    url: "CreateOrder",
+                    type: 'POST',
+                    data: {
+                        'fieldId': @Model.FieldId,
+                        'startTime': '@Model.StartTime.ToString("hh:mm:ss")',
+                        'endTime': '@Model.EndTime.ToString("hh:mm:ss")',
+                        'note': '@Model.Note',
+                        'price': @Model.Price,
+                        'paidType': paidType,
+                        'useDate': '@ViewBag.playDate.ToShortDateString()',
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        $("#createOrder").hide();
+                        $("#viewOrderHistory").show();
+                        $('.paymentRadio').attr("disabled", true);
+                        showMessage("Đặt sân thành công!", "success", "OK");
+                    },
+                    error: function (error) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                });
+            }
+        });*@
+    </script>
 }

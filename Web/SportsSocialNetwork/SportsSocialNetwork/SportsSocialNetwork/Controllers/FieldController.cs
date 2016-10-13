@@ -8,6 +8,8 @@ using SkyWeb.DatVM.Mvc.Autofac;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.ViewModels;
 using SkyWeb.DatVM.Mvc;
+using SportsSocialNetwork.Models.Utilities;
+using SportsSocialNetwork.Models.Enumerable;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -33,15 +35,44 @@ namespace SportsSocialNetwork.Controllers
             }
             return View(fields);
         }
-        public ActionResult GetSchedule(int? id)
+
+        //public ActionResult GetSchedule(int? id)
+        //{
+        //    var _orderService = this.Service<IOrderService>();
+        //    List<Order> orders = _orderService.GetActive(p => p.FieldId == id && p.Status != 4).ToList();
+        //    var _fieldScheduleService = this.Service<IFieldScheduleService>();
+        //    List<FieldSchedule> schedules = _fieldScheduleService.GetActive(p => p.FieldId == id).ToList();
+        //    List<OrderViewModel> orderList = Mapper.Map<List<OrderViewModel>>(orders);
+        //    var s = schedules.Select(m => new
+        //    {
+        //        title = Utils.GetEnumDescription((FieldScheduleStatus)m.Type),
+        //        start = m.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"),
+        //        end = m.EndTime.ToString("yyyy-MM-ddTHH:mm:ss")
+        //    }).ToList();
+
+        //    var o = orders.Select(m => new
+        //    {
+        //        title = "Đã được đặt",
+        //        start = m.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"),
+        //        end = m.EndTime.ToString("yyyy-MM-ddTHH:mm:ss")
+        //    }).ToList();
+        //    var temp = s.Concat(o);
+        //    return Json(temp, JsonRequestBehavior.AllowGet);
+        //}
+        public ActionResult GetOrderCalendar(int? id)
         {
-            //nen tao 1 bang quan ly gio san rieng, gio dung tam bang order
             var _orderService = this.Service<IOrderService>();
-            List<Order> orders = _orderService.GetActive(p => p.FieldId == id).ToList();
+            List<Order> orders = _orderService.GetActive(p => p.FieldId == id && p.Status!=4).ToList();
             List<OrderViewModel> orderList = Mapper.Map<List<OrderViewModel>>(orders);
             return Json(orderList.Select(f => new { title = "Đã được đặt",start=f.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"),end=f.EndTime.ToString("yyyy-MM-ddTHH:mm:ss") }), JsonRequestBehavior.AllowGet );
         }
 
-        
+        public ActionResult GetScheduleCalendar(int? id)
+        {
+            var _fieldScheduleService = this.Service<IFieldScheduleService>();
+            List<FieldSchedule> schedules = _fieldScheduleService.GetActive(p => p.FieldId == id).ToList();
+            List<FieldScheduleViewModel> scheduleList = Mapper.Map<List<FieldScheduleViewModel>>(schedules);
+            return Json(scheduleList.Select(f => new { title = Utils.GetEnumDescription((FieldScheduleStatus)f.Type), start = f.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"), end = f.EndTime.ToString("yyyy-MM-ddTHH:mm:ss") }), JsonRequestBehavior.AllowGet);
+        }
     }
 }

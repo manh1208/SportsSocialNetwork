@@ -35,7 +35,7 @@ namespace SportsSocialNetwork.Controllers
                 Value = m.Name
             }).OrderBy(s => s.Value).ToArray();
             ViewBag.ProvinceList = provinceList;
-            var viewModel =new  SearchPlaceViewModel();
+            var viewModel = new SearchPlaceViewModel();
             return View(viewModel);
         }
 
@@ -43,10 +43,10 @@ namespace SportsSocialNetwork.Controllers
         {
             Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
             IEnumerable<SelectListItem> districtList = new List<SelectListItem>();
-            if (provinceName != null || provinceName!="")
+            if (provinceName != null || provinceName != "")
             {
                 var province = vietnam.VietNamese.Where(p => p.Name.Equals(provinceName)).ToList();
-                if (province != null && province.Count>0)
+                if (province != null && province.Count > 0)
                 {
                     var district = province.First().Districts.ToList();
                     districtList = district.Select(m => new SelectListItem
@@ -55,26 +55,26 @@ namespace SportsSocialNetwork.Controllers
                         Value = m.Name
                     }).OrderBy(s => s.Value).ToArray();
                 }
-                
+
             }
-           
+
             return Json(districtList, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetData(JQueryDataTableParamModel param, string sport, string province, 
+        public ActionResult GetData(JQueryDataTableParamModel param, string sport, string province,
             string district, string lat, string lng)
         {
             var _placeService = this.Service<IPlaceService>();
             List<Place> placeList = new List<Place>();
-            
 
-            if(lat!=null && lat!="" && lng!=null && lng != "")
+
+            if (lat != null && lat != "" && lng != null && lng != "")
             {
                 var places = _placeService.getAllPlace();
                 var latitude = float.Parse(lat);
                 var longtitude = float.Parse(lng);
                 var Coord = new GeoCoordinate(latitude, longtitude);
-                foreach(Place place in places)
+                foreach (Place place in places)
                 {
                     var placeCoord = new GeoCoordinate(place.Latitude, place.Longitude);
                     var dis = Coord.GetDistanceTo(placeCoord);
@@ -88,7 +88,7 @@ namespace SportsSocialNetwork.Controllers
             {
                 placeList = _placeService.getPlace(sport, province, district).ToList();
             }
-            
+
             IEnumerable<Place> filteredListItems;
             if (!string.IsNullOrEmpty(param.sSearch))
             {
@@ -118,7 +118,7 @@ namespace SportsSocialNetwork.Controllers
                 c.Id,
                 c.PlaceImages.Count == 0?"http://raovatso.net/images/no-image.jpg":c.PlaceImages.First().Image,
                 c.Name,
-                c.Description,
+                c.Description.Length > 140? c.Description.Substring(0,140)+"...": c.Description,
                 c.Address,
                 c.District,
                 c.City,
@@ -140,41 +140,6 @@ namespace SportsSocialNetwork.Controllers
             return View();
         }
 
-
-        public ActionResult btnSubmit_Click(object sender, EventArgs e)
-        {
-            String return_url = "http://localhost:26011/Place/verifyOrder";
-            String transaction_info = "DEMO";
-            String order_code = DateTime.Now.ToString("yyyyMMddHHmmss");
-            String receiver = "viethuystudy@gmail.com";//Tài khoản nhận tiền 
-            String price = "20000";
-            NL_Checkout nl = new NL_Checkout();
-            String url;
-            url = nl.buildCheckoutUrl(return_url, receiver, transaction_info, order_code, price);
-            return Redirect(url);
-        }
-
-        public ActionResult verifyOrder(object sender, EventArgs e)
-        {
-            String transaction_info = Request.QueryString["transaction_info"];
-            String order_code = Request.QueryString["order_code"];
-            String payment_id = Request.QueryString["payment_id"];
-            String payment_type = Request.QueryString["payment_type"];
-            String secure_code = Request.QueryString["secure_code"];
-            String price = Request.QueryString["price"];
-            String error_text = Request.QueryString["error_text"];
-            NL_Checkout nl = new NL_Checkout();
-            bool check = nl.verifyPaymentUrl(transaction_info, order_code, price, payment_id, payment_type, error_text, secure_code);
-            if (check)
-            {
-                return Redirect("https://www.google.co.jp/");
-            }
-            else
-            {
-                return Redirect("https://www.facebook.com/");
-            }
-        }
-
         public ActionResult ViewDetail(int? id)
         {
             var _placeService = this.Service<IPlaceService>();
@@ -183,19 +148,45 @@ namespace SportsSocialNetwork.Controllers
             var _placeImageService = this.Service<IPlaceImageService>();
             var _placeFieldService = this.Service<IFieldService>();
             var _placeEventService = this.Service<IEventService>();
-            List<PlaceImage> placeImages = _placeImageService.Get(p => p.PlaceId == id.Value).ToList();
-            List<Field> placeFields = _placeFieldService.Get(p => p.PlaceId == id.Value).ToList();
-            List<Event> placeEvents = _placeEventService.Get(p => p.PlaceId == id.Value).ToList();
+            var _fieldTypeService = this.Service<IFieldTypeService>();
+            var _sportService = this.Service<ISportService>();
+            List<PlaceImage> placeImages = _placeImageService.GetActive(p => p.PlaceId == id.Value).ToList();
+            List<Field> placeFields = _placeFieldService.GetActive(p => p.PlaceId == id.Value).ToList();
+            List<Event> placeEvents = _placeEventService.GetActive(p => p.PlaceId == id.Value).ToList();
+            List<FieldType> fieldTypes = _fieldTypeService.GetActive().ToList();
             Event lastestEvent = new Event();
-            if (placeEvents!=null && placeEvents.Count > 0)
+            if (placeEvents != null && placeEvents.Count > 0)
             {
                 lastestEvent = placeEvents.First();
             }
             ViewBag.placeImages = placeImages;
             ViewBag.placeFields = placeFields;
             ViewBag.lastestEvent = lastestEvent;
+
+            var list = _placeFieldService.GetActive(p => p.PlaceId == id.Value).
+        Join(_fieldTypeService.GetActive(),
+        f => f.FieldTypeId, ft => ft.Id,
+        (f, ft) => new
+        {
+            fieldID = f.Id,
+            fieldName = f.Name,
+            sportId = ft.SportId
+        }).Join(_sportService.GetActive(),
+                a => a.sportId, p => p.Id,
+                (a, p) => new
+                {
+                    fieldID = a.fieldID,
+                    fieldName = a.fieldName,
+                    sport = p.Name
+                }).Select(p => new FieldSportViewModel
+                {
+                    FieldId = p.fieldID,
+                    FieldName = p.fieldName,
+                    Sport = p.sport
+                }).ToList();
+            ViewBag.fieldSport = list;
             return View(place);
         }
     }
-    
+
 }

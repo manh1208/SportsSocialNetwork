@@ -58,24 +58,61 @@
                 <div class="text-right col-md-5 padding-0">
                     <div class="form-group col-md-12 padding-0">
                         <p style="font-weight:bold">Phương thức thanh toán:</p>
-                        <div class="radio-custom radio-default radio-inline">
-                            @Html.RadioButtonFor(model => model.PaidType, 0, new { disabled = "disabled", @class = "paymentRadio", @checked = "" })
-                            @Html.Label("paidType", "Online")
-                        </div>
-                        <div class="radio-custom radio-default radio-inline">
-                            @Html.RadioButtonFor(model => model.PaidType, 1, new { disabled = "disabled", @class = "paymentRadio" })
-                            @Html.Label("paidType", "Tiền mặt")
-                        </div>
+                        @if (Model.PaidType == 1)
+                        {
+                            <span class='label label-lg label-outline label-dark'>Online-Chưa thanh toán</span>
+                        }
+                        @if (Model.PaidType == 2)
+                        {
+                            <span class='label label-lg label-outline label-dark'>Tiền mặt-Chưa thanh toán</span>
+                        }
+                        @if (Model.PaidType == 3)
+                        {
+                            <span class='label label-lg label-outline label-success'>Tiền mặt-Đã thanh toán</span>
+                        }
+                        @if (Model.PaidType == 4)
+                        {
+                            <span class='label label-lg label-outline label-primary'>Online-Đã thanh toán</span>
+                        }
+                    </div>
+                    <div class="form-group col-md-12 padding-0">
+                        <p style="font-weight:bold">Trạng thái đơn đặt:</p>
+                        @if (Model.Status == 1)
+                        {
+                            <span class='label label-lg label-outline label-warning'>Đang chờ duyệt</span>
+                        }
+                        @if (Model.Status == 2)
+                        {
+                            <span class='label label-lg label-outline label-success'>Đã được chấp nhận</span>
+                        }
+                        @if (Model.Status == 3)
+                        {
+                            <span class='label label-lg label-outline label-danger'>Không được chấp nhận</span>
+                        }
+                        @if (Model.Status == 4)
+                        {
+                            <span class='label label-lg label-outline label-dark'>Đã hủy</span>
+                        }
                     </div>
                 </div>
             </div>
         </div>
-</div>
+    </div>
 </div>
 <div class="modal-footer text-right">
-    @if (Model.Status != 0)
+    @if ((Model.PaidType == 1 || Model.PaidType == 2) && Model.Status != 4)
     {
+        <form id="onlineform" action="@Url.Action("PayOnlineNow", "Order")" class="form-horizontal padding-bottom-10" method="get">
+
+            @Html.HiddenFor(p => p.Id)
+            @Html.HiddenFor(p => p.OrderCode)
+            <input type="submit" value="Thanh toán online ngay" class="btn btn-primary">
+        </form>
         <button class="btn btn-danger" onclick="CancelOrder(@Model.Id)">Hủy đặt sân</button>
     }
-        <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+
+    <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+
+
+
 </div>
