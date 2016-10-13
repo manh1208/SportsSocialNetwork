@@ -6,12 +6,16 @@
     [Type]         INT            NOT NULL,
     [PostId]       INT            NULL,
     [InvitationId] INT            NULL,
+    [OrderId]      INT            NULL,
     [Active]       BIT            NOT NULL,
     CONSTRAINT [PK_Notification] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Notification_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id]),
     CONSTRAINT [FK_Notification_Invitation] FOREIGN KEY ([InvitationId]) REFERENCES [dbo].[Invitation] ([Id]),
+    CONSTRAINT [FK_Notification_Order] FOREIGN KEY ([OrderId]) REFERENCES [dbo].[Order] ([Id]),
     CONSTRAINT [FK_Notification_Post] FOREIGN KEY ([PostId]) REFERENCES [dbo].[Post] ([Id])
 );
+
+
 
 
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
@@ -121,6 +121,10 @@
       <HintPath>..\packages\PushSharp.4.0.10\lib\net45\PushSharp.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="QRCoder, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>External Lib\QRCoder.dll</HintPath>
+    </Reference>
     <Reference Include="SkyWeb.DatVM.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>External Lib\SkyWeb.DatVM.Data.dll</HintPath>
@@ -141,6 +145,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -738,6 +743,7 @@
     <Compile Include="Models\Notifications\Android.cs" />
     <Compile Include="Models\Notifications\IOS.cs" />
     <Compile Include="Models\Notifications\NotificationModel.cs" />
+    <Compile Include="Models\Utilities\EmailSender.cs" />
     <Compile Include="Models\Utilities\Utils.cs" />
     <Compile Include="Models\ViewModels\AjaxOperationResult.cs" />
     <Compile Include="Models\ViewModels\AspNetRoleViewModelGen.cs">
@@ -2803,6 +2809,7 @@
     <Content Include="Content\js\custom-script.js" />
     <Content Include="Content\js\sweetAlert\sweetalert.css" />
     <Content Include="Content\js\sweetAlert\sweetalert.min.js" />
+    <Content Include="External Lib\QRCoder.dll" />
     <Content Include="External Lib\SkyWeb.DatVM.Data.dll" />
     <Content Include="External Lib\SkyWeb.DatVM.Mvc.dll" />
     <Content Include="favicon.ico" />

@@ -14,10 +14,13 @@
     [PayerName]       NVARCHAR (MAX) NULL,
     [PayerPhone]      NVARCHAR (255) NULL,
     [PayerEmail]      NVARCHAR (255) NULL,
+    [QRCodeUrl]       NVARCHAR (MAX) NULL,
     CONSTRAINT [PK_Order] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Order_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id]),
     CONSTRAINT [FK_Order_Field] FOREIGN KEY ([FieldId]) REFERENCES [dbo].[Field] ([Id])
 );
+
+
 
 
 
