@@ -2,8 +2,6 @@ package com.capstone.sportssocialnetwork.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,8 +9,18 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
+import com.capstone.sportssocialnetwork.model.response.ResponseModel;
+import com.capstone.sportssocialnetwork.model.User;
+import com.capstone.sportssocialnetwork.service.RestService;
+import com.capstone.sportssocialnetwork.utils.DataUtils;
+import com.capstone.sportssocialnetwork.utils.SharePreferentName;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
     private TextView txtUsername;
@@ -26,6 +34,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         initView();
+        if (DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"").length()>0){
+            Intent intent = new Intent(LoginActivity.this,MainBottomBarActivity.class);
+            startActivity(intent);
+        }
 
     }
 
@@ -64,9 +76,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (focus!=null){
                     focus.requestFocus();
                 }else{
+                    RestService restService = new RestService();
+                    Call<ResponseModel<User>> call = restService.getAccountService().login(username,password);
+                    call.enqueue(new Callback<ResponseModel<User>>() {
+                        @Override
+                        public void onResponse(Call<ResponseModel<User>> call, Response<ResponseModel<User>> response) {
+                            if (response.isSuccessful()){
+                                if (response.body().isSucceed()){
+                                    User user = response.body().getData();
+                                    DataUtils.getINSTANCE(LoginActivity.this)
+                                            .getPreferences()
+                                            .edit()
+                                            .putString(SharePreferentName.SHARE_USER_ID,user.getId())
+                                            .commit();
+                                    Intent intent = new Intent(LoginActivity.this,MainBottomBarActivity.class);
+                                    startActivity(intent);
+                                }else{
+                                    Toast.makeText(LoginActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseModel<User>> call, Throwable t) {
+                            Toast.makeText(LoginActivity.this, "Can not connect to server", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     //checkLogin at server;
-                    Intent intent = new Intent(LoginActivity.this,MainBottomBarActivity.class);
-                    startActivity(intent);
+                   
                 }
                 break;
         }

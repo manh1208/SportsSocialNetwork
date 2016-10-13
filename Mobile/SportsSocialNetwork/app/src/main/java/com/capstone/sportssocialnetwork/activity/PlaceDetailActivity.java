@@ -15,18 +15,29 @@ import android.view.WindowManager;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.adapter.PlacePageAdapter;
+import com.capstone.sportssocialnetwork.model.response.PlaceResponseModel;
+import com.capstone.sportssocialnetwork.model.response.ResponseModel;
+import com.capstone.sportssocialnetwork.service.RestService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PlaceDetailActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private FloatingActionButton fabBooking;
+    private int placeId;
+    private String placeName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_detail);
+        placeId = getIntent().getIntExtra("placeId",-1);
+        placeName = getIntent().getStringExtra("placeName");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Chảo lửa");
+        toolbar.setTitle(placeName);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,15 +47,16 @@ public class PlaceDetailActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setTitle("Chảo lửa");
 
+//        getSupportActionBar().setTitle(placeName);
+//        getSupportActionBar().setTitle("Chảo lửa");
         initView();
         prepareData();
 
     }
 
     private void prepareData() {
-        PlacePageAdapter adapter = new PlacePageAdapter(getSupportFragmentManager());
+        PlacePageAdapter adapter = new PlacePageAdapter(getSupportFragmentManager(),placeId);
         viewPager.setAdapter(adapter);
         tabLayout.post(new Runnable() {
             @Override
@@ -61,10 +73,18 @@ public class PlaceDetailActivity extends AppCompatActivity {
         });
     }
 
+
+
     private void initView() {
         tabLayout = (TabLayout) findViewById(R.id.tabs_place_detail);
         viewPager = (ViewPager) findViewById(R.id.viewpager_place_detail);
         fabBooking= (FloatingActionButton) findViewById(R.id.fab_booking);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
 
 }

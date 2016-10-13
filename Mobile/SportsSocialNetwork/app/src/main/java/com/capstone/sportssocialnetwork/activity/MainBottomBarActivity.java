@@ -3,17 +3,13 @@ package com.capstone.sportssocialnetwork.activity;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.IdRes;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
-import com.capstone.sportssocialnetwork.fragment.BookingFragment;
+import com.capstone.sportssocialnetwork.fragment.PlaceFragment;
 import com.capstone.sportssocialnetwork.fragment.FeedFragment;
 import com.capstone.sportssocialnetwork.fragment.ProfileFragment;
 import com.roughike.bottombar.BottomBar;
@@ -44,7 +40,7 @@ public class MainBottomBarActivity extends AppCompatActivity {
                         getSupportActionBar().setTitle("Trang chủ");
                         break;
                     case R.id.nav_booking:
-                        fragment = new BookingFragment();
+                        fragment = new PlaceFragment();
                         getSupportActionBar().setTitle("Danh sách sân");
                         break;
                     case R.id.nav_profile:

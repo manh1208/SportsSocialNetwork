@@ -20,7 +20,8 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(getApplicationContext(), LoginActivity .class);
+                Intent i = new Intent(getApplicationContext(), LoginActivity
+                        .class);
                 startActivity(i);
 //                overridePendingTransition(R.anim.right_in, R.anim.left_out);
                 finish();

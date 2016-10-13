@@ -1,4 +1,4 @@
-package com.capstone.sportssocialnetwork.model;
+package com.capstone.sportssocialnetwork.model.response;
 
 import com.google.gson.annotations.SerializedName;
 

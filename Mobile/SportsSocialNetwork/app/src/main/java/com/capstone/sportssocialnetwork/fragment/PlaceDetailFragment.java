@@ -12,12 +12,22 @@ import android.view.ViewGroup;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.adapter.PlaceDetailAdapter;
+import com.capstone.sportssocialnetwork.model.response.PlaceResponseModel;
+import com.capstone.sportssocialnetwork.model.response.ResponseModel;
+import com.capstone.sportssocialnetwork.service.RestService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by ManhNV on 9/8/16.
  */
 public class PlaceDetailFragment extends Fragment {
     RecyclerView lvPlaceDetail;
+    private RestService service;
+    private int placeId;
+
 
     @Nullable
     @Override
@@ -29,7 +39,7 @@ public class PlaceDetailFragment extends Fragment {
     }
 
     private void prepareData() {
-        PlaceDetailAdapter adapter = new PlaceDetailAdapter(getActivity());
+        PlaceDetailAdapter adapter = new PlaceDetailAdapter(getActivity(),placeId);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         lvPlaceDetail.setLayoutManager(mLayoutManager);
         lvPlaceDetail.setItemAnimator(new DefaultItemAnimator());
@@ -37,6 +47,12 @@ public class PlaceDetailFragment extends Fragment {
     }
 
     private void initView(View v) {
+        placeId = getArguments().getInt("placeId");
         lvPlaceDetail = (RecyclerView) v.findViewById(R.id.lv_place_detail);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

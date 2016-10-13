@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:background="@color/colorPrimary"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="Lọc"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:orientation="vertical"
+        android:paddingLeft="20sp"
+        android:paddingRight="20sp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="Môn thể thao"
+                android:textColor="@color/colorPrimary"
+
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/sp_filter_sport"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5sp"
+                android:layout_weight="2"
+                android:background="@drawable/background_spinner"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="Tỉnh/TP"
+                android:textColor="@color/colorPrimary"
+
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/sp_filter_province"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5sp"
+
+                android:layout_weight="2"
+                android:background="@drawable/background_spinner"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="Quận/Huyện"
+                android:textColor="@color/colorPrimary"
+
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/sp_filter_district"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5sp"
+
+                android:layout_weight="2"
+                android:background="@drawable/background_spinner"
+                android:gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+    <!--<Button-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center_horizontal"-->
+    <!--android:text="Tìm sân quanh tôi"-->
+    <!--android:paddingLeft="20sp"-->
+    <!--android:paddingRight="20sp"-->
+    <!--android:paddingTop="10sp"-->
+    <!--android:paddingBottom="10sp"-->
+    <!--android:layout_marginTop="20sp"-->
+    <!--android:textSize="18sp"-->
+    <!--android:textAllCaps="false"-->
+    <!--android:textColor="#fff"-->
+    <!--android:background="@drawable/button_find_nearby"-->
+    />
+</LinearLayout>
