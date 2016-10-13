@@ -5,9 +5,26 @@ using System.Web;
 
 namespace SportsSocialNetwork.Models.ViewModels
 {
-    public class PlaceOveralViewModel: PlaceViewModel
+    public class PlaceOveralViewModel
     {
-        public String Avatar { get; set; }
-
+        public int Id { get; set; }
+        public string UserId { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string City { get; set; }
+        public string District { get; set; }
+        public string Ward { get; set; }
+        public string Address { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Description { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public string Avatar { get; set; }
+        public int Status { get; set; }
+        public bool Active { get; set; }
+        public String StartTime { get; set; }
+        public String EndTime { get; set; }
+        public bool Approve { get; set; }
+        public List<SportViewModel> SportList { get; set; }
     }
 }

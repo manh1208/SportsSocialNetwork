@@ -13,7 +13,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 {
     public class OrderController : BaseController
     {
-        private String systemError = "An error has occured!";
+        private String systemError = "Đã có lỗi xảy ra!";
 
 
         [HttpPost]
@@ -37,10 +37,6 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             
             List<OrderDetailViewModel> result = Mapper.Map<List<OrderDetailViewModel>>(orderList);
-
-            foreach (var o in result) {
-                o.CreateDateStrings();
-            }
 
             response = new ResponseModel<List<OrderDetailViewModel>>(true, "Your orders have been loaded!", null, result);
 
@@ -103,8 +99,6 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
                 OrderDetailViewModel result = Mapper.Map<OrderDetailViewModel>(order);
 
-                result.CreateDateStrings();
-
                 response = new ResponseModel<OrderDetailViewModel>(true, "Order Detail", null, result);
             }
 
@@ -133,8 +127,6 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
                 OrderDetailViewModel result = Mapper.Map<OrderDetailViewModel>(order);
 
-                result.CreateDateStrings();
-
                 response = new ResponseModel<OrderDetailViewModel>(true, "Your order status has been changed", null, result);
             }
 
@@ -155,11 +147,9 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             try
             {
-                Order order = service.CreateOrder(model.UserId, model.FieldId, model.StartTime, model.EndTime, model.Note, model.Price, model.PaidType);
+                Order order = service.CreateOrder(model.UserId, model.FieldId, model.StartTime, model.EndTime, model.Note, CalculatePrice(model.FieldId,model.StartTime.TimeOfDay, model.EndTime.TimeOfDay), model.PaidType);
 
                 OrderDetailViewModel result = Mapper.Map<OrderDetailViewModel>(order);
-
-                result.CreateDateStrings();
 
                 response = new ResponseModel<OrderDetailViewModel>(true, "Order created successfully", null, result);
 
@@ -173,7 +163,11 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
         }
 
+        private double CalculatePrice(int fieldId, TimeSpan startTime, TimeSpan endTime) {
+            var timeBlockService = this.Service<ITimeBlockService>();
 
+            return timeBlockService.calPrice(fieldId, startTime, endTime);
+        }
     }
 
 }

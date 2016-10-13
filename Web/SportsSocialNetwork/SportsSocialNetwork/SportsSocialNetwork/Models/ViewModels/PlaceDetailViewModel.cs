@@ -5,8 +5,8 @@ using System.Web;
 
 namespace SportsSocialNetwork.Models.ViewModels
 {
-    public class PlaceDetailViewModel: PlaceViewModel
+    public class PlaceDetailViewModel: PlaceOveralViewModel
     {
-        public List<String> imageList { get; set; }
+        public List<PlaceImageViewModel> PlaceImages { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 {
     public class FieldController : BaseController
     {
-        private String systemError = "An error has occured!";
+        private String systemError = "Đã có lỗi xảy ra!";
 
         [HttpPost]
         public ActionResult ShowFieldList(int placeId)
@@ -69,16 +69,6 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 if (field != null)
                 {
                     FieldDetailViewModel result = Mapper.Map<FieldDetailViewModel>(field);
-
-                    List<FieldImage> images= field.FieldImages.ToList<FieldImage>();
-
-                    List<String> imageList = new List<string>();
-
-                    foreach (var image in images) {
-                        imageList.Add(image.Image);
-                    }
-
-                    result.imageList = imageList;
 
                     response = new ResponseModel<FieldDetailViewModel>(true, "Field detail loaded successfully", null, result);
                 }

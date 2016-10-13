@@ -14,7 +14,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 {
     public class GroupController : BaseController
     {
-        private String systemError = "An error has occured!";
+        private String systemError = "Đã có lỗi xảy ra!";
 
         private String userImagePath = "UserImage\\CuongPK";
 

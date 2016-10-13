@@ -6,10 +6,15 @@ using System.Web;
 
 namespace SportsSocialNetwork.Models
 {
-    public class PostCommentDetailViewModel : PostCommentViewModel
+    public class PostCommentDetailViewModel
     {
-        public String CommentedUserName { get; set; }
-
-        public String CreateDateString { get; set; }
+        public int Id { get; set; }
+        public string UserId { get; set; }
+        public int PostId { get; set; }
+        public string Comment { get; set; }
+        public String CreateDate { get; set; }
+        public string Image { get; set; }
+        public bool Active { get; set; }
+        public AspNetUserOveralViewModel AspNetUser { get; set; }
     }
 }

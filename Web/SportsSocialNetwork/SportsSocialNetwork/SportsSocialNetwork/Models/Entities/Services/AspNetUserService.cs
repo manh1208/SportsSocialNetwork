@@ -1,4 +1,5 @@
-﻿using SportsSocialNetwork.Models.Enumerable;
+﻿using Microsoft.AspNet.Identity.Owin;
+using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
