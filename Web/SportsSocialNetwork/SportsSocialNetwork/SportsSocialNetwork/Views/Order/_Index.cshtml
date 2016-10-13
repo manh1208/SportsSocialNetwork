@@ -12,7 +12,7 @@
                 <span style="color:red; font-size:12px">Thời gian không nằm trong các khung giờ</span>
             </li>
             <li style="display: none" id="error3">
-                <span style="color:red; font-size:12px">Thời gian này đã đươc đặt</span>
+                <span style="color:red; font-size:12px">Thời gian này sân kín</span>
             </li>
         </ul>
 </div>
@@ -20,7 +20,7 @@
         <label>Ngày chơi</label>
         <div class="input-group">
             <span class="input-group-addon"><i class="icon wb-calendar" aria-hidden="true"></i></span>
-            @Html.TextBoxFor(p => p.CreateDate, "{0:dd-MM-yyyy}", new { @class = "form-control filterInput", @id = "playDate", @data_plugin = "datepicker", @Value = "" })
+            @Html.TextBoxFor(p => p.CreateDate, "{0:dd-MM-yyyy}", new { @class = "form-control", @id = "playDate", @data_plugin = "datepicker", @Value = "" })
         </div>
     </div>
         <div class="form-group">
@@ -49,9 +49,13 @@
     $('#orderForm').submit(function () {
         var startTime = $("#startTime").val();
         var endTime = $("#endTime").val();
+        var playDate = $("#playDate").val();
         var error = false;
+        $("#error").hide();
+        $("#error1").hide();
+        $("#error2").hide();
+        $("#error3").hide();
         var hasErrorContent = false;
-        var errorStr ="";
         if (startTime >= endTime) {
             error = true;
             hasErrorContent = true;
@@ -83,7 +87,8 @@
             async: false,
             data: {"fieldId" : @Model.FieldId,
                 "startTime": startTime,
-                "endTime" : endTime},
+                "endTime" : endTime,
+                "playDate" : playDate},
             success: function (result) {
                 if (!result.Succeed) {
                     error = true;
@@ -105,7 +110,6 @@
         }
     });
 
-    console.log("aa");
 </script>
 
 

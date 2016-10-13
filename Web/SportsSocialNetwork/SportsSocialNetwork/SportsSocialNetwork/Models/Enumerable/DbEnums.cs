@@ -79,7 +79,7 @@ namespace SportsSocialNetwork.Models.Enumerable
 
     public enum FieldScheduleStatus
     {
-        [Description("Sửa chửa")]
+        [Description("Sửa chữa")]
         Repair = 1,
         [Description("Đã được đặt")]
         Booked = 2,
@@ -96,4 +96,18 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("Kết thúc")]
         Closed = 0
     }
+
+    public enum OrderPaidType
+    {
+        [Description("Chọn thanh toán online")]
+        ChosePayOnline = 1,
+        [Description("Chọn thanh toán bằng tiền mặt")]
+        ChosePayByCash = 2,
+        [Description("Đã thanh toán bằng tiền mặt")]
+        PaidByCash = 3,
+        [Description("Đã thanh toán online")]
+        PaidOnline = 4
+    }
+
+
 }

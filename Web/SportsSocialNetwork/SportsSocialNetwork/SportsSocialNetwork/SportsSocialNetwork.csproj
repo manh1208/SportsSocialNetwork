@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
@@ -242,6 +242,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APICheckoutV3.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -600,6 +601,7 @@
     <Compile Include="Models\Entities\Services\FieldPriceServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\FieldScheduleService.cs" />
     <Compile Include="Models\Entities\Services\FieldScheduleServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -773,6 +775,7 @@
     <Compile Include="Models\ViewModels\FieldScheduleViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\FieldSportViewModel.cs" />
     <Compile Include="Models\ViewModels\FieldTypeViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -3382,6 +3385,11 @@
     <Content Include="Views\Errors\PageNotFound.cshtml" />
     <Content Include="Views\Errors\NoPermission.cshtml" />
     <Content Include="Views\Errors\DataError.cshtml" />
+    <Content Include="Views\Order\NganLuong.cshtml" />
+    <Content Include="Views\Order\PaymentFail.cshtml" />
+    <Content Include="Views\Order\PaymentSuccessful.cshtml" />
+    <Content Include="Views\Order\BookFieldSuccessful.cshtml" />
+    <Content Include="Views\Order\BookFieldNow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

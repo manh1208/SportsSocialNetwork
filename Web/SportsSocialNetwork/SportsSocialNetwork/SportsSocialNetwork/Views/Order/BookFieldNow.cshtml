@@ -1,0 +1,235 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.OrderViewModel
+
+@{
+    ViewBag.Title = "BookFieldNow";
+    Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
+    var fieldList = ViewBag.FieldList as IEnumerable<SelectListItem>;
+}
+
+<div class="panel padding-top-20 col-md-offset-1 col-md-10">
+    <form id="onlineform" action="@Url.Action("btnSubmit_Click", "Order")" method="get" class="form-horizontal">
+        <div class="panel-body container-fluid">
+            <div class="col-md-12 form-horizontal">
+                <h3 style="text-align:center">Thông tin đặt sân</h3>
+                <div class="summary-errors alert alert-danger alert-dismissible" style="display: none; text-align:left; padding:0px 0px 0px 10px" id="error">
+                    <ul>
+                        <li style="display: none" id="error1">
+                            <span style="color:red; font-size:12px">Thời gian không hợp lệ</span>
+                        </li>
+                        <li style="display: none" id="error2">
+                            <span style="color:red; font-size:12px">Thời gian không nằm trong các khung giờ</span>
+                        </li>
+                        <li style="display: none" id="error3">
+                            <span style="color:red; font-size:12px">Thời gian này sân kín</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="form-group padding-top-10">
+                    <label for="name" class="col-md-4 control-label">Họ Tên:</label>
+                    <div class="col-md-4 input-group">
+                        @Html.TextBoxFor(p => p.PayerName, new { @class = "form-control", @id = "name", @Value = @ViewBag.user.FullName })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="col-md-4 control-label">Email:</label>
+                    <div class="col-md-4 input-group">
+                        @Html.TextBoxFor(p => p.PayerEmail, new { @class = "form-control", @id = "email", @Value = @ViewBag.user.Email })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone" class="col-md-4 control-label">Số Điện thoại:</label>
+                    <div class="col-md-4 input-group">
+                        @Html.TextBoxFor(p => p.PayerPhone, new { @class = "form-control", @id = "phone", @Value = @ViewBag.user.PhoneNumber })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone" class="col-md-4 control-label">Chọn sân:</label>
+                    <div class="col-md-4 input-group">
+                       @Html.DropDownListFor(m => m.FieldId, fieldList, new { @class = "bs-select-hidden form-control input-sm droplist", @id = "field" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Ngày chơi:</label>
+                    <div class="col-md-4 input-group">
+                        <span class="input-group-addon"><i class="icon wb-calendar" aria-hidden="true"></i></span>
+                        @Html.TextBoxFor(p => p.CreateDate, "{0:dd-MM-yyyy}", new { @class = "form-control", @id = "playDate", @data_plugin = "datepicker", @Value = "" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label"></label>
+                        <div class="input-group col-md-4">
+                            <span class="input-group-addon">Giờ bắt đầu</span>
+                            @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker timeInfo form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
+                            </div>
+                    
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label"></label>
+                    <div class="input-group col-md-4">
+                        <span class="input-group-addon">Giờ kết thúc</span>
+                        @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker timeInfo form-control", @id = "endTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Giá tiền</label>
+                    <div class="col-md-4">
+                        <span id="countPrice">0 đồng</span>
+                        @Html.HiddenFor(p => p.Price)
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Ghi chú</label>
+                    <div class="input-group col-md-4">
+                        @Html.TextAreaFor(p => p.Note, new { @class = "form-control", @id = "note", @rows = 3 })
+                    </div>
+                    </div>
+            </div>
+            <div class="col-md-12 padding-0">
+                <p style="font-weight:bold">Phương thức thanh toán:</p>
+                <ul class="list-content">
+                    <li>
+                        <label>
+                            @Html.RadioButtonFor(p => p.PaidType, 2, new { @checked = true })
+                            Thanh toán bằng tiền mặt tại sân
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            @Html.RadioButtonFor(p => p.PaidType, 1)
+                            Thanh toán bằng Ví điện tử NgânLượng
+                        </label>
+                        <div class="boxContent">
+                            <p>
+                                Giao dịch. Đăng ký ví NgânLượng.vn  <a href="https://www.nganluong.vn/?portal=nganluong&amp;page=user_register" target="_blank">tại đây</a>
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+                <div class="form-group col-md-12 text-center">
+                    <input type="submit" class="btn btn-primary" id="createOrder" value="Đặt sân">
+                    <button type="button" class="btn btn-default btn-outline"
+                            onclick="window.history.back()">
+                        <span>Quay lại</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+
+        (function (document, window, $) {
+            'use strict';
+            var Site = window.Site;
+            $(document).ready(function ($) {
+                Site.run();
+                console.log("a");
+            });
+
+        })(document, window, jQuery);
+
+
+        $('input[name="PaidType"]').bind('click', function () {
+            $('.list-content li').removeClass('active');
+            $(this).parent().parent('li').addClass('active');
+        });
+
+        
+        $(".timeInfo").change(function () {
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
+            var fieldId = $("#field").val();
+            if (startTime != "" && startTime != null && endTime != "" && endTime != null) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CalculatePrice")',
+                    async: false,
+                    data: {
+                        "fieldId": fieldId,
+                        "startTime": startTime,
+                        "endTime": endTime
+                    },
+                    success: function (result) {
+                        var price = parseFloat(result.price)
+                        $("#countPrice").empty();
+                        $("#countPrice").text(price + " đồng");
+                        $("#Price").val(price);
+                    }
+                });
+            }
+        });
+
+        $('#onlineform').submit(function () {
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
+            var playDate = $("#playDate").val();
+            var fieldId = $("#field").val();
+            var error = false;
+            $("#error").hide();
+            $("#error1").hide();
+            $("#error2").hide();
+            $("#error3").hide();
+            var hasErrorContent = false;
+            if (startTime >= endTime) {
+                error = true;
+                hasErrorContent = true;
+                $("#error1").show();
+            }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CheckTimeValidInTimeBlock")',
+                async: false,
+                data: {
+                    "fieldId": fieldId,
+                    "startTime": startTime,
+                    "endTime" : endTime},
+                success: function (result) {
+                    if (!result.Succeed) {
+                        error = true;
+                        hasErrorContent = true;
+                        $("#error2").show();
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    error = true;
+                },
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CheckOrderTimeExist")',
+                async: false,
+                data: {
+                    "fieldId": fieldId,
+                    "startTime": startTime,
+                    "endTime" : endTime,
+                    "playDate" : playDate},
+                success: function (result) {
+                    if (!result.Succeed) {
+                        error = true;
+                        hasErrorContent = true;
+                        $("#error3").show();
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    error = true;
+                },
+            });
+
+            if (error) {
+                if(hasErrorContent){
+                    $("#error").show();
+                }
+                return false;
+            }
+        });
+    </script>
+}
+
