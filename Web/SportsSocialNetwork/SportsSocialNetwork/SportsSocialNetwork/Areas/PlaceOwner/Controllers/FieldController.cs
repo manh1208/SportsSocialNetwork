@@ -10,10 +10,11 @@ using SportsSocialNetwork.Models.Entities;
 using System.Web.Routing;
 using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.Utilities;
+using SportsSocialNetwork.Models.Identity;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
-    [Authorize(Roles = "Chủ sân")]
+    [MyAuthorize(Roles = "Chủ sân")]
     public class FieldController : Controller
     {
         // GET: PlaceOwner/Field

@@ -10,10 +10,11 @@ using System.Web.Mvc;
 using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.Utilities;
 using Microsoft.AspNet.Identity;
+using SportsSocialNetwork.Models.Identity;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
-    [Authorize(Roles = "Chủ sân")]
+    [MyAuthorize(Roles = "Chủ sân")]
     public class EventController : Controller
     {
         // GET: PlaceOwner/Event

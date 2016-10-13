@@ -3,6 +3,7 @@ using SkyWeb.DatVM.Mvc.Autofac;
 using SportsSocialNetwork.Areas.PlaceOwner.Models.ViewModels;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.Identity;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Web.Mvc;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
-    [Authorize(Roles = "Chủ sân")]
+    [MyAuthorize(Roles = "Chủ sân")]
     public class OrderController : BaseController
     {
         // GET: PlaceOwner/Order
