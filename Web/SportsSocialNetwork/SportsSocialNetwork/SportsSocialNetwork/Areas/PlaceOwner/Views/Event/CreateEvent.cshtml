@@ -26,7 +26,7 @@
                     @Html.DropDownListFor(e => e.PlaceId, places, new { @class = "form-control input-lg"})
                     <label class="floating-label">Địa điểm</label>
                 </div>
-                <div class="form-group form-material floating">
+                <div class="form-group form-material floating" id="stDate">
                     @Html.TextBoxFor(e => e.StartDate, "{0:dd/MM/yyyy}", new { @class = "form-control input-lg", @data_plugin = "datepicker", @id = "startDate" })
                     <label class="floating-label">Ngày bắt đầu</label>
                 </div>
@@ -46,7 +46,7 @@
                 <div class="form-group">
                     <div class="col-md-offset-5 col-md-7">
                         @Html.ActionLink("Hủy bỏ", "Index", "Event", null, new { @class = "btn btn-default" })
-                        <input type="submit" value="Tạo sự kiện" class="btn btn-success" />
+                        <input type="submit" id="submitBtn" value="Tạo sự kiện" class="btn btn-success" />
                     </div>
                 </div>
             }
@@ -62,8 +62,84 @@
             var Site = window.Site;
             $(document).ready(function () {
                 Site.run();
+
+                $('#stDate').on('changeDate', function (e) {
+                    // Revalidate the date field
+                    $('#eventForm').formValidation('revalidateField', 'stDate');
+                });
             });
         })(document, window, jQuery);
+
+        //Validation
+        (function () {
+            $('#eventForm').formValidation({
+                framework: "bootstrap",
+                button: {
+                    selector: '#submitBtn',
+                    disabled: 'disabled'
+                },
+                icon: null,
+                fields: {
+                    Name: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Tên sự kiện không được trống'
+                            }
+                        }
+                    },
+                    PlaceId: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Địa điểm không được trống'
+                            }
+                        }
+                    },
+                    StartDate: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Ngày bắt đầu không được trống'
+                            },
+                            date: {
+                                format: 'DD/MM/YYYY',
+                                message: 'Ngày không đúng định dạng - DD/MM/YYYY'
+                            }
+                        }
+                    },
+                    EndDate: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Ngày kết thúc không được trống'
+                            },
+                            date: {
+                                format: 'DD/MM/YYYY',
+                                message: 'Ngày không đúng định dạng - DD/MM/YYYY'
+                            }
+                        }
+                    },
+                    Description: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Mô tả không được trống'
+                            }
+                        }
+                    },
+                    type_numberic: {
+                        validators: {
+                            integer: {
+                                message: 'The value is not an number'
+                            }
+                        }
+                    },
+                    type_date: {
+                        validators: {
+                            date: {
+                                format: 'YYYY/MM/DD'
+                            }
+                        }
+                    }
+                }
+            });
+        })();
     </script>
 
     }

@@ -81,7 +81,7 @@
                                 <div class="col-sm-5">
                                     <div class="input-group">
                                         <span class="input-group-addon">Giá</span>
-                                        <input type="text" class="form-control input-lg" id="tsPrice" />
+                                        <input type="text" class="form-control input-lg" id="tsPrice" name="oPrice"/>
                                         <span class="input-group-addon">VND</span>
                                     </div>
                                 </div>
@@ -288,7 +288,14 @@
                         notEmpty: {
                             message: 'Giá tiền không được trống'
                         },
-                        digits: {
+                        integer: {
+                            message: 'Giá trị nhập phải là số'
+                        }
+                    }
+                },
+                oPrice: {
+                    validators: {
+                        integer: {
                             message: 'Giá trị nhập phải là số'
                         }
                     }
