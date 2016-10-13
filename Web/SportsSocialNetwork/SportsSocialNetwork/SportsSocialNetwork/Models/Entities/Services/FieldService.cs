@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 using SportsSocialNetwork.Models.ViewModels;
+=======
+﻿using SportsSocialNetwork.Models.ViewModels;
+>>>>>>> bf8e71da8211e98aa708b3d4eddbc48faff05703
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,6 +80,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 this.Save();
             }
 		}
+
         public IQueryable<Field> GetField(JQueryDataTableParamModel request, out int totalRecord)
         {
             var filter = request.sSearch;
