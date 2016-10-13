@@ -10,5 +10,5 @@
     android:gravity="center"
     android:textColor="@color/colorPrimary"
     android:textSize="18sp"
-    android:padding="5sp"
+    android:padding="10sp"
     android:textAlignment="inherit"/>

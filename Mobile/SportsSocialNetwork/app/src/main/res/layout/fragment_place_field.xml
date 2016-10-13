@@ -3,9 +3,10 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <Spinner
+        android:id="@+id/spinner_sport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner_sport"
+
         android:background="@drawable/background_spinner"
         android:gravity="center"
         android:layout_margin="5sp"

@@ -1,5 +1,7 @@
 package com.capstone.sportssocialnetwork.fragment;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,13 +19,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.PlaceDetailActivity;
 import com.capstone.sportssocialnetwork.adapter.PlaceAdapter;
-import com.capstone.sportssocialnetwork.model.Place;
 import com.capstone.sportssocialnetwork.model.response.PlaceResponseModel;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.ISocialNetworkService;
@@ -51,11 +55,19 @@ public class PlaceFragment extends Fragment {
     private boolean isFull;
     private boolean flag_loading;
     private ViewHolder viewHolder;
+    private Spinner sportSpinner;
+    private Spinner provinceSpinner;
+    private Spinner districtSpinner;
+    private Context mContext;
+    private boolean isFilterNearby;
+    private SearchView searchView;
+    private SearchView.OnQueryTextListener queryTextListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mContext = getActivity();
     }
 
     @Nullable
@@ -152,7 +164,7 @@ public class PlaceFragment extends Fragment {
                 if (viewHolder.refreshLayout.isRefreshing()) {
                     viewHolder.refreshLayout.setRefreshing(false);
                 }
-                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext,"Lỗi kết nối server", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -189,7 +201,38 @@ public class PlaceFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_booking, menu);
+        inflater.inflate(R.menu.menu_place, menu);
+        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView = null;
+        if (searchItem != null) {
+            searchView = (SearchView) searchItem.getActionView();
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+            queryTextListener = new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    Log.i("onQueryTextChange", newText);
+//                    if (newText.length()<=0){
+//                        eventAdapter.setEventList(mEvents);
+//                        flag_loading =false;
+//                    }
+////                    doSearch(newText);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    Log.i("onQueryTextSubmit", query);
+//                    doSearchAPI(query);
+                    return true;
+                }
+            };
+            searchView.setOnQueryTextListener(queryTextListener);
+            searchView.onActionViewCollapsed();
+        }
     }
 
     @Override
@@ -199,6 +242,12 @@ public class PlaceFragment extends Fragment {
             case R.id.menu_filter:
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 View v= getActivity().getLayoutInflater().inflate(R.layout.dialog_place_filter,null,false);
+                sportSpinner = (Spinner) v.findViewById(R.id.sp_filter_sport);
+                provinceSpinner = (Spinner) v.findViewById(R.id.sp_filter_province);
+                districtSpinner = (Spinner) v.findViewById(R.id.sp_filter_district);
+                createSportSpinner();
+                createProvinceSpinner();
+                createDistrictSpinner();
                 builder.setView(v)
                         .setPositiveButton("Lọc", new DialogInterface.OnClickListener() {
                             @Override
@@ -212,6 +261,41 @@ public class PlaceFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void createSportSpinner() {
+        List<String> sports = new ArrayList<String>();
+        sports.add("Tất cả");
+        sports.add("Bóng đá");
+        sports.add("Bóng rổ");
+        sports.add("Bóng chuyền");
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter(getActivity(), R.layout.item_spinner, sports);
+        arrayAdapter.setDropDownViewResource(R.layout.item_spinner);
+        sportSpinner.setAdapter(arrayAdapter);
+        sportSpinner.setSelection(0);
+    }
+    private void createProvinceSpinner() {
+        List<String> sports = new ArrayList<String>();
+        sports.add("Tất cả");
+        sports.add("Bóng đá");
+        sports.add("Bóng rổ");
+        sports.add("Bóng chuyền");
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter(getActivity(), R.layout.item_spinner, sports);
+        arrayAdapter.setDropDownViewResource(R.layout.item_spinner);
+        provinceSpinner.setAdapter(arrayAdapter);
+        provinceSpinner.setSelection(0);
+    }
+    private void createDistrictSpinner() {
+        List<String> sports = new ArrayList<String>();
+        sports.add("Tất cả");
+        sports.add("Bóng đá");
+        sports.add("Bóng rổ");
+        sports.add("Bóng chuyền");
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter(getActivity(), R.layout.item_spinner, sports);
+        arrayAdapter.setDropDownViewResource(R.layout.item_spinner);
+        districtSpinner.setAdapter(arrayAdapter);
+        districtSpinner.setSelection(0);
+    }
+
 
     private final class ViewHolder {
         ListView lvPlace;

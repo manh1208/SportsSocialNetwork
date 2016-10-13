@@ -55,12 +55,14 @@ public class FeedFragment extends Fragment {
     private int take;
     private boolean isFull;
     private boolean flag_loading;
+    private Context mContext;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mContext = getActivity();
     }
 
     @Nullable
@@ -243,7 +245,7 @@ public class FeedFragment extends Fragment {
                 if (viewHolder.layoutRefresh.isRefreshing()) {
                     viewHolder.layoutRefresh.setRefreshing(false);
                 }
-                Toast.makeText(getActivity(), "Lỗi server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Lỗi server", Toast.LENGTH_SHORT).show();
             }
         });
     }
