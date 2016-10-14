@@ -111,5 +111,11 @@ namespace SportsSocialNetwork.Models.Enumerable
         PaidOnline = 4
     }
 
+    public enum NotificationType
+    {
+        [Description("Cập nhật đơn đặt sân")]
+        UpdateOrder = 1,
+    }
+
 
 }
