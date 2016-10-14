@@ -65,7 +65,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             List<PlaceImage> placeImages = _placeImageService.Get(p => p.PlaceId == id.Value).ToList();
 
             Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
-            Province province = vietnam.VietNamese.Where(p => p.Name.Equals(place.City)).FirstOrDefault();
+            Province province = vietnam.VietNamese.Where(p => (p.Type+" "+p.Name).Equals(place.City)).FirstOrDefault();
 
 
             var provinces = vietnam.VietNamese.Select(p =>
@@ -87,7 +87,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                                                Value = d.Type + " " + d.Name
                                            })
                                            .OrderBy(d => d.Value);
-                District district = province.Districts.Where(d => d.Name.Equals(place.District)).FirstOrDefault();
+                District district = province.Districts.Where(d => (d.Type+" "+d.Name).Equals(place.District)).FirstOrDefault();
                 if (district != null)
                 {
                     wards = district.Wards.Select(w =>
@@ -282,7 +282,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         {
             var result = new AjaxOperationResult<IEnumerable<SelectListItem>>();
             Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
-            Province province = vietnam.VietNamese.Where(p => p.Name.Equals(provinceName)).FirstOrDefault();
+            Province province = vietnam.VietNamese.Where(p => (p.Type+" "+p.Name).Equals(provinceName)).FirstOrDefault();
             IOrderedEnumerable<SelectListItem> districts = null;
             if (province != null)
             {
@@ -306,12 +306,12 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         {
             var result = new AjaxOperationResult<IEnumerable<SelectListItem>>();
             Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
-            Province province = vietnam.VietNamese.Where(p => p.Name.Equals(provinceName)).FirstOrDefault();
+            Province province = vietnam.VietNamese.Where(p => (p.Type+" "+p.Name).Equals(provinceName)).FirstOrDefault();
             IOrderedEnumerable<SelectListItem> wards = null;
             if (province != null)
             {
                 District district = province.Districts
-                                            .Where(d => d.Name.Equals(districtName))
+                                            .Where(d => (d.Type+" "+d.Name).Equals(districtName))
                                             .FirstOrDefault();
                 if (district != null)
                 {

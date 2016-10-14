@@ -28,11 +28,11 @@
                 <label class="floating-label">Địa điểm</label>
             </div>
             <div class="form-group form-material floating">
-                @Html.TextBoxFor(e => e.StartDate, "{0:MM/dd/yyyy}", new { @class = "form-control input-lg datepicker", @data_plugin = "datepicker" })
+                @Html.TextBoxFor(e => e.StartDate, "{0:dd/MM/yyyy}", new { @class = "form-control input-lg datepicker", @data_plugin = "datepicker", @id = "startDate" })
                 <label class="floating-label">Ngày bắt đầu</label>
             </div>
             <div class="form-group form-material floating">
-                @Html.TextBoxFor(e => e.EndDate, "{0:MM/dd/yyyy}", new { @class = "form-control input-lg datepicker", @data_plugin = "datepicker" })
+                @Html.TextBoxFor(e => e.EndDate, "{0:dd/MM/yyyy}", new { @class = "form-control input-lg datepicker", @data_plugin = "datepicker", @id = "endDate" })
                 <label class="floating-label">Ngày kết thúc</label>
             </div>
             <div class="form-group form-material floating">
@@ -145,6 +145,13 @@
         Site.run();
       });
     })(document, window, jQuery);
+
+    $('#startDate').datepicker({
+        dateFormat: 'dd/mm/yy'
+    })
+    $('#endDate').datepicker({
+        dateFormat: 'dd/mm/yy'
+    })
 </script>
 
     }

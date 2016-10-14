@@ -68,6 +68,9 @@
         $('#startDate').datepicker({
             dateFormat: 'dd/mm/yy'
         })
+        $('#endDate').datepicker({
+            dateFormat: 'dd/mm/yy'
+        })
 
         $(document).on('change', "#startDate", function () {
             $('#eventForm').formValidation('revalidateField', 'StartDate');
