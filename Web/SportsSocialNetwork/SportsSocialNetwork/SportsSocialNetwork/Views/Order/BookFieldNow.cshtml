@@ -14,7 +14,7 @@
                 <div class="summary-errors alert alert-danger alert-dismissible" style="display: none; text-align:left; padding:0px 0px 0px 10px" id="error">
                     <ul>
                         <li style="display: none" id="error1">
-                            <span style="color:red; font-size:12px">Thời gian không hợp lệ</span>
+                            <span style="color:red; font-size:12px">Thời gian (ngày / giờ) không hợp lệ</span>
                         </li>
                         <li style="display: none" id="error2">
                             <span style="color:red; font-size:12px">Thời gian không nằm trong các khung giờ</span>
@@ -51,22 +51,19 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label">Ngày chơi:</label>
                     <div class="col-md-4 input-group">
-                        <span class="input-group-addon"><i class="icon wb-calendar" aria-hidden="true"></i></span>
                         @Html.TextBoxFor(p => p.CreateDate, "{0:dd-MM-yyyy}", new { @class = "form-control", @id = "playDate", @data_plugin = "datepicker", @Value = "" })
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label"></label>
+                    <label class="col-md-4 control-label">Giờ bắt đầu</label>
                         <div class="input-group col-md-4">
-                            <span class="input-group-addon">Giờ bắt đầu</span>
                             @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker timeInfo form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
                             </div>
                     
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label"></label>
+                    <label class="col-md-4 control-label">Giờ kết thúc</label>
                     <div class="input-group col-md-4">
-                        <span class="input-group-addon">Giờ kết thúc</span>
                         @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker timeInfo form-control", @id = "endTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
                     </div>
 
@@ -123,6 +120,83 @@
 @section Scripts{
     <script>
 
+        (function () {
+            $('#onlineform').formValidation({
+                framework: "bootstrap",
+                button: {
+                    selector: '#createOrder',
+                    disabled: 'disabled'
+                },
+                icon: null,
+                fields: {
+                    PayerName: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Không được để trống'
+                            }
+                        }
+                    },
+                    CreateDate: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Không được để trống'
+                            }
+                        }
+                    },
+                    StartTime: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Không được để trống'
+                            }
+                        }
+                    },
+                    EndTime: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Không được để trống'
+                            }
+                        }
+                    },
+                    PayerEmail: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Email không được trống'
+                            },
+                            emailAddress: {
+                                message: 'Email không đúng định dạng'
+                            }
+                        }
+                    },
+                    PayerPhone: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Số điện thoại không được trống'
+                            },
+                            digits: {
+                                message: 'Số điện thoại phải là số'
+                            },
+                            stringLength: {
+                                min: 10,
+                                message: 'Số điện thoại phải từ 10 số trở lên'
+                            }
+                        }
+                    }
+                }
+            });
+        })();
+
+        $("#startTime").on("change", function () {
+            $('#onlineform').formValidation('revalidateField', 'StartTime');
+        });
+
+        $("#endTime").on("change", function () {
+            $('#onlineform').formValidation('revalidateField', 'EndTime');
+        });
+
+        $("#playDate").on("change", function () {
+            $('#onlineform').formValidation('revalidateField', 'CreateDate');
+        });
+
         (function (document, window, $) {
             'use strict';
             var Site = window.Site;
@@ -133,6 +207,9 @@
 
         })(document, window, jQuery);
 
+        $('#playDate').datepicker({
+            format: 'dd/mm/yyyy'
+        });
 
         $('input[name="PaidType"]').bind('click', function () {
             $('.list-content li').removeClass('active');
@@ -155,7 +232,7 @@
                         "endTime": endTime
                     },
                     success: function (result) {
-                        var price = parseFloat(result.price)
+                        var price = parseInt(result.price)
                         $("#countPrice").empty();
                         $("#countPrice").text(price + " đồng");
                         $("#Price").val(price);
@@ -175,53 +252,57 @@
             $("#error2").hide();
             $("#error3").hide();
             var hasErrorContent = false;
-            if (startTime >= endTime) {
+            if (startTime >= endTime || startTime == null || startTime == "" || endTime == null || endTime == ""
+                || playDate == "" || playDate == null) {
                 error = true;
                 hasErrorContent = true;
                 $("#error1").show();
-            }
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("CheckTimeValidInTimeBlock")',
-                async: false,
-                data: {
-                    "fieldId": fieldId,
-                    "startTime": startTime,
-                    "endTime" : endTime},
-                success: function (result) {
-                    if (!result.Succeed) {
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CheckTimeValidInTimeBlock")',
+                    async: false,
+                    data: {
+                        "fieldId": fieldId,
+                        "startTime": startTime,
+                        "endTime": endTime
+                    },
+                    success: function (result) {
+                        if (!result.Succeed) {
+                            error = true;
+                            hasErrorContent = true;
+                            $("#error2").show();
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                         error = true;
-                        hasErrorContent = true;
-                        $("#error2").show();
-                    }
-                },
-                error: function (result) {
-                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                    error = true;
-                },
-            });
+                    },
+                });
 
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("CheckOrderTimeExist")',
-                async: false,
-                data: {
-                    "fieldId": fieldId,
-                    "startTime": startTime,
-                    "endTime" : endTime,
-                    "playDate" : playDate},
-                success: function (result) {
-                    if (!result.Succeed) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CheckOrderTimeExist")',
+                    async: false,
+                    data: {
+                        "fieldId": fieldId,
+                        "startTime": startTime,
+                        "endTime": endTime,
+                        "playDate": playDate
+                    },
+                    success: function (result) {
+                        if (!result.Succeed) {
+                            error = true;
+                            hasErrorContent = true;
+                            $("#error3").show();
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                         error = true;
-                        hasErrorContent = true;
-                        $("#error3").show();
-                    }
-                },
-                error: function (result) {
-                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                    error = true;
-                },
-            });
+                    },
+                });
+            }
 
             if (error) {
                 if(hasErrorContent){

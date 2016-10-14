@@ -10,9 +10,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Device.Location;
+using SportsSocialNetwork.Models.Identity;
 
 namespace SportsSocialNetwork.Controllers
 {
+    [MyAuthorize(Roles = IdentityMultipleRoles.SSN)]
     public class PlaceController : BaseController
     {
         // GET: Place

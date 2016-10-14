@@ -812,6 +812,7 @@
     <Compile Include="Models\ViewModels\LikeViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\MemberOrderViewModel.cs" />
     <Compile Include="Models\ViewModels\NewsCommentViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>

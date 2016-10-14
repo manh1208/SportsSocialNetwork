@@ -10,9 +10,11 @@ using SportsSocialNetwork.Models.ViewModels;
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Identity;
 
 namespace SportsSocialNetwork.Controllers
 {
+    [MyAuthorize(Roles = IdentityMultipleRoles.SSN)]
     public class FieldController : BaseController
     {
         // GET: Field
