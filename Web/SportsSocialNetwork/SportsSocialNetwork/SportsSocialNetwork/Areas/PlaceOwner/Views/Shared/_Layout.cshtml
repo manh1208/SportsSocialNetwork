@@ -25,9 +25,17 @@
     <link rel="stylesheet" href="~/Content/assets/vendor/flag-icon-css/flag-icon.css">
 
     <!-- Plugin -->
+    <link rel="stylesheet" href="~/Content/assets/vendor/select2/select2.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-select/bootstrap-select.css">
     <link rel="stylesheet" href="~/Content/assets/vendor/chartist-js/chartist.css">
     <link rel="stylesheet" href="~/Content/assets/vendor/jvectormap/jquery-jvectormap.css">
     <link rel="stylesheet" href="~/Content/assets/vendor/formvalidation/formValidation.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/jt-timepicker/jquery-timepicker.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.css">   
+    <link rel="stylesheet" href="~/Content/assets/vendor/asrange/asRange.css"> 
+    <link rel="stylesheet" href="~/Content/assets/vendor/multi-select/multi-select.css">
+
+
 
     <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.css">
 
@@ -55,6 +63,14 @@
     <link rel="stylesheet" href="~/Content/assets/fonts/brand-icons/brand-icons.min.css">
     <link rel="stylesheet" href="~/Content/font-awesome-4.6.3/css/font-awesome.min.css">
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
+
+    <link href="~/Content/js/sweetAlert/sweetalert.css" rel="stylesheet" />
+
+    <link href="~/Content/css/custom-css.css" rel="stylesheet" />
+
+    <link href="~/Content/js/sweetAlert/sweetalert.css" rel="stylesheet" />
+
+    <link href="~/Content/css/custom-css.css" rel="stylesheet" />
 
     
 
@@ -97,7 +113,7 @@
                 <i class="icon wb-search" aria-hidden="true"></i>
             </button>
             <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
-                <img class="navbar-brand-logo" src="~/Content/images/logo.png" title="Sports"/>
+                <img class="navbar-brand-logo" src="~/Content/images/logo.png" title="Sports" />
                 <span class="navbar-brand-text"> Sports social network</span>
             </div>
         </div>
@@ -407,7 +423,6 @@
                             <a href="@Url.Action("index","Event")" data-slug="dashboard">
                                 <i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
                                 <span class="site-menu-title">Quản lý sự kiện</span>
-
                             </a>
                         </li>
                     </ul>
@@ -493,11 +508,105 @@
     <footer class="site-footer">
         <span class="site-footer-legal">© 2015 Remark</span>
         <div class="site-footer-right">
-            
+
         </div>
     </footer>
 
+
     <!-- Core  -->
+    <script src="~/Content/assets/vendor/jquery/jquery.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap/bootstrap.js"></script>
+    <script src="~/Content/assets/vendor/animsition/jquery.animsition.js"></script>
+    <script src="~/Content/assets/vendor/asscroll/jquery-asScroll.js"></script>
+    <script src="~/Content/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
+    <script src="~/Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
+    <script src="~/Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+
+    <!-- Plugins -->
+
+    <script src="~/Content/assets/vendor/select2/select2.min.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap-select/bootstrap-select.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/assets/vendor/asrange/jquery-asRange.min.js"></script>
+    <script src="~/Content/assets/vendor/multi-select/jquery.multi-select.js"></script>
+    <script src="~/Content/assets/vendor/datepair-js/datepair.min.js"></script>
+    <script src="~/Content/assets/vendor/datepair-js/jquery.datepair.min.js"></script>
+    <!--Clockpicker-->
+    <script src="~/Content/assets/vendor/clockpicker/bootstrap-clockpicker.min.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/assets/vendor/jt-timepicker/jquery.timepicker.min.js"></script>
+    <script src="~/Content/assets/vendor/datepair-js/datepair.min.js"></script>
+    <script src="~/Content/assets/vendor/datepair-js/jquery.datepair.min.js"></script>
+    <script src="~/Content/assets/vendor/multi-select/jquery.multi-select.js"></script>
+
+
+
+    <script src="~/Content/assets/vendor/switchery/switchery.min.js"></script>
+    <script src="~/Content/assets/vendor/intro-js/intro.js"></script>
+    <script src="~/Content/assets/vendor/screenfull/screenfull.js"></script>
+    <script src="~/Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
+
+    <script src="~/Content/assets/vendor/skycons/skycons.js"></script>
+    <script src="~/Content/assets/vendor/chartist-js/chartist.min.js"></script>
+    <script src="~/Content/assets/vendor/aspieprogress/jquery-asPieProgress.min.js"></script>
+    <script src="~/Content/assets/vendor/jvectormap/jquery-jvectormap.min.js"></script>
+    <script src="~/Content/assets/vendor/jvectormap/maps/jquery-jvectormap-ca-lcc-en.js"></script>
+    <script src="~/Content/assets/vendor/matchheight/jquery.matchHeight-min.js"></script>
+
+    <!-- Scripts -->
+    
+
+
+
+    <script src="~/Content/assets/js/core.js"></script>
+    <script src="~/Content/assets/js/site.js"></script>
+
+    <script src="~/Content/assets/js/components/select2.js"></script>
+    <script src="~/Content/assets/js/components/bootstrap-select.js"></script>
+    <script src="~/Content/assets/js/components/asrange.js"></script>
+    <script src="~/Content/assets/js/components/multi-select.js"></script>
+    <script src="~/Content/assets/js/components/bootstrap-datepicker.js"></script>
+
+    <script src="~/Content/assets/js/components/jt-timepicker.js"></script>
+    <script src="~/Content/assets/js/components/datepair-js.js"></script>
+
+    <script src="~/Content/assets/js/sections/menu.js"></script>
+    <script src="~/Content/assets/js/sections/menubar.js"></script>
+    <script src="~/Content/assets/js/sections/sidebar.js"></script>
+
+    <script src="~/Content/assets/js/configs/config-colors.js"></script>
+    <script src="~/Content/assets/js/configs/config-tour.js"></script>
+
+    <script src="~/Content/assets/js/components/asscrollable.js"></script>
+    <script src="~/Content/assets/js/components/animsition.js"></script>
+    @*<script src="~/Content/assets/js/components/slidepanel.js"></script>*@
+    <script src="~/Content/assets/js/components/switchery.js"></script>
+    <script src="~/Content/assets/js/components/matchheight.js"></script>
+    @*<script src="~/Content/assets/js/components/jvectormap.js"></script>*@
+
+    <script src="~/Content/assets/js/components/jquery-placeholder.js"></script>
+    <script src="~/Content/assets/js/components/material.js"></script>
+
+
+    <script src="~/Content/assets/js/datatables/jquery.dataTables.js"></script>
+    <script src="~/Content/assets/js/bootstrap/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Content/assets/js/bootstrap/js/dataTables.responsive.min_2.js"></script>
+    <script src="~/Content/assets/js/bootstrap/js/responsive.bootstrap.min.js"></script>
+    <script src="~/Content/js/custom-script.js"></script>
+
+    <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
+
+    <script src="~/Content/assets/js/components/bootstrap-datepicker.js"></script>
+    <script src="~/Content/assets/js/components/jt-timepicker.js"></script>
+    <script src="~/Content/assets/js/components/datepair-js.js"></script>
+    <script src="~/Content/assets/js/components/clockpicker.js"></script>
+
+    <script src="~/Content/js/custom-script.js"></script>
+
+    <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
+</body>
+
+    @*<!-- Core  -->
     <script src="~/Content/assets/vendor/jquery/jquery.js"></script>
     <script src="~/Content/assets/vendor/bootstrap/bootstrap.js"></script>
     <script src="~/Content/assets/vendor/animsition/jquery.animsition.js"></script>
@@ -540,6 +649,8 @@
     <script src="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload-ui.js"></script>
     
 
+
+
     <!-- Scripts -->
     <script src="~/Content/assets/js/core.js"></script>
     <script src="~/Content/assets/js/site.js"></script>
@@ -566,7 +677,7 @@
 
     <script src="~/Content/assets/js/components/material.min.js"></script>
 
-    <script src="~/Content/assets/js/components/bootstrap-datepicker.js"></script>
+    <script src="~/Content/assets/js/components/bootstrap-datepicker.js"></script>*@
 
     <script src="~/Content/js/custom-script.js"></script>
 
@@ -578,6 +689,8 @@
         }
     </script>
     </body>
+
+
 @RenderSection("Scripts", false)
 
 </html>

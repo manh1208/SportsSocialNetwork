@@ -274,8 +274,10 @@
     <Compile Include="Areas\Moderator\ModeratorAreaRegistration.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\EventController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\FieldController.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\FieldScheduleController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\OrderController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\PlaceController.cs" />
+    <Compile Include="Areas\PlaceOwner\Models\ViewModels\FieldScheduleDetailViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDatatableViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDetailViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\PlaceDetailViewModel.cs" />
@@ -871,6 +873,8 @@
     <Compile Include="Models\Utilities\AddressUtil.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Api\multi-select.js" />
+    <Content Include="Areas\Api\multi-select.min.js" />
     <Content Include="Content\assets\css\apps\calendar.css" />
     <Content Include="Content\assets\css\apps\calendar.min.css" />
     <Content Include="Content\assets\css\apps\contacts.css" />
@@ -1133,6 +1137,8 @@
     <Content Include="Content\assets\js\components\matchheight.min.js" />
     <Content Include="Content\assets\js\components\material.js" />
     <Content Include="Content\assets\js\components\material.min.js" />
+    <Content Include="Content\assets\js\components\multi-select.js" />
+    <Content Include="Content\assets\js\components\multi-select.min.js" />
     <Content Include="Content\assets\js\components\nestable.min.js" />
     <Content Include="Content\assets\js\components\nprogress.min.js" />
     <Content Include="Content\assets\js\components\owl-carousel.js" />
@@ -3332,6 +3338,10 @@
     <Content Include="Areas\PlaceOwner\Views\Field\FieldDetail.cshtml" />
     <Content Include="Areas\PlaceOwner\Views\Field\FieldList.cshtml" />
     <Content Include="Areas\PlaceOwner\Views\Field\FieldInfoModal.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\FieldSchedule\Index.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\FieldSchedule\Detail.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\FieldSchedule\Create.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\FieldSchedule\Update.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

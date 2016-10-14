@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+using SportsSocialNetwork.Models.ViewModels;
+=======
+﻿using SportsSocialNetwork.Models.ViewModels;
+>>>>>>> bf8e71da8211e98aa708b3d4eddbc48faff05703
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +20,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         Field GetFieldInfo(int id);
 
         Field ChangeFieldStatus(int id, int status);
+        IQueryable<Field> GetField(JQueryDataTableParamModel request, out int totalRecord);
 
         IEnumerable<Field> FindAllFieldsOfPlace(int id);
         
@@ -73,6 +79,24 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 this.Update(searchField);
                 this.Save();
             }
+		}
+
+        public IQueryable<Field> GetField(JQueryDataTableParamModel request, out int totalRecord)
+        {
+            var filter = request.sSearch;
+            var list1 = this.GetActive(u => u.Active == true);
+
+            var list = list1.Where(
+                u => filter == null ||
+                u.Name.ToLower().Contains(filter.ToLower())                
+                );
+
+            totalRecord = list.Count();
+            var result = list.OrderBy(u => u.Name)
+                .Skip(request.iDisplayStart)
+                             .Take(request.iDisplayLength);
+            return result;
+
         }
 
         #endregion

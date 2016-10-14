@@ -4,10 +4,7 @@
 }
 
 <style>
-    dt, dd {
-        <style> dt, dd;
-    }
-
+    dt, dd 
     {
         font-size: 1.1em;
     }
@@ -44,11 +41,16 @@
                 </div>
                 <div class="panel-body">
                     <div>
+                        @*@Html.ValidationSummary()*@
                         <table align="center">
                             <tr>
                                 <td>Tên môn thể thao:</td>
-                                <td>@Html.TextBoxFor(m => m.Name, new { @class = "form-control input-lg border=0", @id = "createSport" })</td>
-
+                                <td>@Html.TextBoxFor(m => m.Name, new { @class = "form-control input-lg border=0"})</td>
+                                @*@Html.ValidationMessageFor(m => m.Name, "", new { @class = "help-block text-danger" })*@
+                            </tr>
+                            <tr>
+                                <td>Mô tả:</td>
+                                <td>@Html.TextAreaFor(m => m.Description, new { @class = "form-control input-lg border = 1"})</td>
                             </tr>                     
                         </table>
                     </div>
