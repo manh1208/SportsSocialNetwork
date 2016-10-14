@@ -11,6 +11,7 @@ using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.Utilities;
 using Microsoft.AspNet.Identity;
 using SportsSocialNetwork.Models.Identity;
+using System.Globalization;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
@@ -89,6 +90,10 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         public ActionResult createEvent(Event evt, HttpPostedFileBase image)
         {
             var _eventService = this.Service<IEventService>();
+            string stDate = Request["StartDate"];
+            evt.StartDate = DateTime.ParseExact(stDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            string enDate = Request["EndDate"];
+            evt.EndDate = DateTime.ParseExact(enDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             _eventService.saveEvent(evt, image);
 
             return RedirectToAction("index");
@@ -100,6 +105,10 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             try
             {
                 var _eventService = this.Service<IEventService>();
+                string stDate = Request["StartDate"];
+                evt.StartDate = DateTime.ParseExact(stDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                string enDate = Request["EndDate"];
+                evt.EndDate = DateTime.ParseExact(enDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 _eventService.saveEvent(evt, image);
                 result.Succeed = true;
             }

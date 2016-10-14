@@ -218,6 +218,13 @@
                 });
             })(document, window, jQuery);
 
+            $('#startDate').datepicker({
+                dateFormat: 'dd/mm/yy'
+            })
+            $('#endDate').datepicker({
+                dateFormat: 'dd/mm/yy'
+            })
+
             $('#eventForm').submit(function (e) {
                 e.preventDefault();
                 var formData = new FormData(document.getElementById('eventForm'));

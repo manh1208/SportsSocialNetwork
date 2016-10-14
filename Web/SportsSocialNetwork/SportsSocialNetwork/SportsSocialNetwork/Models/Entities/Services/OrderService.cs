@@ -18,6 +18,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         bool checkOrderTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime playDate);
 
         Order CreateOrder(String userId, int fieldId, DateTime startTime, DateTime endTime, String note,double price, int? paidType);
+
         #endregion
 
         void test();
@@ -96,7 +97,6 @@ namespace SportsSocialNetwork.Models.Entities.Services
         public IEnumerable<Order> GetAllOrderByFieldId(int fieldId) {
             return this.GetActive(x=> x.FieldId == fieldId);
         }
-
 
         //private float CalculatePrice(Order order)
         //{
