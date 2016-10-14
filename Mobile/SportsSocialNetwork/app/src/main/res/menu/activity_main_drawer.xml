@@ -11,9 +11,9 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="Quản lý order" />
         <item
-            android:id="@+id/nav_manage_checkin"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Checkin" />
+            android:id="@+id/nav_manage_event"
+            android:icon="@drawable/ic_scaner"
+            android:title="Quản lý sự kiện" />
     </group>
 
 
