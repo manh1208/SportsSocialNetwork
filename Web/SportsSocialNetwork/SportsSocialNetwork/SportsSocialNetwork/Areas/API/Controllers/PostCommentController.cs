@@ -44,6 +44,10 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         public ActionResult Comment(int postId, String userId, String content , HttpPostedFileBase image) {
             var service = this.Service<IPostCommentService>();
 
+            var notiService = this.Service<INotificationService>();
+
+            var postService = this.Service<IPostService>();
+
             ResponseModel<PostCommentDetailViewModel> response = null;
 
             try {
@@ -57,6 +61,14 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 PostComment comment = service.Comment(postId, userId, content,commentImage);
 
+
+                //AspNetUser commentedUser = comment.AspNetUser;
+
+                //Post post = comment.Post;
+
+                //AspNetUser user = postService.GetUserNameOfPost(post.Id);
+
+                //Notification noti=  notiService.SaveNoti(user.Id, "Comment", commentedUser.UserName + "đã bình luận về bài viết của bạn",1,post.Id,null);
 
                 PostCommentDetailViewModel result = Mapper.Map<PostCommentDetailViewModel>(comment);
 
