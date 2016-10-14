@@ -744,6 +744,7 @@
     <Compile Include="Models\Notifications\IOS.cs" />
     <Compile Include="Models\Notifications\NotificationModel.cs" />
     <Compile Include="Models\Utilities\EmailSender.cs" />
+    <Compile Include="Models\Utilities\Setting.cs" />
     <Compile Include="Models\Utilities\Utils.cs" />
     <Compile Include="Models\ViewModels\AjaxOperationResult.cs" />
     <Compile Include="Models\ViewModels\AspNetRoleViewModelGen.cs">
