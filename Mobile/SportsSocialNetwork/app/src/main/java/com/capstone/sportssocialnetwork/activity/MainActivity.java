@@ -151,8 +151,8 @@ public class MainActivity extends AppCompatActivity
                                         if (focus != null) {
                                             focus.requestFocus();
                                         } else {
-                                            int code = Integer.parseInt(c);
-                                            sendCode(code);
+//                                            int code = Integer.parseInt(c);
+                                            sendCode(c);
                                         }
                                     }
                                 });
@@ -178,8 +178,9 @@ public class MainActivity extends AppCompatActivity
 //        AlertDialog alert1 = builder.create();
 //        alert1.show();
         try {
-            int code = Integer.parseInt(result.getText());
-            sendCode(code);
+//            int code = Integer.parseInt(result.getText());
+            Toast.makeText(MainActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
+            sendCode(result.getText());
         } catch (Exception e) {
             Toast.makeText(MainActivity.this, "QR Code không hợp lệ", Toast.LENGTH_SHORT).show();
             recreate();
@@ -187,7 +188,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void sendCode(int code) {
+    private void sendCode(String code) {
         AlertDialog.Builder buider = new AlertDialog.Builder(MainActivity.this);
         View v = getLayoutInflater().inflate(R.layout.dialog_order_info, null, false);
         buider.setView(v)
