@@ -2,6 +2,8 @@
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -178,6 +180,11 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             result.FieldName = order.Field.Name;
 
             result.PlaceName = order.Field.Place.Name;
+
+            result.Status= Utils.GetEnumDescription(OrderStatus.CheckedIn);
+
+            result.PaidType= Utils.GetEnumDescription((OrderPaidType)order.PaidType);
+
             response = new ResponseModel<OrderSimpleViewModel>(true, "Đơn đặt sân đã được checkin", null, result);
 
             return Json(response);
