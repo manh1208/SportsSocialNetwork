@@ -12,11 +12,15 @@ using SportsSocialNetwork.Areas.PlaceOwner.Models.ViewModels;
 using System.Threading.Tasks;
 using NganLuong;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Identity;
+using System.Globalization;
 
 namespace SportsSocialNetwork.Controllers
 {
+    [MyAuthorize(Roles = IdentityMultipleRoles.SSN)]
     public class OrderController : BaseController
     {
+
         // GET: Order
         public ActionResult Index()
         {
@@ -235,7 +239,7 @@ namespace SportsSocialNetwork.Controllers
             var result = new AjaxOperationResult();
             TimeSpan StartTime = TimeSpan.Parse(startTime);
             TimeSpan EndTime = TimeSpan.Parse(endTime);
-            DateTime PlayDate = DateTime.Parse(playDate);
+            DateTime PlayDate = DateTime.ParseExact(playDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             var _orderService = this.Service<IOrderService>();
             var _fieldScheduleService = this.Service<IFieldScheduleService>();
 
@@ -342,12 +346,12 @@ namespace SportsSocialNetwork.Controllers
 
             var _orderService = this.Service<IOrderService>();
             var order = new Order();
-           
-                order.UserId = User.Identity.GetUserId();
+            DateTime PlayDate = DateTime.ParseExact(Request["CreateDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            order.UserId = User.Identity.GetUserId();
                 order.FieldId = model.FieldId;
-                DateTime sTime = new DateTime(model.CreateDate.Year, model.CreateDate.Month, model.CreateDate.Day, model.StartTime.Hour,
+                DateTime sTime = new DateTime(PlayDate.Year, PlayDate.Month, PlayDate.Day, model.StartTime.Hour,
                     model.StartTime.Minute, model.StartTime.Second);
-                DateTime eTime = new DateTime(model.CreateDate.Year, model.CreateDate.Month, model.CreateDate.Day, model.EndTime.Hour,
+                DateTime eTime = new DateTime(PlayDate.Year, PlayDate.Month, PlayDate.Day, model.EndTime.Hour,
                     model.EndTime.Minute, model.EndTime.Second);
                 order.StartTime = sTime;
                 order.EndTime = eTime;
