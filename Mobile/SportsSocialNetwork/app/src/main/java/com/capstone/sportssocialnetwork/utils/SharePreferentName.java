@@ -5,4 +5,5 @@ package com.capstone.sportssocialnetwork.utils;
  */
 public class SharePreferentName {
     public static final String SHARE_USER_ID = "userId";
+    public static final String SHARE_USER_ROLE = "userRole";
 }
