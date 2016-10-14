@@ -72,7 +72,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                             new SelectListItem
                             {
                                 Text = p.Type + " " + p.Name,
-                                Value = p.Name
+                                Value = p.Type + " " + p.Name
                             })
                             .OrderBy(p => p.Value);
 
@@ -84,7 +84,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                                            new SelectListItem
                                            {
                                                Text = d.Type + " " + d.Name,
-                                               Value = d.Name
+                                               Value = d.Type + " " + d.Name
                                            })
                                            .OrderBy(d => d.Value);
                 District district = province.Districts.Where(d => d.Name.Equals(place.District)).FirstOrDefault();
@@ -94,7 +94,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                                           new SelectListItem
                                           {
                                               Text = w.Type + " " + w.Name,
-                                              Value = w.Name
+                                              Value = w.Type + " " + w.Name
                                           })
                                           .OrderBy(w => w.Value);
                 }
@@ -271,7 +271,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                                 new SelectListItem
                                 {
                                     Text = p.Type + " " + p.Name,
-                                    Value = p.Name
+                                    Value = p.Type + " " + p.Name
                                 })
                                 .OrderBy(p => p.Value);
             return provinces;
@@ -290,7 +290,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                                                     new SelectListItem
                                                     {
                                                         Text = d.Type + " " + d.Name,
-                                                        Value = d.Name
+                                                        Value = d.Type + " " + d.Name
                                                     })
                                                     .OrderBy(d => d.Value);
             }
@@ -319,7 +319,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                                                new SelectListItem
                                                {
                                                    Text = w.Type + " " + w.Name,
-                                                   Value = w.Name
+                                                   Value = w.Type + " " + w.Name
                                                })
                                               .OrderBy(w => w.Value);
                 }
