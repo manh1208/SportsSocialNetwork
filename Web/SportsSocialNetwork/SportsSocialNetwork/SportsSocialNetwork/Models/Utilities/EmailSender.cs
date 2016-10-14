@@ -50,7 +50,7 @@ namespace SportsSocialNetwork.Models.Utilities
 
                 client.EnableSsl = true;
                 client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential("ssncapstoneproject@gmail.com", "sportsocialnetwork");
+                client.Credentials = new NetworkCredential(Setting.CREDENTIAL_EMAIL, Setting.CREDENTIAL_PASSWORDS);
                 client.Host = "smtp.gmail.com";
                 client.Port = 587;
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
