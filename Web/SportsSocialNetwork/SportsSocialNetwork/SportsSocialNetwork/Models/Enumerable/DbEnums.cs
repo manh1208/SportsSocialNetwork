@@ -74,7 +74,9 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("Không chấp nhận")]
         Unapproved = 3,
         [Description("Hủy")]
-        Cancel = 4
+        Cancel = 4,
+        [Description("Đã nhận sân")]
+        CheckedIn = 5,
     }
 
     public enum FieldScheduleStatus
