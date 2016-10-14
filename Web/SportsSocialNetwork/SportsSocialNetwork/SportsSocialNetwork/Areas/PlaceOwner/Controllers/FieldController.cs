@@ -10,9 +10,12 @@ using SportsSocialNetwork.Models.Entities;
 using System.Web.Routing;
 using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.Utilities;
+using SportsSocialNetwork.Models.Identity;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
+    [MyAuthorize(Roles = "Chủ sân")]
+
     public class FieldController : Controller
     {
         // GET: PlaceOwner/Field
@@ -39,6 +42,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         public ActionResult CreateField(int? id)
         {
             var _fieldTypeService = this.Service<IFieldTypeService>();
+            var _placeService = this.Service<IPlaceService>();
             List<FieldType> listFieldType = _fieldTypeService.GetActive().ToList();
             List<SelectListItem> selectListFieldType = new List<SelectListItem>();
             selectListFieldType.Add(new SelectListItem { Text = "", Value = "" });
@@ -47,7 +51,9 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             {
                 selectListFieldType.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
             }
-            ViewBag.placeId = id.Value;
+
+            Place curPlace = _placeService.FirstOrDefault(p => p.Id == id.Value);
+            ViewBag.curPlace = curPlace;
             ViewBag.selectListFieldType = selectListFieldType;
             return View();
         }
@@ -58,6 +64,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             var _fieldImageService = this.Service<IFieldImageService>();
             var _timeBlockService = this.Service<ITimeBlockService>();
             var _fieldTypeService = this.Service<IFieldTypeService>();
+            var _placeService = this.Service<IPlaceService>();
 
             Field field = _fieldService.FirstOrDefaultActive(f => f.Id == id.Value);
             List<FieldImage> fieldImages = _fieldImageService.Get(i => i.FieldId == id.Value).ToList();
@@ -74,6 +81,8 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 selectListFieldType.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
             }
 
+            Place curPlace = _placeService.FirstOrDefault(p => p.Id == field.PlaceId);
+            ViewBag.curPlace = curPlace;
             ViewBag.selectListFieldType = selectListFieldType;
             ViewBag.fieldImages = fieldImages;
             ViewBag.timeBlocks = timeBlocks;

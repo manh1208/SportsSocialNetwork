@@ -81,7 +81,7 @@
 
     <nav class="site-navbar navbar navbar-default navbar-fixed-top navbar-mega" role="navigation">
 
-        <div class="navbar-header" style="background-color:#FD9700;">
+        <div class="navbar-header" style="background-color:#f55f00;">
             <button type="button" class="navbar-toggle hamburger hamburger-close navbar-toggle-left hided"
                     data-toggle="menubar">
                 <span class="sr-only">Toggle navigation</span>
@@ -102,7 +102,7 @@
             </div>
         </div>
 
-        <div class="navbar-container container-fluid" style="background-color:#FD9700;">
+        <div class="navbar-container container-fluid" style="background-color:#f55f00;">
             <!-- Navbar Collapse -->
             <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
                 <!-- Navbar Toolbar -->
@@ -325,10 +325,15 @@
                         <ul class="dropdown-menu" role="menu">
                             <li role="presentation">
                                 <a href="javascript:void(0)" role="menuitem">
-                                    <span class="fa fa-key"></span> Đổi mật khẩu
+                                    <span class="fa fa-globe"></span> Trang chủ
                                 </a>
                             </li>
-                            <li role="presentation">
+                            @*<li role="presentation">
+                                <a href="@Url.Action("index", "SSN", new { area = "" })" role="menuitem">
+                                    <span class="fa fa-globe"></span> Quay lại mạng xã hội
+                                </a>
+                            </li>*@
+                            @*<li role="presentation">
                                 <a href="javascript:void(0)" role="menuitem">
                                     <span class="fa fa-users"></span> Tìm người cùng sở thích ở gần bạn
                                 </a>
@@ -347,9 +352,13 @@
                                 <a href="javascript:void(0)" role="menuitem">
                                     <span class="fa fa-list-alt"></span> Quản lý địa điểm B
                                 </a>
-                            </li>
+                            </li>*@
                             <li role="presentation">
-                                <a href="javascript:void(0)" role="menuitem">
+                                <form action="@Url.Action("LogOff","Account", new { area = "" })" method="post" id="form-log-out" hidden>
+                                    @Html.AntiForgeryToken()
+                                    
+                                </form>
+                                <a href="#" role="menuitem" onclick="logout()">
                                     <span class="icon wb-power"></span> Đăng xuất
                                 </a>
                             </li>
@@ -563,6 +572,11 @@
 
     <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
 
+    <script>
+       function logout(){
+           $("#form-log-out").submit();
+        }
+    </script>
     </body>
 @RenderSection("Scripts", false)
 

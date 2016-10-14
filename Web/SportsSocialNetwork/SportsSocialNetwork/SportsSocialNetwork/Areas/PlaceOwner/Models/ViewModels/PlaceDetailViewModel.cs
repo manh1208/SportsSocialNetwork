@@ -16,9 +16,9 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Models.ViewModels
         public void generateAddress()
         {
             this.AddressString = this.Address;
-            this.AddressString += this.Ward != null ? " - Phường " + this.Ward : "";
-            this.AddressString += this.District != null ? " - Quận " + this.District : "";
-            this.AddressString += this.City != null ? " - " + this.City : "";
+            this.AddressString += this.Ward != null ? ", " + this.Ward : "";
+            this.AddressString += this.District != null ? ", " + this.District : "";
+            this.AddressString += this.City != null ? ", " + this.City : "";
         }
     }
 }

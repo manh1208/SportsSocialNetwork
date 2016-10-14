@@ -10,9 +10,11 @@ using System.Web.Mvc;
 using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.Utilities;
 using Microsoft.AspNet.Identity;
+using SportsSocialNetwork.Models.Identity;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
+    [MyAuthorize(Roles = "Chủ sân")]
     public class EventController : Controller
     {
         // GET: PlaceOwner/Event
@@ -124,9 +126,13 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
         public ActionResult GetData(JQueryDataTableParamModel param)
         {
+            string userID = Request["userID"];
             //var blogPostList = _blogPostService.GetBlogPostbyStoreId();
             var _eventService = this.Service<IEventService>();
-            var eventList = _eventService.GetActive();
+
+            var eventList = _eventService.GetActive(e => e.CreatorId == userID).ToList();
+
+            
             //IEnumerable<BlogPost> filteredListItems;
             IEnumerable<Event> filteredListItems;
             if (!string.IsNullOrEmpty(param.sSearch))

@@ -6,6 +6,7 @@
     List<FieldImage> fieldImages = ViewBag.fieldImages;
     List<TimeBlock> timeBlocks = ViewBag.timeBlocks;
     List<SelectListItem> statusList = ViewBag.statusList;
+    Place curPlace = ViewBag.curPlace;
 }
 
 
@@ -70,38 +71,43 @@
                                 <label class="floating-label">Mô tả</label>
                             </div>
 
+                            <div class="form-group">
+                                <label class="control-label font-size-20">Giờ hoạt động: </label>
+                                <span class="font-size-20">@curPlace.StartTime.ToString(@"hh\:mm") - @curPlace.EndTime.ToString(@"hh\:mm")</span>
+                            </div>
+
                             <div class="form-group" id="tempTS">
                                 <label class="control-label">Khung giá</label>
                                 @{
-                                foreach (var item in timeBlocks)
-                                {
-                            <div class="row">
-                                <div class="col-xs-3" style="padding:0 0 0 15px;">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Từ</span>
-                                        <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" id="sstTime" name="" disabled="disabled" value="@item.StartTime" />
-                                    </div>
-                                </div>
-                                <div class="col-xs-3" style="padding:0;">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Đến</span>
-                                        <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" id="senTime" disabled="disabled" value="@item.EndTime" />
-                                    </div>
-                                </div>
-                                <div class="col-xs-3" style="padding:0;">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">Giá</span>
-                                        <input type="text" class="form-control input-lg" id="stsPrice" name="Price" disabled="disabled" value="@item.Price" />
-                                    </div>
-                                </div>
-                                <input type="hidden" value="@item.Id" />
-                                <div class="col-xs-3">
-                                    <button type="button" class="btn btn-pure btn-primary icon wb-pencil editbtn" onclick=""></button>
-                                    <button type="button" class="btn btn-pure btn-danger icon wb-close removebtn" onclick=""></button>
-                                </div>
-                            </div>
+                                    foreach (var item in timeBlocks)
+                                    {
+                                        <div class="row">
+                                            <div class="col-xs-3" style="padding:0 0 0 15px;">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Từ</span>
+                                                    <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" id="sstTime" name="" disabled="disabled" value="@item.StartTime.ToString(@"hh\:mm")" />
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3" style="padding:0;">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Đến</span>
+                                                    <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" id="senTime" disabled="disabled" value="@item.EndTime.ToString(@"hh\:mm")" />
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3" style="padding:0;">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Giá</span>
+                                                    <input type="text" class="form-control input-lg" id="stsPrice" name="Price" disabled="disabled" value="@item.Price" />
+                                                </div>
+                                            </div>
+                                            <input type="hidden" value="@item.Id" />
+                                            <div class="col-xs-3">
+                                                <button type="button" class="btn btn-pure btn-primary icon wb-pencil editbtn" onclick=""></button>
+                                                <button type="button" class="btn btn-pure btn-danger icon wb-close removebtn" onclick=""></button>
+                                            </div>
+                                        </div>
 
-                                }
+                                    }
                                 }
 
                             </div>
@@ -122,7 +128,7 @@
                                     <div class="col-sm-5">
                                         <div class="input-group">
                                             <span class="input-group-addon">Giá</span>
-                                            <input type="text" class="form-control input-lg" id="tsPrice" />
+                                            <input type="text" class="form-control input-lg" id="tsPrice" name="oPrice"/>
                                             <span class="input-group-addon">VND</span>
                                         </div>
                                     </div>
@@ -133,11 +139,14 @@
                                         @{
                                         foreach (var item in timeBlocks)
                                         {
-                                            var vtb = item.StartTime + "_" + item.EndTime + "_" + item.Price + "_" + item.Id;
+                                            var vtb = item.StartTime.ToString(@"hh\:mm") + "_" + item.EndTime.ToString(@"hh\:mm") + "_" + item.Price + "_" + item.Id;
                                             <option value="@vtb" selected></option>
                                         }
                                         }
                                     </select>
+                                </div>
+                                <div class="row" id="notiTB">
+
                                 </div>
                             </div>
                         </div>
@@ -210,7 +219,7 @@
                     <button type="button" class="btn btn-danger" onclick="deleteField(@Model.Id)"><i class="icon wb-trash" aria-hidden="true"></i>Xóa sân</button>
                 </div>
                 <div class="col-sm-offset-4 col-sm-5">
-                    @Html.ActionLink("Hủy bỏ", "Index", "Field", null, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Hủy bỏ", "FieldList", "Field", new { id = curPlace.Id }, new { @class = "btn btn-default" })
                     <input type="submit" id="submitBtn" value="Cập nhật sân" class="btn btn-success" />
                 </div>
             </div>
@@ -222,340 +231,455 @@
 @section Scripts{
 
     <script>
-    var searchValue = "";
+        var searchValue = "";
 
-    (function(document, window, $) {
-      'use strict';
 
-      var Site = window.Site;
-      $(document).ready(function() {
-        Site.run();
-      });
-    })(document, window, jQuery);
+        (function (document, window, $) {
+            'use strict';
 
-    $('body').on('focus', ".timepicker", function () {
-        $(this).clockpicker();
-    })
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
 
-    $(document).on('click', ".editbtn", function () {
-        var sValue = "";
-        this.removeAttribute("class");
-        this.setAttribute("class", "btn btn-pure btn-primary icon wb-check savebtn");
-        var outerDiv = $(this).parent().parent();
-        $(outerDiv).find("input").each(function () {
-            sValue += this.value + "_";
-            console.log(sValue);
-            this.removeAttribute("disabled");
+            });
+        })(document, window, jQuery);
+
+        function loadPlaceActiveTime() {
+
+        }
+
+        $('body').on('focus', ".timepicker", function () {
+            $(this).clockpicker();
         })
-        searchValue = sValue.substring(0, sValue.lastIndexOf("_"));
-    })
 
-    $(document).on('click', ".savebtn", function () {
-        var editValue = "";
-
-        this.removeAttribute("class");
-        this.setAttribute("class", "btn btn-pure btn-primary icon wb-pencil editbtn");
-        var outerDiv = $(this).parent().parent();
-        $(outerDiv).find("input").each(function () {
-            editValue += this.value + "_";
-            this.setAttribute("disabled", "disabled");
+        $(document).on('click', ".editbtn", function () {
+            var sValue = "";
+            this.removeAttribute("class");
+            this.setAttribute("class", "btn btn-pure btn-primary icon wb-check savebtn");
+            var outerDiv = $(this).parent().parent();
+            $(outerDiv).find("input").each(function () {
+                sValue += this.value + "_";
+                console.log(sValue);
+                this.removeAttribute("disabled");
+            })
+            searchValue = sValue.substring(0, sValue.lastIndexOf("_"));
         })
-        var eValue = editValue.substring(0, editValue.lastIndexOf("_"));
-        $("#timeSlot option[value='" + searchValue + "']").val(eValue);
-    })
 
-    $(document).on('click', ".removebtn", function () {
+        $(document).on('click', ".savebtn", function () {
+            var editValue = "";
 
-        var dValue = "";
-        var outerDiv = $(this).parent().parent();
-        $(outerDiv).find("input").each(function () {
-            dValue += this.value+"_";
+            this.removeAttribute("class");
+            this.setAttribute("class", "btn btn-pure btn-primary icon wb-pencil editbtn");
+            var outerDiv = $(this).parent().parent();
+            $(outerDiv).find("input").each(function () {
+                editValue += this.value + "_";
+                this.setAttribute("disabled", "disabled");
+            })
+            var eValue = editValue.substring(0, editValue.lastIndexOf("_"));
+            $("#timeSlot option[value='" + searchValue + "']").val(eValue);
         })
-        var sdValue = dValue.substring(0, dValue.lastIndexOf("_"));
 
-        //console.log(sdValue);
-        bootbox.dialog({
-            message: "Bạn có chắc muốn xóa ?",
-            title: "Xác nhận xóa",
-            buttons: {
-                danger: {
-                    label: "Hủy",
-                    className: "btn-default",
-                    callback: function () {
+        $(document).on('click', ".removebtn", function () {
 
-                    }
-                },
-                success: {
-                    label: "Đồng ý",
-                    className: "btn-danger",
-                    callback: function () {
+            var dValue = "";
+            var outerDiv = $(this).parent().parent();
+            $(outerDiv).find("input").each(function () {
+                dValue += this.value + "_";
+            })
+            var sdValue = dValue.substring(0, dValue.lastIndexOf("_"));
+
+            showConfirmDeleteItem("Bạn có chắc chắn muốn xóa không?",
+                function (isConfirm) {
+                    if (isConfirm) {
                         $.ajax({
+                            type: 'POST',
                             url: '@Url.Action("deleteTimeBlock")',
-                            data: {
-                                format: 'json',
-                                timeblock: sdValue
-                            },
-                            error: function () {
-                                alert("Problem!")
-                            },
+                            data: { timeblock: sdValue },
                             success: function (data) {
                                 if (data.Succeed) {
+                                    showMessage("Đã xóa thành công", "success", "OK");
                                     $("#timeSlot option[value='" + sdValue + "']").remove();
                                     $(outerDiv).remove();
-                                } else {
+                                }
+                                else {
                                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                                 }
                             },
-                            type: 'POST'
-                        })
+                            error: function (error) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        });
+                    }
+                });
+
+            //console.log(sdValue);
+            @*bootbox.dialog({
+                message: "Bạn có chắc muốn xóa ?",
+                title: "Xác nhận xóa",
+                buttons: {
+                    danger: {
+                        label: "Hủy",
+                        className: "btn-default",
+                        callback: function () {
+
+                        }
+                    },
+                    success: {
+                        label: "Đồng ý",
+                        className: "btn-danger",
+                        callback: function () {
+                            $.ajax({
+                                url: '@Url.Action("deleteTimeBlock")',
+                                data: {
+                                    format: 'json',
+                                    timeblock: sdValue
+                                },
+                                error: function () {
+                                    alert("Problem!")
+                                },
+                                success: function (data) {
+                                    if (data.Succeed) {
+                                        $("#timeSlot option[value='" + sdValue + "']").remove();
+                                        $(outerDiv).remove();
+                                    } else {
+                                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                    }
+                                },
+                                type: 'POST'
+                            })
+                        }
                     }
                 }
-            }
+            })*@
         })
-    })
 
-    function addTempTS() {
-        console.log("11");
-        var startTime = $("#stTime").val();
-        var endTime = $("#enTime").val();
-        var price = $("#tsPrice").val();
+        function checkValidTimeBlock(startTime, endTime, compareTime) {
+            var placeActiveStarttime = '@curPlace.StartTime.ToString(@"hh\:mm")';
+            var placeActiveEndTime = '@curPlace.EndTime.ToString(@"hh\:mm")';
 
-        //var tempTS = document.getElementById("#tempTS");
-        var ts = "<div class='row'>"
-                                + "<div class='col-xs-3' style='padding:0 0 0 15px;'>"
-                                    + "<div class='input-group'>"
-                                        + "<span class='input-group-addon'>Từ</span>"
-                                        + "<input type='text' class='timepicker form-control input-lg' data-plugin='clockpicker' data-autoclose='true' id='sstTime' disabled='disabled' value='" + startTime + "'/>"
-                                    + "</div>"
-                                + "</div>"
-                                + "<div class='col-xs-3' style='padding:0;'>"
-                                    + "<div class='input-group'>"
-                                        + "<span class='input-group-addon'>Đến</span>"
-                                        + "<input type='text' class='timepicker form-control input-lg' data-plugin='clockpicker' data-autoclose='true' id='senTime' disabled='disabled' value='" + endTime + "'/>"
-                                    + "</div>"
-                                + "</div>"
-                                + "<div class='col-xs-3' style='padding:0;'>"
-                                    + "<div class='input-group'>"
-                                        + "<span class='input-group-addon'>Giá</span>"
-                                        + "<input type='text' class='form-control input-lg' id='stsPrice' disabled='disabled' value='" + price + "'/>"
-                                    + "</div>"
-                                + "</div>"
-                                + "<div class='col-xs-3'>"
-                                    + "<button type='button' class='btn btn-pure btn-primary icon wb-pencil editbtn' onclick=''></button>"
-                                    + "<button type='button' class='btn btn-pure btn-danger icon wb-close removebtn' onclick=''></button>"
-                                + "</div>"
-                            + "</div>";
-        $("#tempTS").append(ts);
+            if (startTime < endTime) {
 
-        var oValue = startTime + "_" + endTime + "_" + price;
-        var oOption = "<option value='" + oValue + "' selected></option>"
-        $("#timeSlot").append(oOption);
+                if (compareTime == null) {
+                    if ((startTime >= placeActiveStarttime && startTime < placeActiveEndTime) && (endTime > placeActiveStarttime && endTime <= placeActiveEndTime)) {
+                        return true;
+                    } else {
 
-        $("#stTime").val("");
-        $("#enTime").val("");
-        $("#tsPrice").val("");
-    }
-
-    function deleteImage(id) {
-        bootbox.dialog({
-            message: "Bạn có chắc muốn xóa hình này?",
-            title: "Xác nhận xóa",
-            buttons: {
-                success: {
-                    label: "Hủy",
-                    className: "btn-default",
-                    callback: function () {
-
+                        return false;
                     }
-                },
-                danger: {
-                    label: "Xóa",
-                    className: "btn-danger",
-                    callback: function () {
+                } else {
+                    var arrayTime = compareTime.split("_");
+                    var cStartTime = arrayTime[0];
+                    var cEndTime = arrayTime[1];
+
+                    if ((startTime >= placeActiveStarttime && startTime <= placeActiveEndTime) && (endTime >= placeActiveStarttime && endTime <= placeActiveEndTime)) {
+                        if (startTime >= cEndTime) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                }
+
+            } else {
+                return false;
+            }
+        }
+
+        function addTempTS() {
+            console.log("11");
+            var startTime = $("#stTime").val();
+            var endTime = $("#enTime").val();
+            var price = $("#tsPrice").val();
+
+            //check valid timeblock
+            //get the last time block
+            var lastTimeBlock = $('#timeSlot option:last-child').val();
+            console.log(lastTimeBlock);
+            //compare and process
+            if (checkValidTimeBlock(startTime, endTime, lastTimeBlock) == false) {
+                var noti = "<p class='alert alert-danger'>Khung giá nhập không phù hợp</p>";
+                $("#notiTB").empty();
+                $("#notiTB").append(noti);
+            } else {
+
+                //var tempTS = document.getElementById("#tempTS");
+                var ts = "<div class='row'>"
+                                        + "<div class='col-xs-3' style='padding:0 0 0 15px;'>"
+                                            + "<div class='input-group'>"
+                                                + "<span class='input-group-addon'>Từ</span>"
+                                                + "<input type='text' class='timepicker form-control input-lg' data-plugin='clockpicker' data-autoclose='true' id='sstTime' disabled='disabled' value='" + startTime + "'/>"
+                                            + "</div>"
+                                        + "</div>"
+                                        + "<div class='col-xs-3' style='padding:0;'>"
+                                            + "<div class='input-group'>"
+                                                + "<span class='input-group-addon'>Đến</span>"
+                                                + "<input type='text' class='timepicker form-control input-lg' data-plugin='clockpicker' data-autoclose='true' id='senTime' disabled='disabled' value='" + endTime + "'/>"
+                                            + "</div>"
+                                        + "</div>"
+                                        + "<div class='col-xs-3' style='padding:0;'>"
+                                            + "<div class='input-group'>"
+                                                + "<span class='input-group-addon'>Giá</span>"
+                                                + "<input type='text' class='form-control input-lg' id='stsPrice' disabled='disabled' value='" + price + "'/>"
+                                            + "</div>"
+                                        + "</div>"
+                                        + "<div class='col-xs-3'>"
+                                            + "<button type='button' class='btn btn-pure btn-primary icon wb-pencil editbtn' onclick=''></button>"
+                                            + "<button type='button' class='btn btn-pure btn-danger icon wb-close removebtn' onclick=''></button>"
+                                        + "</div>"
+                                    + "</div>";
+                $("#tempTS").append(ts);
+
+                var oValue = startTime + "_" + endTime + "_" + price;
+                var oOption = "<option value='" + oValue + "' selected></option>"
+                $("#timeSlot").append(oOption);
+
+                $("#stTime").val("");
+                $("#enTime").val("");
+                $("#tsPrice").val("");
+            }
+        }
+
+        function deleteImage(id) {
+            showConfirmDeleteItem("Bạn có chắc chắn muốn xóa hình này không?",
+                function (isConfirm) {
+                    if (isConfirm) {
                         $.ajax({
+                            type: 'POST',
                             url: '@Url.Action("deleteImage")',
-                            data: {
-                                format: 'json',
-                                id: id
-                            },
-                            error: function () {
-                                alert("Problem!")
-                            },
+                            data: { id: id },
                             success: function (data) {
                                 if (data === "success") {
-                                    bootbox.alert("Đã xóa thành công", function () {
-                                        var el = document.getElementById("pim_" + id);
-                                        el.parentNode.removeChild(el);
-                                    });
-
+                                    showMessage("Đã xóa thành công", "success", "OK");
+                                    var el = document.getElementById("pim_" + id);
+                                    el.parentNode.removeChild(el);
+                                }
+                                else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                                 }
                             },
-                            type: 'POST'
-                        })
+                            error: function (error) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        });
+                    }
+                });
+
+
+            @*bootbox.dialog({
+                message: "Bạn có chắc muốn xóa hình này?",
+                title: "Xác nhận xóa",
+                buttons: {
+                    success: {
+                        label: "Hủy",
+                        className: "btn-default",
+                        callback: function () {
+
+                        }
+                    },
+                    danger: {
+                        label: "Xóa",
+                        className: "btn-danger",
+                        callback: function () {
+                            $.ajax({
+                                url: '@Url.Action("deleteImage")',
+                                data: {
+                                    format: 'json',
+                                    id: id
+                                },
+                                error: function () {
+                                    alert("Problem!")
+                                },
+                                success: function (data) {
+                                    if (data === "success") {
+                                        bootbox.alert("Đã xóa thành công", function () {
+                                            var el = document.getElementById("pim_" + id);
+                                            el.parentNode.removeChild(el);
+                                        });
+
+                                    }
+                                },
+                                type: 'POST'
+                            })
+                        }
                     }
                 }
-            }
-        });
-    }
+            });*@
+        }
 
 
         function deleteField(id) {
-        showConfirmDeleteItem("Bạn có chắc chắn muốn xóa sân này không?",
-            function (isConfirm) {
-                if (isConfirm) {
-                    $.ajax({
-                        type: 'POST',
-                        url: '@Url.Action("deleteField")',
-                        data: { id: id },
-                        success: function (data) {
-                            if (data === "success") {
-                                //showMessage("Xóa địa điểm thành công", "success", "OK");
-                                location.href = '@Url.Action("FieldList", "Field", new { id = Model.PlaceId})'
-                            }
-                            else {
+            showConfirmDeleteItem("Bạn có chắc chắn muốn xóa sân này không?",
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("deleteField")',
+                            data: { id: id },
+                            success: function (data) {
+                                if (data === "success") {
+                                    //showMessage("Xóa địa điểm thành công", "success", "OK");
+                                    location.href = '@Url.Action("FieldList", "Field", new { id = Model.PlaceId})'
+                                }
+                                else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                }
+                            },
+                            error: function (error) {
                                 showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                             }
-                        },
-                        error: function (error) {
-                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        });
+                    }
+                });
+        }
+
+
+        // Example Validataion Full
+        // ------------------------
+        (function () {
+            $('#fieldForm').formValidation({
+                framework: "bootstrap",
+                button: {
+                    selector: '#submitBtn',
+                    disabled: 'disabled'
+                },
+                icon: null,
+                fields: {
+                    Name: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Tên sân không được trống'
+                            }
                         }
-                    });
+                    },
+                    FieldTypeId: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Hãy chọn một loại sân'
+                            }
+                        }
+                    },
+                    Price: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Giá tiền không được trống'
+                            },
+                            integer: {
+                                message: 'Giá trị nhập phải là số'
+                            }
+                        }
+                    },
+                    oPrice: {
+                        validators: {
+                            integer: {
+                                message: 'Giá trị nhập phải là số'
+                            }
+                        }
+                    },
+                    Description: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Mô tả không được trống'
+                            }
+                        }
+                    },
+                    //username: {
+                    //  validators: {
+                    //    notEmpty: {
+                    //      message: 'The username is required'
+                    //    },
+                    //    stringLength: {
+                    //      min: 6,
+                    //      max: 30
+                    //    },
+                    //    regexp: {
+                    //      regexp: /^[a-zA-Z0-9]+$/
+                    //    }
+                    //  }
+                    //},
+                    //email: {
+                    //  validators: {
+                    //    notEmpty: {
+                    //      message: 'The username is required'
+                    //    },
+                    //    emailAddress: {
+                    //      message: 'The email address is not valid'
+                    //    }
+                    //  }
+                    //},
+                    //password: {
+                    //  validators: {
+                    //    notEmpty: {
+                    //      message: 'The password is required'
+                    //    },
+                    //    stringLength: {
+                    //      min: 8
+                    //    }
+                    //  }
+                    //},
+                    //birthday: {
+                    //  validators: {
+                    //    notEmpty: {
+                    //      message: 'The birthday is required'
+                    //    },
+                    //    date: {
+                    //      format: 'YYYY/MM/DD'
+                    //    }
+                    //  }
+                    //},
+                    //github: {
+                    //  validators: {
+                    //    url: {
+                    //      message: 'The url is not valid'
+                    //    }
+                    //  }
+                    //},
+                    //skills: {
+                    //  validators: {
+                    //    notEmpty: {
+                    //      message: 'The skills is required'
+                    //    },
+                    //    stringLength: {
+                    //      max: 300
+                    //    }
+                    //  }
+                    //},
+                    //porto_is: {
+                    //  validators: {
+                    //    notEmpty: {
+                    //      message: 'Please specify at least one'
+                    //    }
+                    //  }
+                    //},
+                    //'for[]': {
+                    //  validators: {
+                    //    notEmpty: {
+                    //      message: 'Please specify at least one'
+                    //    }
+                    //  }
+                    //},
+                    //company: {
+                    //  validators: {
+                    //    notEmpty: {
+                    //      message: 'Please company'
+                    //    }
+                    //  }
+                    //},
+                    //browsers: {
+                    //  validators: {
+                    //    notEmpty: {
+                    //      message: 'Please specify at least one browser you use daily for development'
+                    //    }
+                    //  }
+                    //}
                 }
             });
-    }
-
-
-    // Example Validataion Full
-      // ------------------------
-      (function() {
-          $('#fieldForm').formValidation({
-          framework: "bootstrap",
-          button: {
-            selector: '#submitBtn',
-            disabled: 'disabled'
-          },
-          icon: null,
-          fields: {
-              Name: {
-                  validators: {
-                      notEmpty: {
-                          message: 'Tên sân không được trống'
-                      }
-                  }
-              },
-              FieldTypeId: {
-                  validators: {
-                      notEmpty: {
-                          message: 'Hãy chọn một loại sân'
-                      }
-                  }
-              },
-              Price: {
-                  validators: {
-                      notEmpty: {
-                          message: 'Giá tiền không được trống'
-                      },
-                      digits: {
-                          message: 'Giá trị nhập phải là số'
-                      }
-                  }
-              },
-            //username: {
-            //  validators: {
-            //    notEmpty: {
-            //      message: 'The username is required'
-            //    },
-            //    stringLength: {
-            //      min: 6,
-            //      max: 30
-            //    },
-            //    regexp: {
-            //      regexp: /^[a-zA-Z0-9]+$/
-            //    }
-            //  }
-            //},
-            //email: {
-            //  validators: {
-            //    notEmpty: {
-            //      message: 'The username is required'
-            //    },
-            //    emailAddress: {
-            //      message: 'The email address is not valid'
-            //    }
-            //  }
-            //},
-            //password: {
-            //  validators: {
-            //    notEmpty: {
-            //      message: 'The password is required'
-            //    },
-            //    stringLength: {
-            //      min: 8
-            //    }
-            //  }
-            //},
-            //birthday: {
-            //  validators: {
-            //    notEmpty: {
-            //      message: 'The birthday is required'
-            //    },
-            //    date: {
-            //      format: 'YYYY/MM/DD'
-            //    }
-            //  }
-            //},
-            //github: {
-            //  validators: {
-            //    url: {
-            //      message: 'The url is not valid'
-            //    }
-            //  }
-            //},
-            //skills: {
-            //  validators: {
-            //    notEmpty: {
-            //      message: 'The skills is required'
-            //    },
-            //    stringLength: {
-            //      max: 300
-            //    }
-            //  }
-            //},
-            //porto_is: {
-            //  validators: {
-            //    notEmpty: {
-            //      message: 'Please specify at least one'
-            //    }
-            //  }
-            //},
-            //'for[]': {
-            //  validators: {
-            //    notEmpty: {
-            //      message: 'Please specify at least one'
-            //    }
-            //  }
-            //},
-            //company: {
-            //  validators: {
-            //    notEmpty: {
-            //      message: 'Please company'
-            //    }
-            //  }
-            //},
-            //browsers: {
-            //  validators: {
-            //    notEmpty: {
-            //      message: 'Please specify at least one browser you use daily for development'
-            //    }
-            //  }
-            //}
-          }
-        });
-      })();
+        })();
 
 
 
-    </script>
+</script>
 
 
 }
