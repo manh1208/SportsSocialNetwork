@@ -111,5 +111,17 @@ namespace SportsSocialNetwork.Models.Enumerable
         PaidOnline = 4
     }
 
+    public enum NotificationType
+    {
+        [Description("Post")]
+        Post = 1,
+        [Description("Order")]
+        Order = 2,
+        [Description("Invitation")]
+        Invitation = 3,
+        [Description("Other")]
+        Other = 4
+    }
+
 
 }

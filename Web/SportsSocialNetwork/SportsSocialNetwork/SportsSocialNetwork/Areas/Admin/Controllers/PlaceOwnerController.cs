@@ -5,6 +5,7 @@ using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.Identity;
+using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -102,7 +103,14 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                     ////var oldRoles = Roles.GetRolesForUser(user.UserName);
                     //UserManager.RemoveFromRoles(user.Id, roles);
                     //UserManager.AddToRole(user.Id, newRole.Name);
+                    string subject = "[SSN] - Từ chối tài khoản";
+                    string body = "Hi <strong>" + user.FullName + "</strong>" +
+                        ",<br/><br/>Tài khoản của bạn đã bị từ chối vì một số thông tin không hợp lệ." +
+                        "<br/> <strong>Tên tài khoản : " + user.UserName + "</strong>";
+                    EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { user.Email }, null, null, subject, body, true);
                     result.Succeed = true;
+                   
+
                 }
                 catch (Exception)
                 {
@@ -129,7 +137,15 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
 
                     user.Status = (int)UserStatus.Active;
                     service.Update(user);
+                    string subject = "[SSN] - Chấp nhận tài khoản";
+                    string body = "Hi <strong>" + user.FullName + "</strong>"+
+                        "<br/><br>/Tài khoản của bạn đã được chấp nhận" +
+                        " Vui lòng vào <a href=\"" + Url.Action("Login", "Account", new { areas = "" }) + "\">link</a> để đăng nhập" +
+                        "<br/> <strong>Tên tài khoản : " + user.UserName + "</strong>" +
+                        "<br/> Password : Your password" + "</strong>";
+                    EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { user.Email }, null, null, subject, body, true);
                     result.Succeed = true;
+                   
                 }
                 catch (Exception)
                 {
