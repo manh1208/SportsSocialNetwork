@@ -163,6 +163,26 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult CheckInOrder(String orderCode) {
+            var service = this.Service<IOrderService>();
+
+            ResponseModel<OrderSimpleViewModel> response = null;
+
+            Order order= service.CheckInOrder(orderCode);
+
+            OrderSimpleViewModel result = Mapper.Map<OrderSimpleViewModel>(order);
+
+            result.UserName = order.AspNetUser.UserName;
+
+            result.FieldName = order.Field.Name;
+
+            result.PlaceName = order.Field.Place.Name;
+            response = new ResponseModel<OrderSimpleViewModel>(true, "Đơn đặt sân đã được checkin", null, result);
+
+            return Json(response);
+        }
+
         private double CalculatePrice(int fieldId, TimeSpan startTime, TimeSpan endTime) {
             var timeBlockService = this.Service<ITimeBlockService>();
 

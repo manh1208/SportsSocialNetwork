@@ -36,7 +36,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         void test();
     }
-    public partial class AspNetUserService:IAspNetUserService
+    public partial class AspNetUserService : IAspNetUserService
     {
         #region Code from here
 
@@ -44,10 +44,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
         public IQueryable<AspNetUser> GetUsers(JQueryDataTableParamModel request, out int totalRecord)
         {
             var filter = request.sSearch;
-            var list1 = this.GetActive(u=>u.Active==true);
+            var list1 = this.GetActive(u => u.Active == true);
 
             var list = list1.Where(
-                u=>filter == null || 
+                u => filter == null ||
                 u.UserName.ToLower().Contains(filter.ToLower()) ||
                 u.FullName.ToLower().Contains(filter.ToLower()) ||
                 u.Email.ToLower().Contains(filter.ToLower())
@@ -55,21 +55,23 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
             //list = list.Where(u => u.AspNetRoles.Where(r => r.Id.Equals(UserRole.Member.ToString())).Count()>0);
             totalRecord = list.Count();
-            var result = list.OrderBy(u=>u.FullName)
+            var result = list.OrderBy(u => u.FullName)
                 .Skip(request.iDisplayStart)
                              .Take(request.iDisplayLength);
-            
+
             return result;
         }
 
         public AspNetUser FindUser(string Id)
         {
             return this.FirstOrDefault(u => u.Id.Equals(Id));
-           
+
         }
 
-        public IEnumerable<AspNetUser> FindUserByName(String name, int skip, int take) {
-            return GetActive(x=> x.FullName.Contains(name)).OrderBy(x => x.FullName).Skip(skip).Take(take);
+        public IEnumerable<AspNetUser> FindUserByName(String name, int skip, int take)
+        {
+            return GetActive(x => x.Email.Contains(name)||x.UserName.Contains(name)||x.FullName.Contains(name)).OrderBy(x => x.FullName).Skip(skip).Take(take);
+
         }
 
         public void DeactivateUser(AspNetUser user)
@@ -79,7 +81,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         }
 
 
-        public String FindUserName(String userId) {
+        public String FindUserName(String userId)
+        {
             return this.FirstOrDefault(x => x.Id == userId).UserName;
         }
 
@@ -93,7 +96,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 if (item.AspNetRoles.FirstOrDefault().Id.Equals(UserRole.PlaceOwner.ToString("d")))
                 {
                     users.Add(item);
-                }   
+                }
             }
             var list = users.AsQueryable().Where(
                 u => filter == null ||
@@ -101,7 +104,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 u.FullName.ToLower().Contains(filter.ToLower()) ||
                 u.Email.ToLower().Contains(filter.ToLower())
                 );
-             
+
             //list = list.Where(u => u.AspNetRoles.Where(r => r.Id.Equals(UserRole.Member.ToString())).Count()>0);
             totalRecord = list.Count();
             var result = list.OrderBy(u => u.FullName)
@@ -116,8 +119,9 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return this.FirstOrDefaultActive(u => u.UserName.Equals(username));
         }
 
-        public AspNetUser UpdateUser(AspNetUser userInfo) {
-            AspNetUser user = this.FirstOrDefaultActive(x=> x.Id == userInfo.Id);
+        public AspNetUser UpdateUser(AspNetUser userInfo)
+        {
+            AspNetUser user = this.FirstOrDefaultActive(x => x.Id == userInfo.Id);
             user.Birthday = userInfo.Birthday;
             user.City = userInfo.City;
             user.District = userInfo.District;
@@ -131,8 +135,9 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return user;
         }
 
-        public String ChangeAvatar(String userId,String image) {
-            AspNetUser user = FirstOrDefaultActive(x=> x.Id==userId);
+        public String ChangeAvatar(String userId, String image)
+        {
+            AspNetUser user = FirstOrDefaultActive(x => x.Id == userId);
             user.AvatarImage = image;
             this.Update(user);
             return user.AvatarImage;
@@ -145,6 +150,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
             this.Update(user);
             return user.CoverImage;
         }
+
 
         #endregion
 
