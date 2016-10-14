@@ -24,32 +24,33 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
         public ActionResult IndexList(JQueryDataTableParamModel request)
         {
-            var fieldService = this.Service<IFieldService>();
-            var fieldScheduleService = this.Service<IFieldScheduleService>();
-            Field field = fieldService.FirstOrDefault();
-            FieldSchedule fieldSchedule = fieldScheduleService.FirstOrDefault(x => x.FieldId == field.Id);
-            var totalRecord = 0;
-            var count = 1;
+            //var fieldService = this.Service<IFieldService>();
+            //var fieldScheduleService = this.Service<IFieldScheduleService>();
+            //Field field = fieldService.FirstOrDefault();
+            //FieldSchedule fieldSchedule = fieldScheduleService.FirstOrDefault(x => x.FieldId == field.Id);
+            //var totalRecord = 0;
+            //var count = 1;
 
-            var results = fieldScheduleService.GetFieldSchedule(request, out totalRecord)
-                .AsEnumerable()
-                .Select(a => new IConvertible[] {
-                        count++,
-                        a.Field.Name,
-                        a.StartTime.ToString(),
-                        a.EndTime.ToString(),
-                        a.Type,
-                        a.Id,
-                }).ToArray();
+            //var results = fieldScheduleService.GetFieldSchedule(request, out totalRecord)
+            //    .AsEnumerable()
+            //    .Select(a => new IConvertible[] {
+            //            count++,
+            //            a.Field.Name,
+            //            a.StartTime.ToString(),
+            //            a.EndTime.ToString(),
+            //            a.Type,
+            //            a.Id,
+            //    }).ToArray();
 
-            var model = new
-            {
-                draw = request.sEcho,
-                data = results,
-                recordsFiltered = totalRecord,
-                recordsTotal = totalRecord
-            };
-            return Json(model);
+            //var model = new
+            //{
+            //    draw = request.sEcho,
+            //    data = results,
+            //    recordsFiltered = totalRecord,
+            //    recordsTotal = totalRecord
+            //};
+            //return Json(model);
+            return Json(new { });
         }
 
         public ActionResult Detail(int id)

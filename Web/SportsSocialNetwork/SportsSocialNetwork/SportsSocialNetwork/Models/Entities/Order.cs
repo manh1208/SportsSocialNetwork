@@ -14,6 +14,12 @@ namespace SportsSocialNetwork.Models.Entities
     
     public partial class Order
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Order()
+        {
+            this.Notifications = new HashSet<Notification>();
+        }
+    
         public int Id { get; set; }
         public string UserId { get; set; }
         public int FieldId { get; set; }
@@ -29,8 +35,11 @@ namespace SportsSocialNetwork.Models.Entities
         public string PayerName { get; set; }
         public string PayerPhone { get; set; }
         public string PayerEmail { get; set; }
+        public string QRCodeUrl { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual Field Field { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Notification> Notifications { get; set; }
     }
 }

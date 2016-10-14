@@ -246,6 +246,7 @@
           <Property Name="Type" Type="int" Nullable="false" />
           <Property Name="PostId" Type="int" />
           <Property Name="InvitationId" Type="int" />
+          <Property Name="OrderId" Type="int" />
           <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Order">
@@ -267,6 +268,7 @@
           <Property Name="PayerName" Type="nvarchar(max)" />
           <Property Name="PayerPhone" Type="nvarchar" MaxLength="255" />
           <Property Name="PayerEmail" Type="nvarchar" MaxLength="255" />
+          <Property Name="QRCodeUrl" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Participation">
           <Key>
@@ -725,6 +727,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Notification_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="0..1" />
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Notification_Post">
           <End Role="Post" Type="Self.Post" Multiplicity="0..1" />
           <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
@@ -1087,6 +1101,10 @@
             <End Role="Invitation" EntitySet="Invitation" />
             <End Role="Notification" EntitySet="Notification" />
           </AssociationSet>
+          <AssociationSet Name="FK_Notification_Order" Association="Self.FK_Notification_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
           <AssociationSet Name="FK_Notification_Post" Association="Self.FK_Notification_Post">
             <End Role="Post" EntitySet="Post" />
             <End Role="Notification" EntitySet="Notification" />
@@ -1348,6 +1366,10 @@
           <AssociationSet Name="FK_NewsComment_News" Association="SSNModel.FK_NewsComment_News">
             <End Role="News" EntitySet="News" />
             <End Role="NewsComment" EntitySet="NewsComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_Order" Association="SSNModel.FK_Notification_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="Notification" EntitySet="Notifications" />
           </AssociationSet>
           <AssociationSet Name="FK_Notification_Post" Association="SSNModel.FK_Notification_Post">
             <End Role="Post" EntitySet="Posts" />
@@ -1668,9 +1690,11 @@
           <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="PostId" Type="Int32" />
           <Property Name="InvitationId" Type="Int32" />
+          <Property Name="OrderId" Type="Int32" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Notification_AspNetUsers" FromRole="Notification" ToRole="AspNetUser" />
           <NavigationProperty Name="Invitation" Relationship="SSNModel.FK_Notification_Invitation" FromRole="Notification" ToRole="Invitation" />
+          <NavigationProperty Name="Order" Relationship="SSNModel.FK_Notification_Order" FromRole="Notification" ToRole="Order" />
           <NavigationProperty Name="Post" Relationship="SSNModel.FK_Notification_Post" FromRole="Notification" ToRole="Post" />
         </EntityType>
         <EntityType Name="Order">
@@ -1692,8 +1716,10 @@
           <Property Name="PayerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PayerPhone" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="PayerEmail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="QRCodeUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Order_AspNetUsers" FromRole="Order" ToRole="AspNetUser" />
           <NavigationProperty Name="Field" Relationship="SSNModel.FK_Order_Field" FromRole="Order" ToRole="Field" />
+          <NavigationProperty Name="Notifications" Relationship="SSNModel.FK_Notification_Order" FromRole="Order" ToRole="Notification" />
         </EntityType>
         <EntityType Name="Participation">
           <Key>
@@ -2296,6 +2322,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Notification_Order">
+          <End Type="SSNModel.Order" Role="Order" Multiplicity="0..1" />
+          <End Type="SSNModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Notification_Post">
           <End Type="SSNModel.Post" Role="Post" Multiplicity="0..1" />
           <End Type="SSNModel.Notification" Role="Notification" Multiplicity="*" />
@@ -2622,6 +2660,7 @@
             <EntityTypeMapping TypeName="SSNModel.Notification">
               <MappingFragment StoreEntitySet="Notification">
                 <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="InvitationId" ColumnName="InvitationId" />
                 <ScalarProperty Name="PostId" ColumnName="PostId" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
@@ -2635,6 +2674,7 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="SSNModel.Order">
               <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="QRCodeUrl" ColumnName="QRCodeUrl" />
                 <ScalarProperty Name="PayerEmail" ColumnName="PayerEmail" />
                 <ScalarProperty Name="PayerPhone" ColumnName="PayerPhone" />
                 <ScalarProperty Name="PayerName" ColumnName="PayerName" />

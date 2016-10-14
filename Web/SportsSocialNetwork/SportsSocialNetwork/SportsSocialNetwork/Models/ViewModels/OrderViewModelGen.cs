@@ -30,6 +30,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string PayerName { get; set; }
     			public virtual string PayerPhone { get; set; }
     			public virtual string PayerEmail { get; set; }
+    			public virtual string QRCodeUrl { get; set; }
     	
     	public OrderViewModel() : base() { }
     	public OrderViewModel(SportsSocialNetwork.Models.Entities.Order entity) : base(entity) { }

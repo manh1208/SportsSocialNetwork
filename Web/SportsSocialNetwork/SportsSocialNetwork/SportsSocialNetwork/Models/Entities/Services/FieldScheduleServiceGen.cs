@@ -12,38 +12,19 @@
 namespace SportsSocialNetwork.Models.Entities.Services
 {
 
-    using System;
+using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using ViewModels;
+    
 
-    public partial interface IFieldScheduleService : SkyWeb.DatVM.Data.IBaseService<FieldSchedule>
+public partial interface IFieldScheduleService : SkyWeb.DatVM.Data.IBaseService<FieldSchedule>
 {
-        IQueryable<FieldSchedule> GetFieldSchedule(JQueryDataTableParamModel request, out int totalRecord);
-    }
+}
 
 public partial class FieldScheduleService : SkyWeb.DatVM.Data.BaseService<FieldSchedule>, IFieldScheduleService
 {
     public FieldScheduleService(SkyWeb.DatVM.Data.IUnitOfWork unitOfWork, Repositories.IFieldScheduleRepository repository) : base(unitOfWork, repository)
     {
     }
-
-        public IQueryable<FieldSchedule> GetFieldSchedule(JQueryDataTableParamModel request, out int totalRecord)
-        {
-            var filter = request.sSearch;
-            var list1 = this.GetActive(u => u.Active == true);
-
-            var list = list1.Where(
-                u => filter == null ||
-                u.Field.Name.ToLower().Contains(filter.ToLower())                
-                );
-
-            totalRecord = list.Count();
-            var result = list.OrderBy(u => u.Field.Name)
-                .Skip(request.iDisplayStart)
-                             .Take(request.iDisplayLength);
-            return result;
-        }
-    }
+}
 
 }

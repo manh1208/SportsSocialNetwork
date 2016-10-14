@@ -21,10 +21,12 @@ namespace SportsSocialNetwork.Models.Entities
         public int Type { get; set; }
         public Nullable<int> PostId { get; set; }
         public Nullable<int> InvitationId { get; set; }
+        public Nullable<int> OrderId { get; set; }
         public bool Active { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual Invitation Invitation { get; set; }
+        public virtual Order Order { get; set; }
         public virtual Post Post { get; set; }
     }
 }
