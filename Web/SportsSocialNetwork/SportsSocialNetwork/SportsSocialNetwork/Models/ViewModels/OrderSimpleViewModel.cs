@@ -14,6 +14,8 @@ namespace SportsSocialNetwork.Models.ViewModels
         public String UserName { get; set; }
         public String FieldName { get; set; }
         public String PlaceName { get; set; }
+        public String Status { get; set; }
+        public String PaidType { get; set; }
 
     }
 }
