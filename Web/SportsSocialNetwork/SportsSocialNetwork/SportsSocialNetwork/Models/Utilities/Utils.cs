@@ -57,10 +57,10 @@ namespace SportsSocialNetwork.Models.Utilities
                             pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
 
                             var fileExtension = ".jpg";
-                            var rootPath = "~/QRCodeImage";
+                            var rootPath = Setting.SSNROOTPATH;
 
                             var fileName = $"{DateTime.Now.ToString("yyyyMMddHHmmsstttt")}_{Guid.NewGuid().ToString()}{fileExtension}";
-                            var relativeFilePath = Path.Combine(rootPath.StartsWith("~") ? rootPath.Substring(1) : rootPath, "Orders", fileName);
+                            var relativeFilePath = Path.Combine(rootPath.StartsWith("~") ? rootPath.Substring(1) : rootPath, "QRCodeImage", fileName);
                             var fullFilePath = HostingEnvironment.MapPath(relativeFilePath);
                             var fullFolderPath = Path.GetDirectoryName(fullFilePath);
 

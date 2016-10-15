@@ -10,6 +10,7 @@ namespace SportsSocialNetwork.Models.Utilities
     {
         public static string CREDENTIAL_EMAIL = GetDataFromWebConfig("CredentialEmail");
         public static string CREDENTIAL_PASSWORDS = GetDataFromWebConfig("CredentialPasswords");
+        public static string SSNROOTPATH = GetDataFromWebConfig("SSNRootPath");
 
         private static string GetDataFromWebConfig(string key)
         {
