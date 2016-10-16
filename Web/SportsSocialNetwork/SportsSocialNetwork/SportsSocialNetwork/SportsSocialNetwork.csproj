@@ -286,7 +286,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\EventController.cs" />
-    <Compile Include="Controllers\EventModelView.cs" />
     <Compile Include="Controllers\FieldController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,7 +18,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
         bool checkOrderTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime playDate);
 
         Order CreateOrder(String userId, int fieldId, DateTime startTime, DateTime endTime, String note, double price, int? paidType);
-        Order CheckInOrder(String orderCode);
+        
+        //Order CheckInOrder(String orderCode);
+        
+        Order FindOrderByCode(String orderCode);
 
         #endregion
 
@@ -105,11 +108,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return this.GetActive(x => x.FieldId == fieldId);
         }
 
-        public Order CheckInOrder(String orderCode) {
+        public Order FindOrderByCode(String orderCode) {
             Order order= this.FirstOrDefaultActive(x => x.OrderCode == orderCode);
-            order.Status = 5;
-            this.Update(order);
-            this.Save();
             return order;
         }
 

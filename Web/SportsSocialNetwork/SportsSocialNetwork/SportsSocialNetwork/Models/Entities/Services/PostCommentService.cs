@@ -33,6 +33,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
             comment.CreateDate = DateTime.Now;
             comment.Active = true;
             this.Create(comment);
+            this.Save();
             return comment;
         }
     }

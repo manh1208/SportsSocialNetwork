@@ -162,7 +162,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         public IEnumerable<Place> GetAll(int skip, int take)
         {
             IEnumerable<Place> placeList;
-            placeList = this.GetActive().OrderBy(x=> x.Ratings.Count ).Skip(skip).Take(take);
+            placeList = this.GetActive(x=> x.Approve==true).OrderBy(x=> x.Ratings.Count ).Skip(skip).Take(take);
             return placeList;
         }
 

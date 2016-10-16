@@ -17,7 +17,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
     {
         private String systemError = "Đã có lỗi xảy ra!";
 
-        private String userImagePath = "UserImage\\CuongPK";
+        private String userImagePath = "PostComment";
 
         [HttpPost]
         public ActionResult GetComment(int postId, int skip, int take) {
@@ -61,14 +61,13 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 PostComment comment = service.Comment(postId, userId, content,commentImage);
 
+                AspNetUser commentedUser = comment.AspNetUser;
 
-                //AspNetUser commentedUser = comment.AspNetUser;
+                Post post = comment.Post;
 
-                //Post post = comment.Post;
+                AspNetUser user = postService.GetUserNameOfPost(post.Id);
 
-                //AspNetUser user = postService.GetUserNameOfPost(post.Id);
-
-                //Notification noti=  notiService.SaveNoti(user.Id, "Comment", commentedUser.UserName + "đã bình luận về bài viết của bạn",1,post.Id,null);
+                Notification noti = notiService.SaveNoti(user.Id, "Comment", commentedUser.UserName + "đã bình luận về bài viết của bạn", 1, post.Id, null);
 
                 PostCommentDetailViewModel result = Mapper.Map<PostCommentDetailViewModel>(comment);
 
