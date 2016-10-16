@@ -19,6 +19,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         Order CreateOrder(String userId, int fieldId, DateTime startTime, DateTime endTime, String note, double price, int? paidType);
         Order CheckInOrder(String orderCode);
+
         #endregion
 
         void test();

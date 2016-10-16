@@ -536,19 +536,89 @@
     (function () {
         $('#placeForm').formValidation({
             framework: "bootstrap",
+            button: {
+                selector: '#submitBtn',
+                disabled: 'disabled'
+            },
             icon: null,
             fields: {
+                Name: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Tên địa điểm không được trống'
+                        }
+                    }
+                },
+                Address: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Địa chỉ không được trống'
+                        }
+                    }
+                },
+                City: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Tỉnh/Thành phố không được trống'
+                        }
+                    }
+                },
+                District: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Quận/Huyện không được trống'
+                        }
+                    }
+                },
+                Ward: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Phường/Xã không được trống'
+                        }
+                    }
+                },
                 Email: {
                     validators: {
+                        notEmpty: {
+                            message: 'Email không được trống'
+                        },
                         emailAddress: {
                             message: 'Email không đúng định dạng'
                         }
                     }
                 },
-                type_digits: {
+                PhoneNumber: {
                     validators: {
+                        notEmpty: {
+                            message: 'Số điện thoại không được trống'
+                        },
                         digits: {
-                            message: 'The value is not digits'
+                            message: 'Số điện thoại phải là số'
+                        },
+                        stringLength: {
+                            min: 10,
+                            message: 'Số điện thoại phải từ 10 số trở lên'
+                        }
+                    }
+                },
+                StartTime: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Giờ bắt đầu không được trống'
+                        }
+                    }
+                },
+                EndTime: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Giờ kết thúc không được trống'
+                        }
+                    }
+                },
+                Description: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Mô tả không được trống'
                         }
                     }
                 },
@@ -632,6 +702,14 @@
     });
     $("#district").on("change", function () {
         updateWard();
+    });
+
+    $("#startTime").on("change", function () {
+        $('#placeForm').formValidation('revalidateField', 'StartTime');
+    });
+
+    $("#endTime").on("change", function () {
+        $('#placeForm').formValidation('revalidateField', 'EndTime');
     });
 
 </script>

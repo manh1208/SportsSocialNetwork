@@ -5,11 +5,11 @@
     ViewBag.Title = "Danh sách các sự kiện";
 }
 
-<style>
+@*<style>
     .datepicker {
         z-index: 1151 !important;
     }
-</style>
+</style>*@
 
 <div class="panel">
     <div class="panel-body">
@@ -218,6 +218,94 @@
                 });
             })(document, window, jQuery);
 
+            $('#startDate').datepicker({
+                format: "dd/mm/yyyy"
+            });
+            $('#endDate').datepicker({
+                format: "dd/mm/yyyy"
+            });
+
+            $(document).on('change', "#startDate", function () {
+                $('#eventForm').formValidation('revalidateField', 'StartDate');
+            });
+            $(document).on('change', "#endDate", function () {
+                $('#eventForm').formValidation('revalidateField', 'EndDate');
+            });
+
+            //Validation
+        (function () {
+            $('#eventForm').formValidation({
+                framework: "bootstrap",
+                button: {
+                    selector: '#submitBtn',
+                    disabled: 'disabled'
+                },
+                icon: null,
+                fields: {
+                    Name: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Tên sự kiện không được trống'
+                            }
+                        }
+                    },
+                    PlaceId: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Địa điểm không được trống'
+                            }
+                        }
+                    },
+                    StartDate: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Ngày bắt đầu không được trống'
+                            },
+                            date: {
+                                format: 'DD/MM/YYYY',
+                                message: 'Ngày không phù hợp',
+                                @*min: '@DateTime.Now.ToString("dd/MM/yyyy")'*@
+                                max: 'EndDate'
+                            }
+                        }
+                    },
+                    EndDate: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Ngày kết thúc không được trống'
+                            },
+                            date: {
+                                format: 'DD/MM/YYYY',
+                                message: 'Ngày không phù hợp',
+                                min: 'StartDate'
+                            }
+                        }
+                    },
+                    Description: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Mô tả không được trống'
+                            }
+                        }
+                    },
+                    type_numberic: {
+                        validators: {
+                            integer: {
+                                message: 'The value is not an number'
+                            }
+                        }
+                    },
+                    type_date: {
+                        validators: {
+                            date: {
+                                format: 'YYYY/MM/DD'
+                            }
+                        }
+                    }
+                }
+            });
+        })();
+
             $('#eventForm').submit(function (e) {
                 e.preventDefault();
                 var formData = new FormData(document.getElementById('eventForm'));
@@ -232,7 +320,7 @@
                     success: function (result) {
                         if (result.Succeed) {
                             showMessage("Cập nhật thành công", "success", "OK");
-                            $('#updateEventModal').modal('toggle');
+                            $('#updateEventModal').modal('hide');
                             RefreshTable();
 
                         } else {

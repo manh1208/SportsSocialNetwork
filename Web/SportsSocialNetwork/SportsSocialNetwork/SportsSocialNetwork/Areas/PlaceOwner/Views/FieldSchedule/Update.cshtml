@@ -71,6 +71,7 @@
         <div class="row">
             <div class="panel " style="margin-bottom:0;">
                 <div class="panel-body">
+                    @Html.TextBoxFor(m => m.Id, new { @style = "display:none;" })
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Chọn sân</label>
@@ -82,7 +83,7 @@
                                 <span class="input-group-addon">
                                     <i class="icon wb-calendar" aria-hidden="true"></i>
                                 </span>
-                                <input type="text" class="datepicker form-control" name="StartDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" value="@startDay.ToString("dd/MM/yyyy")" />
+                                <input type="text" class="datepicker form-control" id="startDay" name="StartDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" value="@startDay.ToString("dd/MM/yyyy")" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -91,7 +92,7 @@
                                 <span class="input-group-addon">
                                     <i class="icon wb-calendar" aria-hidden="true"></i>
                                 </span>
-                                <input type="text" class="datepicker form-control" name="EndDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" value="@endDay.ToString("dd/MM/yyyy")" />
+                                <input type="text" class="datepicker form-control" id="endDay" name="EndDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" value="@endDay.ToString("dd/MM/yyyy")" />
                             </div>
                         </div>
                     </div>
@@ -139,7 +140,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-        <button type="submit" class="btn btn-default">Cập nhật lịch</button>
+        <button type="submit" class="btn btn-success">Cập nhật lịch</button>
     </div>
 </form>
 @section Scripts{

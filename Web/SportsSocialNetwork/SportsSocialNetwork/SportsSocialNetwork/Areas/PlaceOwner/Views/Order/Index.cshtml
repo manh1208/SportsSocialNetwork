@@ -1,4 +1,6 @@
 ﻿@using Microsoft.AspNet.Identity;
+@using SportsSocialNetwork.Models.Enumerable;
+@using SportsSocialNetwork.Models.Utilities;
 @{
     ViewBag.Title = "Quản lí đặt sân";
 }
@@ -196,10 +198,10 @@
                         "aTargets": [5],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
-                            if (o[6] == 1) {
+                            if (o[6] == parseInt('@((int)OrderPaidType.ChosePayOnline)')) {
                                 return "<span class='label label-lg label-outline label-info'>Online</span>";
-                            } else {
-                                return "<span class='label label-lg label-outline label-dark'>Tiền mặt</span>";
+                            } else if (o[6] == parseInt('@((int)OrderPaidType.ChosePayByCash)')) {
+                                return "<span class='label label-lg label-outline label-success'>Tiền mặt</span>";
                             }
                         }
                     },
@@ -207,12 +209,16 @@
                         "aTargets": [6],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
-                            if (o[7] == 1) {
-                                return "<span class='label label-lg label-outline label-warning'>Chưa thanh toán</span>";
-                            } else if(o[7] == 2) {
-                                return "<span class='label label-lg label-outline label-success'>Đã thanh toán</span>";
-                            } else {
-                                return "<span class='label label-lg label-outline label-danger'>Hủy</span>";
+                            if (o[7] == parseInt('@((int)OrderStatus.Pending)')) {
+                                return "<span class='label label-lg label-outline label-warning'>@Utils.GetEnumDescription(OrderStatus.Pending).ToString()</span>";
+                            } else if(o[7] == parseInt('@((int)OrderStatus.Approved)')) {
+                                return "<span class='label label-lg label-outline label-success'>@Utils.GetEnumDescription(OrderStatus.Approved).ToString()</span>";
+                            } else if(o[7] == parseInt('@((int)OrderStatus.Cancel)')) {
+                                return "<span class='label label-lg label-outline label-default'>@Utils.GetEnumDescription(OrderStatus.Cancel).ToString()</span>";
+                            } else if(o[7] == parseInt('@((int)OrderStatus.Unapproved)')) {
+                                return "<span class='label label-lg label-outline label-dark'>@Utils.GetEnumDescription(OrderStatus.Unapproved).ToString()</span>";
+                            } else if(o[7] == parseInt('@((int)OrderStatus.CheckedIn)')) {
+                                return "<span class='label label-lg label-outline label-info'>@Utils.GetEnumDescription(OrderStatus.CheckedIn).ToString()</span>";
                             }
                         }
                     },

@@ -81,7 +81,7 @@
                                 <span class="input-group-addon">
                                     <i class="icon wb-calendar" aria-hidden="true"></i>
                                 </span>
-                                <input type="text" class="datepicker form-control" name="StartDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" />
+                                <input type="text" class="datepicker form-control" id="cstartDay" name="StartDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" />
                             </div>                           
                         </div>
                         <div class="form-group">
@@ -90,7 +90,7 @@
                                 <span class="input-group-addon">
                                     <i class="icon wb-calendar" aria-hidden="true"></i>
                                 </span>
-                                <input type="text" class="datepicker form-control" name="EndDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" />
+                                <input type="text" class="datepicker form-control" id="cendDay" name="EndDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" />
                             </div>                           
                         </div>
                     </div>
@@ -165,7 +165,7 @@
                             <label class="control-label">Mô tả</label>
                         </div>
                         <div>
-                            @Html.TextAreaFor(m => m.Description, new { @style = "width:100%" })
+                            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @style = "width:100%" })
                         </div>
                     </div>
                 </div>
@@ -174,7 +174,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-        <button type="submit" class="btn btn-default">Tạo lịch</button>
+        <button type="submit" class="btn btn-success">Tạo lịch</button>
     </div>
 </form>
 @section Scripts{
