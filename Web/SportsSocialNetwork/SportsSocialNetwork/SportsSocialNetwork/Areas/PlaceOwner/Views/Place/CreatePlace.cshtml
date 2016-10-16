@@ -138,121 +138,7 @@
 @section Scripts{
 
 <script>
-
-    $(document).ready(function() {
-        FormValidation.Validator.time = {
-            html5Attributes: {
-                message: 'message',
-                format: '',
-                min: 'min',
-                max: 'max',
-            },
-            validate: function(validator, $field, options) {
-                var value = $field.val();
-                if (value === '') {
-                    return true;
-                }
-
-                var timeFormat = options.format || 'HH:mm:ss';
-
-                var minutes = null, hours = null, seconds = null;
-
-                if (timeFormat) {
-                    timeFormat = timeFormat.split(':');
-                    time = time.split(':');
-
-                    if (timeFormat.length !== time.length) {
-                        return {
-                            valid: false,
-                            message: message
-                        };
-                    }
-
-                    hours = time.length > 0 ? time[0] : null;
-                    minutes = time.length > 1 ? time[1] : null;
-                    seconds = time.length > 2 ? time[2] : null;
-
-                    if (hours === '' || minutes === '' || seconds === '') {
-                        return {
-                            valid: false,
-                            message: message
-                        };
-                    }
-
-                    // Validate seconds
-                    if (seconds) {
-                        if (isNaN(seconds) || seconds.length > 2) {
-                            return {
-                                valid: false,
-                                message: message
-                            };
-                        }
-                        seconds = parseInt(seconds, 10);
-                        if (seconds < 0 || seconds > 60) {
-                            return {
-                                valid: false,
-                                message: message
-                            };
-                        }
-                    }
-
-                    // Validate hours
-                    if (hours) {
-                        if (isNaN(hours) || hours.length > 2) {
-                            return {
-                                valid: false,
-                                message: message
-                            };
-                        }
-                        hours = parseInt(hours, 10);
-                        if (hours < 0 || hours >= 24 || (amOrPm && hours > 12)) {
-                            return {
-                                valid: false,
-                                message: message
-                            };
-                        }
-                    }
-
-                    // Validate minutes
-                    if (minutes) {
-                        if (isNaN(minutes) || minutes.length > 2) {
-                            return {
-                                valid: false,
-                                message: message
-                            };
-                        }
-                        minutes = parseInt(minutes, 10);
-                        if (minutes < 0 || minutes > 59) {
-                            return {
-                                valid: false,
-                                message: message
-                            };
-                        }
-                    }
-                }
-
-                var min = null,
-                    max = null,
-                    minOption = options.min,
-                    maxOption = options.max;
-
-                if (value.length < 8) {
-                    return false;
-                }
-                if (value === value.toLowerCase()) {
-                    return false;
-                }
-                if (value === value.toUpperCase()) {
-                    return false;
-                }
-                if (value.search(/[0-9]/) < 0) {
-                    return false;
-                }
-
-                return true;
-            }
-        }
-        });
+    var TIME_PATTERN = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
     (function (document, window, $) {
         $(document).ready(function ($) {
@@ -480,10 +366,32 @@
                         notEmpty: {
                             message: 'Giờ bắt đầu không được trống'
                         },
-                        date: {
-                            format: 'HH:MM',
-                            message: 'Giờ không phù hợp'
-                        }
+                        //regexp: {
+                        //    regexp: TIME_PATTERN,
+                        //    message: 'Giờ không đúng định dạng [HH:mm]'
+                        //},
+                        //callback: {
+                        //    message: 'Giờ bắt đầu phải trước giờ kết thúc',
+                        //    callback: function (value, validator, $field) {
+                        //        var endTime = validator.getFieldElements('EndTime').val();
+                        //        if (endTime === '' || !TIME_PATTERN.test(endTime)) {
+                        //            return true;
+                        //        }
+                        //        var startHour = parseInt(value.split(':')[0], 10),
+                        //            startMinutes = parseInt(value.split(':')[1], 10),
+                        //            endHour = parseInt(endTime.split(':')[0], 10),
+                        //            endMinutes = parseInt(endTime.split(':')[1], 10);
+
+                        //        if (startHour < endHour || (startHour == endHour && startMinutes < endMinutes)) {
+                        //            // The end time is also valid
+                        //            // So, we need to update its status
+                        //            validator.updateStatus('EndTime', validator.STATUS_VALID, 'callback');
+                        //            return true;
+                        //        }
+
+                        //        return false;
+                        //    }
+                        //}
                     }
                 },
                 EndTime: {
@@ -491,11 +399,32 @@
                         notEmpty: {
                             message: 'Giờ kết thúc không được trống'
                         },
-                        date: {
-                            format: 'HH:MM',
-                            message: 'Giờ không phù hợp',
-                            min: 'StartTime'
-                        }
+                        //regexp: {
+                        //    regexp: TIME_PATTERN,
+                        //    message: 'Giờ không đúng định dạng [HH:mm]'
+                        //},
+                        //callback: {
+                        //    message: 'Giờ kết thúc phải sau giờ bắt đầu',
+                        //    callback: function (value, validator, $field) {
+                        //        var endTime = validator.getFieldElements('StartTime').val();
+                        //        if (endTime === '' || !TIME_PATTERN.test(endTime)) {
+                        //            return true;
+                        //        }
+                        //        var startHour = parseInt(value.split(':')[0], 10),
+                        //            startMinutes = parseInt(value.split(':')[1], 10),
+                        //            endHour = parseInt(endTime.split(':')[0], 10),
+                        //            endMinutes = parseInt(endTime.split(':')[1], 10);
+
+                        //        if (startHour < endHour || (startHour == endHour && startMinutes < endMinutes)) {
+                        //            // The end time is also valid
+                        //            // So, we need to update its status
+                        //            validator.updateStatus('StartTime', validator.STATUS_VALID, 'callback');
+                        //            return true;
+                        //        }
+
+                        //        return false;
+                        //    }
+                        //}
                     }
                 },
                 Description: {
