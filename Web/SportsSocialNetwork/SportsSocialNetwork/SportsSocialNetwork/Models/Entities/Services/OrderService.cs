@@ -17,6 +17,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         Order ChangeOrderStatus(int id, int status);
         bool checkOrderTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime playDate);
 
+        bool checkMaintainTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate);
+
         Order CreateOrder(String userId, int fieldId, DateTime startTime, DateTime endTime, String note, double price, int? paidType);
         Order CheckInOrder(String orderCode);
 
@@ -31,6 +33,34 @@ namespace SportsSocialNetwork.Models.Entities.Services
         public IEnumerable<Order> GetAllOrderOfUser(String ownerId)
         {
             return this.GetActive(x => x.UserId.Equals(ownerId));
+        }
+
+        public bool checkMaintainTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate)
+        {
+            IEnumerable<Order> orders = this.GetActive(p => p.FieldId == fieldId).OrderBy(p => p.StartTime).ToList();
+            bool isValid = true;
+            DateTime sTime = new DateTime(startDate.Year, startDate.Month, startDate.Day, startTime.Hours,
+                startTime.Minutes, startTime.Seconds);
+            DateTime eTime = new DateTime(endDate.Year, endDate.Month, endDate.Day, endTime.Hours,
+                endTime.Minutes, endTime.Seconds);
+            foreach (var order in orders)
+            {
+                if((order.StartTime >= sTime && order.EndTime <= eTime) || (order.StartTime < sTime && 
+                    order.EndTime > sTime) || (order.EndTime > eTime && order.StartTime < eTime))
+                {
+                    isValid = false;
+                    break;
+                }
+            }
+            if (isValid)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+                
         }
 
         public Order GetOrderById(int id)

@@ -3415,6 +3415,7 @@
     <Content Include="Views\Order\BookFieldNow.cshtml" />
     <Content Include="Views\Event\ViewDetail.cshtml" />
     <Content Include="Views\Event\Index.cshtml" />
+    <Content Include="Views\Event\PlaceEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

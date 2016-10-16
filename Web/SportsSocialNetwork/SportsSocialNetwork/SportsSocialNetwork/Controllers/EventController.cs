@@ -40,6 +40,21 @@ namespace SportsSocialNetwork.Controllers
             return View(viewModel);
         }
 
+        public ActionResult PlaceEvent(int? id)
+        {
+            var _placeService = this.Service<IPlaceService>();
+            var place = _placeService.FirstOrDefaultActive(p => p.Id == id);
+            if(place == null)
+            {
+                return RedirectToAction("PageNotFound", "Errors");
+            }
+            ViewBag.placeName = place.Name;
+            ViewBag.placeId = id;
+            var viewModel = new EventViewModel();
+
+            return View(viewModel);
+        }
+
         public ActionResult GetDistrict(string provinceName)
         {
             Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
@@ -62,45 +77,59 @@ namespace SportsSocialNetwork.Controllers
             return Json(districtList, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetData(JQueryDataTableParamModel param, string province,
+        public ActionResult GetData(JQueryDataTableParamModel param, string placeId, string province,
             string district, string lat, string lng)
+
         {
+
             var _placeService = this.Service<IPlaceService>();
             var _eventService = this.Service<IEventService>();
             List<Event> eventList = new List<Event>();
-
-
-            if (lat != null && lat != "" && lng != null && lng != "")
+            if (placeId!=null)
             {
-                var places = _placeService.getAllPlace();
-                var latitude = float.Parse(lat);
-                var longtitude = float.Parse(lng);
-                var Coord = new GeoCoordinate(latitude, longtitude);
-                foreach (Place place in places)
+                int placeID = Int32.Parse(placeId);
+                var placeEvents = _eventService.GetActive(p => p.PlaceId == placeID).OrderByDescending(p =>
+                           p.EndDate).ToList();
+                foreach (Event placeEvent in placeEvents)
                 {
-                    var placeCoord = new GeoCoordinate(place.Latitude.Value, place.Longitude.Value);
-                    var dis = Coord.GetDistanceTo(placeCoord);
-                    if (Coord.GetDistanceTo(placeCoord) < 5000)
-                    {
-                        var placeEvents = _eventService.GetActive(p => p.PlaceId == place.Id).OrderByDescending(p => 
-                        p.EndDate).ToList();
-                        foreach (Event placeEvent in placeEvents)
-                        {
-                            eventList.Add(placeEvent);
-                        }
-                    }
+                    eventList.Add(placeEvent);
                 }
             }
             else
             {
-                var places = _placeService.getPlace(null, province, district).ToList();
-                foreach(Place place in places)
+               
+                if (lat != null && lat != "" && lng != null && lng != "")
                 {
-                    var placeEvents = _eventService.GetActive(p => p.PlaceId == place.Id).OrderByDescending(p =>
-                       p.EndDate).ToList();
-                    foreach (Event placeEvent in placeEvents)
+                    var places = _placeService.getAllPlace();
+                    var latitude = float.Parse(lat);
+                    var longtitude = float.Parse(lng);
+                    var Coord = new GeoCoordinate(latitude, longtitude);
+                    foreach (Place place in places)
                     {
-                        eventList.Add(placeEvent);
+                        var placeCoord = new GeoCoordinate(place.Latitude.Value, place.Longitude.Value);
+                        var dis = Coord.GetDistanceTo(placeCoord);
+                        if (Coord.GetDistanceTo(placeCoord) < 5000)
+                        {
+                            var placeEvents = _eventService.GetActive(p => p.PlaceId == place.Id).OrderByDescending(p =>
+                            p.EndDate).ToList();
+                            foreach (Event placeEvent in placeEvents)
+                            {
+                                eventList.Add(placeEvent);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    var places = _placeService.getPlace(null, province, district).ToList();
+                    foreach (Place place in places)
+                    {
+                        var placeEvents = _eventService.GetActive(p => p.PlaceId == place.Id).OrderByDescending(p =>
+                           p.EndDate).ToList();
+                        foreach (Event placeEvent in placeEvents)
+                        {
+                            eventList.Add(placeEvent);
+                        }
                     }
                 }
             }
@@ -110,7 +139,7 @@ namespace SportsSocialNetwork.Controllers
             {
                 filteredListItems = eventList.Where(
                     d => (d.Name != null && d.Name.ToLower().Contains(param.sSearch.ToLower()))
-                    //|| (d.Place.Name != null && d.Name.ToLower().Contains(param.sSearch.ToLower()))
+                    || (d.Place.Name != null && d.Place.Name.ToLower().Contains(param.sSearch.ToLower()))
                 ).OrderByDescending(d =>
                        d.EndDate);
             }
@@ -138,8 +167,8 @@ namespace SportsSocialNetwork.Controllers
                 (c.Image == null || c.Image == "")?"/Content/images/no_image.jpg":c.Image,
                 c.Name,
                 c.StartDate.ToString("dd/MM/yyyy")+" - "+c.EndDate.ToString("dd/MM/yyyy"),
-                _placeService.FirstOrDefaultActive(p => p.Id == c.PlaceId).Id,
-                _placeService.FirstOrDefaultActive(p => p.Id == c.PlaceId).Name,
+                c.Place.Id,
+                c.Place.Name,
                 Utils.GetEnumDescription((EventStatus)c.Status)
                 //c.Fields.Count == 0? "": c.Fields.Select(d => d.FieldType.Sport).ToString()
             }.ToArray());

@@ -15,6 +15,7 @@
     .imgW100 {
         width: 100%;
         vertical-align: middle;
+        min-height: 200px;
         max-height: 250px;
     }
 
@@ -78,7 +79,15 @@
                 <div class="col-md-12">
                     <div class="col-md-6 height-250" style="float:left">
                         <div class="overlay-container">
-                            <img title="Nhà thi đấu Phú Thọ" src="@Model.Avatar" class='imgW100'>
+                            @if (Model.Avatar != null && Model.Avatar != "")
+                            {
+                                <img title="Nhà thi đấu Phú Thọ" src="@Model.Avatar" class='imgW100'>
+                            }
+                            else
+                            {
+                                <img title="Nhà thi đấu Phú Thọ" src="~/Content/images/no_image.jpg" class='imgW100'>
+                            }
+
                         </div>
                     </div>
                     <div class="col-md-6" style="float:left">
@@ -174,10 +183,10 @@
                 <div class="widget-body" style="text-align:center">
                     <p>Sự kiện gần đây nhất</p>
                     <h3 class="widget-title">@ViewBag.lastestEvent.Name</h3>
-                    <div class="widget-body-footer padding-bottom-15">
+                    <div class="widget-body-footer padding-bottom-15 margin-top-0">
                         <a class="btn btn-primary" href="@Url.Action("ViewDetail", "Event", new { id = @ViewBag.lastestEvent.Id })">Xem chi tiết</a>
                     </div>
-                    <a href="@Url.Action("Index", "Event", new { id = Model.Id })">Xem các sự kiện khác</a>
+                    <a href="@Url.Action("PlaceEvent", "Event", new { id = Model.Id })">Xem sự kiện khác của sân</a>
                 </div>
             </div>
             <!-- End Widget -->

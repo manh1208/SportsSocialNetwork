@@ -15,6 +15,7 @@
     .imgW100 {
         width: 100%;
         vertical-align: middle;
+        min-height: 200px;
         max-height: 250px;
     }
 
@@ -61,7 +62,7 @@
                     @Html.Raw(Server.HtmlDecode(Model.Description))
                 </div>
                 <div class="col-md-12 text-center">
-                    <a class="btn btn-primary" href="@Url.Action("Index", "Event", new { id = Model.PlaceId })">Xem thêm các sự kiện khác</a>
+                    <a class="btn btn-primary" href="@Url.Action("PlaceEvent", "Event", new { id = Model.PlaceId })">Xem thêm các sự kiện khác của sân</a>
                 </div>
             </div>
         </div>
