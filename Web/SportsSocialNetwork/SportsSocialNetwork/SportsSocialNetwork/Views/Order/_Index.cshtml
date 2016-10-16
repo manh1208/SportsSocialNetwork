@@ -46,55 +46,7 @@
 }
 
 <script>
-    (function () {
-        $('#orderForm').formValidation({
-            framework: "bootstrap",
-            button: {
-                selector: '#createOrder',
-                disabled: 'disabled'
-            },
-            icon: null,
-            fields: {
-                CreateDate: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Không được để trống'
-                        }
-                    }
-                },
-                StartTime: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Không được để trống'
-                        }
-                    }
-                },
-                EndTime: {
-                    validators: {
-                        notEmpty: {
-                            message: 'Không được để trống'
-                        }
-                    }
-                }
-            }
-        });
-    })();
-
-    $("#startTime").on("change", function () {
-        $('#orderForm').formValidation('revalidateField', 'StartTime');
-    });
-
-    $("#endTime").on("change", function () {
-        $('#orderForm').formValidation('revalidateField', 'EndTime');
-    });
-
-    $("#playDate").on("change", function () {
-        $('#orderForm').formValidation('revalidateField', 'CreateDate');
-    });
-
-    $('#playDate').datepicker({
-        format: 'dd/mm/yyyy'
-    });
+    
 
     $('#orderForm').submit(function () {
         var startTime = $("#startTime").val();
@@ -106,51 +58,54 @@
         $("#error2").hide();
         $("#error3").hide();
         var hasErrorContent = false;
-        if (startTime >= endTime) {
+        if (startTime >= endTime || startTime == null || startTime == "" || endTime == null || endTime == ""
+                || playDate == "" || playDate == null) {
             error = true;
             hasErrorContent = true;
             $("#error1").show();
-        }
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("CheckTimeValidInTimeBlock")',
-            async: false,
-            data: {"fieldId" : @Model.FieldId,
-                "startTime": startTime,
-                "endTime" : endTime},
-            success: function (result) {
-                if (!result.Succeed) {
+        }else{
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CheckTimeValidInTimeBlock")',
+                async: false,
+                data: {"fieldId" : @Model.FieldId,
+                    "startTime": startTime,
+                    "endTime" : endTime},
+                success: function (result) {
+                    if (!result.Succeed) {
+                        error = true;
+                        hasErrorContent = true;
+                        $("#error2").show();
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                     error = true;
-                    hasErrorContent = true;
-                    $("#error2").show();
-                }
-            },
-            error: function (result) {
-                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                error = true;
-            },
-        });
+                },
+            });
 
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("CheckOrderTimeExist")',
-            async: false,
-            data: {"fieldId" : @Model.FieldId,
-                "startTime": startTime,
-                "endTime" : endTime,
-                "playDate" : playDate},
-            success: function (result) {
-                if (!result.Succeed) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CheckOrderTimeExist")',
+                async: false,
+                data: {"fieldId" : @Model.FieldId,
+                    "startTime": startTime,
+                    "endTime" : endTime,
+                    "playDate" : playDate},
+                success: function (result) {
+                    if (!result.Succeed) {
+                        error = true;
+                        hasErrorContent = true;
+                        $("#error3").show();
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                     error = true;
-                    hasErrorContent = true;
-                    $("#error3").show();
-                }
-            },
-            error: function (result) {
-                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                error = true;
-            },
-        });
+                },
+            });
+        }
+        
 
         if (error) {
             if(hasErrorContent){

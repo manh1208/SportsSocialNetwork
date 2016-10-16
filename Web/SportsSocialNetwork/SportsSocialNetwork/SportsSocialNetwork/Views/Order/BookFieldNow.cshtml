@@ -45,7 +45,13 @@
                 <div class="form-group">
                     <label for="phone" class="col-md-4 control-label">Chọn sân:</label>
                     <div class="col-md-4 input-group">
-                       @Html.DropDownListFor(m => m.FieldId, fieldList, new { @class = "bs-select-hidden form-control input-sm droplist", @id = "field" })
+                        @Html.DropDownListFor(m => m.FieldId, fieldList, new { @class = "bs-select-hidden form-control input-sm droplist", @id = "field" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone" class="col-md-4 control-label"></label>
+                    <div class="col-md-4 input-group">
+                        <button type="button" class="btn btn-warning col-md-12" id="checkCalendar"><i class="icon wb-calendar" aria-hidden="true"></i> Kiểm tra lịch sân</button>
                     </div>
                 </div>
                 <div class="form-group">
@@ -56,10 +62,10 @@
                 </div>
                 <div class="form-group">
                     <label class="col-md-4 control-label">Giờ bắt đầu</label>
-                        <div class="input-group col-md-4">
-                            @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker timeInfo form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
-                            </div>
-                    
+                    <div class="input-group col-md-4">
+                        @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker timeInfo form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
+                    </div>
+
                 </div>
                 <div class="form-group">
                     <label class="col-md-4 control-label">Giờ kết thúc</label>
@@ -81,7 +87,7 @@
                     <div class="input-group col-md-4">
                         @Html.TextAreaFor(p => p.Note, new { @class = "form-control", @id = "note", @rows = 3 })
                     </div>
-                    </div>
+                </div>
             </div>
             <div class="col-md-12 padding-0">
                 <p style="font-weight:bold">Phương thức thanh toán:</p>
@@ -116,7 +122,27 @@
         </div>
     </form>
 </div>
+<div class="modal fade" id="calendarForm" aria-hidden="true" aria-labelledby="CalendarForm"
+     role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <form class="modal-content" action="#" method="post" role="form">
+            <div class="modal-header">
+                <button type="button" class="close" aria-hidden="true" data-dismiss="modal">×</button>
+                <h4 class="modal-title">Lịch sân</h4>
+            </div>
+            <div class="modal-body">
+                <div id="calendar">
 
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-actions">
+                    <button class="btn btn-primary" data-dismiss="modal" type="button">Đóng</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 @section Scripts{
     <script>
 
@@ -216,7 +242,7 @@
             $(this).parent().parent('li').addClass('active');
         });
 
-        
+
         $(".timeInfo").change(function () {
             var startTime = $("#startTime").val();
             var endTime = $("#endTime").val();
@@ -305,12 +331,83 @@
             }
 
             if (error) {
-                if(hasErrorContent){
+                if (hasErrorContent) {
                     $("#error").show();
                 }
                 return false;
             }
         });
+
+        $('#checkCalendar').on('click', function () {
+            $('#calendarForm').modal('show');
+        });
+
+        $('#calendarForm').on('shown.bs.modal', function () {
+            handleFullcalendar();
+        });
+
+        $('#field').on('change', function () {
+            $('#calendar').fullCalendar('destroy');
+        });
+
+        function handleFullcalendar() {
+
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
+
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+            var fieldId = $("#field").val();
+            today = yyyy + '/' + mm + '/' + dd;
+            var my_options = {
+
+                header: {
+                    left: null,
+                    center: 'prev,title,next',
+                    right: 'agendaWeek,agendaDay'
+                },
+                defaultDate: today,
+                eventSources: [
+        {
+            url: "@Url.Action("GetOrderCalendar", "Field")",
+            data: {
+
+                "id": fieldId
+            },
+            color: 'blue',
+            textColor: 'white'
+        },
+            {
+                url: "@Url.Action("GetScheduleCalendar", "Field")",
+                    data: {
+
+                "id": fieldId
+            },
+                color: 'red',
+                textColor: 'white'
+            }
+                ],
+                lang: 'vi',
+                defaultView: 'agendaWeek',
+                allDaySlot: false
+            };
+
+            var _options;
+            var my_options_mobile = $.extend({}, my_options);
+
+            my_options_mobile.aspectRatio = 0.5;
+            _options = $(window).outerWidth() < 667 ? my_options_mobile : my_options;
+
+            $('#calendar').fullCalendar(_options);
+            $('#calendar').fullCalendar('render');
+        }
     </script>
 }
 

@@ -67,7 +67,7 @@
                                     @ViewBag.field.Name
                                 </td>
                                 <td class="text-center">
-                                    @Model.StartTime.ToShortTimeString() - @Model.EndTime.ToShortTimeString(), Ngày @ViewBag.playDate.ToString("dd-MM-yyyy")
+                                    @Model.StartTime.ToShortTimeString() - @Model.EndTime.ToShortTimeString(), Ngày @Model.StartTime.ToString("dd-MM-yyyy")
                                 </td>
                                 <td>
                                     @Model.Price
@@ -121,15 +121,59 @@
 
 @section Scripts{
     <script>
+        (function () {
+            $('#onlineform').formValidation({
+                framework: "bootstrap",
+                button: {
+                    selector: '#createOrder',
+                    disabled: 'disabled'
+                },
+                icon: null,
+                fields: {
+                    PayerName: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Không được để trống'
+                            }
+                        }
+                    },
+                    PayerEmail: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Email không được trống'
+                            },
+                            emailAddress: {
+                                message: 'Email không đúng định dạng'
+                            }
+                        }
+                    },
+                    PayerPhone: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Số điện thoại không được trống'
+                            },
+                            digits: {
+                                message: 'Số điện thoại phải là số'
+                            },
+                            stringLength: {
+                                min: 10,
+                                message: 'Số điện thoại phải từ 10 số trở lên'
+                            }
+                        }
+                    }
+                }
+            });
+        })();
+
         $('input[name="PaidType"]').bind('click', function () {
             $('.list-content li').removeClass('active');
             $(this).parent().parent('li').addClass('active');
         });
-
+        
         $('#onlineform').submit(function () {
             var startTime = $("#StartTime").val();
             var endTime = $("#EndTime").val();
-            var playDate = @ViewBag.playDate;
+            var playDate = '@Model.StartTime.ToString("dd/MM/yyyy")';
             var error = false;
             $("#error").hide();
             $("#error1").hide();
