@@ -108,8 +108,8 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         [HttpPost]
         public ActionResult Create(FieldSchedule schedule)
         {
-            DateTime _startDay = DateTime.Parse(Request["StartDay"]);
-            DateTime _endDay = DateTime.Parse(Request["EndDay"]);
+            DateTime _startDay = DateTime.ParseExact(Request["StartDay"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            DateTime _endDay = DateTime.ParseExact(Request["EndDay"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
             TimeSpan _startTime = TimeSpan.Parse(Request["StartTime"]);
             TimeSpan _endTime = TimeSpan.Parse(Request["EndTime"]);
 

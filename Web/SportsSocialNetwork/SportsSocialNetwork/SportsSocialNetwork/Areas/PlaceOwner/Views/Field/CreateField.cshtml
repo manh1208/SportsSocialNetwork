@@ -290,19 +290,23 @@
         var startTime = $("#stTime").val();
         var endTime = $("#enTime").val();
         var price = $("#tsPrice").val();
-
+        if (price == null || price == "") {
+            var noti = "<p class='alert alert-danger'>Giá tiền không được trống</p>";
+            $("#notiTB").empty();
+            $("#notiTB").append(noti);
+            return;
+        }
         //check valid timeblock
         //get the last time block
         var lastTimeBlock = $('#timeSlot option:last-child').val();
         console.log(lastTimeBlock);
         //compare and process
         if (checkValidTimeBlock(startTime, endTime, lastTimeBlock) == false) {
-            var noti = "<p class='alert alert-danger'>Khung giá nhập không phù hợp</p>";
+            var noti = "<p class='alert alert-danger'>Khung giờ nhập không phù hợp</p>";
             $("#notiTB").empty();
             $("#notiTB").append(noti);
         } else {
             $("#notiTB").empty();
-            //var tempTS = document.getElementById("#tempTS");
             var ts = "<div class='row' id='ts1'>"
                                     + "<div class='col-xs-3' style='padding:0 0 0 15px;'>"
                                         + "<div class='input-group'>"
@@ -323,7 +327,7 @@
                                         + "</div>"
                                     + "</div>"
                                     + "<div class='col-xs-3'>"
-                                        + "<button type='button' class='btn btn-pure btn-primary icon wb-pencil editbtn' onclick=''></button>"
+                                        + "<button type='button' class='btn btn-pure btn-primary icon wb-pencil editbtn' onclick='' style='display: none;'></button>"
                                         + "<button type='button' class='btn btn-pure btn-danger icon wb-close removebtn' onclick=''></button>"
                                     + "</div>"
                                 + "</div>";
@@ -381,6 +385,11 @@
                         }
                     }
                 },
+                uploadImages: {
+                    notEmpty: {
+                        message: 'Hình ảnh không được trống'
+                    },
+                }
                 //username: {
                 //  validators: {
                 //    notEmpty: {

@@ -27,11 +27,11 @@
                     <label class="floating-label">Địa điểm</label>
                 </div>
                 <div class="form-group form-material floating">
-                    @Html.TextBoxFor(e => e.StartDate, "{0:dd/MM/yyyy}", new { @class = "form-control input-lg", @data_placement = "right", @data_align = "top", @data_plugin = "datepicker",  @id = "startDate" })
+                    @Html.TextBoxFor(e => e.StartDate, "{0:dd/MM/yyyy}", new { @class = "form-control input-lg", @data_placement = "right", @data_align = "top", @data_plugin = "datepicker", @data_autoclose = "true",  @id = "startDate" })
                     <label class="floating-label">Ngày bắt đầu</label>
                 </div>
                 <div class="form-group form-material floating">
-                    @Html.TextBoxFor(e => e.EndDate, "{0:dd/MM/yyyy}", new { @class = "form-control input-lg", @data_plugin = "datepicker", @id = "endDate" })
+                    @Html.TextBoxFor(e => e.EndDate, "{0:dd/MM/yyyy}", new { @class = "form-control input-lg", @data_plugin = "datepicker", @data_autoclose = "true", @id = "endDate" })
                     <label class="floating-label">Ngày kết thúc</label>
                 </div>
                 <div class="form-group form-material floating">
@@ -39,9 +39,10 @@
                     <input type="file" id="image" name="image" />
                     <label class="floating-label">Hình ảnh</label>
                 </div>
-                <div class="form-group form-material floating">
-                    @Html.TextAreaFor(e => e.Description, new { rows = "3", @class = "form-control input-lg" })
-                    <label class="floating-label">Mô tả</label>
+                <div class="form-group">
+                    <label class="control-label">Mô tả</label>
+                    @Html.TextAreaFor(e => e.Description, new { rows = "3", @class = "form-control input-lg", @id = "Description" })
+                    
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-5 col-md-7">
@@ -78,6 +79,8 @@
         $('#endDate').datepicker({
             format: "dd/mm/yyyy"
         });
+
+        CKEDITOR.replace('Description');
         // It is equivalent to use
         //$('#eventForm').formValidation('revalidateField', 'StartDate');
 
@@ -130,13 +133,13 @@
                             }
                         }
                     },
-                    Description: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Mô tả không được trống'
-                            }
-                        }
-                    },
+                    //Description: {
+                    //    validators: {
+                    //        notEmpty: {
+                    //            message: 'Mô tả không được trống'
+                    //        }
+                    //    }
+                    //},
                     type_numberic: {
                         validators: {
                             integer: {

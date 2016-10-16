@@ -51,6 +51,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
                 searchEvent.Name = evt.Name;
                 //searchEvent.CreatorId = evt.CreatorId;
+                searchEvent.PlaceId = evt.PlaceId;
                 searchEvent.StartDate = evt.StartDate;
                 searchEvent.EndDate = evt.EndDate;
                 searchEvent.Description = evt.Description;

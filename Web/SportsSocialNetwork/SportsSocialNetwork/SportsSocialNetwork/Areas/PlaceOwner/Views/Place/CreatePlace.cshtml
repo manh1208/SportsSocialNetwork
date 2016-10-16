@@ -138,7 +138,6 @@
 @section Scripts{
 
 <script>
-    var TIME_PATTERN = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
     (function (document, window, $) {
         $(document).ready(function ($) {
@@ -294,6 +293,7 @@
     // Example Validataion Constraints
     // -------------------------------
     (function () {
+        var TIME_PATTERN = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
         $('#placeForm').formValidation({
             framework: "bootstrap",
             button: {
@@ -366,32 +366,32 @@
                         notEmpty: {
                             message: 'Giờ bắt đầu không được trống'
                         },
-                        //regexp: {
-                        //    regexp: TIME_PATTERN,
-                        //    message: 'Giờ không đúng định dạng [HH:mm]'
-                        //},
-                        //callback: {
-                        //    message: 'Giờ bắt đầu phải trước giờ kết thúc',
-                        //    callback: function (value, validator, $field) {
-                        //        var endTime = validator.getFieldElements('EndTime').val();
-                        //        if (endTime === '' || !TIME_PATTERN.test(endTime)) {
-                        //            return true;
-                        //        }
-                        //        var startHour = parseInt(value.split(':')[0], 10),
-                        //            startMinutes = parseInt(value.split(':')[1], 10),
-                        //            endHour = parseInt(endTime.split(':')[0], 10),
-                        //            endMinutes = parseInt(endTime.split(':')[1], 10);
+                        regexp: {
+                            regexp: TIME_PATTERN,
+                            message: 'Giờ không đúng định dạng [HH:mm]'
+                        },
+                        callback: {
+                            message: 'Giờ bắt đầu phải trước giờ kết thúc',
+                            callback: function (value, validator, $field) {
+                                var endTime = validator.getFieldElements('EndTime').val();
+                                if (endTime === '' || !TIME_PATTERN.test(endTime)) {
+                                    return true;
+                                }
+                                var startHour = parseInt(value.split(':')[0], 10),
+                                    startMinutes = parseInt(value.split(':')[1], 10),
+                                    endHour = parseInt(endTime.split(':')[0], 10),
+                                    endMinutes = parseInt(endTime.split(':')[1], 10);
 
-                        //        if (startHour < endHour || (startHour == endHour && startMinutes < endMinutes)) {
-                        //            // The end time is also valid
-                        //            // So, we need to update its status
-                        //            validator.updateStatus('EndTime', validator.STATUS_VALID, 'callback');
-                        //            return true;
-                        //        }
+                                if (startHour < endHour || (startHour == endHour && startMinutes < endMinutes)) {
+                                    // The end time is also valid
+                                    // So, we need to update its status
+                                    validator.updateStatus('EndTime', validator.STATUS_VALID, 'callback');
+                                    return true;
+                                }
 
-                        //        return false;
-                        //    }
-                        //}
+                                return false;
+                            }
+                        }
                     }
                 },
                 EndTime: {
@@ -399,32 +399,32 @@
                         notEmpty: {
                             message: 'Giờ kết thúc không được trống'
                         },
-                        //regexp: {
-                        //    regexp: TIME_PATTERN,
-                        //    message: 'Giờ không đúng định dạng [HH:mm]'
-                        //},
-                        //callback: {
-                        //    message: 'Giờ kết thúc phải sau giờ bắt đầu',
-                        //    callback: function (value, validator, $field) {
-                        //        var endTime = validator.getFieldElements('StartTime').val();
-                        //        if (endTime === '' || !TIME_PATTERN.test(endTime)) {
-                        //            return true;
-                        //        }
-                        //        var startHour = parseInt(value.split(':')[0], 10),
-                        //            startMinutes = parseInt(value.split(':')[1], 10),
-                        //            endHour = parseInt(endTime.split(':')[0], 10),
-                        //            endMinutes = parseInt(endTime.split(':')[1], 10);
+                        regexp: {
+                            regexp: TIME_PATTERN,
+                            message: 'Giờ không đúng định dạng [HH:mm]'
+                        },
+                        callback: {
+                            message: 'Giờ kết thúc phải sau giờ bắt đầu',
+                            callback: function (value, validator, $field) {
+                                var startTime = validator.getFieldElements('StartTime').val();
+                                if (startTime == '' || !TIME_PATTERN.test(startTime)) {
+                                    return true;
+                                }
+                                var startHour = parseInt(startTime.split(':')[0], 10),
+                                    startMinutes = parseInt(startTime.split(':')[1], 10),
+                                    endHour = parseInt(value.split(':')[0], 10),
+                                    endMinutes = parseInt(value.split(':')[1], 10);
 
-                        //        if (startHour < endHour || (startHour == endHour && startMinutes < endMinutes)) {
-                        //            // The end time is also valid
-                        //            // So, we need to update its status
-                        //            validator.updateStatus('StartTime', validator.STATUS_VALID, 'callback');
-                        //            return true;
-                        //        }
+                                if (endHour > startHour || (endHour == startHour && endMinutes > startMinutes)) {
+                                    // The start time is also valid
+                                    // So, we need to update its status
+                                    validator.updateStatus('StartTime', validator.STATUS_VALID, 'callback');
+                                    return true;
+                                }
 
-                        //        return false;
-                        //    }
-                        //}
+                                return false;
+                            }
+                        }
                     }
                 },
                 Description: {
@@ -518,10 +518,12 @@
 
     $("#startTime").on("change", function () {
         $('#placeForm').formValidation('revalidateField', 'StartTime')
+        //$('#placeForm').formValidation('revalidateField', 'EndTime')
     });
 
     $("#endTime").on("change", function () {
         $('#placeForm').formValidation('revalidateField', 'EndTime')
+        //$('#placeForm').formValidation('revalidateField', 'StartTime')
     });
 
 </script>

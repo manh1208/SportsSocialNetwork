@@ -73,6 +73,8 @@
             });
         })(document, window, jQuery);
 
+        
+
         $('body').on('focus', ".datepicker", function () {
             $(this).datepicker();
         })
@@ -218,6 +220,8 @@
                 });
             })(document, window, jQuery);
 
+            CKEDITOR.replace('Description');
+
             $('#startDate').datepicker({
                 format: "dd/mm/yyyy"
             });
@@ -281,13 +285,13 @@
                             }
                         }
                     },
-                    Description: {
-                        validators: {
-                            notEmpty: {
-                                message: 'Mô tả không được trống'
-                            }
-                        }
-                    },
+                    //Description: {
+                    //    validators: {
+                    //        notEmpty: {
+                    //            message: 'Mô tả không được trống'
+                    //        }
+                    //    }
+                    //},
                     type_numberic: {
                         validators: {
                             integer: {
@@ -308,6 +312,9 @@
 
             $('#eventForm').submit(function (e) {
                 e.preventDefault();
+
+                for (instance in CKEDITOR.instances)
+                    CKEDITOR.instances[instance].updateElement();
                 var formData = new FormData(document.getElementById('eventForm'));
                 $.ajax({
                     type: 'POST',
@@ -324,7 +331,7 @@
                             RefreshTable();
 
                         } else {
-                            showErrors(result.Errors);
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                         }
 
                     },
