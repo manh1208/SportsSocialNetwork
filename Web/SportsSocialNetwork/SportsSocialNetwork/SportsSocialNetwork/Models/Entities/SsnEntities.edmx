@@ -475,6 +475,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Event_Place">
+          <End Role="Place" Type="Self.Place" Multiplicity="1" />
+          <End Role="Event" Type="Self.Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Place">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="PlaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Field_FieldType">
           <End Role="FieldType" Type="Self.FieldType" Multiplicity="1" />
           <End Role="Field" Type="Self.Field" Multiplicity="*" />
@@ -1017,6 +1029,10 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Event" EntitySet="Event" />
           </AssociationSet>
+          <AssociationSet Name="FK_Event_Place" Association="Self.FK_Event_Place">
+            <End Role="Place" EntitySet="Place" />
+            <End Role="Event" EntitySet="Event" />
+          </AssociationSet>
           <AssociationSet Name="FK_Field_FieldType" Association="Self.FK_Field_FieldType">
             <End Role="FieldType" EntitySet="FieldType" />
             <End Role="Field" EntitySet="Field" />
@@ -1295,6 +1311,10 @@
             <End Role="Sport" EntitySet="Sports" />
             <End Role="CategorySport" EntitySet="CategorySports" />
           </AssociationSet>
+          <AssociationSet Name="FK_Event_Place" Association="SSNModel.FK_Event_Place">
+            <End Role="Place" EntitySet="Places" />
+            <End Role="Event" EntitySet="Events" />
+          </AssociationSet>
           <AssociationSet Name="FK_Participation_Event" Association="SSNModel.FK_Participation_Event">
             <End Role="Event" EntitySet="Events" />
             <End Role="Participation" EntitySet="Participations" />
@@ -1512,6 +1532,7 @@
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Event_AspNetUsers" FromRole="Event" ToRole="AspNetUser" />
+          <NavigationProperty Name="Place" Relationship="SSNModel.FK_Event_Place" FromRole="Event" ToRole="Place" />
           <NavigationProperty Name="Participations" Relationship="SSNModel.FK_Participation_Event" FromRole="Event" ToRole="Participation" />
         </EntityType>
         <EntityType Name="Field">
@@ -1756,6 +1777,7 @@
           <Property Name="EndTime" Type="Time" Nullable="false" Precision="7" />
           <Property Name="Approve" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Place_AspNetUsers" FromRole="Place" ToRole="AspNetUser" />
+          <NavigationProperty Name="Events" Relationship="SSNModel.FK_Event_Place" FromRole="Place" ToRole="Event" />
           <NavigationProperty Name="Fields" Relationship="SSNModel.FK_Field_Place" FromRole="Place" ToRole="Field" />
           <NavigationProperty Name="PlaceImages" Relationship="SSNModel.FK_PlaceImage_Place" FromRole="Place" ToRole="PlaceImage" />
           <NavigationProperty Name="Ratings" Relationship="SSNModel.FK_Rating_Place" FromRole="Place" ToRole="Rating" />
@@ -2103,6 +2125,18 @@
             </Principal>
             <Dependent Role="CategorySport">
               <PropertyRef Name="SportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Event_Place">
+          <End Type="SSNModel.Place" Role="Place" Multiplicity="1" />
+          <End Type="SSNModel.Event" Role="Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Place">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="PlaceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>

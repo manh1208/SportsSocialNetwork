@@ -17,6 +17,7 @@ namespace SportsSocialNetwork.Models.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Place()
         {
+            this.Events = new HashSet<Event>();
             this.Fields = new HashSet<Field>();
             this.PlaceImages = new HashSet<PlaceImage>();
             this.Ratings = new HashSet<Rating>();
@@ -42,6 +43,8 @@ namespace SportsSocialNetwork.Models.Entities
         public bool Approve { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Event> Events { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Field> Fields { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
