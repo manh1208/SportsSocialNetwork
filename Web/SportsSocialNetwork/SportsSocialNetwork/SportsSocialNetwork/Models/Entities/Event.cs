@@ -32,6 +32,7 @@ namespace SportsSocialNetwork.Models.Entities
         public bool Active { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
+        public virtual Place Place { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Participation> Participations { get; set; }
     }

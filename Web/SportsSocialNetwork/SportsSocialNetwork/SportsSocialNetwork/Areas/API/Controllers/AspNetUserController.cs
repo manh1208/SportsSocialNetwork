@@ -24,6 +24,10 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
         private String userImagePath = "UserImage\\CuongPK";
 
+        private String AdminRoleId = UserRole.Admin.ToString("d");
+
+        private String ModeratorRoleId = UserRole.Moderator.ToString("d");
+
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -58,11 +62,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 _userManager = value;
             }
         }
-        
+
 
 
         [HttpGet]
-        public ActionResult FindUser(String name, int skip, int take)
+        public ActionResult FindUser(String query, int skip, int take)
         {
             var service = this.Service<IAspNetUserService>();
 
@@ -70,7 +74,9 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             try
             {
-                List<AspNetUser> userList = service.FindUserByName(name, skip, take).ToList();
+                List<AspNetUser> userList = service.FindUserByName(query, skip, take).ToList();
+
+                userList = FilterMember(userList);
 
                 List<AspNetUserOveralViewModel> result = Mapper.Map<List<AspNetUserOveralViewModel>>(userList);
 
@@ -110,7 +116,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                         result.Followed = false;
                     }
 
-                    result.FollowCount = user.Follows.Where(x=> x.FollowerId==user.Id).Count();
+                    result.FollowCount = user.Follows.Where(x => x.FollowerId == user.Id).Count();
 
                     result.NewsCount = user.News.Count();
 
@@ -240,9 +246,29 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                     AspNetUser user = service.FindUserByUserName(username);
 
-                    UserLoginViewModel result = Mapper.Map<UserLoginViewModel>(user);
+                    bool MobileAuthorized = true;
 
-                    response = new ResponseModel<UserLoginViewModel>(true, "Login successfully!", null, result);
+                    foreach (var role in user.AspNetRoles)
+                    {
+                        if (role.Id.Equals(AdminRoleId))
+                        {
+                            MobileAuthorized = false;
+                            response = ResponseModel<UserLoginViewModel>.CreateErrorResponse("Login failed!", Utils.GetEnumDescription(UserRole.Admin) + " không thể đăng nhập trên thiết bị điện thoại");
+                        }
+                        else if (role.Id.Equals(ModeratorRoleId)) {
+                            MobileAuthorized = false;
+                            response = ResponseModel<UserLoginViewModel>.CreateErrorResponse("Login failed!", Utils.GetEnumDescription(UserRole.Moderator) + " không thể đăng nhập trên thiết bị điện thoại");
+                        }
+
+                    }
+
+                    if (MobileAuthorized)
+                    {
+                        UserLoginViewModel result = Mapper.Map<UserLoginViewModel>(user);
+
+                        response = new ResponseModel<UserLoginViewModel>(true, "Login successfully!", null, result);
+                    }
+
 
                     break;
                 case SignInStatus.LockedOut:
@@ -260,7 +286,6 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
         }
 
-        //Temporary
         [HttpPost]
         public async Task<ActionResult> Register(AspNetUserRegisterViewModel model)
         {
@@ -268,7 +293,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             ResponseModel<AspNetUserRegisterViewModel> response = null;
 
-            try {
+            try
+            {
                 bool isValidAccount = ValidateRegisterInfo(errorList, model);
                 if (isValidAccount)
                 {
@@ -303,14 +329,16 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                     }
 
                 }
-                else {
+                else
+                {
                     response = new ResponseModel<AspNetUserRegisterViewModel>(false, "Register failed", errorList, model);
                 }
-            } catch (Exception)
-            {
-                response = ResponseModel<AspNetUserRegisterViewModel>.CreateErrorResponse("Register failed",systemError);
             }
-            
+            catch (Exception)
+            {
+                response = ResponseModel<AspNetUserRegisterViewModel>.CreateErrorResponse("Register failed", systemError);
+            }
+
             return Json(response);
 
         }
@@ -344,7 +372,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             return result;
         }
 
-        private bool ValidateRegisterInfo(List<String> errorList, AspNetUserRegisterViewModel model) {
+        private bool ValidateRegisterInfo(List<String> errorList, AspNetUserRegisterViewModel model)
+        {
             bool result = true;
 
             String emailRegex = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
@@ -363,13 +392,20 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 result = false;
             }
 
-            if (!model.Password.Equals(model.ConfirmPassword)) {
+            if (!model.Password.Equals(model.ConfirmPassword))
+            {
                 errorList.Add("Mật khẩu và mật khẩu nhập lại không đúng!");
                 result = false;
             }
 
-            if (model.Password.Length < 6) {
+            if (model.Password.Length < 6)
+            {
                 errorList.Add("Mật khẩu phải có ít nhất 6 ký tự.");
+                result = false;
+            }
+
+            if (model.UserName.Length < 6) {
+                errorList.Add("Tên tài khoản phải có ít nhất 6 ký tự.");
                 result = false;
             }
 
@@ -381,9 +417,28 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             {
                 if (error.EndsWith("is already taken."))
                 {
-                    errorList.Add(error.Replace("is already taken.", "đã tồn tại.").Replace("Name","Tên tài khoản"));
+                    errorList.Add(error.Replace("is already taken.", "đã tồn tại.").Replace("Name", "Tên tài khoản"));
                 }
             }
+        }
+
+        private List<AspNetUser> FilterMember(List<AspNetUser> userList)
+        {
+            for (int i = 0; i < userList.Count; i++)
+            {
+                var user = userList[i];
+                List<AspNetRole> roles = user.AspNetRoles.ToList();
+
+                foreach (var role in roles)
+                {
+                    if (role.Id.Equals(AdminRoleId) || role.Id.Equals(ModeratorRoleId))
+                    {
+                        userList.Remove(user);
+                    }
+                }
+            }
+
+            return userList;
         }
     }
 }

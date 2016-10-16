@@ -107,19 +107,19 @@
                             <label class="floating-label">Hình ảnh</label>
                         </div>
                         @*<div class="form-group">
-            <label class="col-sm-3 control-label">Hình ảnh</label>
-            <div class="col-sm-6 upload-form" id="exampleUploadForm" >
-                <input type="file" class="form-control" id="inputUpload" name="uploadImages" multiple />
-                <div class="uploader-inline">
-                    <h3 class="upload-instructions">
-                        Click Or Drop Files To Upload
-                    </h3>
-                </div>
-                <div class="file-wrap container-fluid">
-                    <div class="file-list row"></div>
-                </div>
-            </div>
-        </div>*@
+                            <label class="col-sm-3 control-label">Hình ảnh</label>
+                            <div class="col-sm-12 upload-form" id="exampleUploadForm">
+                                <input type="file" class="form-control" id="inputUpload" name="uploadImages" multiple />
+                                <div class="uploader-inline">
+                                    <h3 class="upload-instructions">
+                                        Click Or Drop Files To Upload
+                                    </h3>
+                                </div>
+                                <div class="file-wrap container-fluid">
+                                    <div class="file-list row"></div>
+                                </div>
+                            </div>
+                        </div>*@
                     </div>
                 </div>
             </div>
@@ -138,6 +138,7 @@
 @section Scripts{
 
 <script>
+    var TIME_PATTERN = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
     (function (document, window, $) {
         $(document).ready(function ($) {
@@ -153,6 +154,7 @@
         filesContainer: $('.file-list'),
         uploadTemplateId: false,
         downloadTemplateId: false,
+        autoUpload: false,
         uploadTemplate: tmpl(
           '{% for (var i=0, file; file=o.files[i]; i++) { %}' +
           '<div class="file template-upload fade col-sm-6 {%=file.type.search("image") !== -1? "image" : "other-file"%}">' +
@@ -350,7 +352,7 @@
                         notEmpty: {
                             message: 'Số điện thoại không được trống'
                         },
-                        integer: {
+                        digits: {
                             message: 'Số điện thoại phải là số'
                         },
                         stringLength: {
@@ -363,14 +365,66 @@
                     validators: {
                         notEmpty: {
                             message: 'Giờ bắt đầu không được trống'
-                        }
+                        },
+                        //regexp: {
+                        //    regexp: TIME_PATTERN,
+                        //    message: 'Giờ không đúng định dạng [HH:mm]'
+                        //},
+                        //callback: {
+                        //    message: 'Giờ bắt đầu phải trước giờ kết thúc',
+                        //    callback: function (value, validator, $field) {
+                        //        var endTime = validator.getFieldElements('EndTime').val();
+                        //        if (endTime === '' || !TIME_PATTERN.test(endTime)) {
+                        //            return true;
+                        //        }
+                        //        var startHour = parseInt(value.split(':')[0], 10),
+                        //            startMinutes = parseInt(value.split(':')[1], 10),
+                        //            endHour = parseInt(endTime.split(':')[0], 10),
+                        //            endMinutes = parseInt(endTime.split(':')[1], 10);
+
+                        //        if (startHour < endHour || (startHour == endHour && startMinutes < endMinutes)) {
+                        //            // The end time is also valid
+                        //            // So, we need to update its status
+                        //            validator.updateStatus('EndTime', validator.STATUS_VALID, 'callback');
+                        //            return true;
+                        //        }
+
+                        //        return false;
+                        //    }
+                        //}
                     }
                 },
                 EndTime: {
                     validators: {
                         notEmpty: {
                             message: 'Giờ kết thúc không được trống'
-                        }
+                        },
+                        //regexp: {
+                        //    regexp: TIME_PATTERN,
+                        //    message: 'Giờ không đúng định dạng [HH:mm]'
+                        //},
+                        //callback: {
+                        //    message: 'Giờ kết thúc phải sau giờ bắt đầu',
+                        //    callback: function (value, validator, $field) {
+                        //        var endTime = validator.getFieldElements('StartTime').val();
+                        //        if (endTime === '' || !TIME_PATTERN.test(endTime)) {
+                        //            return true;
+                        //        }
+                        //        var startHour = parseInt(value.split(':')[0], 10),
+                        //            startMinutes = parseInt(value.split(':')[1], 10),
+                        //            endHour = parseInt(endTime.split(':')[0], 10),
+                        //            endMinutes = parseInt(endTime.split(':')[1], 10);
+
+                        //        if (startHour < endHour || (startHour == endHour && startMinutes < endMinutes)) {
+                        //            // The end time is also valid
+                        //            // So, we need to update its status
+                        //            validator.updateStatus('StartTime', validator.STATUS_VALID, 'callback');
+                        //            return true;
+                        //        }
+
+                        //        return false;
+                        //    }
+                        //}
                     }
                 },
                 Description: {
@@ -463,11 +517,11 @@
     });
 
     $("#startTime").on("change", function () {
-        $('#placeForm').formValidation('revalidateField', 'StartTime');
+        $('#placeForm').formValidation('revalidateField', 'StartTime')
     });
 
     $("#endTime").on("change", function () {
-        $('#placeForm').formValidation('revalidateField', 'EndTime');
+        $('#placeForm').formValidation('revalidateField', 'EndTime')
     });
 
 </script>

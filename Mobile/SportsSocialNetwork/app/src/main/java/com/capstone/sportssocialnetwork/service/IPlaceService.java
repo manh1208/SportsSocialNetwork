@@ -22,4 +22,6 @@ public interface IPlaceService {
 
     @POST("/api/place/showplacedetail")
     Call<ResponseModel<PlaceResponseModel>> getPlaceDetail(@Query("id") int id);
+
+//    @POST"/api/order/checkin"
 }

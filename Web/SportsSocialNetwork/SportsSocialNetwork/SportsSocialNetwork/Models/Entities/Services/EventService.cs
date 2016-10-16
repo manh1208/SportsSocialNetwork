@@ -29,8 +29,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
             Event searchEvent = this.FirstOrDefaultActive(e => e.Id == evt.Id);
             if(searchEvent == null)
             {
-                evt.PlaceId = 1008;
-                //evt.CreatorId = "8955d736-4fea-45de-96ce-1ebae8265cc8";
+                //evt.PlaceId = 1008;
+                //evt.CreatorId = "8955d736-4fea-45de-96ce-1ebae8265cc8
                 evt.Status = (int)EventStatus.Operating;
 
                 //save image

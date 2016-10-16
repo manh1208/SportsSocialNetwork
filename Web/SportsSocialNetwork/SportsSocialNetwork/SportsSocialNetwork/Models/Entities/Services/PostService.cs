@@ -17,6 +17,9 @@ namespace SportsSocialNetwork.Models.Entities.Services
         Post CreatePost(Post model);
 
         Post EditPost(Post model, bool imageChanged);
+
+        AspNetUser GetUserNameOfPost(int postId);
+
         #endregion
 
         void test();
@@ -57,6 +60,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return post;
         }
 
+
+        public AspNetUser GetUserNameOfPost(int postId) {
+            return this.FirstOrDefaultActive(x => x.Id == postId).AspNetUser;
+        }
 
         #endregion
 

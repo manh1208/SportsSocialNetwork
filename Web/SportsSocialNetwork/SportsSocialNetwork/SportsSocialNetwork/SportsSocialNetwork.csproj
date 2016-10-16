@@ -267,6 +267,7 @@
     <Compile Include="Areas\Api\Controllers\GroupController.cs" />
     <Compile Include="Areas\Api\Controllers\GroupMemberController.cs" />
     <Compile Include="Areas\Api\Controllers\LikeController.cs" />
+    <Compile Include="Areas\Api\Controllers\NotificationController.cs" />
     <Compile Include="Areas\Api\Controllers\OrderController.cs" />
     <Compile Include="Areas\Api\Controllers\PlaceController.cs" />
     <Compile Include="Areas\Api\Controllers\PostCommentController.cs" />
@@ -824,6 +825,7 @@
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\OrderDetailViewModel.cs" />
+    <Compile Include="Models\ViewModels\OrderSimpleViewModel.cs" />
     <Compile Include="Models\ViewModels\OrderViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -3422,6 +3424,7 @@
     <Folder Include="Areas\Api\Views\GroupMember\" />
     <Folder Include="Areas\Api\Views\Group\" />
     <Folder Include="Areas\Api\Views\Like\" />
+    <Folder Include="Areas\Api\Views\Notification\" />
     <Folder Include="Areas\Api\Views\PostComment\" />
     <Folder Include="Areas\Api\Views\Post\" />
     <Folder Include="Areas\Api\Views\Shared\" />
