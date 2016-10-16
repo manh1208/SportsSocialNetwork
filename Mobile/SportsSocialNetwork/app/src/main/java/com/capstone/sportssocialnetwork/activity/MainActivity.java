@@ -22,16 +22,23 @@ import android.view.MenuItem;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.fragment.ManageOrderFragment;
 import com.capstone.sportssocialnetwork.fragment.ManagePlaceFragment;
+import com.capstone.sportssocialnetwork.model.Order;
+import com.capstone.sportssocialnetwork.model.response.ResponseModel;
+import com.capstone.sportssocialnetwork.service.RestService;
 import com.google.zxing.Result;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity
@@ -41,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     private CoordinatorLayout mainLayout;
     private ZXingScannerView mScannerView;
     private boolean isStartCamera;
+    private RestService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +76,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initialView() {
+        service  = new RestService();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mainLayout = (CoordinatorLayout) findViewById(R.id.app_main);
@@ -189,12 +198,46 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void sendCode(String code) {
-        AlertDialog.Builder buider = new AlertDialog.Builder(MainActivity.this);
-        View v = getLayoutInflater().inflate(R.layout.dialog_order_info, null, false);
-        buider.setView(v)
-                .setNegativeButton("OK", null)
-                .create()
-                .show();
+        Call<ResponseModel<Order>> call = service.getPlaceService().checkInOrder(code);
+
+        call.enqueue(new Callback<ResponseModel<Order>>() {
+            @Override
+            public void onResponse(Call<ResponseModel<Order>> call, Response<ResponseModel<Order>> response) {
+                if (response.isSuccessful()){
+                    if (response.body().isSucceed()){
+                        Order order = response.body().getData();
+                        AlertDialog.Builder buider = new AlertDialog.Builder(MainActivity.this);
+                        View v = getLayoutInflater().inflate(R.layout.dialog_order_info, null, false);
+                        TextView name = (TextView) v.findViewById(R.id.txt_order_detail_fullname);
+                        name.setText(order.getUserName());
+                        TextView createDate = (TextView) v.findViewById(R.id.txt_order_detail_create_time);
+                        createDate.setText(order.getCreateDate());
+                        TextView place = (TextView) v.findViewById(R.id.txt_order_detail_place);
+                        place.setText(order.getPlaceName());
+                        TextView field = (TextView) v.findViewById(R.id.txt_order_detail_field);
+                        field.setText(order.getFieldName());
+                        TextView startTime = (TextView) v.findViewById(R.id.txt_order_detail_start_time);
+                        startTime.setText(order.getStartTime());
+                        TextView endTime = (TextView) v.findViewById(R.id.txt_order_detail_end_time);
+                        endTime.setText(order.getEndTime());
+                        TextView payment = (TextView) v.findViewById(R.id.txt_order_detail_payment);
+                        payment.setText(order.getPaidType());
+                        TextView status = (TextView) v.findViewById(R.id.txt_order_detail_order_status);
+                        status.setText(order.getStatus());
+                        buider.setView(v)
+                                .setNegativeButton("OK", null)
+                                .create()
+                                .show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseModel<Order>> call, Throwable t) {
+
+            }
+        });
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

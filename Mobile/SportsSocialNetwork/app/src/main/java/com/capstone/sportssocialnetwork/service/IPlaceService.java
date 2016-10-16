@@ -1,5 +1,6 @@
 package com.capstone.sportssocialnetwork.service;
 
+import com.capstone.sportssocialnetwork.model.Order;
 import com.capstone.sportssocialnetwork.model.Place;
 import com.capstone.sportssocialnetwork.model.response.PlaceResponseModel;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
@@ -23,5 +24,6 @@ public interface IPlaceService {
     @POST("/api/place/showplacedetail")
     Call<ResponseModel<PlaceResponseModel>> getPlaceDetail(@Query("id") int id);
 
-//    @POST"/api/order/checkin"
+    @POST("/api/order/CheckInOrder")
+    Call<ResponseModel<Order>> checkInOrder(@Query("orderCode")String code);
 }
