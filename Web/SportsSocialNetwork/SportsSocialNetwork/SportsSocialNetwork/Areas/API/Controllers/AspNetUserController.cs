@@ -22,7 +22,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
     {
         private String systemError = "Đã có lỗi xảy ra!";
 
-        private String userImagePath = "UserImage\\CuongPK";
+        private String userImagePath = "AspNetUser";
 
         private String AdminRoleId = UserRole.Admin.ToString("d");
 

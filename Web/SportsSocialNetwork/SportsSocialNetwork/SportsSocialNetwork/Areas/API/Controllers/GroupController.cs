@@ -16,7 +16,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
     {
         private String systemError = "Đã có lỗi xảy ra!";
 
-        private String userImagePath = "UserImage\\CuongPK";
+        private String userImagePath = "Group";
 
         [HttpGet]
         public ActionResult FindGroup(String name, int skip, int take)

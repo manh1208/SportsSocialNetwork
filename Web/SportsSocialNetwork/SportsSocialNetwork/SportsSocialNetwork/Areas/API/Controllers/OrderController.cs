@@ -171,25 +171,73 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             ResponseModel<OrderSimpleViewModel> response = null;
 
-            Order order= service.CheckInOrder(orderCode);
+            try {
+                Order order = service.FindOrderByCode(orderCode);
 
+                if (order != null)
+                {
+                    if (order.Status == int.Parse(OrderStatus.Approved.ToString("d")))
+                    {
+                        service.ChangeOrderStatus(order.Id, int.Parse(OrderStatus.CheckedIn.ToString("d")));
+
+                        OrderSimpleViewModel result = PrepareOrderSimpleViewModel(order);
+
+                        response = new ResponseModel<OrderSimpleViewModel>(true, "Đơn đặt sân đã được checkin", null, result);
+
+                    }
+                    else if (order.Status == int.Parse(OrderStatus.Cancel.ToString("d"))) {
+                        OrderSimpleViewModel result = PrepareOrderSimpleViewModel(order);
+
+                        response = new ResponseModel<OrderSimpleViewModel>(false, "Đơn đặt sân chưa được checkin", new List<string> { "Đơn đặt sân đã bị hủy" }, result);
+                    }
+                    else if (order.Status == int.Parse(OrderStatus.Unapproved.ToString("d")))
+                    {
+                        OrderSimpleViewModel result = PrepareOrderSimpleViewModel(order);
+
+                        response = new ResponseModel<OrderSimpleViewModel>(false, "Đơn đặt sân chưa được checkin", new List<string> { "Đơn đặt sân đã bị từ chối" }, result);
+                    }
+                    else if (order.Status == int.Parse(OrderStatus.CheckedIn.ToString("d")))
+                    {
+                        OrderSimpleViewModel result = PrepareOrderSimpleViewModel(order);
+
+                        response = new ResponseModel<OrderSimpleViewModel>(true, "Đơn đặt sân đã được checkin", null, result);
+                    }
+                    else
+                    {
+                        OrderSimpleViewModel result = PrepareOrderSimpleViewModel(order);
+
+                        response = new ResponseModel<OrderSimpleViewModel>(false, "Đơn đặt sân chưa được checkin", new List<string> { "Đơn đặt sân chưa được chấp nhận" }, result);
+                    }
+                }
+
+                else
+                {
+                    response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Đơn đặt sân chưa được checkin", "Code không hợp lệ");
+                }
+            } catch (Exception) {
+                response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Đơn đặt sân chưa được checkin", systemError);
+            }
+
+            return Json(response);
+        }
+
+        private OrderSimpleViewModel PrepareOrderSimpleViewModel(Order order) {
             OrderSimpleViewModel result = Mapper.Map<OrderSimpleViewModel>(order);
 
             result.UserName = order.AspNetUser.UserName;
+
+            result.FullName = order.AspNetUser.FullName;
 
             result.FieldName = order.Field.Name;
 
             result.PlaceName = order.Field.Place.Name;
 
-            result.Status= Utils.GetEnumDescription(OrderStatus.CheckedIn);
+            result.Status = Utils.GetEnumDescription((OrderStatus)order.Status);
 
-            result.PaidType= Utils.GetEnumDescription((OrderPaidType)order.PaidType);
+            result.PaidType = Utils.GetEnumDescription((OrderPaidType)order.PaidType);
 
-            response = new ResponseModel<OrderSimpleViewModel>(true, "Đơn đặt sân đã được checkin", null, result);
-
-            return Json(response);
+            return result;
         }
-
         private double CalculatePrice(int fieldId, TimeSpan startTime, TimeSpan endTime) {
             var timeBlockService = this.Service<ITimeBlockService>();
 

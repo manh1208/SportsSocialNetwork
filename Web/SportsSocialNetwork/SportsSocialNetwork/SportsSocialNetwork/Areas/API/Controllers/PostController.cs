@@ -18,7 +18,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
     {
         private String systemError = "Đã có lỗi xảy ra!";
 
-        private String userImagePath = "UserImage\\CuongPK";
+        private String userImagePath = "Post";
 
         [HttpPost]
         public ActionResult ShowAllPost(String currentUserId, int skip, int take)
@@ -35,10 +35,10 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 List<PostOveralViewModel> result = Mapper.Map<List<PostOveralViewModel>>(postList);
 
-                //foreach (var p in result)
-                //{
-                //    PreparePostOveralData(p, currentUserId);
-                //}
+                foreach (var p in result)
+                {
+                    PreparePostOveralData(p, currentUserId);
+                }
 
                 response = new ResponseModel<List<PostOveralViewModel>>(true, "Post list loaded!", null, result);
             }
@@ -65,10 +65,10 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 List<PostOveralViewModel> result = Mapper.Map<List<PostOveralViewModel>>(postList);
 
-                //foreach (var p in result)
-                //{
-                //    PreparePostOveralData(p, currentUserId);
-                //}
+                foreach (var p in result)
+                {
+                    PreparePostOveralData(p, currentUserId);
+                }
 
                 response = new ResponseModel<List<PostOveralViewModel>>(true, "Group posts loaded!", null, result);
             }
@@ -136,7 +136,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 result = Mapper.Map<PostOveralViewModel>(post);
 
-                //PreparePostOveralData(result, post.UserId);
+                PreparePostOveralData(result, post.UserId);
 
                 response = new ResponseModel<PostOveralViewModel>(true, "Post created", null, result);
             }

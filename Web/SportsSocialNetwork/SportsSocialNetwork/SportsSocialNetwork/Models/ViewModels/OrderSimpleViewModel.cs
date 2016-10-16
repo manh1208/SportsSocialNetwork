@@ -12,6 +12,7 @@ namespace SportsSocialNetwork.Models.ViewModels
         public String StartTime { get; set; }
         public String EndTime { get; set; }
         public String UserName { get; set; }
+        public String FullName { get; set; }
         public String FieldName { get; set; }
         public String PlaceName { get; set; }
         public String Status { get; set; }
