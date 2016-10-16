@@ -87,7 +87,7 @@
                         <button type="button" class="btn btn-primary col-md-12" id="checkPrice"><i class="fa fa-usd" aria-hidden="true"></i> Bảng giá các khung giờ</button>
                     </div>
                     <div class="input-group">
-                        <button type="button" class="btn btn-warning col-md-12" id="checkCalendar"><i class="icon wb-calendar" aria-hidden="true"></i> Kiểm tra lịch đặt sân</button>
+                        <button type="button" class="btn btn-warning col-md-12" id="checkCalendar"><i class="icon wb-calendar" aria-hidden="true"></i> Kiểm tra lịch sân</button>
                     </div>
                 </div>
             </div>
@@ -173,6 +173,56 @@
 </div>
 @section Scripts{
     <script>
+        (function () {
+        $('#orderForm').formValidation({
+            framework: "bootstrap",
+            button: {
+                selector: '#createOrder',
+                disabled: 'disabled'
+            },
+            icon: null,
+            fields: {
+                CreateDate: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Không được để trống'
+                        }
+                    }
+                },
+                StartTime: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Không được để trống'
+                        }
+                    }
+                },
+                EndTime: {
+                    validators: {
+                        notEmpty: {
+                            message: 'Không được để trống'
+                        }
+                    }
+                }
+            }
+        });
+    })();
+
+    $("#startTime").on("change", function () {
+        $('#orderForm').formValidation('revalidateField', 'StartTime');
+    });
+
+    $("#endTime").on("change", function () {
+        $('#orderForm').formValidation('revalidateField', 'EndTime');
+    });
+
+    $("#playDate").on("change", function () {
+        $('#orderForm').formValidation('revalidateField', 'CreateDate');
+    });
+
+    $('#playDate').datepicker({
+        format: 'dd/mm/yyyy'
+    });
+
         (function (document, window, $) {
             'use strict';
             var Site = window.Site;
@@ -184,12 +234,6 @@
         $(document).ready(function ($) {
             $(".regular").slick({
                 dots: true,
-                infinite: true,
-                slidesToShow: 3,
-                slidesToScroll: 3
-            });
-
-            $('#exampleMultipleItems').slick({
                 infinite: true,
                 slidesToShow: 3,
                 slidesToScroll: 3

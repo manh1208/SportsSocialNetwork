@@ -12,11 +12,17 @@ using SportsSocialNetwork.Areas.PlaceOwner.Models.ViewModels;
 using System.Threading.Tasks;
 using NganLuong;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Identity;
+using System.Globalization;
+using SportsSocialNetwork.Models.Utilities;
+using QRCoder;
 
 namespace SportsSocialNetwork.Controllers
 {
+    [MyAuthorize(Roles = IdentityMultipleRoles.SSN)]
     public class OrderController : BaseController
     {
+
         // GET: Order
         public ActionResult Index()
         {
@@ -73,7 +79,7 @@ namespace SportsSocialNetwork.Controllers
                     o => (o.Field.Name != null && o.Field.Name.ToLower().Contains(param.sSearch.ToLower()))
                     || (o.OrderCode != null && o.OrderCode.ToLower().Contains(param.sSearch.ToLower()))
                     );
-                
+
             }
             else
             {
@@ -144,17 +150,18 @@ namespace SportsSocialNetwork.Controllers
             var fieldId = order.FieldId;
             TimeSpan startTime = order.StartTime.TimeOfDay;
             TimeSpan endTime = order.EndTime.TimeOfDay;
+            DateTime PlayDate = DateTime.ParseExact(Request["CreateDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
             var _timeBlockService = this.Service<ITimeBlockService>();
             var _placeService = this.Service<IPlaceService>();
             var _fieldService = this.Service<IFieldService>();
             var _orderService = this.Service<IOrderService>();
             var _fieldScheduleService = this.Service<IFieldScheduleService>();
 
-            bool rs1 = _orderService.checkOrderTimeValid(fieldId, startTime, endTime, order.CreateDate);
-            bool rs2 = _fieldScheduleService.checkScheduleTimeValid(fieldId, startTime, endTime, order.CreateDate);
+            bool rs1 = _orderService.checkOrderTimeValid(fieldId, startTime, endTime, PlayDate);
+            bool rs2 = _fieldScheduleService.checkScheduleTimeValid(fieldId, startTime, endTime, PlayDate);
             if (!rs1 || !rs2)
             {
-                return RedirectToAction("PageNotFound", "Error");
+                return RedirectToAction("PageNotFound", "Errors");
             }
 
 
@@ -166,8 +173,14 @@ namespace SportsSocialNetwork.Controllers
                 ViewBag.field = field;
             }
             order.Price = _timeBlockService.calPrice(fieldId, startTime, endTime);
-            ViewBag.playDate = order.CreateDate;
+            //ViewBag.playDate = order.CreateDate;
             order.CreateDate = DateTime.Today;
+            DateTime sTime = new DateTime(PlayDate.Year, PlayDate.Month, PlayDate.Day, order.StartTime.Hour,
+                    order.StartTime.Minute, order.StartTime.Second);
+            DateTime eTime = new DateTime(PlayDate.Year, PlayDate.Month, PlayDate.Day, order.EndTime.Hour,
+                order.EndTime.Minute, order.EndTime.Second);
+            order.StartTime = sTime;
+            order.EndTime = eTime;
             if (place != null)
             {
                 ViewBag.place = place;
@@ -204,7 +217,7 @@ namespace SportsSocialNetwork.Controllers
 
         public JsonResult CheckTimeValidInTimeBlock(int fieldId, string startTime, string endTime)
         {
-            
+
             var result = new AjaxOperationResult();
             TimeSpan StartTime = TimeSpan.Parse(startTime);
             TimeSpan EndTime = TimeSpan.Parse(endTime);
@@ -235,7 +248,7 @@ namespace SportsSocialNetwork.Controllers
             var result = new AjaxOperationResult();
             TimeSpan StartTime = TimeSpan.Parse(startTime);
             TimeSpan EndTime = TimeSpan.Parse(endTime);
-            DateTime PlayDate = DateTime.Parse(playDate);
+            DateTime PlayDate = DateTime.ParseExact(playDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             var _orderService = this.Service<IOrderService>();
             var _fieldScheduleService = this.Service<IFieldScheduleService>();
 
@@ -291,17 +304,17 @@ namespace SportsSocialNetwork.Controllers
 
         public ActionResult PayOnlineNow(object sender, EventArgs e, OrderViewModel model)
         {
-            
+
             var _orderService = this.Service<IOrderService>();
             var order = new Order();
             if (String.IsNullOrEmpty(model.OrderCode))
             {
-                return RedirectToAction("PageNotFound", "Error");
+                return RedirectToAction("PageNotFound", "Errors");
             }
             else
             {
                 order = _orderService.FirstOrDefaultActive(p => p.OrderCode == model.OrderCode);
-                if(order != null)
+                if (order != null)
                 {
                     String transaction_info = "Thanh toan dat san";
                     String receiver = "m249bornbeast@gmail.com";//Tài khoản nhận tiền
@@ -320,7 +333,7 @@ namespace SportsSocialNetwork.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("PageNotFound", "Error");
+                    return RedirectToAction("PageNotFound", "Errors");
                 }
             }
         }
@@ -342,41 +355,56 @@ namespace SportsSocialNetwork.Controllers
 
             var _orderService = this.Service<IOrderService>();
             var order = new Order();
-           
-                order.UserId = User.Identity.GetUserId();
-                order.FieldId = model.FieldId;
-                DateTime sTime = new DateTime(model.CreateDate.Year, model.CreateDate.Month, model.CreateDate.Day, model.StartTime.Hour,
-                    model.StartTime.Minute, model.StartTime.Second);
-                DateTime eTime = new DateTime(model.CreateDate.Year, model.CreateDate.Month, model.CreateDate.Day, model.EndTime.Hour,
-                    model.EndTime.Minute, model.EndTime.Second);
-                order.StartTime = sTime;
-                order.EndTime = eTime;
-                order.CreateDate = DateTime.Now;
-                //order.Token = result.Token;
-                order.Price = model.Price;
-                //order.OnlinePaymentMethod = info.Payment_method;
-                //order.BankCode = info.bank_code;
-                order.Note = model.Note;
-                order.PayerName = model.PayerName;
-                order.PayerEmail = model.PayerEmail;
-                order.PayerPhone = model.PayerPhone;
-                order.Status = (int)OrderStatus.Pending;
-                order.OrderCode = order_code;
-                var transdate = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
-                order.TransactionTime = DateTime.Parse(transdate);
+            DateTime PlayDate = DateTime.ParseExact(Request["CreateDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            order.UserId = User.Identity.GetUserId();
+            order.FieldId = model.FieldId;
+            DateTime sTime = new DateTime(PlayDate.Year, PlayDate.Month, PlayDate.Day, model.StartTime.Hour,
+                model.StartTime.Minute, model.StartTime.Second);
+            DateTime eTime = new DateTime(PlayDate.Year, PlayDate.Month, PlayDate.Day, model.EndTime.Hour,
+                model.EndTime.Minute, model.EndTime.Second);
+            order.StartTime = sTime;
+            order.EndTime = eTime;
+            order.CreateDate = DateTime.Now;
+            //order.Token = result.Token;
+            order.Price = model.Price;
+            //order.OnlinePaymentMethod = info.Payment_method;
+            //order.BankCode = info.bank_code;
+            order.Note = model.Note;
+            order.PayerName = model.PayerName;
+            order.PayerEmail = model.PayerEmail;
+            order.PayerPhone = model.PayerPhone;
+            order.Status = (int)OrderStatus.Pending;
+            order.OrderCode = order_code;
+            order.QRCodeUrl = Utils.GenerateQRCode(order_code, QRCodeGenerator.ECCLevel.Q);
+            var transdate = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+            order.TransactionTime = DateTime.Parse(transdate);
 
-                if (model.PaidType == (int)OrderPaidType.ChosePayOnline)
-                {
-                    order.PaidType = (int)OrderPaidType.ChosePayOnline;
+            if (model.PaidType == (int)OrderPaidType.ChosePayOnline)
+            {
+                order.PaidType = (int)OrderPaidType.ChosePayOnline;
 
-                }
-                if (model.PaidType == (int)OrderPaidType.ChosePayByCash)
-                {
-                    order.PaidType = (int)OrderPaidType.ChosePayByCash;
-                    url = Url.Action("BookFieldSuccessful", "Order",
-                           new { area = "", orderCode = order_code }, Request.Url.Scheme);
-                }
-                _orderService.Create(order);
+            }
+            if (model.PaidType == (int)OrderPaidType.ChosePayByCash)
+            {
+                order.PaidType = (int)OrderPaidType.ChosePayByCash;
+                url = Url.Action("BookFieldSuccessful", "Order",
+                       new { area = "", orderCode = order_code }, Request.Url.Scheme);
+            }
+            var _fieldService = this.Service<IFieldService>();
+            var field = _fieldService.FirstOrDefaultActive(p => p.Id == order.FieldId);
+            if(field == null)
+            {
+                return RedirectToAction("PageNotFound", "Errors");
+            }
+            var noti = new Notification();
+            noti.UserId = User.Identity.GetUserId();
+            noti.Message = User.Identity.Name + " đã đặt sân tại " + field.Name;
+            noti.Title = "Đơn hàng mới";
+            noti.Type = (int)NotificationType.Order;
+            noti.Active = true;
+            order.Notifications.Add(noti);
+            _orderService.Create(order);
+
             return Redirect(url);
         }
 
@@ -405,13 +433,13 @@ namespace SportsSocialNetwork.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("PageNotFound", "Error");
+                    return RedirectToAction("PageNotFound", "Errors");
                 }
 
             }
             else
             {
-                return RedirectToAction("PaymentFail", "Error");
+                return RedirectToAction("PaymentFail", "Order");
             }
         }
 
@@ -423,7 +451,7 @@ namespace SportsSocialNetwork.Controllers
 
             if (entity == null)
             {
-                return RedirectToAction("PageNotFound", "Error");
+                return RedirectToAction("PageNotFound", "Errors");
             }
 
             return View(new OrderViewModel(entity));
@@ -436,7 +464,7 @@ namespace SportsSocialNetwork.Controllers
 
             if (entity == null)
             {
-                return RedirectToAction("PageNotFound", "Error");
+                return RedirectToAction("PageNotFound", "Errors");
             }
 
             return View(new OrderViewModel(entity));

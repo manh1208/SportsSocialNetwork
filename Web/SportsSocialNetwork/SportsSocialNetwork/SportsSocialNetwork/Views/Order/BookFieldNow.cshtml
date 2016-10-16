@@ -14,7 +14,7 @@
                 <div class="summary-errors alert alert-danger alert-dismissible" style="display: none; text-align:left; padding:0px 0px 0px 10px" id="error">
                     <ul>
                         <li style="display: none" id="error1">
-                            <span style="color:red; font-size:12px">Thời gian không hợp lệ</span>
+                            <span style="color:red; font-size:12px">Thời gian (ngày / giờ) không hợp lệ</span>
                         </li>
                         <li style="display: none" id="error2">
                             <span style="color:red; font-size:12px">Thời gian không nằm trong các khung giờ</span>
@@ -45,28 +45,31 @@
                 <div class="form-group">
                     <label for="phone" class="col-md-4 control-label">Chọn sân:</label>
                     <div class="col-md-4 input-group">
-                       @Html.DropDownListFor(m => m.FieldId, fieldList, new { @class = "bs-select-hidden form-control input-sm droplist", @id = "field" })
+                        @Html.DropDownListFor(m => m.FieldId, fieldList, new { @class = "bs-select-hidden form-control input-sm droplist", @id = "field" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone" class="col-md-4 control-label"></label>
+                    <div class="col-md-4 input-group">
+                        <button type="button" class="btn btn-warning col-md-12" id="checkCalendar"><i class="icon wb-calendar" aria-hidden="true"></i> Kiểm tra lịch sân</button>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-4 control-label">Ngày chơi:</label>
                     <div class="col-md-4 input-group">
-                        <span class="input-group-addon"><i class="icon wb-calendar" aria-hidden="true"></i></span>
                         @Html.TextBoxFor(p => p.CreateDate, "{0:dd-MM-yyyy}", new { @class = "form-control", @id = "playDate", @data_plugin = "datepicker", @Value = "" })
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label"></label>
-                        <div class="input-group col-md-4">
-                            <span class="input-group-addon">Giờ bắt đầu</span>
-                            @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker timeInfo form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
-                            </div>
-                    
+                    <label class="col-md-4 control-label">Giờ bắt đầu</label>
+                    <div class="input-group col-md-4">
+                        @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker timeInfo form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
+                    </div>
+
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label"></label>
+                    <label class="col-md-4 control-label">Giờ kết thúc</label>
                     <div class="input-group col-md-4">
-                        <span class="input-group-addon">Giờ kết thúc</span>
                         @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker timeInfo form-control", @id = "endTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
                     </div>
 
@@ -84,7 +87,7 @@
                     <div class="input-group col-md-4">
                         @Html.TextAreaFor(p => p.Note, new { @class = "form-control", @id = "note", @rows = 3 })
                     </div>
-                    </div>
+                </div>
             </div>
             <div class="col-md-12 padding-0">
                 <p style="font-weight:bold">Phương thức thanh toán:</p>
@@ -119,9 +122,106 @@
         </div>
     </form>
 </div>
+<div class="modal fade" id="calendarForm" aria-hidden="true" aria-labelledby="CalendarForm"
+     role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <form class="modal-content" action="#" method="post" role="form">
+            <div class="modal-header">
+                <button type="button" class="close" aria-hidden="true" data-dismiss="modal">×</button>
+                <h4 class="modal-title">Lịch sân</h4>
+            </div>
+            <div class="modal-body">
+                <div id="calendar">
 
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-actions">
+                    <button class="btn btn-primary" data-dismiss="modal" type="button">Đóng</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 @section Scripts{
     <script>
+
+        (function () {
+            $('#onlineform').formValidation({
+                framework: "bootstrap",
+                button: {
+                    selector: '#createOrder',
+                    disabled: 'disabled'
+                },
+                icon: null,
+                fields: {
+                    PayerName: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Không được để trống'
+                            }
+                        }
+                    },
+                    CreateDate: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Không được để trống'
+                            }
+                        }
+                    },
+                    StartTime: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Không được để trống'
+                            }
+                        }
+                    },
+                    EndTime: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Không được để trống'
+                            }
+                        }
+                    },
+                    PayerEmail: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Email không được trống'
+                            },
+                            emailAddress: {
+                                message: 'Email không đúng định dạng'
+                            }
+                        }
+                    },
+                    PayerPhone: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Số điện thoại không được trống'
+                            },
+                            digits: {
+                                message: 'Số điện thoại phải là số'
+                            },
+                            stringLength: {
+                                min: 10,
+                                message: 'Số điện thoại phải từ 10 số trở lên'
+                            }
+                        }
+                    }
+                }
+            });
+        })();
+
+        $("#startTime").on("change", function () {
+            $('#onlineform').formValidation('revalidateField', 'StartTime');
+        });
+
+        $("#endTime").on("change", function () {
+            $('#onlineform').formValidation('revalidateField', 'EndTime');
+        });
+
+        $("#playDate").on("change", function () {
+            $('#onlineform').formValidation('revalidateField', 'CreateDate');
+        });
 
         (function (document, window, $) {
             'use strict';
@@ -133,13 +233,16 @@
 
         })(document, window, jQuery);
 
+        $('#playDate').datepicker({
+            format: 'dd/mm/yyyy'
+        });
 
         $('input[name="PaidType"]').bind('click', function () {
             $('.list-content li').removeClass('active');
             $(this).parent().parent('li').addClass('active');
         });
 
-        
+
         $(".timeInfo").change(function () {
             var startTime = $("#startTime").val();
             var endTime = $("#endTime").val();
@@ -155,7 +258,7 @@
                         "endTime": endTime
                     },
                     success: function (result) {
-                        var price = parseFloat(result.price)
+                        var price = parseInt(result.price)
                         $("#countPrice").empty();
                         $("#countPrice").text(price + " đồng");
                         $("#Price").val(price);
@@ -175,61 +278,136 @@
             $("#error2").hide();
             $("#error3").hide();
             var hasErrorContent = false;
-            if (startTime >= endTime) {
+            if (startTime >= endTime || startTime == null || startTime == "" || endTime == null || endTime == ""
+                || playDate == "" || playDate == null) {
                 error = true;
                 hasErrorContent = true;
                 $("#error1").show();
-            }
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("CheckTimeValidInTimeBlock")',
-                async: false,
-                data: {
-                    "fieldId": fieldId,
-                    "startTime": startTime,
-                    "endTime" : endTime},
-                success: function (result) {
-                    if (!result.Succeed) {
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CheckTimeValidInTimeBlock")',
+                    async: false,
+                    data: {
+                        "fieldId": fieldId,
+                        "startTime": startTime,
+                        "endTime": endTime
+                    },
+                    success: function (result) {
+                        if (!result.Succeed) {
+                            error = true;
+                            hasErrorContent = true;
+                            $("#error2").show();
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                         error = true;
-                        hasErrorContent = true;
-                        $("#error2").show();
-                    }
-                },
-                error: function (result) {
-                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                    error = true;
-                },
-            });
+                    },
+                });
 
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("CheckOrderTimeExist")',
-                async: false,
-                data: {
-                    "fieldId": fieldId,
-                    "startTime": startTime,
-                    "endTime" : endTime,
-                    "playDate" : playDate},
-                success: function (result) {
-                    if (!result.Succeed) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CheckOrderTimeExist")',
+                    async: false,
+                    data: {
+                        "fieldId": fieldId,
+                        "startTime": startTime,
+                        "endTime": endTime,
+                        "playDate": playDate
+                    },
+                    success: function (result) {
+                        if (!result.Succeed) {
+                            error = true;
+                            hasErrorContent = true;
+                            $("#error3").show();
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                         error = true;
-                        hasErrorContent = true;
-                        $("#error3").show();
-                    }
-                },
-                error: function (result) {
-                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                    error = true;
-                },
-            });
+                    },
+                });
+            }
 
             if (error) {
-                if(hasErrorContent){
+                if (hasErrorContent) {
                     $("#error").show();
                 }
                 return false;
             }
         });
+
+        $('#checkCalendar').on('click', function () {
+            $('#calendarForm').modal('show');
+        });
+
+        $('#calendarForm').on('shown.bs.modal', function () {
+            handleFullcalendar();
+        });
+
+        $('#field').on('change', function () {
+            $('#calendar').fullCalendar('destroy');
+        });
+
+        function handleFullcalendar() {
+
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
+
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+            var fieldId = $("#field").val();
+            today = yyyy + '/' + mm + '/' + dd;
+            var my_options = {
+
+                header: {
+                    left: null,
+                    center: 'prev,title,next',
+                    right: 'agendaWeek,agendaDay'
+                },
+                defaultDate: today,
+                eventSources: [
+        {
+            url: "@Url.Action("GetOrderCalendar", "Field")",
+            data: {
+
+                "id": fieldId
+            },
+            color: 'blue',
+            textColor: 'white'
+        },
+            {
+                url: "@Url.Action("GetScheduleCalendar", "Field")",
+                    data: {
+
+                "id": fieldId
+            },
+                color: 'red',
+                textColor: 'white'
+            }
+                ],
+                lang: 'vi',
+                defaultView: 'agendaWeek',
+                allDaySlot: false
+            };
+
+            var _options;
+            var my_options_mobile = $.extend({}, my_options);
+
+            my_options_mobile.aspectRatio = 0.5;
+            _options = $(window).outerWidth() < 667 ? my_options_mobile : my_options;
+
+            $('#calendar').fullCalendar(_options);
+            $('#calendar').fullCalendar('render');
+        }
     </script>
 }
 

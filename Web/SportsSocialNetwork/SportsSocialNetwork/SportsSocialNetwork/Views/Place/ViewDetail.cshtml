@@ -15,7 +15,7 @@
     .imgW100 {
         width: 100%;
         vertical-align: middle;
-        height: auto;
+        max-height: 250px;
     }
 
     .example {
@@ -60,7 +60,7 @@
     }
 
     .slider {
-        margin: 0 0 30px;
+        margin: 0 0 10px;
         text-align: center;
     }
 
@@ -76,9 +76,9 @@
         <div class="panel-body" style="padding-top:50px">
             <div class="row padding15">
                 <div class="col-md-12">
-                    <div class="col-md-6" style="float:left">
+                    <div class="col-md-6 height-250" style="float:left">
                         <div class="overlay-container">
-                            <img title="Nhà thi đấu Phú Thọ" src="http://cdn.diachiso.vn/images/420x280/2011/7/28/nha-thi-dau-phu-tho.jpg" class='imgW100'>
+                            <img title="Nhà thi đấu Phú Thọ" src="@Model.Avatar" class='imgW100'>
                         </div>
                     </div>
                     <div class="col-md-6" style="float:left">
@@ -95,8 +95,15 @@
                             <i class="fa fa-clock-o" title="Time"></i> @Model.StartTime.ToString() -@Model.EndTime.ToString()
                         </p>
                         <p>
-                            <i class="fa fa-exclamation-circle" title="status"></i> Status Status
+                            <i class="fa fa-exclamation-circle" title="status"></i> @ViewBag.PlaceStatus
+                            @if (Model.Status==1){
                             <a href="@Url.Action("BookFieldNow","Order", new { placeId = Model.Id})" class="btn btn-block btn-success" style="margin-top:5px">Đặt ngay!</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("BookFieldNow","Order", new { placeId = Model.Id})" class="btn btn-block btn-success disabled" style="margin-top:5px">Đặt ngay!</a>
+                            }
+
                         </p>
                     </div>
                 </div>
@@ -168,7 +175,7 @@
                     <p>Sự kiện đang diễn ra</p>
                     <h3 class="widget-title">@ViewBag.lastestEvent.Name</h3>
                     <div class="widget-body-footer">
-                        <a class="btn btn-outline btn-default" href="javascript:void(0)">Xem chi tiết</a>
+                        <a class="btn btn-outline btn-default" href="@Url.Action("ViewDetail", "Event", new { id = @ViewBag.lastestEvent.Id })">Xem chi tiết</a>
                     </div>
                 </div>
             </div>
@@ -200,7 +207,7 @@
                 slidesToShow: 3,
                 slidesToScroll: 3
             });
-
+            
             $('#exampleGallery').magnificPopup({
                 delegate: 'a',
                 type: 'image',

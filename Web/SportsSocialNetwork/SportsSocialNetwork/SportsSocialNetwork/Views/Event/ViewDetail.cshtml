@@ -1,0 +1,85 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.EventViewModel
+
+@{
+    ViewBag.Title = "ViewDetail";
+    Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
+}
+
+<style>
+    .imgWH100 {
+        width: 100%;
+        vertical-align: middle;
+        height: 100%;
+    }
+
+    .imgW100 {
+        width: 100%;
+        vertical-align: middle;
+        max-height: 250px;
+    }
+
+    .example {
+        position: relative;
+        padding: 10px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+        .example .scrollable-horizontal .scrollable-content {
+            width: 1400px;
+        }
+
+    
+</style>
+
+<div class="col-md-10 col-md-offset-1">
+    <div class="panel col-md-12">
+        <div class="panel-body" style="padding-top:50px">
+            <div class="row padding15">
+                <div class="col-md-12"style="padding:10px">
+                    <div class="col-md-6" style="float:left;padding:0px">
+                        <div class="overlay-container">
+                            <img title="Hình ảnh sự kiện" src="@Model.Image" class='imgW100'>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="float:left">
+                        <h2 class="detail_title">@Model.Name</h2>
+                        <p>
+                            <i class="fa fa-map-marker" title="Địa điểm"></i> @ViewBag.Place.Name
+                        </p>
+                        <p>
+                            <i class="fa fa-clock-o" title="Time"></i> @Model.StartDate.ToString("dd/MM/yyyy") -@Model.EndDate.ToString("dd/MM/yyyy")
+                        </p>
+                        <p>
+                            <i class="fa fa-exclamation-circle" title="status"></i> @ViewBag.EventStatus
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-12" style="padding:10px">
+                    @Model.Description
+                </div>
+                <div class="col-md-12 text-center">
+                    <a class="btn btn-outline btn-default" href="@Url.Action("Index", "Event", new { id = Model.PlaceId })">Xem thêm các sự kiện khác</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+@section Scripts{
+    <script>
+
+        (function (document, window, $) {
+            'use strict';
+            var Site = window.Site;
+            $(document).ready(function ($) {
+                Site.run();
+            });
+
+        })(document, window, jQuery);
+
+    </script>
+}
+
+

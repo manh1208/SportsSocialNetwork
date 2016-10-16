@@ -10,9 +10,13 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Device.Location;
+using SportsSocialNetwork.Models.Identity;
+using SportsSocialNetwork.Models.Utilities;
+using SportsSocialNetwork.Models.Enumerable;
 
 namespace SportsSocialNetwork.Controllers
 {
+    [MyAuthorize(Roles = IdentityMultipleRoles.SSN)]
     public class PlaceController : BaseController
     {
         // GET: Place
@@ -162,6 +166,7 @@ namespace SportsSocialNetwork.Controllers
             ViewBag.placeImages = placeImages;
             ViewBag.placeFields = placeFields;
             ViewBag.lastestEvent = lastestEvent;
+            ViewBag.PlaceStatus = Utils.GetEnumDescription((PlaceStatus)place.Status);
 
             var list = _placeFieldService.GetActive(p => p.PlaceId == id.Value).
         Join(_fieldTypeService.GetActive(),

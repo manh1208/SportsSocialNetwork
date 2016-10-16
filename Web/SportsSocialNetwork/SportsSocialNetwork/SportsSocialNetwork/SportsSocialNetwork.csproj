@@ -285,6 +285,8 @@
     <Compile Include="Areas\PlaceOwner\PlaceOwnerAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
+    <Compile Include="Controllers\EventController.cs" />
+    <Compile Include="Controllers\EventModelView.cs" />
     <Compile Include="Controllers\FieldController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -813,6 +815,7 @@
     <Compile Include="Models\ViewModels\LikeViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\MemberOrderViewModel.cs" />
     <Compile Include="Models\ViewModels\NewsCommentViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -3410,6 +3413,8 @@
     <Content Include="Views\Order\PaymentSuccessful.cshtml" />
     <Content Include="Views\Order\BookFieldSuccessful.cshtml" />
     <Content Include="Views\Order\BookFieldNow.cshtml" />
+    <Content Include="Views\Event\ViewDetail.cshtml" />
+    <Content Include="Views\Event\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
