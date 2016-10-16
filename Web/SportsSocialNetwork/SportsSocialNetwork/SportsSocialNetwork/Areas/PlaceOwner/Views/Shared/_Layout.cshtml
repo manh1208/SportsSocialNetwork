@@ -7,7 +7,7 @@
     <meta name="description" content="bootstrap admin template">
     <meta name="author" content="">
 
-    <title>Dashboard | Remark Admin Template</title>
+    <title>SSN - @ViewBag.Title</title>
 
     <link rel="apple-touch-icon" href="~/Content/assets/images/apple-touch-icon.png">
     <link rel="shortcut icon" href="~/Content/assets/images/favicon.ico">
@@ -24,24 +24,14 @@
     <link rel="stylesheet" href="~/Content/assets/vendor/slidepanel/slidePanel.css">
     <link rel="stylesheet" href="~/Content/assets/vendor/flag-icon-css/flag-icon.css">
 
-    <!-- Plugin -->
-    <link rel="stylesheet" href="~/Content/assets/vendor/select2/select2.css">
-    <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-select/bootstrap-select.css">
-    <link rel="stylesheet" href="~/Content/assets/vendor/chartist-js/chartist.css">
-    <link rel="stylesheet" href="~/Content/assets/vendor/jvectormap/jquery-jvectormap.css">
-    <link rel="stylesheet" href="~/Content/assets/vendor/formvalidation/formValidation.css">
-    <link rel="stylesheet" href="~/Content/assets/vendor/jt-timepicker/jquery-timepicker.css">
-    <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.css">   
-    <link rel="stylesheet" href="~/Content/assets/vendor/asrange/asRange.css"> 
+    <link rel="stylesheet" href="~/Content/assets/vendor/asrange/asRange.css">
     <link rel="stylesheet" href="~/Content/assets/vendor/multi-select/multi-select.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/jvectormap/jquery-jvectormap.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-select/bootstrap-select.css">
 
-
-
+    <!--TEST-->
     <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.css">
-
-    <link href="~/Content/js/sweetAlert/sweetalert.css" rel="stylesheet" />
-
-    <link href="~/Content/css/custom-css.css" rel="stylesheet" />
+    <!--ENDTEST-->
 
     <!--Clock Picker-->
     <link rel="stylesheet" href="~/Content/assets/vendor/clockpicker/clockpicker.css">
@@ -54,9 +44,13 @@
     <!--Upload-->
     <link rel="stylesheet" href="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload.css">
 
-    <!-- Page -->
-    <link rel="stylesheet" href="~/Content/assets/fonts/weather-icons/weather-icons.css">
-    <link rel="stylesheet" href="~/Content/assets/css/dashboard/v1.css">
+    <!--Sweet Alert-->
+    <link rel="stylesheet" href="~/Content/js/sweetAlert/sweetalert.css" />
+
+    <!--Form Validation-->
+    <link rel="stylesheet" href="~/Content/assets/vendor/formvalidation/formValidation.css">
+
+    <link rel="stylesheet" href="~/Content/css/custom-css.css" />    
 
     <!-- Fonts -->
     <link rel="stylesheet" href="~/Content/assets/fonts/web-icons/web-icons.min.css">
@@ -64,15 +58,8 @@
     <link rel="stylesheet" href="~/Content/font-awesome-4.6.3/css/font-awesome.min.css">
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
 
-    <link href="~/Content/js/sweetAlert/sweetalert.css" rel="stylesheet" />
-
-    <link href="~/Content/css/custom-css.css" rel="stylesheet" />
-
-    <link href="~/Content/js/sweetAlert/sweetalert.css" rel="stylesheet" />
-
-    <link href="~/Content/css/custom-css.css" rel="stylesheet" />
-
     
+
 
     
 
@@ -405,7 +392,8 @@
             <div>
                 <div>
                     <ul class="site-menu">
-                        <li class="site-menu-item open">
+                        <li class="site-menu-category">Chủ sân</li>
+                        <li class="site-menu-item">
                             <a href="@Url.Action("index","Place")" data-slug="dashboard">
                                 <i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
                                 <span class="site-menu-title">Quản lý địa điểm</span>
@@ -416,6 +404,13 @@
                             <a href="@Url.Action("index","Order")" data-slug="dashboard">
                                 <i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
                                 <span class="site-menu-title">Quản lý đặt sân</span>
+
+                            </a>
+                        </li>
+                        <li class="site-menu-item">
+                            <a href="@Url.Action("index","FieldSchedule")" data-slug="dashboard">
+                                <i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
+                                <span class="site-menu-title">Quản lý lịch sân</span>
 
                             </a>
                         </li>
@@ -522,53 +517,56 @@
     <script src="~/Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
     <script src="~/Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
 
+    <script src="~/Content/assets/vendor/jquery-ui/jquery-ui.js"></script>
+    <!--TEST-->
     <!-- Plugins -->
-
-    <script src="~/Content/assets/vendor/select2/select2.min.js"></script>
-    <script src="~/Content/assets/vendor/bootstrap-select/bootstrap-select.js"></script>
-    <script src="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-    <script src="~/Content/assets/vendor/asrange/jquery-asRange.min.js"></script>
-    <script src="~/Content/assets/vendor/multi-select/jquery.multi-select.js"></script>
-    <script src="~/Content/assets/vendor/datepair-js/datepair.min.js"></script>
-    <script src="~/Content/assets/vendor/datepair-js/jquery.datepair.min.js"></script>
-    <!--Clockpicker-->
-    <script src="~/Content/assets/vendor/clockpicker/bootstrap-clockpicker.min.js"></script>
-    <script src="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-    <script src="~/Content/assets/vendor/jt-timepicker/jquery.timepicker.min.js"></script>
-    <script src="~/Content/assets/vendor/datepair-js/datepair.min.js"></script>
-    <script src="~/Content/assets/vendor/datepair-js/jquery.datepair.min.js"></script>
-    <script src="~/Content/assets/vendor/multi-select/jquery.multi-select.js"></script>
-
-
-
     <script src="~/Content/assets/vendor/switchery/switchery.min.js"></script>
     <script src="~/Content/assets/vendor/intro-js/intro.js"></script>
     <script src="~/Content/assets/vendor/screenfull/screenfull.js"></script>
     <script src="~/Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
 
-    <script src="~/Content/assets/vendor/skycons/skycons.js"></script>
-    <script src="~/Content/assets/vendor/chartist-js/chartist.min.js"></script>
-    <script src="~/Content/assets/vendor/aspieprogress/jquery-asPieProgress.min.js"></script>
-    <script src="~/Content/assets/vendor/jvectormap/jquery-jvectormap.min.js"></script>
-    <script src="~/Content/assets/vendor/jvectormap/maps/jquery-jvectormap-ca-lcc-en.js"></script>
-    <script src="~/Content/assets/vendor/matchheight/jquery.matchHeight-min.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap-select/bootstrap-select.js"></script>
+    <script src="~/Content/assets/vendor/switchery/switchery.min.js"></script>
+    <script src="~/Content/assets/vendor/asrange/jquery-asRange.min.js"></script>
+    
+    <script src="~/Content/assets/vendor/jquery-placeholder/jquery.placeholder.js"></script>
+
+    <!--Datepicker-->
+    <script src="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+
+    <!--Datatables-->
+    <script src="~/Content/assets/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/assets/vendor/datatables-fixedheader/dataTables.fixedHeader.js"></script>
+    <script src="~/Content/assets/vendor/datatables-bootstrap/dataTables.bootstrap.js"></script>
+    <script src="~/Content/assets/vendor/datatables-responsive/dataTables.responsive.js"></script>
+    <script src="~/Content/assets/vendor/datatables-tabletools/dataTables.tableTools.js"></script>
+
+    <!--Form Validation-->
+    <script src="~/Content/assets/vendor/formvalidation/formValidation.js"></script>
+    <script src="~/Content/assets/vendor/formvalidation/framework/bootstrap.min.js"></script>
+
+    <!--Clockpicker-->
+    <script src="~/Content/assets/vendor/clockpicker/bootstrap-clockpicker.min.js"></script>
+
+    <!--Upload-->
+    <script src="~/Content/assets/vendor/blueimp-tmpl/tmpl.js"></script>
+    <script src="~/Content/assets/vendor/blueimp-canvas-to-blob/canvas-to-blob.js"></script>
+    <script src="~/Content/assets/vendor/blueimp-load-image/load-image.all.min.js"></script>
+    <script src="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload.js"></script>
+    <script src="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload-process.js"></script>
+    <script src="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload-image.js"></script>
+    <script src="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload-audio.js"></script>
+    <script src="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload-video.js"></script>
+    <script src="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload-validate.js"></script>
+    <script src="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload-ui.js"></script>
+
+
+
+    <!--============================================================================================================================-->
 
     <!-- Scripts -->
-    
-
-
-
     <script src="~/Content/assets/js/core.js"></script>
     <script src="~/Content/assets/js/site.js"></script>
-
-    <script src="~/Content/assets/js/components/select2.js"></script>
-    <script src="~/Content/assets/js/components/bootstrap-select.js"></script>
-    <script src="~/Content/assets/js/components/asrange.js"></script>
-    <script src="~/Content/assets/js/components/multi-select.js"></script>
-    <script src="~/Content/assets/js/components/bootstrap-datepicker.js"></script>
-
-    <script src="~/Content/assets/js/components/jt-timepicker.js"></script>
-    <script src="~/Content/assets/js/components/datepair-js.js"></script>
 
     <script src="~/Content/assets/js/sections/menu.js"></script>
     <script src="~/Content/assets/js/sections/menubar.js"></script>
@@ -579,31 +577,40 @@
 
     <script src="~/Content/assets/js/components/asscrollable.js"></script>
     <script src="~/Content/assets/js/components/animsition.js"></script>
-    @*<script src="~/Content/assets/js/components/slidepanel.js"></script>*@
+    <script src="~/Content/assets/js/components/slidepanel.min.js"></script>
     <script src="~/Content/assets/js/components/switchery.js"></script>
-    <script src="~/Content/assets/js/components/matchheight.js"></script>
-    @*<script src="~/Content/assets/js/components/jvectormap.js"></script>*@
-
+    <script src="~/Content/assets/js/components/jvectormap.min.js"></script>
     <script src="~/Content/assets/js/components/jquery-placeholder.js"></script>
+    <!--END TEST-->
+
+    <!--Datepicker-->
+    <script src="~/Content/assets/js/components/bootstrap-datepicker.js"></script>
+
+    <!--Datatables-->
+    <script src="~/Content/assets/js/components/datatables.js"></script>
+    @*<script src="~/Content/assets/js/bootstrap/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Content/assets/js/bootstrap/js/dataTables.responsive.min_2.js"></script>
+    <script src="~/Content/assets/js/bootstrap/js/responsive.bootstrap.min.js"></script>*@
+    
+    <!--Floating Material-->
     <script src="~/Content/assets/js/components/material.js"></script>
 
-
-    <script src="~/Content/assets/js/datatables/jquery.dataTables.js"></script>
-    <script src="~/Content/assets/js/bootstrap/js/dataTables.bootstrap.min.js"></script>
-    <script src="~/Content/assets/js/bootstrap/js/dataTables.responsive.min_2.js"></script>
-    <script src="~/Content/assets/js/bootstrap/js/responsive.bootstrap.min.js"></script>
-    <script src="~/Content/js/custom-script.js"></script>
-
-    <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
-
-    <script src="~/Content/assets/js/components/bootstrap-datepicker.js"></script>
-    <script src="~/Content/assets/js/components/jt-timepicker.js"></script>
-    <script src="~/Content/assets/js/components/datepair-js.js"></script>
+    <!--Clock picker-->
     <script src="~/Content/assets/js/components/clockpicker.js"></script>
 
-    <script src="~/Content/js/custom-script.js"></script>
-
+    <!--Sweet Alert-->
     <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
+
+    <!--Custom Script-->
+    <script src="~/Content/js/custom-script.js"></script>
+    
+    <script>
+       function logout(){
+           $("#form-log-out").submit();
+        }
+    </script>
+
+    @RenderSection("Scripts", false)
 </body>
 
     @*<!-- Core  -->
@@ -627,8 +634,7 @@
     <script src="~/Content/assets/vendor/datatables-responsive/dataTables.responsive.js"></script>
     <script src="~/Content/assets/vendor/datatables-tabletools/dataTables.tableTools.js"></script>
 
-    <script src="~/Content/assets/vendor/formvalidation/formValidation.min.js"></script>
-    <script src="~/Content/assets/vendor/formvalidation/framework/bootstrap.min.js"></script>
+    
 
     <script src="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
 
@@ -679,18 +685,6 @@
 
     <script src="~/Content/assets/js/components/bootstrap-datepicker.js"></script>*@
 
-    <script src="~/Content/js/custom-script.js"></script>
 
-    <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
-
-    <script>
-       function logout(){
-           $("#form-log-out").submit();
-        }
-    </script>
-    </body>
-
-
-@RenderSection("Scripts", false)
 
 </html>

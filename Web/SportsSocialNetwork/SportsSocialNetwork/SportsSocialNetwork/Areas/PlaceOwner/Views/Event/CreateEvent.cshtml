@@ -27,7 +27,7 @@
                     <label class="floating-label">Địa điểm</label>
                 </div>
                 <div class="form-group form-material floating">
-                    @Html.TextBoxFor(e => e.StartDate, "{0:dd/MM/yyyy}", new { @class = "form-control input-lg", @data_plugin = "datepicker", @id = "startDate" })
+                    @Html.TextBoxFor(e => e.StartDate, "{0:dd/MM/yyyy}", new { @class = "form-control input-lg", @data_placement = "right", @data_align = "top", @data_plugin = "datepicker",  @id = "startDate" })
                     <label class="floating-label">Ngày bắt đầu</label>
                 </div>
                 <div class="form-group form-material floating">
@@ -65,13 +65,6 @@
             });
         })(document, window, jQuery);
 
-        $('#startDate').datepicker({
-            dateFormat: 'dd/mm/yy'
-        })
-        $('#endDate').datepicker({
-            dateFormat: 'dd/mm/yy'
-        })
-
         $(document).on('change', "#startDate", function () {
             $('#eventForm').formValidation('revalidateField', 'StartDate');
         });
@@ -79,6 +72,12 @@
             $('#eventForm').formValidation('revalidateField', 'EndDate');
         });
 
+        $('#startDate').datepicker({
+            format: "dd/mm/yyyy"
+        });
+        $('#endDate').datepicker({
+            format: "dd/mm/yyyy"
+        });
         // It is equivalent to use
         //$('#eventForm').formValidation('revalidateField', 'StartDate');
 
@@ -113,7 +112,9 @@
                             },
                             date: {
                                 format: 'DD/MM/YYYY',
-                                message: 'Ngày không đúng định dạng - DD/MM/YYYY'
+                                message: 'Ngày không phù hợp',
+                                min: '@DateTime.Now.ToString("dd/MM/yyyy")',
+                                max: 'EndDate'
                             }
                         }
                     },
@@ -124,7 +125,8 @@
                             },
                             date: {
                                 format: 'DD/MM/YYYY',
-                                message: 'Ngày không đúng định dạng - DD/MM/YYYY'
+                                message: 'Ngày không phù hợp',
+                                min: 'StartDate'
                             }
                         }
                     },

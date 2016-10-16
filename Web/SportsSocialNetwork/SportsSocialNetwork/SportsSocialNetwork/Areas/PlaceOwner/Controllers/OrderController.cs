@@ -37,8 +37,8 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 //save noti
                 Notification noti = new Notification();
                 noti.UserId = order.UserId;
-                noti.Title = Utils.GetEnumDescription(NotificationType.UpdateOrder);
-                noti.Type = (int)NotificationType.UpdateOrder;
+                noti.Title = Utils.GetEnumDescription(NotificationType.Order);
+                noti.Type = (int)NotificationType.Order;
                 //send mail
                 string receiverEmail = _userService.FirstOrDefaultActive(u => u.Id.Equals(order.UserId)).Email;
                 string subject = "";
@@ -48,7 +48,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                     subject = "SSN - Đơn đặt sân được chấp nhận";
                     body = "<p>Đơn đặt sân <strong>" + order.Field.Name + "</strong> từ <strong>" + order.StartTime.ToString() + "</trong> đến <strong>" + order.EndTime.ToString() + "</strong> đã được chấp nhận</p>"
                         + "<p>Quý khách vui lòng đến sân <strong>30 phút</strong> trước giờ đặt để xác nhận.</p>"
-                        + "<p>Chúc quý khách có được những giây phút thư giản vui vẻ!</p>";
+                        + "<p>Chúc quý khách có được những giây phút thư giãn vui vẻ!</p>";
 
                     noti.Message = "Đơn đặt sân " + order.Field.Name + "(" + order.StartTime.ToString() + " - " + order.EndTime.ToString() + ") đã được chấp nhận";
 

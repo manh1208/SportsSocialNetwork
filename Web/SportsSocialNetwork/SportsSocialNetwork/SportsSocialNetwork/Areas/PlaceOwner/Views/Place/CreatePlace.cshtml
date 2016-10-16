@@ -107,19 +107,19 @@
                             <label class="floating-label">Hình ảnh</label>
                         </div>
                         @*<div class="form-group">
-            <label class="col-sm-3 control-label">Hình ảnh</label>
-            <div class="col-sm-6 upload-form" id="exampleUploadForm" >
-                <input type="file" class="form-control" id="inputUpload" name="uploadImages" multiple />
-                <div class="uploader-inline">
-                    <h3 class="upload-instructions">
-                        Click Or Drop Files To Upload
-                    </h3>
-                </div>
-                <div class="file-wrap container-fluid">
-                    <div class="file-list row"></div>
-                </div>
-            </div>
-        </div>*@
+                            <label class="col-sm-3 control-label">Hình ảnh</label>
+                            <div class="col-sm-12 upload-form" id="exampleUploadForm">
+                                <input type="file" class="form-control" id="inputUpload" name="uploadImages" multiple />
+                                <div class="uploader-inline">
+                                    <h3 class="upload-instructions">
+                                        Click Or Drop Files To Upload
+                                    </h3>
+                                </div>
+                                <div class="file-wrap container-fluid">
+                                    <div class="file-list row"></div>
+                                </div>
+                            </div>
+                        </div>*@
                     </div>
                 </div>
             </div>
@@ -139,6 +139,121 @@
 
 <script>
 
+    $(document).ready(function() {
+        FormValidation.Validator.time = {
+            html5Attributes: {
+                message: 'message',
+                format: '',
+                min: 'min',
+                max: 'max',
+            },
+            validate: function(validator, $field, options) {
+                var value = $field.val();
+                if (value === '') {
+                    return true;
+                }
+
+                var timeFormat = options.format || 'HH:mm:ss';
+
+                var minutes = null, hours = null, seconds = null;
+
+                if (timeFormat) {
+                    timeFormat = timeFormat.split(':');
+                    time = time.split(':');
+
+                    if (timeFormat.length !== time.length) {
+                        return {
+                            valid: false,
+                            message: message
+                        };
+                    }
+
+                    hours = time.length > 0 ? time[0] : null;
+                    minutes = time.length > 1 ? time[1] : null;
+                    seconds = time.length > 2 ? time[2] : null;
+
+                    if (hours === '' || minutes === '' || seconds === '') {
+                        return {
+                            valid: false,
+                            message: message
+                        };
+                    }
+
+                    // Validate seconds
+                    if (seconds) {
+                        if (isNaN(seconds) || seconds.length > 2) {
+                            return {
+                                valid: false,
+                                message: message
+                            };
+                        }
+                        seconds = parseInt(seconds, 10);
+                        if (seconds < 0 || seconds > 60) {
+                            return {
+                                valid: false,
+                                message: message
+                            };
+                        }
+                    }
+
+                    // Validate hours
+                    if (hours) {
+                        if (isNaN(hours) || hours.length > 2) {
+                            return {
+                                valid: false,
+                                message: message
+                            };
+                        }
+                        hours = parseInt(hours, 10);
+                        if (hours < 0 || hours >= 24 || (amOrPm && hours > 12)) {
+                            return {
+                                valid: false,
+                                message: message
+                            };
+                        }
+                    }
+
+                    // Validate minutes
+                    if (minutes) {
+                        if (isNaN(minutes) || minutes.length > 2) {
+                            return {
+                                valid: false,
+                                message: message
+                            };
+                        }
+                        minutes = parseInt(minutes, 10);
+                        if (minutes < 0 || minutes > 59) {
+                            return {
+                                valid: false,
+                                message: message
+                            };
+                        }
+                    }
+                }
+
+                var min = null,
+                    max = null,
+                    minOption = options.min,
+                    maxOption = options.max;
+
+                if (value.length < 8) {
+                    return false;
+                }
+                if (value === value.toLowerCase()) {
+                    return false;
+                }
+                if (value === value.toUpperCase()) {
+                    return false;
+                }
+                if (value.search(/[0-9]/) < 0) {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+        });
+
     (function (document, window, $) {
         $(document).ready(function ($) {
             Site.run();
@@ -153,6 +268,7 @@
         filesContainer: $('.file-list'),
         uploadTemplateId: false,
         downloadTemplateId: false,
+        autoUpload: false,
         uploadTemplate: tmpl(
           '{% for (var i=0, file; file=o.files[i]; i++) { %}' +
           '<div class="file template-upload fade col-sm-6 {%=file.type.search("image") !== -1? "image" : "other-file"%}">' +
@@ -363,6 +479,10 @@
                     validators: {
                         notEmpty: {
                             message: 'Giờ bắt đầu không được trống'
+                        },
+                        date: {
+                            format: 'HH:MM',
+                            message: 'Giờ không phù hợp'
                         }
                     }
                 },
@@ -370,6 +490,11 @@
                     validators: {
                         notEmpty: {
                             message: 'Giờ kết thúc không được trống'
+                        },
+                        date: {
+                            format: 'HH:MM',
+                            message: 'Giờ không phù hợp',
+                            min: 'StartTime'
                         }
                     }
                 },
@@ -463,11 +588,11 @@
     });
 
     $("#startTime").on("change", function () {
-        $('#placeForm').formValidation('revalidateField', 'StartTime');
+        $('#placeForm').formValidation('revalidateField', 'StartTime')
     });
 
     $("#endTime").on("change", function () {
-        $('#placeForm').formValidation('revalidateField', 'EndTime');
+        $('#placeForm').formValidation('revalidateField', 'EndTime')
     });
 
 </script>

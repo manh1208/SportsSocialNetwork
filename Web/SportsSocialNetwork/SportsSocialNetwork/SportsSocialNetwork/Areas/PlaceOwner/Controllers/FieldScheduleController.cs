@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.Utilities;
 using Microsoft.AspNet.Identity;
+using System.Globalization;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
@@ -24,33 +25,33 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
         public ActionResult IndexList(JQueryDataTableParamModel request)
         {
-            //var fieldService = this.Service<IFieldService>();
-            //var fieldScheduleService = this.Service<IFieldScheduleService>();
-            //Field field = fieldService.FirstOrDefault();
-            //FieldSchedule fieldSchedule = fieldScheduleService.FirstOrDefault(x => x.FieldId == field.Id);
-            //var totalRecord = 0;
-            //var count = 1;
+            var fieldService = this.Service<IFieldService>();
+            var fieldScheduleService = this.Service<IFieldScheduleService>();
+            Field field = fieldService.FirstOrDefault();
+            FieldSchedule fieldSchedule = fieldScheduleService.FirstOrDefault(x => x.FieldId == field.Id);
+            var totalRecord = 0;
+            var count = 1;
 
-            //var results = fieldScheduleService.GetFieldSchedule(request, out totalRecord)
-            //    .AsEnumerable()
-            //    .Select(a => new IConvertible[] {
-            //            count++,
-            //            a.Field.Name,
-            //            a.StartTime.ToString(),
-            //            a.EndTime.ToString(),
-            //            a.Type,
-            //            a.Id,
-            //    }).ToArray();
+            var results = fieldScheduleService.GetFieldSchedule(request, out totalRecord)
+                .AsEnumerable()
+                .Select(a => new IConvertible[] {
+                        count++,
+                        a.Field.Name,
+                        a.StartTime.ToString(),
+                        a.EndTime.ToString(),
+                        a.Type,
+                        a.Id,
+                }).ToArray();
 
-            //var model = new
-            //{
-            //    draw = request.sEcho,
-            //    data = results,
-            //    recordsFiltered = totalRecord,
-            //    recordsTotal = totalRecord
-            //};
-            //return Json(model);
-            return Json(new { });
+            var model = new
+            {
+                draw = request.sEcho,
+                data = results,
+                recordsFiltered = totalRecord,
+                recordsTotal = totalRecord
+            };
+            return Json(model);
+            //return Json(new { });
         }
 
         public ActionResult Detail(int id)
@@ -84,7 +85,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             foreach (var item in listPlace)
             {
                 Field field = new Field();
-                listField = _fieldService.GetActive(x => x.PlaceId == item.Id).ToList();
+                listField.AddRange(_fieldService.GetActive(x => x.PlaceId == item.Id).ToList());
             }
             List<SelectListItem> selectListField = new List<SelectListItem>();
             foreach (var item in listField)
@@ -177,7 +178,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             foreach (var item in listPlace)
             {
                 Field field = new Field();
-                listField = _fieldService.GetActive(x => x.PlaceId == item.Id).ToList();
+                listField.AddRange(_fieldService.GetActive(x => x.PlaceId == item.Id).ToList());
             }
             List<SelectListItem> selectListField = new List<SelectListItem>();
             foreach (var item in listField)
@@ -216,23 +217,32 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         [HttpPost]
         public ActionResult Update(FieldScheduleViewModel model)
         {
+            DateTime _startDay = DateTime.ParseExact(Request["StartDay"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            DateTime _endDay = DateTime.ParseExact(Request["EndDay"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            TimeSpan _startTime = TimeSpan.Parse(Request["StartTime"]);
+            TimeSpan _endTime = TimeSpan.Parse(Request["EndTime"]);
+
+            DateTime startTime = new DateTime(_startDay.Date.Year, _startDay.Date.Month, _startDay.Date.Day, _startTime.Hours, _startTime.Minutes, _startTime.Seconds);
+            DateTime endTime = new DateTime(_endDay.Date.Year, _endDay.Date.Month, _endDay.Date.Day, _endTime.Hours, _endTime.Minutes, _endTime.Seconds);
+
             var result = new AjaxOperationResult();
             try
             {
                 var scheduleService = this.Service<IFieldScheduleService>();
                 FieldSchedule schedule = scheduleService.Get(model.Id);
                 schedule.FieldId = model.FieldId;
-                schedule.StartTime = model.StartTime;
-                schedule.EndTime = model.EndTime;
+                schedule.StartTime = startTime;
+                schedule.EndTime = endTime;
                 schedule.Type = model.Type;
                 schedule.Description = model.Description;
                 scheduleService.Update(schedule);
                 scheduleService.Save();
                 result.Succeed = true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 result.Succeed = false;
+                Console.WriteLine(e.ToString());
             }           
             return Json(result);
         }
