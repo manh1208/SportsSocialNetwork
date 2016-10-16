@@ -87,6 +87,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult createEvent(Event evt, HttpPostedFileBase image)
         {
             var _eventService = this.Service<IEventService>();
@@ -99,6 +100,8 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             return RedirectToAction("index");
         }
 
+        [HttpPost]
+        [ValidateInput(false)]
         public ActionResult updateEvent(Event evt, HttpPostedFileBase image)
         {
             var result = new AjaxOperationResult();
@@ -109,6 +112,8 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 evt.StartDate = DateTime.ParseExact(stDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 string enDate = Request["EndDate"];
                 evt.EndDate = DateTime.ParseExact(enDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                //string des = Request["Description"];
+                //evt.Description = Request["Description"];
                 _eventService.saveEvent(evt, image);
                 result.Succeed = true;
             }

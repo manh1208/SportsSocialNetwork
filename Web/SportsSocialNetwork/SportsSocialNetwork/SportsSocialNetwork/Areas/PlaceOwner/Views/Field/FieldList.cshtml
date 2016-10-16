@@ -36,7 +36,18 @@
                                         @item.Name
                                     </div>
                                     <div class="pricing-price">
-                                        <img src="@item.FieldImages.ToList()[0].Image" style="display:block; max-height:100%;max-width:100%;" />
+                                        @{
+                                            if (item.FieldImages != null && item.FieldImages.ToList().Count > 0)
+                                            {
+                                                
+                                                <img src="@item.FieldImages.ToList()[0].Image" style="display:block; max-height:100%;max-width:100%;" />
+                                            }
+                                            else
+                                            {
+                                                <img src="~/Content/images/no_image.jpg" style="display:block; max-height:100%;max-width:100%;" />
+                                            }
+                                        }
+                                        
                                     </div>
                                     <div class="pricing-footer">
                                         <button type="button" class="btn btn-success" onclick="showDetail(@item.Id)"><i class="fa fa-eye" aria-hidden="true"></i></button>
