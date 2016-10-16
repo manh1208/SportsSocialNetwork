@@ -169,14 +169,15 @@
             <!-- Widget -->
             <div class="widget widget-article widget-shadow">
                 <div class="widget-header cover overlay overlay-hover">
-                    <img class="cover-image overlay-scale" src="@ViewBag.lastestEvent.Image" alt="">
+                    <img class="cover-image overlay-scale" src="@ViewBag.lastestEvent.Image" style="max-height:175px">
                 </div>
                 <div class="widget-body" style="text-align:center">
-                    <p>Sự kiện đang diễn ra</p>
+                    <p>Sự kiện gần đây nhất</p>
                     <h3 class="widget-title">@ViewBag.lastestEvent.Name</h3>
-                    <div class="widget-body-footer">
-                        <a class="btn btn-outline btn-default" href="@Url.Action("ViewDetail", "Event", new { id = @ViewBag.lastestEvent.Id })">Xem chi tiết</a>
+                    <div class="widget-body-footer padding-bottom-15">
+                        <a class="btn btn-primary" href="@Url.Action("ViewDetail", "Event", new { id = @ViewBag.lastestEvent.Id })">Xem chi tiết</a>
                     </div>
+                    <a href="@Url.Action("Index", "Event", new { id = Model.Id })">Xem các sự kiện khác</a>
                 </div>
             </div>
             <!-- End Widget -->

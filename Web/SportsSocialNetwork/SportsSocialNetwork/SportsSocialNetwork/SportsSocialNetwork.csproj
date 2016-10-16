@@ -285,7 +285,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\EventController.cs" />
-    <Compile Include="Controllers\EventModelView.cs" />
     <Compile Include="Controllers\FieldController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -2816,6 +2815,7 @@
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\logo_new.png" />
     <Content Include="Content\images\logo_orange.png" />
+    <Content Include="Content\images\no_image.jpg" />
     <Content Include="Content\js\custom-script.js" />
     <Content Include="Content\js\sweetAlert\sweetalert.css" />
     <Content Include="Content\js\sweetAlert\sweetalert.min.js" />
