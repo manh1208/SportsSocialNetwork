@@ -21,7 +21,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         IEnumerable<Place> getAllPlace();
         IEnumerable<Place> getPlace(string sport, string province, string district);
         IEnumerable<Place> GetAll(int skip, int take);
-
+        IEnumerable<Place> GetAllOfPlaceOwner(String ownerId);
         Place GetPlaceById(int id);
 
         Place ChangeStatus(int id, int status);
@@ -164,6 +164,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
             IEnumerable<Place> placeList;
             placeList = this.GetActive(x=> x.Approve==true).OrderBy(x=> x.Ratings.Count ).Skip(skip).Take(take);
             return placeList;
+        }
+
+        public IEnumerable<Place> GetAllOfPlaceOwner(String ownerId) {
+            return this.GetActive(x => x.UserId == ownerId);
         }
 
         public Place GetPlaceById(int id)

@@ -262,6 +262,7 @@
     <Compile Include="Areas\Admin\Models\UpdateAccountViewModel.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
     <Compile Include="Areas\Api\Controllers\AspNetUserController.cs" />
+    <Compile Include="Areas\Api\Controllers\EventController.cs" />
     <Compile Include="Areas\Api\Controllers\FieldController.cs" />
     <Compile Include="Areas\Api\Controllers\FollowController.cs" />
     <Compile Include="Areas\Api\Controllers\GroupController.cs" />
@@ -763,6 +764,7 @@
     </Compile>
     <Compile Include="Models\ViewModels\AspNetUserOveralViewModel.cs" />
     <Compile Include="Models\ViewModels\AspNetUserRegisterViewModel.cs" />
+    <Compile Include="Models\ViewModels\AspNetUserSimpleModel.cs" />
     <Compile Include="Models\ViewModels\AspNetUserViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -773,6 +775,8 @@
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\DataTableViewModel.cs" />
+    <Compile Include="Models\ViewModels\EventDetailViewModel.cs" />
+    <Compile Include="Models\ViewModels\EventOveralViewModel.cs" />
     <Compile Include="Models\ViewModels\EventViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -829,6 +833,7 @@
     <Compile Include="Models\ViewModels\OrderViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\ParticipationDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\ParticipationViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -3733,6 +3738,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Api\Models\" />
     <Folder Include="Areas\Api\Views\AspNetUser\" />
+    <Folder Include="Areas\Api\Views\Event\" />
     <Folder Include="Areas\Api\Views\Follow\" />
     <Folder Include="Areas\Api\Views\GroupMember\" />
     <Folder Include="Areas\Api\Views\Group\" />
