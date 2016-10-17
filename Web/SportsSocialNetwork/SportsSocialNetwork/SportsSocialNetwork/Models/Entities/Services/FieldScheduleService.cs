@@ -1,4 +1,4 @@
-﻿using SportsSocialNetwork.Models.ViewModels;
+using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
