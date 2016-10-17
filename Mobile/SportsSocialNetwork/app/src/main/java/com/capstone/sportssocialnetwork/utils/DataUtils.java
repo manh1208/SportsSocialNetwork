@@ -8,7 +8,9 @@ import android.content.SharedPreferences;
  */
 public class DataUtils {
 //    public static String URL = "http://192.168.43.200:26011";
-    public static String URL = "http://192.168.150.149:26011";
+//    public static String URL = "http://192.168.150.149:26011";
+    public static String URL = "http://192.168.1.108:26011";
+
 
     private static DataUtils INSTANCE = null;
     private SharedPreferences mPreferences;
