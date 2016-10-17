@@ -30,11 +30,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 List<PostCommentDetailViewModel> result = Mapper.Map<List<PostCommentDetailViewModel>>(commentList);
 
-                response = new ResponseModel<List<PostCommentDetailViewModel>>(true,"Comment list loaded",null, result);
+                response = new ResponseModel<List<PostCommentDetailViewModel>>(true,"Tải bình luận thành công",null, result);
 
 
             } catch (Exception) {
-                response = ResponseModel<List<PostCommentDetailViewModel>>.CreateErrorResponse("Failed to load comments", systemError);
+                response = ResponseModel<List<PostCommentDetailViewModel>>.CreateErrorResponse("Tải bình luận thất bại", systemError);
             }
 
             return Json(response);
@@ -47,6 +47,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             var notiService = this.Service<INotificationService>();
 
             var postService = this.Service<IPostService>();
+
+            var aspNetUserService = this.Service<IAspNetUserService>();
 
             ResponseModel<PostCommentDetailViewModel> response = null;
 
@@ -61,20 +63,20 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 PostComment comment = service.Comment(postId, userId, content,commentImage);
 
-                AspNetUser commentedUser = comment.AspNetUser;
+                AspNetUser commentedUser = aspNetUserService.FindUser(comment.UserId);
 
-                Post post = comment.Post;
+                Post post = postService.GetPostById(comment.PostId);
 
                 AspNetUser user = postService.GetUserNameOfPost(post.Id);
 
-                Notification noti = notiService.SaveNoti(user.Id, "Comment", commentedUser.UserName + "đã bình luận về bài viết của bạn", 1, post.Id, null);
+                Notification noti = notiService.SaveNoti(user.Id, "Comment", commentedUser.UserName + " đã bình luận về bài viết của bạn", 1, post.Id, null);
 
                 PostCommentDetailViewModel result = Mapper.Map<PostCommentDetailViewModel>(comment);
 
-                response = new ResponseModel<PostCommentDetailViewModel>(true, "Commented successfully", null, result);
+                response = new ResponseModel<PostCommentDetailViewModel>(true, "Bình luận thành công", null, result);
 
             } catch (Exception) {
-                response = ResponseModel<PostCommentDetailViewModel>.CreateErrorResponse("Failed to comment",systemError);
+                response = ResponseModel<PostCommentDetailViewModel>.CreateErrorResponse("Bình luận thất bại", systemError);
             }
             return Json(response);
         }

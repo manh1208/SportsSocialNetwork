@@ -40,11 +40,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                     PreparePostOveralData(p, currentUserId);
                 }
 
-                response = new ResponseModel<List<PostOveralViewModel>>(true, "Post list loaded!", null, result);
+                response = new ResponseModel<List<PostOveralViewModel>>(true, "Tải bài viết thành công!", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<List<PostOveralViewModel>>.CreateErrorResponse("Post list failed to load!", systemError);
+                response = ResponseModel<List<PostOveralViewModel>>.CreateErrorResponse("Tải bài viết thất bại!", systemError);
             }
 
             return Json(response);
@@ -70,11 +70,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                     PreparePostOveralData(p, currentUserId);
                 }
 
-                response = new ResponseModel<List<PostOveralViewModel>>(true, "Group posts loaded!", null, result);
+                response = new ResponseModel<List<PostOveralViewModel>>(true, "Tải bài viết thành công!", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<List<PostOveralViewModel>>.CreateErrorResponse("Group posts failed to load!", systemError);
+                response = ResponseModel<List<PostOveralViewModel>>.CreateErrorResponse("Tải bài viết thất bại!", systemError);
             }
 
             return Json(response);
@@ -99,12 +99,12 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 PostDetailViewModel result = PreparePostDetailData(overal,skip,take);
 
-                response = new ResponseModel<PostDetailViewModel>(true, "Post detail has been loaded!", null, result);
+                response = new ResponseModel<PostDetailViewModel>(true, "Chi tiết bài viết:", null, result);
 
             }
             catch (Exception)
             {
-                response = ResponseModel<PostDetailViewModel>.CreateErrorResponse("Post failed to load!", systemError);
+                response = ResponseModel<PostDetailViewModel>.CreateErrorResponse("Tải bài viết thất bại!", systemError);
             }
 
             return Json(response);
@@ -138,11 +138,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 PreparePostOveralData(result, post.UserId);
 
-                response = new ResponseModel<PostOveralViewModel>(true, "Post created", null, result);
+                response = new ResponseModel<PostOveralViewModel>(true, "Đăng bài thành công!", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<PostOveralViewModel>.CreateErrorResponse("Post failed!", systemError);
+                response = ResponseModel<PostOveralViewModel>.CreateErrorResponse("Đăng bài thất bại!", systemError);
             }
 
             return Json(response);
@@ -179,11 +179,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 PreparePostOveralData(result, post.UserId);
 
-                response = new ResponseModel<PostOveralViewModel>(true, "Your post has been edited!", null, result);
+                response = new ResponseModel<PostOveralViewModel>(true, "Bài viết đã được chỉnh sửa!", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<PostOveralViewModel>.CreateErrorResponse("Post edit failed!", systemError);
+                response = ResponseModel<PostOveralViewModel>.CreateErrorResponse("Chỉnh sửa thất bại!", systemError);
             }
 
             return Json(response);
