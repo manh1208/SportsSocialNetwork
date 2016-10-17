@@ -12,6 +12,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         bool JoinGroup(int groupId, String userId);
 
+        bool LeaveGroup(int groupId, string userId);
+
         GroupMember KickMember(int id);
 
         GroupMember CreateGroupAdmin(int groupId, String userId);
@@ -28,6 +30,9 @@ namespace SportsSocialNetwork.Models.Entities.Services
     }
     public partial class GroupMemberService : IGroupMemberService
     {
+
+
+        #region Code from here
         public bool CheckAdmin(string userId, int groupId)
         {
             GroupMember member = this.FirstOrDefaultActive(x => x.GroupId == groupId && x.UserId == userId);
@@ -69,7 +74,6 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return member;
         }
 
-        #region Code from here
         public IEnumerable<GroupMember> GetMemberList(int groupId)
         {
             return this.GetActive(x => x.GroupId == groupId);
@@ -100,6 +104,17 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 }
                 return false;
             }
+        }
+
+        public bool LeaveGroup(int groupId, string userId) {
+            GroupMember member = this.FirstOrDefaultActive(x => x.GroupId == groupId && x.UserId == userId);
+            if (member != null)
+            {
+                member.Active = false;
+                this.Update(member);
+                return true;
+            }
+            return false;
         }
 
         public GroupMember KickMember(int id)

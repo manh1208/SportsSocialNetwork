@@ -12,7 +12,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 {
     public class LikeController : BaseController
     {
-        private String systemError = "An error has occured!";
+        private String systemError = "Đã có lỗi xảy ra!";
 
         [HttpPost]
         public ActionResult LikeUnlikePost(int postId, String userId)
@@ -34,7 +34,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             }
             catch (Exception)
             {
-                response = ResponseModel<Like>.CreateErrorResponse("An error has occured!", systemError);
+                response = ResponseModel<Like>.CreateErrorResponse("Thao tác thất bại!", systemError);
             }
             return Json(response);
         }

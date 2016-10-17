@@ -24,9 +24,36 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             try {
                 bool result = service.JoinGroup(groupId,userId);
 
-                response = new ResponseModel<bool>(result,"Joined group successfully!",null);
+                response = new ResponseModel<bool>(result,"Bạn đã tham gia nhóm!",null);
             } catch (Exception) {
-                response = ResponseModel<bool>.CreateErrorResponse("Join group failed",systemError);
+                response = ResponseModel<bool>.CreateErrorResponse("Tham gia nhóm thất bại!",systemError);
+            }
+
+            return Json(response);
+        }
+
+        [HttpPost]
+        public ActionResult LeaveGroup(int groupId, String userId)
+        {
+            var service = this.Service<IGroupMemberService>();
+
+            ResponseModel<bool> response = null;
+
+            try
+            {
+                bool result = service.LeaveGroup(groupId, userId);
+
+                if (result == false) {
+                    response = ResponseModel<bool>.CreateErrorResponse("Thành viên không tồn tại!", systemError);
+                }
+                else
+                {
+                    response = new ResponseModel<bool>(result, "Bạn đã rời nhóm!", null);
+                }
+            }
+            catch (Exception)
+            {
+                response = ResponseModel<bool>.CreateErrorResponse("Rời nhóm thất bại!", systemError);
             }
 
             return Json(response);
@@ -43,11 +70,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 List<GroupMemberViewModel> result = Mapper.Map<List<GroupMemberViewModel>>(memberList);
 
-                response = new ResponseModel<List<GroupMemberViewModel>>(true, "Member list loaded!", null, result);
+                response = new ResponseModel<List<GroupMemberViewModel>>(true, "Danh sách thành viên:", null, result);
 
             } catch (Exception)
             {
-                response = ResponseModel<List<GroupMemberViewModel>>.CreateErrorResponse("Member list failed to load", systemError);
+                response = ResponseModel<List<GroupMemberViewModel>>.CreateErrorResponse("Thất bại khi tải danh sách nhóm", systemError);
             }
             return Json(response);
         }
@@ -65,15 +92,15 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 {
                     GroupMemberViewModel result = Mapper.Map<GroupMemberViewModel>(member);
 
-                    response = new ResponseModel<GroupMemberViewModel>(true, "Member kicked", null, result);
+                    response = new ResponseModel<GroupMemberViewModel>(true, "Đã đuổi thành viên", null, result);
                 }
                 else {
-                    response = ResponseModel<GroupMemberViewModel>.CreateErrorResponse("Kick failed", systemError);
+                    response = ResponseModel<GroupMemberViewModel>.CreateErrorResponse("Đuổi thành viên thất bại", systemError);
                 }
             }
             catch (Exception)
             {
-                response = ResponseModel<GroupMemberViewModel>.CreateErrorResponse("Kick failed", systemError);
+                response = ResponseModel<GroupMemberViewModel>.CreateErrorResponse("Đuổi thành viên thất bại", systemError);
             }
             return Json(response);
         }
@@ -92,11 +119,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                     result = service.JoinGroup(groupId, id);
                 }
 
-                response = new ResponseModel<bool>(result, "Members added to the group successfully!", null);
+                response = new ResponseModel<bool>(result, "Thành viên đã được thêm vào nhóm!", null);
             }
             catch (Exception)
             {
-                response = ResponseModel<bool>.CreateErrorResponse("Adding members failed", systemError);
+                response = ResponseModel<bool>.CreateErrorResponse("Thêm thành viên thất bại", systemError);
             }
 
             return Json(response);
@@ -113,9 +140,9 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 GroupMemberViewModel result = Mapper.Map<GroupMemberViewModel>(admin);
 
-                response = new ResponseModel<GroupMemberViewModel>(true, "Admin has been set", null, result);
+                response = new ResponseModel<GroupMemberViewModel>(true, "Đã thêm admin", null, result);
             } catch (Exception) {
-                response = ResponseModel<GroupMemberViewModel>.CreateErrorResponse("Failed to set admin", systemError);
+                response = ResponseModel<GroupMemberViewModel>.CreateErrorResponse("Thêm admin thất bại", systemError);
             }
 
             return Json(response);

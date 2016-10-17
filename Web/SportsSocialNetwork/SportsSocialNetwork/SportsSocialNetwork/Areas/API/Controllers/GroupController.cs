@@ -33,12 +33,12 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 List<GroupViewModel> result = Mapper.Map<List<GroupViewModel>>(groupList);
 
-                response = new ResponseModel<List<GroupViewModel>>(true, "Results loaded!", null, result);
+                response = new ResponseModel<List<GroupViewModel>>(true, "Kết quả tìm kiếm:", null, result);
 
             }
             catch (Exception)
             {
-                response = ResponseModel<List<GroupViewModel>>.CreateErrorResponse("Group list failed to load!", systemError);
+                response = ResponseModel<List<GroupViewModel>>.CreateErrorResponse("Không tìm thấy kết quả", systemError);
             }
 
             return Json(response, JsonRequestBehavior.AllowGet);
@@ -65,11 +65,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 result.IsMember = groupMemberService.CheckMember(currentUser, result.Id);
 
-                response = new ResponseModel<GroupDetailViewModel>(true, "Group detail loaded!", null, result);
+                response = new ResponseModel<GroupDetailViewModel>(true, "Thông tin nhóm:", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<GroupDetailViewModel>.CreateErrorResponse("Group detail failed to load!", systemError);
+                response = ResponseModel<GroupDetailViewModel>.CreateErrorResponse("Tải thông tin thất bại!", systemError);
             }
 
             return Json(response);
@@ -98,10 +98,10 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 GroupViewModel result = Mapper.Map<GroupViewModel>(group);
 
-                response = new ResponseModel<GroupViewModel>(true,"Group Created",null,result);
+                response = new ResponseModel<GroupViewModel>(true,"Nhóm đã được tạo",null,result);
 
             } catch (Exception) {
-                response = ResponseModel<GroupViewModel>.CreateErrorResponse("Failed to to create group!", systemError);
+                response = ResponseModel<GroupViewModel>.CreateErrorResponse("Tạo nhóm thất bại!", systemError);
             }
 
             return Json(response);
@@ -118,9 +118,9 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 GroupViewModel result = Mapper.Map<GroupViewModel>(group);
 
-                response = new ResponseModel<GroupViewModel>(true, "Group Information has been edited!",null, result);
+                response = new ResponseModel<GroupViewModel>(true, "Thông tin nhóm đã được cập nhật!",null, result);
             } catch (Exception) {
-                response = ResponseModel<GroupViewModel>.CreateErrorResponse("Failed to to edit group information!", systemError);
+                response = ResponseModel<GroupViewModel>.CreateErrorResponse("Thất bại khi cập nhật thông tin nhóm!", systemError);
             }
 
             return Json(response);
@@ -140,11 +140,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 String result = service.ChangeCoverImage(groupId, path);
 
-                response = new ResponseModel<String>(true, "Cover image has been changed!", null, result);
+                response = new ResponseModel<String>(true, "Ảnh nhóm đã được cập nhật!", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<String>.CreateErrorResponse("Cover image has NOT been changed!", systemError);
+                response = ResponseModel<String>.CreateErrorResponse("Ảnh nhóm chưa được cập nhật!", systemError);
             }
 
             return Json(response);

@@ -24,14 +24,14 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 if (result)
                 {
-                    response = new ResponseModel<bool>(true, "Followed", null);
+                    response = new ResponseModel<bool>(true, "Đã theo dõi", null);
                 }
                 else {
-                    response = new ResponseModel<bool>(true, "Unfollowed", null);
+                    response = new ResponseModel<bool>(true, "Đã bỏ theo dõi", null);
                 }
 
             } catch (Exception) {
-                response = ResponseModel<bool>.CreateErrorResponse("Follow failed",systemError);
+                response = ResponseModel<bool>.CreateErrorResponse("Theo dõi thất bại",systemError);
             }
 
             return Json(response);

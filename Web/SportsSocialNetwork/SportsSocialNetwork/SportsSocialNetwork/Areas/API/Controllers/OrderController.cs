@@ -33,14 +33,14 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             }
             catch (Exception)
             {
-                response = ResponseModel<List<OrderDetailViewModel>>.CreateErrorResponse("Your orders have failed to load!", systemError);
+                response = ResponseModel<List<OrderDetailViewModel>>.CreateErrorResponse("Đơn đặt sân của bạn đã tải thất bại!", systemError);
                 return Json(response, JsonRequestBehavior.AllowGet);
             }
 
             
             List<OrderDetailViewModel> result = Mapper.Map<List<OrderDetailViewModel>>(orderList);
 
-            response = new ResponseModel<List<OrderDetailViewModel>>(true, "Your orders have been loaded!", null, result);
+            response = new ResponseModel<List<OrderDetailViewModel>>(true, "Đơn đặt sân của bạn đã được tải thành công!", null, result);
 
             return Json(response, JsonRequestBehavior.AllowGet);
         }
@@ -75,10 +75,10 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
                 List<OrderViewModel> result = Mapper.Map<List<OrderViewModel>>(orderList);
 
-                response = new ResponseModel<List<OrderViewModel>>(true, "All your orders have been loaded!", null, result);
+                response = new ResponseModel<List<OrderViewModel>>(true, "Danh sách đặt sân của bạn đã được tải thành công!", null, result);
 
             } catch (Exception) {
-                response = ResponseModel<List<OrderViewModel>>.CreateErrorResponse("Orders have NOT been loaded!",systemError);
+                response = ResponseModel<List<OrderViewModel>>.CreateErrorResponse("Danh sách đặt sân đã tải thất bại!", systemError);
             }
 
 
@@ -129,12 +129,12 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
                 OrderDetailViewModel result = Mapper.Map<OrderDetailViewModel>(order);
 
-                response = new ResponseModel<OrderDetailViewModel>(true, "Your order status has been changed", null, result);
+                response = new ResponseModel<OrderDetailViewModel>(true, "Trạng thái đơn đặt sân đã thay đổi thành công", null, result);
             }
 
             catch (Exception)
             {
-                response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Your order status has NOT been changed", systemError);
+                response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Thay đổi trạng thái đơn đặt sân thất bại", systemError);
             }
 
             return Json(response);
@@ -153,12 +153,12 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
                 OrderDetailViewModel result = Mapper.Map<OrderDetailViewModel>(order);
 
-                response = new ResponseModel<OrderDetailViewModel>(true, "Order created successfully", null, result);
+                response = new ResponseModel<OrderDetailViewModel>(true, "Đặt sân thành công", null, result);
 
             }
             catch (Exception)
             {
-                response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Your order has NOT been created", systemError);
+                response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Đặt sân thất bại", systemError);
             }
 
             return Json(response);

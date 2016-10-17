@@ -47,11 +47,11 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                     }
                 }
 
-                response = new ResponseModel<List<PlaceOveralViewModel>>(true, "Load Place List Successfully", null, result);
+                response = new ResponseModel<List<PlaceOveralViewModel>>(true, "Danh sách địa điểm đã tải thành công!", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<List<PlaceOveralViewModel>>.CreateErrorResponse("Place List failed to load!", systemError);
+                response = ResponseModel<List<PlaceOveralViewModel>>.CreateErrorResponse("Danh sách địa điểm đã tải thất bại!", systemError);
             }
 
             return Json(response, JsonRequestBehavior.AllowGet);
@@ -70,16 +70,16 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 {
                     PlaceDetailViewModel result = Mapper.Map<PlaceDetailViewModel>(place);
 
-                    response = new ResponseModel<PlaceDetailViewModel>(true, "Place info Loaded", null, result);
+                    response = new ResponseModel<PlaceDetailViewModel>(true, "Thông tin địa điểm đã tải thành công", null, result);
                 }
                 else
                 {
-                    response = ResponseModel<PlaceDetailViewModel>.CreateErrorResponse("Place info failed to load!", systemError);
+                    response = ResponseModel<PlaceDetailViewModel>.CreateErrorResponse("Thất bại khi tải thông tin địa điểm!", systemError);
                 }
             }
             catch (Exception)
             {
-                response = ResponseModel<PlaceDetailViewModel>.CreateErrorResponse("Place info failed to load!", systemError);
+                response = ResponseModel<PlaceDetailViewModel>.CreateErrorResponse("Thất bại khi tải thông tin địa điểm!", systemError);
             }
             return Json(response);
         }
@@ -96,16 +96,16 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 if (place != null)
                 {
                     PlaceViewModel result = Mapper.Map<PlaceViewModel>(place);
-                    response = new ResponseModel<PlaceViewModel>(true, "Your Place's status has been updated!", null, result);
+                    response = new ResponseModel<PlaceViewModel>(true, "Trạng thái đã được cập nhật!", null, result);
                 }
                 else
                 {
-                    response = ResponseModel<PlaceViewModel>.CreateErrorResponse("Your Place's status has NOT been updated!", systemError);
+                    response = ResponseModel<PlaceViewModel>.CreateErrorResponse("Cập nhật trạng thái thất bại!", systemError);
                 }
             }
             catch (Exception e)
             {
-                response = ResponseModel<PlaceViewModel>.CreateErrorResponse("Your Place's status has NOT been updated!", systemError);
+                response = ResponseModel<PlaceViewModel>.CreateErrorResponse("Cập nhật trạng thái thất bại!", systemError);
             }
             return Json(response, JsonRequestBehavior.AllowGet);
         }
@@ -146,11 +146,11 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
                 List<PlaceViewModel> result = Mapper.Map<List<PlaceViewModel>>(placeList);
 
-                response = new ResponseModel<List<PlaceViewModel>>(true, "Here are places that you want!", null, result);
+                response = new ResponseModel<List<PlaceViewModel>>(true, "Những địa điểm gần bạn:", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<List<PlaceViewModel>>.CreateErrorResponse("Can not find result", systemError);
+                response = ResponseModel<List<PlaceViewModel>>.CreateErrorResponse("Không tìm thấy kết quả", systemError);
             }
             return Json(response);
         }

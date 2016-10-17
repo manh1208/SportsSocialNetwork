@@ -80,11 +80,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 List<AspNetUserOveralViewModel> result = Mapper.Map<List<AspNetUserOveralViewModel>>(userList);
 
-                response = new ResponseModel<List<AspNetUserOveralViewModel>>(true, "Result list:", null, result);
+                response = new ResponseModel<List<AspNetUserOveralViewModel>>(true, "Kết quả tìm kiếm:", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<List<AspNetUserOveralViewModel>>.CreateErrorResponse("Failed to load result!", systemError);
+                response = ResponseModel<List<AspNetUserOveralViewModel>>.CreateErrorResponse("Tìm kiếm thất bại!", systemError);
             }
 
             return Json(response, JsonRequestBehavior.AllowGet);
@@ -120,17 +120,17 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                     result.NewsCount = user.News.Count();
 
-                    response = new ResponseModel<AspNetUserOveralViewModel>(true, "Profile has been successfully loaded!", null, result);
+                    response = new ResponseModel<AspNetUserOveralViewModel>(true, "Thông tin tài khoản!", null, result);
                 }
                 else
                 {
-                    response = ResponseModel<AspNetUserOveralViewModel>.CreateErrorResponse("Your profile has failed to load!", systemError);
+                    response = ResponseModel<AspNetUserOveralViewModel>.CreateErrorResponse("Thất bại khi tải thông tin tài khoản!", systemError);
                 }
 
             }
             catch (Exception)
             {
-                response = ResponseModel<AspNetUserOveralViewModel>.CreateErrorResponse("Your profile has failed to load!", systemError);
+                response = ResponseModel<AspNetUserOveralViewModel>.CreateErrorResponse("Thất bại khi tải thông tin tài khoản!", systemError);
             }
 
             return Json(response);
@@ -160,22 +160,22 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                         AspNetUserOveralViewModel result = Mapper.Map<AspNetUserOveralViewModel>(user);
 
-                        response = new ResponseModel<AspNetUserOveralViewModel>(true, "Your profile has been updated!", null, result);
+                        response = new ResponseModel<AspNetUserOveralViewModel>(true, "Thông tin của bạn đã được cập nhật!", null, result);
                     }
                     else
                     {
-                        response = new ResponseModel<AspNetUserOveralViewModel>(false, "Your profile has failed to update!", errorList);
+                        response = new ResponseModel<AspNetUserOveralViewModel>(false, "Thông tin của bạn chưa được cập nhật!", errorList);
                     }
 
                 }
                 else
                 {
-                    response = ResponseModel<AspNetUserOveralViewModel>.CreateErrorResponse("Your profile has failed to update!", systemError);
+                    response = ResponseModel<AspNetUserOveralViewModel>.CreateErrorResponse("Thông tin của bạn chưa được cập nhật!", systemError);
                 }
             }
             catch (Exception)
             {
-                response = ResponseModel<AspNetUserOveralViewModel>.CreateErrorResponse("Your profile has failed to update!", systemError);
+                response = ResponseModel<AspNetUserOveralViewModel>.CreateErrorResponse("Thông tin của bạn chưa được cập nhật!", systemError);
             }
 
             return Json(response);
@@ -196,11 +196,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 String result = service.ChangeAvatar(userId, path);
 
-                response = new ResponseModel<String>(true, "Your Avatar has been changed!", null, result);
+                response = new ResponseModel<String>(true, "Ảnh đại diện của bạn đã được cập nhật!", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<String>.CreateErrorResponse("Your Avatar has NOT been changed!", systemError);
+                response = ResponseModel<String>.CreateErrorResponse("Ảnh đại diện của bạn chưa được cập nhật!", systemError);
             }
 
             return Json(response);
@@ -222,11 +222,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 String result = service.ChangeCover(userId, path);
 
-                response = new ResponseModel<String>(true, "Your Cover image has been changed!", null, result);
+                response = new ResponseModel<String>(true, "Ảnh bìa của bạn đã được cập nhật!", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<String>.CreateErrorResponse("Your Cover image has NOT been changed!", systemError);
+                response = ResponseModel<String>.CreateErrorResponse("Ảnh bìa của bạn chưa được cập nhật!", systemError);
             }
 
             return Json(response);
@@ -253,11 +253,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                         if (role.Id.Equals(AdminRoleId))
                         {
                             MobileAuthorized = false;
-                            response = ResponseModel<UserLoginViewModel>.CreateErrorResponse("Login failed!", Utils.GetEnumDescription(UserRole.Admin) + " không thể đăng nhập trên thiết bị điện thoại");
+                            response = ResponseModel<UserLoginViewModel>.CreateErrorResponse("Đăng nhập thất bại!", Utils.GetEnumDescription(UserRole.Admin) + " không thể đăng nhập trên thiết bị điện thoại");
                         }
                         else if (role.Id.Equals(ModeratorRoleId)) {
                             MobileAuthorized = false;
-                            response = ResponseModel<UserLoginViewModel>.CreateErrorResponse("Login failed!", Utils.GetEnumDescription(UserRole.Moderator) + " không thể đăng nhập trên thiết bị điện thoại");
+                            response = ResponseModel<UserLoginViewModel>.CreateErrorResponse("Đăng nhập thất bại!", Utils.GetEnumDescription(UserRole.Moderator) + " không thể đăng nhập trên thiết bị điện thoại");
                         }
 
                     }
@@ -266,19 +266,19 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                     {
                         UserLoginViewModel result = Mapper.Map<UserLoginViewModel>(user);
 
-                        response = new ResponseModel<UserLoginViewModel>(true, "Login successfully!", null, result);
+                        response = new ResponseModel<UserLoginViewModel>(true, "Đăng nhập thành công!", null, result);
                     }
 
 
                     break;
                 case SignInStatus.LockedOut:
-                    response = ResponseModel<UserLoginViewModel>.CreateErrorResponse("Login failed!", "Locked out");
+                    response = ResponseModel<UserLoginViewModel>.CreateErrorResponse("Đăng nhập thất bại!", "Locked out");
 
                     break;
                 case SignInStatus.RequiresVerification:
                 //return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
-                    response = ResponseModel<UserLoginViewModel>.CreateErrorResponse("Login failed!", "Đăng nhập không thành công");
+                    response = ResponseModel<UserLoginViewModel>.CreateErrorResponse("Đăng nhập thất bại!", "Tên tài khoản hoặc mật khẩu không chính xác");
 
                     break;
             }
@@ -320,23 +320,23 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                         userService.Update(userEntity);
                         var hobbyService = this.Service<IHobbyService>();
                         hobbyService.SaveHobbyForUser(userEntity.Id, model.Hobby);
-                        response = new ResponseModel<AspNetUserRegisterViewModel>(true, "Registered successfully", null, model);
+                        response = new ResponseModel<AspNetUserRegisterViewModel>(true, "Bạn đã đăng ký thành công", null, model);
                     }
                     else
                     {
                         AddErrors(registerResult, errorList);
-                        response = new ResponseModel<AspNetUserRegisterViewModel>(false, "Register failed", errorList, model);
+                        response = new ResponseModel<AspNetUserRegisterViewModel>(false, "Đăng ký không thành công", errorList, model);
                     }
 
                 }
                 else
                 {
-                    response = new ResponseModel<AspNetUserRegisterViewModel>(false, "Register failed", errorList, model);
+                    response = new ResponseModel<AspNetUserRegisterViewModel>(false, "Đăng ký không thành công", errorList, model);
                 }
             }
             catch (Exception)
             {
-                response = ResponseModel<AspNetUserRegisterViewModel>.CreateErrorResponse("Register failed", systemError);
+                response = ResponseModel<AspNetUserRegisterViewModel>.CreateErrorResponse("Đăng ký không thành công", systemError);
             }
 
             return Json(response);
