@@ -66,7 +66,7 @@
     </button>
     <h4 class="modal-title">Thêm mới</h4>
 </div>
-@using (Html.BeginForm("Create", "FieldSchedule", FormMethod.Post, new { enctype = "multipart/form-data", @id = "create-form" }))
+@using (Html.BeginForm("Create", "FieldSchedule", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return checkDateTimeInput()", @id = "create-form" }))
 {
     <input type="hidden" name="placeId" value="@placeId" />
 <div class="modal-body" style="padding-bottom:0;" id="modalBody">
@@ -76,7 +76,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Chọn sân</label>
-                        @Html.DropDownListFor(m => m.FieldId, selectListField, new { @class = "form-control input-lg" })
+                        @Html.DropDownListFor(m => m.FieldId, selectListField, new { @class = "form-control input-lg", @id = "fieldId" })
                     </div>
                     <label class="control-label">Từ ngày: </label>
                     <div class="form-group">
@@ -121,7 +121,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12">
+                <div class="col-sm-12">
                     <div class="form-group">
                         <label class="control-label">Mô tả</label>
                         <div>
@@ -129,13 +129,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-sm-12" id="noti">
+                    
+                </div>
             </div>
         </div>
     </div>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-    <button type="submit" class="btn btn-success" id="csubmitBtn">Tạo lịch</button>
+    <button type="submit" class="btn btn-success" id="csubmitBtn" onclick="return checkDateTimeInput()">Tạo lịch</button>
 </div>
 }
 @*<form id="create-form" action="Create" method="post">
@@ -152,6 +155,41 @@
                 Site.run();
             });
         })(document, window, jQuery);
+
+        @*function checkDateTimeInput() {
+            var fieldId = $('#fieldId option:selected').val()
+            var startDay = $("#cstartDay");
+            var endDay = $("#cendDay");
+            var startTime = $("#cstartTime");
+            var endTime = $("#cendTime");
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("checkDTValid")',
+                data: {
+                    fieldId: fieldId,
+                    startDay: startDay,
+                    endDay: endDay,
+                    startTime: startTime,
+                    endTime: endDay
+                },
+                success: function (data) {
+                    if (data === "success") {
+
+                        return true;
+                    }
+                    else {
+                        var noti = "<p class='alert alert-danger'>Khung giờ này đã tồn tại</p>";
+                        $("#noti").empty();
+                        $("#noti").append(noti);
+                        return false;
+                    }
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }*@
 
     </script>
 }

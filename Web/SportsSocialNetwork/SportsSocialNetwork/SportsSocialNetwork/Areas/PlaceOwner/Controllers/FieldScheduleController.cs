@@ -264,5 +264,24 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             }           
             return Json(result);
         }
+
+        [HttpPost]
+        public string checkDTValid(int fieldId, string startDay, string endDay, string startTime, string endTime)
+        {
+            var _fieldScheduleService = this.Service<IFieldScheduleService>();
+            DateTime _startDay = DateTime.ParseExact(startDay, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            DateTime _endDay = DateTime.ParseExact(endDay, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+            TimeSpan _startTime = TimeSpan.Parse(startTime);
+            TimeSpan _endTime = TimeSpan.Parse(endTime);
+            if (_fieldScheduleService.checkMaintainTimeValid(fieldId,_startTime,_endTime,_startDay,_endDay))
+            {
+                return "valid";
+            }
+            else
+            {
+                return "invalid";
+            }
+        }
     }
 }
