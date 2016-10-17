@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
+import com.capstone.sportssocialnetwork.model.FieldType;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
@@ -24,6 +25,7 @@ import com.capstone.sportssocialnetwork.utils.SharePreferentName;
 import com.capstone.sportssocialnetwork.utils.Utilities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -45,6 +47,12 @@ public class BookingActivity extends AppCompatActivity {
     private String startTime;
     private String endTime;
     private RestService service;
+    private ArrayAdapter<String> placeAdapter;
+    private ArrayAdapter<String> sportAdapter;
+    private ArrayAdapter<String> fieldAdapter;
+    private HashMap<String,Integer> placeHash;
+    private HashMap<String,Integer> sportHash;
+    private HashMap<String,Integer> fieldHash;
 
 
     @Override
@@ -64,13 +72,14 @@ public class BookingActivity extends AppCompatActivity {
 //        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         initView();
         event();
+        loadPlace();
     }
 
     private void event() {
         spField.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(BookingActivity.this, "tinh", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(BookingActivity.this, "tinh", Toast.LENGTH_SHORT).show();
                 calculatePrice();
             }
 
@@ -93,7 +102,7 @@ public class BookingActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 startTime = s.toString();
-                Toast.makeText(BookingActivity.this, "Tinh", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(BookingActivity.this, "Tinh", Toast.LENGTH_SHORT).show();
                 calculatePrice();
             }
         });
@@ -113,15 +122,41 @@ public class BookingActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 endTime = s.toString();
-                Toast.makeText(BookingActivity.this, "Tinh", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(BookingActivity.this, "Tinh", Toast.LENGTH_SHORT).show();
                 calculatePrice();
+            }
+        });
+
+        spSport.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spPlace.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(BookingActivity.this, "Place was selected", Toast.LENGTH_SHORT).show();
+                String text = placeAdapter.getItem(position);
+                if (placeHash.containsKey(text)){
+                    loadFieldType(placeHash.get(text));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
     }
 
     private void initView() {
         txtPlaceName = getIntent().getStringExtra("placeName");
-        placeId = getIntent().getIntExtra("placeId",-1);
+        placeId = getIntent().getIntExtra("placeId", -1);
         userId = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID, "");
         spPlace = (Spinner) findViewById(R.id.sp_booking_place);
         spSport = (Spinner) findViewById(R.id.sp_booking_sport);
@@ -140,59 +175,102 @@ public class BookingActivity extends AppCompatActivity {
         Utilities.setTimeField(this, txtStartTime, "HH:mm");
         Utilities.setTimeField(this, txtEndTime, "HH:mm");
         service = new RestService();
-        fieldId = 1010;
+        fieldId = 3;
     }
 
 
-
     private void createPlaceSpinner() {
-        List<String> sports = new ArrayList<String>();
-        sports.add(txtPlaceName);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter(this, R.layout.item_spinner, sports);
-        arrayAdapter.setDropDownViewResource(R.layout.item_spinner);
-        spPlace.setAdapter(arrayAdapter);
+//        List<String> sports = new ArrayList<String>();
+//        sports.add(txtPlaceName);
+        placeAdapter = new ArrayAdapter(this, R.layout.item_spinner, new ArrayList());
+        placeAdapter.setDropDownViewResource(R.layout.item_spinner);
+        spPlace.setAdapter(placeAdapter);
         spPlace.setSelection(0);
     }
 
     private void createSportSpinner() {
-        List<String> sports = new ArrayList<String>();
-        sports.add("Tất cả");
-        sports.add("Bóng đá");
-        sports.add("Bóng rổ");
-        sports.add("Bóng chuyền");
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter(this, R.layout.item_spinner, sports);
-        arrayAdapter.setDropDownViewResource(R.layout.item_spinner);
-        spSport.setAdapter(arrayAdapter);
+//        List<String> sports = new ArrayList<String>();
+//        sports.add("Tất cả");
+//        sports.add("Bóng đá");
+//        sports.add("Bóng rổ");
+//        sports.add("Bóng chuyền");
+        sportAdapter = new ArrayAdapter(this, R.layout.item_spinner, new ArrayList());
+        sportAdapter.setDropDownViewResource(R.layout.item_spinner);
+        spSport.setAdapter(sportAdapter);
         spSport.setSelection(0);
     }
 
     private void createFieldSpinner() {
-        List<String> sports = new ArrayList<String>();
-        sports.add("Tất cả");
-        sports.add("Bóng đá");
-        sports.add("Bóng rổ");
-        sports.add("Bóng chuyền");
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter(this, R.layout.item_spinner, sports);
-        arrayAdapter.setDropDownViewResource(R.layout.item_spinner);
-        spField.setAdapter(arrayAdapter);
+//        List<String> sports = new ArrayList<String>();
+//        sports.add("Tất cả");
+//        sports.add("Bóng đá");
+//        sports.add("Bóng rổ");
+//        sports.add("Bóng chuyền");
+        fieldAdapter = new ArrayAdapter(this, R.layout.item_spinner, new ArrayList());
+        fieldAdapter.setDropDownViewResource(R.layout.item_spinner);
+        spField.setAdapter(fieldAdapter);
         spField.setSelection(0);
     }
 
-    private void calculatePrice(){
-        if (fieldId==-1) return;
-        if (startTime==null ||startTime.equals("")) return;
-        if (endTime ==null || endTime.equals("")) return;
-        Call<ResponseModel<Long>> call = service.getOrderService().getPrice(fieldId,startTime,endTime);
-        call.enqueue(new Callback<ResponseModel<Long>>() {
+    private void loadPlace(){
+        if (placeHash==null){
+            placeHash = new HashMap<>();
+        }else{
+            placeHash.clear();
+        }
+        placeHash.put(txtPlaceName,placeId);
+        placeAdapter.addAll(placeHash.keySet());
+    }
+
+    private void loadFieldType(int placeId){
+        if (sportHash==null){
+            sportHash = new HashMap<>();
+        }else{
+            sportHash.clear();
+        }
+        Call<ResponseModel<List<FieldType>>> call = service.getPlaceService().getFieldType(placeId);
+        call.enqueue(new Callback<ResponseModel<List<FieldType>>>() {
             @Override
-            public void onResponse(Call<ResponseModel<Long>> call, Response<ResponseModel<Long>> response) {
+            public void onResponse(Call<ResponseModel<List<FieldType>>> call, Response<ResponseModel<List<FieldType>>> response) {
                 if (response.isSuccessful()){
                     if (response.body().isSucceed()){
-                        txtPrice.setText(response.body().getData()+"");
+                        for (FieldType item: response.body().getData()
+                             ) {
+                            sportHash.put(item.getName(),item.getId());
+                        }
+                        sportAdapter.clear();
+                        sportAdapter.addAll(sportHash.keySet());
                     }else{
                         Toast.makeText(BookingActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
                     }
                 }else{
+                    Toast.makeText(BookingActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseModel<List<FieldType>>> call, Throwable t) {
+                Toast.makeText(BookingActivity.this, "Loi server", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void calculatePrice() {
+        if (fieldId == -1) return;
+        if (startTime == null || startTime.equals("")) return;
+        if (endTime == null || endTime.equals("")) return;
+        Call<ResponseModel<Long>> call = service.getOrderService().getPrice(fieldId, startTime, endTime);
+        call.enqueue(new Callback<ResponseModel<Long>>() {
+            @Override
+            public void onResponse(Call<ResponseModel<Long>> call, Response<ResponseModel<Long>> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().isSucceed()) {
+                        txtPrice.setText(response.body().getData() + "");
+                    } else {
+                        Toast.makeText(BookingActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
                     Toast.makeText(BookingActivity.this, response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
