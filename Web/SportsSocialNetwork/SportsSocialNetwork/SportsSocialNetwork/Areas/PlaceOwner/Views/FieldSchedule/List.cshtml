@@ -6,49 +6,49 @@
 }
 <style>
     .datepicker.datepicker-dropdown.dropdown-menu.datepicker-oritent-left.dataTable-orient-bottom {
-        top:43%;
+        top: 43%;
     }
 
-        .timepicker {
-            z-index: 5000 !important;
-        }
+    .timepicker {
+        z-index: 5000 !important;
+    }
 
-        .narrow {
-            padding: 5px;
-            border: 1px solid;
-            width: 8em;
-        }
+    .narrow {
+        padding: 5px;
+        border: 1px solid;
+        width: 8em;
+    }
 
-        .breakAll {
-            word-break: break-all;
-        }
+    .breakAll {
+        word-break: break-all;
+    }
 
 
-        dt, dd {
-            font-size: 15px;
-            color: #000;
-        }
+    dt, dd {
+        font-size: 15px;
+        color: #000;
+    }
 
-        dt {
-            font-weight: bold;
-        }
+    dt {
+        font-weight: bold;
+    }
 
-        .button {
-            background-color: #008CBA; /* blue */
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-        }
+    .button {
+        background-color: #008CBA; /* blue */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+    }
 
-        #sport-table {
-            word-wrap: break-word;
-        }
+    #sport-table {
+        word-wrap: break-word;
+    }
 
-        /*p.alignCenter {
+    /*p.alignCenter {
         text-align: center;
     }*/
 </style>
@@ -138,7 +138,6 @@
             });
         })(document, window, jQuery);
 
-
         //load init datatable function
         $(document).ready(function () {
             initEventTable();
@@ -194,7 +193,7 @@
             };
             $('#fieldschedule-table').customDataTable(param);
 
-        }
+        };
 
         //show detail popup
         function showDetailModal(id) {
@@ -210,13 +209,14 @@
                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                 }
             });
-        }
+        };
         //show sport create popup
         function showCreateModal() {
             $.ajax({
                 url: '@Url.Action("Create")',
                 type: 'Get',
-                dataType: "html",
+                data: { placeId: @placeID},
+                //dataType: "html",
                 //luc khoi tao 1 sport moi thi ko có id
                 success: function (data) {
                     $('#create-modal-container').html(data);
@@ -227,7 +227,7 @@
                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                 }
             });
-        }
+        };
 
 
         //show sport update popup
@@ -235,17 +235,17 @@
             $.ajax({
                 url: '@Url.Action("Update")',
                 type: 'Get',
-                data: { id: id },
+                data: { id: id, placeId: @placeID },
                 success: function (data) {
                     $('#update-modal-container').html(data);
                     $('#modalUpdate').modal('show');
-                    scriptForPartialView();
+                    scriptUpdatePartial();
                 },
                 error: function (error) {
                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                 }
             });
-        }
+        };
 
         //this function will change the status from active to deactive
         function deactiveSchedule(id) {
@@ -270,26 +270,51 @@
                         });
                     }
                 });
-        }
+        };
+        function scriptUpdatePartial() {
+            (function (document, window, $) {
+                'use strict';
 
-        //function nay de goi controller thuc hien cac thao tac xu ly update, create
-        function scriptForPartialView() {
+                var Site = window.Site;
+                $(document).ready(function () {
+                    Site.run();
+                });
+            })(document, window, jQuery);
+
             $('#startDay').datepicker({
                 format: "dd/mm/yyyy"
             });
             $('#endDay').datepicker({
                 format: "dd/mm/yyyy"
             });
-            $('#cstartDay').datepicker({
-                format: "dd/mm/yyyy"
+
+            $(document).on('change', "#startDay", function () {
+                $('#update-form').formValidation('revalidateField', 'StartDay');
             });
-            $('#cendDay').datepicker({
-                format: "dd/mm/yyyy"
+            $(document).on('change', "#endDay", function () {
+                $('#update-form').formValidation('revalidateField', 'EndDay');
             });
 
-            //Validation
+            $(document).on('change', "#startTime", function () {
+                $('#update-form').formValidation('revalidateField', 'StartTime');
+            });
+            $(document).on('change', "#endTime", function () {
+                $('#update-form').formValidation('revalidateField', 'EndTime');
+            });
+
+            $("#startTime").on("change", function () {
+                $('#update-form').formValidation('revalidateField', 'StartTime')
+            });
+
+            $("#endTime").on("change", function () {
+                $('#update-form').formValidation('revalidateField', 'EndTime')
+            });
+
+            var stD = $("#startDay").val();
+
             (function () {
-                $('#eventForm').formValidation({
+                var TIME_PATTERN = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+                $('#update-form').formValidation({
                     framework: "bootstrap",
                     button: {
                         selector: '#submitBtn',
@@ -297,20 +322,6 @@
                     },
                     icon: null,
                     fields: {
-                        FieldId: {
-                            validators: {
-                                notEmpty: {
-                                    message: 'Tên sự kiện không được trống'
-                                }
-                            }
-                        },
-                        PlaceId: {
-                            validators: {
-                                notEmpty: {
-                                    message: 'Địa điểm không được trống'
-                                }
-                            }
-                        },
                         StartDay: {
                             validators: {
                                 notEmpty: {
@@ -319,8 +330,8 @@
                                 date: {
                                     format: 'DD/MM/YYYY',
                                     message: 'Ngày không phù hợp',
-                                    min: '@DateTime.Now.ToString("dd/MM/yyyy")',
-                                    max: 'EndDate'
+                                    min: stD,
+                                    max: 'EndDay'
                                 }
                             }
                         },
@@ -332,8 +343,30 @@
                                 date: {
                                     format: 'DD/MM/YYYY',
                                     message: 'Ngày không phù hợp',
-                                    min: 'StartDate'
+                                    min: 'StartDay'
                                 }
+                            }
+                        },
+                        StartTime: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Giờ bắt đầu không được trống'
+                                },
+                                regexp: {
+                                    regexp: TIME_PATTERN,
+                                    message: 'Giờ không đúng định dạng [HH:mm]'
+                                },
+                            }
+                        },
+                        EndTime: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Giờ bắt đầu không được trống'
+                                },
+                                regexp: {
+                                    regexp: TIME_PATTERN,
+                                    message: 'Giờ không đúng định dạng [HH:mm]'
+                                },
                             }
                         },
                         Description: {
@@ -377,8 +410,140 @@
                 });
             });
 
+            $('body').on('focus', ".timepicker", function () {
+                $(this).clockpicker();
+            })
+            $('body').on('focus', ".datepicker", function () {
+                $(this).datepicker();
+            })
+        };
+
+        //function nay de goi controller thuc hien cac thao tac xu ly update, create
+        function scriptForPartialView() {
+            (function (document, window, $) {
+                'use strict';
+
+                var Site = window.Site;
+                $(document).ready(function () {
+                    Site.run();
+                });
+            })(document, window, jQuery);
+
+            $('#cstartDay').datepicker({
+                format: "dd/mm/yyyy"
+            });
+            $('#cendDay').datepicker({
+                format: "dd/mm/yyyy"
+            });
+
+            $(document).on('change', "#cstartDay", function () {
+                $('#create-form').formValidation('revalidateField', 'StartDay');
+            });
+            $(document).on('change', "#cendDay", function () {
+                $('#create-form').formValidation('revalidateField', 'EndDay');
+            });
+
+            $(document).on('change', "#cstartTime", function () {
+                $('#create-form').formValidation('revalidateField', 'StartTime');
+            });
+            $(document).on('change', "#cendTime", function () {
+                $('#create-form').formValidation('revalidateField', 'EndTime');
+            });
+
+            $("#cstartTime").on("change", function () {
+                $('#create-form').formValidation('revalidateField', 'StartTime')
+            });
+
+            $("#cendTime").on("change", function () {
+                $('#create-form').formValidation('revalidateField', 'EndTime')
+            });
+
+            //Validation
+            (function () {
+                var TIME_PATTERN = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+                $('#create-form').formValidation({
+                    framework: "bootstrap",
+                    button: {
+                        selector: '#csubmitBtn',
+                        disabled: 'disabled'
+                    },
+                    icon: null,
+                    fields: {
+                        FieldId: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Tên sự kiện không được trống'
+                                }
+                            }
+                        },
+                        PlaceId: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Địa điểm không được trống'
+                                }
+                            }
+                        },
+                        StartDay: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Ngày bắt đầu không được trống'
+                                },
+                                date: {
+                                    format: 'DD/MM/YYYY',
+                                    message: 'Ngày không phù hợp',
+                                    min: '@DateTime.Now.ToString("dd/MM/yyyy")',
+                                    max: 'EndDay'
+                                }
+                            }
+                        },
+                        EndDay: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Ngày kết thúc không được trống'
+                                },
+                                date: {
+                                    format: 'DD/MM/YYYY',
+                                    message: 'Ngày không phù hợp',
+                                    min: 'StartDay'
+                                }
+                            }
+                        },
+                        StartTime: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Giờ bắt đầu không được trống'
+                                },
+                                regexp: {
+                                    regexp: TIME_PATTERN,
+                                    message: 'Giờ không đúng định dạng [HH:mm]'
+                                },
+                            }
+                        },
+                        EndTime: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Giờ bắt đầu không được trống'
+                                },
+                                regexp: {
+                                    regexp: TIME_PATTERN,
+                                    message: 'Giờ không đúng định dạng [HH:mm]'
+                                },
+                            }
+                        },
+                        Description: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Mô tả không được trống'
+                                }
+                            }
+                        }
+                    }
+                });
+            })();
+
+
             //create sport
-            $('#create-form').submit(function (e) {
+            @*$('#create-form').submit(function (e) {
                 e.preventDefault();
                 var formData = new FormData(document.getElementById('create-form'));
                 $.ajax({
@@ -405,20 +570,22 @@
                         showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                     },
                 });
-            });
-        }
+            });*@
+
+            $('body').on('focus', ".timepicker", function () {
+                $(this).clockpicker();
+            })
+            $('body').on('focus', ".datepicker", function () {
+                $(this).datepicker();
+            })
+
+        };
 
         $('body').on('focus', ".timepicker", function () {
             $(this).clockpicker();
         })
         $('body').on('focus', ".datepicker", function () {
             $(this).datepicker();
-        })
-        $('body').on('focus', ".datepair-date", function () {
-            $(this).datepair();
-        })
-        $('body').on('focus', ".datepair-time", function () {
-            $(this).datepair();
         })
     </script>
 }

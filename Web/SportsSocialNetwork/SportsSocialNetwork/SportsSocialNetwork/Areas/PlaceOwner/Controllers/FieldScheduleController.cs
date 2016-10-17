@@ -12,27 +12,42 @@ using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.Utilities;
 using Microsoft.AspNet.Identity;
 using System.Globalization;
+using System.Web.Routing;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
     public class FieldScheduleController : BaseController
     {
         // GET: PlaceOwner/FieldSchedule
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
+            ViewBag.placeID = id.Value;
+            return View();
+        }
+
+        public ActionResult List(int? id)
+        {
+            ViewBag.placeID = id.Value;
             return View();
         }
 
         public ActionResult IndexList(JQueryDataTableParamModel request)
         {
-            var fieldService = this.Service<IFieldService>();
+            int placeID = Int32.Parse(Request["placeID"]);
+            //var fieldService = this.Service<IFieldService>();
             var fieldScheduleService = this.Service<IFieldScheduleService>();
-            Field field = fieldService.FirstOrDefault();
-            FieldSchedule fieldSchedule = fieldScheduleService.FirstOrDefault(x => x.FieldId == field.Id);
+            //List<Field> listField = fieldService.Get(f => f.PlaceId == placeID).ToList();
+            //List<FieldSchedule> listFS = new List<FieldSchedule>();
+            //foreach (var item in listField)
+            //{
+            //    listFS.AddRange(fieldScheduleService.Get(f => f.FieldId == item.Id).ToList());
+            //}
+            //Field field = fieldService.FirstOrDefault();
+            //FieldSchedule fieldSchedule = fieldScheduleService.FirstOrDefault(x => x.FieldId == field.Id);
             var totalRecord = 0;
             var count = 1;
 
-            var results = fieldScheduleService.GetFieldSchedule(request, out totalRecord)
+            var results = fieldScheduleService.GetFieldSchedule(request, out totalRecord, placeID)
                 .AsEnumerable()
                 .Select(a => new IConvertible[] {
                         count++,
@@ -74,7 +89,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
 
         [HttpGet]
-        public ActionResult Create()
+        public ActionResult Create(int placeId)
         {
             string userID = User.Identity.GetUserId();
             var _placeService = this.Service<IPlaceService>();
@@ -84,8 +99,11 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             listPlace = _placeService.GetActive(p => p.UserId == userID).ToList();
             foreach (var item in listPlace)
             {
-                Field field = new Field();
-                listField.AddRange(_fieldService.GetActive(x => x.PlaceId == item.Id).ToList());
+                if(item.Id == placeId)
+                {
+                    listField.AddRange(_fieldService.GetActive(x => x.PlaceId == item.Id).ToList());
+                }
+                
             }
             List<SelectListItem> selectListField = new List<SelectListItem>();
             foreach (var item in listField)
@@ -100,6 +118,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             }
             ViewBag.scheduleType = scheduleType;
             ViewBag.selectListField = selectListField;
+            ViewBag.placeId = placeId;
             return this.PartialView();
         }
 
@@ -108,6 +127,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         [HttpPost]
         public ActionResult Create(FieldSchedule schedule)
         {
+            int placeId = Int32.Parse(Request["placeId"]);
             DateTime _startDay = DateTime.ParseExact(Request["StartDay"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
             DateTime _endDay = DateTime.ParseExact(Request["EndDay"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
             TimeSpan _startTime = TimeSpan.Parse(Request["StartTime"]);
@@ -116,8 +136,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             DateTime startTime = new DateTime(_startDay.Date.Year, _startDay.Date.Month, _startDay.Date.Day, _startTime.Hours, _startTime.Minutes, _startTime.Seconds);
             DateTime endTime = new DateTime(_endDay.Date.Year, _endDay.Date.Month, _endDay.Date.Day, _endTime.Hours, _endTime.Minutes, _endTime.Seconds);
             var result = new AjaxOperationResult();
-            try
-            {               
+                      
                 var typeService = this.Service<IFieldTypeService>();
                 var fieldService = this.Service<IFieldService>();
                 var scheduleService = this.Service<IFieldScheduleService>();                             
@@ -130,12 +149,9 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 scheduleService.Create(fs);
                 scheduleService.Save();
                 result.Succeed = true;
-            }
-            catch (Exception e)
-            {
-                result.Succeed = false;
-            }
-            return Json(result);
+         
+            return RedirectToAction("List", new RouteValueDictionary(
+                new { controller = "FieldSchedule", action = "List", id = placeId }));
         }
 
         [HttpPost]
@@ -163,7 +179,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             return Json(result);
         }
 
-        public ActionResult Update(int id)
+        public ActionResult Update(int id, int placeId)
         {
             string userID = User.Identity.GetUserId();
             var scheduleService = this.Service<IFieldScheduleService>();
@@ -177,8 +193,10 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             listPlace = _placeService.GetActive(p => p.UserId == userID).ToList();
             foreach (var item in listPlace)
             {
-                Field field = new Field();
-                listField.AddRange(_fieldService.GetActive(x => x.PlaceId == item.Id).ToList());
+                if (item.Id == placeId)
+                {
+                    listField.AddRange(_fieldService.GetActive(x => x.PlaceId == item.Id).ToList());
+                }
             }
             List<SelectListItem> selectListField = new List<SelectListItem>();
             foreach (var item in listField)
