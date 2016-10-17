@@ -14,7 +14,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         void saveEvent(Event evt, HttpPostedFileBase image);
         string saveEvtImage(HttpPostedFileBase image);
-        IEnumerable<Event> GetAllPlaceOwnerEvent(String ownerId);
+        List<Event> GetAllPlaceOwnerEvent(String ownerId);
 
         #endregion
 

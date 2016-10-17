@@ -107,5 +107,43 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             return Json(response);
         }
+
+        [HttpPost]
+        public ActionResult GetFieldTypeByPlaceId(int placeId) {
+            var service = this.Service<IFieldService>();
+
+            ResponseModel<List<FieldTypeViewModel>> response = null;
+
+            try {
+                List<FieldType> typeList = service.GetFieldTypeByPlaceId(placeId);
+
+                List<FieldTypeViewModel> result = Mapper.Map<List<FieldTypeViewModel>>(typeList);
+
+                response = new ResponseModel<List<FieldTypeViewModel>>(true, "Danh sách loại sân:", null, result);
+            } catch (Exception) {
+                response = ResponseModel<List<FieldTypeViewModel>>.CreateErrorResponse("Không thể tải loại sân",systemError);
+            }
+
+            return Json(response);
+        }
+
+        [HttpPost]
+        public ActionResult GetFieldByFieldTypeId(int placeId, int fieldTypeId)
+        {
+            var service = this.Service<IFieldService>();
+
+            ResponseModel<List<FieldDetailViewModel>> response = null;
+
+            try {
+                List<Field> fieldList = service.FindAllFieldsByFieldType(placeId, fieldTypeId).ToList();
+
+                List<FieldDetailViewModel> result = Mapper.Map<List<FieldDetailViewModel>>(fieldList);
+
+                response = new ResponseModel<List<FieldDetailViewModel>>(true, "Kết quả tìm kiếm:", null, result);
+            } catch (Exception) {
+                response = ResponseModel<List<FieldDetailViewModel>>.CreateErrorResponse("Tìm kiếm thất bại",systemError);
+            }
+            return Json(response);
+        }
     }
 }

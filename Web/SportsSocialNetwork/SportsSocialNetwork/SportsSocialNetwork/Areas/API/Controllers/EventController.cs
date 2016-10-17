@@ -24,7 +24,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             try
             {
-                List<Event> eventList = service.GetAllPlaceOwnerEvent(ownerId).ToList();
+                List<Event> eventList = service.GetAllPlaceOwnerEvent(ownerId);
 
                 List<EventOveralViewModel> result = Mapper.Map<List<EventOveralViewModel>>(eventList);
 

@@ -19,7 +19,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
         IQueryable<Field> GetField(JQueryDataTableParamModel request, out int totalRecord);
 
         IEnumerable<Field> FindAllFieldsOfPlace(int id);
-        
+
+        IEnumerable<Field> FindAllFieldsByFieldType(int placeId, int fieldTypeId);
+
+        List<FieldType> GetFieldTypeByPlaceId(int placeId);
         void saveField(Field field);
 
         #endregion
@@ -28,7 +31,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         void test();
     }
 
-    public partial class FieldService: IFieldService
+    public partial class FieldService : IFieldService
     {
         #region Code from here
 
@@ -52,15 +55,16 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return field;
         }
 
-        public IEnumerable<Field> FindAllFieldsOfPlace(int id) {
+        public IEnumerable<Field> FindAllFieldsOfPlace(int id)
+        {
             return this.GetActive(x => x.PlaceId == id);
         }
-        
+
         public void saveField(Field field)
         {
             Field searchField = this.FirstOrDefault(f => f.Id == field.Id);
 
-            if(searchField == null)
+            if (searchField == null)
             {
                 field.Status = (int)PlaceStatus.Active;
                 this.Create(field);
@@ -75,7 +79,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 this.Update(searchField);
                 this.Save();
             }
-		}
+        }
 
         public IQueryable<Field> GetField(JQueryDataTableParamModel request, out int totalRecord)
         {
@@ -84,7 +88,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
             var list = list1.Where(
                 u => filter == null ||
-                u.Name.ToLower().Contains(filter.ToLower())                
+                u.Name.ToLower().Contains(filter.ToLower())
                 );
 
             totalRecord = list.Count();
@@ -95,11 +99,46 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         }
 
+        public List<FieldType> GetFieldTypeByPlaceId(int placeId)
+        {
+            List<Field> fieldList = this.GetActive(x => x.PlaceId == placeId).ToList();
+
+            List<FieldType> result = new List<FieldType>();
+
+            foreach (var field in fieldList)
+            {
+                FieldType type = field.FieldType;
+                if (result.Count == 0)
+                {
+                    result.Add(type);
+                }
+                else
+                {
+                    for (int i = 0; i < result.Count; i++)
+                    {
+
+                        if (!type.Equals(result[i]))
+                        {
+                            result.Add(type);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        public IEnumerable<Field> FindAllFieldsByFieldType(int placeId, int fieldTypeId)
+        {
+            return this.GetActive(x=> x.PlaceId==placeId && x.FieldTypeId==fieldTypeId);
+        }
+
         #endregion
 
         public void test()
         {
 
         }
+
+
     }
 }
