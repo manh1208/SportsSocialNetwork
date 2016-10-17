@@ -21,7 +21,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         [HttpPost]
         public ActionResult ShowAllOrderOfUser(String userId)
         {
-            ResponseModel<List<OrderDetailViewModel>> response = null;
+            ResponseModel<List<OrderSimpleViewModel>> response = null;
 
             var service = this.Service<IOrderService>();
 
@@ -30,19 +30,21 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             try
             {
                 orderList = service.GetAllOrderOfUser(userId).ToList<Order>();
+
+                List<OrderSimpleViewModel> result = new List<OrderSimpleViewModel>();
+
+                foreach (var order in orderList) {
+                    result.Add(PrepareOrderSimpleViewModel(order));
+                }
+
+                response = new ResponseModel<List<OrderSimpleViewModel>>(true, "Đơn đặt sân của bạn đã được tải thành công!", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<List<OrderDetailViewModel>>.CreateErrorResponse("Đơn đặt sân của bạn đã tải thất bại!", systemError);
-                return Json(response, JsonRequestBehavior.AllowGet);
+                response = ResponseModel<List<OrderSimpleViewModel>>.CreateErrorResponse("Đơn đặt sân của bạn đã tải thất bại!", systemError);
             }
 
-            
-            List<OrderDetailViewModel> result = Mapper.Map<List<OrderDetailViewModel>>(orderList);
-
-            response = new ResponseModel<List<OrderDetailViewModel>>(true, "Đơn đặt sân của bạn đã được tải thành công!", null, result);
-
-            return Json(response, JsonRequestBehavior.AllowGet);
+            return Json(response);
         }
 
         [HttpPost]
@@ -53,7 +55,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             var fieldService = this.Service<IFieldService>();
 
-            ResponseModel<List<OrderViewModel>> response = null;
+            ResponseModel<List<OrderSimpleViewModel>> response = null;
 
             try {
                 List<Place> placeList = placeService.FindAllPlaceOfPlaceOwner(ownerId).ToList();
@@ -73,12 +75,17 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                     orderList = orderList.Concat(orderService.GetAllOrderByFieldId(field.Id)).ToList();
                 }
 
-                List<OrderViewModel> result = Mapper.Map<List<OrderViewModel>>(orderList);
+                List<OrderSimpleViewModel> result = new List<OrderSimpleViewModel>();
 
-                response = new ResponseModel<List<OrderViewModel>>(true, "Danh sách đặt sân của bạn đã được tải thành công!", null, result);
+                foreach (var order in orderList)
+                {
+                    result.Add(PrepareOrderSimpleViewModel(order));
+                }
+
+                response = new ResponseModel<List<OrderSimpleViewModel>>(true, "Danh sách đặt sân của bạn đã được tải thành công!", null, result);
 
             } catch (Exception) {
-                response = ResponseModel<List<OrderViewModel>>.CreateErrorResponse("Danh sách đặt sân đã tải thất bại!", systemError);
+                response = ResponseModel<List<OrderSimpleViewModel>>.CreateErrorResponse("Danh sách đặt sân đã tải thất bại!", systemError);
             }
 
 
@@ -101,12 +108,16 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
                 OrderDetailViewModel result = Mapper.Map<OrderDetailViewModel>(order);
 
-                response = new ResponseModel<OrderDetailViewModel>(true, "Order Detail", null, result);
+                result.Status = Utils.GetEnumDescription((OrderStatus)order.Status);
+
+                result.PaidType = Utils.GetEnumDescription((OrderPaidType)order.PaidType);
+
+                response = new ResponseModel<OrderDetailViewModel>(true, "Thông tin đặt sân:", null, result);
             }
 
             catch (Exception)
             {
-                response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Can not load Order Detail", systemError);
+                response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Không thể tải thông tin đặt sân", systemError);
             }
 
 
@@ -128,6 +139,10 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 order = service.ChangeOrderStatus(id, status);
 
                 OrderDetailViewModel result = Mapper.Map<OrderDetailViewModel>(order);
+
+                result.Status = Utils.GetEnumDescription((OrderStatus)order.Status);
+
+                result.PaidType = Utils.GetEnumDescription((OrderPaidType)order.PaidType);
 
                 response = new ResponseModel<OrderDetailViewModel>(true, "Trạng thái đơn đặt sân đã thay đổi thành công", null, result);
             }

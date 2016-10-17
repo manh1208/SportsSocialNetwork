@@ -762,6 +762,7 @@
     </Compile>
     <Compile Include="Models\ViewModels\AspNetUserOveralViewModel.cs" />
     <Compile Include="Models\ViewModels\AspNetUserRegisterViewModel.cs" />
+    <Compile Include="Models\ViewModels\AspNetUserSimpleModel.cs" />
     <Compile Include="Models\ViewModels\AspNetUserViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>

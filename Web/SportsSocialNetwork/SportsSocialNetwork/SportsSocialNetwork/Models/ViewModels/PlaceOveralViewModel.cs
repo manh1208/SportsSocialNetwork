@@ -8,7 +8,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     public class PlaceOveralViewModel
     {
         public int Id { get; set; }
-        public string UserId { get; set; }
+        public AspNetUserSimpleModel AspNetUser { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string City { get; set; }

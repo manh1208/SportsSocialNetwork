@@ -57,6 +57,28 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             return Json(response, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult ShowAllPlacesOfPlaceOwner(String ownerId) {
+            ResponseModel<List<PlaceOveralViewModel>> response = null;
+
+            var service = this.Service<IPlaceService>();
+
+            List<PlaceOveralViewModel> result = null;
+
+            try {
+                List<Place> placeList = service.GetAllOfPlaceOwner(ownerId).ToList();
+
+                result = Mapper.Map<List<PlaceOveralViewModel>>(placeList);
+
+                response = new ResponseModel<List<PlaceOveralViewModel>>(true, "Danh sách địa điểm của bạn:",null,result);
+            }
+            catch (Exception) {
+                response = ResponseModel<List<PlaceOveralViewModel>>.CreateErrorResponse("Tải danh sách địa điểm thất bại", systemError);
+            }
+
+            return Json(response);
+        }
+
         [System.Web.Mvc.HttpPost]
         public ActionResult ShowPlaceDetail(int id)
         {
@@ -89,23 +111,23 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         {
             var service = this.Service<IPlaceService>();
 
-            ResponseModel<PlaceViewModel> response = null;
+            ResponseModel<PlaceOveralViewModel> response = null;
             try
             {
                 Place place = service.ChangeStatus(id, status);
                 if (place != null)
                 {
-                    PlaceViewModel result = Mapper.Map<PlaceViewModel>(place);
-                    response = new ResponseModel<PlaceViewModel>(true, "Trạng thái đã được cập nhật!", null, result);
+                    PlaceOveralViewModel result = Mapper.Map<PlaceOveralViewModel>(place);
+                    response = new ResponseModel<PlaceOveralViewModel>(true, "Trạng thái đã được cập nhật!", null, result);
                 }
                 else
                 {
-                    response = ResponseModel<PlaceViewModel>.CreateErrorResponse("Cập nhật trạng thái thất bại!", systemError);
+                    response = ResponseModel<PlaceOveralViewModel>.CreateErrorResponse("Cập nhật trạng thái thất bại!", systemError);
                 }
             }
             catch (Exception e)
             {
-                response = ResponseModel<PlaceViewModel>.CreateErrorResponse("Cập nhật trạng thái thất bại!", systemError);
+                response = ResponseModel<PlaceOveralViewModel>.CreateErrorResponse("Cập nhật trạng thái thất bại!", systemError);
             }
             return Json(response, JsonRequestBehavior.AllowGet);
         }
@@ -118,7 +140,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             List<Place> placeList = new List<Place>();
 
-            ResponseModel<List<PlaceViewModel>> response = null;
+            ResponseModel<List<PlaceOveralViewModel>> response = null;
 
             try
             {
@@ -144,13 +166,13 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                     placeList = placeService.getPlace(sport, province, district).ToList();
                 }
 
-                List<PlaceViewModel> result = Mapper.Map<List<PlaceViewModel>>(placeList);
+                List<PlaceOveralViewModel> result = Mapper.Map<List<PlaceOveralViewModel>>(placeList);
 
-                response = new ResponseModel<List<PlaceViewModel>>(true, "Những địa điểm gần bạn:", null, result);
+                response = new ResponseModel<List<PlaceOveralViewModel>>(true, "Những địa điểm gần bạn:", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<List<PlaceViewModel>>.CreateErrorResponse("Không tìm thấy kết quả", systemError);
+                response = ResponseModel<List<PlaceOveralViewModel>>.CreateErrorResponse("Không tìm thấy kết quả", systemError);
             }
             return Json(response);
         }
