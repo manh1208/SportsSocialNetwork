@@ -11,7 +11,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         #region Code from here
         bool checkScheduleTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime playDate);
 
-        IQueryable<FieldSchedule> GetFieldSchedule(JQueryDataTableParamModel request, out int totalRecord);
+        IQueryable<FieldSchedule> GetFieldSchedule(JQueryDataTableParamModel request, out int totalRecord, int placeId);
         #endregion
 
         void test();
@@ -47,10 +47,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
             }
         }
 
-        public IQueryable<FieldSchedule> GetFieldSchedule(JQueryDataTableParamModel request, out int totalRecord)
+        public IQueryable<FieldSchedule> GetFieldSchedule(JQueryDataTableParamModel request, out int totalRecord, int placeId)
         {
             var filter = request.sSearch;
-            var list1 = this.GetActive(u => u.Active == true);
+            var list1 = this.GetActive(f => f.Field.PlaceId == placeId);
 
             var list = list1.Where(
                 u => filter == null ||

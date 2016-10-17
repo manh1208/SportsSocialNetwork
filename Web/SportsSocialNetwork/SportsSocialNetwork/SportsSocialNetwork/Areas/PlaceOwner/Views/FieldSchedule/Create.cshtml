@@ -3,6 +3,7 @@
     ViewBag.Title = "Create";
     List<SelectListItem> scheduleType = ViewBag.scheduleType;
     List<SelectListItem> selectListField = ViewBag.selectListField;
+    int placeId = ViewBag.placeId;
 }
 <style>
     .bootstrap-select {
@@ -59,124 +60,87 @@
 </style>
 
 
-<form id="create-form">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-        </button>
-        <h4 class="modal-title">Thêm mới</h4>
-    </div>
-    <div class="modal-body" style="padding-bottom:0;" id="modalBody">
-        <div class="row">
-            <div class="panel " style="margin-bottom:0;">
-                <div class="panel-body">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Chọn sân</label>
-                            @Html.DropDownListFor(m => m.FieldId, selectListField, new { @class = "form-control input-lg" })
-                        </div>
-                        <label class="control-label">Từ ngày: </label>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="icon wb-calendar" aria-hidden="true"></i>
-                                </span>
-                                <input type="text" class="datepicker form-control" id="cstartDay" name="StartDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" />
-                            </div>                           
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Đến ngày: </label>
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="icon wb-calendar" aria-hidden="true"></i>
-                                </span>
-                                <input type="text" class="datepicker form-control" id="cendDay" name="EndDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" />
-                            </div>                           
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="modal-title">Thêm mới</h4>
+</div>
+@using (Html.BeginForm("Create", "FieldSchedule", FormMethod.Post, new { enctype = "multipart/form-data", @id = "create-form" }))
+{
+    <input type="hidden" name="placeId" value="@placeId" />
+<div class="modal-body" style="padding-bottom:0;" id="modalBody">
+    <div class="row">
+        <div class="panel " style="margin-bottom:0;">
+            <div class="panel-body">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Chọn sân</label>
+                        @Html.DropDownListFor(m => m.FieldId, selectListField, new { @class = "form-control input-lg" })
+                    </div>
+                    <label class="control-label">Từ ngày: </label>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="icon wb-calendar" aria-hidden="true"></i>
+                            </span>
+                            <input type="text" class="datepicker form-control" id="cstartDay" name="StartDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" />
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="control-label">Loại</label>
-                            @Html.DropDownListFor(m => m.Type, scheduleType, new { @class = "form-control input-lg" })
-                        </div>
-                        <div class="form-group">
-                            <div class="form-group">
-                                <div>
-                                    <label class="control-label">Giờ:</label>
-                                </div>
-                                <div class="col-sm-10 input-group">
-                                    <span class="input-group-addon">
-                                        <i class="icon wb-time" aria-hidden="true"></i>
-                                    </span>
-                                    <input type="text" name="StartTime" class="timepicker form-control" data-placement="right" data-align="top" data-plugin="clockpicker" data-autoclose="true" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div>
-                                    <label class="control-label">Giờ:</label>
-                                </div>
-                                <div class="col-sm-10 input-group clockpicker-wrap">
-                                    <span class="input-group-addon">
-                                        <i class="icon wb-time" aria-hidden="true"></i>
-                                    </span>
-                                    <input type="text" name="EndTime" class="timepicker form-control" data-placement="right" data-align="top" data-plugin="clockpicker" data-autoclose="true" />
-                                </div>
-                            </div>
+                    <div class="form-group">
+                        <label class="control-label">Đến ngày: </label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="icon wb-calendar" aria-hidden="true"></i>
+                            </span>
+                            <input type="text" class="datepicker form-control" id="cendDay" name="EndDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" />
                         </div>
                     </div>
-                    <div class="col-lg-12">
-                        @*<div class="example datepair-wrap" data-plugin="datepair">
-                                <div class="input-daterange-wrap">
-                                    <div><label class="control-label">Từ ngày</label></div>
-                                    <div class="input-daterange">
-                                        <div class="input-group">
-                                            <span class="input-group-addon">
-                                                <i class="icon wb-calendar" aria-hidden="true"></i>
-                                            </span>
-                                            <input name="StartDay" type="text" class="form-control datepair-date datepair-start" data-plugin="datepicker">
-                                        </div>
-                                        <div class="input-group">
-                                            <span class="input-group-addon">
-                                                <i class="icon wb-time" aria-hidden="true"></i>
-                                            </span>
-                                            <input name="StartTime" type="text" class="form-control datepair-time datepair-start" data-plugin="timepicker" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-daterange-to">Đến</div>
-                                <div class="input-daterange-wrap">
-                                    <div class="input-daterange">
-                                        <div class="input-group">
-                                            <span class="input-group-addon">
-                                                <i class="icon wb-calendar" aria-hidden="true"></i>
-                                            </span>
-                                            <input type="text" class="form-control datepair-date datepair-end" name="EndDay" data-plugin="datepicker">
-                                        </div>
-                                        <div class="input-group">
-                                            <span class="input-group-addon">
-                                                <i class="icon wb-time" aria-hidden="true"></i>
-                                            </span>
-                                            <input type="text" class="form-control datepair-time datepair-end" name="EndTime" data-plugin="timepicker" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>*@
-                        <div>
-                            <label class="control-label">Mô tả</label>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">Loại</label>
+                        @Html.DropDownListFor(m => m.Type, scheduleType, new { @class = "form-control input-lg" })
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Giờ:</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="icon wb-time" aria-hidden="true"></i>
+                            </span>
+                            <input type="text" name="StartTime" id="cstartTime" class="timepicker form-control" data-placement="right" data-align="top" data-plugin="clockpicker" data-autoclose="true" value="" />
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Giờ:</label>
+                        <div class="input-group clockpicker-wrap">
+                            <span class="input-group-addon">
+                                <i class="icon wb-time" aria-hidden="true"></i>
+                            </span>
+                            <input type="text" name="EndTime" id="cendTime" class="timepicker form-control" data-placement="right" data-align="top" data-plugin="clockpicker" data-autoclose="true" value="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="control-label">Mô tả</label>
                         <div>
-                            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @style = "width:100%" })
+                            @Html.TextAreaFor(m => m.Description, new { @style = "width:100%" })
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-        <button type="submit" class="btn btn-success">Tạo lịch</button>
-    </div>
-</form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+    <button type="submit" class="btn btn-success" id="csubmitBtn">Tạo lịch</button>
+</div>
+}
+@*<form id="create-form" action="Create" method="post">
+    
+</form>*@
 @section Scripts{
 
     <script>
