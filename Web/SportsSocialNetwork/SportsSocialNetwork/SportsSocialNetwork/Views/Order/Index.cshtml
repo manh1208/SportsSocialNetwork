@@ -1,5 +1,6 @@
 ﻿@model SportsSocialNetwork.Models.ViewModels.OrderViewModel
-
+@using SportsSocialNetwork.Models.Enumerable
+@using SportsSocialNetwork.Models.Utilities
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
@@ -159,14 +160,16 @@
                         "aTargets": [6],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
-                            if (o[7] == 1) {
-                                return "<span class='label label-lg label-outline label-dark'>Online-Chưa thanh toán</span>";
-                            } else if (o[7] == 2) {
-                                return "<span class='label label-lg label-outline label-dark'>Tiền mặt-Chưa thanh toán</span>";
-                            } else if (o[7] == 3) {
-                                return "<span class='label label-lg label-outline label-success'>Tiền mặt-Đã thanh toán</span>";
-                            } else if (o[7] == 4) {
-                                return "<span class='label label-lg label-outline label-primary'>Online-Đã thanh toán</span>";
+                            if (o[7] == parseInt('@((int)OrderPaidType.ChosePayOnline)')) {
+                                return "<span class='label label-lg label-outline label-dark'>@Utils.GetEnumDescription(OrderPaidType.ChosePayOnline).ToString()</span>";
+                            } else if (o[7] == parseInt('@((int)OrderPaidType.ChosePayByCash)')) {
+                                return "<span class='label label-lg label-outline label-dark'>@Utils.GetEnumDescription(OrderPaidType.ChosePayByCash).ToString()</span>";
+                            } else if (o[7] == parseInt('@((int)OrderPaidType.PaidByCash)')) {
+                                return "<span class='label label-lg label-outline label-success'>@Utils.GetEnumDescription(OrderPaidType.PaidByCash).ToString()</span>";
+                            } else if (o[7] == parseInt('@((int)OrderPaidType.PaidOnline)')) {
+                                return "<span class='label label-lg label-outline label-primary'>@Utils.GetEnumDescription(OrderPaidType.PaidOnline).ToString()</span>";
+                            } else {
+                                return "<span class='label label-lg label-outline label-dark'>Không xác định</span>";
                             }
                         }
                     },
@@ -174,15 +177,20 @@
                         "aTargets": [7],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
-                            if (o[8] == 1) {
-                                return "<span class='label label-lg label-outline label-warning'>Đang chờ duyệt</span>";
-                            } else if(o[8] == 2) {
-                                return "<span class='label label-lg label-outline label-success'>Đã được chấp nhận</span>";
-                            } else if (o[8] == 3) {
-                                return "<span class='label label-lg label-outline label-danger'>Không được chấp nhận</span>";
+                            if (o[8] == parseInt('@((int)OrderStatus.Pending)')) {
+                                return "<span class='label label-lg label-outline label-warning'>@Utils.GetEnumDescription(OrderStatus.Pending).ToString()</span>";
+                            } else if (o[8] == parseInt('@((int)OrderStatus.Approved)')) {
+                                return "<span class='label label-lg label-outline label-success'>@Utils.GetEnumDescription(OrderStatus.Approved).ToString()</span>";
+                            } else if (o[8] == parseInt('@((int)OrderStatus.Unapproved)')) {
+                                return "<span class='label label-lg label-outline label-danger'>@Utils.GetEnumDescription(OrderStatus.Unapproved).ToString()</span>";
+                            } else if (o[8] == parseInt('@((int)OrderStatus.Cancel)')) {
+                                return "<span class='label label-lg label-outline label-dark'>@Utils.GetEnumDescription(OrderStatus.Cancel).ToString()</span>";
+                            } else if (o[8] == parseInt('@((int)OrderStatus.CheckedIn)')) {
+                                return "<span class='label label-lg label-outline label-primary'>@Utils.GetEnumDescription(OrderStatus.CheckedIn).ToString()</span>";
                             } else {
-                                return "<span class='label label-lg label-outline label-dark'>Đã hủy</span>";
+                                return "<span class='label label-lg label-outline label-dark'>Không xác định</span>";
                             }
+
                         }
                     },
                     {

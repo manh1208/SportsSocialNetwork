@@ -76,5 +76,13 @@ namespace SportsSocialNetwork.Controllers
             List<FieldScheduleViewModel> scheduleList = Mapper.Map<List<FieldScheduleViewModel>>(schedules);
             return Json(scheduleList.Select(f => new { title = Utils.GetEnumDescription((FieldScheduleStatus)f.Type), start = f.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"), end = f.EndTime.ToString("yyyy-MM-ddTHH:mm:ss") }), JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetTimeBlockPrice(int? id)
+        {
+            var _timeBlockService = this.Service<ITimeBlockService>();
+            List<TimeBlock> timeBlocks = _timeBlockService.GetActive(p => p.FieldId == id).ToList();
+            return Json(timeBlocks.Select(f => new { block = f.StartTime + " - " + f.EndTime, price = f.Price }).ToArray()
+                , JsonRequestBehavior.AllowGet);
+        }
     }
 }

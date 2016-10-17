@@ -120,14 +120,12 @@ namespace SportsSocialNetwork.Controllers
             var displayedList = filteredListItems.Skip(param.iDisplayStart).Take(param.iDisplayLength);
             var result = displayedList.Select(c => new IConvertible[]{
                 c.Id,
-                c.PlaceImages.Count == 0?"/Content/images/no_image.jpg":c.PlaceImages.First().Image,
+                (c.Avatar == null || c.Avatar.Equals(""))?"/Content/images/no_image.jpg":c.Avatar,
                 c.Name,
                 c.Description.Length > 140? c.Description.Substring(0,140)+"...": c.Description,
-                c.Address,
-                c.District,
-                c.City,
+                (c.Address +", "+c.District+", "+c.City).Length < 65? (c.Address +", "+c.District+", "+c.City):
+                (c.Address +", "+c.District+", "+c.City).Substring(0, 65)+"...",
                 c.PhoneNumber
-                //c.Fields.Count == 0? "": c.Fields.Select(d => d.FieldType.Sport).ToString()
             }.ToArray());
 
             return Json(new
@@ -147,7 +145,12 @@ namespace SportsSocialNetwork.Controllers
         public ActionResult ViewDetail(int? id)
         {
             var _placeService = this.Service<IPlaceService>();
-            var entity = _placeService.FirstOrDefaultActive(p => p.Id == id.Value);
+            var entity = _placeService.FirstOrDefaultActive(p => p.Id == id.Value && 
+            (p.Status == (int)PlaceStatus.Active || p.Status == (int)PlaceStatus.Repairing));
+            if(entity == null)
+            {
+                return RedirectToAction("PageNotFound", "Errors");
+            }
             var place = new PlaceViewModel(entity);
             var _placeImageService = this.Service<IPlaceImageService>();
             var _placeFieldService = this.Service<IFieldService>();
@@ -162,10 +165,10 @@ namespace SportsSocialNetwork.Controllers
             if (placeEvents != null && placeEvents.Count > 0)
             {
                 lastestEvent = placeEvents.First();
+                ViewBag.lastestEvent = lastestEvent;
             }
             ViewBag.placeImages = placeImages;
             ViewBag.placeFields = placeFields;
-            ViewBag.lastestEvent = lastestEvent;
             ViewBag.PlaceStatus = Utils.GetEnumDescription((PlaceStatus)place.Status);
 
             var list = _placeFieldService.GetActive(p => p.PlaceId == id.Value).
