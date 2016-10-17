@@ -21,7 +21,7 @@ public interface IOrderService {
     Call<ResponseModel<List<Order>>> getPlaceOwnerOrder(@Query("ownerId")String id);
 
     @POST("/api/order/getprice")
-    Call<ResponseModel<Long>> getPrice(@Query("fieldId")int fieldId,
+    Call<ResponseModel<Double>> getPrice(@Query("fieldId")int fieldId,
                                        @Query("startTime")String startTime,
                                        @Query("endTime")String endTime);
 }

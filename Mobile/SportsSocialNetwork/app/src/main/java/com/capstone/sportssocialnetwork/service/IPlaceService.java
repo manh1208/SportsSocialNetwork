@@ -28,6 +28,6 @@ public interface IPlaceService {
     Call<ResponseModel<List<FieldType>>> getFieldType(@Query("placeId")int id);
 
     @POST("/api/field/getfieldbyfieldtypeid")
-    Call<ResponseModel<List<Field>>> getFieldType(@Query("placeId")int id,
+    Call<ResponseModel<List<Field>>> getFieldByFieldType(@Query("placeId")int id,
                                                   @Query("fieldTypeId")int fieldTypeId);
 }
