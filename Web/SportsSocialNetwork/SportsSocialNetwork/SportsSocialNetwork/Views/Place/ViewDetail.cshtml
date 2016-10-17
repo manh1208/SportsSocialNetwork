@@ -103,14 +103,17 @@
                         <p>
                             <i class="fa fa-clock-o" title="Time"></i> @Model.StartTime.ToString() -@Model.EndTime.ToString()
                         </p>
-                        <p>
+                        <p id="status">
                             <i class="fa fa-exclamation-circle" title="status"></i> @ViewBag.PlaceStatus
-                            @if (Model.Status==1){
-                            <a href="@Url.Action("BookFieldNow","Order", new { placeId = Model.Id})" class="btn btn-block btn-success" style="margin-top:5px">Đặt ngay!</a>
+                            </p>
+                        <p>
+                            @if (Model.Status==1 && fieldSportList.Count > 0 && fieldSportList != null)
+                            {
+                            <a href="@Url.Action("BookFieldNow","Order", new { id = Model.Id})" class="btn btn-block btn-success" style="margin-top:5px">Đặt ngay!</a>
                             }
                             else
                             {
-                                <a href="@Url.Action("BookFieldNow","Order", new { placeId = Model.Id})" class="btn btn-block btn-success disabled" style="margin-top:5px">Đặt ngay!</a>
+                                <a class="btn btn-block btn-success disabled" style="margin-top:5px">Đặt ngay!</a>
                             }
 
                         </p>
@@ -133,13 +136,21 @@
     <div class="panel col-md-12">
         <h4 class="panel-title">Hình ảnh</h4>
         <section class="regular slider">
-            @foreach (var item in ViewBag.placeImages)
+            @if (ViewBag.placeImages.Count > 0 && ViewBag.placeImages != null)
             {
-                <div>
-                    <a class="inline-block" href="@item.Image" title="@Model.Name"><img src="@item.Image" class='imgWH100 img-rounded'></a>
-                </div>
+                foreach (var item in ViewBag.placeImages)
+                {
+                    <div>
+                        <a class="inline-block" href="@item.Image" title="@Model.Name"><img src="@item.Image" class='imgWH100 img-rounded'></a>
+                    </div>
 
+                }
             }
+            else
+            {
+                <span>Hiện tại chưa có hình ảnh!</span>
+            }
+            
         </section>
     </div>
 
@@ -155,13 +166,16 @@
                         <div data-role="container">
                             <div data-role="content" >
                                 <ul class="list-group list-group-dividered list-group-full">
-                                    @if (fieldSportList != null)
+                                    @if (fieldSportList != null && fieldSportList.Count > 0)
                                     {
                                         foreach (var item in fieldSportList)
                                         {
                                             <li class="list-group-item"><a style="display:block" href='/Field/Index/@item.FieldId'><p style="text-align:center;padding:0px;margin:0px"> @item.FieldName</p><p style="text-align:center;font-size:15px;padding:0px;margin:0px">(@item.Sport)</p></a></li>
 
                                         }
+                                    }else
+                                    {
+                                        <li ><p style="text-align:center">Địa điểm chưa có sân nào</p></li>
                                     }
                                 </ul>
                             </div>
@@ -199,6 +213,15 @@
 </div>
 @section Scripts{
     <script>
+        
+        function checkAvailableTime() {
+            var dt = new Date();
+            var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+            if(time > '@Model.EndTime' || time < '@Model.StartTime'){
+                $("#status").html("");
+                $("#status").html('<i class="fa fa-exclamation-circle" title="status"></i> Hết giờ hoạt động');
+            }
+        }
 
         (function (document, window, $) {
             'use strict';
@@ -211,6 +234,9 @@
 
 
         $(document).ready(function () {
+
+            checkAvailableTime();
+
             $(".regular").slick({
                 dots: true,
                 infinite: true,

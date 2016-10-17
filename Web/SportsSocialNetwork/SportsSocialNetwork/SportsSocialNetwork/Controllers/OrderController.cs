@@ -132,7 +132,7 @@ namespace SportsSocialNetwork.Controllers
             model.FieldId = id;
             if (String.IsNullOrEmpty(img))
             {
-                img = "http://i57.servimg.com/u/f57/16/18/15/10/1104.png";
+                img = "/Content/images/no_image.jpg.";
             }
             ViewBag.avatar = img;
             model.UserId = userId;
@@ -390,6 +390,15 @@ namespace SportsSocialNetwork.Controllers
                 url = Url.Action("BookFieldSuccessful", "Order",
                        new { area = "", orderCode = order_code }, Request.Url.Scheme);
             }
+
+            var _userService = this.Service<IAspNetUserService>();
+            var userId = User.Identity.GetUserId();
+            var user = _userService.FirstOrDefaultActive(p => p.Id == userId);
+            if (user == null)
+            {
+                return RedirectToAction("PageNotFound", "Errors");
+            }
+
             var _fieldService = this.Service<IFieldService>();
             var field = _fieldService.FirstOrDefaultActive(p => p.Id == order.FieldId);
             if(field == null)
@@ -404,6 +413,16 @@ namespace SportsSocialNetwork.Controllers
             noti.Active = true;
             order.Notifications.Add(noti);
             _orderService.Create(order);
+
+            string subject = "[SSN] - Thông tin đặt sân";
+            string body = "Hi <strong>" + User.Identity.Name + "</strong>" +
+                ",<br/><br/>Bạn đã đặt sân: "+field.Name+"<br/> Thời gian: "+order.StartTime.ToString("HH:mm")+" - "+
+                order.EndTime.ToString("HH:mm") +", ngày "+order.StartTime.ToString("dd/MM/yyyy")+
+                "<br/> Giá tiền : " + order.Price + " đồng" +
+                "<br/> <strong>Mã đặt sân của bạn : " + order.OrderCode + "</strong>"+
+                "<br/><img src='" +Utils.GetHostName()+order.QRCodeUrl + "'>"+
+                "<br/> Cảm ơn bạn đã sử dụng dịch vụ của SSN. Chúc bạn có những giờ phút thoải mái chơi thể thao!";
+            EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { user.Email }, null, null, subject, body, true);
 
             return Redirect(url);
         }
@@ -476,8 +495,14 @@ namespace SportsSocialNetwork.Controllers
             return View();
         }
 
-        public ActionResult BookFieldNow(int? placeId)
+        public ActionResult BookFieldNow(int? id)
         {
+            var _fieldService = this.Service<IFieldService>();
+            var fieldList = _fieldService.GetActive(p => p.PlaceId == id && p.Status != (int)FieldStatus.Deactive);
+            if (fieldList == null || fieldList.ToList().Count == 0)
+            {
+                return RedirectToAction("PageNotFound", "Errors");
+            }
             HttpContext.Response.Cache.SetExpires(DateTime.UtcNow.AddDays(-1));
             HttpContext.Response.Cache.SetValidUntilExpires(false);
             HttpContext.Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
@@ -490,8 +515,7 @@ namespace SportsSocialNetwork.Controllers
             {
                 ViewBag.user = user;
             }
-            var _fieldService = this.Service<IFieldService>();
-            var fieldList = _fieldService.GetActive(p => p.PlaceId == placeId);
+            
             IEnumerable<SelectListItem> selectList = fieldList.Select(s => new SelectListItem
             {
                 Text = s.Name,
