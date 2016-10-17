@@ -458,41 +458,6 @@
                 $('#create-form').formValidation('revalidateField', 'EndTime')
             });
 
-            @*function checkDateTimeInput() {
-                var fieldId = $('#fieldId option:selected').val()
-                var startDay = $("#cstartDay");
-                var endDay = $("#cendDay");
-                var startTime = $("#cstartTime");
-                var endTime = $("#cendTime");
-
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("checkDTValid")',
-                    data: {
-                        fieldId: fieldId,
-                        startDay: startDay,
-                        endDay: endDay,
-                        startTime: startTime,
-                        endTime: endDay
-                    },
-                    success: function (data) {
-                        if (data === "success") {
-
-                            return true;
-                        }
-                        else {
-                            var noti = "<p class='alert alert-danger'>Giá tiền không được trống</p>";
-                            $("#noti").empty();
-                            $("#noti").append(noti);
-                            return false;
-                        }
-                    },
-                    error: function (error) {
-                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                    }
-                });
-            }*@
-
             //Validation
             (function () {
                 var TIME_PATTERN = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
