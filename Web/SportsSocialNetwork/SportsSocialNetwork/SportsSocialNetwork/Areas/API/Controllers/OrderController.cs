@@ -164,7 +164,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             try
             {
-                Order order = service.CreateOrder(model.UserId, model.FieldId, model.StartTime, model.EndTime, model.Note, CalculatePrice(model.FieldId,model.StartTime.TimeOfDay, model.EndTime.TimeOfDay), model.PaidType);
+                Order order = service.CreateOrder(model.UserId, model.FieldId, model.StartTime, model.EndTime, model.Note, model.Price, model.PaidType);
 
                 OrderDetailViewModel result = Mapper.Map<OrderDetailViewModel>(order);
 
@@ -236,6 +236,19 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             return Json(response);
         }
 
+        [HttpPost]
+        public ActionResult GetPrice(int fieldId,TimeSpan startTime, TimeSpan endTime) {
+            ResponseModel<double> response = null;
+            try {
+                double result =CalculatePrice(fieldId, startTime, endTime);
+
+                response = new ResponseModel<double>(true, "Giá:", null, result);
+            } catch (Exception) {
+                response = ResponseModel<double>.CreateErrorResponse("Lỗi tính giá", systemError);
+            }
+            return Json(response);
+        }
+
         private OrderSimpleViewModel PrepareOrderSimpleViewModel(Order order) {
             OrderSimpleViewModel result = Mapper.Map<OrderSimpleViewModel>(order);
 
@@ -253,6 +266,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             return result;
         }
+
         private double CalculatePrice(int fieldId, TimeSpan startTime, TimeSpan endTime) {
             var timeBlockService = this.Service<ITimeBlockService>();
 

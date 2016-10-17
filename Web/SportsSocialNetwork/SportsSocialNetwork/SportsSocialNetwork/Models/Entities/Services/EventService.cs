@@ -14,27 +14,27 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         void saveEvent(Event evt, HttpPostedFileBase image);
         string saveEvtImage(HttpPostedFileBase image);
-
+        IEnumerable<Event> GetAllPlaceOwnerEvent(String ownerId);
 
         #endregion
 
         void test();
     }
-    public partial class EventService: IEventService
+    public partial class EventService : IEventService
     {
         #region Code from here
 
         public void saveEvent(Event evt, HttpPostedFileBase image)
         {
             Event searchEvent = this.FirstOrDefaultActive(e => e.Id == evt.Id);
-            if(searchEvent == null)
+            if (searchEvent == null)
             {
                 evt.PlaceId = 1008;
                 //evt.CreatorId = "8955d736-4fea-45de-96ce-1ebae8265cc8";
                 evt.Status = (int)EventStatus.Operating;
 
                 //save image
-                if(image != null)
+                if (image != null)
                 {
                     evt.Image = this.saveEvtImage(image);
                 }
@@ -70,6 +70,14 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
             return path;
         }
+
+
+        public List<Event> GetAllPlaceOwnerEvent(String ownerId)
+        {
+            return this.GetActive(x => x.CreatorId == ownerId).OrderBy(x => x.StartDate).ToList();
+        }
+
+
         #endregion
 
         public void test()
