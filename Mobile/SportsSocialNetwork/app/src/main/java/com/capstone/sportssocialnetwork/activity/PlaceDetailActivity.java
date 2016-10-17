@@ -68,6 +68,8 @@ public class PlaceDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PlaceDetailActivity.this,BookingActivity.class);
+                intent.putExtra("placeId",placeId);
+                intent.putExtra("placeName",placeName);
                 startActivity(intent);
             }
         });

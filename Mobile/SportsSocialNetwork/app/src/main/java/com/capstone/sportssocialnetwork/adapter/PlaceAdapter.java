@@ -54,7 +54,7 @@ public class PlaceAdapter extends ArrayAdapter<PlaceResponseModel> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        PlaceResponseModel place=  getItem(position);
+        final PlaceResponseModel place=  getItem(position);
         viewHolder.txtName.setText(place.getName());
         viewHolder.txtAddress.setText(place.getAddressString());
         viewHolder.btnBook.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +62,8 @@ public class PlaceAdapter extends ArrayAdapter<PlaceResponseModel> {
             public void onClick(View v) {
 
                 Intent intent = new Intent(mContext, BookingActivity.class);
+                intent.putExtra("placeId",place.getId());
+                intent.putExtra("placeName",place.getName());
                 mContext.startActivity(intent);
             }
         });

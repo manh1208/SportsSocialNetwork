@@ -109,9 +109,10 @@ public class Utilities {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus)
+
                     datePickerDialog.show();
                 InputMethodManager imm = (InputMethodManager) finalContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(finalEdittext.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(finalEdittext.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         });
         editText.setOnClickListener(new View.OnClickListener() {
@@ -119,9 +120,46 @@ public class Utilities {
             public void onClick(View v) {
                 datePickerDialog.show();
                 InputMethodManager imm = (InputMethodManager) finalContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(finalEdittext.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(finalEdittext.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         });
+    }
+
+    public static void setTimeField(Context mContext,EditText editText, String formatTime) {
+        final String finalFormattime = formatTime;
+        final Context finalContext = mContext;
+        final  EditText finalEdittext  = editText;
+        final Calendar newCalendar = Calendar.getInstance();
+        final TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                Time time = new Time(hourOfDay, minute, 0);
+                try {
+                    finalEdittext.setText(getDateTimeString(time,finalFormattime));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    timePickerDialog.show();
+                InputMethodManager imm = (InputMethodManager) finalContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(finalEdittext.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        });
+        editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePickerDialog.show();
+                InputMethodManager imm = (InputMethodManager) finalContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(finalEdittext.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        });
+
+
     }
 
     public static void setDatetimeField(Context mContext,EditText editText, String formatDate, String formatTime) {

@@ -4,8 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -28,13 +26,12 @@ import android.widget.Toast;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.fragment.ManageOrderFragment;
 import com.capstone.sportssocialnetwork.fragment.ManagePlaceFragment;
-import com.capstone.sportssocialnetwork.model.Order;
+import com.capstone.sportssocialnetwork.model.CheckIn;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
+import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.google.zxing.Result;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -198,14 +195,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void sendCode(String code) {
-        Call<ResponseModel<Order>> call = service.getPlaceService().checkInOrder(code);
+        Call<ResponseModel<CheckIn>> call = service.getOrderService().checkInOrder(code);
 
-        call.enqueue(new Callback<ResponseModel<Order>>() {
+        call.enqueue(new Callback<ResponseModel<CheckIn>>() {
             @Override
-            public void onResponse(Call<ResponseModel<Order>> call, Response<ResponseModel<Order>> response) {
+            public void onResponse(Call<ResponseModel<CheckIn>> call, Response<ResponseModel<CheckIn>> response) {
                 if (response.isSuccessful()){
                     if (response.body().isSucceed()){
-                        Order order = response.body().getData();
+                        CheckIn order = response.body().getData();
                         AlertDialog.Builder buider = new AlertDialog.Builder(MainActivity.this);
                         View v = getLayoutInflater().inflate(R.layout.dialog_order_info, null, false);
                         TextView name = (TextView) v.findViewById(R.id.txt_order_detail_fullname);
@@ -236,7 +233,7 @@ public class MainActivity extends AppCompatActivity
                     }else{
                         Toast.makeText(MainActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
                         if (response.body().getData()!=null){
-                            Order order = response.body().getData();
+                            CheckIn order = response.body().getData();
                             AlertDialog.Builder buider = new AlertDialog.Builder(MainActivity.this);
                             View v = getLayoutInflater().inflate(R.layout.dialog_order_info, null, false);
                             TextView name = (TextView) v.findViewById(R.id.txt_order_detail_fullname);
@@ -282,7 +279,7 @@ public class MainActivity extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<ResponseModel<Order>> call, Throwable t) {
+            public void onFailure(Call<ResponseModel<CheckIn>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "Loi ket noi voi server", Toast.LENGTH_SHORT).show();
             }
         });
@@ -304,7 +301,13 @@ public class MainActivity extends AppCompatActivity
                 fragment = new ManageOrderFragment();
                 getSupportActionBar().setTitle("Quản lý đơn đặt sân");
                 break;
-
+            case R.id.nav_manage_logout:
+                DataUtils.getINSTANCE(this).getPreferences().edit().clear().commit();
+                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                finish();
+                break;
         }
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()

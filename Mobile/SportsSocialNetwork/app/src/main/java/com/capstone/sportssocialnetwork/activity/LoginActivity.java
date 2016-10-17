@@ -100,6 +100,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                 .getPreferences()
                                                 .edit()
                                                 .putString(SharePreferentName.SHARE_USER_ID, user.getId())
+                                                .putInt(SharePreferentName.SHARE_USER_ROLE, Integer.parseInt(user.getRole().getId()))
                                                 .commit();
 
                                         Intent intent = new Intent(LoginActivity.this, MainBottomBarActivity.class);

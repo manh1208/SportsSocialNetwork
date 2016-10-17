@@ -16,6 +16,18 @@
             android:title="Quản lý sự kiện" />
     </group>
 
+    <item android:title="Khác">
+        <menu>
+            <item
+                android:id="@+id/nav_manage_notice"
+                android:icon="@drawable/ic_notification"
+                android:title="Thông báo" />
 
+            <item
+                android:id="@+id/nav_manage_logout"
+                android:icon="@drawable/ic_logout"
+                android:title="Đăng xuất" />
+        </menu>
+    </item>
 
 </menu>
