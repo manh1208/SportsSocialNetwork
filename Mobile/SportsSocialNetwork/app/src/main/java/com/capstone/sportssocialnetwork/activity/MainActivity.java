@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity
 //        alert1.show();
         try {
 //            int code = Integer.parseInt(result.getText());
-            Toast.makeText(MainActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
             sendCode(result.getText());
         } catch (Exception e) {
             Toast.makeText(MainActivity.this, "QR Code không hợp lệ", Toast.LENGTH_SHORT).show();
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity
                         AlertDialog.Builder buider = new AlertDialog.Builder(MainActivity.this);
                         View v = getLayoutInflater().inflate(R.layout.dialog_order_info, null, false);
                         TextView name = (TextView) v.findViewById(R.id.txt_order_detail_fullname);
-                        name.setText(order.getUserName());
+                        name.setText(order.getFullName());
                         TextView createDate = (TextView) v.findViewById(R.id.txt_order_detail_create_time);
                         createDate.setText(order.getCreateDate());
                         TextView place = (TextView) v.findViewById(R.id.txt_order_detail_place);
@@ -225,16 +225,65 @@ public class MainActivity extends AppCompatActivity
                         TextView status = (TextView) v.findViewById(R.id.txt_order_detail_order_status);
                         status.setText(order.getStatus());
                         buider.setView(v)
-                                .setNegativeButton("OK", null)
+                                .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        onBackPressed();
+                                    }
+                                })
                                 .create()
                                 .show();
+                    }else{
+                        Toast.makeText(MainActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                        if (response.body().getData()!=null){
+                            Order order = response.body().getData();
+                            AlertDialog.Builder buider = new AlertDialog.Builder(MainActivity.this);
+                            View v = getLayoutInflater().inflate(R.layout.dialog_order_info, null, false);
+                            TextView name = (TextView) v.findViewById(R.id.txt_order_detail_fullname);
+                            name.setText(order.getFullName());
+                            TextView createDate = (TextView) v.findViewById(R.id.txt_order_detail_create_time);
+                            createDate.setText(order.getCreateDate());
+                            TextView place = (TextView) v.findViewById(R.id.txt_order_detail_place);
+                            place.setText(order.getPlaceName());
+                            TextView field = (TextView) v.findViewById(R.id.txt_order_detail_field);
+                            field.setText(order.getFieldName());
+                            TextView startTime = (TextView) v.findViewById(R.id.txt_order_detail_start_time);
+                            startTime.setText(order.getStartTime());
+                            TextView endTime = (TextView) v.findViewById(R.id.txt_order_detail_end_time);
+                            endTime.setText(order.getEndTime());
+                            TextView payment = (TextView) v.findViewById(R.id.txt_order_detail_payment);
+                            payment.setText(order.getPaidType());
+                            TextView status = (TextView) v.findViewById(R.id.txt_order_detail_order_status);
+                            status.setText(order.getStatus());
+                            buider.setView(v)
+                                    .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            onBackPressed();
+                                        }
+                                    })
+                                    .create()
+                                    .show();
+                        }
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+//                        builder.setTitle("Warning")
+//                                .setMessage(response.body().getErrorsString())
+//                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        onBackPressed();
+//                                    }
+//                                })
+//                                .create().show();
                     }
+                }else{
+                    Toast.makeText(MainActivity.this, response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseModel<Order>> call, Throwable t) {
-
+                Toast.makeText(MainActivity.this, "Loi ket noi voi server", Toast.LENGTH_SHORT).show();
             }
         });
 
