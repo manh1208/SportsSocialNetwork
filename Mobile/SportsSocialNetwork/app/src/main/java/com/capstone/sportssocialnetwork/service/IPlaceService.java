@@ -1,5 +1,7 @@
 package com.capstone.sportssocialnetwork.service;
 
+import com.capstone.sportssocialnetwork.model.Field;
+import com.capstone.sportssocialnetwork.model.FieldType;
 import com.capstone.sportssocialnetwork.model.response.PlaceResponseModel;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 
@@ -22,5 +24,10 @@ public interface IPlaceService {
     @POST("/api/place/showplacedetail")
     Call<ResponseModel<PlaceResponseModel>> getPlaceDetail(@Query("id") int id);
 
+    @POST("/api/field/getfieldtypebyplaceid")
+    Call<ResponseModel<List<FieldType>>> getFieldType(@Query("placeId")int id);
 
+    @POST("/api/field/getfieldbyfieldtypeid")
+    Call<ResponseModel<List<Field>>> getFieldType(@Query("placeId")int id,
+                                                  @Query("fieldTypeId")int fieldTypeId);
 }
