@@ -11,6 +11,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         #region Code from here
         bool checkScheduleTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime playDate);
 
+        bool checkMaintainTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate);
         IQueryable<FieldSchedule> GetFieldSchedule(JQueryDataTableParamModel request, out int totalRecord);
         #endregion
 
@@ -19,6 +20,33 @@ namespace SportsSocialNetwork.Models.Entities.Services
     public partial class FieldScheduleService : IFieldScheduleService
     {
         #region Code from here
+
+        public bool checkMaintainTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate)
+        {
+            IEnumerable<FieldSchedule> schedules = this.GetActive(p => p.FieldId == fieldId).OrderBy(p => p.StartTime).ToList();
+            bool isValid = true;
+            DateTime sTime = new DateTime(startDate.Year, startDate.Month, startDate.Day, startTime.Hours,
+                startTime.Minutes, startTime.Seconds);
+            DateTime eTime = new DateTime(endDate.Year, endDate.Month, endDate.Day, endTime.Hours,
+                endTime.Minutes, endTime.Seconds);
+            foreach (var schedule in schedules)
+            {
+                if ((schedule.StartTime >= sTime && schedule.EndTime <= eTime) || (schedule.StartTime < sTime &&
+                    schedule.EndTime > sTime) || (schedule.EndTime > eTime && schedule.StartTime < eTime))
+                {
+                    isValid = false;
+                    break;
+                }
+            }
+            if (isValid)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public bool checkScheduleTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime useDate)
         {
             IEnumerable<FieldSchedule> schedules = this.GetActive(p => p.FieldId == fieldId).OrderBy(p => p.StartTime).ToList();

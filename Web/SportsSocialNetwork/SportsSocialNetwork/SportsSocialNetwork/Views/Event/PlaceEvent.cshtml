@@ -1,0 +1,141 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.EventViewModel
+
+@{
+    ViewBag.Title = "PlaceEvent";
+    Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
+}
+
+<style>
+    .imgWH100 {
+        width: 100%;
+        vertical-align: middle;
+        height: 100%;
+    }
+
+    .table_image {
+        float: left;
+        width: 210px;
+        height: 160px;
+        text-align: center;
+    }
+
+    .table_text {
+        float: left;
+        width: 450px;
+        margin-left: 10px;
+    }
+
+    .table_text_title {
+        height: 40px;
+        font-weight: bold;
+        font-size: 25px;
+    }
+
+    .table_text_des3 {
+        height: 30px;
+    }
+</style>
+<div class="col-md-offset-1 col-md-10">
+    <div class="panel">
+        <header class="panel-heading">
+            <h3 class="panel-title">Danh sách sự kiện tại @ViewBag.placeName
+            <a class="btn btn-primary" href="@Url.Action("Index", "Event", new { id = Model.Id })">XEM TOÀN BỘ CÁC SỰ KIỆN</a>
+            </h3>
+        </header>
+        <div class="panel-body">
+            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                <div class="col-sm-12">
+                    <table class="table table-hover dataTable table-striped width-full dtr-inline" data-plugin="dataTable" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+
+    function RefreshTable() {
+        var oTable = $("#DataTables_Table_0").dataTable();
+        oTable._fnPageChange(0);
+        oTable._fnAjaxUpdate();
+
+    }
+
+    function InitDatatable() {
+        $("#DataTables_Table_0").DataTable({
+            "bRetrieve": true,
+            "bServerSide": true,
+            "bScrollCollapse": true,
+            "bSort": true,
+            "sAjaxSource": "/Event/GetData",
+            "bProcessing": true,
+            "fnServerParams": function (aoData) {
+                aoData.push(
+                    { "name": "placeId", "value": @ViewBag.placeId });
+            },
+            "aLengthMenu": [10, 20, 100],
+            "oLanguage": {
+                "sSearch": "Tìm kiếm bằng tên sự kiện/tên sân:",
+                "sZeroRecords": "Không có dữ liệu phù hợp",
+                "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
+                "sEmptyTable": "Không có dữ liệu",
+                "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
+                "sLengthMenu": "Hiển thị _MENU_ dòng",
+                "sProcessing": "Xin đợi trong giây lát...",
+                "oPaginate": {
+                    "sFirst": "Về đầu",
+                    "sLast": "Về cuối",
+                    "sNext": "Trang kế",
+                    "sPrevious": "Trang trước"
+                },
+            },
+            "aoColumnDefs": [
+                {
+                     //"sWidth" : "10%",
+                     "aTargets": [0,2,3,4,5,6],
+                     "bVisible": false,
+                     "bSortable": false
+                 },
+                 {
+                     //"sWidth" : "10%",
+                     "aTargets": [1],
+                     "bSortable": false,
+                     "mRender": function (data, type, o) {
+                         return "<div class='table_image'><img src='" + o[1] + "' class='imgWH100'></div><div class='table_text'>" +
+                             "<div class='table_text_title'><a href='/Event/ViewDetail/" + o[0] + "'>" + o[2] +
+                             "</a></div><div class='table_text_des3'>Thời gian: " + o[3] + "</div><div class='table_text_des3'>Địa điểm: <a href='/Place/ViewDetail/" + o[4] + "'>" + o[5] +
+                             "</a></div><div class='table_text_des3'>Trạng thái: "
+                             + o[6] + "</div></div>";
+
+                     }
+                 },
+
+            ],
+            "bAutoWidth": false
+
+        });
+    }
+
+    $(document).ready(function () {
+        InitDatatable();
+        RefreshTable();
+    });
+
+
+
+    </script>
+}
+

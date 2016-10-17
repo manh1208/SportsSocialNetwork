@@ -15,6 +15,7 @@
     .imgW100 {
         width: 100%;
         vertical-align: middle;
+        min-height: 200px;
         max-height: 250px;
     }
 
@@ -45,7 +46,7 @@
                     <div class="col-md-6" style="float:left">
                         <h2 class="detail_title">@Model.Name</h2>
                         <p>
-                            <i class="fa fa-map-marker" title="Địa điểm"></i> @ViewBag.Place.Name
+                            <i class="fa fa-map-marker" title="Địa điểm"></i> <a href="/Place/ViewDetail/@Model.PlaceId">@ViewBag.Place.Name</a>
                         </p>
                         <p>
                             <i class="fa fa-clock-o" title="Time"></i> @Model.StartDate.ToString("dd/MM/yyyy") -@Model.EndDate.ToString("dd/MM/yyyy")
@@ -56,10 +57,12 @@
                     </div>
                 </div>
                 <div class="col-md-12" style="padding:10px">
-                    @Model.Description
+                    <hr />
+                    <h3 class="panel-heading">Nội dung:</h3>
+                    @Html.Raw(Server.HtmlDecode(Model.Description))
                 </div>
                 <div class="col-md-12 text-center">
-                    <a class="btn btn-outline btn-default" href="@Url.Action("Index", "Event", new { id = Model.PlaceId })">Xem thêm các sự kiện khác</a>
+                    <a class="btn btn-primary" href="@Url.Action("PlaceEvent", "Event", new { id = Model.PlaceId })">Xem thêm các sự kiện khác của sân</a>
                 </div>
             </div>
         </div>

@@ -41,7 +41,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         #region Code from here
         public IEnumerable<Place> getAllPlace()
         {
-            return this.GetActive();
+            return this.GetActive(p => p.Status == (int)PlaceStatus.Active);
         }
 
         public DataTable getLocation(string address)

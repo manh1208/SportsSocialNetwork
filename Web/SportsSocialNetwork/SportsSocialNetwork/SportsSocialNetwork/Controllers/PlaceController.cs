@@ -120,7 +120,7 @@ namespace SportsSocialNetwork.Controllers
             var displayedList = filteredListItems.Skip(param.iDisplayStart).Take(param.iDisplayLength);
             var result = displayedList.Select(c => new IConvertible[]{
                 c.Id,
-                c.PlaceImages.Count == 0?"http://raovatso.net/images/no-image.jpg":c.PlaceImages.First().Image,
+                c.PlaceImages.Count == 0?"/Content/images/no_image.jpg":c.PlaceImages.First().Image,
                 c.Name,
                 c.Description.Length > 140? c.Description.Substring(0,140)+"...": c.Description,
                 c.Address,

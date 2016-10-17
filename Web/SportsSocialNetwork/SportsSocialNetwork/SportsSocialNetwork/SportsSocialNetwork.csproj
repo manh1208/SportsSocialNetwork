@@ -3112,6 +3112,7 @@
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\logo_new.png" />
     <Content Include="Content\images\logo_orange.png" />
+    <Content Include="Content\images\no_image.jpg" />
     <Content Include="Content\js\custom-script.js" />
     <Content Include="Content\js\sweetAlert\sweetalert.css" />
     <Content Include="Content\js\sweetAlert\sweetalert.min.js" />
@@ -3726,6 +3727,7 @@
     <Content Include="Views\Order\BookFieldNow.cshtml" />
     <Content Include="Views\Event\ViewDetail.cshtml" />
     <Content Include="Views\Event\Index.cshtml" />
+    <Content Include="Views\Event\PlaceEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
