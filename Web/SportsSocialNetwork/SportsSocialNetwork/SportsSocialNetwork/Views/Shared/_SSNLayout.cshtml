@@ -14,7 +14,7 @@
     <title>Profile</title>
 
     <link rel="apple-touch-icon" href="~/Content/assets/images/apple-touch-icon.png">
-    <link rel="shortcut icon" href="~/Content/images/logo_orange.png">
+    <link rel="shortcut icon" href="~/Content/images/logo_new.png">
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="~/Content/assets/css/bootstrap.min.css">
@@ -130,19 +130,63 @@
                                 <i></i>
                             </span>
                         </a>
-                        <ul class="dropdown-menu" role="menu">
+                        <ul class="dropdown-menu width-250" role="menu">
                             <li role="presentation">
-                                <a href="javascript:void(0)" role="menuitem"><i class="icon wb-user" aria-hidden="true"></i> Profile</a>
+                                <form action="" style="margin:10px" method="post" id="form-">
+                                    <a href="#" role="menuitem" onclick="">
+                                        <span class="fa fa-globe"></span> Trang chủ
+                                    </a>
+                                </form>
                             </li>
                             <li role="presentation">
-                                <a href="javascript:void(0)" role="menuitem"><i class="icon wb-payment" aria-hidden="true"></i> Billing</a>
+                                <form action="" style="margin:10px" method="post" id="form-">
+                                    <a href="#" role="menuitem" onclick="">
+                                        <span class="fa fa-key"></span> Đổi mật khẩu
+                                    </a>
+                                </form>
                             </li>
                             <li role="presentation">
-                                <a href="javascript:void(0)" role="menuitem"><i class="icon wb-settings" aria-hidden="true"></i> Settings</a>
+                                <form action="" style="margin:10px" method="post" id="form-">
+                                    <a href="#" role="menuitem" onclick="">
+                                        <span class="fa fa-users"></span> Tìm người cùng sở thích
+                                    </a>
+                                </form>
                             </li>
-                            <li class="divider" role="presentation"></li>
                             <li role="presentation">
-                                <a href="javascript:void(0)" role="menuitem"><i class="icon wb-power" aria-hidden="true"></i> Logout</a>
+                                <form action="" style="margin:10px" method="post" id="form-">
+                                    <a href="#" role="menuitem" onclick="">
+                                        <span class="fa fa-pencil-square-o"></span> Mời chơi thể thao
+                                    </a>
+                                </form>
+                            </li>
+                            <li role="presentation">
+                                <form action="@Url.Action("Index","Event", new { area = "" })" style="margin:10px" method="post" id="form-search-event">
+                                    <a href="#" role="menuitem" onclick="searchEvent()">
+                                        <span class="fa fa-bullhorn"></span> Các sự kiện thể thao
+                                    </a>
+                                </form>
+                            </li>
+                            <li role="presentation">
+                                <form action="@Url.Action("Index","Place", new { area = "" })" style="margin:10px" method="post" id="form-search-place">
+                                    <a href="#" role="menuitem" onclick="searchPlace()">
+                                        <span class="fa fa-futbol-o"></span> Tìm nơi chơi thể thao
+                                    </a>
+                                </form>
+                            </li>
+                            <li role="presentation">
+                                <form action="@Url.Action("Index","Order", new { area = "" })" style="margin:10px" method="post" id="form-order-history">
+                                    <a href="#" role="menuitem" onclick="orderHistory()">
+                                        <span class="fa fa-history"></span> Lịch sử đặt sân
+                                    </a>
+                                </form>
+                            </li>
+                            <li role="presentation">
+                                <form action="@Url.Action("LogOff","Account", new { area = "" })" style="margin:10px" method="post" id="form-log-out">
+                                    @Html.AntiForgeryToken()
+                                    <a href="#" role="menuitem" onclick="logout()">
+                                        <span class="icon wb-power"></span> Đăng xuất
+                                    </a>
+                                </form>
                             </li>
                         </ul>
                     </li>
@@ -221,6 +265,20 @@
                 Site.run();
             });
         })(document, window, jQuery);
+    </script>
+    <script>
+       function logout(){
+           $("#form-log-out").submit();
+       }
+       function searchPlace() {
+           $("#form-search-place").submit();
+       }
+       function orderHistory() {
+           $("#form-order-history").submit();
+       }
+       function searchEvent() {
+           $("#form-search-event").submit();
+       }
     </script>
     @RenderSection("scripts", false)
 </body>
