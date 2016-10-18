@@ -30,7 +30,11 @@ import com.capstone.sportssocialnetwork.model.CheckIn;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
+import com.capstone.sportssocialnetwork.utils.Utilities;
 import com.google.zxing.Result;
+
+import java.text.ParseException;
+import java.util.Date;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import retrofit2.Call;
@@ -135,7 +139,7 @@ public class MainActivity extends AppCompatActivity
                         AlertDialog.Builder inputCodeBuilder = new AlertDialog.Builder(MainActivity.this);
                         View dialogView = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog_input_code, null);
                         final EditText txtCode = (EditText) dialogView.findViewById(R.id.txt_your_code);
-
+                        isStartCamera = true;
                         inputCodeBuilder.setView(dialogView)
                                 .setNegativeButton("Cancel", null)
                                 .setPositiveButton("Xong", null);
@@ -213,10 +217,29 @@ public class MainActivity extends AppCompatActivity
                         place.setText(order.getPlaceName());
                         TextView field = (TextView) v.findViewById(R.id.txt_order_detail_field);
                         field.setText(order.getFieldName());
+                        TextView useDate = (TextView) v.findViewById(R.id.txt_order_detail_use_date);
+                        try {
+                            Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
+                            useDate.setText( Utilities.getDateTimeString(date,"dd/MM/yyyy"));
+                        } catch (ParseException e) {
+                            Toast.makeText(MainActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
+                        }
                         TextView startTime = (TextView) v.findViewById(R.id.txt_order_detail_start_time);
-                        startTime.setText(order.getStartTime());
+                        try {
+                            Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
+                            startTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
+                        } catch (ParseException e) {
+                            Toast.makeText(MainActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
+                        }
+
+
                         TextView endTime = (TextView) v.findViewById(R.id.txt_order_detail_end_time);
-                        endTime.setText(order.getEndTime());
+                        try {
+                            Date date = Utilities.getDateTime(order.getEndTime(),"MM/dd/yyyy hh:mm:ss a");
+                            endTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
+                        } catch (ParseException e) {
+                            Toast.makeText(MainActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
+                        }
                         TextView payment = (TextView) v.findViewById(R.id.txt_order_detail_payment);
                         payment.setText(order.getPaidType());
                         TextView status = (TextView) v.findViewById(R.id.txt_order_detail_order_status);
@@ -244,10 +267,29 @@ public class MainActivity extends AppCompatActivity
                             place.setText(order.getPlaceName());
                             TextView field = (TextView) v.findViewById(R.id.txt_order_detail_field);
                             field.setText(order.getFieldName());
+                            TextView useDate = (TextView) v.findViewById(R.id.txt_order_detail_use_date);
+                            try {
+                                Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
+                                useDate.setText( Utilities.getDateTimeString(date,"dd/MM/yyyy"));
+                            } catch (ParseException e) {
+                                Toast.makeText(MainActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
+                            }
                             TextView startTime = (TextView) v.findViewById(R.id.txt_order_detail_start_time);
-                            startTime.setText(order.getStartTime());
+                            try {
+                                Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
+                                startTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
+                            } catch (ParseException e) {
+                                Toast.makeText(MainActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
+                            }
+
+
                             TextView endTime = (TextView) v.findViewById(R.id.txt_order_detail_end_time);
-                            endTime.setText(order.getEndTime());
+                            try {
+                                Date date = Utilities.getDateTime(order.getEndTime(),"MM/dd/yyyy hh:mm:ss a");
+                                endTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
+                            } catch (ParseException e) {
+                                Toast.makeText(MainActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
+                            }
                             TextView payment = (TextView) v.findViewById(R.id.txt_order_detail_payment);
                             payment.setText(order.getPaidType());
                             TextView status = (TextView) v.findViewById(R.id.txt_order_detail_order_status);

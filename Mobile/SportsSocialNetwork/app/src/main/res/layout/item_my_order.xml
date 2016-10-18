@@ -8,25 +8,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="20sp"
             android:orientation="vertical"
             android:paddingLeft="20sp"
             android:paddingBottom="20sp"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/btn_manage_order_detail">
+            android:layout_toLeftOf="@+id/btn_my_order_detail">
 
             <TextView
-                android:id="@+id/txt_manage_order_fullname"
+                android:id="@+id/txt_my_order_place"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nguyen Van Manh"
+                android:text="Chảo lửa"
                 android:textSize="20sp"
                 android:textColor="#000"
+                android:textStyle="bold"
                 />
             <TextView
-                android:id="@+id/txt_manage_order_time"
+                android:id="@+id/txt_my_order_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="20/10/2016: 14:00:00 - 16:00:00"
@@ -34,7 +35,7 @@
                 android:textColor="#000"
                 />
             <TextView
-                android:id="@+id/txt_manage_order_status"
+                android:id="@+id/txt_my_order_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Đã nhận sân"
@@ -43,7 +44,7 @@
                 />
         </LinearLayout>
         <Button
-            android:id="@+id/btn_manage_order_detail"
+            android:id="@+id/btn_my_order_detail"
             android:layout_width="50sp"
             android:layout_height="50sp"
             android:layout_alignParentRight="true"

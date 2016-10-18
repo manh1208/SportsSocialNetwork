@@ -1,49 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <RelativeLayout
+        android:id="@+id/layout_menu_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="20sp"
-        android:paddingTop="10sp"
         android:paddingBottom="10sp"
-        android:paddingRight="20sp">
+        android:paddingLeft="20sp"
+        android:paddingRight="20sp"
+        android:paddingTop="10sp">
+
         <com.capstone.sportssocialnetwork.custom.RoundedImageView
             android:id="@+id/iv_avatar"
             android:layout_width="80sp"
             android:layout_height="80sp"
-            android:src="@drawable/img_default_avatar"
+            android:padding="10sp"
             android:scaleType="fitCenter"
-            android:padding="10sp"/>
+            android:src="@drawable/img_default_avatar" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="20sp"
             android:layout_toRightOf="@+id/iv_avatar"
-            android:layout_centerVertical="true"
-            >
+            android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textStyle="bold"
                 android:text="Nguyễn Văn Mạnh"
-                android:textColor="#000"/>
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:text="Xem trang cá nhân"
                 android:layout_marginTop="5sp"
-                android:textColor="#8b8b8b"/>
+                android:text="Xem trang cá nhân"
+                android:textColor="#8b8b8b"
+                android:textSize="15sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="5sp"
-        android:background="@color/separator"/>
+        android:background="@color/separator" />
+
+    <RelativeLayout
+        android:id="@+id/layout_menu_my_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="20sp"
+        android:paddingLeft="20sp"
+        android:paddingRight="20sp"
+        android:paddingTop="20sp">
+
+        <com.capstone.sportssocialnetwork.custom.RoundedImageView
+            android:id="@+id/iv_menu_image"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_football"
+
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20sp"
+            android:layout_toRightOf="@+id/iv_menu_image"
+            android:orientation="vertical">
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đơn đặt sân của tôi"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -31,7 +32,10 @@ import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.capstone.sportssocialnetwork.utils.SharePreferentName;
 import com.capstone.sportssocialnetwork.utils.Utilities;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,6 +44,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BookingActivity extends AppCompatActivity {
+    private static final String TAG = "BookingActivity";
     private Spinner spPlace;
     private Spinner spSport;
     private Spinner spField;
@@ -210,6 +215,9 @@ public class BookingActivity extends AppCompatActivity {
     private void visibleTime(){
         layoutPrice.setVisibility(View.VISIBLE);
         layoutTime.setVisibility(View.VISIBLE);
+        txtUseDate.setText("");
+        txtStartTime.setText("");
+        txtEndTime.setText("");
     }
 
     private void invisibleTime(){
@@ -402,9 +410,53 @@ public class BookingActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id){
             case R.id.menu_booking:
-                Toast.makeText(BookingActivity.this, "Booking", Toast.LENGTH_SHORT).show();
+                if (isValidation()){
+
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean isValidation() {
+        try {
+            if (txtUseDate.getText().toString() == null || txtUseDate.getText().toString().equals("")) {
+                txtUseDate.setError("Vui lòng chọn ngày sử dụng sân");
+                txtUseDate.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
+                return false;
+            }
+            Log.e(TAG,"Choose Date"+Date.parse(txtUseDate.getText().toString())+" - " +new Date().toString());
+            Log.e(TAG,"Current Date"+(new java.util.Date()).getTime()+" - " + new Date(Date.parse(txtUseDate.getText().toString())));
+
+
+            if ((new Date()).after((new Date(Date.parse(txtUseDate.getText().toString()))))) {
+                txtUseDate.setError("Ngày sử dụng phải lớn hơn ngày hiện tại");
+                txtUseDate.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
+                return false;
+            }
+
+            if (txtStartTime.getText().toString() == null || txtStartTime.getText().toString().equals("")) {
+                txtStartTime.setError("Vui lòng chọn thời gian bắt đầu");
+                txtStartTime.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
+                return false;
+
+            }
+            if (txtEndTime.getText().toString() == null || txtEndTime.getText().toString().equals("")) {
+                txtEndTime.setError("Vui lòng chọn thời gian kết thúc");
+                txtEndTime.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
+                return false;
+            }
+
+//            if (Time.valueOf(txtStartTime.getText().toString()).after(Time.valueOf(txtEndTime.getText().toString())) ) {
+//                txtEndTime.setError("Giờ kết thúc phải lớn hơn giờ bắt đầu");
+//                txtEndTime.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
+//                return false;
+//            }
+        }catch (Exception e){
+            Toast.makeText(BookingActivity.this, "Lỗi cú pháp", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 }

@@ -24,29 +24,34 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class Utilities {
 
 
     public static Date getDateTime(String s, String format) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
         Date date = sdf.parse(s);
         return date;
     }
 
     public static String getDateTimeString(Long s, String format) throws ParseException {
         java.sql.Date date = new java.sql.Date(s);
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
         return sdf.format(date);
     }
     public static String getDateTimeString(Time s, String format) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
         return sdf.format(s);
     }
     public static String getDateTimeString(Date s, String format) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
         return sdf.format(s);
     }
+
+
+
+
 
     public static String getPicturePath(String name) {
         String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + name;

@@ -10,7 +10,10 @@ import android.widget.TextView;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.model.Order;
+import com.capstone.sportssocialnetwork.utils.Utilities;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,7 +57,21 @@ public class ManageOrderAdapter extends ArrayAdapter<Order> {
 
         Order order = getItem(position);
 
+        viewHolder.txtFullName.setText(order.getFullName());
 
+        try {
+            Date date  = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
+            String useDate = Utilities.getDateTimeString(date,"dd/MM/yyyy");
+            String startTime = Utilities.getDateTimeString(date,"hh:mm a");
+            date = Utilities.getDateTime(order.getEndTime(),"MM/dd/yyyy hh:mm:ss a");
+            String endTime = Utilities.getDateTimeString(date,"hh:mm a");
+            viewHolder.txtTime.setText(useDate +" : " +startTime +" - " +endTime);
+        } catch (ParseException e) {
+            viewHolder.txtTime.setText(order.getStartTime()+" - " + order.getEndTime());
+            e.printStackTrace();
+        }
+
+        viewHolder.txtStatus.setText("Trạng thái: " + order.getStatus());
 
         return convertView;
     }
@@ -62,10 +79,12 @@ public class ManageOrderAdapter extends ArrayAdapter<Order> {
     private final class ViewHolder{
         TextView txtFullName;
         TextView txtTime;
+        TextView txtStatus;
         Button btnDetail;
         ViewHolder(View v){
             txtFullName = (TextView) v.findViewById(R.id.txt_manage_order_fullname);
             txtTime = (TextView) v.findViewById(R.id.txt_manage_order_time);
+            txtStatus = (TextView) v.findViewById(R.id.txt_manage_order_status);
             btnDetail = (Button) v.findViewById(R.id.btn_manage_order_detail);
         }
     }
