@@ -45,7 +45,7 @@
                 <div class="form-group">
                     <label for="phone" class="col-md-4 control-label">Chọn sân:</label>
                     <div class="col-md-4 input-group">
-                        @Html.DropDownListFor(m => m.FieldId, fieldList, new { @class = "bs-select-hidden form-control input-sm droplist", @id = "field" })
+                        @Html.DropDownListFor(m => m.FieldId, fieldList, new { @class = "orderInfo bs-select-hidden form-control input-sm droplist", @id = "field" })
                     </div>
                 </div>
                 <div class="form-group">
@@ -63,20 +63,20 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label">Ngày chơi:</label>
                     <div class="col-md-4 input-group">
-                        @Html.TextBoxFor(p => p.CreateDate, "{0:dd-MM-yyyy}", new { @class = "form-control", @id = "playDate", @data_plugin = "datepicker", @Value = "" })
+                        @Html.TextBoxFor(p => p.CreateDate, "{0:dd-MM-yyyy}", new { @class = "orderInfo form-control", @id = "playDate", @data_plugin = "datepicker", @Value = "" })
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-4 control-label">Giờ bắt đầu</label>
                     <div class="input-group col-md-4">
-                        @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker timeInfo form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
+                        @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker orderInfo form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
                     </div>
 
                 </div>
                 <div class="form-group">
                     <label class="col-md-4 control-label">Giờ kết thúc</label>
                     <div class="input-group col-md-4">
-                        @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker timeInfo form-control", @id = "endTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
+                        @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker orderInfo form-control", @id = "endTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
                     </div>
 
                 </div>
@@ -326,7 +326,7 @@
         });
 
 
-        $(".timeInfo").change(function () {
+        $(".orderInfo").change(function () {
             var startTime = $("#startTime").val();
             var endTime = $("#endTime").val();
             var fieldId = $("#field").val();
