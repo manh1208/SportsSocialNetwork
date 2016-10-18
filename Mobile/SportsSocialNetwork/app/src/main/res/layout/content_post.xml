@@ -13,7 +13,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/btn_answer_add_image"
+            android:layout_above="@+id/btn_new_post_camera"
             android:layout_alignParentTop="true"
             android:descendantFocusability="blocksDescendants"
             android:id="@+id/crollview_answer"
@@ -77,7 +77,7 @@
                     android:id="@+id/iv_new_post_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/txt_answer_content"
+                    android:layout_below="@+id/txt_new_post_content"
                     android:src="@drawable/placeholder"
                     android:scaleType="centerCrop"
                     android:layout_marginTop="15sp"

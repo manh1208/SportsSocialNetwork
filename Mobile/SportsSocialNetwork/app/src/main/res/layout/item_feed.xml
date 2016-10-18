@@ -19,7 +19,7 @@
             android:orientation="vertical"
             android:layout_marginLeft="20sp"
             android:layout_toRightOf="@+id/iv_feed_avatar"
-            android:layout_toLeftOf="@+id/iv_menu_down"
+            android:layout_toLeftOf="@+id/btn_feed_menu_down"
             android:paddingTop="5sp">
         <TextView
             android:id="@+id/txt_feed_name"

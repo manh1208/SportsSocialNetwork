@@ -26,6 +26,8 @@ public class Order {
     private String status;
     @SerializedName("PaidType")
     private String paidType;
+    @SerializedName("QRCodeUrl")
+    private String qRCodeUrl;
 
     public String getId() {
         return id;
@@ -105,5 +107,14 @@ public class Order {
 
     public void setPaidType(String paidType) {
         this.paidType = paidType;
+    }
+
+
+    public String getqRCodeUrl() {
+        return qRCodeUrl;
+    }
+
+    public void setqRCodeUrl(String qRCodeUrl) {
+        this.qRCodeUrl = qRCodeUrl;
     }
 }

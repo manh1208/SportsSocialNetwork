@@ -1,18 +1,22 @@
 package com.capstone.sportssocialnetwork.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.model.Order;
+import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.capstone.sportssocialnetwork.utils.Utilities;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -81,6 +85,16 @@ public class MyOrderAdapter extends ArrayAdapter<Order> {
 
                 AlertDialog.Builder buider=  new AlertDialog.Builder(mContext);
                 View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_my_order_detail,null,false);
+
+
+                ImageView ivQR = (ImageView) view.findViewById(R.id.iv_qr_code);
+
+                Picasso.with(mContext).load(Uri.parse(DataUtils.URL+order.getqRCodeUrl()))
+                        .placeholder(R.drawable.image_logo)
+                        .error(R.drawable.image_logo)
+                        .into(ivQR);
+
+
                 TextView useDate = (TextView) view.findViewById(R.id.txt_order_detail_use_date);
                 try {
                     Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
