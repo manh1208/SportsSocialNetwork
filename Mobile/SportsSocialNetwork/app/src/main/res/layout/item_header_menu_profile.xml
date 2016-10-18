@@ -69,7 +69,7 @@
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_football"
+            android:src="@drawable/ic_history"
 
             />
 
