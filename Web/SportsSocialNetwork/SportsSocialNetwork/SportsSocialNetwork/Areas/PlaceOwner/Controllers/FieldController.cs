@@ -112,8 +112,11 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 var _fieldImageService = this.Service<IFieldImageService>();
                 _fieldImageService.saveImage(field.Id, uploadImages);
             }
-
-            _timeBlockService.saveTimeBLock(field.Id, timeSlot);
+            if(timeSlot != null && timeSlot.Count > 0)
+            {
+                _timeBlockService.saveTimeBLock(field.Id, timeSlot);
+            }
+           
 
             return RedirectToAction("FieldList", new RouteValueDictionary(
                 new { controller = "Field", action = "FieldList", id = field.PlaceId }));
@@ -133,7 +136,11 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 _fieldImageService.saveImage(field.Id, uploadImages);
             }
 
-            _timeBlockService.saveTimeBLock(field.Id, timeSlot);
+            if (timeSlot != null && timeSlot.Count > 0)
+            {
+                _timeBlockService.saveTimeBLock(field.Id, timeSlot);
+            }
+            //_timeBlockService.saveTimeBLock(field.Id, timeSlot);
 
             return RedirectToAction("FieldDetail", new RouteValueDictionary(
                 new { controller = "Field", action = "FieldDetail", id = field.Id }));

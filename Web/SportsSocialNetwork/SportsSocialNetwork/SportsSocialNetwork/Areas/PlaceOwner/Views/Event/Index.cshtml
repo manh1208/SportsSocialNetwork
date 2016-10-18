@@ -461,6 +461,10 @@
                         "aTargets": [2],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
+                            if (o[5] === '' || o[5] == "" || o[5] == null)
+                            {
+                                return "<img src='~/Content/images/no_image.jpg' width='100' />";
+                            }
                             return "<img src='" + o[5] + "' width='100' />";
                         }
                     },
