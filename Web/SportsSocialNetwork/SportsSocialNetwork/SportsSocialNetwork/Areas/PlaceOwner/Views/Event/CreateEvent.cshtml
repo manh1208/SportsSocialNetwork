@@ -14,7 +14,7 @@
 <div class="panel">
     <div class="panel-body">
         <div class="col-md-6 col-md-offset-3">
-            @using (Html.BeginForm("createEvent", "Event", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "eventForm", @autocomplete = "off" }))
+            @using (Html.BeginForm("createEvent", "Event", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "eventForm", @autocomplete = "off", onsubmit = "return checkCK()" }))
             {
                 <input type="hidden" value="@User.Identity.GetUserId()" name="CreatorId"/>
                 
@@ -44,6 +44,7 @@
                     @Html.TextAreaFor(e => e.Description, new { rows = "3", @class = "form-control input-lg", @id = "Description" })
                     
                 </div>
+                <p id="nullCK" class="text-danger"></p>
                 <div class="form-group">
                     <div class="col-md-offset-5 col-md-7">
                         @Html.ActionLink("Hủy bỏ", "Index", "Event", null, new { @class = "btn btn-default" })
@@ -66,6 +67,23 @@
             });
         })(document, window, jQuery);
 
+        //$(document).ready(function () {
+        //    $('#Description').ckeditor(ckeditor_config);
+
+        //    CKEDITOR.instances.Description.on('blur', checkCK());
+        //});
+
+        CKEDITOR.replace('Description', {
+            on: {
+                change: function () {
+                   // var content = $('#Description').val(CKEDITOR.instances.PageContent.editable().getText());
+                    checkCK();
+                    $('#eventForm').formValidation('revalidateField', 'EndDate');
+                }
+            }
+        });
+
+
         $(document).on('change', "#startDate", function () {
             $('#eventForm').formValidation('revalidateField', 'StartDate');
         });
@@ -80,18 +98,42 @@
             format: "dd/mm/yyyy"
         });
 
-        CKEDITOR.replace('Description');
+        //CKEDITOR.replace('Description');
         // It is equivalent to use
         //$('#eventForm').formValidation('revalidateField', 'StartDate');
 
         //Validation
+        function checkCK() {
+            var isValid = false;
+            var content = $("#cke_Description iframe").contents().find("body").text();
+            if (content != null && content != "") {
+                isValid = true;
+            } else {
+                isValid = false;
+            }
+            if (isValid) {
+                $("#nullCK").empty();
+                return true;
+            } else {
+                var ct = "Mô tả không được trống";
+                $("#nullCK").empty();
+                $("#nullCK").text(ct);
+                return false;
+            }
+        };
+
+        $(document).on('change', "#cke_Description iframe body", function () {
+            checkCK();
+            $('#eventForm').formValidation('revalidateField', 'EndDate');
+        });
+
         (function () {
             $('#eventForm').formValidation({
                 framework: "bootstrap",
-                button: {
-                    selector: '#submitBtn',
-                    disabled: 'disabled'
-                },
+                //button: {
+                //    selector: '#submitBtn',
+                //    disabled: 'disabled'
+                //},
                 icon: null,
                 fields: {
                     Name: {
@@ -130,6 +172,18 @@
                                 format: 'DD/MM/YYYY',
                                 message: 'Ngày không phù hợp',
                                 min: 'StartDate'
+                            }
+                        }
+                    },
+                    image: {
+                        validators: {
+                            notEmpty: {
+                                message: "Hãy chọn một hình ảnh cho sự kiện"
+                            },
+                            file: {
+                                extension: 'jpeg,jpg,png',
+                                type: 'image/jpeg,image/png',
+                                message: "Hình không đúng định dạng"
                             }
                         }
                     },

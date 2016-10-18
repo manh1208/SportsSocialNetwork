@@ -98,7 +98,7 @@
                                         <label class="control-label">Đến</label>
                                     </div>
                                     <div class="col-sm-8">
-                                        @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                                        @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "endTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
                                     </div>
                                 </div>
                             </div>
@@ -758,12 +758,22 @@
     });
 
     $("#startTime").on("change", function () {
-        $('#placeForm').formValidation('revalidateField', 'StartTime');
+        $('#placeForm').formValidation('revalidateField', 'StartTime')
+        //$('#placeForm').formValidation('revalidateField', 'EndTime')
     });
 
     $("#endTime").on("change", function () {
-        $('#placeForm').formValidation('revalidateField', 'EndTime');
+        $('#placeForm').formValidation('revalidateField', 'EndTime')
+        //$('#placeForm').formValidation('revalidateField', 'StartTime')
     });
+    
+    $(document).on('change', "#startTime", function () {
+        $('#placeForm').formValidation('revalidateField', 'StartTime')
+    })
+
+    $(document).on('change', "#endTime", function () {
+        $('#placeForm').formValidation('revalidateField', 'EndTime')
+    })
 
 </script>
 

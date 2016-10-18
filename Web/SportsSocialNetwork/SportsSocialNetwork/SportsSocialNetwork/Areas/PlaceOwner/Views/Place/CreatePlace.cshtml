@@ -441,6 +441,18 @@
                         }
                     }
                 },
+                uploadImages: {
+                    validators: {
+                        notEmpty: {
+                            message: "Hãy chọn ít nhất một hình"
+                        },
+                        file: {
+                            extension: 'jpeg,jpg,png',
+                            type: 'image/jpeg,image/png',
+                            message: "Hình không đúng định dạng"
+                        }
+                    }
+                },
                 type_date: {
                     validators: {
                         date: {
