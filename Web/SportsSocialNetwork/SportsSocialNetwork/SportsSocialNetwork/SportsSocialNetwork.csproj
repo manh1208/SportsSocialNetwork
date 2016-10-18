@@ -801,6 +801,7 @@
     </Compile>
     <Compile Include="Models\ViewModels\GroupCreateModel.cs" />
     <Compile Include="Models\ViewModels\GroupDetailViewModel.cs" />
+    <Compile Include="Models\ViewModels\GroupMemberDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\GroupMemberViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>

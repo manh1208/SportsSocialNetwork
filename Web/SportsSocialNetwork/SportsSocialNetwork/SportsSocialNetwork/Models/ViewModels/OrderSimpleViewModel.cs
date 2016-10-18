@@ -17,6 +17,6 @@ namespace SportsSocialNetwork.Models.ViewModels
         public String PlaceName { get; set; }
         public String Status { get; set; }
         public String PaidType { get; set; }
-
+        public String QRCodeUrl { get; set; }
     }
 }

@@ -63,18 +63,22 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         public ActionResult ShowMemberList(int groupId) {
             var service = this.Service<IGroupMemberService>();
 
-            ResponseModel<List<GroupMemberViewModel>> response = null;
+            ResponseModel<List<GroupMemberDetailViewModel>> response = null;
 
             try {
                 List<GroupMember> memberList = service.GetMemberList(groupId).ToList();
 
-                List<GroupMemberViewModel> result = Mapper.Map<List<GroupMemberViewModel>>(memberList);
+                List<GroupMemberDetailViewModel> result = new List<GroupMemberDetailViewModel>();
 
-                response = new ResponseModel<List<GroupMemberViewModel>>(true, "Danh sách thành viên:", null, result);
+                foreach (var member in memberList) {
+                    result.Add(PrepareGroupMember(member));
+                }
+
+                response = new ResponseModel<List<GroupMemberDetailViewModel>>(true, "Danh sách thành viên:", null, result);
 
             } catch (Exception)
             {
-                response = ResponseModel<List<GroupMemberViewModel>>.CreateErrorResponse("Thất bại khi tải danh sách nhóm", systemError);
+                response = ResponseModel<List<GroupMemberDetailViewModel>>.CreateErrorResponse("Thất bại khi tải danh sách nhóm", systemError);
             }
             return Json(response);
         }
@@ -83,24 +87,24 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         public ActionResult KickMember(int id) {
             var service = this.Service<IGroupMemberService>();
 
-            ResponseModel<GroupMemberViewModel> response = null;
+            ResponseModel<GroupMemberDetailViewModel> response = null;
 
             try {
                 GroupMember member = service.KickMember(id);
 
                 if (member.Active == false)
                 {
-                    GroupMemberViewModel result = Mapper.Map<GroupMemberViewModel>(member);
+                    GroupMemberDetailViewModel result = PrepareGroupMember(member);
 
-                    response = new ResponseModel<GroupMemberViewModel>(true, "Đã đuổi thành viên", null, result);
+                    response = new ResponseModel<GroupMemberDetailViewModel>(true, "Đã đuổi thành viên", null, result);
                 }
                 else {
-                    response = ResponseModel<GroupMemberViewModel>.CreateErrorResponse("Đuổi thành viên thất bại", systemError);
+                    response = ResponseModel<GroupMemberDetailViewModel>.CreateErrorResponse("Đuổi thành viên thất bại", systemError);
                 }
             }
             catch (Exception)
             {
-                response = ResponseModel<GroupMemberViewModel>.CreateErrorResponse("Đuổi thành viên thất bại", systemError);
+                response = ResponseModel<GroupMemberDetailViewModel>.CreateErrorResponse("Đuổi thành viên thất bại", systemError);
             }
             return Json(response);
         }
@@ -133,19 +137,30 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         public ActionResult SetGroupAdmin(int id, String userId) {
             var service = this.Service<IGroupMemberService>();
 
-            ResponseModel<GroupMemberViewModel> response = null;
+            ResponseModel<GroupMemberDetailViewModel> response = null;
 
             try {
                 GroupMember admin = service.SetGroupAdmin(id, userId);
 
-                GroupMemberViewModel result = Mapper.Map<GroupMemberViewModel>(admin);
+                GroupMemberDetailViewModel result = PrepareGroupMember(admin);
 
-                response = new ResponseModel<GroupMemberViewModel>(true, "Đã thêm admin", null, result);
+                response = new ResponseModel<GroupMemberDetailViewModel>(true, "Đã thêm admin", null, result);
             } catch (Exception) {
-                response = ResponseModel<GroupMemberViewModel>.CreateErrorResponse("Thêm admin thất bại", systemError);
+                response = ResponseModel<GroupMemberDetailViewModel>.CreateErrorResponse("Thêm admin thất bại", systemError);
             }
 
             return Json(response);
         }
+
+        private GroupMemberDetailViewModel PrepareGroupMember(GroupMember member) {
+            var service = this.Service<IAspNetUserService>();
+
+            GroupMemberDetailViewModel result = Mapper.Map<GroupMemberDetailViewModel>(member);
+
+            result.AspNetUser = Mapper.Map<AspNetUserSimpleModel> (service.FindUser(member.UserId));
+
+            return result;
+        }
     }
+
 }
