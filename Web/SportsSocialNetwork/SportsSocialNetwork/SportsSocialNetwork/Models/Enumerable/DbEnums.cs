@@ -101,13 +101,13 @@ namespace SportsSocialNetwork.Models.Enumerable
 
     public enum OrderPaidType
     {
-        [Description("Chọn thanh toán online")]
+        [Description("Online-Chưa thanh toán")]
         ChosePayOnline = 1,
-        [Description("Chọn thanh toán bằng tiền mặt")]
+        [Description("Tiền mặt-Chưa thanh toán")]
         ChosePayByCash = 2,
-        [Description("Đã thanh toán bằng tiền mặt")]
+        [Description("Tiền mặt-Đã thanh toán")]
         PaidByCash = 3,
-        [Description("Đã thanh toán online")]
+        [Description("Online-Đã thanh toán")]
         PaidOnline = 4
     }
 

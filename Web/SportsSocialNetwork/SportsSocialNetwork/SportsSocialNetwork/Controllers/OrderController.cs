@@ -354,6 +354,7 @@ namespace SportsSocialNetwork.Controllers
             url = nl.buildCheckoutUrl(return_url, cancel_url, receiver, transaction_info, order_code, price);
 
             var _orderService = this.Service<IOrderService>();
+            var _timeBlockService = this.Service<ITimeBlockService>();
             var order = new Order();
             DateTime PlayDate = DateTime.ParseExact(Request["CreateDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
             order.UserId = User.Identity.GetUserId();
@@ -366,7 +367,7 @@ namespace SportsSocialNetwork.Controllers
             order.EndTime = eTime;
             order.CreateDate = DateTime.Now;
             //order.Token = result.Token;
-            order.Price = model.Price;
+            order.Price = _timeBlockService.calPrice(model.FieldId, sTime.TimeOfDay, eTime.TimeOfDay);
             //order.OnlinePaymentMethod = info.Payment_method;
             //order.BankCode = info.bank_code;
             order.Note = model.Note;

@@ -1,5 +1,6 @@
 ﻿@model SportsSocialNetwork.Models.ViewModels.OrderViewModel
-@using SportsSocialNetwork.Models.Enumerable;
+@using SportsSocialNetwork.Models.Enumerable
+@using SportsSocialNetwork.Models.Utilities
 @{
     ViewBag.Title = "Chi tiết đơn đặt sân";
 }
@@ -58,40 +59,48 @@
                 <div class="text-right col-md-5 padding-0">
                     <div class="form-group col-md-12 padding-0">
                         <p style="font-weight:bold">Phương thức thanh toán:</p>
-                        @if (Model.PaidType == 1)
+                        @if (Model.PaidType == (int)OrderPaidType.ChosePayOnline)
                         {
-                            <span class='label label-lg label-outline label-dark'>Online-Chưa thanh toán</span>
+                            <span class='label label-lg label-outline label-dark'>@Utils.GetEnumDescription(OrderPaidType.ChosePayOnline).ToString()</span>
                         }
-                        @if (Model.PaidType == 2)
+                        else if (Model.PaidType == (int)OrderPaidType.ChosePayByCash)
                         {
-                            <span class='label label-lg label-outline label-dark'>Tiền mặt-Chưa thanh toán</span>
+                            <span class='label label-lg label-outline label-dark'>@Utils.GetEnumDescription(OrderPaidType.ChosePayByCash).ToString()</span>
                         }
-                        @if (Model.PaidType == 3)
+                        else if (Model.PaidType == (int)OrderPaidType.PaidByCash)
                         {
-                            <span class='label label-lg label-outline label-success'>Tiền mặt-Đã thanh toán</span>
+                            <span class='label label-lg label-outline label-success'>@Utils.GetEnumDescription(OrderPaidType.PaidByCash).ToString()</span>
                         }
-                        @if (Model.PaidType == 4)
+                        else if (Model.PaidType == (int)OrderPaidType.PaidOnline)
                         {
-                            <span class='label label-lg label-outline label-primary'>Online-Đã thanh toán</span>
+                            <span class='label label-lg label-outline label-primary'>@Utils.GetEnumDescription(OrderPaidType.PaidOnline).ToString()</span>
+                        }
+                        else
+                        {
+                            <span class='label label-lg label-outline label-dark'>Không xác định</span>
                         }
                     </div>
                     <div class="form-group col-md-12 padding-0">
                         <p style="font-weight:bold">Trạng thái đơn đặt:</p>
-                        @if (Model.Status == 1)
+                        @if (Model.Status == (int)OrderStatus.Pending)
                         {
-                            <span class='label label-lg label-outline label-warning'>Đang chờ duyệt</span>
+                            <span class='label label-lg label-outline label-warning'>@Utils.GetEnumDescription(OrderStatus.Pending).ToString()</span>
                         }
-                        @if (Model.Status == 2)
+                        else if (Model.Status == (int)OrderStatus.Approved)
                         {
-                            <span class='label label-lg label-outline label-success'>Đã được chấp nhận</span>
+                            <span class='label label-lg label-outline label-success'>@Utils.GetEnumDescription(OrderStatus.Approved).ToString()</span>
                         }
-                        @if (Model.Status == 3)
+                        else if (Model.Status == (int)OrderStatus.Unapproved)
                         {
-                            <span class='label label-lg label-outline label-danger'>Không được chấp nhận</span>
+                            <span class='label label-lg label-outline label-danger'>@Utils.GetEnumDescription(OrderStatus.Unapproved).ToString()</span>
                         }
-                        @if (Model.Status == 4)
+                        else if (Model.Status == (int)OrderStatus.Cancel)
                         {
-                            <span class='label label-lg label-outline label-dark'>Đã hủy</span>
+                            <span class='label label-lg label-outline label-dark'>@Utils.GetEnumDescription(OrderStatus.Cancel).ToString()</span>
+                        }
+                        else
+                        {
+                            <span class='label label-lg label-outline label-dark'>Không xác định</span>;
                         }
                     </div>
                 </div>

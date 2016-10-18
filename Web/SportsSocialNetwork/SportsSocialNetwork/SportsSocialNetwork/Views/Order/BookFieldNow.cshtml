@@ -306,6 +306,10 @@
             $('#onlineform').formValidation('revalidateField', 'CreateDate');
         });
 
+        $("#field").on("change", function () {
+            $('#onlineform').formValidation('revalidateField', 'CreateDate');
+        });
+
         (function (document, window, $) {
             'use strict';
             var Site = window.Site;
