@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SportsSocialNetwork.Models.Enumerable;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,9 +16,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         IEnumerable<Order> GetAllOrderByFieldId(int fieldId);
 
         Order ChangeOrderStatus(int id, int status);
-        bool checkOrderTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime playDate);
 
-        bool checkMaintainTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate);
+        bool checkTimeValidInOrder(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate);
 
         Order CreateOrder(String userId, int fieldId, DateTime startTime, DateTime endTime, String note, double price, int? paidType);
         Order CheckInOrder(String orderCode);
@@ -35,9 +35,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return this.GetActive(x => x.UserId.Equals(ownerId));
         }
 
-        public bool checkMaintainTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate)
+        public bool checkTimeValidInOrder(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate)
         {
-            IEnumerable<Order> orders = this.GetActive(p => p.FieldId == fieldId).OrderBy(p => p.StartTime).ToList();
+            IEnumerable<Order> orders = this.GetActive(p => p.FieldId == fieldId &&
+            p.Status != (int)OrderStatus.Cancel && p.Status != (int)OrderStatus.Unapproved).OrderBy(p => p.StartTime).ToList();
             bool isValid = true;
             DateTime sTime = new DateTime(startDate.Year, startDate.Month, startDate.Day, startTime.Hours,
                 startTime.Minutes, startTime.Seconds);
@@ -45,8 +46,12 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 endTime.Minutes, endTime.Seconds);
             foreach (var order in orders)
             {
-                if((order.StartTime >= sTime && order.EndTime <= eTime) || (order.StartTime < sTime && 
-                    order.EndTime > sTime) || (order.EndTime > eTime && order.StartTime < eTime))
+                if ((order.StartTime > sTime && order.StartTime >= eTime) || (order.EndTime <= sTime &&
+                    order.EndTime < sTime))
+                {
+                    isValid = true;
+                }
+                else
                 {
                     isValid = false;
                     break;
@@ -60,7 +65,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
             {
                 return false;
             }
-                
+
         }
 
         public Order GetOrderById(int id)
@@ -99,44 +104,45 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         }
 
-        public bool checkOrderTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime useDate)
-        {
-            IEnumerable<Order> orders = this.GetActive(p => p.FieldId == fieldId).OrderBy(p => p.StartTime).ToList();
-            bool isValid = true;
-            foreach (var order in orders)
-            {
-                if (DateTime.Compare(useDate, order.StartTime.Date) == 0)
-                if ((startTime >= order.StartTime.TimeOfDay && startTime < order.EndTime.TimeOfDay) ||
-                    (endTime > order.StartTime.TimeOfDay && endTime <= order.EndTime.TimeOfDay) ||
-                    (startTime <= order.StartTime.TimeOfDay && endTime >= order.EndTime.TimeOfDay))
-                {
-                    if ((startTime >= order.StartTime.TimeOfDay && startTime < order.EndTime.TimeOfDay) ||
-                                        (endTime > order.StartTime.TimeOfDay && endTime <= order.EndTime.TimeOfDay) ||
-                                        (startTime <= order.StartTime.TimeOfDay && endTime >= order.EndTime.TimeOfDay))
-                    {
-                        isValid = false;
-                        break;
-                    }
-                }
-                
-            }
-            if (isValid)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        //public bool checkOrderTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime useDate)
+        //{
+        //    IEnumerable<Order> orders = this.GetActive(p => p.FieldId == fieldId).OrderBy(p => p.StartTime).ToList();
+        //    bool isValid = true;
+        //    foreach (var order in orders)
+        //    {
+        //        if (DateTime.Compare(useDate, order.StartTime.Date) == 0)
+        //        if ((startTime >= order.StartTime.TimeOfDay && startTime < order.EndTime.TimeOfDay) ||
+        //            (endTime > order.StartTime.TimeOfDay && endTime <= order.EndTime.TimeOfDay) ||
+        //            (startTime <= order.StartTime.TimeOfDay && endTime >= order.EndTime.TimeOfDay))
+        //        {
+        //            if ((startTime >= order.StartTime.TimeOfDay && startTime < order.EndTime.TimeOfDay) ||
+        //                                (endTime > order.StartTime.TimeOfDay && endTime <= order.EndTime.TimeOfDay) ||
+        //                                (startTime <= order.StartTime.TimeOfDay && endTime >= order.EndTime.TimeOfDay))
+        //            {
+        //                isValid = false;
+        //                break;
+        //            }
+        //        }
 
-        }
+        //    }
+        //    if (isValid)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+
+        //}
         public IEnumerable<Order> GetAllOrderByFieldId(int fieldId)
         {
             return this.GetActive(x => x.FieldId == fieldId);
         }
 
-        public Order CheckInOrder(String orderCode) {
-            Order order= this.FirstOrDefaultActive(x => x.OrderCode == orderCode);
+        public Order CheckInOrder(String orderCode)
+        {
+            Order order = this.FirstOrDefaultActive(x => x.OrderCode == orderCode);
             order.Status = 5;
             this.Update(order);
             this.Save();

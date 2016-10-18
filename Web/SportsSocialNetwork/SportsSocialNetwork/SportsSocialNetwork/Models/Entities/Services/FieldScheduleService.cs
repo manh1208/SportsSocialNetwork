@@ -9,9 +9,9 @@ namespace SportsSocialNetwork.Models.Entities.Services
     public partial interface IFieldScheduleService
     {
         #region Code from here
-        bool checkScheduleTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime playDate);
+        //bool checkScheduleTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime playDate);
 
-        bool checkMaintainTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate);
+        bool checkTimeValidInFieldSchedule(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate);
         IQueryable<FieldSchedule> GetFieldSchedule(JQueryDataTableParamModel request, out int totalRecord);
         #endregion
 
@@ -21,7 +21,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
     {
         #region Code from here
 
-        public bool checkMaintainTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate)
+        public bool checkTimeValidInFieldSchedule(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate)
         {
             IEnumerable<FieldSchedule> schedules = this.GetActive(p => p.FieldId == fieldId).OrderBy(p => p.StartTime).ToList();
             bool isValid = true;
@@ -31,8 +31,11 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 endTime.Minutes, endTime.Seconds);
             foreach (var schedule in schedules)
             {
-                if ((schedule.StartTime >= sTime && schedule.EndTime <= eTime) || (schedule.StartTime < sTime &&
-                    schedule.EndTime > sTime) || (schedule.EndTime > eTime && schedule.StartTime < eTime))
+                if ((schedule.StartTime > sTime && schedule.StartTime >= eTime) || (schedule.EndTime <= sTime &&
+                    schedule.EndTime < eTime))
+                {
+                    isValid = true;
+                }else
                 {
                     isValid = false;
                     break;
@@ -47,33 +50,33 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 return false;
             }
         }
-        public bool checkScheduleTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime useDate)
-        {
-            IEnumerable<FieldSchedule> schedules = this.GetActive(p => p.FieldId == fieldId).OrderBy(p => p.StartTime).ToList();
-            bool isValid = true;
-            foreach (var schedule in schedules)
-            {
-                if (DateTime.Compare(useDate, schedule.StartTime.Date) == 0)
-                {
-                    if ((startTime >= schedule.StartTime.TimeOfDay && startTime < schedule.EndTime.TimeOfDay) ||
-                                        (endTime > schedule.StartTime.TimeOfDay && endTime <= schedule.EndTime.TimeOfDay) ||
-                                        (startTime <= schedule.StartTime.TimeOfDay && endTime >= schedule.EndTime.TimeOfDay))
-                    {
-                        isValid = false;
-                        break;
-                    }
-                }
+        //public bool checkScheduleTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime useDate)
+        //{
+        //    IEnumerable<FieldSchedule> schedules = this.GetActive(p => p.FieldId == fieldId).OrderBy(p => p.StartTime).ToList();
+        //    bool isValid = true;
+        //    foreach (var schedule in schedules)
+        //    {
+        //        if (DateTime.Compare(useDate, schedule.StartTime.Date) == 0)
+        //        {
+        //            if ((startTime >= schedule.StartTime.TimeOfDay && startTime < schedule.EndTime.TimeOfDay) ||
+        //                                (endTime > schedule.StartTime.TimeOfDay && endTime <= schedule.EndTime.TimeOfDay) ||
+        //                                (startTime <= schedule.StartTime.TimeOfDay && endTime >= schedule.EndTime.TimeOfDay))
+        //            {
+        //                isValid = false;
+        //                break;
+        //            }
+        //        }
 
-            }
-            if (isValid)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        //    }
+        //    if (isValid)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
 
         public IQueryable<FieldSchedule> GetFieldSchedule(JQueryDataTableParamModel request, out int totalRecord)
         {

@@ -157,8 +157,8 @@ namespace SportsSocialNetwork.Controllers
             var _orderService = this.Service<IOrderService>();
             var _fieldScheduleService = this.Service<IFieldScheduleService>();
 
-            bool rs1 = _orderService.checkOrderTimeValid(fieldId, startTime, endTime, PlayDate);
-            bool rs2 = _fieldScheduleService.checkScheduleTimeValid(fieldId, startTime, endTime, PlayDate);
+            bool rs1 = _orderService.checkTimeValidInOrder(fieldId, startTime, endTime, PlayDate, PlayDate);
+            bool rs2 = _fieldScheduleService.checkTimeValidInFieldSchedule(fieldId, startTime, endTime, PlayDate, PlayDate);
             if (!rs1 || !rs2)
             {
                 return RedirectToAction("PageNotFound", "Errors");
@@ -254,8 +254,8 @@ namespace SportsSocialNetwork.Controllers
 
             try
             {
-                bool rs1 = _orderService.checkOrderTimeValid(fieldId, StartTime, EndTime, PlayDate);
-                bool rs2 = _fieldScheduleService.checkScheduleTimeValid(fieldId, StartTime, EndTime, PlayDate);
+                bool rs1 = _orderService.checkTimeValidInOrder(fieldId, StartTime, EndTime, PlayDate, PlayDate);
+                bool rs2 = _fieldScheduleService.checkTimeValidInFieldSchedule(fieldId, StartTime, EndTime, PlayDate, PlayDate);
                 if (rs1 && rs2)
                 {
                     result.Succeed = true;
@@ -407,7 +407,7 @@ namespace SportsSocialNetwork.Controllers
                 return RedirectToAction("PageNotFound", "Errors");
             }
             var noti = new Notification();
-            noti.UserId = User.Identity.GetUserId();
+            noti.UserId = field.Place.UserId;
             noti.Message = User.Identity.Name + " đã đặt sân tại " + field.Name;
             noti.Title = "Đơn hàng mới";
             noti.Type = (int)NotificationType.Order;
