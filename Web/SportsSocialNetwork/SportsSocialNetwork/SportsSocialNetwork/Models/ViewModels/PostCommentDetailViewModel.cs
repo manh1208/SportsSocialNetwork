@@ -15,6 +15,6 @@ namespace SportsSocialNetwork.Models
         public String CreateDate { get; set; }
         public string Image { get; set; }
         public bool Active { get; set; }
-        public AspNetUserOveralViewModel AspNetUser { get; set; }
+        public AspNetUserSimpleModel AspNetUser { get; set; }
     }
 }

@@ -78,7 +78,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 userList = FilterMember(userList);
 
-                List<AspNetUserOveralViewModel> result = Mapper.Map<List<AspNetUserOveralViewModel>>(userList);
+                List<AspNetUserOveralViewModel> result = new List<AspNetUserOveralViewModel>();
+
+                foreach (var user in userList) {
+                    result.Add(PrepareAspNetUserOveralViewModel(user));
+                }
 
                 response = new ResponseModel<List<AspNetUserOveralViewModel>>(true, "Kết quả tìm kiếm:", null, result);
             }
@@ -103,7 +107,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 if (user != null)
                 {
-                    AspNetUserOveralViewModel result = Mapper.Map<AspNetUserOveralViewModel>(user);
+                    AspNetUserOveralViewModel result = PrepareAspNetUserOveralViewModel(user);
 
                     Follow follow = user.Follows.FirstOrDefault(x => x.UserId == userId && x.FollowerId == currentUserId && x.Active == true);
 
@@ -158,7 +162,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                     {
                         user = service.UpdateUser(userInfo);
 
-                        AspNetUserOveralViewModel result = Mapper.Map<AspNetUserOveralViewModel>(user);
+                        AspNetUserOveralViewModel result = PrepareAspNetUserOveralViewModel(user);
 
                         response = new ResponseModel<AspNetUserOveralViewModel>(true, "Thông tin của bạn đã được cập nhật!", null, result);
                     }
@@ -439,6 +443,14 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             }
 
             return userList;
+        }
+
+        private AspNetUserOveralViewModel PrepareAspNetUserOveralViewModel(AspNetUser user) {
+            AspNetUserOveralViewModel result = Mapper.Map<AspNetUserOveralViewModel>(user);
+
+            result.Gender = Utils.GetEnumDescription((Gender)user.Gender);
+
+            return result;
         }
     }
 }
