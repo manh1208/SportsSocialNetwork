@@ -2,6 +2,7 @@
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Identity;
 using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using SportsSocialNetwork.Utilities;
@@ -14,6 +15,7 @@ using System.Web.Mvc;
 
 namespace SportsSocialNetwork.Controllers
 {
+    [MyAuthorize(Roles = IdentityMultipleRoles.SSN)]
     public class EventController : BaseController
     {
         // GET: Event

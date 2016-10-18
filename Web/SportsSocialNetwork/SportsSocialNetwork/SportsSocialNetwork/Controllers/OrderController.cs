@@ -354,6 +354,7 @@ namespace SportsSocialNetwork.Controllers
             url = nl.buildCheckoutUrl(return_url, cancel_url, receiver, transaction_info, order_code, price);
 
             var _orderService = this.Service<IOrderService>();
+            var _timeBlockService = this.Service<ITimeBlockService>();
             var order = new Order();
             DateTime PlayDate = DateTime.ParseExact(Request["CreateDate"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
             order.UserId = User.Identity.GetUserId();
@@ -366,7 +367,7 @@ namespace SportsSocialNetwork.Controllers
             order.EndTime = eTime;
             order.CreateDate = DateTime.Now;
             //order.Token = result.Token;
-            order.Price = model.Price;
+            order.Price = _timeBlockService.calPrice(model.FieldId, sTime.TimeOfDay, eTime.TimeOfDay);
             //order.OnlinePaymentMethod = info.Payment_method;
             //order.BankCode = info.bank_code;
             order.Note = model.Note;
@@ -446,6 +447,23 @@ namespace SportsSocialNetwork.Controllers
                 {
                     order.PaidType = (int)OrderPaidType.PaidOnline;
                     _orderService.Update(order);
+                    var _userService = this.Service<IAspNetUserService>();
+                    var userId = User.Identity.GetUserId();
+                    var user = _userService.FirstOrDefaultActive(p => p.Id == userId);
+                    if (user == null)
+                    {
+                        return RedirectToAction("PageNotFound", "Errors");
+                    }
+                    string subject = "[SSN] - Thông tin thanh toán";
+                    string body = "Hi <strong>" + User.Identity.Name + "</strong>" +
+                        ",<br/><br/>Bạn đã thanh toán đơn đặt sân: "+ order.OrderCode +" thành công"+
+                        "<br/><strong>Thông tin hóa đơn:</strong><ul> " +
+                        "<li> Tên sân: "+order.Field.Name + "</li>"+
+                        "<li> Thời gian: " + order.StartTime.ToString("HH:mm") + " - " +
+                        order.EndTime.ToString("HH:mm") + ", ngày " + order.StartTime.ToString("dd/MM/yyyy") +"</li>"+
+                        "<li> Giá tiền : " + order.Price + " đồng</li></ul>" +
+                        "<br/> Cảm ơn bạn đã sử dụng dịch vụ của SSN. Chúc bạn có những giờ phút thoải mái chơi thể thao!";
+                    EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { user.Email }, null, null, subject, body, true);
                     var url = Url.Action("PaymentSuccessful", "Order",
                        new { area = "", orderCode = order_code }, Request.Url.Scheme);
                     return Redirect(url);
