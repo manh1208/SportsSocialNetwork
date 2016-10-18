@@ -48,7 +48,7 @@ public class ManageOrderAdapter extends ArrayAdapter<Order> {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView==null){
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_manage_order,parent,false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_order_manage,parent,false);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         }else{

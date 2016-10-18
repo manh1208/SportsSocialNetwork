@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <ListView
+        tools:listitem="@layout/item_place_manage"
+        android:id="@+id/lv_manage_place"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/separator"
+        android:dividerHeight="10sp"/>
 </LinearLayout>

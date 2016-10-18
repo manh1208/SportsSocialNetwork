@@ -1,6 +1,5 @@
 package com.capstone.sportssocialnetwork.fragment;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.adapter.ManageOrderAdapter;
-import com.capstone.sportssocialnetwork.model.CheckIn;
 import com.capstone.sportssocialnetwork.model.Order;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
@@ -74,14 +72,14 @@ public class ManageOrderFragment extends Fragment {
         userId = DataUtils.getINSTANCE(getActivity()).getPreferences().getString(SharePreferentName.SHARE_USER_ID, "");
         viewHolder = new ViewHolder(v);
         service = new RestService();
-        adapter = new ManageOrderAdapter(getActivity(), R.layout.item_manage_order, new ArrayList<Order>());
+        adapter = new ManageOrderAdapter(getActivity(), R.layout.item_order_manage, new ArrayList<Order>());
         isLoading = false;
         viewHolder.lvOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Order order = adapter.getItem(position);
                 AlertDialog.Builder buider = new AlertDialog.Builder(getActivity());
-                View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_order_info, null, false);
+                View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_manage_order_detail, null, false);
                 TextView name = (TextView) v.findViewById(R.id.txt_order_detail_fullname);
                 name.setText(order.getFullName());
                 TextView createDate = (TextView) v.findViewById(R.id.txt_order_detail_create_time);
@@ -118,7 +116,7 @@ public class ManageOrderFragment extends Fragment {
                 TextView status = (TextView) v.findViewById(R.id.txt_order_detail_order_status);
                 status.setText(order.getStatus());
                 buider.setView(v)
-                        .setNegativeButton("OK",null)
+                        .setNegativeButton("Hủy",null)
                         .create()
                         .show();
             }

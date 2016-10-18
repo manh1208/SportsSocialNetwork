@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/iv_manage_place_image"
         android:layout_width="match_parent"
         android:layout_height="150sp"
         android:src="@drawable/placeholder"
@@ -24,6 +25,7 @@
             android:paddingBottom="20sp">
 
             <TextView
+                android:id="@+id/txt_manage_place_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Phú Thọ"
@@ -32,6 +34,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/txt_manage_place_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Phường 3 - Quận Tân Bình - TP.Hồ Chí Minh"

@@ -2,8 +2,6 @@ package com.capstone.sportssocialnetwork.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -59,7 +57,7 @@ public class MyOrderActivity extends AppCompatActivity {
 
     private void initView() {
         lvMyOrder= (ListView) findViewById(R.id.lv_my_order);
-        adapter = new MyOrderAdapter(this,R.layout.item_my_order,new ArrayList<Order>());
+        adapter = new MyOrderAdapter(this,R.layout.item_order_history,new ArrayList<Order>());
         lvMyOrder.setAdapter(adapter);
         service  = new RestService();
         userId = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");

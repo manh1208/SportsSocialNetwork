@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ListView
-            tools:listitem="@layout/item_manage_order"
+            tools:listitem="@layout/item_order_manage"
             android:id="@+id/lv_manage_order"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -50,7 +50,7 @@ public class MyOrderAdapter extends ArrayAdapter<Order> {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView ==null){
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_my_order,parent,false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_order_history,parent,false);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         }else{
