@@ -2,6 +2,7 @@
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -98,7 +99,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 GroupViewModel result = Mapper.Map<GroupViewModel>(group);
 
-                response = new ResponseModel<GroupViewModel>(true,"Nhóm đã được tạo",null,result);
+                response = new ResponseModel<GroupViewModel>(true,"Tạo nhóm thành công",null,result);
 
             } catch (Exception) {
                 response = ResponseModel<GroupViewModel>.CreateErrorResponse("Tạo nhóm thất bại!", systemError);
@@ -150,7 +151,6 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             return Json(response);
 
         }
-
 
     }
 }

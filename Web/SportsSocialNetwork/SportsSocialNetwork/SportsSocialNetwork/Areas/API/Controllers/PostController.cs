@@ -115,6 +115,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         {
             var service = this.Service<IPostService>();
 
+            var aspNetUserService = this.Service<IAspNetUserService>();
+
             PostOveralViewModel result = null;
 
             ResponseModel<PostOveralViewModel> response = null;
@@ -135,6 +137,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 post = service.CreatePost(post);
 
                 result = Mapper.Map<PostOveralViewModel>(post);
+
+                result.AspNetUser = Mapper.Map<AspNetUserSimpleModel>(aspNetUserService.FindUser(result.UserId));
 
                 PreparePostOveralData(result, post.UserId);
 

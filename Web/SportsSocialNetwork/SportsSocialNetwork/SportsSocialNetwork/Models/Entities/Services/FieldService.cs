@@ -20,7 +20,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         IEnumerable<Field> FindAllFieldsOfPlace(int id);
 
-        IEnumerable<Field> FindAllFieldsByFieldType(int placeId, int fieldTypeId);
+        IEnumerable<Field> FindAllFieldsByFieldType(int placeId, int? fieldTypeId);
 
         List<FieldType> GetFieldTypeByPlaceId(int placeId);
         void saveField(Field field);
@@ -127,8 +127,11 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return result;
         }
 
-        public IEnumerable<Field> FindAllFieldsByFieldType(int placeId, int fieldTypeId)
+        public IEnumerable<Field> FindAllFieldsByFieldType(int placeId, int? fieldTypeId)
         {
+            if (fieldTypeId == -1 || fieldTypeId==null) {
+                return this.GetActive(x => x.PlaceId == placeId);
+            }
             return this.GetActive(x=> x.PlaceId==placeId && x.FieldTypeId==fieldTypeId);
         }
 

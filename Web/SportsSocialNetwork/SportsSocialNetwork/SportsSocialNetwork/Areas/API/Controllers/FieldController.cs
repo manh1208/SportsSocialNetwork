@@ -46,13 +46,13 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                     }
                 }
 
-                response = new ResponseModel<List<FieldDetailViewModel>>(true, "Field list loaded successfully", null, result);
+                response = new ResponseModel<List<FieldDetailViewModel>>(true, "Danh sách sân:", null, result);
 
             }
             catch (Exception)
             {
 
-                response = ResponseModel<List<FieldDetailViewModel>>.CreateErrorResponse("Field list failed to load", systemError);
+                response = ResponseModel<List<FieldDetailViewModel>>.CreateErrorResponse("Thất bại khi tải danh sách sân!", systemError);
             }
 
             return Json(response);
@@ -70,14 +70,14 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 {
                     FieldDetailViewModel result = Mapper.Map<FieldDetailViewModel>(field);
 
-                    response = new ResponseModel<FieldDetailViewModel>(true, "Field detail loaded successfully", null, result);
+                    response = new ResponseModel<FieldDetailViewModel>(true, "Chi tiết sân:", null, result);
                 }
                 else {
-                    response = ResponseModel<FieldDetailViewModel>.CreateErrorResponse("Field detail has failed to load!", systemError);
+                    response = ResponseModel<FieldDetailViewModel>.CreateErrorResponse("Tải chi tiết sân thất bại!", systemError);
                 }
 
             } catch (Exception) {
-                response = ResponseModel<FieldDetailViewModel>.CreateErrorResponse("Field detail has failed to load!",systemError);
+                response = ResponseModel<FieldDetailViewModel>.CreateErrorResponse("Tải chi tiết sân thất bại!", systemError);
             }
 
             return Json(response);
@@ -95,14 +95,14 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 {
                     FieldViewModel result = Mapper.Map<FieldViewModel>(field);
 
-                    response = new ResponseModel<FieldViewModel>(true, "Field status changed successfully", null, result);
+                    response = new ResponseModel<FieldViewModel>(true, "Trạng thái sân đã được cập nhật thành công", null, result);
                 }
                 else {
-                    response = ResponseModel<FieldViewModel>.CreateErrorResponse("Field status has failed to change");
+                    response = ResponseModel<FieldViewModel>.CreateErrorResponse("Cập nhật trạng thái sân thất bại",systemError);
                 }
                 
             } catch (Exception) {
-                response = ResponseModel<FieldViewModel>.CreateErrorResponse("Field status has failed to change");
+                response = ResponseModel<FieldViewModel>.CreateErrorResponse("Cập nhật trạng thái sân thất bại",systemError);
             }
 
             return Json(response);
