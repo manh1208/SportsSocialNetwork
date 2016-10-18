@@ -268,9 +268,16 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         }
 
         private double CalculatePrice(int fieldId, TimeSpan startTime, TimeSpan endTime) {
+            double price = 0;
+
             var timeBlockService = this.Service<ITimeBlockService>();
 
-            return timeBlockService.calPrice(fieldId, startTime, endTime);
+            bool rs = timeBlockService.checkTimeValid(fieldId, startTime, endTime);
+            if (rs) {
+                return timeBlockService.calPrice(fieldId, startTime, endTime);
+            }
+
+            return price;
         }
     }
 
