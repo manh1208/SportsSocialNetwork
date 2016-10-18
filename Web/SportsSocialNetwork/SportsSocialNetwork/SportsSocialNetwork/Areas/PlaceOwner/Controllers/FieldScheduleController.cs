@@ -274,7 +274,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
             TimeSpan _startTime = TimeSpan.Parse(startTime);
             TimeSpan _endTime = TimeSpan.Parse(endTime);
-            if (_fieldScheduleService.checkMaintainTimeValid(fieldId,_startTime,_endTime,_startDay,_endDay))
+            if (_fieldScheduleService.checkTimeValidInFieldSchedule(fieldId,_startTime,_endTime,_startDay,_endDay))
             {
                 return "valid";
             }
