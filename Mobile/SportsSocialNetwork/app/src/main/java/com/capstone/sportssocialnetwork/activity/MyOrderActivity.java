@@ -1,5 +1,6 @@
 package com.capstone.sportssocialnetwork.activity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +23,7 @@ import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.capstone.sportssocialnetwork.utils.SharePreferentName;
 import com.capstone.sportssocialnetwork.utils.Utilities;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -66,6 +69,12 @@ public class MyOrderActivity extends AppCompatActivity {
                 Order order = adapter.getItem(position);
                 AlertDialog.Builder buider=  new AlertDialog.Builder(MyOrderActivity.this);
                 View view = LayoutInflater.from(MyOrderActivity.this).inflate(R.layout.dialog_my_order_detail,null,false);
+                ImageView ivQR = (ImageView) view.findViewById(R.id.iv_qr_code);
+
+                Picasso.with(MyOrderActivity.this).load(Uri.parse(DataUtils.URL+order.getqRCodeUrl()))
+                        .placeholder(R.drawable.image_logo)
+                        .error(R.drawable.img_default_avatar)
+                        .into(ivQR);
                 TextView useDate = (TextView) view.findViewById(R.id.txt_order_detail_use_date);
                 try {
                     Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");

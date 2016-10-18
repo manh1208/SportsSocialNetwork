@@ -91,9 +91,9 @@ public class MyOrderAdapter extends ArrayAdapter<Order> {
 
                 Picasso.with(mContext).load(Uri.parse(DataUtils.URL+order.getqRCodeUrl()))
                         .placeholder(R.drawable.image_logo)
-                        .error(R.drawable.image_logo)
+                        .error(R.drawable.img_default_avatar)
                         .into(ivQR);
-
+//                Toast.makeText(mContext, (DataUtils.URL+order.getqRCodeUrl()), Toast.LENGTH_SHORT).show();
 
                 TextView useDate = (TextView) view.findViewById(R.id.txt_order_detail_use_date);
                 try {
