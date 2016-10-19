@@ -78,47 +78,7 @@ public class ManageOrderFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Order order = adapter.getItem(position);
-                AlertDialog.Builder buider = new AlertDialog.Builder(getActivity());
-                View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_manage_order_detail, null, false);
-                TextView name = (TextView) v.findViewById(R.id.txt_order_detail_fullname);
-                name.setText(order.getFullName());
-                TextView createDate = (TextView) v.findViewById(R.id.txt_order_detail_create_time);
-                createDate.setText(order.getCreateDate());
-                TextView place = (TextView) v.findViewById(R.id.txt_order_detail_place);
-                place.setText(order.getPlaceName());
-                TextView field = (TextView) v.findViewById(R.id.txt_order_detail_field);
-                field.setText(order.getFieldName());
-                TextView useDate = (TextView) v.findViewById(R.id.txt_order_detail_use_date);
-                try {
-                    Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
-                    useDate.setText( Utilities.getDateTimeString(date,"dd/MM/yyyy"));
-                } catch (ParseException e) {
-                    Toast.makeText(getActivity(), "Lỗi parse", Toast.LENGTH_SHORT).show();
-                }
-                TextView startTime = (TextView) v.findViewById(R.id.txt_order_detail_start_time);
-                try {
-                    Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
-                    startTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
-                } catch (ParseException e) {
-                    Toast.makeText(getActivity(), "Lỗi parse", Toast.LENGTH_SHORT).show();
-                }
-
-
-                TextView endTime = (TextView) v.findViewById(R.id.txt_order_detail_end_time);
-                try {
-                    Date date = Utilities.getDateTime(order.getEndTime(),"MM/dd/yyyy hh:mm:ss a");
-                    endTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
-                } catch (ParseException e) {
-                    Toast.makeText(getActivity(), "Lỗi parse", Toast.LENGTH_SHORT).show();
-                }
-                TextView payment = (TextView) v.findViewById(R.id.txt_order_detail_payment);
-                payment.setText(order.getPaidType());
-                TextView status = (TextView) v.findViewById(R.id.txt_order_detail_order_status);
-                status.setText(order.getStatus());
-                buider.setView(v)
-                        .setNegativeButton("Hủy",null)
-                        .create()
-                        .show();
+               adapter.showDialog(order);
             }
         });
     }

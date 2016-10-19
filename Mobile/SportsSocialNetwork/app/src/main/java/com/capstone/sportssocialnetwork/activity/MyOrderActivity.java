@@ -65,49 +65,50 @@ public class MyOrderActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Order order = adapter.getItem(position);
-                AlertDialog.Builder buider=  new AlertDialog.Builder(MyOrderActivity.this);
-                View view = LayoutInflater.from(MyOrderActivity.this).inflate(R.layout.dialog_my_order_detail,null,false);
-                ImageView ivQR = (ImageView) view.findViewById(R.id.iv_qr_code);
-
-                Picasso.with(MyOrderActivity.this).load(Uri.parse(DataUtils.URL+order.getqRCodeUrl()))
-                        .placeholder(R.drawable.image_logo)
-                        .error(R.drawable.img_default_avatar)
-                        .into(ivQR);
-                TextView useDate = (TextView) view.findViewById(R.id.txt_order_detail_use_date);
-                try {
-                    Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
-                    useDate.setText( Utilities.getDateTimeString(date,"dd/MM/yyyy"));
-                } catch (ParseException e) {
-                    Toast.makeText(MyOrderActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
-                }
-
-                TextView place = (TextView) view.findViewById(R.id.txt_order_detail_place);
-                place.setText(order.getPlaceName());
-                TextView field = (TextView) view.findViewById(R.id.txt_order_detail_field);
-                field.setText(order.getFieldName());
-                TextView startTime = (TextView) view.findViewById(R.id.txt_order_detail_start_time);
-                try {
-                    Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
-                    startTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
-                } catch (ParseException e) {
-                    Toast.makeText(MyOrderActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
-                }
-
-
-                TextView endTime = (TextView) view.findViewById(R.id.txt_order_detail_end_time);
-                try {
-                    Date date = Utilities.getDateTime(order.getEndTime(),"MM/dd/yyyy hh:mm:ss a");
-                    endTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
-                } catch (ParseException e) {
-                    Toast.makeText(MyOrderActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
-                }
-
-                TextView payment = (TextView) view.findViewById(R.id.txt_order_detail_payment);
-                payment.setText(order.getPaidType());
-                TextView status = (TextView) view.findViewById(R.id.txt_order_detail_order_status);
-                status.setText(order.getStatus());
-                buider.setView(view)
-                        .setNegativeButton("OK",null).create().show();
+                adapter.showDialog(order);
+//                AlertDialog.Builder buider=  new AlertDialog.Builder(MyOrderActivity.this);
+//                View view = LayoutInflater.from(MyOrderActivity.this).inflate(R.layout.dialog_my_order_detail,null,false);
+//                ImageView ivQR = (ImageView) view.findViewById(R.id.iv_qr_code);
+//
+//                Picasso.with(MyOrderActivity.this).load(Uri.parse(DataUtils.URL+order.getqRCodeUrl()))
+//                        .placeholder(R.drawable.image_logo)
+//                        .error(R.drawable.img_default_avatar)
+//                        .into(ivQR);
+//                TextView useDate = (TextView) view.findViewById(R.id.txt_order_detail_use_date);
+//                try {
+//                    Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
+//                    useDate.setText( Utilities.getDateTimeString(date,"dd/MM/yyyy"));
+//                } catch (ParseException e) {
+//                    Toast.makeText(MyOrderActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
+//                }
+//
+//                TextView place = (TextView) view.findViewById(R.id.txt_order_detail_place);
+//                place.setText(order.getPlaceName());
+//                TextView field = (TextView) view.findViewById(R.id.txt_order_detail_field);
+//                field.setText(order.getFieldName());
+//                TextView startTime = (TextView) view.findViewById(R.id.txt_order_detail_start_time);
+//                try {
+//                    Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
+//                    startTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
+//                } catch (ParseException e) {
+//                    Toast.makeText(MyOrderActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
+//                }
+//
+//
+//                TextView endTime = (TextView) view.findViewById(R.id.txt_order_detail_end_time);
+//                try {
+//                    Date date = Utilities.getDateTime(order.getEndTime(),"MM/dd/yyyy hh:mm:ss a");
+//                    endTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
+//                } catch (ParseException e) {
+//                    Toast.makeText(MyOrderActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
+//                }
+//
+//                TextView payment = (TextView) view.findViewById(R.id.txt_order_detail_payment);
+//                payment.setText(order.getPaidTypeString());
+//                TextView status = (TextView) view.findViewById(R.id.txt_order_detail_order_status);
+//                status.setText(order.getStatus());
+//                buider.setView(view)
+//                        .setNegativeButton("OK",null).create().show();
             }
         });
     }
