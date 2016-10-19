@@ -52,6 +52,7 @@ namespace SportsSocialNetwork.Models.Entities
         public virtual DbSet<PlaceImage> PlaceImages { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<PostComment> PostComments { get; set; }
+        public virtual DbSet<PostImage> PostImages { get; set; }
         public virtual DbSet<PostSport> PostSports { get; set; }
         public virtual DbSet<Rating> Ratings { get; set; }
         public virtual DbSet<Sport> Sports { get; set; }

@@ -20,6 +20,7 @@ namespace SportsSocialNetwork.Models.Entities
             this.Likes = new HashSet<Like>();
             this.Notifications = new HashSet<Notification>();
             this.PostComments = new HashSet<PostComment>();
+            this.PostImages = new HashSet<PostImage>();
             this.PostSports = new HashSet<PostSport>();
         }
     
@@ -28,7 +29,6 @@ namespace SportsSocialNetwork.Models.Entities
         public System.DateTime CreateDate { get; set; }
         public string PostContent { get; set; }
         public Nullable<System.DateTime> EditDate { get; set; }
-        public string Image { get; set; }
         public bool Active { get; set; }
         public Nullable<int> GroupId { get; set; }
     
@@ -40,6 +40,8 @@ namespace SportsSocialNetwork.Models.Entities
         public virtual ICollection<Notification> Notifications { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PostComment> PostComments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PostImage> PostImages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PostSport> PostSports { get; set; }
     }

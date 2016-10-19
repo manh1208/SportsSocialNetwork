@@ -320,7 +320,6 @@
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="PostContent" Type="nvarchar(max)" Nullable="false" />
           <Property Name="EditDate" Type="datetime" />
-          <Property Name="Image" Type="nvarchar(max)" />
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="GroupId" Type="int" />
         </EntityType>
@@ -335,6 +334,14 @@
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="Image" Type="nvarchar(max)" />
           <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PostImages">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PostId" Type="int" Nullable="false" />
+          <Property Name="Image" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="PostSport">
           <Key>
@@ -883,6 +890,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PostImages_Post">
+          <End Role="Post" Type="Self.Post" Multiplicity="1" />
+          <End Role="PostImages" Type="Self.PostImages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PostImages">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PostSport_Post">
           <End Role="Post" Type="Self.Post" Multiplicity="1" />
           <End Role="PostSport" Type="Self.PostSport" Multiplicity="*" />
@@ -996,6 +1015,7 @@
           <EntitySet Name="PlaceImage" EntityType="Self.PlaceImage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Post" EntityType="Self.Post" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PostComment" EntityType="Self.PostComment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PostImages" EntityType="Self.PostImages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PostSport" EntityType="Self.PostSport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rating" EntityType="Self.Rating" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sport" EntityType="Self.Sport" Schema="dbo" store:Type="Tables" />
@@ -1165,6 +1185,10 @@
             <End Role="Post" EntitySet="Post" />
             <End Role="PostComment" EntitySet="PostComment" />
           </AssociationSet>
+          <AssociationSet Name="FK_PostImages_Post" Association="Self.FK_PostImages_Post">
+            <End Role="Post" EntitySet="Post" />
+            <End Role="PostImages" EntitySet="PostImages" />
+          </AssociationSet>
           <AssociationSet Name="FK_PostSport_Post" Association="Self.FK_PostSport_Post">
             <End Role="Post" EntitySet="Post" />
             <End Role="PostSport" EntitySet="PostSport" />
@@ -1226,6 +1250,7 @@
           <EntitySet Name="PlaceImages" EntityType="SSNModel.PlaceImage" />
           <EntitySet Name="Posts" EntityType="SSNModel.Post" />
           <EntitySet Name="PostComments" EntityType="SSNModel.PostComment" />
+          <EntitySet Name="PostImages" EntityType="SSNModel.PostImage" />
           <EntitySet Name="PostSports" EntityType="SSNModel.PostSport" />
           <EntitySet Name="Ratings" EntityType="SSNModel.Rating" />
           <EntitySet Name="Sports" EntityType="SSNModel.Sport" />
@@ -1406,6 +1431,10 @@
           <AssociationSet Name="FK_PostComment_Post1" Association="SSNModel.FK_PostComment_Post1">
             <End Role="Post" EntitySet="Posts" />
             <End Role="PostComment" EntitySet="PostComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PostImages_Post" Association="SSNModel.FK_PostImages_Post">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="PostImage" EntitySet="PostImages" />
           </AssociationSet>
           <AssociationSet Name="FK_PostSport_Post" Association="SSNModel.FK_PostSport_Post">
             <End Role="Post" EntitySet="Posts" />
@@ -1800,7 +1829,6 @@
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="PostContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="EditDate" Type="DateTime" Precision="3" />
-          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <Property Name="GroupId" Type="Int32" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Post_AspNetUsers" FromRole="Post" ToRole="AspNetUser" />
@@ -1808,6 +1836,7 @@
           <NavigationProperty Name="Likes" Relationship="SSNModel.FK_Like_Post" FromRole="Post" ToRole="Like" />
           <NavigationProperty Name="Notifications" Relationship="SSNModel.FK_Notification_Post" FromRole="Post" ToRole="Notification" />
           <NavigationProperty Name="PostComments" Relationship="SSNModel.FK_PostComment_Post1" FromRole="Post" ToRole="PostComment" />
+          <NavigationProperty Name="PostImages" Relationship="SSNModel.FK_PostImages_Post" FromRole="Post" ToRole="PostImage" />
           <NavigationProperty Name="PostSports" Relationship="SSNModel.FK_PostSport_Post" FromRole="Post" ToRole="PostSport" />
         </EntityType>
         <EntityType Name="PostComment">
@@ -1823,6 +1852,15 @@
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_PostComment_AspNetUsers" FromRole="PostComment" ToRole="AspNetUser" />
           <NavigationProperty Name="Post" Relationship="SSNModel.FK_PostComment_Post1" FromRole="PostComment" ToRole="Post" />
+        </EntityType>
+        <EntityType Name="PostImage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PostId" Type="Int32" Nullable="false" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Post" Relationship="SSNModel.FK_PostImages_Post" FromRole="PostImage" ToRole="Post" />
         </EntityType>
         <EntityType Name="PostSport">
           <Key>
@@ -2416,6 +2454,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PostImages_Post">
+          <End Type="SSNModel.Post" Role="Post" Multiplicity="1" />
+          <End Type="SSNModel.PostImage" Role="PostImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PostImage">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PostSport_Post">
           <End Type="SSNModel.Post" Role="Post" Multiplicity="1" />
           <End Type="SSNModel.PostSport" Role="PostSport" Multiplicity="*" />
@@ -2776,7 +2826,6 @@
               <MappingFragment StoreEntitySet="Post">
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="EditDate" ColumnName="EditDate" />
                 <ScalarProperty Name="PostContent" ColumnName="PostContent" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
@@ -2794,6 +2843,15 @@
                 <ScalarProperty Name="Comment" ColumnName="Comment" />
                 <ScalarProperty Name="PostId" ColumnName="PostId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PostImages">
+            <EntityTypeMapping TypeName="SSNModel.PostImage">
+              <MappingFragment StoreEntitySet="PostImages">
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

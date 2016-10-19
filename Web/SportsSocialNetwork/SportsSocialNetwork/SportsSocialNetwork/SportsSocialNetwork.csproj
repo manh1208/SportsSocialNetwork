@@ -462,6 +462,12 @@
     <Compile Include="Models\Entities\PostCommentRefined.cs">
       <DependentUpon>EntityRefinery.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\PostImage.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\PostImageRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Entities\PostRefined.cs">
       <DependentUpon>EntityRefinery.tt</DependentUpon>
     </Compile>
@@ -553,6 +559,9 @@
       <DependentUpon>Repositories.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Repositories\PostCommentRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Repositories\PostImageRepositoryGen.cs">
       <DependentUpon>Repositories.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Repositories\PostRepositoryGen.cs">
@@ -676,6 +685,9 @@
     </Compile>
     <Compile Include="Models\Entities\Services\PostCommentService.cs" />
     <Compile Include="Models\Entities\Services\PostCommentServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\PostImageServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Services\PostService.cs" />
@@ -851,6 +863,9 @@
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\PostDetailViewModel.cs" />
+    <Compile Include="Models\ViewModels\PostImageViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ViewModels\PostOveralViewModel.cs" />
     <Compile Include="Models\ViewModels\PostSportViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>

@@ -12,19 +12,15 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class PostViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.Post>
+    public partial class PostImageViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.PostImage>
     {
     	
     			public virtual int Id { get; set; }
-    			public virtual string UserId { get; set; }
-    			public virtual System.DateTime CreateDate { get; set; }
-    			public virtual string PostContent { get; set; }
-    			public virtual Nullable<System.DateTime> EditDate { get; set; }
-    			public virtual bool Active { get; set; }
-    			public virtual Nullable<int> GroupId { get; set; }
+    			public virtual int PostId { get; set; }
+    			public virtual string Image { get; set; }
     	
-    	public PostViewModel() : base() { }
-    	public PostViewModel(SportsSocialNetwork.Models.Entities.Post entity) : base(entity) { }
+    	public PostImageViewModel() : base() { }
+    	public PostImageViewModel(SportsSocialNetwork.Models.Entities.PostImage entity) : base(entity) { }
     
     }
 }

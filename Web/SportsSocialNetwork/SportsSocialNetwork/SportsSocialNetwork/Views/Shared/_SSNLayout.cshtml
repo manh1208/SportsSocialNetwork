@@ -11,7 +11,7 @@
     <meta name="description" content="bootstrap admin template">
     <meta name="author" content="">
 
-    <title>Profile</title>
+    <title>SSN-@ViewBag.Title</title>
 
     <link rel="apple-touch-icon" href="~/Content/assets/images/apple-touch-icon.png">
     <link rel="shortcut icon" href="~/Content/images/logo_new.png">
@@ -43,6 +43,19 @@
     <script>
         Breakpoints();
     </script>
+    <style>
+        .logo-link {
+            color: #fff;
+        }
+
+            .logo-link a span {
+                color: #fff;
+            }
+
+            .logo-link a {
+                text-decoration: none;
+            }
+    </style>
     @RenderSection("styles", false)
 </head>
 <body class="page-profile">
@@ -63,9 +76,11 @@
                 <span class="sr-only">Toggle Search</span>
                 <i class="icon wb-search" aria-hidden="true"></i>
             </button>
-            <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
-                <img class="navbar-brand-logo" src="~/Content/images/logo.png" title="Sports" />
-                <span class="navbar-brand-text"> Sports social network</span>
+            <div class="navbar-brand navbar-brand-center site-gridmenu-toggle logo-link">
+                <a href="@Url.Action("Index","SSN", new { areas=""})">
+                    <img class="navbar-brand-logo" src="~/Content/images/logo.png" title="Sports" />
+                    <span class="navbar-brand-text"> Sports social network</span>
+                </a>
             </div>
         </div>
 
@@ -83,6 +98,14 @@
                 <!-- End Navbar Toolbar -->
                 <!-- Navbar Toolbar Right -->
                 <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
+                    <li class="dropdown">
+                        <a href="@Url.Action("Index","SSN",new { areas = "" })" aria-expanded="false"
+                           role="button">Trang chủ</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" aria-expanded="false"
+                            role="button">Tin tức</a>
+                    </li>
                     <li class="dropdown">
                         <a data-toggle="dropdown" href="javascript:void(0)" title="Notifications" aria-expanded="false"
                            data-animation="slide-bottom" role="button">
@@ -212,13 +235,18 @@
             <!-- End Site Navbar Seach -->
         </div>
     </nav>
-    @RenderBody()
+    <!-- Page -->
+    <div class="page animsition" style="margin: 0 50px;">
+        <div class="page-content container-fluid">
+            @RenderBody()
+        </div>
+    </div>
     <!-- End Page -->
     <!-- Footer -->
     <footer class="site-footer">
-        <span class="site-footer-legal">© 2015 Remark</span>
+        <span class="site-footer-legal">© 2016 SSN - Capstone Project</span>
         <div class="site-footer-right">
-            Crafted with <i class="red-600 wb wb-heart"></i> by <a href="http://themeforest.net/user/amazingSurge">amazingSurge</a>
+           
         </div>
     </footer>
 
@@ -267,18 +295,18 @@
         })(document, window, jQuery);
     </script>
     <script>
-       function logout(){
-           $("#form-log-out").submit();
-       }
-       function searchPlace() {
-           $("#form-search-place").submit();
-       }
-       function orderHistory() {
-           $("#form-order-history").submit();
-       }
-       function searchEvent() {
-           $("#form-search-event").submit();
-       }
+        function logout() {
+            $("#form-log-out").submit();
+        }
+        function searchPlace() {
+            $("#form-search-place").submit();
+        }
+        function orderHistory() {
+            $("#form-order-history").submit();
+        }
+        function searchEvent() {
+            $("#form-search-event").submit();
+        }
     </script>
     @RenderSection("scripts", false)
 </body>
