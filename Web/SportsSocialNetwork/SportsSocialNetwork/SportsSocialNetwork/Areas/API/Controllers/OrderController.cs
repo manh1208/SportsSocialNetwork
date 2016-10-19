@@ -348,17 +348,23 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         {
             OrderSimpleViewModel result = Mapper.Map<OrderSimpleViewModel>(order);
 
+            result.UserId = order.AspNetUser.Id;
+
             result.UserName = order.AspNetUser.UserName;
 
             result.FullName = order.AspNetUser.FullName;
 
+            result.PhoneNumber = order.AspNetUser.PhoneNumber;
+
             result.FieldName = order.Field.Name;
+
+            result.PlaceId = order.Field.PlaceId;
 
             result.PlaceName = order.Field.Place.Name;
 
-            result.Status = Utils.GetEnumDescription((OrderStatus)order.Status);
+            result.StatusString = Utils.GetEnumDescription((OrderStatus)result.Status);
 
-            result.PaidType = Utils.GetEnumDescription((OrderPaidType)order.PaidType);
+            result.PaidTypeString = Utils.GetEnumDescription((OrderPaidType)result.PaidType);
 
             return result;
         }
