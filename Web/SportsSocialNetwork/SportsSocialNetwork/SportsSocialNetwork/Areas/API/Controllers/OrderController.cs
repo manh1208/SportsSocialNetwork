@@ -104,7 +104,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         [HttpPost]
         public ActionResult ShowOrderDetail(int id)
         {
-            ResponseModel<OrderDetailViewModel> response = null;
+            ResponseModel<OrderSimpleViewModel> response = null;
 
             var service = this.Service<IOrderService>();
 
@@ -113,18 +113,14 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             {
                 Order order = service.GetOrderById(id);
 
-                OrderDetailViewModel result = Mapper.Map<OrderDetailViewModel>(order);
+                OrderSimpleViewModel result = PrepareOrderSimpleViewModel(order);
 
-                result.Status = Utils.GetEnumDescription((OrderStatus)order.Status);
-
-                result.PaidType = Utils.GetEnumDescription((OrderPaidType)order.PaidType);
-
-                response = new ResponseModel<OrderDetailViewModel>(true, "Thông tin đặt sân:", null, result);
+                response = new ResponseModel<OrderSimpleViewModel>(true, "Thông tin đặt sân:", null, result);
             }
 
             catch (Exception)
             {
-                response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Không thể tải thông tin đặt sân", systemError);
+                response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Không thể tải thông tin đặt sân", systemError);
             }
 
 
@@ -135,7 +131,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         [HttpPost]
         public ActionResult ChangeOrderStatus(int id, int status)
         {
-            ResponseModel<OrderDetailViewModel> response = null;
+            ResponseModel<OrderSimpleViewModel> response = null;
 
             var service = this.Service<IOrderService>();
 
@@ -145,18 +141,14 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             {
                 order = service.ChangeOrderStatus(id, status);
 
-                OrderDetailViewModel result = Mapper.Map<OrderDetailViewModel>(order);
+                OrderSimpleViewModel result = PrepareOrderSimpleViewModel(order);
 
-                result.Status = Utils.GetEnumDescription((OrderStatus)order.Status);
-
-                result.PaidType = Utils.GetEnumDescription((OrderPaidType)order.PaidType);
-
-                response = new ResponseModel<OrderDetailViewModel>(true, "Trạng thái đơn đặt sân đã thay đổi thành công", null, result);
+                response = new ResponseModel<OrderSimpleViewModel>(true, "Trạng thái đơn đặt sân đã thay đổi thành công", null, result);
             }
 
             catch (Exception)
             {
-                response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Thay đổi trạng thái đơn đặt sân thất bại", systemError);
+                response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Thay đổi trạng thái đơn đặt sân thất bại", systemError);
             }
 
             return Json(response);
@@ -165,7 +157,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         [HttpPost]
         public ActionResult CreateOrder(OrderViewModel model)
         {
-            ResponseModel<OrderDetailViewModel> response = null;
+            ResponseModel<OrderSimpleViewModel> response = null;
 
             var orderService = this.Service<IOrderService>();
 
@@ -184,7 +176,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             //Temporary
             if (price==0)
             {
-                response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Đặt sân thất bại", "Thời gian không nằm trong các khung giờ");
+                response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Đặt sân thất bại", "Thời gian không nằm trong các khung giờ");
 
                 return Json(response);
             }
@@ -206,9 +198,9 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 order.CreateDate = DateTime.Now;
                 order.Price = price;
                 order.Note = model.Note;
-                order.PayerName = model.PayerName;
-                order.PayerEmail = model.PayerEmail;
-                order.PayerPhone = model.PayerPhone;
+                order.PayerName = user.FullName;
+                order.PayerEmail = user.Email;
+                order.PayerPhone = user.PhoneNumber;
                 order.Status = (int)OrderStatus.Pending;
                 order.OrderCode = orderCode;
                 order.QRCodeUrl = Utils.GenerateQRCode(orderCode, QRCodeGenerator.ECCLevel.Q);
@@ -252,14 +244,14 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                     "<br/> Cảm ơn bạn đã sử dụng dịch vụ của SSN. Chúc bạn có những giờ phút thoải mái chơi thể thao!";
                 EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { user.Email }, null, null, subject, body, true);
 
-                OrderDetailViewModel result = Mapper.Map<OrderDetailViewModel>(order);
+                OrderSimpleViewModel result = PrepareOrderSimpleViewModel(order);
 
-                response = new ResponseModel<OrderDetailViewModel>(true, "Đặt sân thành công", null, result);
+                response = new ResponseModel<OrderSimpleViewModel>(true, "Đặt sân thành công", null, result);
 
             }
             catch (Exception)
             {
-                response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Đặt sân thất bại", systemError);
+                response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Đặt sân thất bại", systemError);
             }
 
             return Json(response);
