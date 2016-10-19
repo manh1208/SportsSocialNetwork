@@ -27,4 +27,8 @@ public interface IOrderService {
 
     @POST("/api/order/showallorderofuser")
     Call<ResponseModel<List<Order>>> getMyOrder(@Query("userId")String userId);
+
+    @POST("/api/order/changeorderstatus")
+    Call<ResponseModel<Order>> changeStatusOrder(@Query("id")int id,
+                                                 @Query("status")int status);
 }

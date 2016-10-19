@@ -16,6 +16,8 @@ import com.capstone.sportssocialnetwork.Enumerable.OrderStatusEnum;
 import com.capstone.sportssocialnetwork.Enumerable.PaidTypeEnum;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.model.Order;
+import com.capstone.sportssocialnetwork.model.response.ResponseModel;
+import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.capstone.sportssocialnetwork.utils.Utilities;
 import com.squareup.picasso.Picasso;
@@ -24,17 +26,23 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * Created by ManhNV on 10/17/16.
  */
 public class ManageOrderAdapter extends ArrayAdapter<Order> {
     private Context mContext;
     private List<Order> orders;
+    private RestService service;
 
     public ManageOrderAdapter(Context context, int resource, List<Order> objects) {
         super(context, resource, objects);
         mContext = context;
         orders = objects;
+        service = new RestService();
     }
 
     @Override
@@ -91,7 +99,7 @@ public class ManageOrderAdapter extends ArrayAdapter<Order> {
         return convertView;
     }
 
-    public void showDialog(Order order) {
+    public void showDialog(final Order order) {
         AlertDialog.Builder buider = new AlertDialog.Builder(mContext);
         View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_manage_order_detail, null, false);
         TextView name = (TextView) view.findViewById(R.id.txt_order_detail_fullname);
@@ -134,6 +142,75 @@ public class ManageOrderAdapter extends ArrayAdapter<Order> {
         payment.setText(PaidTypeEnum.fromInteger(order.getPaidType()).toString());
         TextView status = (TextView) view.findViewById(R.id.txt_order_detail_order_status);
         status.setText(OrderStatusEnum.fromInteger(order.getStatus()).toString());
+        Button btnApprove = (Button) view.findViewById(R.id.btn_maange_order_approve);
+        Button btnUnapprove = (Button) view.findViewById(R.id.btn_manage_order_unapprove);
+        if (order.getStatus()==OrderStatusEnum.Pending.getValue()){
+            btnApprove.setVisibility(View.VISIBLE);
+            btnUnapprove.setVisibility(View.VISIBLE);
+        }else{
+            btnApprove.setVisibility(View.GONE);
+            btnUnapprove.setVisibility(View.GONE);
+        }
+        if (order.getStatus()==OrderStatusEnum.Approved.getValue()){
+            btnUnapprove.setVisibility(View.VISIBLE);
+            btnApprove.setVisibility(View.GONE);
+        }
+        if (order.getStatus()==OrderStatusEnum.Unapproved.getValue()){
+            btnUnapprove.setVisibility(View.GONE);
+            btnApprove.setVisibility(View.VISIBLE);
+        }
+        btnApprove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<ResponseModel<Order>> call = service.getOrderService().changeStatusOrder(order.getId(),OrderStatusEnum.Approved.getValue());
+                call.enqueue(new Callback<ResponseModel<Order>>() {
+                    @Override
+                    public void onResponse(Call<ResponseModel<Order>> call, Response<ResponseModel<Order>> response) {
+                        if (response.isSuccessful()){
+                            if (response.body().isSucceed()){
+                                Toast.makeText(mContext, "Approved", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(mContext, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseModel<Order>> call, Throwable t) {
+                        Toast.makeText(mContext, "Loi ket noi voi server", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
+
+        btnUnapprove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<ResponseModel<Order>> call = service.getOrderService().changeStatusOrder(order.getId(),OrderStatusEnum.Unapproved.getValue());
+                call.enqueue(new Callback<ResponseModel<Order>>() {
+                    @Override
+                    public void onResponse(Call<ResponseModel<Order>> call, Response<ResponseModel<Order>> response) {
+                        if (response.isSuccessful()){
+                            if (response.body().isSucceed()){
+                                Toast.makeText(mContext, "Approved", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(mContext, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseModel<Order>> call, Throwable t) {
+                        Toast.makeText(mContext, "Loi ket noi voi server", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
         buider.setView(view)
                 .setNegativeButton("OK", null).create().show();
     }
