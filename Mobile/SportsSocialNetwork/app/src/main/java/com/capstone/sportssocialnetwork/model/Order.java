@@ -18,16 +18,26 @@ public class Order {
     private String username;
     @SerializedName("FullName")
     private String fullName;
+    @SerializedName("FieldId")
+    private int fieldId;
     @SerializedName("FieldName")
     private String fieldName;
+    @SerializedName("PlaceId")
+    private int placeId;
     @SerializedName("PlaceName")
     private String placeName;
     @SerializedName("Status")
-    private String status;
+    private int status;
+    @SerializedName("StatusString")
+    private String statusString;
     @SerializedName("PaidType")
-    private String paidType;
+    private int paidType;
+    @SerializedName("PaidTypeString")
+    private String paidTypeString;
     @SerializedName("QRCodeUrl")
     private String qRCodeUrl;
+    @SerializedName("Price")
+    private double price;
 
     public String getId() {
         return id;
@@ -93,22 +103,6 @@ public class Order {
         this.placeName = placeName;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getPaidType() {
-        return paidType;
-    }
-
-    public void setPaidType(String paidType) {
-        this.paidType = paidType;
-    }
-
 
     public String getqRCodeUrl() {
         return qRCodeUrl;
@@ -116,5 +110,61 @@ public class Order {
 
     public void setqRCodeUrl(String qRCodeUrl) {
         this.qRCodeUrl = qRCodeUrl;
+    }
+
+    public int getFieldId() {
+        return fieldId;
+    }
+
+    public void setFieldId(int fieldId) {
+        this.fieldId = fieldId;
+    }
+
+    public int getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(int placeId) {
+        this.placeId = placeId;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getStatusString() {
+        return statusString;
+    }
+
+    public void setStatusString(String statusString) {
+        this.statusString = statusString;
+    }
+
+    public int getPaidType() {
+        return paidType;
+    }
+
+    public void setPaidType(int paidType) {
+        this.paidType = paidType;
+    }
+
+    public String getPaidTypeString() {
+        return paidTypeString;
+    }
+
+    public void setPaidTypeString(String paidTypeString) {
+        this.paidTypeString = paidTypeString;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

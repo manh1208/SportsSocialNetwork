@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.capstone.sportssocialnetwork.Enumerable.OrderStatusEnum;
+import com.capstone.sportssocialnetwork.Enumerable.PaidTypeEnum;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.model.Order;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
@@ -49,11 +51,11 @@ public class MyOrderAdapter extends ArrayAdapter<Order> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-        if (convertView ==null){
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_order_history,parent,false);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_order_history, parent, false);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
-        }else{
+        } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
@@ -62,77 +64,80 @@ public class MyOrderAdapter extends ArrayAdapter<Order> {
         viewHolder.txtPlace.setText(order.getPlaceName());
 
         try {
-            Date date  = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
-            String useDate = Utilities.getDateTimeString(date,"dd/MM/yyyy");
-            String startTime = Utilities.getDateTimeString(date,"hh:mm a");
-            date = Utilities.getDateTime(order.getEndTime(),"MM/dd/yyyy hh:mm:ss a");
-            String endTime = Utilities.getDateTimeString(date,"hh:mm a");
-            viewHolder.txtTime.setText(useDate +" : " +startTime +" - " +endTime);
+            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
+            String useDate = Utilities.getDateTimeString(date, "dd/MM/yyyy");
+            String startTime = Utilities.getDateTimeString(date, "hh:mm a");
+            date = Utilities.getDateTime(order.getEndTime(), "MM/dd/yyyy hh:mm:ss a");
+            String endTime = Utilities.getDateTimeString(date, "hh:mm a");
+            viewHolder.txtTime.setText(useDate + " : " + startTime + " - " + endTime);
         } catch (ParseException e) {
-            viewHolder.txtTime.setText(order.getStartTime()+" - " + order.getEndTime());
+            viewHolder.txtTime.setText(order.getStartTime() + " - " + order.getEndTime());
             e.printStackTrace();
         }
 
-        viewHolder.txtStatus.setText("Trạng thái: " + order.getStatus());
+        viewHolder.txtStatus.setText("" + OrderStatusEnum.fromInteger(order.getStatus()).toString());
+        if (order.getStatus()==OrderStatusEnum.Pending.getValue()){
+            viewHolder.txtStatus.setBackgroundResource(R.drawable.order_status_waiting);
+        }else if (order.getStatus()==OrderStatusEnum.Cancel.getValue() || order.getStatus() == OrderStatusEnum.Unapproved.getValue()){
+            viewHolder.txtStatus.setBackgroundResource(R.drawable.order_status_cancel);
+        }else{
+            viewHolder.txtStatus.setBackgroundResource(R.drawable.order_status_approve);
+        }
+
+        return convertView;
+    }
+
+    public void showDialog(Order order) {
+        AlertDialog.Builder buider = new AlertDialog.Builder(mContext);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_my_order_detail, null, false);
 
 
+        ImageView ivQR = (ImageView) view.findViewById(R.id.iv_qr_code);
 
-
-
-        viewHolder.btnDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                AlertDialog.Builder buider=  new AlertDialog.Builder(mContext);
-                View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_my_order_detail,null,false);
-
-
-                ImageView ivQR = (ImageView) view.findViewById(R.id.iv_qr_code);
-
-                Picasso.with(mContext).load(Uri.parse(DataUtils.URL+order.getqRCodeUrl()))
-                        .placeholder(R.drawable.image_logo)
-                        .error(R.drawable.img_default_avatar)
-                        .into(ivQR);
+        Picasso.with(mContext).load(Uri.parse(DataUtils.URL + order.getqRCodeUrl()))
+                .placeholder(R.drawable.image_logo)
+                .error(R.drawable.img_default_avatar)
+                .into(ivQR);
 //                Toast.makeText(mContext, (DataUtils.URL+order.getqRCodeUrl()), Toast.LENGTH_SHORT).show();
 
-                TextView useDate = (TextView) view.findViewById(R.id.txt_order_detail_use_date);
-                try {
-                    Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
-                    useDate.setText( Utilities.getDateTimeString(date,"dd/MM/yyyy"));
-                } catch (ParseException e) {
-                    Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
-                }
+        TextView useDate = (TextView) view.findViewById(R.id.txt_order_detail_use_date);
+        try {
+            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
+            useDate.setText(Utilities.getDateTimeString(date, "dd/MM/yyyy"));
+        } catch (ParseException e) {
+            Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
+        }
 
-                TextView place = (TextView) view.findViewById(R.id.txt_order_detail_place);
-                place.setText(order.getPlaceName());
-                TextView field = (TextView) view.findViewById(R.id.txt_order_detail_field);
-                field.setText(order.getFieldName());
-                TextView startTime = (TextView) view.findViewById(R.id.txt_order_detail_start_time);
-                try {
-                    Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
-                    startTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
-                } catch (ParseException e) {
-                    Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
-                }
+        TextView place = (TextView) view.findViewById(R.id.txt_order_detail_place);
+        place.setText(order.getPlaceName());
+        TextView field = (TextView) view.findViewById(R.id.txt_order_detail_field);
+        field.setText(order.getFieldName());
+        TextView startTime = (TextView) view.findViewById(R.id.txt_order_detail_start_time);
+        try {
+            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
+            startTime.setText(Utilities.getDateTimeString(date, "hh:mm a"));
+        } catch (ParseException e) {
+            Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
+        }
 
 
-                TextView endTime = (TextView) view.findViewById(R.id.txt_order_detail_end_time);
-                try {
-                    Date date = Utilities.getDateTime(order.getEndTime(),"MM/dd/yyyy hh:mm:ss a");
-                    endTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
-                } catch (ParseException e) {
-                    Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
-                }
+        TextView endTime = (TextView) view.findViewById(R.id.txt_order_detail_end_time);
+        try {
+            Date date = Utilities.getDateTime(order.getEndTime(), "MM/dd/yyyy hh:mm:ss a");
+            endTime.setText(Utilities.getDateTimeString(date, "hh:mm a"));
+        } catch (ParseException e) {
+            Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
+        }
 
-                TextView payment = (TextView) view.findViewById(R.id.txt_order_detail_payment);
-                payment.setText(order.getPaidType());
-                TextView status = (TextView) view.findViewById(R.id.txt_order_detail_order_status);
-                status.setText(order.getStatus());
-                buider.setView(view)
-                        .setNegativeButton("OK",null).create().show();
-            }
-        });
-        return convertView;
+        TextView price = (TextView) view.findViewById(R.id.txt_order_detail_price);
+        price.setText(order.getPrice().longValue()+"");
+
+        TextView payment = (TextView) view.findViewById(R.id.txt_order_detail_payment);
+        payment.setText(PaidTypeEnum.fromInteger(order.getPaidType()).toString());
+        TextView status = (TextView) view.findViewById(R.id.txt_order_detail_order_status);
+        status.setText(OrderStatusEnum.fromInteger(order.getStatus()).toString());
+        buider.setView(view)
+                .setNegativeButton("OK", null).create().show();
     }
 
     public void setOrders(List<Order> orders) {
@@ -140,16 +145,15 @@ public class MyOrderAdapter extends ArrayAdapter<Order> {
         notifyDataSetChanged();
     }
 
-    private final class ViewHolder{
+    private final class ViewHolder {
         TextView txtPlace;
         TextView txtTime;
         TextView txtStatus;
-        Button btnDetail;
-        ViewHolder(View v){
+
+        ViewHolder(View v) {
             txtPlace = (TextView) v.findViewById(R.id.txt_my_order_place);
             txtTime = (TextView) v.findViewById(R.id.txt_my_order_time);
             txtStatus = (TextView) v.findViewById(R.id.txt_my_order_status);
-            btnDetail = (Button) v.findViewById(R.id.btn_my_order_detail);
         }
     }
 }
