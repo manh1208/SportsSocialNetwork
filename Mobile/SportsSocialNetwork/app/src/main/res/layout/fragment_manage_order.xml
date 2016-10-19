@@ -4,6 +4,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <Spinner
+        android:id="@+id/spinner_manage_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_spinner"
+        android:gravity="center"
+        android:layout_margin="5sp"
+        >
+    </Spinner>
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/layout_refresh"
         android:layout_width="match_parent"

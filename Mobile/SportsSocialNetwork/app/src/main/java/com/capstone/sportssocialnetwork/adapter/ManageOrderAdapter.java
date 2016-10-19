@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,8 +24,10 @@ import com.capstone.sportssocialnetwork.utils.Utilities;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,6 +40,8 @@ public class ManageOrderAdapter extends ArrayAdapter<Order> {
     private Context mContext;
     private List<Order> orders;
     private RestService service;
+    private final Object mLock = new Object();
+    private ArrayList<Order> mOriginalItems;
 
     public ManageOrderAdapter(Context context, int resource, List<Order> objects) {
         super(context, resource, objects);
@@ -57,6 +62,7 @@ public class ManageOrderAdapter extends ArrayAdapter<Order> {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+        mOriginalItems = null;
         notifyDataSetChanged();
     }
 
@@ -99,121 +105,6 @@ public class ManageOrderAdapter extends ArrayAdapter<Order> {
         return convertView;
     }
 
-    public void showDialog(final Order order) {
-        AlertDialog.Builder buider = new AlertDialog.Builder(mContext);
-        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_manage_order_detail, null, false);
-        TextView name = (TextView) view.findViewById(R.id.txt_order_detail_fullname);
-        name.setText(order.getFullName());
-//                Toast.makeText(mContext, (DataUtils.URL+order.getqRCodeUrl()), Toast.LENGTH_SHORT).show();
-
-        TextView useDate = (TextView) view.findViewById(R.id.txt_order_detail_use_date);
-        try {
-            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
-            useDate.setText(Utilities.getDateTimeString(date, "dd/MM/yyyy"));
-        } catch (ParseException e) {
-            Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
-        }
-
-        TextView place = (TextView) view.findViewById(R.id.txt_order_detail_place);
-        place.setText(order.getPlaceName());
-        TextView field = (TextView) view.findViewById(R.id.txt_order_detail_field);
-        field.setText(order.getFieldName());
-        TextView startTime = (TextView) view.findViewById(R.id.txt_order_detail_start_time);
-        try {
-            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
-            startTime.setText(Utilities.getDateTimeString(date, "hh:mm a"));
-        } catch (ParseException e) {
-            Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
-        }
-
-
-        TextView endTime = (TextView) view.findViewById(R.id.txt_order_detail_end_time);
-        try {
-            Date date = Utilities.getDateTime(order.getEndTime(), "MM/dd/yyyy hh:mm:ss a");
-            endTime.setText(Utilities.getDateTimeString(date, "hh:mm a"));
-        } catch (ParseException e) {
-            Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
-        }
-
-        TextView price = (TextView) view.findViewById(R.id.txt_order_detail_price);
-        price.setText(order.getPrice().longValue()+"");
-
-        TextView payment = (TextView) view.findViewById(R.id.txt_order_detail_payment);
-        payment.setText(PaidTypeEnum.fromInteger(order.getPaidType()).toString());
-        TextView status = (TextView) view.findViewById(R.id.txt_order_detail_order_status);
-        status.setText(OrderStatusEnum.fromInteger(order.getStatus()).toString());
-        Button btnApprove = (Button) view.findViewById(R.id.btn_maange_order_approve);
-        Button btnUnapprove = (Button) view.findViewById(R.id.btn_manage_order_unapprove);
-        if (order.getStatus()==OrderStatusEnum.Pending.getValue()){
-            btnApprove.setVisibility(View.VISIBLE);
-            btnUnapprove.setVisibility(View.VISIBLE);
-        }else{
-            btnApprove.setVisibility(View.GONE);
-            btnUnapprove.setVisibility(View.GONE);
-        }
-        if (order.getStatus()==OrderStatusEnum.Approved.getValue()){
-            btnUnapprove.setVisibility(View.VISIBLE);
-            btnApprove.setVisibility(View.GONE);
-        }
-        if (order.getStatus()==OrderStatusEnum.Unapproved.getValue()){
-            btnUnapprove.setVisibility(View.GONE);
-            btnApprove.setVisibility(View.VISIBLE);
-        }
-        btnApprove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Call<ResponseModel<Order>> call = service.getOrderService().changeStatusOrder(order.getId(),OrderStatusEnum.Approved.getValue());
-                call.enqueue(new Callback<ResponseModel<Order>>() {
-                    @Override
-                    public void onResponse(Call<ResponseModel<Order>> call, Response<ResponseModel<Order>> response) {
-                        if (response.isSuccessful()){
-                            if (response.body().isSucceed()){
-                                Toast.makeText(mContext, "Approved", Toast.LENGTH_SHORT).show();
-                            }else{
-                                Toast.makeText(mContext, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
-                            }
-                        }else{
-                            Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseModel<Order>> call, Throwable t) {
-                        Toast.makeText(mContext, "Loi ket noi voi server", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            }
-        });
-
-        btnUnapprove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Call<ResponseModel<Order>> call = service.getOrderService().changeStatusOrder(order.getId(),OrderStatusEnum.Unapproved.getValue());
-                call.enqueue(new Callback<ResponseModel<Order>>() {
-                    @Override
-                    public void onResponse(Call<ResponseModel<Order>> call, Response<ResponseModel<Order>> response) {
-                        if (response.isSuccessful()){
-                            if (response.body().isSucceed()){
-                                Toast.makeText(mContext, "Approved", Toast.LENGTH_SHORT).show();
-                            }else{
-                                Toast.makeText(mContext, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
-                            }
-                        }else{
-                            Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseModel<Order>> call, Throwable t) {
-                        Toast.makeText(mContext, "Loi ket noi voi server", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-        buider.setView(view)
-                .setNegativeButton("OK", null).create().show();
-    }
 
     private final class ViewHolder{
         TextView txtFullName;
@@ -225,4 +116,28 @@ public class ManageOrderAdapter extends ArrayAdapter<Order> {
             txtStatus = (TextView) v.findViewById(R.id.txt_manage_order_status);
         }
     }
+
+    public void filter(int orderStatus) {
+       if (mOriginalItems==null){
+           mOriginalItems = new ArrayList<>(orders);
+       }
+
+       if (orderStatus<=0){
+           orders = mOriginalItems;
+           notifyDataSetChanged();
+       }else{
+           List<Order> newlist = new ArrayList<>();
+           for (int i = 0; i < mOriginalItems.size(); i++) {
+               Order value = mOriginalItems.get(i);
+               if (value.getStatus()==orderStatus){
+                   newlist.add(value);
+               }
+           }
+           orders = newlist;
+           notifyDataSetChanged();
+       }
+
+    }
+
+
 }

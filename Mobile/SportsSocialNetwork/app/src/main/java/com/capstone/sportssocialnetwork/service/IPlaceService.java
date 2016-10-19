@@ -34,4 +34,12 @@ public interface IPlaceService {
 
     @POST("/api/place/showallplacesofplaceowner")
     Call<ResponseModel<List<Place>>> getAllPlaceOwnerPlace(@Query("ownerId")String ownerId);
+
+    @POST("/api/place/findsurroundingplace")
+    Call<ResponseModel<List<PlaceResponseModel>>> findArroundPlace(@Query("lat")double lat,
+                                                      @Query("lng") double lng,
+                                                      @Query("sport")String sport,
+                                                      @Query("province")String province,
+                                                      @Query("district")String district
+                                                      );
 }

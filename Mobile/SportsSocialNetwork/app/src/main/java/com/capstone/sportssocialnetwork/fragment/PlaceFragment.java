@@ -1,11 +1,18 @@
 package com.capstone.sportssocialnetwork.fragment;
 
+import android.Manifest;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -45,6 +52,7 @@ import retrofit2.Response;
 public class PlaceFragment extends Fragment {
 
     private static final String TAG = "PlaceFragment";
+    private static final int MY_PERMISSIONS = 1994;
     private PlaceAdapter adapter;
     private RestService service;
     private ISocialNetworkService sSNService;
@@ -62,6 +70,7 @@ public class PlaceFragment extends Fragment {
     private boolean isFilterNearby;
     private SearchView searchView;
     private SearchView.OnQueryTextListener queryTextListener;
+    private LocationManager lm;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -214,6 +223,7 @@ public class PlaceFragment extends Fragment {
             queryTextListener = new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextChange(String newText) {
+                    adapter.filter(newText);
                     Log.i("onQueryTextChange", newText);
 //                    if (newText.length()<=0){
 //                        eventAdapter.setEventList(mEvents);
@@ -255,12 +265,75 @@ public class PlaceFragment extends Fragment {
 
                             }
                         })
-                        .setNegativeButton("Tìm sân quanh đây",null)
+                        .setNegativeButton("Tìm sân quanh đây", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                                        && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                                    getData();
+                                } else {
+                                    requestPermission();
+                                }
+                               
+                            }
+                        })
                         .create().show();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void requestPermission() {
+
+            String[] perms = {"android.permission.ACCESS_COARSE_LOCATION","android.permission.ACCESS_FINE_LOCATION"};
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(perms, MY_PERMISSIONS);
+            }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case MY_PERMISSIONS:
+                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    getData();
+                }
+        }
+    }
+
+    private void getData() {
+         lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Call<ResponseModel<List<PlaceResponseModel>>>  call =  service.getPlaceService().findArroundPlace(location.getLatitude(),location.getLongitude(),"","","");
+            call.enqueue(new Callback<ResponseModel<List<PlaceResponseModel>>>() {
+                @Override
+                public void onResponse(Call<ResponseModel<List<PlaceResponseModel>>> call, Response<ResponseModel<List<PlaceResponseModel>>> response) {
+                    if (response.isSuccessful()){
+                        if (response.body().isSucceed()){
+                            adapter.loadNew();
+                            adapter.setAppendFeed(response.body().getData());
+                        }else{
+                            Toast.makeText(getActivity(),response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Toast.makeText(getActivity(), response.message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseModel<List<PlaceResponseModel>>> call, Throwable t) {
+                    Toast.makeText(getActivity(), "Lỗi kết nối server", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+    }
+
 
     private void createSportSpinner() {
         List<String> sports = new ArrayList<String>();

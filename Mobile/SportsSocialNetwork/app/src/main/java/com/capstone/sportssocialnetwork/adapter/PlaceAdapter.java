@@ -13,10 +13,13 @@ import android.widget.TextView;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.BookingActivity;
 import com.capstone.sportssocialnetwork.model.Feed;
+import com.capstone.sportssocialnetwork.model.Order;
 import com.capstone.sportssocialnetwork.model.Place;
 import com.capstone.sportssocialnetwork.model.response.PlaceResponseModel;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by ManhNV on 9/6/16.
@@ -24,6 +27,7 @@ import java.util.List;
 public class PlaceAdapter extends ArrayAdapter<PlaceResponseModel> {
     private Context mContext;
     private List<PlaceResponseModel> places;
+    private ArrayList<PlaceResponseModel> mOriginalItems;
 
     public PlaceAdapter(Context context, int resource, List<PlaceResponseModel> objects) {
         super(context, resource, objects);
@@ -72,6 +76,7 @@ public class PlaceAdapter extends ArrayAdapter<PlaceResponseModel> {
 
     public void loadNew() {
         places.clear();
+        mOriginalItems = null;
         notifyDataSetChanged();
     }
 
@@ -79,6 +84,37 @@ public class PlaceAdapter extends ArrayAdapter<PlaceResponseModel> {
         places.addAll(data);
         notifyDataSetChanged();
     }
+    
+    public void filter(String query){
+
+        if (mOriginalItems==null){
+            mOriginalItems = new ArrayList<>(places);
+        }
+
+        if (query == null || query.length() == 0) {
+            places = mOriginalItems;
+            mOriginalItems = null;
+            notifyDataSetChanged();
+        } else {
+            String constraintString = query.toString().toLowerCase(
+                    Locale.getDefault());
+            List<PlaceResponseModel> newlist = new ArrayList<>();
+            for (int i = 0; i < mOriginalItems.size(); i++) {
+                final PlaceResponseModel value = mOriginalItems.get(i);
+                final String valueText = value.getName().toString().toLowerCase(
+                        Locale.getDefault());
+
+                // First match against the whole, non-splitted value
+                if (valueText.contains(constraintString)) {
+                    newlist.add(value);
+                }
+            }
+            places = newlist;
+            notifyDataSetChanged();
+        }
+    }
+
+
 
     private class ViewHolder{
         ImageView ivAvatar;

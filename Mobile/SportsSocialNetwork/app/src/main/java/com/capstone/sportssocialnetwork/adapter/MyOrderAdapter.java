@@ -21,6 +21,7 @@ import com.capstone.sportssocialnetwork.utils.Utilities;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +31,7 @@ import java.util.List;
 public class MyOrderAdapter extends ArrayAdapter<Order> {
     private Context mContext;
     private List<Order> orders;
+    private ArrayList<Order> mOriginalItems;
 
     public MyOrderAdapter(Context context, int resource, List<Order> objects) {
         super(context, resource, objects);
@@ -142,7 +144,29 @@ public class MyOrderAdapter extends ArrayAdapter<Order> {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+        mOriginalItems = null;
         notifyDataSetChanged();
+    }
+
+    public void filter(int position) {
+        if (mOriginalItems==null){
+            mOriginalItems = new ArrayList<>(orders);
+        }
+
+        if (position<=0){
+            orders = mOriginalItems;
+            notifyDataSetChanged();
+        }else{
+            List<Order> newlist = new ArrayList<>();
+            for (int i = 0; i < mOriginalItems.size(); i++) {
+                Order value = mOriginalItems.get(i);
+                if (value.getStatus()==position){
+                    newlist.add(value);
+                }
+            }
+            orders = newlist;
+            notifyDataSetChanged();
+        }
     }
 
     private final class ViewHolder {

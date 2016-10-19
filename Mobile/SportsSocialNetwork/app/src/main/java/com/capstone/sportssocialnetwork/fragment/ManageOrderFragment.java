@@ -1,5 +1,8 @@
 package com.capstone.sportssocialnetwork.fragment;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,10 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.capstone.sportssocialnetwork.Enumerable.OrderStatusEnum;
+import com.capstone.sportssocialnetwork.Enumerable.PaidTypeEnum;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.adapter.ManageOrderAdapter;
 import com.capstone.sportssocialnetwork.model.Order;
@@ -24,6 +32,7 @@ import com.capstone.sportssocialnetwork.utils.Utilities;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -40,12 +49,14 @@ public class ManageOrderFragment extends Fragment {
     private ManageOrderAdapter adapter;
     private String userId;
     private boolean isLoading;
+    private Context mContext;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_manage_order, container, false);
         init(v);
+        createSpinner();
         prepareData();
         event();
 
@@ -62,6 +73,17 @@ public class ManageOrderFragment extends Fragment {
                 }
             }
         });
+        viewHolder.spFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                adapter.filter(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void prepareData() {
@@ -69,6 +91,7 @@ public class ManageOrderFragment extends Fragment {
     }
 
     private void init(View v) {
+        mContext = getActivity();
         userId = DataUtils.getINSTANCE(getActivity()).getPreferences().getString(SharePreferentName.SHARE_USER_ID, "");
         viewHolder = new ViewHolder(v);
         service = new RestService();
@@ -78,18 +101,33 @@ public class ManageOrderFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Order order = adapter.getItem(position);
-               adapter.showDialog(order);
+               showDialog(order);
             }
         });
     }
 
+    private void createSpinner() {
+        List<String> sports = new ArrayList<String>();
+        sports.add("Tất cả");
+        for (int i = 0; i < OrderStatusEnum.values().length; i++) {
+            sports.add(OrderStatusEnum.values()[i].toString());
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter(getActivity(), R.layout.item_spinner, sports);
+        arrayAdapter.setDropDownViewResource(R.layout.item_spinner);
+        viewHolder.spFilter.setAdapter(arrayAdapter);
+        viewHolder.spFilter.setSelection(0);
+    }
+
     private final class ViewHolder {
+        Spinner spFilter;
         SwipeRefreshLayout refreshLayout;
         ListView lvOrder;
 
         ViewHolder(View v) {
             refreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.layout_refresh);
             lvOrder = (ListView) v.findViewById(R.id.lv_manage_order);
+            spFilter = (Spinner) v.findViewById(R.id.spinner_manage_order);
         }
     }
 
@@ -99,7 +137,138 @@ public class ManageOrderFragment extends Fragment {
         loadData();
     }
 
+    public void showDialog(final Order order) {
+        AlertDialog.Builder buider = new AlertDialog.Builder(mContext);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_manage_order_detail, null, false);
+        final AlertDialog dialog =  buider.setView(view)
+                .setNegativeButton("OK", null).create();
+
+
+        TextView name = (TextView) view.findViewById(R.id.txt_order_detail_fullname);
+        name.setText(order.getFullName());
+//                Toast.makeText(mContext, (DataUtils.URL+order.getqRCodeUrl()), Toast.LENGTH_SHORT).show();
+
+        TextView useDate = (TextView) view.findViewById(R.id.txt_order_detail_use_date);
+        try {
+            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
+            useDate.setText(Utilities.getDateTimeString(date, "dd/MM/yyyy"));
+        } catch (ParseException e) {
+            Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
+        }
+
+        TextView place = (TextView) view.findViewById(R.id.txt_order_detail_place);
+        place.setText(order.getPlaceName());
+        TextView field = (TextView) view.findViewById(R.id.txt_order_detail_field);
+        field.setText(order.getFieldName());
+        TextView startTime = (TextView) view.findViewById(R.id.txt_order_detail_start_time);
+        try {
+            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
+            startTime.setText(Utilities.getDateTimeString(date, "hh:mm a"));
+        } catch (ParseException e) {
+            Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
+        }
+
+
+        TextView endTime = (TextView) view.findViewById(R.id.txt_order_detail_end_time);
+        try {
+            Date date = Utilities.getDateTime(order.getEndTime(), "MM/dd/yyyy hh:mm:ss a");
+            endTime.setText(Utilities.getDateTimeString(date, "hh:mm a"));
+        } catch (ParseException e) {
+            Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
+        }
+
+        TextView price = (TextView) view.findViewById(R.id.txt_order_detail_price);
+        price.setText(order.getPrice().longValue()+"");
+
+        TextView payment = (TextView) view.findViewById(R.id.txt_order_detail_payment);
+        payment.setText(PaidTypeEnum.fromInteger(order.getPaidType()).toString());
+        TextView status = (TextView) view.findViewById(R.id.txt_order_detail_order_status);
+        status.setText(OrderStatusEnum.fromInteger(order.getStatus()).toString());
+        Button btnApprove = (Button) view.findViewById(R.id.btn_maange_order_approve);
+        Button btnUnapprove = (Button) view.findViewById(R.id.btn_manage_order_unapprove);
+        if (order.getStatus()==OrderStatusEnum.Pending.getValue()){
+            btnApprove.setVisibility(View.VISIBLE);
+            btnUnapprove.setVisibility(View.VISIBLE);
+        }else{
+            btnApprove.setVisibility(View.GONE);
+            btnUnapprove.setVisibility(View.GONE);
+        }
+        if (order.getStatus()==OrderStatusEnum.Approved.getValue()){
+            btnUnapprove.setVisibility(View.VISIBLE);
+            btnApprove.setVisibility(View.GONE);
+        }
+        if (order.getStatus()==OrderStatusEnum.Unapproved.getValue()){
+            btnUnapprove.setVisibility(View.GONE);
+            btnApprove.setVisibility(View.VISIBLE);
+        }
+        btnApprove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<ResponseModel<Order>> call = service.getOrderService().changeStatusOrder(order.getId(),OrderStatusEnum.Approved.getValue());
+                call.enqueue(new Callback<ResponseModel<Order>>() {
+                    @Override
+                    public void onResponse(Call<ResponseModel<Order>> call, Response<ResponseModel<Order>> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()){
+                            if (response.body().isSucceed()){
+                                Toast.makeText(mContext, "Approved", Toast.LENGTH_SHORT).show();
+
+                            }else{
+                                Toast.makeText(mContext, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseModel<Order>> call, Throwable t) {
+                        Toast.makeText(mContext, "Loi ket noi voi server", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
+
+        btnUnapprove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<ResponseModel<Order>> call = service.getOrderService().changeStatusOrder(order.getId(),OrderStatusEnum.Unapproved.getValue());
+                call.enqueue(new Callback<ResponseModel<Order>>() {
+                    @Override
+                    public void onResponse(Call<ResponseModel<Order>> call, Response<ResponseModel<Order>> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()){
+                            if (response.body().isSucceed()){
+                                Toast.makeText(mContext, "UnApproved", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(mContext, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseModel<Order>> call, Throwable t) {
+                        Toast.makeText(mContext, "Loi ket noi voi server", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        dialog.show();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                loadData();
+            }
+        });
+
+    }
+
+
     private void loadData() {
+        viewHolder.spFilter.setSelection(0);
         isLoading = true;
         Call<ResponseModel<List<Order>>> call = service.getOrderService().getPlaceOwnerOrder(userId);
         call.enqueue(new Callback<ResponseModel<List<Order>>>() {
