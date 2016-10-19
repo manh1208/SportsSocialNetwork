@@ -20,7 +20,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         bool checkTimeValidInOrder(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate);
 
-        Order CreateOrder(String userId, int fieldId, DateTime startTime, DateTime endTime, String note, double price, int? paidType);
+        Order CreateOrder(Order order);
         
         //Order CheckInOrder(String orderCode);
         
@@ -90,21 +90,11 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return null;
         }
 
-        public Order CreateOrder(String userId, int fieldId, DateTime startTime, DateTime endTime, String note, double price, int? paidType)
+        public Order CreateOrder(Order o)
         {
-            Order order = new Order();
-            order.UserId = userId;
-            order.FieldId = fieldId;
-            order.CreateDate = DateTime.Now;
-            order.StartTime = startTime;
-            order.EndTime = endTime;
-            order.Note = note;
-            order.Price = price;
-            order.Status = 0;
-            order.PaidType = paidType;
-            this.Create(order);
+            this.Create(o);
             this.Save();
-            return order;
+            return o;
 
         }
 

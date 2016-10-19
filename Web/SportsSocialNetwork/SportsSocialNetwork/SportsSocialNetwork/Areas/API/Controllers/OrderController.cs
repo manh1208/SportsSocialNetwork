@@ -1,4 +1,6 @@
-﻿using SkyWeb.DatVM.Mvc;
+﻿
+using QRCoder;
+using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
@@ -33,7 +35,8 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
                 List<OrderSimpleViewModel> result = new List<OrderSimpleViewModel>();
 
-                foreach (var order in orderList) {
+                foreach (var order in orderList)
+                {
                     result.Add(PrepareOrderSimpleViewModel(order));
                 }
 
@@ -48,7 +51,8 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult ShowAllOrderOfPlaceOwner(String ownerId) {
+        public ActionResult ShowAllOrderOfPlaceOwner(String ownerId)
+        {
             var placeService = this.Service<IPlaceService>();
 
             var orderService = this.Service<IOrderService>();
@@ -57,7 +61,8 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             ResponseModel<List<OrderSimpleViewModel>> response = null;
 
-            try {
+            try
+            {
                 List<Place> placeList = placeService.FindAllPlaceOfPlaceOwner(ownerId).ToList();
 
                 List<Field> fieldList = new List<Field>();
@@ -71,7 +76,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
                 foreach (var field in fieldList)
                 {
-                    
+
                     orderList = orderList.Concat(orderService.GetAllOrderByFieldId(field.Id)).ToList();
                 }
 
@@ -84,7 +89,9 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
                 response = new ResponseModel<List<OrderSimpleViewModel>>(true, "Danh sách đặt sân của bạn đã được tải thành công!", null, result);
 
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 response = ResponseModel<List<OrderSimpleViewModel>>.CreateErrorResponse("Danh sách đặt sân đã tải thất bại!", systemError);
             }
 
@@ -160,11 +167,90 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         {
             ResponseModel<OrderDetailViewModel> response = null;
 
-            var service = this.Service<IOrderService>();
+            var orderService = this.Service<IOrderService>();
+
+            var fieldService = this.Service<IFieldService>();
+
+            var userService = this.Service<IAspNetUserService>();
+
+            //if (!CheckTimeValid(model.FieldId, model.StartTime.TimeOfDay, model.EndTime.TimeOfDay))
+            //{
+            //    response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Đặt sân thất bại", "Thời gian không nằm trong các khung giờ");
+
+            //    return Json(response);
+            //}
+            double price = CalculatePrice(model.FieldId, model.StartTime.TimeOfDay, model.EndTime.TimeOfDay);
+
+            //Temporary
+            if (price==0)
+            {
+                response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Đặt sân thất bại", "Thời gian không nằm trong các khung giờ");
+
+                return Json(response);
+            }
 
             try
             {
-                Order order = service.CreateOrder(model.UserId, model.FieldId, model.StartTime, model.EndTime, model.Note, model.Price, model.PaidType);
+                //Get current user info
+                var user = userService.FindUser(model.UserId);
+
+                //Create order info
+                String orderCode = DateTime.Now.ToString("yyyyMMddHHmmss");
+
+                Order order = new Order();
+
+                order.FieldId = model.FieldId;
+                order.UserId = model.UserId;
+                order.StartTime = model.StartTime;
+                order.EndTime = model.EndTime;
+                order.CreateDate = DateTime.Now;
+                order.Price = price;
+                order.Note = model.Note;
+                order.PayerName = model.PayerName;
+                order.PayerEmail = model.PayerEmail;
+                order.PayerPhone = model.PayerPhone;
+                order.Status = (int)OrderStatus.Pending;
+                order.OrderCode = orderCode;
+                order.QRCodeUrl = Utils.GenerateQRCode(orderCode, QRCodeGenerator.ECCLevel.Q);
+                var transdate = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+                order.TransactionTime = DateTime.Parse(transdate);
+
+                if (model.PaidType == (int)OrderPaidType.ChosePayOnline)
+                {
+                    order.PaidType = (int)OrderPaidType.ChosePayOnline;
+
+                }
+                if (model.PaidType == (int)OrderPaidType.ChosePayByCash)
+                {
+                    order.PaidType = (int)OrderPaidType.ChosePayByCash;
+                }
+
+
+                //Create Noti
+                var field = fieldService.FirstOrDefaultActive(p => p.Id == order.FieldId);
+                var noti = new Notification();
+                noti.UserId = field.Place.UserId;
+                noti.Message = user.UserName + " đã đặt sân tại " + field.Name;
+                noti.Title = "Đơn hàng mới";
+                noti.Type = (int)NotificationType.Order;
+                noti.Active = true;
+                order.Notifications.Add(noti);
+
+
+                //Save Order
+                order = orderService.CreateOrder(order);
+
+
+                //Send Email
+                string subject = "[SSN] - Thông tin đặt sân";
+                string body = "Hi <strong>" + user.UserName + "</strong>" +
+                    ",<br/><br/>Bạn đã đặt sân: " + field.Name + "<br/> Thời gian: " + order.StartTime.ToString("HH:mm") + " - " +
+                    order.EndTime.ToString("HH:mm") + ", ngày " + order.StartTime.ToString("dd/MM/yyyy") +
+                    "<br/> Giá tiền : " + order.Price + " đồng" +
+                    "<br/> <strong>Mã đặt sân của bạn : " + order.OrderCode + "</strong>" +
+                    "<br/><img src='" + Utils.GetHostName() + order.QRCodeUrl + "'>" +
+                    "<br/> Cảm ơn bạn đã sử dụng dịch vụ của SSN. Chúc bạn có những giờ phút thoải mái chơi thể thao!";
+                EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { user.Email }, null, null, subject, body, true);
 
                 OrderDetailViewModel result = Mapper.Map<OrderDetailViewModel>(order);
 
@@ -181,12 +267,14 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult CheckInOrder(String orderCode) {
+        public ActionResult CheckInOrder(String orderCode)
+        {
             var service = this.Service<IOrderService>();
 
             ResponseModel<OrderSimpleViewModel> response = null;
 
-            try {
+            try
+            {
                 Order order = service.FindOrderByCode(orderCode);
 
                 if (order != null)
@@ -200,7 +288,8 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                         response = new ResponseModel<OrderSimpleViewModel>(true, "Đơn đặt sân đã được checkin", null, result);
 
                     }
-                    else if (order.Status == int.Parse(OrderStatus.Cancel.ToString("d"))) {
+                    else if (order.Status == int.Parse(OrderStatus.Cancel.ToString("d")))
+                    {
                         OrderSimpleViewModel result = PrepareOrderSimpleViewModel(order);
 
                         response = new ResponseModel<OrderSimpleViewModel>(false, "Đơn đặt sân chưa được checkin", new List<string> { "Đơn đặt sân đã bị hủy" }, result);
@@ -229,7 +318,9 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 {
                     response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Đơn đặt sân chưa được checkin", "Code không hợp lệ");
                 }
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Đơn đặt sân chưa được checkin", systemError);
             }
 
@@ -237,47 +328,85 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetPrice(int fieldId,TimeSpan startTime, TimeSpan endTime) {
+        public ActionResult GetPrice(int fieldId, TimeSpan startTime, TimeSpan endTime)
+        {
             ResponseModel<double> response = null;
-            try {
-                double result =CalculatePrice(fieldId, startTime, endTime);
+            try
+            {
+                double result = CalculatePrice(fieldId, startTime, endTime);
 
                 response = new ResponseModel<double>(true, "Giá:", null, result);
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 response = ResponseModel<double>.CreateErrorResponse("Lỗi tính giá", systemError);
             }
             return Json(response);
         }
 
-        private OrderSimpleViewModel PrepareOrderSimpleViewModel(Order order) {
+        private OrderSimpleViewModel PrepareOrderSimpleViewModel(Order order)
+        {
             OrderSimpleViewModel result = Mapper.Map<OrderSimpleViewModel>(order);
+
+            result.UserId = order.AspNetUser.Id;
 
             result.UserName = order.AspNetUser.UserName;
 
             result.FullName = order.AspNetUser.FullName;
 
+            result.PhoneNumber = order.AspNetUser.PhoneNumber;
+
             result.FieldName = order.Field.Name;
+
+            result.PlaceId = order.Field.PlaceId;
 
             result.PlaceName = order.Field.Place.Name;
 
-            result.Status = Utils.GetEnumDescription((OrderStatus)order.Status);
+            result.StatusString = Utils.GetEnumDescription((OrderStatus)result.Status);
 
-            result.PaidType = Utils.GetEnumDescription((OrderPaidType)order.PaidType);
+            result.PaidTypeString = Utils.GetEnumDescription((OrderPaidType)result.PaidType);
 
             return result;
         }
 
-        private double CalculatePrice(int fieldId, TimeSpan startTime, TimeSpan endTime) {
+        private double CalculatePrice(int fieldId, TimeSpan startTime, TimeSpan endTime)
+        {
             double price = 0;
-
+            
             var timeBlockService = this.Service<ITimeBlockService>();
 
             bool rs = timeBlockService.checkTimeValid(fieldId, startTime, endTime);
-            if (rs) {
-                return timeBlockService.calPrice(fieldId, startTime, endTime);
+            if (rs)
+            {
+                price = timeBlockService.calPrice(fieldId, startTime, endTime);
+            }
+            return price;
+        }
+
+        private bool CheckTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime) {
+            bool result =true;
+
+            var _timeBlockService = this.Service<ITimeBlockService>();
+
+            try
+            {
+                bool rs = _timeBlockService.checkTimeValid(fieldId, startTime, endTime);
+                if (rs)
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+
+            }
+            catch (Exception)
+            {
+                result = false;
             }
 
-            return price;
+            return result;
         }
     }
 
