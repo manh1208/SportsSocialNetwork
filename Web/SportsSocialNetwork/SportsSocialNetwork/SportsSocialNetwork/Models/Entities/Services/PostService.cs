@@ -52,10 +52,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
             Post post = FirstOrDefaultActive(x => x.Id == model.Id);
             post.PostContent = model.PostContent;
             post.EditDate = DateTime.Now;
-            if (imageChanged)
-            {
-                post.Image = model.Image;
-            }
+            //if (imageChanged)
+            //{
+            //    post.Image = model.Image;
+            //}
             this.Update(post);
             return post;
         }

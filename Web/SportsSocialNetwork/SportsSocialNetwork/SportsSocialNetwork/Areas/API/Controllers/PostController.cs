@@ -127,12 +127,12 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 Post post = Mapper.Map<Post>(model);
 
-                if (model.UploadImage != null)
-                {
-                    FileUploader uploader = new FileUploader();
+                //if (model.UploadImage != null)
+                //{
+                //    FileUploader uploader = new FileUploader();
 
-                    post.Image = uploader.UploadImage(model.UploadImage, "UserImage");
-                }
+                //    post.Image = uploader.UploadImage(model.UploadImage, "UserImage");
+                //}
 
                 post = service.CreatePost(post);
 
@@ -163,19 +163,19 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             {
                 Post post = Mapper.Map<Post>(model);
 
-                if (imageChanged)
-                {
-                    if (model.UploadImage != null)
-                    {
-                        FileUploader uploader = new FileUploader();
+                //if (imageChanged)
+                //{
+                //    if (model.UploadImage != null)
+                //    {
+                //        FileUploader uploader = new FileUploader();
 
-                        post.Image = uploader.UploadImage(model.UploadImage, userImagePath);
-                    }
-                    else
-                    {
-                        post.Image = null;
-                    }
-                }
+                //        post.Image = uploader.UploadImage(model.UploadImage, userImagePath);
+                //    }
+                //    else
+                //    {
+                //        post.Image = null;
+                //    }
+                //}
 
                 post = service.EditPost(post, imageChanged);
 
