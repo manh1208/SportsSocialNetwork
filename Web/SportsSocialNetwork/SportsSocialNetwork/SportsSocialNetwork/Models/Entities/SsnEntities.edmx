@@ -319,6 +319,7 @@
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="PostContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ContentType" Type="int" />
           <Property Name="EditDate" Type="datetime" />
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="GroupId" Type="int" />
@@ -1828,6 +1829,7 @@
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="PostContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ContentType" Type="Int32" />
           <Property Name="EditDate" Type="DateTime" Precision="3" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <Property Name="GroupId" Type="Int32" />
@@ -2827,6 +2829,7 @@
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
                 <ScalarProperty Name="PostContent" ColumnName="PostContent" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
