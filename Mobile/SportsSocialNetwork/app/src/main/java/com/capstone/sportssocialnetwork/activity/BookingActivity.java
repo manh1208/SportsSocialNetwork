@@ -25,10 +25,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.capstone.sportssocialnetwork.Enumerable.PaidTypeEnum;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.model.Field;
 import com.capstone.sportssocialnetwork.model.FieldType;
+import com.capstone.sportssocialnetwork.model.Order;
 import com.capstone.sportssocialnetwork.model.Place;
+import com.capstone.sportssocialnetwork.model.request.OrderRequestModel;
 import com.capstone.sportssocialnetwork.model.response.PlaceResponseModel;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
@@ -37,6 +40,7 @@ import com.capstone.sportssocialnetwork.utils.SharePreferentName;
 import com.capstone.sportssocialnetwork.utils.Utilities;
 
 import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -385,6 +389,7 @@ public class BookingActivity extends AppCompatActivity {
         if (fieldId == -1) return;
         if (startTime == null || startTime.equals("")) return;
         if (endTime == null || endTime.equals("")) return;
+        if (!isValidation()) return;
         Call<ResponseModel<Double>> call = service.getOrderService().getPrice(fieldId, startTime, endTime);
         call.enqueue(new Callback<ResponseModel<Double>>() {
             @Override
@@ -427,12 +432,11 @@ public class BookingActivity extends AppCompatActivity {
                     cash.setChecked(true);
                     TextView txtPlace = (TextView) v.findViewById(R.id.txt_order_confirm_place);
                     txtPlace.setText(spPlace.getSelectedItem().toString());
-
                     TextView txtField = (TextView) v.findViewById(R.id.txt_order_confirm_field);
                     txtField.setText(spField.getSelectedItem().toString());
                     TextView txtDate = (TextView) v.findViewById(R.id.txt_order_confirm_use_date);
                     txtDate.setText(this.txtUseDate.getText().toString());
-                    TextView txtStartTime = (TextView) v.findViewById(R.id.txt_order_confirm_start_time);
+                    final TextView txtStartTime = (TextView) v.findViewById(R.id.txt_order_confirm_start_time);
                     txtStartTime.setText(this.txtStartTime.getText().toString());
                     TextView txtEndTime = (TextView) v.findViewById(R.id.txt_order_confirm_end_time);
                     txtEndTime.setText(this.txtEndTime.getText().toString());
@@ -442,6 +446,7 @@ public class BookingActivity extends AppCompatActivity {
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+
 
                                 }
                             })
@@ -456,7 +461,49 @@ public class BookingActivity extends AppCompatActivity {
                     dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(BookingActivity.this, "ahihi", Toast.LENGTH_SHORT).show();
+                            try {
+                                int fieldId= fieldHash.get(spField.getSelectedItem().toString());
+                                String startTime = txtUseDate.getText().toString()+" "+txtStartTime.getText().toString();
+                                Date startTimeDate = Utilities.getDateTime(startTime,"dd/MM/yyyy HH:mm");
+                                String start = Utilities.getDateTimeString(startTimeDate,"dd/MM/yyyy HH:mm:ss a");
+                                String endTime = txtUseDate.getText().toString()+" "+txtStartTime.getText().toString();
+                                Date endTimeDate = Utilities.getDateTime(endTime,"dd/MM/yyyy HH:mm");
+                                String end = Utilities.getDateTimeString(endTimeDate,"dd/MM/yyyy HH:mm:ss a");
+                                int paidType = PaidTypeEnum.ChosePayByCash.getValue();
+                                switch (group.getCheckedRadioButtonId()){
+                                    case R.id.rbt_cash:
+                                        paidType = PaidTypeEnum.ChosePayByCash.getValue();
+                                        break;
+                                    case R.id.rbt_online:
+                                        paidType = PaidTypeEnum.ChosePayOnline.getValue();
+                                        break;
+                                }
+
+                                OrderRequestModel model = new OrderRequestModel(userId,fieldId,start,end,"","",paidType);
+                                Call<ResponseModel<Order>> call = service.getOrderService().createOrder(model);
+                                call.enqueue(new Callback<ResponseModel<Order>>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseModel<Order>> call, Response<ResponseModel<Order>> response) {
+                                        if (response.isSuccessful()){
+                                            if (response.body().isSucceed()){
+                                                
+                                            }else{
+                                                Toast.makeText(BookingActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }else{
+                                            Toast.makeText(BookingActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseModel<Order>> call, Throwable t) {
+                                        Toast.makeText(BookingActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            } catch (ParseException e) {
+                                Toast.makeText(BookingActivity.this, "Thời gian không hợp lệ", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                 }
@@ -476,9 +523,10 @@ public class BookingActivity extends AppCompatActivity {
             Log.e(TAG,"Choose Date"+Date.parse(txtUseDate.getText().toString())+" - " +new Date().toString());
             Log.e(TAG,"Current Date"+(new java.util.Date()).getTime()+" - " + new Date(Date.parse(txtUseDate.getText().toString())));
 
-            Date currentDate=  new Date();
+            Date currentDate= Utilities.getZeroTimeDate(new Date());
             Date useDate = Utilities.getDateTime(txtUseDate.getText().toString(),"dd/MM/yyyy");
-            if (currentDate.after(useDate)) {
+
+            if (useDate.before(currentDate)) {
                 txtUseDate.setError("Ngày sử dụng phải lớn hơn ngày hiện tại");
                 txtUseDate.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
                 return false;
@@ -488,14 +536,20 @@ public class BookingActivity extends AppCompatActivity {
                 txtStartTime.setError("Vui lòng chọn thời gian bắt đầu");
                 txtStartTime.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
                 return false;
-
             }
+
             if (txtEndTime.getText().toString() == null || txtEndTime.getText().toString().equals("")) {
                 txtEndTime.setError("Vui lòng chọn thời gian kết thúc");
                 txtEndTime.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
                 return false;
             }
-
+            Date starttime = Utilities.getDateTime(txtStartTime.getText().toString(),"HH:mm");
+            Date endtime = Utilities.getDateTime(txtEndTime.getText().toString(),"HH:mm");
+            if(starttime.compareTo(endtime)>=0){
+                txtEndTime.setError("Giờ kết thúc phải lớn hơn giờ bắt đầu");
+                txtEndTime.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
+                return false;
+            }
 //            if (Time.valueOf(txtStartTime.getText().toString()).after(Time.valueOf(txtEndTime.getText().toString())) ) {
 //                txtEndTime.setError("Giờ kết thúc phải lớn hơn giờ bắt đầu");
 //                txtEndTime.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));

@@ -16,4 +16,5 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_check_in">CheckInActivity</string>
     <string name="title_activity_my_order">MyOrderActivity</string>
+    <string name="failure">Lỗi kết nối với server. Vui lòng thử lại sau!</string>
 </resources>

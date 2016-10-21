@@ -49,6 +49,26 @@ public class Utilities {
         return sdf.format(s);
     }
 
+//    public static Time getTime(String format) throws ParseException{
+//        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
+//        Time time = sdf.pa
+//    }
+
+    public static Date getZeroTimeDate(Date fecha) {
+        Date res = fecha;
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime( fecha );
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        res = calendar.getTime();
+
+        return res;
+    }
+
 
 
 
