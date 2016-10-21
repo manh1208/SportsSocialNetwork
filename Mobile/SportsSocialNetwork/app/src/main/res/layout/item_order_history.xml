@@ -14,7 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/btn_my_order_detail"
             android:orientation="vertical"
             android:paddingBottom="20sp"
             android:paddingLeft="20sp"

@@ -15,7 +15,7 @@
             android:paddingLeft="20sp"
             android:paddingBottom="20sp"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/btn_manage_order_detail">
+            >
 
             <TextView
                 android:id="@+id/txt_manage_order_fullname"
