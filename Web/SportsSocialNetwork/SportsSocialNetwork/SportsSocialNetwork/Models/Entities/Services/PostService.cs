@@ -20,6 +20,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         AspNetUser GetUserNameOfPost(int postId);
 
+        string CalculatePostAge(DateTime date);
+
         #endregion
 
         void test();
@@ -63,6 +65,28 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         public AspNetUser GetUserNameOfPost(int postId) {
             return this.FirstOrDefaultActive(x => x.Id == postId).AspNetUser;
+        }
+
+        public string CalculatePostAge(DateTime date)
+        {
+            string result = "";
+            TimeSpan a = DateTime.Now - date;
+            int b = (int)a.TotalSeconds;
+            if (b / 86400 > 1)
+            {
+                result = date.ToString("dd/MM/yyyy");
+            }
+            else if (b / 3600 < 1)
+            {
+                int minute = b / 3600;
+                result = minute.ToString() + " phút";
+            }
+            else
+            {
+                int hours = b / 3600;
+                result = hours.ToString() + " giờ";
+            }
+            return result;
         }
 
         #endregion

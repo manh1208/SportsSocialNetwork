@@ -1,0 +1,569 @@
+﻿@using Microsoft.AspNet.Identity;
+@using SportsSocialNetwork.Models.Enumerable;
+@{
+    ViewBag.Title = "Group";
+    Layout = "~/Views/Shared/_SSNLayout.cshtml";
+}
+
+<style>
+    .panel-cover {
+        margin:0 0 10px 0;
+
+    }
+
+    .panel-status {
+        margin-bottom: 15px;
+    }
+
+    .suggest-group {
+        border: 1px solid lightgray;
+        overflow:hidden;
+        padding-top: 15px;
+        margin:10px;
+    }
+</style>
+
+@section styles {
+    <link rel="stylesheet" href="~/Content/assets/vendor/magnific-popup/magnific-popup.css">
+
+}
+
+
+<!--Cover area-->
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-cover" style="background-image: url('/Content/assets/example-images/dashboard-header.jpg');
+                padding-top: 30%; background-position:center">
+        </div>
+    </div>
+</div>
+ <!--END Cover area-->
+
+<div class="row">
+    <!--Left side-bar-->
+    <div class="col-sm-3">
+        <div class="widget widget-shadow text-center">
+            <div class="widget-header">
+                <div class="widget-header-content">
+                    <a class="avatar avatar-lg" href="javascript:void(0)">
+                        <img src="~/Content/assets/portraits/5.jpg" alt="...">
+                    </a>
+                    <div class="profile-user">Hội mê bóng hơn bồ</div>
+                    <div class="profile-job">Bóng đá</div>
+                    <p>
+                        Hội thích bóng, thích chơi bóng, bồ cũng thích nhưng mà hok
+                        thích bằng bóng. Bóng là số 1!
+                    </p>
+                    <div class="profile-social">
+                        <a class="icon bd-twitter" href="javascript:void(0)"></a>
+                        <a class="icon bd-facebook" href="javascript:void(0)"></a>
+                        <a class="icon bd-dribbble" href="javascript:void(0)"></a>
+                        <a class="icon bd-github" href="javascript:void(0)"></a>
+                    </div>
+                    <button type="button" class="btn btn-primary">Tham gia nhóm</button>
+                </div>
+            </div>
+            <div class="widget-footer">
+                <div class="row no-space">
+                    <div class="col-xs-6">
+                        <strong class="profile-stat-count">260</strong>
+                        <span>Thành viên</span>
+                    </div>
+                    <div class="col-xs-6">
+                        <strong class="profile-stat-count">180</strong>
+                        <span>Số bài post</span>
+                    </div>
+                    @*<div class="col-xs-4">
+                        <strong class="profile-stat-count">2000</strong>
+                        <span>Tweets</span>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--END Left side-bar-->
+
+    <!--Main-->
+    <div class="col-sm-6" style="padding: 0;">
+        <!--Posting status area-->
+        <div class="panel text-right panel-status">
+            <div class="row">
+                <input type="file" class="btn b" value="Thêm hình ảnh"/>
+            </div>
+            <div class="clearfix"></div>
+            <textarea class="form-control" placeholder="Viết gì đó cho nhóm của bạn" rows="3"></textarea>
+            <button type="button" style="width: 80px" class="btn btn-round btn-sm btn-primary">Đăng</button>
+        </div>
+        <!--END Posting status area-->
+
+        <!--Post area-->
+        <div class="panel" id="activities" role="tabpanel">
+            <div class="panel-body">
+                <ul class="list-group" id="listPost">
+                    <li class="list-group-item">
+                        <div class="media">
+                            <div class="media-left">
+                                <a class="avatar" href="javascript:void(0)">
+                                    <img class="img-responsive" src="~/Content//assets/portraits/2.jpg" alt="...">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    Ida Fleming
+                                    <span>posted an updated</span>
+                                </h4>
+                                <small>active 14 minutes ago</small>
+                                <div class="profile-brief">
+                                    “Check if it can be corrected with overflow : hidden”
+                                    <div class="media">
+                                        <div class="col-xs-12">
+                                            <div style="max-width:500px;">
+                                                @*<img class="img-responsive" src="~/Content/assets/example-images/coming-soon.jpg" alt="...">*@
+                                                <a class="inline-block" href="~/Content/assets/example-images/coming-soon.jpg" data-plugin="magnificPopup"
+                                                   data-close-btn-inside="false" data-fixed-contentPos="true" data-main-class="mfp-margin-0s mfp-with-zoom"
+                                                   data-zoom='{"enabled": "true","duration":"300"}'>
+                                                    <img class="img-responsive" src="~/Content/assets/example-images/coming-soon.jpg" alt="..." />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="media">
+                            <div class="media-left">
+                                <a class="avatar" href="javascript:void(0)">
+                                    <img class="img-responsive" src="~/Content//assets/portraits/3.jpg" alt="...">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    Julius
+                                    <span>uploaded 4 photos</span>
+                                </h4>
+                                <small>active 14 minutes ago</small>
+                                <div class="profile-brief">
+                                    “Check if it can be corrected with overflow : hidden”
+                                    <div class="example" id="exampleGallery">
+                                        <a class="inline-block" href="~/Content/assets/photos/placeholder.png" title="view-4" data-effect="mfp-zoom-in">
+                                            <img class="img-responsive" src="~/Content/assets/photos/placeholder.png" alt="..." width="150">
+                                        </a>
+                                        <a class="inline-block" href="~/Content/assets/photos/placeholder.png" title="view-5">
+                                            <img class="img-responsive" src="~/Content/assets/photos/placeholder.png" alt="..." width="150">
+                                        </a>
+                                        <a class="inline-block" href="~/Content/assets/photos/placeholder.png" title="view-6">
+                                            <img class="img-responsive" src="~/Content/assets/photos/placeholder.png" alt="..." width="150">
+                                        </a>
+                                    </div>
+                                    @*<img class="profile-uploaded" src="~/Content//assets/photos/placeholder.png" alt="...">
+                                    <img class="profile-uploaded" src="~/Content//assets/photos/placeholder.png" alt="...">
+                                    <img class="profile-uploaded" src="~/Content//assets/photos/placeholder.png" alt="...">
+                                    <img class="profile-uploaded" src="~/Content//assets/photos/placeholder.png" alt="...">*@
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="media">
+                            <div class="media-left">
+                                <a class="avatar" href="javascript:void(0)">
+                                    <img class="img-responsive" src="~/Content//assets/portraits/4.jpg" alt="...">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    Owen Hunt
+                                    <span>posted a new note</span>
+                                </h4>
+                                <small>active 14 minutes ago</small>
+                                <div class="profile-brief">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                    Integer nec odio. Praesent libero. Sed cursus ante
+                                    dapibus diam. Sed nisi. Nulla quis sem at nibh elementum
+                                    imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce
+                                    nec tellus sed augue semper porta. Mauris massa.
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="media media-lg">
+                            <div class="media-left">
+                                <a class="avatar" href="javascript:void(0)">
+                                    <img class="img-responsive" src="~/Content//assets/portraits/5.jpg" alt="...">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    Terrance Arnold
+                                    <span>posted a new blog</span>
+                                </h4>
+                                <small>active 14 minutes ago</small>
+                                <div class="profile-brief">
+                                    <div class="media">
+                                        <div class="col-xs-12">
+                                            <div style="max-width:500px;">
+                                                @*<img class="img-responsive" src="~/Content/assets/example-images/coming-soon.jpg" alt="...">*@
+                                                <a class="inline-block" href="~/Content/assets/example-images/coming-soon.jpg" data-plugin="magnificPopup"
+                                                   data-close-btn-inside="false" data-fixed-contentPos="true" data-main-class="mfp-margin-0s mfp-with-zoom"
+                                                   data-zoom='{"enabled": "true","duration":"300"}'>
+                                                    <img class="img-responsive" src="~/Content/assets/example-images/coming-soon.jpg" alt="..." />
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <h4 class="media-heading">Getting Started</h4>
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing
+                                                elit. Integer nec odio. Praesent libero. Sed
+                                                cursus ante dapibus diam. Sed nisi. Nulla quis
+                                                sem at nibh elementum imperdiet. Duis sagittis
+                                                ipsum. Praesent mauris.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="media">
+                            <div class="media-left">
+                                <a class="avatar" href="javascript:void(0)">
+                                    <img class="img-responsive" src="~/Content//assets/portraits/2.jpg" alt="...">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    Ida Fleming
+                                    <span>posted an new activity comment</span>
+                                </h4>
+                                <small>active 14 minutes ago</small>
+                                <div class="profile-brief">
+                                    Cras sit amet nibh libero, in gravida nulla. Nulla vel
+                                    metus.
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-group-item">
+                        <div class="media">
+                            <div class="media-left">
+                                <a class="avatar" href="javascript:void(0)">
+                                    <img class="img-responsive" src="~/Content//assets/portraits/3.jpg" alt="...">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    Julius
+                                    <span>posted an updated</span>
+                                </h4>
+                                <small>active 14 minutes ago</small>
+                                <div class="profile-brief">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                    Integer nec odio. Praesent libero. Sed cursus ante
+                                    dapibus diam.
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <a class="btn btn-block btn-default profile-readMore" href="javascript:void(0)" role="button">Show more</a>
+            </div>
+        </div>
+        <!--END Post area-->
+    </div>
+    <!--END Main-->
+
+    <!--Right side-bar-->
+    <div class="col-sm-3">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Thêm thành viên mới</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-pure btn-primary icon wb-plus"></button>
+                        </span>
+                        <input type="text" class="form-control" placeholder="Nhập tên người muốn thêm vào nhóm">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nhóm đề nghị</h3>
+            </div>
+            <div class="panel-body" style="padding: 0 0 15px 0;">
+                <div class="suggest-group">
+                    <div class="col-sm-12">
+                        <div class="overlay">
+                            <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
+                            <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                <h4><span class="icon wb-heart"> 255</span></h4>
+                            </figcaption>
+                        </div>
+                        <div class="row">
+                            <div class="clearfix"></div>
+                            <div class="col-sm-8 height-50 vertical-align">
+                                <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
+                            </div>
+                            <div class="col-sm-4 text-right height-50 vertical-align">
+                                <button class="btn btn-icon btn-default vertical-align-middle" title="Tham gia nhóm"><span class="icon wb-plus"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="suggest-group">
+                    <div class="col-sm-12">
+                        <div class="overlay">
+                            <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
+                            <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                <h4><span class="icon wb-heart"> 255</span></h4>
+                            </figcaption>
+                        </div>
+                        <div class="row">
+                            <div class="clearfix"></div>
+                            <div class="col-sm-8 height-50 vertical-align">
+                                <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
+                            </div>
+                            <div class="col-sm-4 text-right height-50 vertical-align">
+                                <button class="btn btn-icon btn-default vertical-align-middle" title="Tham gia nhóm"><span class="icon wb-plus"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="suggest-group">
+                    <div class="col-sm-12">
+                        <div class="overlay">
+                            <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
+                            <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                <h4><span class="icon wb-heart"> 255</span></h4>
+                            </figcaption>
+                        </div>
+                        <div class="row">
+                            <div class="clearfix"></div>
+                            <div class="col-sm-8 height-50 vertical-align">
+                                <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
+                            </div>
+                            <div class="col-sm-4 text-right height-50 vertical-align">
+                                <button class="btn btn-icon btn-default vertical-align-middle" title="Tham gia nhóm"><span class="icon wb-plus"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="suggest-group">
+                    <div class="col-sm-12">
+                        <div class="overlay">
+                            <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
+                            <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                <h4><span class="icon wb-heart"> 255</span></h4>
+                            </figcaption>
+                        </div>
+                        <div class="row">
+                            <div class="clearfix"></div>
+                            <div class="col-sm-8 height-50 vertical-align">
+                                <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
+                            </div>
+                            <div class="col-sm-4 text-right height-50 vertical-align">
+                                <button class="btn btn-icon btn-default vertical-align-middle" title="Tham gia nhóm"><span class="icon wb-plus"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="suggest-group">
+                    <div class="col-sm-12">
+                        <div class="overlay">
+                            <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
+                            <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                <h4><span class="icon wb-heart"> 255</span></h4>
+                            </figcaption>
+                        </div>
+                        <div class="row">
+                            <div class="clearfix"></div>
+                            <div class="col-sm-8 height-50 vertical-align">
+                                <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
+                            </div>
+                            <div class="col-sm-4 text-right height-50 vertical-align">
+                                <button class="btn btn-icon btn-default vertical-align-middle" title="Tham gia nhóm"><span class="icon wb-plus"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--END right side-bar-->
+</div>
+
+@section scripts {
+    <script src="~/Content/assets/vendor/magnific-popup/jquery.magnific-popup.js"></script>
+    <script src="~/Content/assets/js/components/magnific-popup.js"></script>
+
+    <script>
+
+        $(document).ready(function() {
+            getAllPost();
+        })
+
+        // Example Popup Gallery
+        // ---------------------
+        $('#exampleGallery').magnificPopup({
+            delegate: 'a',
+            type: 'image',
+            tLoading: 'Loading image #%curr%...',
+            mainClass: 'mfp-img-mobile',
+            gallery: {
+                enabled: true,
+                navigateByImgClick: true,
+                preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+            },
+            image: {
+                tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
+                titleSrc: function (item) {
+                    return item.el.attr('title') +
+                      '<small>by amazingSurge</small>';
+                }
+            },
+            zoom: {
+                enabled: true,
+                duration: 300, // don't foget to change the duration also in CSS
+                opener: function (element) {
+                    return element.find('img');
+                }
+            }
+        });
+
+        function getAllPost() {
+            $.ajax({
+                url: '@Url.Action("getAllPost")',
+                type: 'POST',
+                data: {
+                    userId: '@User.Identity.GetUserId()'
+                },
+
+                success: function (data) {
+                    if (data.Succeed) {
+                        $(data.AdditionalData).each(function () {
+                            var content = "";
+                            if (this.ContentType == parseInt('@((int)ContentPostType.TextOnly)'))
+                            {
+                                content = textPost(this);
+                            }
+                            if (this.ContentType == parseInt('@((int)ContentPostType.TextAndImage)')) {
+                                content = textImagePost(this);
+                            }
+                            if (this.ContentType == parseInt('@((int)ContentPostType.ImageOnly)')) {
+                                content = imagePost(this);
+                            }
+                            if (this.ContentType == parseInt('@((int)ContentPostType.MultiImages)')) {
+                                content = multiImagePost(this);
+                            }
+                            if (this.ContentType == parseInt('@((int)ContentPostType.TextAndMultiImages)')) {
+                                content = multiImageTextPost(this);
+                            }
+                            var post = "<li class='list-group-item'>"
+                                           + "<div class='media'>"
+                                               + "<div class='media-left'>"
+                                                   + "<a class='avatar' href='javascript:void(0)'>"
+                                                        + "<img class='img-responsive' src='" + this.AspNetUser.AvatarImage + "' alt='...'>"
+                                                    + "</a>"
+                                                + "</div>"
+                                                + "<div class='media-body'>"
+                                                    + "<h4 class='media-heading'>"
+                                                        + this.AspNetUser.UserName
+                                                        + "<span>posted an updated</span>"
+                                                    + "</h4>"
+                                                    + "<small>"+ this.PostAge +"</small>"
+                                                    + "<div class='profile-brief'>" + content + "</div>"
+                                                + "</div>"
+                                            + "</div>"
+                                        + "</li>";
+                            $("#listPost").append(post);
+
+                        })
+                    } else {
+
+                    }
+                },
+                error: function (error) {
+                }
+            });
+        }
+
+        function textPost(data) {
+            var content = data.PostContent;
+            return content;
+        }
+
+        function textImagePost(data) {
+            var content = data.PostContent
+                                  + "<div class='media' style='margin-top:20px;'>"
+                                     + " <div class='col-xs-12'>"
+                                          + "<div style='max-width:500px;'>"
+                                               + "<a class='inline-block' href='" + data.PostImages[0].Image + "' data-plugin='magnificPopup'"
+                                                 + "data-close-btn-inside='false' data-fixed-contentPos='true' data-main-class='mfp-margin-0s mfp-with-zoom'"
+                                                  + "data-zoom='{'enabled': 'true','duration':'300'}'>"
+                                                   + "<img class='img-responsive' src='" + data.PostImages[0].Image + "' alt='...' />"
+                                               + "</a>"
+                                           + "</div>"
+                                       + "</div>"
+                                   + "</div>";
+            return content;
+        }
+
+        function imagePost(data) {
+            var content = "<div class='media'>"
+                                     + " <div class='col-xs-12'>"
+                                          + "<div style='max-width:500px;'>"
+                                               + "<a class='inline-block' href='" + data.PostImages[0].Image + "' data-plugin='magnificPopup'"
+                                                 + "data-close-btn-inside='false' data-fixed-contentPos='true' data-main-class='mfp-margin-0s mfp-with-zoom'"
+                                                  + "data-zoom='{'enabled': 'true','duration':'300'}'>"
+                                                   + "<img class='img-responsive' src='" + data.PostImages[0].Image + "' alt='...' />"
+                                               + "</a>"
+                                           + "</div>"
+                                       + "</div>"
+                                   + "</div>";
+            return content;
+        }
+
+        function multiImagePost(data) {
+            var content = "<div class='example' id='exampleGallery'>";
+            var images = "";
+            $(data.PostImages).each(function() {
+
+                images += "<a class='inline-block' href='"+ this.Image +"' title='view-4' data-effect='mfp-zoom-in'>"
+                             + "<img class='img-responsive' src='" + this.Image + "' alt='...' width='150'>"
+                         +"</a>";
+            })
+
+            content = content + images + "</div>";
+            return content;
+
+        }
+
+        function multiImageTextPost(data) {
+            var content = data.PostContent
+                + "<div class='example' id='exampleGallery'>";
+            var images = "";
+            $(data.PostImages).each(function () {
+
+                images += "<a class='inline-block' href='" + this.Image + "' title='view-4' data-effect='mfp-zoom-in'>"
+                             + "<img class='img-responsive' src='"+ this.Image +"' alt='...' width='150'>"
+                         + "</a>";
+            })
+
+            content = content + images + "</div>";
+            return content;
+        }
+    </script>
+}
