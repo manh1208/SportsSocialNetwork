@@ -27,6 +27,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.capstone.sportssocialnetwork.Enumerable.OrderStatusEnum;
+import com.capstone.sportssocialnetwork.Enumerable.PaidTypeEnum;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.fragment.ManageOrderFragment;
 import com.capstone.sportssocialnetwork.fragment.ManagePlaceFragment;
@@ -211,114 +213,12 @@ public class MainActivity extends AppCompatActivity
             public void onResponse(Call<ResponseModel<CheckIn>> call, Response<ResponseModel<CheckIn>> response) {
                 if (response.isSuccessful()){
                     if (response.body().isSucceed()){
-                        CheckIn order = response.body().getData();
-                        AlertDialog.Builder buider = new AlertDialog.Builder(MainActivity.this);
-                        View v = getLayoutInflater().inflate(R.layout.dialog_order_info, null, false);
-                        TextView name = (TextView) v.findViewById(R.id.txt_order_detail_fullname);
-                        name.setText(order.getFullName());
-                        TextView createDate = (TextView) v.findViewById(R.id.txt_order_detail_create_time);
-                        createDate.setText(order.getCreateDate());
-                        TextView place = (TextView) v.findViewById(R.id.txt_order_detail_place);
-                        place.setText(order.getPlaceName());
-                        TextView field = (TextView) v.findViewById(R.id.txt_order_detail_field);
-                        field.setText(order.getFieldName());
-                        TextView useDate = (TextView) v.findViewById(R.id.txt_order_detail_use_date);
-                        try {
-                            Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
-                            useDate.setText( Utilities.getDateTimeString(date,"dd/MM/yyyy"));
-                        } catch (ParseException e) {
-                            Toast.makeText(MainActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
-                        }
-                        TextView startTime = (TextView) v.findViewById(R.id.txt_order_detail_start_time);
-                        try {
-                            Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
-                            startTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
-                        } catch (ParseException e) {
-                            Toast.makeText(MainActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
-                        }
-
-
-                        TextView endTime = (TextView) v.findViewById(R.id.txt_order_detail_end_time);
-                        try {
-                            Date date = Utilities.getDateTime(order.getEndTime(),"MM/dd/yyyy hh:mm:ss a");
-                            endTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
-                        } catch (ParseException e) {
-                            Toast.makeText(MainActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
-                        }
-                        TextView payment = (TextView) v.findViewById(R.id.txt_order_detail_payment);
-                        payment.setText(order.getPaidType());
-                        TextView status = (TextView) v.findViewById(R.id.txt_order_detail_order_status);
-                        status.setText(order.getStatus());
-                        buider.setView(v)
-                                .setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        onBackPressed();
-                                    }
-                                })
-                                .create()
-                                .show();
-                    }else{
+                        showDialog(response.body().getData());
+                    }else {
                         Toast.makeText(MainActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
-                        if (response.body().getData()!=null){
-                            CheckIn order = response.body().getData();
-                            AlertDialog.Builder buider = new AlertDialog.Builder(MainActivity.this);
-                            View v = getLayoutInflater().inflate(R.layout.dialog_order_info, null, false);
-                            TextView name = (TextView) v.findViewById(R.id.txt_order_detail_fullname);
-                            name.setText(order.getFullName());
-                            TextView createDate = (TextView) v.findViewById(R.id.txt_order_detail_create_time);
-                            createDate.setText(order.getCreateDate());
-                            TextView place = (TextView) v.findViewById(R.id.txt_order_detail_place);
-                            place.setText(order.getPlaceName());
-                            TextView field = (TextView) v.findViewById(R.id.txt_order_detail_field);
-                            field.setText(order.getFieldName());
-                            TextView useDate = (TextView) v.findViewById(R.id.txt_order_detail_use_date);
-                            try {
-                                Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
-                                useDate.setText( Utilities.getDateTimeString(date,"dd/MM/yyyy"));
-                            } catch (ParseException e) {
-                                Toast.makeText(MainActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
-                            }
-                            TextView startTime = (TextView) v.findViewById(R.id.txt_order_detail_start_time);
-                            try {
-                                Date date = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
-                                startTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
-                            } catch (ParseException e) {
-                                Toast.makeText(MainActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
-                            }
-
-
-                            TextView endTime = (TextView) v.findViewById(R.id.txt_order_detail_end_time);
-                            try {
-                                Date date = Utilities.getDateTime(order.getEndTime(),"MM/dd/yyyy hh:mm:ss a");
-                                endTime.setText( Utilities.getDateTimeString(date,"hh:mm a"));
-                            } catch (ParseException e) {
-                                Toast.makeText(MainActivity.this, "Lỗi parse", Toast.LENGTH_SHORT).show();
-                            }
-                            TextView payment = (TextView) v.findViewById(R.id.txt_order_detail_payment);
-                            payment.setText(order.getPaidType());
-                            TextView status = (TextView) v.findViewById(R.id.txt_order_detail_order_status);
-                            status.setText(order.getStatus());
-                            buider.setView(v)
-                                    .setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            onBackPressed();
-                                        }
-                                    })
-                                    .create()
-                                    .show();
+                        if (response.body().getData()!=null) {
+                            showDialog(response.body().getData());
                         }
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//                        builder.setTitle("Warning")
-//                                .setMessage(response.body().getErrorsString())
-//                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        onBackPressed();
-//                                    }
-//                                })
-//                                .create().show();
                     }
                 }else{
                     Toast.makeText(MainActivity.this, response.message(), Toast.LENGTH_SHORT).show();
@@ -327,10 +227,60 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<ResponseModel<CheckIn>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Loi ket noi voi server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
             }
         });
 
+    }
+
+    private void showDialog(CheckIn order){
+
+        AlertDialog.Builder buider = new AlertDialog.Builder(MainActivity.this);
+        View v = getLayoutInflater().inflate(R.layout.dialog_order_info, null, false);
+        TextView name = (TextView) v.findViewById(R.id.txt_order_detail_fullname);
+        name.setText(order.getFullName());
+        TextView createDate = (TextView) v.findViewById(R.id.txt_order_detail_create_time);
+        createDate.setText(order.getCreateDate());
+        TextView place = (TextView) v.findViewById(R.id.txt_order_detail_place);
+        place.setText(order.getPlaceName());
+        TextView field = (TextView) v.findViewById(R.id.txt_order_detail_field);
+        field.setText(order.getFieldName());
+        TextView useDate = (TextView) v.findViewById(R.id.txt_order_detail_use_date);
+        try {
+            Date date = Utilities.getDateTime(order.getStartTime(),DataUtils.FORMAT_DATE_TIME);
+            useDate.setText( Utilities.getDateTimeString(date,DataUtils.FORMAT_DATE));
+        } catch (ParseException e) {
+            Toast.makeText(MainActivity.this, R.string.parse_exception, Toast.LENGTH_SHORT).show();
+        }
+        TextView startTime = (TextView) v.findViewById(R.id.txt_order_detail_start_time);
+        try {
+            Date date = Utilities.getDateTime(order.getStartTime(),DataUtils.FORMAT_DATE_TIME);
+            startTime.setText( Utilities.getDateTimeString(date,DataUtils.FORMAT_TIME));
+        } catch (ParseException e) {
+            Toast.makeText(MainActivity.this, R.string.parse_exception, Toast.LENGTH_SHORT).show();
+        }
+
+
+        TextView endTime = (TextView) v.findViewById(R.id.txt_order_detail_end_time);
+        try {
+            Date date = Utilities.getDateTime(order.getEndTime(),DataUtils.FORMAT_DATE_TIME);
+            endTime.setText( Utilities.getDateTimeString(date,DataUtils.FORMAT_TIME));
+        } catch (ParseException e) {
+            Toast.makeText(MainActivity.this, R.string.parse_exception, Toast.LENGTH_SHORT).show();
+        }
+        TextView payment = (TextView) v.findViewById(R.id.txt_order_detail_payment);
+        payment.setText(PaidTypeEnum.fromInteger(order.getPaidType()).toString());
+        TextView status = (TextView) v.findViewById(R.id.txt_order_detail_order_status);
+        status.setText(OrderStatusEnum.fromInteger(order.getStatus()).toString());
+        buider.setView(v)
+                .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onBackPressed();
+                    }
+                })
+                .create()
+                .show();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

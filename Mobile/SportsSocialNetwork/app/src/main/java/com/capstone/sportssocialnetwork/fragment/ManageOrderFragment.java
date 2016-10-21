@@ -148,12 +148,14 @@ public class ManageOrderFragment extends Fragment {
         name.setText(order.getFullName());
 //                Toast.makeText(mContext, (DataUtils.URL+order.getqRCodeUrl()), Toast.LENGTH_SHORT).show();
 
+        TextView createDate = (TextView) view.findViewById(R.id.txt_order_detail_create_time);
+        createDate.setText(order.getCreateDate());
         TextView useDate = (TextView) view.findViewById(R.id.txt_order_detail_use_date);
         try {
-            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
-            useDate.setText(Utilities.getDateTimeString(date, "dd/MM/yyyy"));
+            Date date = Utilities.getDateTime(order.getStartTime(), DataUtils.FORMAT_DATE_TIME);
+            useDate.setText(Utilities.getDateTimeString(date, DataUtils.FORMAT_DATE));
         } catch (ParseException e) {
-            Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
 
         TextView place = (TextView) view.findViewById(R.id.txt_order_detail_place);
@@ -162,19 +164,19 @@ public class ManageOrderFragment extends Fragment {
         field.setText(order.getFieldName());
         TextView startTime = (TextView) view.findViewById(R.id.txt_order_detail_start_time);
         try {
-            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
-            startTime.setText(Utilities.getDateTimeString(date, "hh:mm a"));
+            Date date = Utilities.getDateTime(order.getStartTime(), DataUtils.FORMAT_DATE_TIME);
+            startTime.setText(Utilities.getDateTimeString(date, DataUtils.FORMAT_TIME));
         } catch (ParseException e) {
-            Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
 
 
         TextView endTime = (TextView) view.findViewById(R.id.txt_order_detail_end_time);
         try {
-            Date date = Utilities.getDateTime(order.getEndTime(), "MM/dd/yyyy hh:mm:ss a");
-            endTime.setText(Utilities.getDateTimeString(date, "hh:mm a"));
+            Date date = Utilities.getDateTime(order.getEndTime(), DataUtils.FORMAT_DATE_TIME);
+            endTime.setText(Utilities.getDateTimeString(date, DataUtils.FORMAT_TIME));
         } catch (ParseException e) {
-            Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
 
         TextView price = (TextView) view.findViewById(R.id.txt_order_detail_price);
@@ -223,7 +225,7 @@ public class ManageOrderFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<ResponseModel<Order>> call, Throwable t) {
-                        Toast.makeText(mContext, "Loi ket noi voi server", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.failure, Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -251,7 +253,7 @@ public class ManageOrderFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<ResponseModel<Order>> call, Throwable t) {
-                        Toast.makeText(mContext, "Loi ket noi voi server", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.failure, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -294,7 +296,7 @@ public class ManageOrderFragment extends Fragment {
                 if (viewHolder.refreshLayout.isRefreshing()) {
                     viewHolder.refreshLayout.setRefreshing(false);
                 }
-                Toast.makeText(getActivity(), "Loi ket noi server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.failure, Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -222,9 +222,9 @@ public class BookingActivity extends AppCompatActivity {
         createPlaceSpinner();
         createSportSpinner();
         createFieldSpinner();
-        Utilities.setDateField(this, txtUseDate, "dd/MM/yyyy");
-        Utilities.setTimeField(this, txtStartTime, "HH:mm");
-        Utilities.setTimeField(this, txtEndTime, "HH:mm");
+        Utilities.setDateField(this, txtUseDate, DataUtils.FORMAT_DATE);
+        Utilities.setTimeField(this, txtStartTime, DataUtils.FORMAT_TIME);
+        Utilities.setTimeField(this, txtEndTime, DataUtils.FORMAT_TIME);
         service = new RestService();
         progressDialog = new ProgressDialog(this);
     }
@@ -316,7 +316,7 @@ public class BookingActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseModel<List<PlaceResponseModel>>> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(BookingActivity.this, "Lỗi kết nối server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(BookingActivity.this,R.string.failure, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -363,7 +363,7 @@ public class BookingActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseModel<List<FieldType>>> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(BookingActivity.this, "Loi server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(BookingActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -401,7 +401,7 @@ public class BookingActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseModel<List<Field>>> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(BookingActivity.this, "Loi server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(BookingActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -433,7 +433,7 @@ public class BookingActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseModel<Double>> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(BookingActivity.this, "Loi ket noi voi server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(BookingActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -491,10 +491,10 @@ public class BookingActivity extends AppCompatActivity {
                                 int fieldId = fieldHash.get(spField.getSelectedItem().toString());
                                 String startTime = txtUseDate.getText().toString() + " " + txtStartTime.getText().toString();
                                 Date startTimeDate = Utilities.getDateTime(startTime, "dd/MM/yyyy HH:mm");
-                                String start = Utilities.getDateTimeString(startTimeDate, "yyyy/MM/dd HH:mm:ss");
+                                String start = Utilities.getDateTimeString(startTimeDate, DataUtils.FORMAT_DATE_TIME);
                                 String endTime = txtUseDate.getText().toString() + " " + txtEndTime.getText().toString();
                                 Date endTimeDate = Utilities.getDateTime(endTime, "dd/MM/yyyy HH:mm");
-                                String end = Utilities.getDateTimeString(endTimeDate, "yyyy/MM/dd HH:mm:ss");
+                                String end = Utilities.getDateTimeString(endTimeDate, DataUtils.FORMAT_DATE_TIME);
                                 int paidType = PaidTypeEnum.ChosePayByCash.getValue();
                                 switch (group.getCheckedRadioButtonId()) {
                                     case R.id.rbt_cash:
@@ -533,7 +533,7 @@ public class BookingActivity extends AppCompatActivity {
                                 });
 
                             } catch (ParseException e) {
-                                Toast.makeText(BookingActivity.this, "Thời gian không hợp lệ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BookingActivity.this, R.string.parse_exception, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -560,10 +560,10 @@ public class BookingActivity extends AppCompatActivity {
 
         TextView useDate = (TextView) view.findViewById(R.id.txt_order_detail_use_date);
         try {
-            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
-            useDate.setText(Utilities.getDateTimeString(date, "dd/MM/yyyy"));
+            Date date = Utilities.getDateTime(order.getStartTime(),DataUtils.FORMAT_DATE_TIME);
+            useDate.setText(Utilities.getDateTimeString(date, DataUtils.FORMAT_DATE));
         } catch (ParseException e) {
-            Toast.makeText(this, "Lỗi parse", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
 
         TextView place = (TextView) view.findViewById(R.id.txt_order_detail_place);
@@ -572,19 +572,19 @@ public class BookingActivity extends AppCompatActivity {
         field.setText(order.getFieldName());
         TextView startTime = (TextView) view.findViewById(R.id.txt_order_detail_start_time);
         try {
-            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
-            startTime.setText(Utilities.getDateTimeString(date, "hh:mm a"));
+            Date date = Utilities.getDateTime(order.getStartTime(),DataUtils.FORMAT_DATE_TIME);
+            startTime.setText(Utilities.getDateTimeString(date, DataUtils.FORMAT_TIME));
         } catch (ParseException e) {
-            Toast.makeText(this, "Lỗi parse", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
 
 
         TextView endTime = (TextView) view.findViewById(R.id.txt_order_detail_end_time);
         try {
-            Date date = Utilities.getDateTime(order.getEndTime(), "MM/dd/yyyy hh:mm:ss a");
-            endTime.setText(Utilities.getDateTimeString(date, "hh:mm a"));
+            Date date = Utilities.getDateTime(order.getEndTime(), DataUtils.FORMAT_DATE_TIME);
+            endTime.setText(Utilities.getDateTimeString(date, DataUtils.FORMAT_TIME));
         } catch (ParseException e) {
-            Toast.makeText(this, "Lỗi parse", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
 
         TextView price = (TextView) view.findViewById(R.id.txt_order_detail_price);
@@ -624,7 +624,7 @@ public class BookingActivity extends AppCompatActivity {
             Log.e(TAG, "Current Date" + (new java.util.Date()).getTime() + " - " + new Date(Date.parse(txtUseDate.getText().toString())));
 
             Date currentDate = Utilities.getZeroTimeDate(new Date());
-            Date useDate = Utilities.getDateTime(txtUseDate.getText().toString(), "dd/MM/yyyy");
+            Date useDate = Utilities.getDateTime(txtUseDate.getText().toString(), DataUtils.FORMAT_DATE);
 
             if (useDate.before(currentDate)) {
                 txtUseDate.setError("Ngày sử dụng phải lớn hơn ngày hiện tại");
@@ -643,18 +643,13 @@ public class BookingActivity extends AppCompatActivity {
                 txtEndTime.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
                 return false;
             }
-            Date starttime = Utilities.getDateTime(txtStartTime.getText().toString(), "HH:mm");
-            Date endtime = Utilities.getDateTime(txtEndTime.getText().toString(), "HH:mm");
+            Date starttime = Utilities.getDateTime(txtStartTime.getText().toString(), DataUtils.FORMAT_TIME);
+            Date endtime = Utilities.getDateTime(txtEndTime.getText().toString(), DataUtils.FORMAT_TIME);
             if (starttime.compareTo(endtime) >= 0) {
                 txtEndTime.setError("Giờ kết thúc phải lớn hơn giờ bắt đầu");
                 txtEndTime.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
                 return false;
             }
-//            if (Time.valueOf(txtStartTime.getText().toString()).after(Time.valueOf(txtEndTime.getText().toString())) ) {
-//                txtEndTime.setError("Giờ kết thúc phải lớn hơn giờ bắt đầu");
-//                txtEndTime.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
-//                return false;
-//            }
         } catch (Exception e) {
             Toast.makeText(BookingActivity.this, "Lỗi cú pháp", Toast.LENGTH_SHORT).show();
             return false;

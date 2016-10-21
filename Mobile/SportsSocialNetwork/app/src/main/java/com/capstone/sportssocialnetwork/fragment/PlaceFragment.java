@@ -1,12 +1,14 @@
 package com.capstone.sportssocialnetwork.fragment;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -71,13 +73,57 @@ public class PlaceFragment extends Fragment {
     private SearchView searchView;
     private SearchView.OnQueryTextListener queryTextListener;
     private LocationManager lm;
+    private double latitude;
+    private double longitude;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mContext = getActivity();
+        LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            requestPermission();
+            return;
+        }
+        Location loc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (loc!=null) {
+            latitude = loc.getLatitude();
+            longitude = loc.getLongitude();
+        }
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 1, locationListener);
     }
+
+
+    private final LocationListener locationListener = new LocationListener() {
+        public void onLocationChanged(Location location) {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
 
     @Nullable
     @Override
@@ -308,8 +354,7 @@ public class PlaceFragment extends Fragment {
          lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            Call<ResponseModel<List<PlaceResponseModel>>>  call =  service.getPlaceService().findArroundPlace(location.getLatitude(),location.getLongitude(),"","","");
+            Call<ResponseModel<List<PlaceResponseModel>>>  call =  service.getPlaceService().findArroundPlace(latitude,longitude,"","","");
             call.enqueue(new Callback<ResponseModel<List<PlaceResponseModel>>>() {
                 @Override
                 public void onResponse(Call<ResponseModel<List<PlaceResponseModel>>> call, Response<ResponseModel<List<PlaceResponseModel>>> response) {

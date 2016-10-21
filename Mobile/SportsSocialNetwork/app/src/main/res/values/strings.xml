@@ -17,4 +17,5 @@
     <string name="title_activity_check_in">CheckInActivity</string>
     <string name="title_activity_my_order">MyOrderActivity</string>
     <string name="failure">Lỗi kết nối với server. Vui lòng thử lại sau!</string>
+    <string name="parse_exception">Dữ liệu ngày tháng bị lỗi. Vui lòng thử lại sau.</string>
 </resources>

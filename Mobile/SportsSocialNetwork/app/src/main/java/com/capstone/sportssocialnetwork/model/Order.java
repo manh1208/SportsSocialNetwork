@@ -8,11 +8,11 @@ import com.google.gson.annotations.SerializedName;
 public class Order {
     @SerializedName("Id")
     private int id;
-    @SerializedName("CreateDate")
+    @SerializedName("CreateDateString")
     private String createDate;
-    @SerializedName("StartTime")
+    @SerializedName("StartTimeString")
     private String startTime;
-    @SerializedName("EndTime")
+    @SerializedName("EndTimeString")
     private String endTime;
     @SerializedName("UserName")
     private String username;

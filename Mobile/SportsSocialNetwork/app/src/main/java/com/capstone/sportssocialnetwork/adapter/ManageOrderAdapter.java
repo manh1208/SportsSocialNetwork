@@ -82,11 +82,11 @@ public class ManageOrderAdapter extends ArrayAdapter<Order> {
         viewHolder.txtFullName.setText(order.getFullName());
 
         try {
-            Date date  = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
-            String useDate = Utilities.getDateTimeString(date,"dd/MM/yyyy");
-            String startTime = Utilities.getDateTimeString(date,"hh:mm a");
-            date = Utilities.getDateTime(order.getEndTime(),"MM/dd/yyyy hh:mm:ss a");
-            String endTime = Utilities.getDateTimeString(date,"hh:mm a");
+            Date date  = Utilities.getDateTime(order.getStartTime(),DataUtils.FORMAT_DATE_TIME);
+            String useDate = Utilities.getDateTimeString(date,DataUtils.FORMAT_DATE);
+            String startTime = Utilities.getDateTimeString(date,DataUtils.FORMAT_TIME);
+            date = Utilities.getDateTime(order.getEndTime(),DataUtils.FORMAT_DATE_TIME);
+            String endTime = Utilities.getDateTimeString(date,DataUtils.FORMAT_TIME);
             viewHolder.txtTime.setText(useDate +" : " +startTime +" - " +endTime);
         } catch (ParseException e) {
             viewHolder.txtTime.setText(order.getStartTime()+" - " + order.getEndTime());

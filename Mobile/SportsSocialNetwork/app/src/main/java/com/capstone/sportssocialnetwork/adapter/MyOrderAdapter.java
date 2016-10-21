@@ -66,11 +66,11 @@ public class MyOrderAdapter extends ArrayAdapter<Order> {
         viewHolder.txtPlace.setText(order.getPlaceName());
 
         try {
-            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
-            String useDate = Utilities.getDateTimeString(date, "dd/MM/yyyy");
-            String startTime = Utilities.getDateTimeString(date, "hh:mm a");
-            date = Utilities.getDateTime(order.getEndTime(), "MM/dd/yyyy hh:mm:ss a");
-            String endTime = Utilities.getDateTimeString(date, "hh:mm a");
+            Date date = Utilities.getDateTime(order.getStartTime(), DataUtils.FORMAT_DATE_TIME);
+            String useDate = Utilities.getDateTimeString(date, DataUtils.FORMAT_DATE);
+            String startTime = Utilities.getDateTimeString(date, DataUtils.FORMAT_TIME);
+            date = Utilities.getDateTime(order.getEndTime(), DataUtils.FORMAT_DATE_TIME);
+            String endTime = Utilities.getDateTimeString(date, DataUtils.FORMAT_TIME);
             viewHolder.txtTime.setText(useDate + " : " + startTime + " - " + endTime);
         } catch (ParseException e) {
             viewHolder.txtTime.setText(order.getStartTime() + " - " + order.getEndTime());
@@ -102,12 +102,13 @@ public class MyOrderAdapter extends ArrayAdapter<Order> {
                 .into(ivQR);
 //                Toast.makeText(mContext, (DataUtils.URL+order.getqRCodeUrl()), Toast.LENGTH_SHORT).show();
 
+
         TextView useDate = (TextView) view.findViewById(R.id.txt_order_detail_use_date);
         try {
-            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
-            useDate.setText(Utilities.getDateTimeString(date, "dd/MM/yyyy"));
+            Date date = Utilities.getDateTime(order.getStartTime(), DataUtils.FORMAT_DATE_TIME);
+            useDate.setText(Utilities.getDateTimeString(date, DataUtils.FORMAT_DATE));
         } catch (ParseException e) {
-            Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
 
         TextView place = (TextView) view.findViewById(R.id.txt_order_detail_place);
@@ -116,19 +117,19 @@ public class MyOrderAdapter extends ArrayAdapter<Order> {
         field.setText(order.getFieldName());
         TextView startTime = (TextView) view.findViewById(R.id.txt_order_detail_start_time);
         try {
-            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
-            startTime.setText(Utilities.getDateTimeString(date, "hh:mm a"));
+            Date date = Utilities.getDateTime(order.getStartTime(), DataUtils.FORMAT_DATE_TIME);
+            startTime.setText(Utilities.getDateTimeString(date, DataUtils.FORMAT_TIME));
         } catch (ParseException e) {
-            Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
 
 
         TextView endTime = (TextView) view.findViewById(R.id.txt_order_detail_end_time);
         try {
-            Date date = Utilities.getDateTime(order.getEndTime(), "MM/dd/yyyy hh:mm:ss a");
-            endTime.setText(Utilities.getDateTimeString(date, "hh:mm a"));
+            Date date = Utilities.getDateTime(order.getEndTime(), DataUtils.FORMAT_DATE_TIME);
+            endTime.setText(Utilities.getDateTimeString(date, DataUtils.FORMAT_TIME));
         } catch (ParseException e) {
-            Toast.makeText(mContext, "Lỗi parse", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
 
         TextView price = (TextView) view.findViewById(R.id.txt_order_detail_price);
