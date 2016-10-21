@@ -1,6 +1,9 @@
 package com.capstone.sportssocialnetwork.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +22,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -25,6 +30,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.capstone.sportssocialnetwork.Enumerable.OrderStatusEnum;
 import com.capstone.sportssocialnetwork.Enumerable.PaidTypeEnum;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.model.Field;
@@ -38,6 +44,7 @@ import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.capstone.sportssocialnetwork.utils.SharePreferentName;
 import com.capstone.sportssocialnetwork.utils.Utilities;
+import com.squareup.picasso.Picasso;
 
 import java.sql.Time;
 import java.text.ParseException;
@@ -77,6 +84,7 @@ public class BookingActivity extends AppCompatActivity {
     private int placeIdSelected;
     private LinearLayout layoutTime;
     private LinearLayout layoutPrice;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -156,7 +164,7 @@ public class BookingActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String text = sportAdapter.getItem(position);
                 if (sportHash.containsKey(text)) {
-                    loadField(placeIdSelected,sportHash.get(text));
+                    loadField(placeIdSelected, sportHash.get(text));
                 }
             }
 
@@ -185,7 +193,7 @@ public class BookingActivity extends AppCompatActivity {
         spField.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    visibleTime();
+                visibleTime();
             }
 
             @Override
@@ -218,10 +226,10 @@ public class BookingActivity extends AppCompatActivity {
         Utilities.setTimeField(this, txtStartTime, "HH:mm");
         Utilities.setTimeField(this, txtEndTime, "HH:mm");
         service = new RestService();
-        fieldId = 3;
+        progressDialog = new ProgressDialog(this);
     }
 
-    private void visibleTime(){
+    private void visibleTime() {
         layoutPrice.setVisibility(View.VISIBLE);
         layoutTime.setVisibility(View.VISIBLE);
         txtUseDate.setText("");
@@ -230,7 +238,7 @@ public class BookingActivity extends AppCompatActivity {
         txtPrice.setText("");
     }
 
-    private void invisibleTime(){
+    private void invisibleTime() {
         layoutPrice.setVisibility(View.GONE);
         layoutTime.setVisibility(View.GONE);
     }
@@ -276,10 +284,13 @@ public class BookingActivity extends AppCompatActivity {
         }
         placeHash.put(txtPlaceName, placeId);
         placeAdapter.addAll(placeHash.keySet());
+        progressDialog.setMessage("Đang tài dữ liệu địa điểm");
+        progressDialog.show();
         Call<ResponseModel<List<PlaceResponseModel>>> callback = service.getPlaceService().getAllPlace(0, 100);
         callback.enqueue(new Callback<ResponseModel<List<PlaceResponseModel>>>() {
             @Override
             public void onResponse(Call<ResponseModel<List<PlaceResponseModel>>> call, Response<ResponseModel<List<PlaceResponseModel>>> response) {
+                progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     ResponseModel<List<PlaceResponseModel>> responseModel = response.body();
                     if (responseModel.isSucceed()) {
@@ -290,7 +301,7 @@ public class BookingActivity extends AppCompatActivity {
                         placeAdapter.clear();
                         placeAdapter.addAll(placeHash.keySet());
                         for (int i = 0; i < placeAdapter.getCount(); i++) {
-                            if (txtPlaceName.equalsIgnoreCase(placeAdapter.getItem(i))){
+                            if (txtPlaceName.equalsIgnoreCase(placeAdapter.getItem(i))) {
                                 spPlace.setSelection(i);
                             }
                         }
@@ -304,7 +315,8 @@ public class BookingActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseModel<List<PlaceResponseModel>>> call, Throwable t) {
-                Toast.makeText(BookingActivity.this,"Lỗi kết nối server", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                Toast.makeText(BookingActivity.this, "Lỗi kết nối server", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -317,10 +329,13 @@ public class BookingActivity extends AppCompatActivity {
         } else {
             sportHash.clear();
         }
+        progressDialog.setMessage("Đang tải loại sân...");
+        progressDialog.show();
         Call<ResponseModel<List<FieldType>>> call = service.getPlaceService().getFieldType(placeId);
         call.enqueue(new Callback<ResponseModel<List<FieldType>>>() {
             @Override
             public void onResponse(Call<ResponseModel<List<FieldType>>> call, Response<ResponseModel<List<FieldType>>> response) {
+                progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     if (response.body().isSucceed()) {
                         for (FieldType item : response.body().getData()
@@ -330,22 +345,24 @@ public class BookingActivity extends AppCompatActivity {
                         sportAdapter.clear();
                         fieldAdapter.clear();
                         sportAdapter.addAll(sportHash.keySet());
-                        if (sportHash.size()>0){
+                        if (sportHash.size() > 0) {
                             spSport.setSelection(0);
                             if (sportHash.containsKey(spSport.getSelectedItem().toString())) {
-                                loadField(placeIdSelected,sportHash.get(spSport.getSelectedItem().toString()));
+                                loadField(placeIdSelected, sportHash.get(spSport.getSelectedItem().toString()));
                             }
                         }
                     } else {
                         Toast.makeText(BookingActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
+
                     Toast.makeText(BookingActivity.this, response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseModel<List<FieldType>>> call, Throwable t) {
+                progressDialog.dismiss();
                 Toast.makeText(BookingActivity.this, "Loi server", Toast.LENGTH_SHORT).show();
             }
         });
@@ -358,10 +375,13 @@ public class BookingActivity extends AppCompatActivity {
         } else {
             fieldHash.clear();
         }
+        progressDialog.setMessage("Đang tải dữ liệu sân");
+        progressDialog.show();
         Call<ResponseModel<List<Field>>> call = service.getPlaceService().getFieldByFieldType(placeId, fieldTypeId);
         call.enqueue(new Callback<ResponseModel<List<Field>>>() {
             @Override
             public void onResponse(Call<ResponseModel<List<Field>>> call, Response<ResponseModel<List<Field>>> response) {
+                progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     if (response.body().isSucceed()) {
                         for (Field item : response.body().getData()
@@ -380,20 +400,25 @@ public class BookingActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseModel<List<Field>>> call, Throwable t) {
+                progressDialog.dismiss();
                 Toast.makeText(BookingActivity.this, "Loi server", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void calculatePrice() {
+        fieldId = fieldHash.get(spField.getSelectedItem().toString());
         if (fieldId == -1) return;
         if (startTime == null || startTime.equals("")) return;
         if (endTime == null || endTime.equals("")) return;
         if (!isValidation()) return;
+        progressDialog.setMessage("Đang tính giá...");
+        progressDialog.show();
         Call<ResponseModel<Double>> call = service.getOrderService().getPrice(fieldId, startTime, endTime);
         call.enqueue(new Callback<ResponseModel<Double>>() {
             @Override
             public void onResponse(Call<ResponseModel<Double>> call, Response<ResponseModel<Double>> response) {
+                progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     if (response.body().isSucceed()) {
                         txtPrice.setText(response.body().getData().longValue() + "");
@@ -407,6 +432,7 @@ public class BookingActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseModel<Double>> call, Throwable t) {
+                progressDialog.dismiss();
                 Toast.makeText(BookingActivity.this, "Loi ket noi voi server", Toast.LENGTH_SHORT).show();
             }
         });
@@ -422,13 +448,13 @@ public class BookingActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.menu_booking:
-                if (isValidation()){
+                if (isValidation()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    View v = getLayoutInflater().inflate(R.layout.dialog_confirm_booking,null,false);
+                    View v = getLayoutInflater().inflate(R.layout.dialog_confirm_booking, null, false);
                     final RadioGroup group = (RadioGroup) v.findViewById(R.id.rbt_paid_type);
-                    RadioButton cash  = (RadioButton) v.findViewById(R.id.rbt_cash);
+                    RadioButton cash = (RadioButton) v.findViewById(R.id.rbt_cash);
                     cash.setChecked(true);
                     TextView txtPlace = (TextView) v.findViewById(R.id.txt_order_confirm_place);
                     txtPlace.setText(spPlace.getSelectedItem().toString());
@@ -438,7 +464,7 @@ public class BookingActivity extends AppCompatActivity {
                     txtDate.setText(this.txtUseDate.getText().toString());
                     final TextView txtStartTime = (TextView) v.findViewById(R.id.txt_order_confirm_start_time);
                     txtStartTime.setText(this.txtStartTime.getText().toString());
-                    TextView txtEndTime = (TextView) v.findViewById(R.id.txt_order_confirm_end_time);
+                    final TextView txtEndTime = (TextView) v.findViewById(R.id.txt_order_confirm_end_time);
                     txtEndTime.setText(this.txtEndTime.getText().toString());
                     TextView txtPrice = (TextView) v.findViewById(R.id.txt_order_confirm_price);
                     txtPrice.setText(this.txtPrice.getText().toString());
@@ -456,21 +482,21 @@ public class BookingActivity extends AppCompatActivity {
 
                                 }
                             });
-                    AlertDialog dialog = builder.create();
+                    final AlertDialog dialog = builder.create();
                     dialog.show();
                     dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             try {
-                                int fieldId= fieldHash.get(spField.getSelectedItem().toString());
-                                String startTime = txtUseDate.getText().toString()+" "+txtStartTime.getText().toString();
-                                Date startTimeDate = Utilities.getDateTime(startTime,"dd/MM/yyyy HH:mm");
-                                String start = Utilities.getDateTimeString(startTimeDate,"dd/MM/yyyy HH:mm:ss a");
-                                String endTime = txtUseDate.getText().toString()+" "+txtStartTime.getText().toString();
-                                Date endTimeDate = Utilities.getDateTime(endTime,"dd/MM/yyyy HH:mm");
-                                String end = Utilities.getDateTimeString(endTimeDate,"dd/MM/yyyy HH:mm:ss a");
+                                int fieldId = fieldHash.get(spField.getSelectedItem().toString());
+                                String startTime = txtUseDate.getText().toString() + " " + txtStartTime.getText().toString();
+                                Date startTimeDate = Utilities.getDateTime(startTime, "dd/MM/yyyy HH:mm");
+                                String start = Utilities.getDateTimeString(startTimeDate, "yyyy/MM/dd HH:mm:ss");
+                                String endTime = txtUseDate.getText().toString() + " " + txtEndTime.getText().toString();
+                                Date endTimeDate = Utilities.getDateTime(endTime, "dd/MM/yyyy HH:mm");
+                                String end = Utilities.getDateTimeString(endTimeDate, "yyyy/MM/dd HH:mm:ss");
                                 int paidType = PaidTypeEnum.ChosePayByCash.getValue();
-                                switch (group.getCheckedRadioButtonId()){
+                                switch (group.getCheckedRadioButtonId()) {
                                     case R.id.rbt_cash:
                                         paidType = PaidTypeEnum.ChosePayByCash.getValue();
                                         break;
@@ -479,24 +505,29 @@ public class BookingActivity extends AppCompatActivity {
                                         break;
                                 }
 
-                                OrderRequestModel model = new OrderRequestModel(userId,fieldId,start,end,"","",paidType);
+                                OrderRequestModel model = new OrderRequestModel(userId, fieldId, start, end, "", "", paidType);
+                                progressDialog.setMessage("Đang lưu dữ liệu đơn hàng. Vui lòng đợi...");
+                                progressDialog.show();
                                 Call<ResponseModel<Order>> call = service.getOrderService().createOrder(model);
                                 call.enqueue(new Callback<ResponseModel<Order>>() {
                                     @Override
                                     public void onResponse(Call<ResponseModel<Order>> call, Response<ResponseModel<Order>> response) {
-                                        if (response.isSuccessful()){
-                                            if (response.body().isSucceed()){
-                                                
-                                            }else{
+                                        progressDialog.dismiss();
+                                        if (response.isSuccessful()) {
+                                            if (response.body().isSucceed()) {
+                                                dialog.dismiss();
+                                                showOrderDetail(response.body().getData());
+                                            } else {
                                                 Toast.makeText(BookingActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
                                             }
-                                        }else{
+                                        } else {
                                             Toast.makeText(BookingActivity.this, response.message(), Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(Call<ResponseModel<Order>> call, Throwable t) {
+                                        progressDialog.dismiss();
                                         Toast.makeText(BookingActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
                                     }
                                 });
@@ -507,10 +538,79 @@ public class BookingActivity extends AppCompatActivity {
                         }
                     });
                 }
-                
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showOrderDetail(Order order) {
+        AlertDialog.Builder buider = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_my_order_detail, null, false);
+
+        TextView txtTitle = (TextView) view.findViewById(R.id.txt_order_detail_title);
+        txtTitle.setText("Đặt sân thành công");
+        ImageView ivQR = (ImageView) view.findViewById(R.id.iv_qr_code);
+
+        Picasso.with(this).load(Uri.parse(DataUtils.URL + order.getqRCodeUrl()))
+                .placeholder(R.drawable.image_logo)
+                .error(R.drawable.img_default_avatar)
+                .into(ivQR);
+//                Toast.makeText(mContext, (DataUtils.URL+order.getqRCodeUrl()), Toast.LENGTH_SHORT).show();
+
+        TextView useDate = (TextView) view.findViewById(R.id.txt_order_detail_use_date);
+        try {
+            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
+            useDate.setText(Utilities.getDateTimeString(date, "dd/MM/yyyy"));
+        } catch (ParseException e) {
+            Toast.makeText(this, "Lỗi parse", Toast.LENGTH_SHORT).show();
+        }
+
+        TextView place = (TextView) view.findViewById(R.id.txt_order_detail_place);
+        place.setText(order.getPlaceName());
+        TextView field = (TextView) view.findViewById(R.id.txt_order_detail_field);
+        field.setText(order.getFieldName());
+        TextView startTime = (TextView) view.findViewById(R.id.txt_order_detail_start_time);
+        try {
+            Date date = Utilities.getDateTime(order.getStartTime(), "MM/dd/yyyy hh:mm:ss a");
+            startTime.setText(Utilities.getDateTimeString(date, "hh:mm a"));
+        } catch (ParseException e) {
+            Toast.makeText(this, "Lỗi parse", Toast.LENGTH_SHORT).show();
+        }
+
+
+        TextView endTime = (TextView) view.findViewById(R.id.txt_order_detail_end_time);
+        try {
+            Date date = Utilities.getDateTime(order.getEndTime(), "MM/dd/yyyy hh:mm:ss a");
+            endTime.setText(Utilities.getDateTimeString(date, "hh:mm a"));
+        } catch (ParseException e) {
+            Toast.makeText(this, "Lỗi parse", Toast.LENGTH_SHORT).show();
+        }
+
+        TextView price = (TextView) view.findViewById(R.id.txt_order_detail_price);
+        price.setText(order.getPrice().longValue() + "");
+
+        TextView payment = (TextView) view.findViewById(R.id.txt_order_detail_payment);
+        payment.setText(PaidTypeEnum.fromInteger(order.getPaidType()).toString());
+        TextView status = (TextView) view.findViewById(R.id.txt_order_detail_order_status);
+        status.setText(OrderStatusEnum.fromInteger(order.getStatus()).toString());
+        buider.setView(view)
+                .setNegativeButton("Đi dến lịch sử", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(BookingActivity.this, MyOrderActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .setPositiveButton("Quay về", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        onBackPressed();
+                    }
+                })
+                .create().show();
     }
 
     public boolean isValidation() {
@@ -520,11 +620,11 @@ public class BookingActivity extends AppCompatActivity {
                 txtUseDate.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
                 return false;
             }
-            Log.e(TAG,"Choose Date"+Date.parse(txtUseDate.getText().toString())+" - " +new Date().toString());
-            Log.e(TAG,"Current Date"+(new java.util.Date()).getTime()+" - " + new Date(Date.parse(txtUseDate.getText().toString())));
+            Log.e(TAG, "Choose Date" + Date.parse(txtUseDate.getText().toString()) + " - " + new Date().toString());
+            Log.e(TAG, "Current Date" + (new java.util.Date()).getTime() + " - " + new Date(Date.parse(txtUseDate.getText().toString())));
 
-            Date currentDate= Utilities.getZeroTimeDate(new Date());
-            Date useDate = Utilities.getDateTime(txtUseDate.getText().toString(),"dd/MM/yyyy");
+            Date currentDate = Utilities.getZeroTimeDate(new Date());
+            Date useDate = Utilities.getDateTime(txtUseDate.getText().toString(), "dd/MM/yyyy");
 
             if (useDate.before(currentDate)) {
                 txtUseDate.setError("Ngày sử dụng phải lớn hơn ngày hiện tại");
@@ -543,9 +643,9 @@ public class BookingActivity extends AppCompatActivity {
                 txtEndTime.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
                 return false;
             }
-            Date starttime = Utilities.getDateTime(txtStartTime.getText().toString(),"HH:mm");
-            Date endtime = Utilities.getDateTime(txtEndTime.getText().toString(),"HH:mm");
-            if(starttime.compareTo(endtime)>=0){
+            Date starttime = Utilities.getDateTime(txtStartTime.getText().toString(), "HH:mm");
+            Date endtime = Utilities.getDateTime(txtEndTime.getText().toString(), "HH:mm");
+            if (starttime.compareTo(endtime) >= 0) {
                 txtEndTime.setError("Giờ kết thúc phải lớn hơn giờ bắt đầu");
                 txtEndTime.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
                 return false;
@@ -555,7 +655,7 @@ public class BookingActivity extends AppCompatActivity {
 //                txtEndTime.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
 //                return false;
 //            }
-        }catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(BookingActivity.this, "Lỗi cú pháp", Toast.LENGTH_SHORT).show();
             return false;
         }
