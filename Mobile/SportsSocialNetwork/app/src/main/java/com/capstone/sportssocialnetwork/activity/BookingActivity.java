@@ -1,8 +1,10 @@
 package com.capstone.sportssocialnetwork.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -17,6 +19,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +37,7 @@ import com.capstone.sportssocialnetwork.utils.SharePreferentName;
 import com.capstone.sportssocialnetwork.utils.Utilities;
 
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -153,7 +158,7 @@ public class BookingActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+//                Toast.makeText(BookingActivity.this, "sport no choice", Toast.LENGTH_SHORT).show();
             }
         });
         spPlace.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -218,6 +223,7 @@ public class BookingActivity extends AppCompatActivity {
         txtUseDate.setText("");
         txtStartTime.setText("");
         txtEndTime.setText("");
+        txtPrice.setText("");
     }
 
     private void invisibleTime(){
@@ -322,6 +328,9 @@ public class BookingActivity extends AppCompatActivity {
                         sportAdapter.addAll(sportHash.keySet());
                         if (sportHash.size()>0){
                             spSport.setSelection(0);
+                            if (sportHash.containsKey(spSport.getSelectedItem().toString())) {
+                                loadField(placeIdSelected,sportHash.get(spSport.getSelectedItem().toString()));
+                            }
                         }
                     } else {
                         Toast.makeText(BookingActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
@@ -411,8 +420,47 @@ public class BookingActivity extends AppCompatActivity {
         switch (id){
             case R.id.menu_booking:
                 if (isValidation()){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    View v = getLayoutInflater().inflate(R.layout.dialog_confirm_booking,null,false);
+                    final RadioGroup group = (RadioGroup) v.findViewById(R.id.rbt_paid_type);
+                    RadioButton cash  = (RadioButton) v.findViewById(R.id.rbt_cash);
+                    cash.setChecked(true);
+                    TextView txtPlace = (TextView) v.findViewById(R.id.txt_order_confirm_place);
+                    txtPlace.setText(spPlace.getSelectedItem().toString());
 
+                    TextView txtField = (TextView) v.findViewById(R.id.txt_order_confirm_field);
+                    txtField.setText(spField.getSelectedItem().toString());
+                    TextView txtDate = (TextView) v.findViewById(R.id.txt_order_confirm_use_date);
+                    txtDate.setText(this.txtUseDate.getText().toString());
+                    TextView txtStartTime = (TextView) v.findViewById(R.id.txt_order_confirm_start_time);
+                    txtStartTime.setText(this.txtStartTime.getText().toString());
+                    TextView txtEndTime = (TextView) v.findViewById(R.id.txt_order_confirm_end_time);
+                    txtEndTime.setText(this.txtEndTime.getText().toString());
+                    TextView txtPrice = (TextView) v.findViewById(R.id.txt_order_confirm_price);
+                    txtPrice.setText(this.txtPrice.getText().toString());
+                    builder.setView(v)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(BookingActivity.this, "ahihi", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
+                
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -428,8 +476,9 @@ public class BookingActivity extends AppCompatActivity {
             Log.e(TAG,"Choose Date"+Date.parse(txtUseDate.getText().toString())+" - " +new Date().toString());
             Log.e(TAG,"Current Date"+(new java.util.Date()).getTime()+" - " + new Date(Date.parse(txtUseDate.getText().toString())));
 
-
-            if ((new Date()).after((new Date(Date.parse(txtUseDate.getText().toString()))))) {
+            Date currentDate=  new Date();
+            Date useDate = Utilities.getDateTime(txtUseDate.getText().toString(),"dd/MM/yyyy");
+            if (currentDate.after(useDate)) {
                 txtUseDate.setError("Ngày sử dụng phải lớn hơn ngày hiện tại");
                 txtUseDate.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
                 return false;
