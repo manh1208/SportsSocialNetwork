@@ -152,5 +152,33 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult ShowAllJoinedGroup(String userId) {
+            var groupService = this.Service<IGroupService>();
+
+            var groupMemberService = this.Service<IGroupMemberService>();
+
+            ResponseModel<List<GroupViewModel>> response = null;
+
+            try {
+                List<GroupMember> joinedList = groupMemberService.GetJoinedList(userId).ToList();
+
+                List<Group> groupList = new List<Group>();
+
+                foreach (var j in joinedList) {
+                    groupList.Add(groupService.FindGroupById(j.GroupId));
+                }
+
+                List<GroupViewModel> result = Mapper.Map<List<GroupViewModel>>(groupList);
+
+                response = new ResponseModel<List<GroupViewModel>>(true, "Danh sách nhóm:", null, result);
+
+            } catch (Exception) {
+                response = ResponseModel<List<GroupViewModel>>.CreateErrorResponse("Không thể tải danh sách nhóm",systemError);
+            }
+
+            return Json(response);
+        }
+
     }
 }
