@@ -9,6 +9,7 @@ using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -155,7 +156,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateOrder(OrderViewModel model)
+        public ActionResult CreateOrder(CreateOrderViewModel model)
         {
             ResponseModel<OrderSimpleViewModel> response = null;
 
@@ -165,13 +166,29 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             var userService = this.Service<IAspNetUserService>();
 
-            if (!CheckTimeValid(model.FieldId, model.StartTime.TimeOfDay, model.EndTime.TimeOfDay))
+            DateTime startTime = new DateTime();
+
+            DateTime endTime = new DateTime();
+
+            try {
+                startTime = DateTime.ParseExact(model.StartTime, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+
+                endTime = DateTime.ParseExact(model.EndTime, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+
+            }
+            catch (Exception) {
+                response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Đặt sân thất bại", "Lỗi định dạng thời gian");
+
+                return Json(response);
+            }
+            
+            if (!CheckTimeValid(model.FieldId, startTime.TimeOfDay, endTime.TimeOfDay))
             {
                 response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Đặt sân thất bại", "Thời gian không nằm trong các khung giờ");
 
                 return Json(response);
             }
-            double price = CalculatePrice(model.FieldId, model.StartTime.TimeOfDay, model.EndTime.TimeOfDay);
+            double price = CalculatePrice(model.FieldId, startTime.TimeOfDay, endTime.TimeOfDay);
 
             try
             {
@@ -185,8 +202,8 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
                 order.FieldId = model.FieldId;
                 order.UserId = model.UserId;
-                order.StartTime = model.StartTime;
-                order.EndTime = model.EndTime;
+                order.StartTime = startTime;
+                order.EndTime = endTime;
                 order.CreateDate = DateTime.Now;
                 order.Price = price;
                 order.Note = model.Note;
@@ -346,6 +363,12 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             result.PlaceName = order.Field.Place.Name;
 
+            result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy hh:mm:ss");
+
+            result.StartTimeString = result.StartTime.ToString("dd/MM/yyyy hh:mm:ss");
+
+            result.EndTimeString = result.EndTime.ToString("dd/MM/yyyy hh:mm:ss");
+
             result.StatusString = Utils.GetEnumDescription((OrderStatus)result.Status);
 
             result.PaidTypeString = Utils.GetEnumDescription((OrderPaidType)result.PaidType);
@@ -392,6 +415,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             return result;
         }
+
     }
 
 }
