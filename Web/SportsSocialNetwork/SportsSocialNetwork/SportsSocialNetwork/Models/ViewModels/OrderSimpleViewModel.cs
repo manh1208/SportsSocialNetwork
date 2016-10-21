@@ -8,9 +8,12 @@ namespace SportsSocialNetwork.Models.ViewModels
     public class OrderSimpleViewModel
     {
         public int Id { get; set; }
-        public String CreateDate { get; set; }
-        public String StartTime { get; set; }
-        public String EndTime { get; set; }
+        public DateTime CreateDate { get; set; }
+        public String CreateDateString { get; set; }
+        public DateTime StartTime { get; set; }
+        public String StartTimeString { get; set; }
+        public DateTime EndTime { get; set; }
+        public String EndTimeString { get; set; }
         public String UserId { get; set; }
         public String UserName { get; set; }
         public String FullName { get; set; }

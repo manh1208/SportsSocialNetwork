@@ -774,6 +774,7 @@
     <Compile Include="Models\ViewModels\CategoryViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\CreateOrderViewModel.cs" />
     <Compile Include="Models\ViewModels\DataTableViewModel.cs" />
     <Compile Include="Models\ViewModels\EventDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\EventOveralViewModel.cs" />
