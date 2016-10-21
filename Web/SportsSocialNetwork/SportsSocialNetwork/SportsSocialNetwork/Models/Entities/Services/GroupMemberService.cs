@@ -23,6 +23,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         bool CheckAdmin(String userId, int groupId);
 
         bool CheckMember(String userId, int groupId);
+
+        IEnumerable<GroupMember> GetJoinedList(String userId);
         #endregion
 
 
@@ -135,7 +137,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return member;
         }
 
-
+        public IEnumerable<GroupMember> GetJoinedList(string userId)
+        {
+            return this.GetActive(x => x.UserId == userId);
+        }
 
 
 
@@ -145,5 +150,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         {
 
         }
+
+
     }
 }

@@ -165,21 +165,13 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             var userService = this.Service<IAspNetUserService>();
 
-            //if (!CheckTimeValid(model.FieldId, model.StartTime.TimeOfDay, model.EndTime.TimeOfDay))
-            //{
-            //    response = ResponseModel<OrderDetailViewModel>.CreateErrorResponse("Đặt sân thất bại", "Thời gian không nằm trong các khung giờ");
-
-            //    return Json(response);
-            //}
-            double price = CalculatePrice(model.FieldId, model.StartTime.TimeOfDay, model.EndTime.TimeOfDay);
-
-            //Temporary
-            if (price==0)
+            if (!CheckTimeValid(model.FieldId, model.StartTime.TimeOfDay, model.EndTime.TimeOfDay))
             {
                 response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Đặt sân thất bại", "Thời gian không nằm trong các khung giờ");
 
                 return Json(response);
             }
+            double price = CalculatePrice(model.FieldId, model.StartTime.TimeOfDay, model.EndTime.TimeOfDay);
 
             try
             {

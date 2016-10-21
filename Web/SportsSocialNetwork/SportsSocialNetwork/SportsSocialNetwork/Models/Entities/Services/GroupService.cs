@@ -63,6 +63,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
             Save();
             return group.CoverImage;
         }
+
+
         #endregion
 
         public void test()
