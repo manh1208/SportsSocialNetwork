@@ -21,8 +21,10 @@ public class OrderRequestModel {
     private String price;
     @SerializedName("paidType")
     private int paidType;
+    @SerializedName("PlayDate")
+    private String playDate;
 
-    public OrderRequestModel(String userId, int fieldId, String startTime, String endTime, String note, String price, int paidType) {
+    public OrderRequestModel(String userId, int fieldId, String startTime, String endTime, String note, String price, int paidType, String playDate) {
         this.userId = userId;
         this.fieldId = fieldId;
         this.startTime = startTime;
@@ -30,6 +32,7 @@ public class OrderRequestModel {
         this.note = note;
         this.price = price;
         this.paidType = paidType;
+        this.playDate = playDate;
     }
 
     public String getUserId() {
@@ -86,5 +89,13 @@ public class OrderRequestModel {
 
     public void setPaidType(int paidType) {
         this.paidType = paidType;
+    }
+
+    public String getPlayDate() {
+        return playDate;
+    }
+
+    public void setPlayDate(String playDate) {
+        this.playDate = playDate;
     }
 }
