@@ -170,31 +170,21 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             DateTime endTime = new DateTime();
 
-            DateTime playDate = new DateTime();
-
-            try
-            {
+            try {
                 startTime = DateTime.ParseExact(model.StartTime, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
 
                 endTime = DateTime.ParseExact(model.EndTime, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
 
-                playDate = DateTime.ParseExact(model.PlayDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             }
-            catch (Exception)
-            {
+            catch (Exception) {
                 response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Đặt sân thất bại", "Lỗi định dạng thời gian");
 
                 return Json(response);
             }
-
+            
             if (!CheckTimeValid(model.FieldId, startTime.TimeOfDay, endTime.TimeOfDay))
             {
                 response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Đặt sân thất bại", "Thời gian không nằm trong các khung giờ");
-
-                return Json(response);
-            }
-            else if (!CheckOrderTime(model.FieldId, startTime.TimeOfDay, endTime.TimeOfDay,playDate)) {
-                response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Đặt sân thất bại", "Sân đặt được đặt vào thời gian này");
 
                 return Json(response);
             }
@@ -339,41 +329,14 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetPrice(int fieldId, String startTime, String endTime, String playDate)
+        public ActionResult GetPrice(int fieldId, TimeSpan startTime, TimeSpan endTime)
         {
             ResponseModel<double> response = null;
-
-            TimeSpan StartTime = new TimeSpan();
-
-            TimeSpan EndTime = new TimeSpan();
-
-            DateTime PlayDate = new DateTime();
             try
             {
-                StartTime = TimeSpan.Parse(startTime);
-                EndTime = TimeSpan.Parse(endTime);
-                PlayDate = DateTime.ParseExact(playDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            }
-            catch (Exception)
-            {
-                response = ResponseModel<double>.CreateErrorResponse("Lỗi tính giá", "Định dạng ngày giờ không chính xác");
-                return Json(response);
-            }
+                double result = CalculatePrice(fieldId, startTime, endTime);
 
-            try
-            {
-                bool valid = CheckOrderTime(fieldId, StartTime, EndTime,PlayDate);
-
-                if (valid)
-                {
-                    double result = CalculatePrice(fieldId, StartTime, EndTime);
-
-                    response = new ResponseModel<double>(true, "Giá:", null, result);
-                }
-                else {
-                    response = ResponseModel<double>.CreateErrorResponse("Không thể đặt sân", "Sân đặt được đặt vào thời gian này");
-                }
-
+                response = new ResponseModel<double>(true, "Giá:", null, result);
             }
             catch (Exception)
             {
@@ -400,11 +363,11 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             result.PlaceName = order.Field.Place.Name;
 
-            result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+            result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy hh:mm:ss");
 
-            result.StartTimeString = result.StartTime.ToString("dd/MM/yyyy HH:mm:ss");
+            result.StartTimeString = result.StartTime.ToString("dd/MM/yyyy hh:mm:ss");
 
-            result.EndTimeString = result.EndTime.ToString("dd/MM/yyyy HH:mm:ss");
+            result.EndTimeString = result.EndTime.ToString("dd/MM/yyyy hh:mm:ss");
 
             result.StatusString = Utils.GetEnumDescription((OrderStatus)result.Status);
 
@@ -416,7 +379,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         private double CalculatePrice(int fieldId, TimeSpan startTime, TimeSpan endTime)
         {
             double price = 0;
-
+            
             var timeBlockService = this.Service<ITimeBlockService>();
 
             bool rs = timeBlockService.checkTimeValid(fieldId, startTime, endTime);
@@ -427,9 +390,8 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             return price;
         }
 
-        private bool CheckTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime)
-        {
-            bool result = true;
+        private bool CheckTimeValid(int fieldId, TimeSpan startTime, TimeSpan endTime) {
+            bool result =true;
 
             var _timeBlockService = this.Service<ITimeBlockService>();
 
@@ -451,32 +413,6 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 result = false;
             }
 
-            return result;
-        }
-
-        private bool CheckOrderTime(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime playDate)
-        {
-            bool result = false;
-            var orderService = this.Service<IOrderService>();
-            var fieldScheduleService = this.Service<IFieldScheduleService>();
-            try
-            {
-                bool rs1 = orderService.checkOrderTimeValid(fieldId, startTime, endTime, playDate);
-                bool rs2 = fieldScheduleService.checkScheduleTimeValid(fieldId, startTime, endTime, playDate);
-                if (rs1 && rs2)
-                {
-                    result = true;
-                }
-                else
-                {
-                    result = false;
-                }
-
-            }
-            catch (Exception)
-            {
-                result = false;
-            }
             return result;
         }
 
