@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.NotificationActivity;
 import com.capstone.sportssocialnetwork.activity.PostActivity;
+import com.capstone.sportssocialnetwork.activity.PostDetailActivity;
 import com.capstone.sportssocialnetwork.adapter.FeedAdapter;
 import com.capstone.sportssocialnetwork.model.Feed;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
@@ -99,6 +101,18 @@ public class FeedFragment extends Fragment {
                     } else {
                         removeFooter();
                     }
+                }
+            }
+        });
+
+        viewHolder.lvFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position>0) {
+                    Feed feed = adapter.getItem(position-1);
+                    Intent intent = new Intent(getActivity(), PostDetailActivity.class);
+                    intent.putExtra("postId", feed.getId());
+                    getActivity().startActivity(intent);
                 }
             }
         });

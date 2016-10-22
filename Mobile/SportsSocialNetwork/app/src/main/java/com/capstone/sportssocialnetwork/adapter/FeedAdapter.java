@@ -25,6 +25,8 @@ import com.capstone.sportssocialnetwork.activity.PostDetailActivity;
 import com.capstone.sportssocialnetwork.custom.CustomImage;
 import com.capstone.sportssocialnetwork.custom.RoundedImageView;
 import com.capstone.sportssocialnetwork.model.Feed;
+import com.capstone.sportssocialnetwork.utils.DataUtils;
+import com.capstone.sportssocialnetwork.utils.SharePreferentName;
 
 import org.w3c.dom.Text;
 
@@ -37,11 +39,13 @@ import java.util.List;
 public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListener {
     private Context mContext;
     private List<Feed> feeds;
+    private String userId;
 
     public FeedAdapter(Context context, int resource, List<Feed> objects) {
         super(context, resource, objects);
         mContext = context;
         feeds = objects;
+        userId = DataUtils.getINSTANCE(mContext).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
     }
 
     @Override
@@ -81,6 +85,11 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             viewHolder.ivImage.setVisibility(View.VISIBLE);
         } else {
             viewHolder.ivImage.setVisibility(View.GONE);
+        }
+        if (userId.equals(feed.getUser().getId())){
+            viewHolder.btnMenuPopUp.setVisibility(View.VISIBLE);
+        }else{
+            viewHolder.btnMenuPopUp.setVisibility(View.GONE);
         }
         viewHolder.btnMenuPopUp.setTag(position);
         viewHolder.btnMenuPopUp.setOnClickListener(this);
@@ -147,6 +156,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                 break;
             case R.id.btn_feed_comment:
                 Intent intent = new Intent(mContext, PostDetailActivity.class);
+                intent.putExtra("postId",getItem(position).getId());
                 mContext.startActivity(intent);
                 break;
 

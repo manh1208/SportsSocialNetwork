@@ -17,6 +17,7 @@ public class RestService {
     private IAccountService accountService;
     private IPlaceService placeService;
     private IOrderService orderService;
+    private IPostService postService;
 
     public RestService() {
         Gson gson = new GsonBuilder()
@@ -37,6 +38,7 @@ public class RestService {
         accountService = retrofit.create(IAccountService.class);
         placeService = retrofit.create(IPlaceService.class);
         orderService = retrofit.create(IOrderService.class);
+        postService = retrofit.create(IPostService.class);
 
     }
 
@@ -58,5 +60,9 @@ public class RestService {
 
     public IOrderService getOrderService() {
         return orderService;
+    }
+
+    public IPostService getPostService() {
+        return postService;
     }
 }

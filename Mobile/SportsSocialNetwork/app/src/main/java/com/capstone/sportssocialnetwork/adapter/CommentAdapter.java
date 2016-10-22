@@ -7,11 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.PostDetailActivity;
+import com.capstone.sportssocialnetwork.custom.CustomImage;
+import com.capstone.sportssocialnetwork.custom.RoundedImageView;
 import com.capstone.sportssocialnetwork.model.Comment;
 import com.capstone.sportssocialnetwork.model.Feed;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -29,19 +34,38 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
     }
 
     @Override
+    public Comment getItem(int position) {
+        return comments.get(position);
+    }
+
+    @Override
     public int getCount() {
-        return 5;
+        return comments.size();
+    }
+
+
+    public void setAppendFeed(List<Comment> data) {
+        comments.addAll(data);
+        notifyDataSetChanged();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-//        ViewHolder viewHolder;
+        ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_comment, parent, false);
-//            viewHolder = new ViewHolder(convertView);
-//            convertView.setTag(viewHolder);
+            viewHolder = new ViewHolder(convertView);
+            convertView.setTag(viewHolder);
         } else {
-//            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+        Comment comment = getItem(position);
+        viewHolder.txtName.setText(comment.getUser().getFullName());
+        viewHolder.txtComment.setText(comment.getComment());
+        if (comment.getImage()==null || comment.getImage().equals("")){
+            viewHolder.ivImage.setVisibility(View.GONE);
+        }else{
+            viewHolder.imageView.setVisibility(View.VISIBLE);
         }
 //        viewHolder.btnComment.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -54,12 +78,18 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
     }
 
     private final class ViewHolder {
-        Button btnComment;
-        Button btnLike;
+        RoundedImageView imageView;
+        TextView txtName;
+        TextView txtComment;
+        TextView txtTime;
+        CustomImage ivImage;
 
         public ViewHolder(View v) {
-            btnComment = (Button) v.findViewById(R.id.btn_feed_comment);
-            btnLike = (Button) v.findViewById(R.id.btn_feed_like);
+            imageView = (RoundedImageView) v.findViewById(R.id.iv_comment_avatar);
+            txtName = (TextView) v.findViewById(R.id.txt_comment_name);
+            txtComment = (TextView) v.findViewById(R.id.txt_comment_content);
+            txtTime = (TextView) v.findViewById(R.id.txt_comment_time);
+            ivImage = (CustomImage) v.findViewById(R.id.iv_comment_image);
         }
 
     }
