@@ -123,5 +123,19 @@ namespace SportsSocialNetwork.Models.Enumerable
         Other = 4
     }
 
+    public enum ContentPostType
+    {
+        [Description("")]
+        TextOnly = 1,
+        [Description("")]
+        TextAndImage = 2,
+        [Description("")]
+        ImageOnly = 3,
+        [Description("")]
+        MultiImages = 4,
+        [Description("")]
+        TextAndMultiImages = 5
+    }
+
 
 }
