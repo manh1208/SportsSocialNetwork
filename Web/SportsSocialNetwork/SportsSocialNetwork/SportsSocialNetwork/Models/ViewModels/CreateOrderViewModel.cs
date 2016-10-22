@@ -11,6 +11,7 @@ namespace SportsSocialNetwork.Models.ViewModels
         public string UserId { get; set; }
         public int FieldId { get; set; }
         public String CreateDate { get; set; }
+        public String PlayDate { get; set; }
         public String StartTime { get; set; }
         public String EndTime { get; set; }
         public string Note { get; set; }
