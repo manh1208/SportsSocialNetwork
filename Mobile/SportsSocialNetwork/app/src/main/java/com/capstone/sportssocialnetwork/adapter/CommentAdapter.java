@@ -77,6 +77,11 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         return convertView;
     }
 
+    public void addNew() {
+        comments.clear();
+        notifyDataSetChanged();
+    }
+
     private final class ViewHolder {
         RoundedImageView imageView;
         TextView txtName;

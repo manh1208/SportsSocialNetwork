@@ -37,4 +37,14 @@ public interface IPostService {
     Call<ResponseModel<List<Comment>>> getComment(@Query("postId") int postId,
                                                   @Query("skip")int skip,
                                                   @Query("take")int take);
+    @Multipart
+    @POST("/api/postcomment/comment")
+    Call<ResponseModel<Comment>>  commentPost(@Part("postId")RequestBody postId,
+                                              @Part("userId")RequestBody userId,
+                                              @Part("content")RequestBody content,
+                                              @Part MultipartBody.Part file);
+
+    @POST("/api/like/likeunlikepost")
+    Call<ResponseModel<String>> likePost(@Query("postId")int postId,
+                                         @Query("userId")String userId);
 }

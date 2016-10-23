@@ -1,12 +1,16 @@
 package com.capstone.sportssocialnetwork.activity;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,15 +44,23 @@ import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.capstone.sportssocialnetwork.utils.SharePreferentName;
+import com.capstone.sportssocialnetwork.utils.Utilities;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PostDetailActivity extends AppCompatActivity implements View.OnClickListener{
+    private static final int SELECT_PICTURE = 1994;
+    private static final String TAG = "PostDetailActivity";
     private ListView lvComment;
     private CommentAdapter adapter;
     private View header;
@@ -63,7 +76,12 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     private EditText txtComment;
     private ImageButton btnCamera;
     private ImageButton btnSent;
-
+    private ImageView ivCommentImage;
+    private ImageView ivDeleteImage;
+    private RequestBody requestFile;
+    private MultipartBody.Part body;
+    private boolean isLiked;
+    private int likeCount;
 
 
     @Override
@@ -95,7 +113,12 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                Log.e(TAG,s.toString());
+                if (s.length()>0){
+                    btnSent.setVisibility(View.VISIBLE);
+                }else{
+                    btnSent.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -162,6 +185,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         adapter = new CommentAdapter(this,R.layout.item_comment,new ArrayList<Comment>());
         lvComment.addHeaderView(header);
         lvComment.setAdapter(adapter);
+        init();
     }
 
     private void initView() {
@@ -171,12 +195,20 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         txtComment = (EditText) findViewById(R.id.txt_post_comment);
         btnCamera = (ImageButton) findViewById(R.id.btn_post_comment_image);
         btnSent = (ImageButton) findViewById(R.id.btn_post_comment_write);
+        ivCommentImage = (ImageView) findViewById(R.id.iv_write_comment_image);
+        ivDeleteImage = (ImageView) findViewById(R.id.iv_write_comment_delete);
+        btnCamera.setOnClickListener(this);
+        ivDeleteImage.setOnClickListener(this);
+        btnSent.setOnClickListener(this);
         header= ((LayoutInflater)
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
                 R.layout.item_feed, null, false);
         headerViewHolder = new ViewHolder(header);
         service = new RestService();
-       init();
+        ivCommentImage.setVisibility(View.GONE);
+        ivDeleteImage.setVisibility(View.GONE);
+        btnSent.setVisibility(View.GONE);
+
     }
 
     private void init(){
@@ -184,6 +216,11 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         take = MAX_TAKE;
         flag_loading = false;
         isFull = false;
+        txtComment.setText("");
+        txtComment.clearFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(txtComment.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        adapter.addNew();
     }
 
     private void loadNewData(){
@@ -238,9 +275,12 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         headerViewHolder.txtNumOfComment.setText(feed.getCommentCount() + " bình luận");
         if (feed.isLiked()) {
             setLiked(headerViewHolder.btnLike);
+            isLiked=true;
         } else {
             setUnLiked(headerViewHolder.btnLike);
+            isLiked=false;
         }
+        likeCount = feed.getLikeCount();
         headerViewHolder.txtName.setText(feed.getUser().getFullName());
         headerViewHolder.txtContent.setText(feed.getPostContent());
         if (feed.getImage() != null) {
@@ -259,15 +299,49 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         headerViewHolder.btnComment.setOnClickListener(this);
         headerViewHolder.btnLike.setTag(feed);
         headerViewHolder.btnLike.setOnClickListener(this);
+
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         int id = v.getId();
         Feed feed = (Feed) v.getTag();
         switch (id) {
             case R.id.btn_feed_like:
-                setLiked((Button) v);
+                headerViewHolder.btnLike.setEnabled(false);
+                Call<ResponseModel<String>> callLike = service.getPostService().likePost(postId,userId);
+                callLike.enqueue(new Callback<ResponseModel<String>>() {
+                    @Override
+                    public void onResponse(Call<ResponseModel<String>> call, Response<ResponseModel<String>> response) {
+                        headerViewHolder.btnLike.setEnabled(true);
+                        if(response.isSuccessful()){
+                            if (response.body().isSucceed()){
+                                isLiked = !isLiked;
+                                if (isLiked) {
+                                    setLiked((Button) v);
+                                    likeCount++;
+                                    headerViewHolder.txtNumOfLike.setText(likeCount+"");
+                                }else{
+                                    setUnLiked((Button)v);
+                                    likeCount--;
+                                    headerViewHolder.txtNumOfLike.setText(likeCount+"");
+                                }
+
+                            }else{
+                                Toast.makeText(PostDetailActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(PostDetailActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseModel<String>> call, Throwable t) {
+                        headerViewHolder.btnLike.setEnabled(true);
+                        Toast.makeText(PostDetailActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
                 break;
             case R.id.btn_feed_comment:
                 txtComment.requestFocus();
@@ -280,6 +354,84 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             case R.id.txt_feed_name:
 
                 break;
+            case R.id.btn_post_comment_image:
+                Intent pickIntent = new Intent();
+                pickIntent.setType("image/*");
+                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+                Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
+                Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
+                chooserIntent.putExtra
+                        (
+                                Intent.EXTRA_INITIAL_INTENTS,
+                                new Intent[]{takePhotoIntent}
+                        );
+
+                startActivityForResult(chooserIntent, SELECT_PICTURE);
+
+                break;
+            case R.id.iv_write_comment_delete:
+                body = null;
+                ivCommentImage.setVisibility(View.GONE);
+                ivDeleteImage.setVisibility(View.GONE);
+                break;
+            case R.id.btn_post_comment_write:
+                RequestBody postId =
+                        RequestBody.create(
+                                MediaType.parse("multipart/form-data"), String.valueOf(this.postId));
+                RequestBody userBody =
+                        RequestBody.create(
+                                MediaType.parse("multipart/form-data"), this.userId);
+                RequestBody content =
+                        RequestBody.create(
+                                MediaType.parse("multipart/form-data"), txtComment.getText().toString());
+                Call<ResponseModel<Comment>> call =  service.getPostService().commentPost(postId,userBody,content,body);
+                call.enqueue(new Callback<ResponseModel<Comment>>() {
+                    @Override
+                    public void onResponse(Call<ResponseModel<Comment>> call, Response<ResponseModel<Comment>> response) {
+                        if (response.isSuccessful()){
+                            if (response.body().isSucceed()){
+                                loadNewData();
+                            }else{
+                                Toast.makeText(PostDetailActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(PostDetailActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseModel<Comment>> call, Throwable t) {
+                        Toast.makeText(PostDetailActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECT_PICTURE && resultCode == Activity.RESULT_OK) {
+            String filename = "Image" + System.currentTimeMillis() % 10000 + ".jpg";
+            File f = Utilities.getImageFileFromUri(this, data.getData(), Utilities.getPicturePath(filename), 2000, Bitmap.CompressFormat.JPEG, 50);
+
+            try {
+                int str = new ExifInterface(data.getData().getPath()).getAttributeInt("Orientation", 1000);
+                Log.d("haha", "haha");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+//            imageFile = new TypedFile("multipart/form-data", f);
+
+            requestFile =
+                    RequestBody.create(MediaType.parse("multipart/form-data"), f);
+            body =
+                    MultipartBody.Part.createFormData("image", f.getName(), requestFile);
+
+            ivCommentImage.setImageURI(data.getData());
+            ivCommentImage.setVisibility(View.VISIBLE);
+            ivDeleteImage.setVisibility(View.VISIBLE);
         }
     }
 

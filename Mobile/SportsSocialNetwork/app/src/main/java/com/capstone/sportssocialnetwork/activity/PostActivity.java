@@ -135,6 +135,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         if (requestCode == SELECT_PICTURE && resultCode == Activity.RESULT_OK) {
             String filename = "Image" + System.currentTimeMillis() % 10000 + ".jpg";
             File f = Utilities.getImageFileFromUri(this, data.getData(), Utilities.getPicturePath(filename), 2000, Bitmap.CompressFormat.JPEG, 50);
+//            Toast.makeText(PostActivity.this, Utilities.getOrientation(this,data.getData())+"", Toast.LENGTH_SHORT).show();
 //            ExifInterface exifInterface = null;
 //            try {
 //                exifInterface = new ExifInterface(f.getAbsolutePath());
@@ -142,22 +143,23 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
 //                e.printStackTrace();
 //            }
 //            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-//            Bitmap bm;
+//            Toast.makeText(PostActivity.this, Utilities.exifToDegrees(orientation)+"", Toast.LENGTH_SHORT).show();
+////            Bitmap bm;
+////            try {
+////                 bm = BitmapFactory.decodeStream(
+////                        getContentResolver().openInputStream(data.getData()));
+////                Log.d("haha","haha");
+////            } catch (FileNotFoundException e) {
+////                e.printStackTrace();
+////            }
+//
 //            try {
-//                 bm = BitmapFactory.decodeStream(
-//                        getContentResolver().openInputStream(data.getData()));
-//                Log.d("haha","haha");
-//            } catch (FileNotFoundException e) {
+//                int str = new ExifInterface(data.getData().getPath()).getAttributeInt("Orientation", 1000);
+//                Log.d("haha", "haha");
+//            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
-
-            try {
-                int str = new ExifInterface(data.getData().getPath()).getAttributeInt("Orientation", 1000);
-                Log.d("haha", "haha");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-//            imageFile = new TypedFile("multipart/form-data", f);
+////            imageFile = new TypedFile("multipart/form-data", f);
 
             requestFile =
                     RequestBody.create(MediaType.parse("multipart/form-data"), f);

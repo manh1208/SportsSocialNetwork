@@ -8,6 +8,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.capstone.sportssocialnetwork.activity.PostDetailActivity"
     tools:showIn="@layout/activity_post_detail">
+
     <ListView
         android:id="@+id/lv_comment"
         android:layout_width="match_parent"
@@ -18,42 +19,74 @@
     </ListView>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/layout_new_comment"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:id="@+id/layout_new_comment">
-        <ImageButton
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:layout_width="30sp"
-            android:layout_height="30sp"
-            android:src="@drawable/ic_camera"
-            android:id="@+id/btn_post_comment_image"
-            android:padding="5sp"
-            android:layout_marginLeft="10sp"
-            android:layout_marginTop="10sp"
-            />
-        <EditText
-            android:id="@+id/txt_post_comment"
+        android:paddingTop="10sp">
+
+
+        <LinearLayout
+
             android:layout_width="match_parent"
-            android:layout_height="50sp"
-            android:layout_toRightOf="@id/btn_post_comment_image"
-            android:layout_marginLeft="10sp"
-            android:hint="Viết bình luận..."
-            android:layout_toLeftOf="@+id/btn_post_comment_write"
-            />
-        <ImageButton
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:layout_width="30sp"
-            android:layout_height="30sp"
-            android:src="@drawable/ic_send_comment"
-            android:id="@+id/btn_post_comment_write"
-            android:padding="5sp"
-            android:layout_marginLeft="10sp"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10sp"
-            />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="10sp">
+
+            <ImageView
+                android:id="@+id/iv_write_comment_image"
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+                android:layout_marginLeft="50sp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/placeholder" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btn_post_comment_image"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginTop="10sp"
+                    android:background="@null"
+                    android:padding="5sp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_camera"
+
+                    />
+
+                <EditText
+                    android:id="@+id/txt_post_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="50sp"
+                    android:layout_marginLeft="10sp"
+                    android:layout_toLeftOf="@+id/btn_post_comment_write"
+                    android:layout_toRightOf="@id/btn_post_comment_image"
+                    android:hint="Viết bình luận..." />
+
+                <ImageButton
+                    android:id="@+id/btn_post_comment_write"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginTop="10sp"
+                    android:background="@null"
+                    android:padding="5sp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_send_comment" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_write_comment_delete"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_marginLeft="90sp"
+            android:src="@drawable/ic_close" />
     </RelativeLayout>
 </RelativeLayout>
