@@ -21,6 +21,7 @@ namespace SportsSocialNetwork.Models.ViewModels
         public double Longitude { get; set; }
         public string Avatar { get; set; }
         public int Status { get; set; }
+        public String StatusString { get; set; }
         public bool Active { get; set; }
         public String StartTime { get; set; }
         public String EndTime { get; set; }

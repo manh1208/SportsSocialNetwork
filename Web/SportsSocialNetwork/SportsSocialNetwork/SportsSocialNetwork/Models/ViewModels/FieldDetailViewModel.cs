@@ -5,10 +5,10 @@ using System.Web;
 
 namespace SportsSocialNetwork.Models.ViewModels
 {
-    public class FieldDetailViewModel: FieldViewModel
+    public class FieldDetailViewModel : FieldViewModel
     {
         public String Avatar { get; set; }
-
+        public String StatusString { get; set; }
         public List<FieldImageViewModel> FieldImages { get; set; }
 
     }

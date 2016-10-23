@@ -264,6 +264,7 @@
     <Compile Include="Areas\Api\Controllers\AspNetUserController.cs" />
     <Compile Include="Areas\Api\Controllers\EventController.cs" />
     <Compile Include="Areas\Api\Controllers\FieldController.cs" />
+    <Compile Include="Areas\Api\Controllers\FieldScheduleController.cs" />
     <Compile Include="Areas\Api\Controllers\FollowController.cs" />
     <Compile Include="Areas\Api\Controllers\GroupController.cs" />
     <Compile Include="Areas\Api\Controllers\GroupMemberController.cs" />
@@ -800,6 +801,8 @@
     <Compile Include="Models\ViewModels\FieldPriceViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\FieldScheduleCreateViewModel.cs" />
+    <Compile Include="Models\ViewModels\FieldScheduleViewModel.cs" />
     <Compile Include="Models\ViewModels\FieldScheduleViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -3757,6 +3760,7 @@
     <Folder Include="Areas\Api\Models\" />
     <Folder Include="Areas\Api\Views\AspNetUser\" />
     <Folder Include="Areas\Api\Views\Event\" />
+    <Folder Include="Areas\Api\Views\FieldSchedule\" />
     <Folder Include="Areas\Api\Views\Follow\" />
     <Folder Include="Areas\Api\Views\GroupMember\" />
     <Folder Include="Areas\Api\Views\Group\" />

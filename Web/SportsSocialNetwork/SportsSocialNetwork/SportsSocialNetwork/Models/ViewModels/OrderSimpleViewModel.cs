@@ -27,6 +27,9 @@ namespace SportsSocialNetwork.Models.ViewModels
         public String StatusString { get; set; }
         public int PaidType { get; set; }
         public String PaidTypeString { get; set; }
+        public string PayerName { get; set; }
+        public string PayerPhone { get; set; }
+        public string PayerEmail { get; set; }
         public String OrderCode { get; set; }
         public String QRCodeUrl { get; set; }
     }

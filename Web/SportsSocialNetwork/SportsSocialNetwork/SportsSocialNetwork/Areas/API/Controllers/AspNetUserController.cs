@@ -450,6 +450,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             result.Gender = Utils.GetEnumDescription((Gender)user.Gender);
 
+            result.BirthdayString = result.Birthday.ToString("dd/MM/yyyy");
+
             return result;
         }
     }

@@ -54,7 +54,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
             post.EditDate = DateTime.Now;
             //if (imageChanged)
             //{
-            //    post.Image = model.Image;
+            //    post.PostImages = model.PostImages;
             //}
             this.Update(post);
             return post;
