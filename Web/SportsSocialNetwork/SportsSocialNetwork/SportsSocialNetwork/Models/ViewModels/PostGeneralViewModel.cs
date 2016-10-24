@@ -15,6 +15,5 @@ namespace SportsSocialNetwork.Models.ViewModels
         public bool Liked { get; set; }
         public string PostAge { get; set; }
         public List<PostCommentDetailViewModel> PostComments { get; set; }
-        public int ContentType { get; set; }
     }
 }
