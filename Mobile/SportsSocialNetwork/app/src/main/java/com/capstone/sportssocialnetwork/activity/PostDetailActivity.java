@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -45,9 +46,11 @@ import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.capstone.sportssocialnetwork.utils.SharePreferentName;
 import com.capstone.sportssocialnetwork.utils.Utilities;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -218,6 +221,8 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         isFull = false;
         txtComment.setText("");
         txtComment.clearFocus();
+        ivCommentImage.setVisibility(View.GONE);
+        ivDeleteImage.setVisibility(View.GONE);
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(txtComment.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         adapter.addNew();
@@ -281,6 +286,16 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             isLiked=false;
         }
         likeCount = feed.getLikeCount();
+        
+        Picasso.with(this).load(Uri.parse(DataUtils.URL + feed.getUser().getAvatar()))
+                .placeholder(R.drawable.img_default_avatar)
+                .error(R.drawable.img_default_avatar_error)
+                .into(headerViewHolder.ivAvatar);
+        try {
+            headerViewHolder.txtTime.setText(Utilities.getTimeAgo(feed.getCreateDate()));
+        } catch (ParseException e) {
+            Toast.makeText(PostDetailActivity.this, R.string.parse_exception, Toast.LENGTH_SHORT).show();
+        }
         headerViewHolder.txtName.setText(feed.getUser().getFullName());
         headerViewHolder.txtContent.setText(feed.getPostContent());
         if (feed.getImage() != null) {
@@ -413,6 +428,8 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SELECT_PICTURE && resultCode == Activity.RESULT_OK) {
+            ivCommentImage.setVisibility(View.VISIBLE);
+            ivDeleteImage.setVisibility(View.VISIBLE);
             String filename = "Image" + System.currentTimeMillis() % 10000 + ".jpg";
             File f = Utilities.getImageFileFromUri(this, data.getData(), Utilities.getPicturePath(filename), 2000, Bitmap.CompressFormat.JPEG, 50);
 

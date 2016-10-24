@@ -7,6 +7,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v7.widget.AppCompatDrawableManager;
 import android.support.v7.widget.PopupMenu;
@@ -30,9 +31,12 @@ import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.capstone.sportssocialnetwork.utils.SharePreferentName;
+import com.capstone.sportssocialnetwork.utils.Utilities;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,6 +91,17 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             setLiked(viewHolder.btnLike);
         } else {
             setUnLiked(viewHolder.btnLike);
+        }
+
+
+        Picasso.with(mContext).load(Uri.parse(DataUtils.URL + feed.getUser().getAvatar()))
+                .placeholder(R.drawable.img_default_avatar)
+                .error(R.drawable.img_default_avatar_error)
+                .into(viewHolder.ivAvatar);
+        try {
+            viewHolder.txtTime.setText(Utilities.getTimeAgo(feed.getCreateDate()));
+        } catch (ParseException e) {
+            Toast.makeText(mContext, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
         viewHolder.txtName.setText(feed.getUser().getFullName());
         viewHolder.txtContent.setText(feed.getPostContent());

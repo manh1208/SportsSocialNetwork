@@ -2,12 +2,14 @@ package com.capstone.sportssocialnetwork.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.PostDetailActivity;
@@ -15,9 +17,13 @@ import com.capstone.sportssocialnetwork.custom.CustomImage;
 import com.capstone.sportssocialnetwork.custom.RoundedImageView;
 import com.capstone.sportssocialnetwork.model.Comment;
 import com.capstone.sportssocialnetwork.model.Feed;
+import com.capstone.sportssocialnetwork.utils.DataUtils;
+import com.capstone.sportssocialnetwork.utils.Utilities;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -60,12 +66,25 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         Comment comment = getItem(position);
+        Picasso.with(mContext).load(Uri.parse(DataUtils.URL + comment.getUser().getAvatar()))
+                .placeholder(R.drawable.img_default_avatar)
+                .error(R.drawable.img_default_avatar_error)
+                .into(viewHolder.imageView);
         viewHolder.txtName.setText(comment.getUser().getFullName());
         viewHolder.txtComment.setText(comment.getComment());
         if (comment.getImage()==null || comment.getImage().equals("")){
             viewHolder.ivImage.setVisibility(View.GONE);
         }else{
-            viewHolder.imageView.setVisibility(View.VISIBLE);
+            viewHolder.ivImage.setVisibility(View.VISIBLE);
+            Picasso.with(mContext).load(Uri.parse(DataUtils.URL + comment.getImage()))
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.img_default_avatar_error)
+                    .into(viewHolder.ivImage);
+        }
+        try {
+            viewHolder.txtTime.setText(Utilities.getTimeAgo(comment.getCreateDate()));
+        } catch (ParseException e) {
+            Toast.makeText(mContext, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
 //        viewHolder.btnComment.setOnClickListener(new View.OnClickListener() {
 //            @Override
