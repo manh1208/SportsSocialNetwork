@@ -96,7 +96,7 @@ public class Utilities {
 
 
     public static String getTimeAgo(String s) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a",Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss",Locale.US);
 //        Calendar cal = Calendar.getInstance();
 //        TimeZone tz = cal.getTimeZone();
 //        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));

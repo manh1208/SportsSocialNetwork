@@ -117,7 +117,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.e(TAG,s.toString());
-                if (s.length()>0){
+                if (s.length()>0 || body!=null){
                     btnSent.setVisibility(View.VISIBLE);
                 }else{
                     btnSent.setVisibility(View.GONE);
@@ -221,8 +221,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         isFull = false;
         txtComment.setText("");
         txtComment.clearFocus();
-        ivCommentImage.setVisibility(View.GONE);
-        ivDeleteImage.setVisibility(View.GONE);
+
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(txtComment.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         adapter.addNew();
@@ -292,14 +291,18 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 .error(R.drawable.img_default_avatar_error)
                 .into(headerViewHolder.ivAvatar);
         try {
-            headerViewHolder.txtTime.setText(Utilities.getTimeAgo(feed.getCreateDate()));
+            headerViewHolder.txtTime.setText(Utilities.getTimeAgo(feed.getCreateDateString()));
         } catch (ParseException e) {
             Toast.makeText(PostDetailActivity.this, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
         headerViewHolder.txtName.setText(feed.getUser().getFullName());
         headerViewHolder.txtContent.setText(feed.getPostContent());
-        if (feed.getImage() != null) {
+        if (feed.getPostImages().size()>0) {
             headerViewHolder.ivImage.setVisibility(View.VISIBLE);
+            Picasso.with(this).load(Uri.parse(DataUtils.URL + feed.getPostImages().get(0).getImage()))
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(headerViewHolder.ivImage);
         } else {
             headerViewHolder.ivImage.setVisibility(View.GONE);
         }
@@ -387,6 +390,11 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.iv_write_comment_delete:
                 body = null;
+                if (txtComment.getText()==null || txtComment.getText().toString().equals("")){
+                    btnSent.setVisibility(View.GONE);
+                }else{
+                    btnSent.setVisibility(View.VISIBLE);
+                }
                 ivCommentImage.setVisibility(View.GONE);
                 ivDeleteImage.setVisibility(View.GONE);
                 break;
@@ -406,6 +414,9 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                     public void onResponse(Call<ResponseModel<Comment>> call, Response<ResponseModel<Comment>> response) {
                         if (response.isSuccessful()){
                             if (response.body().isSucceed()){
+                                ivCommentImage.setVisibility(View.GONE);
+                                ivDeleteImage.setVisibility(View.GONE);
+                                body=null;
                                 loadNewData();
                             }else{
                                 Toast.makeText(PostDetailActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
@@ -449,6 +460,11 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             ivCommentImage.setImageURI(data.getData());
             ivCommentImage.setVisibility(View.VISIBLE);
             ivDeleteImage.setVisibility(View.VISIBLE);
+            if (body !=null){
+                btnSent.setVisibility(View.VISIBLE);
+            }else{
+                btnSent.setVisibility(View.GONE);
+            }
         }
     }
 

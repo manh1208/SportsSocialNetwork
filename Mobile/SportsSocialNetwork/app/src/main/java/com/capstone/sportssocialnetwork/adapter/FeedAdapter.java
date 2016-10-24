@@ -99,14 +99,18 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                 .error(R.drawable.img_default_avatar_error)
                 .into(viewHolder.ivAvatar);
         try {
-            viewHolder.txtTime.setText(Utilities.getTimeAgo(feed.getCreateDate()));
+            viewHolder.txtTime.setText(Utilities.getTimeAgo(feed.getCreateDateString()));
         } catch (ParseException e) {
             Toast.makeText(mContext, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
         viewHolder.txtName.setText(feed.getUser().getFullName());
         viewHolder.txtContent.setText(feed.getPostContent());
-        if (feed.getImage() != null) {
+        if (feed.getPostImages().size()>0) {
             viewHolder.ivImage.setVisibility(View.VISIBLE);
+            Picasso.with(mContext).load(Uri.parse(DataUtils.URL + feed.getPostImages().get(0).getImage()))
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(viewHolder.ivImage);
         } else {
             viewHolder.ivImage.setVisibility(View.GONE);
         }
