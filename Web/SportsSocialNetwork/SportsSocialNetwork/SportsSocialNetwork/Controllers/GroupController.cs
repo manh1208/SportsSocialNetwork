@@ -1,9 +1,11 @@
 ﻿using SkyWeb.DatVM.Mvc;
+using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,8 +15,9 @@ namespace SportsSocialNetwork.Controllers
     public class GroupController : BaseController
     {
         // GET: Group
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
+            ViewBag.groupId = id.Value;
             return View();
         }
 
@@ -24,29 +27,20 @@ namespace SportsSocialNetwork.Controllers
         }
 
         [HttpPost]
-        public ActionResult getAllPost(string userId)
+        public ActionResult getGroupPost(int groupId, string curUserId, int skip, int take)
         {
             var result = new AjaxOperationResult<IEnumerable<PostGeneralViewModel>>();
-            if (!String.IsNullOrEmpty(userId))
+            if (groupId != 0)
             {
                 var _postService = this.Service<IPostService>();
-                var _postImageService = this.Service<IPostImageService>();
-                List<PostGeneralViewModel> listPostVM = new List<PostGeneralViewModel>();
-                List<Post> postList = _postService.GetActive(p => p.UserId.Equals(userId)).ToList();
+                var _postCommentService = this.Service<IPostCommentService>();
 
-                foreach (var item in postList)
+                List<Post> postList = _postService.GetAllPostsOfGroup(groupId, skip, take).ToList();
+                List<PostGeneralViewModel> listPostVM = Mapper.Map<List<PostGeneralViewModel>>(postList);
+
+                foreach (var item in listPostVM)
                 {
-                    PostGeneralViewModel model = Mapper.Map<PostGeneralViewModel>(item);
-                    if(item.EditDate != null)
-                    {
-                        model.PostAge = _postService.CalculatePostAge(item.EditDate.Value);
-                    }
-                    else
-                    {
-                        model.PostAge = _postService.CalculatePostAge(item.CreateDate);
-                    }
-                    
-                    listPostVM.Add(model);
+                    PrepareDetailPostData(item, curUserId);
                 }
                 
                 result.AdditionalData = listPostVM;
@@ -56,6 +50,64 @@ namespace SportsSocialNetwork.Controllers
             {
                 result.Succeed = false;
             }
+
+            return Json(result);
+        }
+
+        public void PrepareDetailPostData(PostGeneralViewModel p, string curUserId)
+        {
+            var _postService = this.Service<IPostService>();
+            var _likeService = this.Service<ILikeService>();
+            var _postCommentService = this.Service<IPostCommentService>();
+
+            List<Like> likeList = _likeService.GetLikeListByPostId(p.Id).ToList();
+
+            p.LikeCount = likeList.Count();
+            foreach (var item in likeList)
+            {
+                if(item.UserId == curUserId)
+                {
+                    p.Liked = true;
+                }
+                else
+                {
+                    p.Liked = false;
+                }
+            }
+
+            List<PostComment> postCmtList = _postCommentService.GetCommentListByPostId(p.Id, 0, 3).ToList();
+            p.PostAge = _postService.CalculatePostAge(p.EditDate == null ? p.CreateDate : p.EditDate.Value);
+            p.PostComments = Mapper.Map<List<PostCommentDetailViewModel>>(postCmtList);
+            p.CommentCount = p.PostComments.Count();
+            foreach (var item in p.PostComments)
+            {
+                DateTime dt = DateTime.ParseExact(item.CreateDate, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                item.CommentAge = _postCommentService.CalculateCommentAge(dt);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult getMoreCmtByPostId(int postId, int skip, int take)
+        {
+            var result = new AjaxOperationResult<IEnumerable<PostCommentDetailViewModel>>();
+            var _postCommentService = this.Service<IPostCommentService>();
+            List<PostComment> cmtList = _postCommentService.GetCommentListByPostId(postId, skip, take).ToList();
+            if(cmtList != null && cmtList.Count > 0)
+            {
+                List<PostCommentDetailViewModel> cmtListVM = Mapper.Map<List<PostCommentDetailViewModel>>(cmtList);
+                foreach (var item in cmtListVM)
+                {
+                    DateTime dt = DateTime.ParseExact(item.CreateDate, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                    item.CommentAge = _postCommentService.CalculateCommentAge(dt);
+                }
+                result.AdditionalData = cmtListVM;
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+
 
             return Json(result);
         }
