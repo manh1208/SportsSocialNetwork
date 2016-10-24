@@ -83,8 +83,8 @@ namespace SportsSocialNetwork.Controllers
             p.CommentCount = _postCommentService.GetActive(c => c.PostId == p.Id).ToList().Count();
             foreach (var item in p.PostComments)
             {
-                DateTime dt = DateTime.ParseExact(item.CreateDate, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-                item.CommentAge = _postCommentService.CalculateCommentAge(dt);
+                //DateTime dt = DateTime.ParseExact(item.CreateDateString, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                item.CommentAge = _postCommentService.CalculateCommentAge(item.CreateDate);
             }
 
             //sport
@@ -103,8 +103,8 @@ namespace SportsSocialNetwork.Controllers
                 List<PostCommentDetailViewModel> cmtListVM = Mapper.Map<List<PostCommentDetailViewModel>>(cmtList);
                 foreach (var item in cmtListVM)
                 {
-                    DateTime dt = DateTime.ParseExact(item.CreateDate, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-                    item.CommentAge = _postCommentService.CalculateCommentAge(dt);
+                    //DateTime dt = DateTime.ParseExact(item.CreateDateString, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                    item.CommentAge = _postCommentService.CalculateCommentAge(item.CreateDate);
                 }
                 result.AdditionalData = cmtListVM;
                 result.Succeed = true;
