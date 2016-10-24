@@ -211,23 +211,23 @@ function loadProfilePost(userId, curUserId, skip, take, actionName) {
 
 function prependPost(data) {
     var content = "";
-    if (this.ContentType == parseInt('@((int)ContentPostType.TextOnly)')) {
+    if (data.ContentType == 1) {
         content = textPost(data);
     }
-    if (this.ContentType == parseInt('@((int)ContentPostType.TextAndImage)')) {
+    if (data.ContentType == 2) {
         content = textImagePost(data);
     }
-    if (this.ContentType == parseInt('@((int)ContentPostType.ImageOnly)')) {
+    if (data.ContentType == 3) {
         content = imagePost(data);
     }
-    if (this.ContentType == parseInt('@((int)ContentPostType.MultiImages)')) {
+    if (data.ContentType == 4) {
         content = multiImagePost(data);
     }
-    if (this.ContentType == parseInt('@((int)ContentPostType.TextAndMultiImages)')) {
+    if (data.ContentType == 5) {
         content = multiImageTextPost(data);
     }
     var moreCmtBtn = "";
-    if (postComment(this) != null && postComment(this) != "") {
+    if (postComment(data) != null && postComment(data) != "") {
         moreCmtBtn = "<div><a href='#'>Xem thêm bình luận</a>";
     }
     var post = "<li class='list-group-item'>"
@@ -354,12 +354,20 @@ function postComment(data) {
 }
 
 function textPost(data) {
+    var hashtag = getHashTagSport(data);
+    if (hashtag != null && hashtag != "") {
+        hashtag += "<br/>";
+    }
     var content = data.PostContent;
-    return content;
+    return hashtag + content;
 }
 
 function textImagePost(data) {
-    var content = data.PostContent
+    var hashtag = getHashTagSport(data);
+    if (hashtag != null && hashtag != "") {
+        hashtag = "<br/>" + hashtag;
+    }
+    var content = data.PostContent + hashtag
                           + "<div class='media' style='margin-top:20px;'>"
                              + " <div class='col-xs-12'>"
                                   + "<div style='max-width:500px;'>"
@@ -375,6 +383,10 @@ function textImagePost(data) {
 }
 
 function imagePost(data) {
+    var hashtag = getHashTagSport(data);
+    if (hashtag != null && hashtag != "") {
+        hashtag += "<br/>";
+    }
     var content = "<div class='media'>"
                              + " <div class='col-xs-12'>"
                                   + "<div style='max-width:500px;'>"
@@ -386,10 +398,14 @@ function imagePost(data) {
                                    + "</div>"
                                + "</div>"
                            + "</div>";
-    return content;
+    return hashtag + content;
 }
 
 function multiImagePost(data) {
+    var hashtag = getHashTagSport(data);
+    if (hashtag != null && hashtag != "") {
+        hashtag += "<br/>";
+    }
     var content = "<div class='example' id='exampleGallery'>";
     var images = "";
     $(data.PostImages).each(function () {
@@ -400,12 +416,16 @@ function multiImagePost(data) {
     })
 
     content = content + images + "</div>";
-    return content;
+    return hashtag + content;
 
 }
 
 function multiImageTextPost(data) {
-    var content = data.PostContent
+    var hashtag = getHashTagSport(data);
+    if (hashtag != null && hashtag != "") {
+        hashtag = "<br/>" + hashtag;
+    }
+    var content = data.PostContent + hashtag
         + "<div class='example imageMagnific' id='exampleGallery'>";
     var images = "";
     $(data.PostImages).each(function () {
@@ -417,4 +437,12 @@ function multiImageTextPost(data) {
 
     content = content + images + "</div>";
     return content;
+}
+
+function getHashTagSport(data) {
+    var hashtag = "";
+    $(data.PostSports).each(function() {
+        hashtag += "<a href='" + this.Sport.Id + "'>#" + this.Sport.Name + " </a>";
+    })
+    return hashtag;
 }

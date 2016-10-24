@@ -59,9 +59,10 @@ namespace SportsSocialNetwork.Controllers
             var _postService = this.Service<IPostService>();
             var _likeService = this.Service<ILikeService>();
             var _postCommentService = this.Service<IPostCommentService>();
+            var _postSportService = this.Service<IPostSportService>();
 
+            //like
             List<Like> likeList = _likeService.GetLikeListByPostId(p.Id).ToList();
-
             p.LikeCount = likeList.Count();
             foreach (var item in likeList)
             {
@@ -75,6 +76,7 @@ namespace SportsSocialNetwork.Controllers
                 }
             }
 
+            //comment
             List<PostComment> postCmtList = _postCommentService.GetCommentListByPostId(p.Id, 0, 3).ToList();
             p.PostAge = _postService.CalculatePostAge(p.EditDate == null ? p.CreateDate : p.EditDate.Value);
             p.PostComments = Mapper.Map<List<PostCommentDetailViewModel>>(postCmtList);
@@ -84,6 +86,10 @@ namespace SportsSocialNetwork.Controllers
                 DateTime dt = DateTime.ParseExact(item.CreateDate, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
                 item.CommentAge = _postCommentService.CalculateCommentAge(dt);
             }
+
+            //sport
+            List<PostSport> postSportList = _postSportService.GetActive(s => s.PostId == p.Id).ToList();
+            p.PostSports = Mapper.Map<List<PostSportDetailViewModel>>(postSportList);
         }
 
         [HttpPost]
