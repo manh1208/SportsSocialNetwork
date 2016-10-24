@@ -12,6 +12,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         IEnumerable<Post> GetAllPostsOfGroup(int groupId, int skip, int take);
 
+        IEnumerable<Post> GetAllPostOfUser(string userId, int skip, int take);
+
         Post GetPostById(int id);
 
         Post CreatePost(Post model);
@@ -19,6 +21,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         Post EditPost(Post model, bool imageChanged);
 
         AspNetUser GetUserNameOfPost(int postId);
+
+        string CalculatePostAge(DateTime date);
 
         #endregion
 
@@ -34,7 +38,12 @@ namespace SportsSocialNetwork.Models.Entities.Services
         }
 
         public IEnumerable<Post> GetAllPostsOfGroup(int groupId, int skip, int take) {
-            return this.GetActive(x=> x.GroupId==groupId).OrderBy(x => x.EditDate == null ? x.CreateDate : x.EditDate).Skip(skip).Take(take);
+            return this.GetActive(x=> x.GroupId==groupId).OrderByDescending(x => x.EditDate == null ? x.CreateDate : x.EditDate).Skip(skip).Take(take);
+        }
+
+        public IEnumerable<Post> GetAllPostOfUser(string userId, int skip, int take)
+        {
+            return this.GetActive(x => x.UserId == userId).OrderByDescending(x => x.EditDate == null ? x.CreateDate : x.EditDate).Skip(skip).Take(take);
         }
 
         public Post GetPostById(int id) {
@@ -63,6 +72,35 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         public AspNetUser GetUserNameOfPost(int postId) {
             return this.FirstOrDefaultActive(x => x.Id == postId).AspNetUser;
+        }
+
+        public string CalculatePostAge(DateTime date)
+        {
+            string result = "";
+            TimeSpan a = DateTime.Now - date;
+            int b = (int)a.TotalSeconds;
+            if (b / 86400 > 1)
+            {
+                result = date.Day + "/" + date.Month + "/" + date.Year + " lúc " + date.Hour + ":" + date.Minute;
+            }
+            else if (b / 3600 < 1)
+            {
+                int minute = (b % 3600)/60;
+                if (minute == 0)
+                {
+                    result = "Mới tức thì";
+                }
+                else
+                {
+                    result = minute.ToString() + " phút trước";
+                }
+            }
+            else
+            {
+                int hours = b / 3600;
+                result = hours.ToString() + " giờ trước";
+            }
+            return result;
         }
 
         #endregion

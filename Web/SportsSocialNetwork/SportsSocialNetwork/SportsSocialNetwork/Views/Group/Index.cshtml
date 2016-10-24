@@ -1,0 +1,263 @@
+﻿@using Microsoft.AspNet.Identity;
+@using SportsSocialNetwork.Models.Enumerable;
+@{
+    ViewBag.Title = "Group";
+    Layout = "~/Views/Shared/_SSNLayout.cshtml";
+
+    int groupId = ViewBag.groupId;
+}
+
+<style>
+    .panel-cover {
+        margin:0 0 10px 0;
+
+    }
+
+    .panel-status {
+        margin-bottom: 15px;
+    }
+
+    .suggest-group {
+        border: 1px solid lightgray;
+        overflow:hidden;
+        padding-top: 15px;
+        margin:10px;
+    }
+</style>
+
+@section styles {
+    <link rel="stylesheet" href="~/Content/assets/vendor/magnific-popup/magnific-popup.css">
+
+}
+
+
+<!--Cover area-->
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-cover" style="background-image: url('/Content/assets/example-images/dashboard-header.jpg');
+                padding-top: 30%; background-position:center">
+        </div>
+    </div>
+</div>
+ <!--END Cover area-->
+
+<div class="row">
+    <!--Left side-bar-->
+    <div class="col-sm-3">
+        <div class="widget widget-shadow text-center">
+            <div class="widget-header">
+                <div class="widget-header-content">
+                    <a class="avatar avatar-lg" href="javascript:void(0)">
+                        <img src="~/Content/assets/portraits/5.jpg" alt="...">
+                    </a>
+                    <div class="profile-user">Hội mê bóng hơn bồ</div>
+                    <div class="profile-job">Bóng đá</div>
+                    <p>
+                        Hội thích bóng, thích chơi bóng, bồ cũng thích nhưng mà hok
+                        thích bằng bóng. Bóng là số 1!
+                    </p>
+                    <div class="profile-social">
+                        <a class="icon bd-twitter" href="javascript:void(0)"></a>
+                        <a class="icon bd-facebook" href="javascript:void(0)"></a>
+                        <a class="icon bd-dribbble" href="javascript:void(0)"></a>
+                        <a class="icon bd-github" href="javascript:void(0)"></a>
+                    </div>
+                    <button type="button" class="btn btn-primary">Tham gia nhóm</button>
+                </div>
+            </div>
+            <div class="widget-footer">
+                <div class="row no-space">
+                    <div class="col-xs-6">
+                        <strong class="profile-stat-count">260</strong>
+                        <span>Thành viên</span>
+                    </div>
+                    <div class="col-xs-6">
+                        <strong class="profile-stat-count">180</strong>
+                        <span>Số bài post</span>
+                    </div>
+                    @*<div class="col-xs-4">
+                        <strong class="profile-stat-count">2000</strong>
+                        <span>Tweets</span>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--END Left side-bar-->
+
+    <!--Main-->
+    <div class="col-sm-6" style="padding: 0;">
+        <!--Posting status area-->
+        <div class="panel text-right panel-status">
+            <div class="row">
+                <input type="file" class="btn b" value="Thêm hình ảnh"/>
+            </div>
+            <div class="clearfix"></div>
+            <textarea class="form-control" placeholder="Viết gì đó cho nhóm của bạn" rows="3"></textarea>
+            <button type="button" style="width: 80px" class="btn btn-round btn-sm btn-primary">Đăng</button>
+        </div>
+        <!--END Posting status area-->
+
+        <!--Post area-->
+        <div class="panel" id="activities" role="tabpanel">
+            <div class="panel-body">
+                <ul class="list-group" id="listPost">
+                    
+                </ul>
+                <a class="btn btn-block btn-default profile-readMore" href="javascript:void(0)" role="button">Xem thêm bài viết</a>
+            </div>
+        </div>
+        <!--END Post area-->
+    </div>
+    <!--END Main-->
+
+    <!--Right side-bar-->
+    <div class="col-sm-3">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Thêm thành viên mới</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-pure btn-primary icon wb-plus"></button>
+                        </span>
+                        <input type="text" class="form-control" placeholder="Nhập tên người muốn thêm vào nhóm">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nhóm đề nghị</h3>
+            </div>
+            <div class="panel-body" style="padding: 0 0 15px 0;">
+                <div class="suggest-group">
+                    <div class="col-sm-12">
+                        <div class="overlay">
+                            <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
+                            <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                <h4><span class="icon wb-heart"> 255</span></h4>
+                            </figcaption>
+                        </div>
+                        <div class="row">
+                            <div class="clearfix"></div>
+                            <div class="col-sm-8 height-50 vertical-align">
+                                <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
+                            </div>
+                            <div class="col-sm-4 text-right height-50 vertical-align">
+                                <button class="btn btn-icon btn-default vertical-align-middle" title="Tham gia nhóm"><span class="icon wb-plus"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="suggest-group">
+                    <div class="col-sm-12">
+                        <div class="overlay">
+                            <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
+                            <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                <h4><span class="icon wb-heart"> 255</span></h4>
+                            </figcaption>
+                        </div>
+                        <div class="row">
+                            <div class="clearfix"></div>
+                            <div class="col-sm-8 height-50 vertical-align">
+                                <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
+                            </div>
+                            <div class="col-sm-4 text-right height-50 vertical-align">
+                                <button class="btn btn-icon btn-default vertical-align-middle" title="Tham gia nhóm"><span class="icon wb-plus"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="suggest-group">
+                    <div class="col-sm-12">
+                        <div class="overlay">
+                            <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
+                            <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                <h4><span class="icon wb-heart"> 255</span></h4>
+                            </figcaption>
+                        </div>
+                        <div class="row">
+                            <div class="clearfix"></div>
+                            <div class="col-sm-8 height-50 vertical-align">
+                                <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
+                            </div>
+                            <div class="col-sm-4 text-right height-50 vertical-align">
+                                <button class="btn btn-icon btn-default vertical-align-middle" title="Tham gia nhóm"><span class="icon wb-plus"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="suggest-group">
+                    <div class="col-sm-12">
+                        <div class="overlay">
+                            <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
+                            <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                <h4><span class="icon wb-heart"> 255</span></h4>
+                            </figcaption>
+                        </div>
+                        <div class="row">
+                            <div class="clearfix"></div>
+                            <div class="col-sm-8 height-50 vertical-align">
+                                <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
+                            </div>
+                            <div class="col-sm-4 text-right height-50 vertical-align">
+                                <button class="btn btn-icon btn-default vertical-align-middle" title="Tham gia nhóm"><span class="icon wb-plus"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="suggest-group">
+                    <div class="col-sm-12">
+                        <div class="overlay">
+                            <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
+                            <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                <h4><span class="icon wb-heart"> 255</span></h4>
+                            </figcaption>
+                        </div>
+                        <div class="row">
+                            <div class="clearfix"></div>
+                            <div class="col-sm-8 height-50 vertical-align">
+                                <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
+                            </div>
+                            <div class="col-sm-4 text-right height-50 vertical-align">
+                                <button class="btn btn-icon btn-default vertical-align-middle" title="Tham gia nhóm"><span class="icon wb-plus"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--END right side-bar-->
+</div>
+
+@section scripts {
+    <script src="~/Content/assets/vendor/magnific-popup/jquery.magnific-popup.js"></script>
+    <script src="~/Content/assets/js/components/magnific-popup.js"></script>
+    <script src="~/Content/js/post-script.js"></script>
+
+    <script>
+        var _groupId = '@ViewBag.groupId';
+        var _curUserId = '@User.Identity.GetUserId()';
+        var _firstSkip = 0;
+        var _skip = 10;
+        var _firstTake = 10;
+        var _take = 5;
+        var _actionName = '@Url.Action("getGroupPost")';
+        var _loadMoreCmtActionName = '@Url.Action("getMoreCmtByPostId")';
+
+        $(document).ready(function () {
+            loadGroupPost(_groupId, _curUserId, _firstSkip, _firstTake, _actionName, _loadMoreCmtActionName);
+        })
+
+        $(window).scroll(function () {
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                loadGroupPost(_groupId, _curUserId, _skip, _take, _actionName, _loadMoreCmtActionName);
+                _skip = _skip + _take;
+            }
+        });
+    </script>
+}

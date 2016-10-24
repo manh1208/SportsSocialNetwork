@@ -17,5 +17,6 @@ namespace SportsSocialNetwork.Models
         public string Image { get; set; }
         public bool Active { get; set; }
         public AspNetUserSimpleModel AspNetUser { get; set; }
+        public string CommentAge { get; set; }
     }
 }

@@ -289,6 +289,7 @@
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\FieldController.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
@@ -874,10 +875,12 @@
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\PostOveralViewModel.cs" />
+    <Compile Include="Models\ViewModels\PostSportDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\PostSportViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\PostUploadViewModel.cs" />
+    <Compile Include="Models\ViewModels\PostGeneralViewModel.cs" />
     <Compile Include="Models\ViewModels\PostViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -1164,6 +1167,8 @@
     <Content Include="Content\assets\js\components\jt-timepicker.js" />
     <Content Include="Content\assets\js\components\jvectormap.min.js" />
     <Content Include="Content\assets\js\components\ladda-bootstrap.min.js" />
+    <Content Include="Content\assets\js\components\magnific-popup.js" />
+    <Content Include="Content\assets\js\components\magnific-popup.min.js" />
     <Content Include="Content\assets\js\components\masonry.js" />
     <Content Include="Content\assets\js\components\matchheight.js" />
     <Content Include="Content\assets\js\components\matchheight.min.js" />
@@ -3143,6 +3148,7 @@
     <Content Include="Content\images\logo_orange.png" />
     <Content Include="Content\images\no_image.jpg" />
     <Content Include="Content\js\custom-script.js" />
+    <Content Include="Content\js\post-script.js" />
     <Content Include="Content\js\sweetAlert\sweetalert.css" />
     <Content Include="Content\js\sweetAlert\sweetalert.min.js" />
     <Content Include="External Lib\QRCoder.dll" />
@@ -3804,6 +3810,8 @@
     <Content Include="Views\Event\ViewDetail.cshtml" />
     <Content Include="Views\Event\Index.cshtml" />
     <Content Include="Views\Event\PlaceEvent.cshtml" />
+    <Content Include="Views\Group\Index.cshtml" />
+    <Content Include="Views\Group\test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
