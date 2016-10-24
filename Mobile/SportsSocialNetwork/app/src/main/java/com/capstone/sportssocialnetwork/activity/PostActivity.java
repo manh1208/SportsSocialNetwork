@@ -168,6 +168,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
 
             ivContentImage.setImageURI(data.getData());
             ivContentImage.setVisibility(View.VISIBLE);
+            txtContent.setError(null);
         }
     }
 
@@ -182,7 +183,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         int id = item.getItemId();
         switch (id){
             case R.id.menu_create_post:
-                if (txtContent.getText().toString().equals("")){
+                if (txtContent.getText().toString().equals("") && body==null){
                     txtContent.setError("Vui lòng điền nội dung");
                     txtContent.startAnimation(AnimationUtils.loadAnimation(this,R.anim.shake));
                     txtContent.requestFocus();

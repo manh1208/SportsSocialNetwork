@@ -14,7 +14,7 @@ public class Comment {
     private int postId;
     @SerializedName("Comment")
     private String comment;
-    @SerializedName("CreateDate")
+    @SerializedName("CreateDateString")
     private String createDate;
     @SerializedName("Image")
     private String image;

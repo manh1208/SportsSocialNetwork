@@ -2,6 +2,8 @@ package com.capstone.sportssocialnetwork.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by ManhNV on 10/9/16.
  */
@@ -22,6 +24,8 @@ public class Post {
     private boolean active;
     @SerializedName("GroupId")
     private Integer groupId;
+    @SerializedName("PostImages")
+    private List<PostImage> postImages;
 
     public int getId() {
         return id;
@@ -85,5 +89,13 @@ public class Post {
 
     public void setGroupId(Integer groupId) {
         this.groupId = groupId;
+    }
+
+    public List<PostImage> getPostImages() {
+        return postImages;
+    }
+
+    public void setPostImages(List<PostImage> postImages) {
+        this.postImages = postImages;
     }
 }
