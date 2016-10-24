@@ -28,7 +28,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             try {
                 List<PostComment> commentList= service.GetCommentListByPostId(postId,skip,take).ToList();
 
-                List<PostCommentDetailViewModel> result = Mapper.Map<List<PostCommentDetailViewModel>>(commentList);
+                List<PostCommentDetailViewModel> result = new List<PostCommentDetailViewModel>();
+
+                foreach (var comment in commentList) {
+                    result.Add(PreparePostCommentDetailViewModel(comment));
+                }
 
                 response = new ResponseModel<List<PostCommentDetailViewModel>>(true,"Tải bình luận thành công",null, result);
 
@@ -71,7 +75,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 Notification noti = notiService.SaveNoti(user.Id, "Comment", commentedUser.UserName + " đã bình luận về bài viết của bạn", 1, post.Id, null);
 
-                PostCommentDetailViewModel result = Mapper.Map<PostCommentDetailViewModel>(comment);
+                PostCommentDetailViewModel result = PreparePostCommentDetailViewModel(comment);
 
                 response = new ResponseModel<PostCommentDetailViewModel>(true, "Bình luận thành công", null, result);
 
@@ -79,6 +83,14 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 response = ResponseModel<PostCommentDetailViewModel>.CreateErrorResponse("Bình luận thất bại", systemError);
             }
             return Json(response);
+        }
+
+        private PostCommentDetailViewModel PreparePostCommentDetailViewModel(PostComment comment) {
+            PostCommentDetailViewModel result = Mapper.Map<PostCommentDetailViewModel>(comment);
+
+            result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+
+            return result;
         }
     }
 }

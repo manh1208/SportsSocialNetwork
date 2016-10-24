@@ -218,9 +218,9 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 order.CreateDate = DateTime.Now;
                 order.Price = price;
                 order.Note = model.Note;
-                order.PayerName = user.FullName;
-                order.PayerEmail = user.Email;
-                order.PayerPhone = user.PhoneNumber;
+                order.PayerName = model.PayerName;
+                order.PayerEmail = model.PayerEmail;
+                order.PayerPhone = model.PayerPhone;
                 order.Status = (int)OrderStatus.Pending;
                 order.OrderCode = orderCode;
                 order.QRCodeUrl = Utils.GenerateQRCode(orderCode, QRCodeGenerator.ECCLevel.Q);

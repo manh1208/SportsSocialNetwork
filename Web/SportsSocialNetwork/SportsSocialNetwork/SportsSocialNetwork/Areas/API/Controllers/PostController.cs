@@ -2,6 +2,7 @@
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -97,7 +98,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 PreparePostOveralData(overal, currentUserId);
 
-                PostDetailViewModel result = PreparePostDetailData(overal,skip,take);
+                PostDetailViewModel result = PreparePostDetailData(overal, skip, take);
 
                 response = new ResponseModel<PostDetailViewModel>(true, "Chi tiết bài viết:", null, result);
 
@@ -123,16 +124,25 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             try
             {
-
-
                 Post post = Mapper.Map<Post>(model);
+                if (model.PostContent == null)
+                {
+                    post.PostContent = "";
+                }
+                post.ContentType = GetPostType(model);
 
-                //if (model.UploadImage != null)
-                //{
-                //    FileUploader uploader = new FileUploader();
+                if (post.ContentType != int.Parse(ContentPostType.TextOnly.ToString("d")))
+                {
+                    FileUploader uploader = new FileUploader();
 
-                //    post.Image = uploader.UploadImage(model.UploadImage, "UserImage");
-                //}
+                    foreach (var img in model.UploadImage) {
+                        PostImage image = new PostImage();
+
+                        image.Image = uploader.UploadImage(img, userImagePath);
+
+                        post.PostImages.Add(image);
+                    }
+                }
 
                 post = service.CreatePost(post);
 
@@ -169,11 +179,22 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 //    {
                 //        FileUploader uploader = new FileUploader();
 
-                //        post.Image = uploader.UploadImage(model.UploadImage, userImagePath);
+                //        List<PostImage> imgList = new List<PostImage>();
+
+                //        foreach (var img in model.UploadImage)
+                //        {
+                //            PostImage image = new PostImage();
+
+                //            image.Image = uploader.UploadImage(img, userImagePath);
+
+                //            imgList.Add(image);
+                //        }
+
+                //        post.PostImages = imgList;
                 //    }
                 //    else
                 //    {
-                //        post.Image = null;
+                //        post.PostImages = null;
                 //    }
                 //}
 
@@ -215,11 +236,15 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             p.CommentCount = commentService.GetCommentListByPostId(p.Id).Count();
 
+            p.CreateDateString = p.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
 
-
+            if(!p.EditDate.ToString().Equals("01/01/0001 12:00:00 SA"))
+            {
+                p.EditDateString = p.EditDate.ToString("dd/MM/yyyy HH:mm:ss");
+            }
         }
 
-        public PostDetailViewModel PreparePostDetailData(PostOveralViewModel post,int skip, int take)
+        public PostDetailViewModel PreparePostDetailData(PostOveralViewModel post, int skip, int take)
         {
 
             var likeService = this.Service<ILikeService>();
@@ -230,9 +255,60 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             result.Post = post;
 
-            List<PostComment> commentList = commentService.GetCommentListByPostId(post.Id,skip,take).ToList<PostComment>();
-            List<PostCommentDetailViewModel> commentListResult = Mapper.Map<List<PostCommentDetailViewModel>>(commentList);
+            List<PostComment> commentList = commentService.GetCommentListByPostId(post.Id, skip, take).ToList<PostComment>();
+            List<PostCommentDetailViewModel> commentListResult = new List<PostCommentDetailViewModel>();
+            foreach (var comment in commentList) {
+                commentListResult.Add(PreparePostCommentDetailViewModel(comment));
+            }
             result.CommentList = commentListResult;
+            return result;
+        }
+
+        private int GetPostType(PostUploadViewModel model)
+        {
+            int contentType = 0;
+
+            bool hasText = false;
+
+            if (model.PostContent == null)
+            {
+                hasText = false;
+            }
+            else
+            {
+                hasText = true;
+            }
+
+
+            if (model.UploadImage==null && hasText)
+            {
+                contentType = int.Parse(ContentPostType.TextOnly.ToString("d"));
+            }
+            else if (model.UploadImage.Count == 1 && hasText)
+            {
+                contentType = int.Parse(ContentPostType.TextAndImage.ToString("d"));
+            }
+            else if (model.UploadImage.Count > 1 && hasText)
+            {
+                contentType = int.Parse(ContentPostType.TextAndMultiImages.ToString("d"));
+            }
+            else if (model.UploadImage.Count > 1 && !hasText)
+            {
+                contentType = int.Parse(ContentPostType.MultiImages.ToString("d"));
+            }
+            else if (model.UploadImage.Count == 1 && !hasText) {
+                contentType = int.Parse(ContentPostType.ImageOnly.ToString("d"));
+            }
+
+            return contentType;
+        }
+
+        private PostCommentDetailViewModel PreparePostCommentDetailViewModel(PostComment comment)
+        {
+            PostCommentDetailViewModel result = Mapper.Map<PostCommentDetailViewModel>(comment);
+
+            result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+
             return result;
         }
     }

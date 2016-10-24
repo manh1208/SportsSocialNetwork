@@ -26,7 +26,12 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             {
                 List<Event> eventList = service.GetAllPlaceOwnerEvent(ownerId);
 
-                List<EventOveralViewModel> result = Mapper.Map<List<EventOveralViewModel>>(eventList);
+                List<EventOveralViewModel> result = new List<EventOveralViewModel>();
+
+                foreach (var e in eventList)
+                {
+                    result.Add(PrepareEventOveralViewModel(e));
+                }
 
                 response = new ResponseModel<List<EventOveralViewModel>>(true, "Danh sách cách sự kiện của bạn:", null, result);
             }
@@ -36,6 +41,16 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             }
             return Json(response);
+        }
+
+        private EventOveralViewModel PrepareEventOveralViewModel(Event e)
+        {
+            EventOveralViewModel result = Mapper.Map<EventOveralViewModel>(e);
+            result.StartDateString = result.StartDate.ToString("dd/MM/yyyy");
+
+            result.EndDateString = result.EndDate.ToString("dd/MM/yyyy");
+
+            return result;
         }
     }
 }

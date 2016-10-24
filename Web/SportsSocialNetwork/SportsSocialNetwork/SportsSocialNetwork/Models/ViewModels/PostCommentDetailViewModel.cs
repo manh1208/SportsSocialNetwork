@@ -12,7 +12,8 @@ namespace SportsSocialNetwork.Models
         public string UserId { get; set; }
         public int PostId { get; set; }
         public string Comment { get; set; }
-        public String CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
+        public String CreateDateString { get; set; }
         public string Image { get; set; }
         public bool Active { get; set; }
         public AspNetUserSimpleModel AspNetUser { get; set; }
