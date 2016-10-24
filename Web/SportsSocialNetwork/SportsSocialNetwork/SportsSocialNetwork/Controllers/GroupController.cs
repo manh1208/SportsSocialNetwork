@@ -80,7 +80,7 @@ namespace SportsSocialNetwork.Controllers
             List<PostComment> postCmtList = _postCommentService.GetCommentListByPostId(p.Id, 0, 3).ToList();
             p.PostAge = _postService.CalculatePostAge(p.EditDate == null ? p.CreateDate : p.EditDate.Value);
             p.PostComments = Mapper.Map<List<PostCommentDetailViewModel>>(postCmtList);
-            p.CommentCount = p.PostComments.Count();
+            p.CommentCount = _postCommentService.GetActive(c => c.PostId == p.Id).ToList().Count();
             foreach (var item in p.PostComments)
             {
                 DateTime dt = DateTime.ParseExact(item.CreateDate, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);

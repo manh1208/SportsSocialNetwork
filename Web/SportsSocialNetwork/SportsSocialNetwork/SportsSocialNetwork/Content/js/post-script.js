@@ -1,4 +1,6 @@
-﻿$('body').on('focus', ".magnific", function () {
+﻿var _loadMorePostActionName = "";
+
+$('body').on('focus', ".magnific", function () {
     $(this).magnificPopup({
         type: 'image',
         zoom: {
@@ -67,7 +69,8 @@ $('body').on('focus', ".imageMagnific", function () {
 //    }
 //});
 
-function loadGroupPost(groupId, curUserId, skip, take, actionName) {
+function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtActionName) {
+    _loadMorePostActionName = loadMoreCmtActionName;
     $.ajax({
         url: actionName,
         type: 'POST',
@@ -99,7 +102,7 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName) {
                     }
                     var moreCmtBtn = "";
                     if (postComment(this) != null && postComment(this) != "") {
-                        moreCmtBtn = "<div><a href='#'>Xem thêm bình luận</a>";
+                        moreCmtBtn = "<div><a href='javascript:void(0)' onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
                     }
                     var post = "<li class='list-group-item'>"
                                    + "<div class='media'>"
@@ -138,7 +141,8 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName) {
     });
 }
 
-function loadProfilePost(userId, curUserId, skip, take, actionName) {
+function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtActionName) {
+    _loadMorePostActionName = loadMoreCmtActionName;
     $.ajax({
         url: actionName,
         type: 'POST',
@@ -170,7 +174,7 @@ function loadProfilePost(userId, curUserId, skip, take, actionName) {
                     }
                     var moreCmtBtn = "";
                     if (postComment(this) != null && postComment(this) != "") {
-                        moreCmtBtn = "<div><a href='#'>Xem thêm bình luận</a>";
+                        moreCmtBtn = "<div><a href='javascript:void(0)' onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
                     }
                     var post = "<li class='list-group-item'>"
                                    + "<div class='media'>"
@@ -228,7 +232,7 @@ function prependPost(data) {
     }
     var moreCmtBtn = "";
     if (postComment(data) != null && postComment(data) != "") {
-        moreCmtBtn = "<div><a href='#'>Xem thêm bình luận</a>";
+        moreCmtBtn = "<div><a href='javascript:void(0)' onclick='loadMoreComt(" + data.Id + ")'>Xem thêm bình luận</a>";
     }
     var post = "<li class='list-group-item'>"
                    + "<div class='media'>"
@@ -261,7 +265,7 @@ function prependPost(data) {
 function appendComment(data) {
     var cmt = "";
     var cmtImage = "";
-    if (data.Image != null) {
+    if (data.Image != null && data.Image != "") {
         cmtImage = "<div style='max-width:150px;'>"
                         + "<a class='inline-block magnific' href='" + data.Image + "' data-plugin='magnificPopup'"
                             + "data-close-btn-inside='false' data-fixed-contentPos='true' data-main-class='mfp-margin-0s mfp-with-zoom'"
@@ -295,12 +299,19 @@ function appendComment(data) {
     $(element).append(cmt);
 }
 
-function loadMoreComt(postId, actionName) {
+function loadMoreComt(postId) {
+    var element = "#postComments_" + postId + " > div";
+    var displayedCmt = $(element).length;
+    var skip = displayedCmt;
+    var take = 3;
+
     $.ajax({
-        url: actionName,
+        url: _loadMorePostActionName,
         type: 'POST',
         data: {
-            postId: postId
+            postId: postId,
+            skip: skip,
+            take: take
         },
         success: function (data) {
             if (data.Succeed) {
@@ -319,7 +330,7 @@ function postComment(data) {
     var cmt = "";
     $(data.PostComments).each(function () {
         var cmtImage = "";
-        if (this.Image != null) {
+        if (this.Image != null && this.Image != "") {
             cmtImage = "<div style='max-width:150px;'>"
                             + "<a class='inline-block magnific' href='" + this.Image + "' data-plugin='magnificPopup'"
                                 + "data-close-btn-inside='false' data-fixed-contentPos='true' data-main-class='mfp-margin-0s mfp-with-zoom'"
@@ -442,7 +453,7 @@ function multiImageTextPost(data) {
 function getHashTagSport(data) {
     var hashtag = "";
     $(data.PostSports).each(function() {
-        hashtag += "<a href='" + this.Sport.Id + "'>#" + this.Sport.Name + " </a>";
+        hashtag += "<a href='#" + this.Sport.Id + "'>#" + this.Sport.Name + " </a>";
     })
     return hashtag;
 }
