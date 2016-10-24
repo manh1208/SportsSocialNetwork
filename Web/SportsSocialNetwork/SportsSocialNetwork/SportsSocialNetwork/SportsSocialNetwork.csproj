@@ -293,6 +293,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
+    <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\SSNController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -688,6 +689,7 @@
     <Compile Include="Models\Entities\Services\PostCommentServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\PostImageService.cs" />
     <Compile Include="Models\Entities\Services\PostImageServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -813,6 +815,7 @@
     <Compile Include="Models\ViewModels\FieldViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\FollowSuggestViewModel.cs" />
     <Compile Include="Models\ViewModels\FollowViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -3134,6 +3137,7 @@
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome-4.6.3\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\font-awesome-4.6.3\HELP-US-OUT.txt" />
+    <Content Include="Content\images\cam-icon.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\logo_new.png" />
     <Content Include="Content\images\logo_orange.png" />
@@ -3174,6 +3178,16 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ViewModels.cs</LastGenOutput>
     </Content>
+    <Content Include="QRCodeImage\Orders\20161014163151PM_c3b8799c-bffa-42e5-b212-223d6f61e1ae.jpg" />
+    <Content Include="QRCodeImage\Orders\20161014163707PM_b12531c6-82cd-45cf-adcd-749fa2dcd2ff.jpg" />
+    <Content Include="QRCodeImage\Orders\20161014170528PM_b21ee835-b752-4883-b5f8-9e30b7eeb610.jpg" />
+    <Content Include="QRCodeImage\Orders\20161014170757PM_079d64de-382e-47c1-90d6-b3cc208df7ce.jpg" />
+    <Content Include="QRCodeImage\Orders\20161014170959PM_2dd7b574-161b-415a-9c9c-8b17e21094b8.jpg" />
+    <Content Include="QRCodeImage\Orders\20161014233453PM_ac7af448-e9cb-40b6-aa07-48ec2b9ddb68.jpg" />
+    <Content Include="QRCodeImage\Orders\20161014235858PM_517013d9-bda5-42ef-9722-52ca3a01f1dd.jpg" />
+    <Content Include="QRCodeImage\Orders\20161016005059AM_372dac7a-c4ed-41e5-9e2f-3a84440993db.jpg" />
+    <Content Include="QRCodeImage\Orders\20161016005220AM_b6eaffd0-59a9-418f-b855-543da507c998.jpg" />
+    <Content Include="QRCodeImage\Orders\20161016005834AM_f6bb24d9-05c6-457a-94c5-a9b80d708797.jpg" />
     <Content Include="Scripts\ai.0.22.19-build00125.js" />
     <Content Include="Scripts\ai.0.22.19-build00125.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -3697,6 +3711,42 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="SSNImages\QRCodeImage\20161017142204PM_5e8dd3d9-39b8-470a-91bb-6c292adb970d.jpg" />
+    <Content Include="SSNImages\QRCodeImage\20161017160148PM_7fefd263-c9b4-40b6-b399-2e8a5fbdde8d.jpg" />
+    <Content Include="SSNImages\QRCodeImage\20161017162150PM_f48b2e42-d227-4d11-81a3-c8ee428be768.jpg" />
+    <Content Include="SSNImages\QRCodeImage\20161017162302PM_53d8e4a4-734f-49d4-88a0-02ac9ffce621.jpg" />
+    <Content Include="SSNImages\QRCodeImage\20161017162554PM_75bc331b-170f-4fd6-b330-230fe40feb1e.jpg" />
+    <Content Include="SSNImages\QRCodeImage\20161017163353PM_f6808531-2bd4-4442-9f0c-3942d9a5cd40.jpg" />
+    <Content Include="SSNImages\QRCodeImage\20161017164147PM_17e45bc3-39a6-40bf-b6e1-70c25c1c71b9.jpg" />
+    <Content Include="SSNImages\QRCodeImage\20161017164427PM_9c134c09-3def-4063-b309-3ef9716c711c.jpg" />
+    <Content Include="SSNImages\QRCodeImage\20161017165750PM_080630fc-61e1-41a3-b5a9-e9878488ce52.jpg" />
+    <Content Include="SSNImages\QRCodeImage\20161018110427AM_24c688a0-1a59-4881-91eb-43f60f8ddfef.jpg" />
+    <Content Include="SSNImages\QRCodeImage\20161018110908AM_6917e1c1-c6ef-4514-a922-d6240e5d0c60.jpg" />
+    <Content Include="SSNImages\QRCodeImage\20161018111046AM_6d1b19ff-61dc-4830-aa8b-d947602b0851.jpg" />
+    <Content Include="SSNImages\QRCodeImage\20161018111217AM_2c027188-ae23-4e4d-853e-b6aa87f07880.jpg" />
+    <Content Include="SSNImages\QRCodeImage\20161018113146AM_9665df42-4b3f-43ae-83c7-cfb742ff0e85.jpg" />
+    <Content Include="SSNImages\QRCodeImage\20161018114946AM_91152bdd-499d-4323-a0ce-f21e0313248d.jpg" />
+    <Content Include="SSNImages\QRCodeImage\20161018115514AM_99e2792d-4798-489e-8e0d-a4bdcd8d505a.jpg" />
+    <Content Include="SSN\EventImages\20161015170053PM_c31e8883-08b1-492e-84d9-7dccd4412d54.jpg" />
+    <Content Include="SSN\EventImages\20161016170515PM_7b108d33-3f34-454a-8bdf-0575568e71b3.jpg" />
+    <Content Include="SSN\EventImages\20161016170515PM_f892f38e-a797-477f-a169-6c313920b0c1.jpg" />
+    <Content Include="SSN\EventImages\20161016171651PM_dbc0d590-a903-4b9b-a8de-4d227b9632c9.jpg" />
+    <Content Include="SSN\FieldImages\20161016170428PM_ab024037-09d5-4084-8442-8bdef090dff6.jpg" />
+    <Content Include="SSN\PlaceImages\20161016170120PM_17381596-f9d0-4f71-b1dd-9ee0a30bf955.png" />
+    <Content Include="SSN\PlaceImages\20161016170120PM_cbd6e88f-fec1-40fc-bad7-85d7c51e2d6f.jpg" />
+    <Content Include="SSN\PlaceImages\20161017104535AM_2f1bf086-6231-4625-b5c7-74af22f0f1d9.jpg" />
+    <Content Include="SSN\PlaceImages\20161017104607AM_3e93cc86-a5e7-4672-a245-be6e0bc7c3a6.png" />
+    <Content Include="SSN\Post\20161016163909CH_03b7d4b0-60a1-4b29-9d50-ffeb814f091b.jpg" />
+    <Content Include="SSN\UserImage\CuongPK\12472562_1076222005784422_7468429074863474822_n.jpg" />
+    <Content Include="SSN\UserImage\CuongPK\12961601_1076478049092151_26188844484776346_n.jpg" />
+    <Content Include="SSN\UserImage\CuongPK\13177491_1229522080398924_8669244253177149204_n.jpg" />
+    <Content Include="SSN\UserImage\CuongPK\20161006133025CH_9ca1a452-4ffe-49d8-b112-b081ed7b873a.jpg" />
+    <Content Include="SSN\UserImage\CuongPK\20161006135128CH_0e3699ef-cd88-4a82-8224-6d76be63747e.jpg" />
+    <Content Include="SSN\UserImage\CuongPK\20161007141636CH_c4bd6fdd-7c40-45f6-9511-65eccf84b1ee.jpg" />
+    <Content Include="SSN\UserImage\CuongPK\20161007145214CH_640b2376-ffc1-4075-91ab-0b83003ab531.jpg" />
+    <Content Include="SSN\UserImage\CuongPK\20161008203741CH_a6710362-a5f3-4707-8ccb-707f1e893726.jpg" />
+    <Content Include="SSN\UserImage\CuongPK\20161010205538CH_30b93ef5-cd2a-41bb-8840-192eb2875213.jpg" />
+    <Content Include="SSN\UserImage\CuongPK\DSC_0397.JPG" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -3773,6 +3823,8 @@
     <Folder Include="Areas\Moderator\Models\" />
     <Folder Include="Areas\Moderator\Views\Shared\" />
     <Folder Include="Models\Hubs\" />
+    <Folder Include="SSN\PostImages\" />
+    <Folder Include="Views\Post\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

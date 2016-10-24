@@ -13,6 +13,14 @@ using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.Enumerable;
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.ViewModels;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Net;
+using System.IO;
+using System.Device.Location;
+using SportsSocialNetwork.Models.Entities;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -477,6 +485,7 @@ namespace SportsSocialNetwork.Controllers
 
             base.Dispose(disposing);
         }
+        
 
         #region Helpers
         // Used for XSRF protection when adding external logins

@@ -31,6 +31,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         String ChangeAvatar(String userId, String image);
 
         String ChangeCover(String userId, String image);
+        
 
         #endregion
 
@@ -39,7 +40,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
     public partial class AspNetUserService : IAspNetUserService
     {
         #region Code from here
-
+        
 
         public IQueryable<AspNetUser> GetUsers(JQueryDataTableParamModel request, out int totalRecord)
         {
