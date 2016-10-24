@@ -14,7 +14,6 @@ public class User {
     private String fullName;
     @SerializedName("Avatar")
     private String avatar;
-
     @SerializedName("AspNetRoles")
     private List<Role> roles;
 

@@ -98,7 +98,7 @@ public class MyOrderAdapter extends ArrayAdapter<Order> {
 
         Picasso.with(mContext).load(Uri.parse(DataUtils.URL + order.getqRCodeUrl()))
                 .placeholder(R.drawable.image_logo)
-                .error(R.drawable.img_default_avatar)
+                .error(R.drawable.img_default_avatar_error)
                 .into(ivQR);
 //                Toast.makeText(mContext, (DataUtils.URL+order.getqRCodeUrl()), Toast.LENGTH_SHORT).show();
 

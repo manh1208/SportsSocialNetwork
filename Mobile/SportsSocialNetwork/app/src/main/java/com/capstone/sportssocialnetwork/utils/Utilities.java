@@ -4,10 +4,13 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
@@ -25,6 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class Utilities {
 
@@ -69,7 +74,61 @@ public class Utilities {
         return res;
     }
 
+    public static int exifToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
+        return 0;
+    }
 
+    public static int getOrientation(Context context, Uri photoUri) {
+
+        Cursor cursor = context.getContentResolver().query(photoUri,
+                new String[] { MediaStore.Images.ImageColumns.ORIENTATION }, null, null, null);
+
+        if (cursor == null || cursor.getCount() != 1) {
+            return 90;  //Assuming it was taken portrait
+        }
+
+        cursor.moveToFirst();
+        return cursor.getInt(0);
+    }
+
+
+    public static String getTimeAgo(String s) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a",Locale.US);
+//        Calendar cal = Calendar.getInstance();
+//        TimeZone tz = cal.getTimeZone();
+//        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date date = sdf.parse(s);
+
+        Calendar c = Calendar.getInstance();
+        Date currentDate = c.getTime();
+        long time = 0;
+        time = currentDate.getTime() - date.getTime();
+        String interval = "";
+        long temp = 0;
+        if ((temp = TimeUnit.SECONDS.convert(time, TimeUnit.MILLISECONDS)) < 60) {
+            if (temp < 10) {
+                interval = "Just now";
+            } else {
+                interval = temp + " second" + (temp > 1 ? "s ago" : " ago");
+            }
+        } else if ((temp = TimeUnit.MINUTES.convert(time, TimeUnit.MILLISECONDS)) < 60) {
+            interval = temp + " minute" + (temp > 1 ? "s ago" : " ago");
+        } else if ((temp = TimeUnit.HOURS.convert(time, TimeUnit.MILLISECONDS)) < 24) {
+            interval += temp + " hour" + (temp > 1 ? "s ago" : " ago");
+        } else if ((temp = TimeUnit.DAYS.convert(time, TimeUnit.MILLISECONDS)) < 30) {
+            if (temp==1){
+                interval = "Yesterday";
+            }else {
+                interval += temp + " day" + (temp > 1 ? "s ago" : " ago");
+            }
+        } else {
+            interval = s;
+        }
+        return interval;
+    }
 
 
 

@@ -74,6 +74,7 @@ public class BookingActivity extends AppCompatActivity {
     private int fieldId;
     private String startTime;
     private String endTime;
+    private String playDate;
     private RestService service;
     private ArrayAdapter<String> placeAdapter;
     private ArrayAdapter<String> sportAdapter;
@@ -120,6 +121,27 @@ public class BookingActivity extends AppCompatActivity {
 
             }
         });
+
+        txtUseDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                playDate = s.toString();
+                removeError();
+//                Toast.makeText(BookingActivity.this, "Tinh", Toast.LENGTH_SHORT).show();
+                calculatePrice();
+            }
+        });
+
         txtStartTime.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -134,6 +156,7 @@ public class BookingActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 startTime = s.toString();
+                removeError();
 //                Toast.makeText(BookingActivity.this, "Tinh", Toast.LENGTH_SHORT).show();
                 calculatePrice();
             }
@@ -154,6 +177,7 @@ public class BookingActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 endTime = s.toString();
+               removeError();
 //                Toast.makeText(BookingActivity.this, "Tinh", Toast.LENGTH_SHORT).show();
                 calculatePrice();
             }
@@ -201,6 +225,12 @@ public class BookingActivity extends AppCompatActivity {
                 invisibleTime();
             }
         });
+    }
+
+    private void removeError(){
+        txtUseDate.setError(null);
+        txtStartTime.setError(null);
+        txtEndTime.setError(null);
     }
 
     private void initView() {
@@ -409,12 +439,17 @@ public class BookingActivity extends AppCompatActivity {
     private void calculatePrice() {
         fieldId = fieldHash.get(spField.getSelectedItem().toString());
         if (fieldId == -1) return;
+        if (playDate ==null || playDate.equals("")) return;
         if (startTime == null || startTime.equals("")) return;
         if (endTime == null || endTime.equals("")) return;
+
         if (!isValidation()) return;
+        startTime = txtStartTime.getText().toString();
+        endTime = txtEndTime.getText().toString();
+        playDate  = txtUseDate.getText().toString();
         progressDialog.setMessage("Đang tính giá...");
         progressDialog.show();
-        Call<ResponseModel<Double>> call = service.getOrderService().getPrice(fieldId, startTime, endTime);
+        Call<ResponseModel<Double>> call = service.getOrderService().getPrice(fieldId, startTime, endTime,playDate);
         call.enqueue(new Callback<ResponseModel<Double>>() {
             @Override
             public void onResponse(Call<ResponseModel<Double>> call, Response<ResponseModel<Double>> response) {
@@ -505,7 +540,7 @@ public class BookingActivity extends AppCompatActivity {
                                         break;
                                 }
 
-                                OrderRequestModel model = new OrderRequestModel(userId, fieldId, start, end, "", "", paidType);
+                                OrderRequestModel model = new OrderRequestModel(userId, fieldId, start, end, "", "", paidType,playDate);
                                 progressDialog.setMessage("Đang lưu dữ liệu đơn hàng. Vui lòng đợi...");
                                 progressDialog.show();
                                 Call<ResponseModel<Order>> call = service.getOrderService().createOrder(model);
