@@ -38,12 +38,12 @@ namespace SportsSocialNetwork.Models.Entities.Services
         }
 
         public IEnumerable<Post> GetAllPostsOfGroup(int groupId, int skip, int take) {
-            return this.GetActive(x=> x.GroupId==groupId).OrderBy(x => x.EditDate == null ? x.CreateDate : x.EditDate).Skip(skip).Take(take);
+            return this.GetActive(x=> x.GroupId==groupId).OrderByDescending(x => x.EditDate == null ? x.CreateDate : x.EditDate).Skip(skip).Take(take);
         }
 
         public IEnumerable<Post> GetAllPostOfUser(string userId, int skip, int take)
         {
-            return this.GetActive(x => x.UserId == userId).OrderBy(x => x.EditDate == null ? x.CreateDate : x.EditDate).Skip(skip).Take(take);
+            return this.GetActive(x => x.UserId == userId).OrderByDescending(x => x.EditDate == null ? x.CreateDate : x.EditDate).Skip(skip).Take(take);
         }
 
         public Post GetPostById(int id) {

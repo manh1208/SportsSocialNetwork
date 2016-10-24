@@ -247,14 +247,15 @@
         var _firstTake = 10;
         var _take = 5;
         var _actionName = '@Url.Action("getGroupPost")';
+        var _loadMoreCmtActionName = '@Url.Action("getMoreCmtByPostId")';
 
         $(document).ready(function () {
-            loadGroupPost(_groupId, _curUserId, _firstSkip, _firstTake, _actionName);
+            loadGroupPost(_groupId, _curUserId, _firstSkip, _firstTake, _actionName, _loadMoreCmtActionName);
         })
 
         $(window).scroll(function () {
             if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-                loadGroupPost(_groupId, _curUserId, _skip, _take, _actionName);
+                loadGroupPost(_groupId, _curUserId, _skip, _take, _actionName, _loadMoreCmtActionName);
                 _skip = _skip + _take;
             }
         });

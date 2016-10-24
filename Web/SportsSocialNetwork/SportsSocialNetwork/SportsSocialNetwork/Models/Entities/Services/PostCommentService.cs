@@ -23,7 +23,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         public IEnumerable<PostComment> GetCommentListByPostId(int postId, int skip, int take)
         {
-            return this.GetActive(x => x.PostId == postId).OrderBy(x=> x.CreateDate).Skip(skip).Take(take);
+            return this.GetActive(x => x.PostId == postId).OrderByDescending(x=> x.CreateDate).Skip(skip).Take(take);
         }
 
         public PostComment Comment(int postId, String userId, String content, String image) {
