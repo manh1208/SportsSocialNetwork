@@ -143,11 +143,11 @@
             <div class="widget-footer">
                 <div class="row no-space">
                     <div class="col-xs-6">
-                        <strong class="profile-stat-count">260</strong>
+                        <strong class="profile-stat-count">@ViewBag.Follower</strong>
                         <span>Người theo dõi</span>
                     </div>
                     <div class="col-xs-6">
-                        <strong class="profile-stat-count">180</strong>
+                        <strong class="profile-stat-count">@ViewBag.Following</strong>
                         <span>Đang theo dõi</span>
                     </div>
                 </div>
@@ -566,32 +566,6 @@
             });
         }*@
 
-        //$('.imageMagnific').magnificPopup({
-        //    delegate: 'a',
-        //    type: 'image',
-        //    tLoading: 'Loading image #%curr%...',
-        //    mainClass: 'mfp-img-mobile',
-        //    gallery: {
-        //        enabled: true,
-        //        navigateByImgClick: true,
-        //        preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
-        //    },
-        //    image: {
-        //        tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
-        //        titleSrc: function (item) {
-        //            return item.el.attr('title') +
-        //              '<small>by amazingSurge</small>';
-        //        }
-        //    },
-        //    zoom: {
-        //        enabled: true,
-        //        duration: 300, // don't foget to change the duration also in CSS
-        //        opener: function (element) {
-        //            return element.find('img');
-        //        }
-        //    }
-        //});
-
         function follow(id){
             var update = false;
             $.ajax({
@@ -720,31 +694,34 @@
 
         $('#post-form').submit(function (e) {
             e.preventDefault();
-            var formData = new FormData(document.getElementById('post-form'));
-            for(var i=0, len=storedFiles.length; i<len; i++) {
-                formData.append('uploadImages', storedFiles[i]);
-            }
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("CreatePost","Post")',
-                data: formData,
-                async: false,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (result) {
-                    if (result.Succeed) {
-                        showMessage("Cập nhật thành công.", "success", "OK");
-                    } else {
-                        showErrors(result.Errors);
-                        showMessage("Không thể cập nhật.", "error", "OK");
+            var postContent = $("#PostContent").val().trim();
+            if(storedFiles.length!=0 || postContent){
+                var formData = new FormData(document.getElementById('post-form'));
+                for(var i=0, len=storedFiles.length; i<len; i++) {
+                    formData.append('uploadImages', storedFiles[i]);
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CreatePost","Post")',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            showMessage("Cập nhật thành công.", "success", "OK");
+                        } else {
+                            showErrors(result.Errors);
+                            showMessage("Không thể cập nhật.", "error", "OK");
 
-                    }
-                },
-                error: function (result) {
-                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                },
-            });
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+            }
         });
 
 
