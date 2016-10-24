@@ -13,7 +13,7 @@ namespace SportsSocialNetwork.Models.ViewModels
         public int LikeCount { get; set; }
         public int CommentCount { get; set; }
         public bool Liked { get; set; }
-        public int ContentType { get; set; }
         public string PostAge { get; set; }
+        public List<PostCommentDetailViewModel> PostComments { get; set; }
     }
 }

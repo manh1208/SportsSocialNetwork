@@ -3139,6 +3139,7 @@
     <Content Include="Content\images\logo_orange.png" />
     <Content Include="Content\images\no_image.jpg" />
     <Content Include="Content\js\custom-script.js" />
+    <Content Include="Content\js\post-script.js" />
     <Content Include="Content\js\sweetAlert\sweetalert.css" />
     <Content Include="Content\js\sweetAlert\sweetalert.min.js" />
     <Content Include="External Lib\QRCoder.dll" />
