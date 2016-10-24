@@ -126,6 +126,11 @@ namespace SportsSocialNetwork.Controllers
             }
             List<FollowSuggestViewModel> suggestUserList = userList.OrderByDescending(p => p.weight).Take(10).ToList();
             ViewBag.suggestUserList = suggestUserList;
+
+            //load follow numbers
+            var _followService = this.Service<IFollowService>();
+            ViewBag.Following = _followService.GetActive(p => p.FollowerId == curUser.Id).Count();
+            ViewBag.Follower = _followService.GetActive(p => p.UserId == curUser.Id).Count();
             return View();
         }
 

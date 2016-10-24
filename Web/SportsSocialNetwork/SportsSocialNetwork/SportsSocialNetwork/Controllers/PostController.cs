@@ -2,6 +2,7 @@
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -23,16 +24,52 @@ namespace SportsSocialNetwork.Controllers
             var result = new AjaxOperationResult();
             var _postService = this.Service<IPostService>();
             var post = new Post();
+            int ImageNumber = 0;
+            bool hasText = false; 
             post.Active = true;
             post.CreateDate = DateTime.Now;
             post.UserId = User.Identity.GetUserId();
-            post.PostContent = model.PostContent;
-            _postService.Create(post);
+            
+            
             if (uploadImages.ToList()[0] != null && uploadImages.ToList().Count > 0)
             {
+                if (uploadImages.ToList().Count == 1)
+                {
+                    ImageNumber = 1;
+                }else
+                {
+                    ImageNumber = 2;
+                }
                 var _postImageService = this.Service<IPostImageService>();
                 _postImageService.saveImage(post.Id, uploadImages);
             }
+            if (!String.IsNullOrEmpty(model.PostContent))
+            {
+                hasText = true;
+            }
+
+            post.PostContent = model.PostContent;
+            if (ImageNumber == 0 && hasText)
+            {
+                post.ContentType = (int)ContentPostType.TextOnly;
+            }
+            else if(ImageNumber == 1 && hasText)
+            {
+                post.ContentType = (int)ContentPostType.TextAndImage;
+            }
+            else if(ImageNumber == 2 && hasText)
+            {
+                post.ContentType = (int)ContentPostType.TextAndMultiImages;
+            }
+            else if(ImageNumber == 1 && !hasText)
+            {
+                post.ContentType = (int)ContentPostType.ImageOnly;
+            }
+            else if(ImageNumber == 2 && !hasText)
+            {
+                post.ContentType = (int)ContentPostType.MultiImages;
+            }
+            _postService.Create(post);
             if (!String.IsNullOrEmpty(sportSelect))
             {
                 string[] sportId = sportSelect.Split(',');
