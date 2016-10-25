@@ -21,6 +21,7 @@ namespace SportsSocialNetwork.Models.Entities
             this.AspNetUserLogins = new HashSet<AspNetUserLogin>();
             this.Events = new HashSet<Event>();
             this.Follows = new HashSet<Follow>();
+            this.GroupMembers = new HashSet<GroupMember>();
             this.Hobbies = new HashSet<Hobby>();
             this.Invitations = new HashSet<Invitation>();
             this.Likes = new HashSet<Like>();
@@ -71,6 +72,8 @@ namespace SportsSocialNetwork.Models.Entities
         public virtual ICollection<Event> Events { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Follow> Follows { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GroupMember> GroupMembers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Hobby> Hobbies { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

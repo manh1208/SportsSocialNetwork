@@ -6,8 +6,11 @@
     [Status]  INT            NOT NULL,
     [Active]  BIT            NOT NULL,
     CONSTRAINT [PK_GroupMember] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_GroupMember_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id]),
     CONSTRAINT [FK_GroupMember_Group] FOREIGN KEY ([GroupId]) REFERENCES [dbo].[Group] ([Id])
 );
+
+
 
 
 

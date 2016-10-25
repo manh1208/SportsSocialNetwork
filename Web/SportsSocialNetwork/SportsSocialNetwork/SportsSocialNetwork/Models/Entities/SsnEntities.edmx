@@ -605,6 +605,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_GroupMember_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="GroupMember" Type="Self.GroupMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GroupMember">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_GroupMember_Group">
           <End Role="Group" Type="Self.Group" Multiplicity="1" />
           <End Role="GroupMember" Type="Self.GroupMember" Multiplicity="*" />
@@ -1092,6 +1104,10 @@
             <End Role="Sport" EntitySet="Sport" />
             <End Role="Group" EntitySet="Group" />
           </AssociationSet>
+          <AssociationSet Name="FK_GroupMember_AspNetUsers" Association="Self.FK_GroupMember_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="GroupMember" EntitySet="GroupMember" />
+          </AssociationSet>
           <AssociationSet Name="FK_GroupMember_Group" Association="Self.FK_GroupMember_Group">
             <End Role="Group" EntitySet="Group" />
             <End Role="GroupMember" EntitySet="GroupMember" />
@@ -1274,6 +1290,10 @@
           <AssociationSet Name="FK_Follow_AspNetUsers" Association="SSNModel.FK_Follow_AspNetUsers">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="Follow" EntitySet="Follows" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GroupMember_AspNetUsers" Association="SSNModel.FK_GroupMember_AspNetUsers">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="GroupMember" EntitySet="GroupMembers" />
           </AssociationSet>
           <AssociationSet Name="FK_Hobby_AspNetUsers" Association="SSNModel.FK_Hobby_AspNetUsers">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
@@ -1514,6 +1534,7 @@
           <NavigationProperty Name="AspNetUserLogins" Relationship="SSNModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
           <NavigationProperty Name="Events" Relationship="SSNModel.FK_Event_AspNetUsers" FromRole="AspNetUser" ToRole="Event" />
           <NavigationProperty Name="Follows" Relationship="SSNModel.FK_Follow_AspNetUsers" FromRole="AspNetUser" ToRole="Follow" />
+          <NavigationProperty Name="GroupMembers" Relationship="SSNModel.FK_GroupMember_AspNetUsers" FromRole="AspNetUser" ToRole="GroupMember" />
           <NavigationProperty Name="Hobbies" Relationship="SSNModel.FK_Hobby_AspNetUsers" FromRole="AspNetUser" ToRole="Hobby" />
           <NavigationProperty Name="Invitations" Relationship="SSNModel.FK_Invitation_AspNetUsers" FromRole="AspNetUser" ToRole="Invitation" />
           <NavigationProperty Name="Likes" Relationship="SSNModel.FK_Like_AspNetUsers" FromRole="AspNetUser" ToRole="Like" />
@@ -1666,6 +1687,7 @@
           <Property Name="Admin" Type="Boolean" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_GroupMember_AspNetUsers" FromRole="GroupMember" ToRole="AspNetUser" />
           <NavigationProperty Name="Group" Relationship="SSNModel.FK_GroupMember_Group" FromRole="GroupMember" ToRole="Group" />
         </EntityType>
         <EntityType Name="Hobby">
@@ -1976,6 +1998,18 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Follow">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GroupMember_AspNetUsers">
+          <End Type="SSNModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="SSNModel.GroupMember" Role="GroupMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GroupMember">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
