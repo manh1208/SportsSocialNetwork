@@ -2,6 +2,7 @@
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -73,7 +74,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 AspNetUser user = postService.GetUserNameOfPost(post.Id);
 
-                Notification noti = notiService.SaveNoti(user.Id, "Comment", commentedUser.UserName + " đã bình luận về bài viết của bạn", 1, post.Id, null);
+                if (!(user.Id == commentedUser.Id))
+                {
+                    Notification noti = notiService.SaveNoti(user.Id, "Comment", commentedUser.FullName + " đã bình luận về bài viết của bạn", int.Parse(NotificationType.Post.ToString("d")), post.Id, null);
+
+                }
 
                 PostCommentDetailViewModel result = PreparePostCommentDetailViewModel(comment);
 

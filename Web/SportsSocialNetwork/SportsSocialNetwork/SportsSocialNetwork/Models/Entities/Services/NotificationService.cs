@@ -11,6 +11,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
         Notification SaveNoti(String userId, String title, String message, int type, Nullable<int> postId, Nullable<int> invitationId);
 
         IEnumerable<Notification> GetNoti(String userId, int skip, int take);
+
+        bool MarkAsRead(int id);
+
+        bool MarkAllAsRead(String userId);
         #endregion
 
         void test();
@@ -29,6 +33,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
             noti.Message = message;
             noti.Type = type;
             noti.PostId = postId;
+            noti.CreateDate = DateTime.Now;
             noti.InvitationId = invitationId;
             noti.Active = true;
             this.Create(noti);
@@ -41,11 +46,38 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return this.GetActive(x => x.UserId == userId).OrderBy(x => x.Id).Skip(skip).Take(take);
         }
 
+        public bool MarkAsRead(int id)
+        {
+            Notification noti = FirstOrDefaultActive(x => x.Id == id);
+            if (noti == null) {
+                return false;
+            }
+            noti.MarkRead = true;
+            this.Save();
+            return true;
+        }
+
+        public bool MarkAllAsRead(string userId)
+        {
+            List<Notification> notiList = GetActive(x => x.UserId == userId).ToList();
+            if (notiList == null||notiList.Count==0)
+            {
+                return false;
+            }
+            foreach (var noti in notiList) {
+                noti.MarkRead = true;
+            }
+            this.Save();
+            return true;
+        }
+
         #endregion
 
         public void test()
         {
 
         }
+
+
     }
 }
