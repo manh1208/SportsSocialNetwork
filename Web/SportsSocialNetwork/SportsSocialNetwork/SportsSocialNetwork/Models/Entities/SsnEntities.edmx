@@ -247,6 +247,8 @@
           <Property Name="PostId" Type="int" />
           <Property Name="InvitationId" Type="int" />
           <Property Name="OrderId" Type="int" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="MarkRead" Type="bit" />
           <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Order">
@@ -1742,6 +1744,8 @@
           <Property Name="PostId" Type="Int32" />
           <Property Name="InvitationId" Type="Int32" />
           <Property Name="OrderId" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="MarkRead" Type="Boolean" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Notification_AspNetUsers" FromRole="Notification" ToRole="AspNetUser" />
           <NavigationProperty Name="Invitation" Relationship="SSNModel.FK_Notification_Invitation" FromRole="Notification" ToRole="Invitation" />
@@ -2746,6 +2750,8 @@
             <EntityTypeMapping TypeName="SSNModel.Notification">
               <MappingFragment StoreEntitySet="Notification">
                 <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="MarkRead" ColumnName="MarkRead" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="InvitationId" ColumnName="InvitationId" />
                 <ScalarProperty Name="PostId" ColumnName="PostId" />

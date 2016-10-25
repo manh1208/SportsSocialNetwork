@@ -22,6 +22,8 @@ namespace SportsSocialNetwork.Models.Entities
         public Nullable<int> PostId { get; set; }
         public Nullable<int> InvitationId { get; set; }
         public Nullable<int> OrderId { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
+        public Nullable<bool> MarkRead { get; set; }
         public bool Active { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
