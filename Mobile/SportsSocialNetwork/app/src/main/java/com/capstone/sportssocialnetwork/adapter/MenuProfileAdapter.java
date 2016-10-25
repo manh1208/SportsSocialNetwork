@@ -1,6 +1,7 @@
 package com.capstone.sportssocialnetwork.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.custom.RoundedImageView;
 import com.capstone.sportssocialnetwork.model.Group;
+import com.capstone.sportssocialnetwork.utils.DataUtils;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -30,7 +33,12 @@ public class MenuProfileAdapter extends ArrayAdapter<Group> {
 
     @Override
     public int getCount() {
-        return 20;
+        return mGroups.size()+1;
+    }
+
+    @Override
+    public Group getItem(int position) {
+        return mGroups.get(position);
     }
 
     @Override
@@ -51,9 +59,20 @@ public class MenuProfileAdapter extends ArrayAdapter<Group> {
             viewHolder.header.setVisibility(View.GONE);
             viewHolder.image.setVisibility(View.VISIBLE);
             viewHolder.groupName.setVisibility(View.VISIBLE);
+            Group group = getItem(position-1);
+            viewHolder.groupName.setText(group.getName());
+            Picasso.with(mContext).load(Uri.parse(DataUtils.URL+group.getAvatar()))
+                    .placeholder(R.drawable.img_default_avatar)
+                    .error(R.drawable.img_default_avatar_error)
+                    .into(viewHolder.image);
         }
 
         return convertView;
+    }
+
+    public void setGroups(List<Group> mGroups) {
+        this.mGroups = mGroups;
+        notifyDataSetChanged();
     }
 
     private final class ViewHolder{

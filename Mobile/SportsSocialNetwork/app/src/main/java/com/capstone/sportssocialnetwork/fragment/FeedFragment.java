@@ -287,6 +287,7 @@ public class FeedFragment extends Fragment {
 
             btnPost = (Button) header.findViewById(R.id.btn_feed_post);
             layoutRefresh = (SwipeRefreshLayout) v.findViewById(R.id.layout_refresh);
+
         }
 
     }

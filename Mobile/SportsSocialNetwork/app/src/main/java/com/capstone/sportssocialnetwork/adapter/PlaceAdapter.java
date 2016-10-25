@@ -2,6 +2,7 @@ package com.capstone.sportssocialnetwork.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.capstone.sportssocialnetwork.model.Feed;
 import com.capstone.sportssocialnetwork.model.Order;
 import com.capstone.sportssocialnetwork.model.Place;
 import com.capstone.sportssocialnetwork.model.response.PlaceResponseModel;
+import com.capstone.sportssocialnetwork.utils.DataUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +62,10 @@ public class PlaceAdapter extends ArrayAdapter<PlaceResponseModel> {
         }
 
         final PlaceResponseModel place=  getItem(position);
+        Picasso.with(mContext).load(Uri.parse(DataUtils.URL+place.getAvatar()))
+                .placeholder(R.drawable.image_logo)
+                .error(R.drawable.ic_image_error)
+                .into(viewHolder.ivAvatar);
         viewHolder.txtName.setText(place.getName());
         viewHolder.txtAddress.setText(place.getAddressString());
         viewHolder.btnBook.setOnClickListener(new View.OnClickListener() {

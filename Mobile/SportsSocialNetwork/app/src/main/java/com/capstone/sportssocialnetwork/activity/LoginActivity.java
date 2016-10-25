@@ -101,6 +101,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                 .edit()
                                                 .putString(SharePreferentName.SHARE_USER_ID, user.getId())
                                                 .putInt(SharePreferentName.SHARE_USER_ROLE, Integer.parseInt(user.getRole().getId()))
+                                                .putString(SharePreferentName.SHARE_USER_FULLNAME,user.getFullName())
+                                                .putString(SharePreferentName.SHARE_USER_AVATAR,user.getAvatar())
                                                 .commit();
 
                                         Intent intent = new Intent(LoginActivity.this, MainBottomBarActivity.class);
@@ -112,6 +114,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                 .edit()
                                                 .putString(SharePreferentName.SHARE_USER_ID,user.getId())
                                                 .putInt(SharePreferentName.SHARE_USER_ROLE, Integer.parseInt(user.getRole().getId()))
+                                                .putString(SharePreferentName.SHARE_USER_FULLNAME,user.getFullName())
+                                                .putString(SharePreferentName.SHARE_USER_AVATAR,user.getAvatar())
                                                 .apply();
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                         startActivity(intent);

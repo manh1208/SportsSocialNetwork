@@ -12,7 +12,7 @@ public class User {
     private String Id;
     @SerializedName("FullName")
     private String fullName;
-    @SerializedName("Avatar")
+    @SerializedName("AvatarImage")
     private String avatar;
     @SerializedName("AspNetRoles")
     private List<Role> roles;
