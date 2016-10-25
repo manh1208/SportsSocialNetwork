@@ -10,12 +10,14 @@ namespace SportsSocialNetwork.Models.Entities.Services
         #region Code from here
         Notification SaveNoti(String userId, String title, String message, int type, Nullable<int> postId, Nullable<int> invitationId);
 
+        IEnumerable<Notification> GetNoti(String userId, int skip, int take);
         #endregion
 
         void test();
     }
     public partial class NotificationService : INotificationService
     {
+
 
 
         #region Code from here
@@ -34,7 +36,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return noti;
         }
 
-
+        public IEnumerable<Notification> GetNoti(string userId, int skip, int take)
+        {
+            return this.GetActive(x => x.UserId == userId).OrderBy(x => x.Id).Skip(skip).Take(take);
+        }
 
         #endregion
 
