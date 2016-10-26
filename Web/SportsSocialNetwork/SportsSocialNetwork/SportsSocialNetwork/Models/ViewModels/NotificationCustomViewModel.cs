@@ -18,6 +18,7 @@ namespace SportsSocialNetwork.Models.ViewModels
         public DateTime CreateDate { get; set; }
         public String CreateDateString { get; set; }
         public Nullable<bool> MarkRead { get; set; }
+        public String Avatar { get; set; }
         public bool Active { get; set; }
     }
 }

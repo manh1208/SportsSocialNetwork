@@ -829,6 +829,7 @@
     <Compile Include="Models\ViewModels\GroupViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\HobbyViewModel.cs" />
     <Compile Include="Models\ViewModels\HobbyViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>

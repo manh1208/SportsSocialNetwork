@@ -18,7 +18,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         Post CreatePost(Post model);
 
-        Post EditPost(Post model, bool imageChanged);
+        Post EditPost(Post model);
 
         AspNetUser GetUserNameOfPost(int postId);
 
@@ -57,14 +57,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return model;
         }
 
-        public Post EditPost(Post model,bool imageChanged) {
+        public Post EditPost(Post model) {
             Post post = FirstOrDefaultActive(x => x.Id == model.Id);
             post.PostContent = model.PostContent;
             post.EditDate = DateTime.Now;
-            //if (imageChanged)
-            //{
-            //    post.PostImages = model.PostImages;
-            //}
             this.Update(post);
             return post;
         }

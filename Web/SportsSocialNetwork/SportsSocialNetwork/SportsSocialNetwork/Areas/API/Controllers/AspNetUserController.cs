@@ -80,7 +80,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 List<AspNetUserOveralViewModel> result = new List<AspNetUserOveralViewModel>();
 
-                foreach (var user in userList) {
+                foreach (var user in userList)
+                {
                     result.Add(PrepareAspNetUserOveralViewModel(user));
                 }
 
@@ -98,6 +99,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         public ActionResult ShowProfile(String userId, String currentUserId)
         {
             var service = this.Service<IAspNetUserService>();
+
+            var followService = this.Service<IFollowService>();
 
             ResponseModel<AspNetUserOveralViewModel> response = null;
 
@@ -120,9 +123,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                         result.Followed = false;
                     }
 
-                    result.FollowCount = user.Follows.Where(x => x.FollowerId == user.Id).Count();
+                    result.FollowCount = followService.GetActive(x => x.FollowerId == user.Id).Count();
 
-                    result.NewsCount = user.News.Count();
+                    result.FollowedCount= user.Follows.Where(x => x.UserId == user.Id).Count();
+
+                    result.PostCount = user.Posts.Count();
 
                     response = new ResponseModel<AspNetUserOveralViewModel>(true, "Thông tin tài khoản!", null, result);
                 }
@@ -259,7 +264,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                             MobileAuthorized = false;
                             response = ResponseModel<UserLoginViewModel>.CreateErrorResponse("Đăng nhập thất bại!", Utils.GetEnumDescription(UserRole.Admin) + " không thể đăng nhập trên thiết bị điện thoại");
                         }
-                        else if (role.Id.Equals(ModeratorRoleId)) {
+                        else if (role.Id.Equals(ModeratorRoleId))
+                        {
                             MobileAuthorized = false;
                             response = ResponseModel<UserLoginViewModel>.CreateErrorResponse("Đăng nhập thất bại!", Utils.GetEnumDescription(UserRole.Moderator) + " không thể đăng nhập trên thiết bị điện thoại");
                         }
@@ -408,7 +414,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 result = false;
             }
 
-            if (model.UserName.Length < 6) {
+            if (model.UserName.Length < 6)
+            {
                 errorList.Add("Tên tài khoản phải có ít nhất 6 ký tự.");
                 result = false;
             }
@@ -445,12 +452,29 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             return userList;
         }
 
-        private AspNetUserOveralViewModel PrepareAspNetUserOveralViewModel(AspNetUser user) {
+        private AspNetUserOveralViewModel PrepareAspNetUserOveralViewModel(AspNetUser user)
+        {
             AspNetUserOveralViewModel result = Mapper.Map<AspNetUserOveralViewModel>(user);
 
-            result.Gender = Utils.GetEnumDescription((Gender)user.Gender);
+            if (result.Hobbies != null)
+            {
+                var service = this.Service<ISportService>();
+                foreach (var hobby in result.Hobbies)
+                {
 
-            result.BirthdayString = result.Birthday.ToString("dd/MM/yyyy");
+                    hobby.SportName = service.GetSportName(hobby.SportId);
+                }
+            }
+
+            if (user.Gender != null)
+            {
+                result.Gender = Utils.GetEnumDescription((Gender)user.Gender);
+            }
+
+            if (user.Birthday != null)
+            {
+                result.BirthdayString = result.Birthday.ToString("dd/MM/yyyy");
+            }
 
             return result;
         }
