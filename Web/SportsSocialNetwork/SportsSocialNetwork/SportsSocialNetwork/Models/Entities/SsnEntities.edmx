@@ -241,6 +241,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="FromUserId" Type="nvarchar" MaxLength="128" />
           <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Type" Type="int" Nullable="false" />
@@ -323,6 +324,7 @@
           <Property Name="PostContent" Type="nvarchar(max)" />
           <Property Name="ContentType" Type="int" />
           <Property Name="EditDate" Type="datetime" />
+          <Property Name="LatestInteractionTime" Type="datetime" />
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="GroupId" Type="int" />
         </EntityType>
@@ -749,6 +751,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Notification_AspNetUsers1">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="FromUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Notification_Invitation">
           <End Role="Invitation" Type="Self.Invitation" Multiplicity="0..1" />
           <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
@@ -1152,6 +1166,10 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Notification" EntitySet="Notification" />
           </AssociationSet>
+          <AssociationSet Name="FK_Notification_AspNetUsers1" Association="Self.FK_Notification_AspNetUsers1">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
           <AssociationSet Name="FK_Notification_Invitation" Association="Self.FK_Notification_Invitation">
             <End Role="Invitation" EntitySet="Invitation" />
             <End Role="Notification" EntitySet="Notification" />
@@ -1316,6 +1334,10 @@
             <End Role="NewsComment" EntitySet="NewsComments" />
           </AssociationSet>
           <AssociationSet Name="FK_Notification_AspNetUsers" Association="SSNModel.FK_Notification_AspNetUsers">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="Notification" EntitySet="Notifications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_AspNetUsers1" Association="SSNModel.FK_Notification_AspNetUsers1">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="Notification" EntitySet="Notifications" />
           </AssociationSet>
@@ -1541,6 +1563,7 @@
           <NavigationProperty Name="News" Relationship="SSNModel.FK_News_AspNetUsers" FromRole="AspNetUser" ToRole="News" />
           <NavigationProperty Name="NewsComments" Relationship="SSNModel.FK_NewsComment_AspNetUsers" FromRole="AspNetUser" ToRole="NewsComment" />
           <NavigationProperty Name="Notifications" Relationship="SSNModel.FK_Notification_AspNetUsers" FromRole="AspNetUser" ToRole="Notification" />
+          <NavigationProperty Name="Notifications1" Relationship="SSNModel.FK_Notification_AspNetUsers1" FromRole="AspNetUser" ToRole="Notification" />
           <NavigationProperty Name="Orders" Relationship="SSNModel.FK_Order_AspNetUsers" FromRole="AspNetUser" ToRole="Order" />
           <NavigationProperty Name="Participations" Relationship="SSNModel.FK_Participation_AspNetUsers" FromRole="AspNetUser" ToRole="Participation" />
           <NavigationProperty Name="Places" Relationship="SSNModel.FK_Place_AspNetUsers" FromRole="AspNetUser" ToRole="Place" />
@@ -1760,6 +1783,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="FromUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Title" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Type" Type="Int32" Nullable="false" />
@@ -1770,6 +1794,7 @@
           <Property Name="MarkRead" Type="Boolean" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Notification_AspNetUsers" FromRole="Notification" ToRole="AspNetUser" />
+          <NavigationProperty Name="AspNetUser1" Relationship="SSNModel.FK_Notification_AspNetUsers1" FromRole="Notification" ToRole="AspNetUser" />
           <NavigationProperty Name="Invitation" Relationship="SSNModel.FK_Notification_Invitation" FromRole="Notification" ToRole="Invitation" />
           <NavigationProperty Name="Order" Relationship="SSNModel.FK_Notification_Order" FromRole="Notification" ToRole="Order" />
           <NavigationProperty Name="Post" Relationship="SSNModel.FK_Notification_Post" FromRole="Notification" ToRole="Post" />
@@ -1857,6 +1882,7 @@
           <Property Name="PostContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ContentType" Type="Int32" />
           <Property Name="EditDate" Type="DateTime" Precision="3" />
+          <Property Name="LatestInteractionTime" Type="DateTime" Precision="3" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <Property Name="GroupId" Type="Int32" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Post_AspNetUsers" FromRole="Post" ToRole="AspNetUser" />
@@ -2083,6 +2109,18 @@
             </Principal>
             <Dependent Role="Notification">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notification_AspNetUsers1">
+          <End Type="SSNModel.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
+          <End Type="SSNModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="FromUserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2792,6 +2830,7 @@
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="FromUserId" ColumnName="FromUserId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -2868,6 +2907,7 @@
               <MappingFragment StoreEntitySet="Post">
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="LatestInteractionTime" ColumnName="LatestInteractionTime" />
                 <ScalarProperty Name="EditDate" ColumnName="EditDate" />
                 <ScalarProperty Name="ContentType" ColumnName="ContentType" />
                 <ScalarProperty Name="PostContent" ColumnName="PostContent" />

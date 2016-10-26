@@ -16,6 +16,7 @@ namespace SportsSocialNetwork.Models.Entities
     {
         public int Id { get; set; }
         public string UserId { get; set; }
+        public string FromUserId { get; set; }
         public string Title { get; set; }
         public string Message { get; set; }
         public int Type { get; set; }
@@ -27,6 +28,7 @@ namespace SportsSocialNetwork.Models.Entities
         public bool Active { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
+        public virtual AspNetUser AspNetUser1 { get; set; }
         public virtual Invitation Invitation { get; set; }
         public virtual Order Order { get; set; }
         public virtual Post Post { get; set; }

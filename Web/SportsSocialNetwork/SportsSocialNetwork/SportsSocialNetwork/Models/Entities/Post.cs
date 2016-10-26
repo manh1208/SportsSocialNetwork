@@ -30,6 +30,7 @@ namespace SportsSocialNetwork.Models.Entities
         public string PostContent { get; set; }
         public Nullable<int> ContentType { get; set; }
         public Nullable<System.DateTime> EditDate { get; set; }
+        public Nullable<System.DateTime> LatestInteractionTime { get; set; }
         public bool Active { get; set; }
         public Nullable<int> GroupId { get; set; }
     
