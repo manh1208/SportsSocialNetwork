@@ -3,7 +3,7 @@
     android:id="@+id/layout_notification"
     android:layout_width="match_parent"
     android:layout_height="80sp"
-    android:background="#c8f7ee"
+    android:background="@color/notification"
     android:orientation="horizontal">
 
     <com.capstone.sportssocialnetwork.custom.RoundedImageView

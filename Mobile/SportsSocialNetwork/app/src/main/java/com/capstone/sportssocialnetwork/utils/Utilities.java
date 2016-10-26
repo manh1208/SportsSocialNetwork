@@ -100,7 +100,13 @@ public class Utilities {
 //        Calendar cal = Calendar.getInstance();
 //        TimeZone tz = cal.getTimeZone();
 //        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        Date date = sdf.parse(s);
+        Date date = new Date();
+        if (s.contains("/Date")){
+            s = s.replaceAll("\\D+","");
+            date = new Date(Long.parseLong(s));
+        }else {
+            date = sdf.parse(s);
+        }
 
         Calendar c = Calendar.getInstance();
         Date currentDate = c.getTime();

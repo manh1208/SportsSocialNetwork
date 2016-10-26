@@ -14,6 +14,10 @@ public class Notification {
     private String title;
     @SerializedName("Message")
     private String message;
+    @SerializedName("CreateDate")
+    private String createDate;
+    @SerializedName("MarkRead")
+    private boolean Read;
 
 
 
@@ -41,4 +45,27 @@ public class Notification {
         this.message = message;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public boolean isRead() {
+        return Read;
+    }
+
+    public void setRead(boolean read) {
+        Read = read;
+    }
 }
