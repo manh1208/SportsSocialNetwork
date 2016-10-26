@@ -100,6 +100,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         {
             var service = this.Service<IAspNetUserService>();
 
+            var followService = this.Service<IFollowService>();
+
             ResponseModel<AspNetUserOveralViewModel> response = null;
 
             try
@@ -121,9 +123,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                         result.Followed = false;
                     }
 
-                    result.FollowCount = user.Follows.Where(x => x.FollowerId == user.Id).Count();
+                    result.FollowCount = followService.GetActive(x => x.FollowerId == user.Id).Count();
 
-                    result.NewsCount = user.News.Count();
+                    result.FollowedCount= user.Follows.Where(x => x.UserId == user.Id).Count();
+
+                    result.PostCount = user.Posts.Count();
 
                     response = new ResponseModel<AspNetUserOveralViewModel>(true, "Thông tin tài khoản!", null, result);
                 }
