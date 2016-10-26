@@ -448,9 +448,15 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         private AspNetUserOveralViewModel PrepareAspNetUserOveralViewModel(AspNetUser user) {
             AspNetUserOveralViewModel result = Mapper.Map<AspNetUserOveralViewModel>(user);
 
-            result.Gender = Utils.GetEnumDescription((Gender)user.Gender);
+            if (user.Gender != null)
+            {
+                result.Gender = Utils.GetEnumDescription((Gender)user.Gender);
+            }
 
-            result.BirthdayString = result.Birthday.ToString("dd/MM/yyyy");
+            if (result.Birthday != null)
+            {
+                result.BirthdayString = result.Birthday.ToString("dd/MM/yyyy");
+            }
 
             return result;
         }

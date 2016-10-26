@@ -135,7 +135,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 {
                     FileUploader uploader = new FileUploader();
 
-                    foreach (var img in model.UploadImage) {
+                    foreach (var img in model.UploadImage)
+                    {
                         PostImage image = new PostImage();
 
                         image.Image = uploader.UploadImage(img, userImagePath);
@@ -145,6 +146,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 }
 
                 post = service.CreatePost(post);
+
+                //Missing post sport
 
                 result = Mapper.Map<PostOveralViewModel>(post);
 
@@ -163,42 +166,39 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditPost(PostUploadViewModel model, bool imageChanged)
+        public ActionResult EditPost(PostUploadViewModel model)
         {
-            var service = this.Service<IPostService>();
+            var postService = this.Service<IPostService>();
+
+            var postImageService = this.Service<IPostImageService>();
 
             ResponseModel<PostOveralViewModel> response = null;
 
             try
             {
-                Post post = Mapper.Map<Post>(model);
+                Post post = postService.FirstOrDefaultActive(x => x.Id == model.Id);
 
-                //if (imageChanged)
-                //{
-                //    if (model.UploadImage != null)
-                //    {
-                //        FileUploader uploader = new FileUploader();
+                post.ContentType = GetPostType(model);
 
-                //        List<PostImage> imgList = new List<PostImage>();
+                if (model.UploadImage != null)
+                {
+                    postImageService.saveImage(post.Id, model.UploadImage);
+                }
 
-                //        foreach (var img in model.UploadImage)
-                //        {
-                //            PostImage image = new PostImage();
+                if (model.DeleteImage != null && model.DeleteImage.Count > 0)
+                {
+                    foreach (var delete in model.DeleteImage)
+                    {
+                        PostImage img = postImageService.FirstOrDefaultActive(x => x.Id == delete);
+                        postImageService.Delete(img);
+                    }
+                }
 
-                //            image.Image = uploader.UploadImage(img, userImagePath);
+                post.PostContent = model.PostContent;
 
-                //            imgList.Add(image);
-                //        }
+                post.EditDate = DateTime.Now;
 
-                //        post.PostImages = imgList;
-                //    }
-                //    else
-                //    {
-                //        post.PostImages = null;
-                //    }
-                //}
-
-                post = service.EditPost(post, imageChanged);
+                postService.Update(post);
 
                 PostOveralViewModel result = Mapper.Map<PostOveralViewModel>(post);
 
@@ -238,7 +238,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             p.CreateDateString = p.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
 
-            if(!p.EditDate.ToString().Equals("01/01/0001 12:00:00 SA"))
+            if (!p.EditDate.ToString().Equals("01/01/0001 12:00:00 SA"))
             {
                 p.EditDateString = p.EditDate.ToString("dd/MM/yyyy HH:mm:ss");
             }
@@ -257,18 +257,62 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             List<PostComment> commentList = commentService.GetCommentListByPostId(post.Id, skip, take).ToList<PostComment>();
             List<PostCommentDetailViewModel> commentListResult = new List<PostCommentDetailViewModel>();
-            foreach (var comment in commentList) {
+            foreach (var comment in commentList)
+            {
                 commentListResult.Add(PreparePostCommentDetailViewModel(comment));
             }
             result.CommentList = commentListResult;
             return result;
         }
 
+        //private int GetPostType(PostUploadViewModel model)
+        //{
+        //    int contentType = 0;
+
+        //    bool hasText = false;
+
+        //    if (model.PostContent == null)
+        //    {
+        //        hasText = false;
+        //    }
+        //    else
+        //    {
+        //        hasText = true;
+        //    }
+
+
+        //    if (model.UploadImage==null && hasText)
+        //    {
+        //        contentType = int.Parse(ContentPostType.TextOnly.ToString("d"));
+        //    }
+        //    else if (model.UploadImage.Count == 1 && hasText)
+        //    {
+        //        contentType = int.Parse(ContentPostType.TextAndImage.ToString("d"));
+        //    }
+        //    else if (model.UploadImage.Count > 1 && hasText)
+        //    {
+        //        contentType = int.Parse(ContentPostType.TextAndMultiImages.ToString("d"));
+        //    }
+        //    else if (model.UploadImage.Count > 1 && !hasText)
+        //    {
+        //        contentType = int.Parse(ContentPostType.MultiImages.ToString("d"));
+        //    }
+        //    else if (model.UploadImage.Count == 1 && !hasText) {
+        //        contentType = int.Parse(ContentPostType.ImageOnly.ToString("d"));
+        //    }
+
+        //    return contentType;
+        //}
+
         private int GetPostType(PostUploadViewModel model)
         {
+            var service = this.Service<IPostService>();
+
             int contentType = 0;
 
             bool hasText = false;
+
+            int numberOfImages = 0;
 
             if (model.PostContent == null)
             {
@@ -279,24 +323,43 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 hasText = true;
             }
 
+            Post post = service.FirstOrDefaultActive(x => x.Id == model.Id);
+            if (post != null)
+            {
+                if (post.PostImages != null)
+                {
+                    numberOfImages = post.PostImages.Count();
+                }
 
-            if (model.UploadImage==null && hasText)
+            }
+
+            if (model.UploadImage != null && model.UploadImage.Count() > 0)
+            {
+                numberOfImages = numberOfImages + model.UploadImage.Count();
+            }
+            if (model.DeleteImage != null && model.DeleteImage.Count() > 0)
+            {
+                numberOfImages = numberOfImages - model.DeleteImage.Count();
+            }
+
+            if (numberOfImages == 0 && hasText)
             {
                 contentType = int.Parse(ContentPostType.TextOnly.ToString("d"));
             }
-            else if (model.UploadImage.Count == 1 && hasText)
+            else if (numberOfImages == 1 && hasText)
             {
                 contentType = int.Parse(ContentPostType.TextAndImage.ToString("d"));
             }
-            else if (model.UploadImage.Count > 1 && hasText)
+            else if (numberOfImages > 1 && hasText)
             {
                 contentType = int.Parse(ContentPostType.TextAndMultiImages.ToString("d"));
             }
-            else if (model.UploadImage.Count > 1 && !hasText)
+            else if (numberOfImages > 1 && !hasText)
             {
                 contentType = int.Parse(ContentPostType.MultiImages.ToString("d"));
             }
-            else if (model.UploadImage.Count == 1 && !hasText) {
+            else if (numberOfImages == 1 && !hasText)
+            {
                 contentType = int.Parse(ContentPostType.ImageOnly.ToString("d"));
             }
 
