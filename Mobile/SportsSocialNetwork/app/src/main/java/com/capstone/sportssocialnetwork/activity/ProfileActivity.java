@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.adapter.PlacePageAdapter;
 import com.capstone.sportssocialnetwork.adapter.ProfilePageAdapter;
+import com.capstone.sportssocialnetwork.custom.RoundedImageView;
 import com.capstone.sportssocialnetwork.model.User;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
@@ -35,12 +36,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileActivity extends AppCompatActivity  implements AppBarLayout.OnOffsetChangedListener {
-    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.9f;
-    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
-    private static final int ALPHA_ANIMATIONS_DURATION              = 200;
+public class ProfileActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
+    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.9f;
+    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
+    private static final int ALPHA_ANIMATIONS_DURATION = 200;
 
-    private boolean mIsTheTitleVisible          = false;
+    private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
 
     private AppBarLayout appbar;
@@ -50,7 +51,8 @@ public class ProfileActivity extends AppCompatActivity  implements AppBarLayout.
     private LinearLayout linearlayoutTitle;
     private Toolbar toolbar;
     private TextView textviewTitle;
-    private SimpleDraweeView avatar;
+    private RoundedImageView avatar;
+    private TextView txtFullName;
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -62,6 +64,7 @@ public class ProfileActivity extends AppCompatActivity  implements AppBarLayout.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 //
@@ -90,28 +93,29 @@ public class ProfileActivity extends AppCompatActivity  implements AppBarLayout.
         appbar.addOnOffsetChangedListener(this);
 
         setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         startAlphaAnimation(textviewTitle, 0, View.INVISIBLE);
 
         //set avatar and cover
-
-
 
 
     }
 
     private void initView() {
         service = new RestService();
-        userId = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
+        userId = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID, "");
         tabLayout = (TabLayout) findViewById(R.id.tabs_profile);
         viewPager = (ViewPager) findViewById(R.id.viewpager_profile);
-        appbar = (AppBarLayout)findViewById( R.id.appbar );
-        collapsing = (CollapsingToolbarLayout)findViewById( R.id.collapsing );
-        coverImage = (ImageView)findViewById( R.id.imageview_placeholder );
-        framelayoutTitle = (FrameLayout)findViewById( R.id.framelayout_title );
-        linearlayoutTitle = (LinearLayout)findViewById( R.id.linearlayout_title );
-        toolbar = (Toolbar)findViewById( R.id.toolbar );
-        textviewTitle = (TextView)findViewById( R.id.textview_title );
-        avatar = (SimpleDraweeView)findViewById(R.id.avatar);
+        appbar = (AppBarLayout) findViewById(R.id.appbar);
+        collapsing = (CollapsingToolbarLayout) findViewById(R.id.collapsing);
+        coverImage = (ImageView) findViewById(R.id.imageview_placeholder);
+        framelayoutTitle = (FrameLayout) findViewById(R.id.framelayout_title);
+        linearlayoutTitle = (LinearLayout) findViewById(R.id.linearlayout_title);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        textviewTitle = (TextView) findViewById(R.id.textview_title);
+        avatar = (RoundedImageView) findViewById(R.id.avatar);
+        txtFullName = (TextView) findViewById(R.id.txt_fullName);
     }
 
 
@@ -127,7 +131,7 @@ public class ProfileActivity extends AppCompatActivity  implements AppBarLayout.
     private void handleToolbarTitleVisibility(float percentage) {
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
 
-            if(!mIsTheTitleVisible) {
+            if (!mIsTheTitleVisible) {
                 startAlphaAnimation(textviewTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 mIsTheTitleVisible = true;
             }
@@ -143,7 +147,7 @@ public class ProfileActivity extends AppCompatActivity  implements AppBarLayout.
 
     private void handleAlphaOnTitle(float percentage) {
         if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
-            if(mIsTheTitleContainerVisible) {
+            if (mIsTheTitleContainerVisible) {
                 startAlphaAnimation(linearlayoutTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 mIsTheTitleContainerVisible = false;
             }
@@ -158,18 +162,18 @@ public class ProfileActivity extends AppCompatActivity  implements AppBarLayout.
     }
 
 
-    private  void loadUserProfile(){
+    private void loadUserProfile() {
         service.getAccountService().getUserProfile(userId).enqueue(new Callback<ResponseModel<User>>() {
             @Override
             public void onResponse(Call<ResponseModel<User>> call, Response<ResponseModel<User>> response) {
-                if (response.isSuccessful()){
-                    if (response.body().isSucceed()){
+                if (response.isSuccessful()) {
+                    if (response.body().isSucceed()) {
                         user = response.body().getData();
                         updateUI();
-                    }else{
+                    } else {
                         Toast.makeText(ProfileActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
                     }
-                }else{
+                } else {
                     Toast.makeText(ProfileActivity.this, response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -185,25 +189,29 @@ public class ProfileActivity extends AppCompatActivity  implements AppBarLayout.
         Picasso.with(this).load(Uri.parse(DataUtils.URL + user.getAvatar()))
                 .placeholder(R.drawable.img_default_avatar)
                 .error(R.drawable.img_default_avatar_error)
+                .fit()
                 .into(avatar);
         Picasso.with(this).load(Uri.parse(DataUtils.URL + user.getCoverImage()))
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.ic_image_error)
+                .fit()
                 .into(coverImage);
+
         textviewTitle.setText(user.getFullName());
+        txtFullName.setText(user.getFullName());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (user==null){
+        if (user == null) {
             loadUserProfile();
-        }else{
+        } else {
             updateUI();
         }
     }
 
-    public static void startAlphaAnimation (View v, long duration, int visibility) {
+    public static void startAlphaAnimation(View v, long duration, int visibility) {
         AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
                 ? new AlphaAnimation(0f, 1f)
                 : new AlphaAnimation(1f, 0f);

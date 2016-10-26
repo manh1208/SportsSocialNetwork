@@ -42,6 +42,15 @@ public class User {
     private String gender;
     @SerializedName("CreateDate")
     private String createDate;
+    @SerializedName("Followed")
+    private boolean followed;
+    @SerializedName("FollowCount")
+    private int followCount;
+    @SerializedName("FollowedCount")
+    private int followedCount;
+    @SerializedName("PostCount")
+    private int postCount;
+
 
     public String getId() {
         return Id;
@@ -185,5 +194,69 @@ public class User {
 
     public void setCreateDate(String createDate) {
         this.createDate = createDate;
+    }
+
+    public String getAddressString() {
+        String tmp = address;
+        if (ward != null && ward.length() > 0) {
+            tmp += " - " + ward;
+        }
+        if (district != null && district.length() > 0) {
+            tmp += " - " + district;
+        }
+        if (city != null && city.length() > 0) {
+            tmp += " - " + city;
+        }
+        if (tmp==null || tmp.length()<=0){
+            tmp = "Không xác định";
+        }
+
+        return tmp;
+    }
+
+    public String getListSport() {
+        String s = "";
+        if (hobbies!=null) {
+            for (Hobby hobby : this.hobbies
+                    ) {
+                s += hobby.getSportName() + ", ";
+
+            }
+            s = s.substring(0, s.length() - 2);
+        }
+        return s;
+    }
+
+
+    public boolean isFollowed() {
+        return followed;
+    }
+
+    public void setFollowed(boolean followed) {
+        this.followed = followed;
+    }
+
+    public int getFollowCount() {
+        return followCount;
+    }
+
+    public void setFollowCount(int followCount) {
+        this.followCount = followCount;
+    }
+
+    public int getFollowedCount() {
+        return followedCount;
+    }
+
+    public void setFollowedCount(int followedCount) {
+        this.followedCount = followedCount;
+    }
+
+    public int getPostCount() {
+        return postCount;
+    }
+
+    public void setPostCount(int postCount) {
+        this.postCount = postCount;
     }
 }

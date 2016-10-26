@@ -65,6 +65,7 @@ public class PlaceAdapter extends ArrayAdapter<PlaceResponseModel> {
         Picasso.with(mContext).load(Uri.parse(DataUtils.URL+place.getAvatar()))
                 .placeholder(R.drawable.image_logo)
                 .error(R.drawable.ic_image_error)
+                .fit()
                 .into(viewHolder.ivAvatar);
         viewHolder.txtName.setText(place.getName());
         viewHolder.txtAddress.setText(place.getAddressString());

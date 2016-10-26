@@ -289,6 +289,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         Picasso.with(this).load(Uri.parse(DataUtils.URL + feed.getUser().getAvatar()))
                 .placeholder(R.drawable.img_default_avatar)
                 .error(R.drawable.img_default_avatar_error)
+                .fit()
                 .into(headerViewHolder.ivAvatar);
         try {
             headerViewHolder.txtTime.setText(Utilities.getTimeAgo(feed.getCreateDateString()));
@@ -302,6 +303,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             Picasso.with(this).load(Uri.parse(DataUtils.URL + feed.getPostImages().get(0).getImage()))
                     .placeholder(R.drawable.placeholder)
                     .error(R.drawable.placeholder)
+                    .fit()
                     .into(headerViewHolder.ivImage);
         } else {
             headerViewHolder.ivImage.setVisibility(View.GONE);

@@ -102,6 +102,7 @@ public class ProfileFragment extends Fragment {
         Picasso.with(getActivity()).load(Uri.parse(DataUtils.URL+avatar))
                 .placeholder(R.drawable.img_default_avatar)
                 .error(R.drawable.img_default_avatar_error)
+                .fit()
                 .into(headerHolder.ivAvatar);
         getGroup();
         return v;

@@ -6,7 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="10sp"
-        android:background="#d2d2d2"></RelativeLayout>
+        android:background="@color/separator"></RelativeLayout>
     <Button
         android:id="@+id/btn_feed_post"
         android:layout_width="match_parent"

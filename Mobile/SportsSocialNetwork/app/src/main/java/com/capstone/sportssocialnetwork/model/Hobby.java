@@ -12,6 +12,8 @@ public class Hobby {
     private String userId;
     @SerializedName("SportId")
     private int sportId;
+    @SerializedName("SportName")
+    private String sportName;
 
     public int getId() {
         return id;
@@ -35,5 +37,13 @@ public class Hobby {
 
     public void setSportId(int sportId) {
         this.sportId = sportId;
+    }
+
+    public String getSportName() {
+        return sportName;
+    }
+
+    public void setSportName(String sportName) {
+        this.sportName = sportName;
     }
 }

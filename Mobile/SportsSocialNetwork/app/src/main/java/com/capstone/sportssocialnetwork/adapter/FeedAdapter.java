@@ -97,6 +97,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         Picasso.with(mContext).load(Uri.parse(DataUtils.URL + feed.getUser().getAvatar()))
                 .placeholder(R.drawable.img_default_avatar)
                 .error(R.drawable.img_default_avatar_error)
+                .fit()
                 .into(viewHolder.ivAvatar);
         try {
             viewHolder.txtTime.setText(Utilities.getTimeAgo(feed.getCreateDateString()));
@@ -112,6 +113,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             Picasso.with(mContext).load(Uri.parse(DataUtils.URL + feed.getPostImages().get(0).getImage()))
                     .placeholder(R.drawable.placeholder)
                     .error(R.drawable.placeholder)
+                    .fit()
                     .into(viewHolder.ivImage);
         } else {
             viewHolder.ivImage.setVisibility(View.GONE);

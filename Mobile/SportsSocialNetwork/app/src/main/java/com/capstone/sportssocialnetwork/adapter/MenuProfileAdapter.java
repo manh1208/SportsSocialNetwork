@@ -64,6 +64,7 @@ public class MenuProfileAdapter extends ArrayAdapter<Group> {
             Picasso.with(mContext).load(Uri.parse(DataUtils.URL+group.getAvatar()))
                     .placeholder(R.drawable.img_default_avatar)
                     .error(R.drawable.img_default_avatar_error)
+                    .fit()
                     .into(viewHolder.image);
         }
 

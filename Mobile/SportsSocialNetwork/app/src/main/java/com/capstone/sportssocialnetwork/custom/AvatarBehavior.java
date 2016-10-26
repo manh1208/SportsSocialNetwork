@@ -13,7 +13,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 /**
  * Created by ManhNV on 10/3/16.
  */
-public class AvatarBehavior extends CoordinatorLayout.Behavior<SimpleDraweeView> {
+public class AvatarBehavior extends CoordinatorLayout.Behavior<RoundedImageView> {
 
     private final static float MIN_AVATAR_PERCENTAGE_SIZE   = 0.3f;
     private final static int EXTRA_FINAL_AVATAR_PADDING     = 80;
@@ -50,12 +50,12 @@ public class AvatarBehavior extends CoordinatorLayout.Behavior<SimpleDraweeView>
     private int mFinalXPosition;
 
     @Override
-    public boolean layoutDependsOn(CoordinatorLayout parent, SimpleDraweeView child, View dependency) {
+    public boolean layoutDependsOn(CoordinatorLayout parent, RoundedImageView child, View dependency) {
         return dependency instanceof Toolbar;
     }
 
     @Override
-    public boolean onDependentViewChanged(CoordinatorLayout parent, SimpleDraweeView child, View dependency) {
+    public boolean onDependentViewChanged(CoordinatorLayout parent, RoundedImageView child, View dependency) {
         maybeInitProperties(child, dependency);
 
         final int maxScrollDistance = (int) (mStartToolbarPosition - getStatusBarHeight());
@@ -82,7 +82,7 @@ public class AvatarBehavior extends CoordinatorLayout.Behavior<SimpleDraweeView>
     }
 
     @SuppressLint("PrivateResource")
-    private void maybeInitProperties(SimpleDraweeView child, View dependency) {
+    private void maybeInitProperties(RoundedImageView child, View dependency) {
         if (mStartYPosition == 0)
             mStartYPosition = (int) (dependency.getY());
 

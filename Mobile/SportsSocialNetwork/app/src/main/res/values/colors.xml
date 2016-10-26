@@ -6,6 +6,6 @@
     <color name="colorPrimaryDark">#ca4f00</color>
     <color name="colorAccent">#FF4081</color>
     <color name="black">#000</color>
-    <color name="separator">#d2d2d2</color>
+    <color name="separator">#ffe4d0</color>
     <color name="notification">#ffe4d4</color>
 </resources>

@@ -47,4 +47,6 @@ public interface IPostService {
     @POST("/api/like/likeunlikepost")
     Call<ResponseModel<String>> likePost(@Query("postId")int postId,
                                          @Query("userId")String userId);
+
+
 }

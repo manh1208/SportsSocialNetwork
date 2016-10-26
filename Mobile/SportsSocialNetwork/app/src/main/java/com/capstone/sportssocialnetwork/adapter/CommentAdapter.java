@@ -69,6 +69,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         Picasso.with(mContext).load(Uri.parse(DataUtils.URL + comment.getUser().getAvatar()))
                 .placeholder(R.drawable.img_default_avatar)
                 .error(R.drawable.img_default_avatar_error)
+                .fit()
                 .into(viewHolder.imageView);
         viewHolder.txtName.setText(comment.getUser().getFullName());
         viewHolder.txtComment.setText(comment.getComment());
@@ -79,6 +80,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
             Picasso.with(mContext).load(Uri.parse(DataUtils.URL + comment.getImage()))
                     .placeholder(R.drawable.placeholder)
                     .error(R.drawable.img_default_avatar_error)
+                    .fit()
                     .into(viewHolder.ivImage);
         }
         try {

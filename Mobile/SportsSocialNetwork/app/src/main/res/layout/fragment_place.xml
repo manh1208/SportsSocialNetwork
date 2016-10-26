@@ -14,8 +14,8 @@
             android:id="@+id/lv_list_place"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="#d2d2d2"
-            android:dividerHeight="15sp"
+            android:divider="@color/separator"
+            android:dividerHeight="10sp"
             tools:listitem="@layout/item_place"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>
