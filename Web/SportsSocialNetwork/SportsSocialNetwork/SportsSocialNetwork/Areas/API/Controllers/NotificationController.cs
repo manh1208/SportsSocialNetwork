@@ -19,16 +19,21 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         public ActionResult LoadNoti(String userId, int skip, int take) {
             var service = this.Service<INotificationService>();
 
-            ResponseModel<List<NotificationViewModel>> response = null;
+            ResponseModel<List<NotificationCustomViewModel>> response = null;
 
             try {
                 List<Notification> notiList = service.GetNoti(userId, skip, take).ToList();
 
-                List<NotificationViewModel> result = Mapper.Map<List<NotificationViewModel>>(notiList);
+                List<NotificationCustomViewModel> result = Mapper.Map<List<NotificationCustomViewModel>>(notiList);
 
-                response = new ResponseModel<List<NotificationViewModel>>(true, "Thông báo mới của bạn:", null, result);
+                foreach (var noti in result)
+                {
+                    PrepareNotificationViewModel(noti);
+                }
+
+                response = new ResponseModel<List<NotificationCustomViewModel>>(true, "Thông báo mới của bạn:", null, result);
             } catch (Exception) {
-                response = ResponseModel<List<NotificationViewModel>>.CreateErrorResponse("Không thể tải thông báo", systemError);
+                response = ResponseModel<List<NotificationCustomViewModel>>.CreateErrorResponse("Không thể tải thông báo", systemError);
             }
             return Json(response);
         }
@@ -85,6 +90,12 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             }
 
             return Json(response);
+        }
+
+        private void PrepareNotificationViewModel(NotificationCustomViewModel noti)
+        {
+            noti.CreateDateString = noti.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+
         }
     }
 }
