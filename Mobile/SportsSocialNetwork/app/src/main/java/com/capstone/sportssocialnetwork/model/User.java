@@ -16,7 +16,32 @@ public class User {
     private String avatar;
     @SerializedName("AspNetRoles")
     private List<Role> roles;
-
+    @SerializedName("Email")
+    private String email;
+    @SerializedName("PhoneNumber")
+    private String PhoneNumber;
+    @SerializedName("UserName")
+    private String userName;
+    @SerializedName("Address")
+    private String address;
+    @SerializedName("City")
+    private String city;
+    @SerializedName("District")
+    private String district;
+    @SerializedName("Ward")
+    private String ward;
+    @SerializedName("CoverImage")
+    private String coverImage;
+    @SerializedName("Hobbies")
+    private List<Hobby> hobbies;
+    @SerializedName("Birthday")
+    private String birthDay;
+    @SerializedName("BirthdayString")
+    private String birthDayString;
+    @SerializedName("Gender")
+    private String gender;
+    @SerializedName("CreateDate")
+    private String createDate;
 
     public String getId() {
         return Id;
@@ -43,9 +68,9 @@ public class User {
     }
 
     public Role getRole() {
-        if (roles!=null && roles.size()>0) {
+        if (roles != null && roles.size() > 0) {
             return roles.get(0);
-        }else{
+        } else {
             return null;
         }
     }
@@ -56,5 +81,109 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return PhoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        PhoneNumber = phoneNumber;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getWard() {
+        return ward;
+    }
+
+    public void setWard(String ward) {
+        this.ward = ward;
+    }
+
+    public String getCoverImage() {
+        return coverImage;
+    }
+
+    public void setCoverImage(String coverImage) {
+        this.coverImage = coverImage;
+    }
+
+    public List<Hobby> getHobbies() {
+        return hobbies;
+    }
+
+    public void setHobbies(List<Hobby> hobbies) {
+        this.hobbies = hobbies;
+    }
+
+    public String getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(String birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public String getBirthDayString() {
+        return birthDayString;
+    }
+
+    public void setBirthDayString(String birthDayString) {
+        this.birthDayString = birthDayString;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
     }
 }

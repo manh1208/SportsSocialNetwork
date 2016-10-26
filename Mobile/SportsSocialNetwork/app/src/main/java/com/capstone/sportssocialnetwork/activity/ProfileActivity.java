@@ -18,17 +18,27 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.adapter.PlacePageAdapter;
 import com.capstone.sportssocialnetwork.adapter.ProfilePageAdapter;
+import com.capstone.sportssocialnetwork.model.User;
+import com.capstone.sportssocialnetwork.model.response.ResponseModel;
+import com.capstone.sportssocialnetwork.service.RestService;
+import com.capstone.sportssocialnetwork.utils.DataUtils;
+import com.capstone.sportssocialnetwork.utils.SharePreferentName;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.picasso.Picasso;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileActivity extends AppCompatActivity  implements AppBarLayout.OnOffsetChangedListener {
     private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.9f;
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.3f;
     private static final int ALPHA_ANIMATIONS_DURATION              = 200;
-    final Uri imageUri = Uri.parse("http://i.imgur.com/VIlcLfg.jpg");
 
     private boolean mIsTheTitleVisible          = false;
     private boolean mIsTheTitleContainerVisible = true;
@@ -44,6 +54,9 @@ public class ProfileActivity extends AppCompatActivity  implements AppBarLayout.
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    private User user;
+    private String userId;
+    private RestService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +93,15 @@ public class ProfileActivity extends AppCompatActivity  implements AppBarLayout.
         startAlphaAnimation(textviewTitle, 0, View.INVISIBLE);
 
         //set avatar and cover
-        avatar.setImageURI(imageUri);
-        coverImage.setImageResource(R.drawable.image_cover);
-        textviewTitle.setText("Nguyễn Văn Mạnh");
+
+
+
 
     }
 
     private void initView() {
+        service = new RestService();
+        userId = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
         tabLayout = (TabLayout) findViewById(R.id.tabs_profile);
         viewPager = (ViewPager) findViewById(R.id.viewpager_profile);
         appbar = (AppBarLayout)findViewById( R.id.appbar );
@@ -139,6 +154,52 @@ public class ProfileActivity extends AppCompatActivity  implements AppBarLayout.
                 startAlphaAnimation(linearlayoutTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 mIsTheTitleContainerVisible = true;
             }
+        }
+    }
+
+
+    private  void loadUserProfile(){
+        service.getAccountService().getUserProfile(userId).enqueue(new Callback<ResponseModel<User>>() {
+            @Override
+            public void onResponse(Call<ResponseModel<User>> call, Response<ResponseModel<User>> response) {
+                if (response.isSuccessful()){
+                    if (response.body().isSucceed()){
+                        user = response.body().getData();
+                        updateUI();
+                    }else{
+                        Toast.makeText(ProfileActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(ProfileActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseModel<User>> call, Throwable t) {
+                Toast.makeText(ProfileActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateUI() {
+        Picasso.with(this).load(Uri.parse(DataUtils.URL + user.getAvatar()))
+                .placeholder(R.drawable.img_default_avatar)
+                .error(R.drawable.img_default_avatar_error)
+                .into(avatar);
+        Picasso.with(this).load(Uri.parse(DataUtils.URL + user.getCoverImage()))
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.ic_image_error)
+                .into(coverImage);
+        textviewTitle.setText(user.getFullName());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (user==null){
+            loadUserProfile();
+        }else{
+            updateUI();
         }
     }
 

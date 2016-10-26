@@ -16,9 +16,16 @@ public class Notification {
     private String message;
     @SerializedName("CreateDate")
     private String createDate;
+    @SerializedName("CreateDateString")
+    private String createDateString;
     @SerializedName("MarkRead")
     private boolean Read;
-
+    @SerializedName("PostId")
+    private Integer postId;
+    @SerializedName("InvitationId")
+    private Integer invitationId;
+    @SerializedName("OrderId")
+    private Integer orderId;
 
 
     public String getTitle() {
@@ -67,5 +74,37 @@ public class Notification {
 
     public void setRead(boolean read) {
         Read = read;
+    }
+
+    public String getCreateDateString() {
+        return createDateString;
+    }
+
+    public void setCreateDateString(String createDateString) {
+        this.createDateString = createDateString;
+    }
+
+    public Integer getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Integer postId) {
+        this.postId = postId;
+    }
+
+    public Integer getInvitationId() {
+        return invitationId;
+    }
+
+    public void setInvitationId(Integer invitationId) {
+        this.invitationId = invitationId;
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 }

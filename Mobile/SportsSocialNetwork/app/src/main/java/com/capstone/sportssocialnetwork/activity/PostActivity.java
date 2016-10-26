@@ -133,8 +133,8 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SELECT_PICTURE && resultCode == Activity.RESULT_OK) {
-            String filename = "Image" + System.currentTimeMillis() % 10000 + ".jpg";
-            File f = Utilities.getImageFileFromUri(this, data.getData(), Utilities.getPicturePath(filename), 2000, Bitmap.CompressFormat.JPEG, 50);
+            String filename = "Image" + System.currentTimeMillis() % 100000 + ".jpg";
+            File f = Utilities.getImageFileFromUri(this, data.getData(), Utilities.getPicturePath(filename), DataUtils.MAX_SIZE_IMAGE, Bitmap.CompressFormat.JPEG, 50);
 //            Toast.makeText(PostActivity.this, Utilities.getOrientation(this,data.getData())+"", Toast.LENGTH_SHORT).show();
 //            ExifInterface exifInterface = null;
 //            try {

@@ -107,6 +107,8 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         viewHolder.txtContent.setText(feed.getPostContent());
         if (feed.getPostImages().size()>0) {
             viewHolder.ivImage.setVisibility(View.VISIBLE);
+//            viewHolder.ivImage.setImageURI(Uri.parse(DataUtils.URL+feed.getPostImages().get(0).getImage()));
+//
             Picasso.with(mContext).load(Uri.parse(DataUtils.URL + feed.getPostImages().get(0).getImage()))
                     .placeholder(R.drawable.placeholder)
                     .error(R.drawable.placeholder)

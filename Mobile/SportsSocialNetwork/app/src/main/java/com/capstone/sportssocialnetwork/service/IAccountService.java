@@ -14,4 +14,7 @@ public interface IAccountService {
     @POST("/api/aspnetuser/login")
     Call<ResponseModel<User>> login(@Query("username")String username,
                                     @Query("password")String password);
+
+    @POST("/api/aspnetuser/showprofile")
+    Call<ResponseModel<User>> getUserProfile(@Query("userId")String userId);
 }

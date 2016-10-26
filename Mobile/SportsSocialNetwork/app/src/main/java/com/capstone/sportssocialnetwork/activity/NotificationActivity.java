@@ -90,8 +90,40 @@ public class NotificationActivity extends AppCompatActivity {
         lvNotification.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                adapter.getItem(position).setRead(true);
-                adapter.notifyDataSetChanged();
+                final Notification notification = adapter.getItem(position);
+                Call<ResponseModel<String>> call = service.getNotificationService().markAsRead(notification.getId());
+                call.enqueue(new Callback<ResponseModel<String>>() {
+                    @Override
+                    public void onResponse(Call<ResponseModel<String>> call, Response<ResponseModel<String>> response) {
+                        if (response.isSuccessful()){
+                            if (response.body().isSucceed()){
+                                notification.setRead(true);
+                                adapter.notifyDataSetChanged();
+
+                                if (notification.getPostId()!=null){
+                                    Intent intent  = new Intent(NotificationActivity.this,PostDetailActivity.class);
+                                    intent.putExtra("postId",notification.getPostId());
+                                    startActivity(intent);
+                                }
+                                if (notification.getOrderId()!=null){
+                                    Intent intent  = new Intent(NotificationActivity.this,MyOrderActivity.class);
+                                    startActivity(intent);
+                                }
+                            }else{
+                                Toast.makeText(NotificationActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(NotificationActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseModel<String>> call, Throwable t) {
+                        Toast.makeText(NotificationActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
 //                if (position>0) {
 //                    Feed feed = adapter.getItem(position-1);
 //                    Intent intent = new Intent(getActivity(), PostDetailActivity.class);

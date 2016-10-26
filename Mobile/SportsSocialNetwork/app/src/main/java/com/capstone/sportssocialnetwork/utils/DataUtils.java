@@ -10,11 +10,14 @@ public class DataUtils {
 //    public static String URL = "http://192.168.43.200:26011";
 //    public static String URL = "http://192.168.150.155:26011";
 //    public static String URL = "http://192.168.1.111:26011";
-    public static String URL = "http://192.168.43.213:26011";
+//    public static String URL = "http://192.168.43.213:26011";
+        public static String URL = "http://192.168.150.149:26011";
+
 
     public static String FORMAT_DATE_TIME = "dd/MM/yyyy HH:mm:ss";
     public static String FORMAT_DATE = "dd/MM/yyyy";
     public static String FORMAT_TIME = "HH:mm";
+    public static int MAX_SIZE_IMAGE = 1000;
 
 
     private static DataUtils INSTANCE = null;

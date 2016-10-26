@@ -442,7 +442,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             ivCommentImage.setVisibility(View.VISIBLE);
             ivDeleteImage.setVisibility(View.VISIBLE);
             String filename = "Image" + System.currentTimeMillis() % 10000 + ".jpg";
-            File f = Utilities.getImageFileFromUri(this, data.getData(), Utilities.getPicturePath(filename), 2000, Bitmap.CompressFormat.JPEG, 50);
+            File f = Utilities.getImageFileFromUri(this, data.getData(), Utilities.getPicturePath(filename), DataUtils.MAX_SIZE_IMAGE, Bitmap.CompressFormat.JPEG, 50);
 
             try {
                 int str = new ExifInterface(data.getData().getPath()).getAttributeInt("Orientation", 1000);

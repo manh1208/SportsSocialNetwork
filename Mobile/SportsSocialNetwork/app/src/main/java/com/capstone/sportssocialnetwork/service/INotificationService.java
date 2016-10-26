@@ -21,4 +21,7 @@ public interface INotificationService {
     @POST("/api/notification/markallasread")
     Call<ResponseModel<String>> martAllAsRead(@Query("userID")String userId);
 
+    @POST("/api/notification/markasread")
+    Call<ResponseModel<String>> markAsRead(@Query("id")int id);
+
 }
