@@ -846,6 +846,7 @@
     <Compile Include="Models\ViewModels\NewsViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\NotificationCustomViewModel.cs" />
     <Compile Include="Models\ViewModels\NotificationViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
