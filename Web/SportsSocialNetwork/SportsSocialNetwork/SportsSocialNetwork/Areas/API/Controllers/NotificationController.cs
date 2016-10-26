@@ -24,11 +24,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             try {
                 List<Notification> notiList = service.GetNoti(userId, skip, take).ToList();
 
-                List<NotificationCustomViewModel> result = Mapper.Map<List<NotificationCustomViewModel>>(notiList);
+                List<NotificationCustomViewModel> result = new List<NotificationCustomViewModel>();
 
-                foreach (var noti in result)
+                foreach (var noti in notiList)
                 {
-                    PrepareNotificationViewModel(noti);
+                    result.Add(PrepareNotificationViewModel(noti));
                 }
 
                 response = new ResponseModel<List<NotificationCustomViewModel>>(true, "Thông báo mới của bạn:", null, result);
@@ -92,9 +92,15 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             return Json(response);
         }
 
-        private void PrepareNotificationViewModel(NotificationCustomViewModel noti)
+        private NotificationCustomViewModel PrepareNotificationViewModel(Notification noti)
         {
-            noti.CreateDateString = noti.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+            NotificationCustomViewModel result = Mapper.Map<NotificationCustomViewModel>(noti);
+
+            result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+
+            result.Avatar = noti.AspNetUser1.AvatarImage;
+
+            return result;
 
         }
     }
