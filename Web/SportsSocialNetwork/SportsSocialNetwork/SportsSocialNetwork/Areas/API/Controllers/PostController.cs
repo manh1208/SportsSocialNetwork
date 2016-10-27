@@ -82,6 +82,36 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         }
 
         [HttpPost]
+        public ActionResult ShowAllUserPost(String userId, String currentUserId, int skip, int take)
+        {
+            var postService = this.Service<IPostService>();
+
+            List<Post> postList = null;
+
+            ResponseModel<List<PostOveralViewModel>> response = null;
+
+            try
+            {
+                postList = postService.GetAllPostOfUser(userId, skip, take).ToList<Post>();
+
+                List<PostOveralViewModel> result = Mapper.Map<List<PostOveralViewModel>>(postList);
+
+                foreach (var p in result)
+                {
+                    PreparePostOveralData(p, currentUserId);
+                }
+
+                response = new ResponseModel<List<PostOveralViewModel>>(true, "Tải bài viết thành công!", null, result);
+            }
+            catch (Exception)
+            {
+                response = ResponseModel<List<PostOveralViewModel>>.CreateErrorResponse("Tải bài viết thất bại!", systemError);
+            }
+
+            return Json(response);
+        }
+
+        [HttpPost]
         public ActionResult ShowPostDetail(int postId, String currentUserId, int skip, int take)
         {
             var postService = this.Service<IPostService>();

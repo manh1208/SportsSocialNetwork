@@ -9,6 +9,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
     public partial interface IPostImageService
     {
         void saveImage(int id, IEnumerable<HttpPostedFileBase> images);
+
+        IEnumerable<PostImage> GetAllPostImage(int postId);
     }
     public partial class PostImageService : IPostImageService
     {
@@ -28,6 +30,12 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 this.Create(fi);
                 this.Save();
             }
+        }
+
+        public IEnumerable<PostImage> GetAllPostImage(int postId)
+        {
+            return this.GetActive(x => x.PostId == postId);
+
         }
     }
 }

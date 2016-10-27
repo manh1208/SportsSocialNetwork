@@ -274,6 +274,7 @@
     <Compile Include="Areas\Api\Controllers\PlaceController.cs" />
     <Compile Include="Areas\Api\Controllers\PostCommentController.cs" />
     <Compile Include="Areas\Api\Controllers\PostController.cs" />
+    <Compile Include="Areas\Api\Controllers\PostImageController.cs" />
     <Compile Include="Areas\Moderator\ModeratorAreaRegistration.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\EventController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\FieldController.cs" />
@@ -3827,6 +3828,7 @@
     <Folder Include="Areas\Api\Views\Like\" />
     <Folder Include="Areas\Api\Views\Notification\" />
     <Folder Include="Areas\Api\Views\PostComment\" />
+    <Folder Include="Areas\Api\Views\PostImage\" />
     <Folder Include="Areas\Api\Views\Post\" />
     <Folder Include="Areas\Api\Views\Shared\" />
     <Folder Include="Areas\Moderator\Controllers\" />
