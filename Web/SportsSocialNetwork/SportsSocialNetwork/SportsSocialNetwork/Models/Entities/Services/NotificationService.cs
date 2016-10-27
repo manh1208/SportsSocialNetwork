@@ -8,7 +8,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
     public partial interface INotificationService
     {
         #region Code from here
-        Notification SaveNoti(String userId, String title, String message, int type, Nullable<int> postId, Nullable<int> invitationId);
+        Notification SaveNoti(String userId, String fromUserId, String title, String message, int type, Nullable<int> postId, Nullable<int> invitationId);
 
         IEnumerable<Notification> GetNoti(String userId, int skip, int take);
 
@@ -25,10 +25,11 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
 
         #region Code from here
-        public Notification SaveNoti(string userId, string title, string message, int type, Nullable<int> postId, Nullable<int> invitationId)
+        public Notification SaveNoti(string userId, String fromUserId, string title, string message, int type, Nullable<int> postId, Nullable<int> invitationId)
         {
             Notification noti = new Notification();
             noti.UserId = userId;
+            noti.FromUserId = fromUserId;
             noti.Title = title;
             noti.Message = message;
             noti.Type = type;

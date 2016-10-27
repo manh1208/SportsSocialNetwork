@@ -76,7 +76,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 if (!(user.Id == commentedUser.Id))
                 {
-                    Notification noti = notiService.SaveNoti(user.Id, "Comment", commentedUser.FullName + " đã bình luận về bài viết của bạn", int.Parse(NotificationType.Post.ToString("d")), post.Id, null);
+                    Notification noti = notiService.SaveNoti(user.Id, commentedUser.Id, "Comment", commentedUser.FullName + " đã bình luận về bài viết của bạn", int.Parse(NotificationType.Post.ToString("d")), post.Id, null);
 
                 }
 
