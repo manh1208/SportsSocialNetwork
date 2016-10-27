@@ -163,6 +163,31 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             return Json(response);
         }
 
+        [HttpPost]
+        public ActionResult ShowAllSchedule(int fieldId)
+        {
+            var service = this.Service<IFieldScheduleService>();
+
+            ResponseModel<List<FieldScheduleViewModel>> response = null;
+
+            try {
+                List<FieldSchedule> scheduleList = service.GetActive(x => x.FieldId == fieldId).ToList();
+
+                List<FieldScheduleViewModel> result = Mapper.Map<List<FieldScheduleViewModel>>(scheduleList);
+
+                foreach(var r in result)
+                {
+                    PrepareFieldScheduleViewModel(r);
+
+                }
+
+                response = new ResponseModel<List<FieldScheduleViewModel>>(true, "Tải lịch sân thành công", null, result);
+            } catch(Exception) {
+                response = ResponseModel<List<FieldScheduleViewModel>>.CreateErrorResponse("Tải lịch sân thất bại", systemError);
+            }
+            return Json(response);
+        }
+
         private void PrepareFieldScheduleViewModel(FieldScheduleViewModel schedule) {
             schedule.EndTimeString = schedule.EndTime.ToString("dd/MM/yyyy HH:mm:ss");
 

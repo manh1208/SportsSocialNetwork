@@ -295,6 +295,41 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             return result;
         }
 
+        [HttpPost]
+        public ActionResult DeletePost(int id)
+        {
+            var postService = this.Service<IPostService>();
+
+            var imageService = this.Service<IPostImageService>();
+
+            ResponseModel<bool> response = null;
+
+            try {
+                Post post = postService.FirstOrDefaultActive(x => x.Id == id);
+
+                List<PostImage> imageList = post.PostImages.ToList();
+
+                if (imageList != null)
+                {
+                    foreach(var img in imageList)
+                    {
+                        imageService.Delete(img);
+                    }
+
+                }
+
+                postService.Deactivate(post);
+
+                response = new ResponseModel<bool>(true, "Xóa bài thành công", null);
+
+            } catch (Exception)
+            {
+                response = ResponseModel<bool>.CreateErrorResponse("Xóa bài thất bại", systemError);
+
+            }
+            return Json(response);
+        }
+
         //private int GetPostType(PostUploadViewModel model)
         //{
         //    int contentType = 0;
