@@ -1,6 +1,7 @@
 package com.capstone.sportssocialnetwork.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,12 +13,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.adapter.PlacePageAdapter;
 import com.capstone.sportssocialnetwork.model.response.PlaceResponseModel;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
+import com.capstone.sportssocialnetwork.utils.DataUtils;
+import com.squareup.picasso.Picasso;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +33,8 @@ public class PlaceDetailActivity extends AppCompatActivity {
     private FloatingActionButton fabBooking;
     private int placeId;
     private String placeName;
+    private String placeAvatar;
+    private ImageView ivCover;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_place_detail);
         placeId = getIntent().getIntExtra("placeId",-1);
         placeName = getIntent().getStringExtra("placeName");
+        placeAvatar = getIntent().getStringExtra("placeAvatar");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(placeName);
         setSupportActionBar(toolbar);
@@ -73,6 +80,12 @@ public class PlaceDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Picasso.with(this).load(Uri.parse(DataUtils.URL+placeAvatar))
+                .placeholder(R.drawable.img_default_avatar)
+                .error(R.drawable.placeholder)
+                .fit()
+                .into(ivCover);
+
     }
 
 
@@ -81,6 +94,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs_place_detail);
         viewPager = (ViewPager) findViewById(R.id.viewpager_place_detail);
         fabBooking= (FloatingActionButton) findViewById(R.id.fab_booking);
+        ivCover = (ImageView) findViewById(R.id.iv_detail_place_cover);
     }
 
     @Override

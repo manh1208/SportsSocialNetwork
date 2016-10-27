@@ -238,6 +238,7 @@ public class PlaceFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), PlaceDetailActivity.class);
                 intent.putExtra("placeId",adapter.getItem(position).getId());
                 intent.putExtra("placeName",adapter.getItem(position).getName());
+                intent.putExtra("placeAvatar",adapter.getItem(position).getAvatar());
                 startActivity(intent);
             }
         });

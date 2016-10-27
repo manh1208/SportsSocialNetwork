@@ -11,13 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.adapter.PlaceDetailAdapter;
 import com.capstone.sportssocialnetwork.adapter.PlaceFieldAdapter;
+import com.capstone.sportssocialnetwork.model.Field;
+import com.capstone.sportssocialnetwork.model.response.ResponseModel;
+import com.capstone.sportssocialnetwork.service.RestService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by ManhNV on 9/8/16.
@@ -25,6 +33,9 @@ import java.util.List;
 public class PlaceFieldFragment extends Fragment {
     RecyclerView lvPlaceField;
     Spinner spinerSport;
+    RestService service;
+    private int placeId;
+    PlaceFieldAdapter adapter;
 
     @Nullable
     @Override
@@ -49,17 +60,46 @@ public class PlaceFieldFragment extends Fragment {
     }
 
     private void prepareData() {
-        PlaceFieldAdapter adapter = new PlaceFieldAdapter(getActivity());
+         adapter = new PlaceFieldAdapter(getActivity(), new ArrayList<Field>() {
+         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         lvPlaceField.setLayoutManager(mLayoutManager);
         lvPlaceField.setItemAnimator(new DefaultItemAnimator());
         lvPlaceField.setAdapter(adapter);
     }
 
+    private void loadData(){
+        service.getPlaceService().getFieldOfPlace(placeId).enqueue(new Callback<ResponseModel<List<Field>>>() {
+            @Override
+            public void onResponse(Call<ResponseModel<List<Field>>> call, Response<ResponseModel<List<Field>>> response) {
+                if (response.isSuccessful()){
+                    if (response.body().isSucceed()){
+                        adapter.setFields(response.body().getData());
+                    }else{
+                        Toast.makeText(getActivity(), response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(getActivity(), response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseModel<List<Field>>> call, Throwable t) {
+                Toast.makeText(getActivity(), R.string.failure, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void initView(View v) {
+        service = new RestService();
+        placeId = getArguments().getInt("placeId");
         lvPlaceField = (RecyclerView) v.findViewById(R.id.lv_place_field);
         spinerSport  = (Spinner) v.findViewById(R.id.spinner_sport);
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadData();
+    }
 }

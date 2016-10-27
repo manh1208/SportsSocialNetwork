@@ -42,4 +42,6 @@ public interface IPlaceService {
                                                       @Query("province")String province,
                                                       @Query("district")String district
                                                       );
+    @POST("/api/field/showfieldlist")
+    Call<ResponseModel<List<Field>>> getFieldOfPlace(@Query("placeId") int placeId);
 }
