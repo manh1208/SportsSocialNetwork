@@ -11,6 +11,7 @@ import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.commons.RecyclePagerAdapter;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.capstone.sportssocialnetwork.R;
+import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.capstone.sportssocialnetwork.utils.GestureSettingsSetupListener;
 import com.squareup.picasso.Picasso;
 
@@ -44,9 +45,10 @@ public class ImageViewerAdapter extends RecyclePagerAdapter<ImageViewerAdapter.V
 //            setupListener.onSetupGestureView(holder.image);
 //        }
 //        GlideHelper.loadResource(paintings[position].getImageId(), holder.image);
-        Picasso.with(context).load(Uri.parse(images[position]))
+        Picasso.with(context).load(Uri.parse(DataUtils.URL+images[position]))
                 .placeholder(R.drawable.img_default_avatar)
                 .error(R.drawable.placeholder)
+                .fit()
                 .into(holder.image);
     }
 

@@ -15,6 +15,9 @@ import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.adapter.ImageAdapter;
 import com.capstone.sportssocialnetwork.adapter.PlaceDetailAdapter;
 import com.capstone.sportssocialnetwork.adapter.PlaceImageAdapter;
+import com.capstone.sportssocialnetwork.model.PostImage;
+
+import java.util.ArrayList;
 
 /**
  * Created by ManhNV on 9/10/16.
@@ -36,7 +39,7 @@ public class PlaceImageFragment extends Fragment {
 //        lvPlaceImage.setLayoutManager(mLayoutManager);
 //        lvPlaceImage.setItemAnimator(new DefaultItemAnimator());
 //        lvPlaceImage.setAdapter(adapter);
-        ImageAdapter adapter = new ImageAdapter(getActivity());
+        ImageAdapter adapter =  new ImageAdapter(getActivity(),R.layout.item_image,new ArrayList<PostImage>());
         lvPlaceImage.setAdapter(adapter);
     }
 

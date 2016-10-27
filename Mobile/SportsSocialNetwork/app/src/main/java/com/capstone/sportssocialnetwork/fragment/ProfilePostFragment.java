@@ -155,7 +155,7 @@ public class ProfilePostFragment extends Fragment {
 
     private void loadData() {
         flag_loading = true;
-        Call<ResponseModel<List<Feed>>> callback = service.getSocialNetworkService().getAllPost(userId, take, skip);
+        Call<ResponseModel<List<Feed>>> callback = service.getPostService().getUserPost(userId,userId, take, skip);
         callback.enqueue(new Callback<ResponseModel<List<Feed>>>() {
             @Override
             public void onResponse(Call<ResponseModel<List<Feed>>> call, Response<ResponseModel<List<Feed>>> response) {
