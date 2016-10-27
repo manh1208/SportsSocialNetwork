@@ -11,7 +11,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         #region Code from here
         IEnumerable<Like> GetLikeListByPostId(int postId);
 
-        bool LikeUnlikePost(int postId, String userId);
+        Like LikeUnlikePost(int postId, String userId);
 
         #endregion
 
@@ -25,7 +25,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return this.GetActive(x => x.PostId == postId);
         }
 
-        public bool LikeUnlikePost(int postId, String userId) {
+        public Like LikeUnlikePost(int postId, String userId) {
             Like like = FirstOrDefault(x=> x.PostId==postId&& x.UserId==userId);
             if (like == null)
             {
@@ -49,7 +49,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 this.Update(like);
                 this.Save();
             }
-            return like.Active;
+            return like;
         }
 
         #endregion
