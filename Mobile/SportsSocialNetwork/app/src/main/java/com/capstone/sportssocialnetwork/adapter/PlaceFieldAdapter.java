@@ -11,9 +11,11 @@ import android.widget.TextView;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.model.Field;
+import com.capstone.sportssocialnetwork.model.response.PlaceResponseModel;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +25,7 @@ public class PlaceFieldAdapter extends RecyclerView.Adapter<PlaceFieldAdapter.Pl
 
     private Context mContext;
     private List<Field> fields;
+    private List<Field> mOriginalItems;
 
     public PlaceFieldAdapter(Context mContext,List<Field> fields) {
         this.mContext = mContext;
@@ -55,6 +58,28 @@ public class PlaceFieldAdapter extends RecyclerView.Adapter<PlaceFieldAdapter.Pl
         this.fields = fields;
         notifyDataSetChanged();
     }
+
+    public void getFilter(int fieldTypeId){
+        if (mOriginalItems==null){
+            mOriginalItems = new ArrayList<>(fields);
+        }
+
+        if (fieldTypeId==-1){
+            fields = mOriginalItems;
+            mOriginalItems = null;
+            notifyDataSetChanged();
+        }else{
+            List<Field> newlist = new ArrayList<>();
+            for (int i = 0; i < mOriginalItems.size(); i++) {
+                if (mOriginalItems.get(i).getFieldTypeId()==fieldTypeId){
+                    newlist.add(mOriginalItems.get(i));
+                }
+            }
+            fields = newlist;
+            notifyDataSetChanged();
+        }
+    }
+
 
     @Override
     public int getItemCount() {

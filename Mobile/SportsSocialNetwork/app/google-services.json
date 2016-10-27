@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "727248131277",
+    "firebase_url": "https://sportsocialnetwork-1ff07.firebaseio.com",
+    "project_id": "sportsocialnetwork-1ff07",
+    "storage_bucket": "sportsocialnetwork-1ff07.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727248131277:android:7c266d3d5fa0e8dc",
+        "android_client_info": {
+          "package_name": "com.capstone.sportssocialnetwork"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "727248131277-alv3gf1c25g94v89i1tpvo0dak04tmbf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2khUE8T27qj0vWXQzxWo2g1YRY6NP7Vk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
