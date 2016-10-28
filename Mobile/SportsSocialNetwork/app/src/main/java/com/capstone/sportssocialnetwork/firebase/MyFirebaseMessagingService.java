@@ -14,6 +14,8 @@ import com.capstone.sportssocialnetwork.activity.MainBottomBarActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Map;
+
 /**
  * Created by ManhNV on 10/27/16.
  */
@@ -26,37 +28,50 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-
+        sendNotification(remoteMessage.getData());
         // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-        }
-
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            sendNotification(remoteMessage.getNotification().getBody());
-        }
+//        if (remoteMessage.getData().size() > 0) {
+//            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+//        }
+//
+//        // Check if message contains a notification payload.
+//        if (remoteMessage.getNotification() != null) {
+//            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+//            sendNotification(remoteMessage.getData());
+//        }
 
     }
-    private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, MainBottomBarActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
 
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder =  new NotificationCompat.Builder(this)
-                .setContentTitle("Sport Social Network")
+    private void sendNotification(Map<String, String> data) {
+
+        String message = data.get("Message");
+        String title = data.get("Title");
+//        int eventId = Integer.parseInt(data.get("EventId"));
+        int notificationId = Integer.parseInt(data.get("Id"));
+        Log.i("Otto", "Gởi message");
+//        String ipAddress = data.getString("IpAddress");
+//        BusStation.getBus().post(new Message(ipAddress));
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.image_logo)
-                .setContentText(messageBody)
+                .setContentTitle("Sport Social Network")
+                .setContentText(message)
+                .setColor(getColor(R.color.colorPrimary))
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
+                .setPriority(android.app.Notification.PRIORITY_HIGH);
+
+        Intent intent = new Intent(this, MainBottomBarActivity.class);
+//            intent.putExtra("eventId", eventId);
+//            intent.putExtra("start",true);
+//                intent.putExtra("notiId", notificationId);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, notificationId /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+        notificationBuilder.setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(notificationId /* ID of notification */, notificationBuilder.build());
     }
 }
