@@ -353,6 +353,34 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult SaveToken(String userId, String token)
+        {
+            var service = this.Service<IFirebaseTokenService>();
+
+            ResponseModel<bool> response = null;
+
+            try {
+                FirebaseToken firebaseToken = service.FirstOrDefault(x => x.UserId.Equals(userId) && x.Token.Equals(token));
+
+                if (firebaseToken != null)
+                {
+                    firebaseToken = new FirebaseToken();
+                    firebaseToken.UserId = userId;
+                    firebaseToken.Token = token;
+                    service.Create(firebaseToken);
+                    service.Save();
+
+                }
+
+                response = new ResponseModel<bool>(true, "Token đã được tạo", null);
+
+            } catch (Exception) {
+                response = ResponseModel<bool>.CreateErrorResponse("Tạo token thất bại",systemError);
+            }
+            return Json(response);
+        }
+
         private bool ValidateUserInfo(List<String> errorList, AspNetUser userInfo)
         {
             bool result = true;
