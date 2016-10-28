@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using SportsSocialNetwork.Models.Entities;
 
 namespace SportsSocialNetwork.Models
 {
@@ -47,5 +48,9 @@ namespace SportsSocialNetwork.Models
             return response;
         }
 
+        internal static ResponseModel<Like> CreateErrorResponse(string v, object systemError)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

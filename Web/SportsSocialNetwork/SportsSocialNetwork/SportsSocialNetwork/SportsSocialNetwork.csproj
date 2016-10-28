@@ -292,6 +292,7 @@
     <Compile Include="Controllers\FieldController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LikeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
@@ -3980,6 +3981,7 @@
     <Folder Include="Models\Hubs\" />
     <Folder Include="SSN\PostImages\" />
     <Folder Include="Views\Comment\" />
+    <Folder Include="Views\Like\" />
     <Folder Include="Views\PostComment\" />
     <Folder Include="Views\Post\" />
   </ItemGroup>

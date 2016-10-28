@@ -245,8 +245,9 @@ namespace SportsSocialNetwork.Controllers
                 var _postService = this.Service<IPostService>();
                 var _postCommentService = this.Service<IPostCommentService>();
 
-                List<Post> postList = _postService.GetActive().OrderByDescending(p => p.CreateDate).
-                    Skip(skip).Take(take).ToList();
+                List<Post> postList = _postService.GetActive(p => 
+                p.AspNetUser.Follows.Where(f => f.FollowerId == userId).ToList().Count > 0 ||
+                p.Group.GroupMembers.Where(g => g.UserId == userId).ToList().Count > 0).ToList();
                 List<PostGeneralViewModel> listPostVM = Mapper.Map<List<PostGeneralViewModel>>(postList);
 
                 foreach (var item in listPostVM)

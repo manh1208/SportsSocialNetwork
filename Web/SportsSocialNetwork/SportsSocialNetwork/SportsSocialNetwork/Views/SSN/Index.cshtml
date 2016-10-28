@@ -385,14 +385,15 @@
         var _deletePostActionName = '@Url.Action("DeletePost","Post")';
         var _loadAPostActionName = '@Url.Action("LoadSavedPost", "Post")';
         var _deleteCommentActionName = '@Url.Action("DeleteComment", "PostComment")';
-        var _loadACommentActionName = '@Url.Action("LoadSavedComment", "PostComment")'
+        var _loadACommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
+        var _likeUnlikePostActionName = '@Url.Action("LikeUnlikePost","Like")';
         $(document).ready(function () {
-            loadNewFeedPost(_userId, _firstSkip, _firstTake, _actionName, _loadMoreCmtActionName,_deletePostActionName, _loadAPostActionName,_deleteCommentActionName,_loadACommentActionName);
+            loadNewFeedPost(_userId, _firstSkip, _firstTake, _actionName, _loadMoreCmtActionName,_deletePostActionName, _loadAPostActionName,_deleteCommentActionName,_loadACommentActionName,_likeUnlikePostActionName);
         })
 
         $(window).scroll(function () {
             if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-                loadNewFeedPost(_userId, _skip, _take, _actionName, _loadMoreCmtActionName,_deletePostActionName, _loadAPostActionName,_deleteCommentActionName,_loadACommentActionName);
+                loadNewFeedPost(_userId, _skip, _take, _actionName, _loadMoreCmtActionName,_deletePostActionName, _loadAPostActionName,_deleteCommentActionName,_loadACommentActionName,_likeUnlikePostActionName);
                 _skip = _skip + _take;
             }
         });
