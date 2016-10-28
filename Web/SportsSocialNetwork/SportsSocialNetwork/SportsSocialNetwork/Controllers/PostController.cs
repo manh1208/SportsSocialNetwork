@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using SkyWeb.DatVM.Mvc;
+using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
@@ -21,7 +22,7 @@ namespace SportsSocialNetwork.Controllers
         }
         public ActionResult CreatePost(PostViewModel model, String sportSelect, IEnumerable<HttpPostedFileBase> uploadImages)
         {
-            var result = new AjaxOperationResult();
+            var result = new AjaxOperationResult<PostGeneralViewModel>();
             var _postService = this.Service<IPostService>();
             var post = new Post();
             int ImageNumber = 0;
@@ -30,19 +31,21 @@ namespace SportsSocialNetwork.Controllers
             post.CreateDate = DateTime.Now;
             post.UserId = User.Identity.GetUserId();
             
-            
-            if (uploadImages.ToList()[0] != null && uploadImages.ToList().Count > 0)
+            if(uploadImages != null)
             {
-                if (uploadImages.ToList().Count == 1)
+                if (uploadImages.ToList()[0] != null && uploadImages.ToList().Count > 0)
                 {
-                    ImageNumber = 1;
-                }else
-                {
-                    ImageNumber = 2;
+                    if (uploadImages.ToList().Count == 1)
+                    {
+                        ImageNumber = 1;
+                    }
+                    else
+                    {
+                        ImageNumber = 2;
+                    }
                 }
-                var _postImageService = this.Service<IPostImageService>();
-                _postImageService.saveImage(post.Id, uploadImages);
             }
+            
             if (!String.IsNullOrEmpty(model.PostContent))
             {
                 hasText = true;
@@ -70,6 +73,15 @@ namespace SportsSocialNetwork.Controllers
                 post.ContentType = (int)ContentPostType.MultiImages;
             }
             _postService.Create(post);
+            _postService.Save();
+            if (uploadImages != null)
+            {
+                if (uploadImages.ToList()[0] != null && uploadImages.ToList().Count > 0)
+                {
+                    var _postImageService = this.Service<IPostImageService>();
+                    _postImageService.saveImage(post.Id, uploadImages);
+                }
+            }
             if (!String.IsNullOrEmpty(sportSelect))
             {
                 string[] sportId = sportSelect.Split(',');
@@ -90,8 +102,211 @@ namespace SportsSocialNetwork.Controllers
                 }
             }
 
+            result.AdditionalData = Mapper.Map<PostGeneralViewModel>(post);
             return Json(result);
 
+        }
+
+        public ActionResult DeletePost(int id)
+        {
+            var result = new AjaxOperationResult();
+            var _postService = this.Service<IPostService>();
+
+            var _postImageService = this.Service<IPostImageService>();
+
+            Post post = _postService.FirstOrDefaultActive(x => x.Id == id);
+
+            if (post != null)
+            {
+                List<PostImage> imageList = _postImageService.GetActive(x => x.PostId == post.Id).ToList();
+
+                if (imageList != null)
+                {
+                    for (int i = 0; i < imageList.Count; i++)
+                    {
+                        _postImageService.Delete(imageList[i]);
+                    }
+                }
+
+                _postService.Deactivate(post);
+                result.Succeed = true;
+            }else
+            {
+
+                result.Succeed = false;
+            }
+
+            return Json(result);
+        }
+
+        public ActionResult LoadSavedPost(String postId)
+        {
+            int id = Int32.Parse(postId);
+            var result = new AjaxOperationResult<PostGeneralViewModel>();
+            var _postService = this.Service<IPostService>();
+            Post tmp = _postService.FirstOrDefaultActive(p => p.Id == id);
+            if (tmp != null)
+            {
+                var _userService = this.Service<IAspNetUserService>();
+                PostGeneralViewModel postGeneral = Mapper.Map<PostGeneralViewModel>(tmp);
+                var user = Mapper.Map<AspNetUserSimpleModel>(_userService.Get<string>(postGeneral.UserId));
+                postGeneral.AspNetUser = user;
+                PrepareDetailPostData(postGeneral, User.Identity.GetUserId());
+                result.AdditionalData = postGeneral;
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+            return Json(result);
+        }
+
+        public ActionResult UpdatePost(String postEditId, String PostContentEdit, String sportSelectEdit, List<HttpPostedFileBase> uploadImages, List<int> deleteImages, List<int> notDeleteImages)
+        {
+            int postId = Int32.Parse(postEditId);
+            var result = new AjaxOperationResult();
+
+            var _postService = this.Service<IPostService>();
+            var _postSport = this.Service<IPostSportService>();
+            var _postImageService = this.Service<IPostImageService>();
+
+            int ImageNumber = 0;
+            bool hasText = false;
+            Post post = _postService.FirstOrDefaultActive(x => x.Id == postId);
+
+            if (post != null)
+            {
+                post.EditDate = DateTime.Now;
+                if (deleteImages != null && deleteImages.Count > 0)
+                {
+                    foreach (var delete in deleteImages)
+                    {
+                        PostImage img =  _postImageService.FirstOrDefaultActive(x => x.Id == delete);
+                        _postImageService.Delete(img);
+                    }
+                }
+
+                var uploadImgNum = 0;
+                var notDeleteImgNum = 0;
+                if (uploadImages != null)
+                {
+                    uploadImgNum = uploadImages.Count;
+                    _postImageService.saveImage(post.Id, uploadImages);
+                }
+                if (notDeleteImages != null)
+                {
+                    notDeleteImgNum = notDeleteImages.Count;
+                }
+                var totalImg = uploadImgNum + notDeleteImgNum;
+                if(totalImg == 1)
+                {
+                    ImageNumber = 1;
+                }else if(totalImg > 1)
+                {
+                    ImageNumber = 2;
+                }
+
+                if (!String.IsNullOrEmpty(PostContentEdit))
+                {
+                    hasText = true;
+                }
+                post.PostContent = PostContentEdit;
+                if (ImageNumber == 0 && hasText)
+                {
+                    post.ContentType = (int)ContentPostType.TextOnly;
+                }
+                else if (ImageNumber == 1 && hasText)
+                {
+                    post.ContentType = (int)ContentPostType.TextAndImage;
+                }
+                else if (ImageNumber == 2 && hasText)
+                {
+                    post.ContentType = (int)ContentPostType.TextAndMultiImages;
+                }
+                else if (ImageNumber == 1 && !hasText)
+                {
+                    post.ContentType = (int)ContentPostType.ImageOnly;
+                }
+                else if (ImageNumber == 2 && !hasText)
+                {
+                    post.ContentType = (int)ContentPostType.MultiImages;
+                }
+
+                List<PostSport> sportList = _postSport.Get(x => x.PostId == postId).ToList();
+                if (sportList != null)
+                {
+                    foreach (var sport in sportList)
+                    {
+
+                        _postSport.Delete(sport);
+                    }
+                }
+                if (!String.IsNullOrEmpty(sportSelectEdit))
+                {
+                    string[] sportId = sportSelectEdit.Split(',');
+                    if (sportId != null)
+                    {
+                        
+                        foreach (var item in sportId)
+                        {
+                            if (!item.Equals(""))
+                            {
+                                PostSport postSport = new PostSport();
+                                postSport.PostId = post.Id;
+                                postSport.SportId = Int32.Parse(item);
+                                _postSport.Create(postSport);
+                                
+                            }
+                        }
+                    }
+                }
+                _postService.Update(post);
+                _postService.Save();
+                result.Succeed = true;
+            }else
+            {
+                result.Succeed = false;
+            }
+            return Json(result);
+        }
+
+        public void PrepareDetailPostData(PostGeneralViewModel p, string curUserId)
+        {
+            var _postService = this.Service<IPostService>();
+            var _likeService = this.Service<ILikeService>();
+            var _postCommentService = this.Service<IPostCommentService>();
+            var _postSportService = this.Service<IPostSportService>();
+
+            //like
+            List<Like> likeList = _likeService.GetLikeListByPostId(p.Id).ToList();
+            p.LikeCount = likeList.Count();
+            foreach (var item in likeList)
+            {
+                if (item.UserId == curUserId)
+                {
+                    p.Liked = true;
+                }
+                else
+                {
+                    p.Liked = false;
+                }
+            }
+
+            //comment
+            List<PostComment> postCmtList = _postCommentService.GetCommentListByPostId(p.Id, 0, 3).ToList();
+            p.PostAge = _postService.CalculatePostAge(p.EditDate == null ? p.CreateDate : p.EditDate.Value);
+            p.PostComments = Mapper.Map<List<PostCommentDetailViewModel>>(postCmtList);
+            p.CommentCount = _postCommentService.GetActive(c => c.PostId == p.Id).ToList().Count();
+            foreach (var item in p.PostComments)
+            {
+                //DateTime dt = DateTime.ParseExact(item.CreateDateString, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                item.CommentAge = _postCommentService.CalculateCommentAge(item.CreateDate);
+            }
+
+            //sport
+            List<PostSport> postSportList = _postSportService.GetActive(s => s.PostId == p.Id).ToList();
+            p.PostSports = Mapper.Map<List<PostSportDetailViewModel>>(postSportList);
         }
 
         public ActionResult UpdatePost(PostViewModel model, String sportSelect, List<HttpPostedFileBase> uploadImages, List<int> deleteImages)
