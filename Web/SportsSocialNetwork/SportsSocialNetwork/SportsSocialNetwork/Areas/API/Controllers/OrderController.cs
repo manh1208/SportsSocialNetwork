@@ -156,6 +156,32 @@ namespace SportsSocialNetwork.Areas.API.Controllers
         }
 
         [HttpPost]
+        public ActionResult CancelOrder(int id)
+        {
+            ResponseModel<OrderSimpleViewModel> response = null;
+
+            var service = this.Service<IOrderService>();
+
+            Order order = null;
+
+            try
+            {
+                order = service.ChangeOrderStatus(id, (int)OrderStatus.Cancel);
+
+                OrderSimpleViewModel result = PrepareOrderSimpleViewModel(order);
+
+                response = new ResponseModel<OrderSimpleViewModel>(true, "Đơn đặt sân đã được hủy", null, result);
+            }
+
+            catch (Exception)
+            {
+                response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Hủy đơn đặt sân thất bại", systemError);
+            }
+
+            return Json(response);
+        }
+
+        [HttpPost]
         public ActionResult CreateOrder(CreateOrderViewModel model)
         {
             ResponseModel<OrderSimpleViewModel> response = null;
