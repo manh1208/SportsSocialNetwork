@@ -17,4 +17,9 @@ public interface IAccountService {
 
     @POST("/api/aspnetuser/showprofile")
     Call<ResponseModel<User>> getUserProfile(@Query("userId")String userId);
+
+    @POST("/api/aspnetuser/savetoken")
+    Call<ResponseModel<String>> sentToken(@Query("userId")String userId,
+                                          @Query("token")String token);
+
 }
