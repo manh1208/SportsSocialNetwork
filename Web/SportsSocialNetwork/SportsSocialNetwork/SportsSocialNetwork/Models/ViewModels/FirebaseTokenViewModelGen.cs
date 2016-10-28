@@ -12,19 +12,15 @@ namespace SportsSocialNetwork.Models.ViewModels
     using System;
     using System.Collections.Generic;
     
-    public partial class GroupViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.Group>
+    public partial class FirebaseTokenViewModel : SkyWeb.DatVM.Mvc.BaseEntityViewModel<SportsSocialNetwork.Models.Entities.FirebaseToken>
     {
     	
     			public virtual int Id { get; set; }
-    			public virtual string Name { get; set; }
-    			public virtual string Description { get; set; }
-    			public virtual int SportId { get; set; }
-    			public virtual string CoverImage { get; set; }
-    			public virtual string Avatar { get; set; }
-    			public virtual bool Active { get; set; }
+    			public virtual string UserId { get; set; }
+    			public virtual string Token { get; set; }
     	
-    	public GroupViewModel() : base() { }
-    	public GroupViewModel(SportsSocialNetwork.Models.Entities.Group entity) : base(entity) { }
+    	public FirebaseTokenViewModel() : base() { }
+    	public FirebaseTokenViewModel(SportsSocialNetwork.Models.Entities.FirebaseToken entity) : base(entity) { }
     
     }
 }

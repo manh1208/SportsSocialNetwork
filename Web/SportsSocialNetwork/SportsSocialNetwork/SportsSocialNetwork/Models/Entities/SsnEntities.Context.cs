@@ -37,6 +37,7 @@ namespace SportsSocialNetwork.Models.Entities
         public virtual DbSet<FieldPrice> FieldPrices { get; set; }
         public virtual DbSet<FieldSchedule> FieldSchedules { get; set; }
         public virtual DbSet<FieldType> FieldTypes { get; set; }
+        public virtual DbSet<FirebaseToken> FirebaseTokens { get; set; }
         public virtual DbSet<Follow> Follows { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<GroupMember> GroupMembers { get; set; }

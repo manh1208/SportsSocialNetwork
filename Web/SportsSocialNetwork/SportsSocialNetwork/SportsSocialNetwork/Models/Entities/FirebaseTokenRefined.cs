@@ -15,7 +15,7 @@ namespace SportsSocialNetwork.Models.Entities
 using System;
     using System.Collections.Generic;
     
-public partial class Group : SkyWeb.DatVM.Data.IEntity, SkyWeb.DatVM.Data.IActivable
+public partial class FirebaseToken : SkyWeb.DatVM.Data.IEntity
 {
 }
 

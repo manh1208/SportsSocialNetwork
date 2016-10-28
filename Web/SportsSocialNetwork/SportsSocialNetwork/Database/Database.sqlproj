@@ -96,5 +96,6 @@
     <Build Include="dbo\Tables\Category.sql" />
     <Build Include="dbo\Tables\FieldSchedule.sql" />
     <Build Include="dbo\Tables\PostImages.sql" />
+    <Build Include="dbo\Tables\FirebaseToken.sql" />
   </ItemGroup>
 </Project>

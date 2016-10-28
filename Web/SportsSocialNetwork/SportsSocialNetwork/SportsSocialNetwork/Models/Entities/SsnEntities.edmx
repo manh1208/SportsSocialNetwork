@@ -150,6 +150,14 @@
           <Property Name="SportId" Type="int" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="FirebaseToken">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Token" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
         <EntityType Name="Follow">
           <Key>
             <PropertyRef Name="Id" />
@@ -170,7 +178,7 @@
           <Property Name="SportId" Type="int" Nullable="false" />
           <Property Name="CoverImage" Type="nvarchar(max)" />
           <Property Name="Avatar" Type="nvarchar(max)" />
-          <Property Name="Active" Type="bit" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="GroupMember">
           <Key>
@@ -580,6 +588,18 @@
             </Principal>
             <Dependent Role="FieldType">
               <PropertyRef Name="SportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FirebaseToken_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="FirebaseToken" Type="Self.FirebaseToken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FirebaseToken">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1029,6 +1049,7 @@
           <EntitySet Name="FieldPrice" EntityType="Self.FieldPrice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FieldSchedule" EntityType="Self.FieldSchedule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FieldType" EntityType="Self.FieldType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FirebaseToken" EntityType="Self.FirebaseToken" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Follow" EntityType="Self.Follow" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Group" EntityType="Self.Group" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GroupMember" EntityType="Self.GroupMember" Schema="dbo" store:Type="Tables" />
@@ -1109,6 +1130,10 @@
           <AssociationSet Name="FK_FieldType_Sport" Association="Self.FK_FieldType_Sport">
             <End Role="Sport" EntitySet="Sport" />
             <End Role="FieldType" EntitySet="FieldType" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FirebaseToken_AspNetUsers" Association="Self.FK_FirebaseToken_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="FirebaseToken" EntitySet="FirebaseToken" />
           </AssociationSet>
           <AssociationSet Name="FK_Follow_AspNetUsers" Association="Self.FK_Follow_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -1272,6 +1297,7 @@
           <EntitySet Name="FieldPrices" EntityType="SSNModel.FieldPrice" />
           <EntitySet Name="FieldSchedules" EntityType="SSNModel.FieldSchedule" />
           <EntitySet Name="FieldTypes" EntityType="SSNModel.FieldType" />
+          <EntitySet Name="FirebaseTokens" EntityType="SSNModel.FirebaseToken" />
           <EntitySet Name="Follows" EntityType="SSNModel.Follow" />
           <EntitySet Name="Groups" EntityType="SSNModel.Group" />
           <EntitySet Name="GroupMembers" EntityType="SSNModel.GroupMember" />
@@ -1304,6 +1330,10 @@
           <AssociationSet Name="FK_Event_AspNetUsers" Association="SSNModel.FK_Event_AspNetUsers">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="Event" EntitySet="Events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FirebaseToken_AspNetUsers" Association="SSNModel.FK_FirebaseToken_AspNetUsers">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="FirebaseToken" EntitySet="FirebaseTokens" />
           </AssociationSet>
           <AssociationSet Name="FK_Follow_AspNetUsers" Association="SSNModel.FK_Follow_AspNetUsers">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
@@ -1555,6 +1585,7 @@
           <NavigationProperty Name="AspNetUserClaims" Relationship="SSNModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
           <NavigationProperty Name="AspNetUserLogins" Relationship="SSNModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
           <NavigationProperty Name="Events" Relationship="SSNModel.FK_Event_AspNetUsers" FromRole="AspNetUser" ToRole="Event" />
+          <NavigationProperty Name="FirebaseTokens" Relationship="SSNModel.FK_FirebaseToken_AspNetUsers" FromRole="AspNetUser" ToRole="FirebaseToken" />
           <NavigationProperty Name="Follows" Relationship="SSNModel.FK_Follow_AspNetUsers" FromRole="AspNetUser" ToRole="Follow" />
           <NavigationProperty Name="GroupMembers" Relationship="SSNModel.FK_GroupMember_AspNetUsers" FromRole="AspNetUser" ToRole="GroupMember" />
           <NavigationProperty Name="Hobbies" Relationship="SSNModel.FK_Hobby_AspNetUsers" FromRole="AspNetUser" ToRole="Hobby" />
@@ -1674,6 +1705,15 @@
           <NavigationProperty Name="Fields" Relationship="SSNModel.FK_Field_FieldType" FromRole="FieldType" ToRole="Field" />
           <NavigationProperty Name="Sport" Relationship="SSNModel.FK_FieldType_Sport" FromRole="FieldType" ToRole="Sport" />
         </EntityType>
+        <EntityType Name="FirebaseToken">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Token" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_FirebaseToken_AspNetUsers" FromRole="FirebaseToken" ToRole="AspNetUser" />
+        </EntityType>
         <EntityType Name="Follow">
           <Key>
             <PropertyRef Name="Id" />
@@ -1695,7 +1735,7 @@
           <Property Name="SportId" Type="Int32" Nullable="false" />
           <Property Name="CoverImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Avatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Active" Type="Boolean" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Sport" Relationship="SSNModel.FK_Group_Sport" FromRole="Group" ToRole="Sport" />
           <NavigationProperty Name="GroupMembers" Relationship="SSNModel.FK_GroupMember_Group" FromRole="Group" ToRole="GroupMember" />
           <NavigationProperty Name="Posts" Relationship="SSNModel.FK_Post_Group" FromRole="Group" ToRole="Post" />
@@ -2013,6 +2053,18 @@
             </Principal>
             <Dependent Role="Event">
               <PropertyRef Name="CreatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FirebaseToken_AspNetUsers">
+          <End Type="SSNModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="SSNModel.FirebaseToken" Role="FirebaseToken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FirebaseToken">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2721,6 +2773,15 @@
                 <ScalarProperty Name="SportId" ColumnName="SportId" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FirebaseTokens">
+            <EntityTypeMapping TypeName="SSNModel.FirebaseToken">
+              <MappingFragment StoreEntitySet="FirebaseToken">
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

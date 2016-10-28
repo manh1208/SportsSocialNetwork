@@ -27,7 +27,7 @@ namespace SportsSocialNetwork.Models.Entities
         public int SportId { get; set; }
         public string CoverImage { get; set; }
         public string Avatar { get; set; }
-        public Nullable<bool> Active { get; set; }
+        public bool Active { get; set; }
     
         public virtual Sport Sport { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

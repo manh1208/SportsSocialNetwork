@@ -379,6 +379,12 @@
     <Compile Include="Models\Entities\FieldTypeRefined.cs">
       <DependentUpon>EntityRefinery.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\FirebaseToken.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\FirebaseTokenRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Entities\Follow.cs">
       <DependentUpon>SsnEntities.tt</DependentUpon>
     </Compile>
@@ -523,6 +529,9 @@
     <Compile Include="Models\Entities\Repositories\FieldTypeRepositoryGen.cs">
       <DependentUpon>Repositories.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Repositories\FirebaseTokenRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Entities\Repositories\FollowRepositoryGen.cs">
       <DependentUpon>Repositories.tt</DependentUpon>
     </Compile>
@@ -634,6 +643,9 @@
     </Compile>
     <Compile Include="Models\Entities\Services\FieldTypeService.cs" />
     <Compile Include="Models\Entities\Services\FieldTypeServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\FirebaseTokenServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Services\FollowService.cs" />
@@ -815,6 +827,9 @@
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\FieldViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\FirebaseTokenViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\FollowSuggestViewModel.cs" />

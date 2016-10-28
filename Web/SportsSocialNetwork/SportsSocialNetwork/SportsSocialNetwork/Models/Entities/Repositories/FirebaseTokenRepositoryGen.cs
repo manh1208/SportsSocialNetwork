@@ -9,14 +9,22 @@
 //------------------------------------------------------------------------------
 
 
-namespace SportsSocialNetwork.Models.Entities
+namespace SportsSocialNetwork.Models.Entities.Repositories
 {
 
 using System;
     using System.Collections.Generic;
     
-public partial class Group : SkyWeb.DatVM.Data.IEntity, SkyWeb.DatVM.Data.IActivable
+
+public partial interface IFirebaseTokenRepository : SkyWeb.DatVM.Data.IBaseRepository<FirebaseToken>
 {
+}
+
+public partial class FirebaseTokenRepository : SkyWeb.DatVM.Data.BaseRepository<FirebaseToken>, IFirebaseTokenRepository
+{
+	public FirebaseTokenRepository(System.Data.Entity.DbContext dbContext) : base(dbContext)
+    {
+    }
 }
 
 }
