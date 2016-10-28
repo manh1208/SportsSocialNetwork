@@ -363,7 +363,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             try {
                 FirebaseToken firebaseToken = service.FirstOrDefault(x => x.UserId.Equals(userId) && x.Token.Equals(token));
 
-                if (firebaseToken != null)
+                if (firebaseToken == null)
                 {
                     firebaseToken = new FirebaseToken();
                     firebaseToken.UserId = userId;
