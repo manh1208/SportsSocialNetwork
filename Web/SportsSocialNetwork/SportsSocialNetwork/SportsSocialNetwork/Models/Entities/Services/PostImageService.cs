@@ -14,7 +14,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
     {
         public void saveImage(int id, IEnumerable<HttpPostedFileBase> images)
         {
-            string containFolder = "FieldImages";
+            string containFolder = "PostImages";
             PostImage fi = null;
             List<HttpPostedFileBase> li = images.ToList();
             FileUploader _fileUploaderService = new FileUploader();
