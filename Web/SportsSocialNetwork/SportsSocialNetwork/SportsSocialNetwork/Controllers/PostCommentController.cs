@@ -80,7 +80,7 @@ namespace SportsSocialNetwork.Controllers
 
                 AspNetUser user = postService.GetUserNameOfPost(post.Id);
 
-                Notification noti = notiService.SaveNoti(user.Id, "Comment", commentedUser.UserName + " đã bình luận về bài viết của bạn", 1, post.Id, null);
+                //Notification noti = notiService.SaveNoti(user.Id, "Comment", commentedUser.UserName + " đã bình luận về bài viết của bạn", 1, post.Id, null);
 
                 PostCommentDetailViewModel result = PreparePostCommentDetailViewModel(comment);
 
