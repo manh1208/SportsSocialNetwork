@@ -128,6 +128,26 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         }
 
         [HttpPost]
+        public ActionResult DeleteGroup(int id)
+        {
+            var service = this.Service<IGroupService>();
+
+            ResponseModel<bool> response = null;
+
+            try {
+                Group group = service.FirstOrDefaultActive(x => x.Id == id);
+
+                service.Deactivate(group);
+
+                response = new ResponseModel<bool>(true, "Xóa nhóm thành công", null);
+
+            } catch (Exception) {
+                response = ResponseModel<bool>.CreateErrorResponse("Xóa nhóm thất bại", systemError);
+            }
+            return Json(response);
+        }
+
+        [HttpPost]
         public ActionResult ChangeCoverImage(int groupId, HttpPostedFileBase image) {
             var service = this.Service<IGroupService>();
 
