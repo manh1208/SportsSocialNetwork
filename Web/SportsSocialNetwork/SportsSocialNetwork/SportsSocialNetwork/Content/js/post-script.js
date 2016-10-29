@@ -136,6 +136,28 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                                    '</div>' +
                                    '</div>';
                     }
+
+                    var spanLike = "";
+                    if (this.Liked) {
+                        spanLike = "<span><i style='color:#62a8ea' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + this.Id + "' style='margin-right:10px'> " + this.LikeCount + " lượt thích</span>";
+                    } else {
+                        spanLike = "<span><i  id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + this.Id + "' style='margin-right:10px'> " + this.LikeCount + " lượt thích</span>";
+                    }
+                    var reportDiv = "";
+                    if (this.AspNetUser.Id != userId) {
+                        //            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
+                        reportDiv = '<div style="position: absolute;right: 0;top:15px;width: 30px;">' +
+                          '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
+                          '<div class="dropdown">' +
+                                        '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-lg fa-angle-down"></i>' +
+                                       '</a>' +
+                                       '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
+                                           '<li><a style="font-weight: bold;" onclick="report(' + this.Id + ')"><i class="fa fa-fw fa-warning"></i> Báo cáo vi phạm</a></li>' +
+                                       '</ul>' +
+                                   '</div>' +
+                                   '</div>' +
+                                   '</div>';
+                    }
                     else if (this.AspNetUser.Id == userId) {
                         reportDiv = '<div style="position: absolute;right: 0;top:15px;width: 30px;">' +
                           '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
@@ -346,7 +368,6 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
             skip: skip,
             take: take
         },
-
         success: function (data) {
             if (data.Succeed) {
                 $(data.AdditionalData).each(function () {
@@ -776,6 +797,8 @@ function loadMoreComt(postId) {
                 $(data.AdditionalData).each(function () {
                     appendComment(this);
                 })
+            } else {
+                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
             }
         }
     });
@@ -1391,7 +1414,6 @@ function removeFileCommentEdit(id) {
 }
 
 function addImageCommentEdit(id) {
-
     $("#selectImageCommentEdit_" + id).click();
 }
 
@@ -1405,8 +1427,6 @@ function handleFileSelectCommentEdit(e, id) {
     }
     var filesArr = Array.prototype.slice.call(files);
     var output = document.getElementById("resultCommentEdit_" + id);
-
-
     filesArr.forEach(function (f) {
 
         if (!f.type.match("image.*")) {
