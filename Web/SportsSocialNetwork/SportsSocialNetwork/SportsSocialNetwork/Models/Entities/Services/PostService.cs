@@ -75,11 +75,11 @@ namespace SportsSocialNetwork.Models.Entities.Services
             string result = "";
             TimeSpan a = DateTime.Now - date;
             int b = (int)a.TotalSeconds;
-            if (b / 86400 > 1)
+            if ((b / 86400) >= 1)
             {
                 result = date.Day + "/" + date.Month + "/" + date.Year + " lúc " + date.Hour + ":" + date.Minute;
             }
-            else if (b / 3600 < 1)
+            else if ((b / 3600) < 1)
             {
                 int minute = (b % 3600)/60;
                 if (minute == 0)

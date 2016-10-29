@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -17,8 +18,84 @@ namespace SportsSocialNetwork.Controllers
         // GET: Group
         public ActionResult Index(int? id)
         {
+            var _groupService = this.Service<IGroupService>();
+            var _groupMemberService = this.Service<IGroupMemberService>();
+            var _postService = this.Service<IPostService>();
+            var _sportService = this.Service<ISportService>();
+            var _followService = this.Service<IFollowService>();
+            var _userService = this.Service<IAspNetUserService>();
+
+            GroupFullInfoViewModel model = Mapper.Map<GroupFullInfoViewModel>(_groupService.FirstOrDefaultActive(g => g.Id == id));
+
+            //list that current user is member
+            string curUserId = User.Identity.GetUserId();
+            List<GroupMember> listGroup = _groupMemberService.GetActive(g => g.UserId.Equals(curUserId)).ToList();
+            foreach (var item in listGroup)
+            {
+                if(item.GroupId == model.Id)
+                {
+                    model.IsMember = true;
+                    if(item.Admin)
+                    {
+                        model.IsAdmin = true;
+                    }
+                }
+            }
+
+            //post count
+            model.PostCount = _postService.GetActive(p => p.GroupId == id).ToList().Count();
+
+            //member count
+            model.MemberCount = _groupMemberService.GetActive(g => g.GroupId == id).ToList().Count();
+            
+            //get sport list for post
+            var sports = _sportService.GetActive()
+                            .Select(s => new SelectListItem
+                            {
+                                Text = s.Name,
+                                Value = s.Id.ToString()
+                            }).OrderBy(s => s.Value);
+            ViewBag.Sport = sports;
+
+            //get followed friend
+            var friends = _followService.GetActive(f => f.FollowerId == curUserId)
+                            .Select(s => new SelectListItem
+                            {
+                                Text = s.AspNetUser.FullName,
+                                Value = s.AspNetUser.Id
+                            }).OrderBy(s => s.Value);
+            ViewBag.friends = friends;
+
+            //member
+            List<GroupMember> ListGroupMember = _groupMemberService.GetActive(g => g.GroupId == id).ToList();
+            List<GroupMemberFullInfoModel> ListGroupMemberVM = Mapper.Map<List<GroupMemberFullInfoModel>>(ListGroupMember);
+            for(int i = 0; i < ListGroupMember.Count(); i++)
+            {
+                GroupMember gm = ListGroupMember.ElementAt(i);
+                AspNetUser user = _userService.FirstOrDefaultActive(u => u.Id == gm.UserId);
+                AspNetUserFullInfoViewModel userFull = Mapper.Map<AspNetUserFullInfoViewModel>(user);
+                ListGroupMemberVM[i].AspNetUser = userFull;
+            }
+            //get list user that cur user followed
+            List<Follow> listFollow = _followService.GetActive(f => f.FollowerId == curUserId).ToList();
+            if(listFollow != null && listFollow.Count > 0)
+            {
+                foreach (var followedUser in listFollow)
+                {
+                    foreach (var groupMember in ListGroupMemberVM)
+                    {
+                        if (followedUser.UserId == groupMember.AspNetUser.Id)
+                        {
+                            groupMember.isFollowed = true;
+                        }
+                    }
+                }
+            }
+            
+            ViewBag.groupMember = ListGroupMemberVM;
+
             ViewBag.groupId = id.Value;
-            return View();
+            return View(model);
         }
 
         public ActionResult test()
@@ -114,6 +191,153 @@ namespace SportsSocialNetwork.Controllers
                 result.Succeed = false;
             }
 
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult leaveGroupNotAdmin(string userId, int groupId)
+        {
+            var _groupMemberService = this.Service<IGroupMemberService>();
+            var result = new AjaxOperationResult();
+
+            GroupMember gm = _groupMemberService.FirstOrDefaultActive(p => p.UserId == userId && p.GroupId == groupId);
+            if(gm != null)
+            {
+                gm.Admin = false;
+                _groupMemberService.Update(gm);
+                _groupMemberService.Deactivate(gm);
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+            return Json(result);
+        }
+
+        public ActionResult showFriendList(int groupId)
+        {
+            var result = new AjaxOperationResult<IEnumerable<GroupMemberDetailViewModel>>();
+            var _groupMemberService = this.Service<IGroupMemberService>();
+
+            List<GroupMember> MemberList = _groupMemberService.GetActive(g => g.GroupId == groupId).ToList();
+            if(MemberList != null && MemberList.Count > 0)
+            {
+                List<GroupMemberDetailViewModel> MemberListVM = Mapper.Map<List<GroupMemberDetailViewModel>>(MemberList);
+                result.AdditionalData = MemberListVM;
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult MakeGroupAdmin(int groupId, string curAdminId, string desAdminId)
+        {
+            var _GroupMemberService = this.Service<IGroupMemberService>();
+            var result = new AjaxOperationResult();
+
+            GroupMember curAdmin = _GroupMemberService.FirstOrDefaultActive(g => g.GroupId == groupId && g.UserId == curAdminId && g.Admin == true);
+            GroupMember desAdmin = _GroupMemberService.FirstOrDefaultActive(g => g.GroupId == groupId && g.UserId == desAdminId && g.Admin == false);
+
+            if(curAdmin != null && desAdmin != null)
+            {
+                //curAdmin.Admin = false;
+                desAdmin.Admin = true;
+
+                //_GroupMemberService.Update(curAdmin);
+                _GroupMemberService.Update(desAdmin);
+                _GroupMemberService.Save();
+
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult RemoveGroupAdmin(int groupId, string curAdminId, string desAdminId)
+        {
+            var _GroupMemberService = this.Service<IGroupMemberService>();
+            var result = new AjaxOperationResult();
+
+            GroupMember curAdmin = _GroupMemberService.FirstOrDefaultActive(g => g.GroupId == groupId && g.UserId == curAdminId && g.Admin == true);
+            GroupMember desAdmin = _GroupMemberService.FirstOrDefaultActive(g => g.GroupId == groupId && g.UserId == desAdminId && g.Admin == true);
+
+            if (curAdmin != null && desAdmin != null)
+            {
+                //curAdmin.Admin = false;
+                desAdmin.Admin = false;
+
+                //_GroupMemberService.Update(curAdmin);
+                _GroupMemberService.Update(desAdmin);
+                _GroupMemberService.Save();
+
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult JoinGroup(int groupId, string userId)
+        {
+            var result = new AjaxOperationResult();
+            var _GroupMemberService = this.Service<IGroupMemberService>();
+            var _userService = this.Service<IAspNetUserService>();
+            var _GroupService = this.Service<IGroupService>();
+
+            if(_GroupMemberService.JoinGroup(groupId, userId))
+            {
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+            return Json(result);
+        }
+
+        [HttpPost]
+        public string CheckIsOnlyOneAdmin(int groupId)
+        {
+            var _groupMemberService = this.Service<IGroupMemberService>();
+            List<GroupMember> listGM = _groupMemberService.GetActive(g => g.GroupId == groupId && g.Admin == true).ToList();
+            if(listGM.Count() > 1)
+            {
+                return "false";
+            }
+            else
+            {
+                return "true";
+            }
+        }
+
+        public ActionResult DeleteGroup(int groupId)
+        {
+            var result = new AjaxOperationResult();
+            var _groupService = this.Service<IGroupService>();
+
+            if (_groupService.DeleteGroup(groupId))
+            {
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
 
             return Json(result);
         }

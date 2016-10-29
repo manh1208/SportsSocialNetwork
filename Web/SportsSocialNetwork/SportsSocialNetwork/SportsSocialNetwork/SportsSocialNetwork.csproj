@@ -789,6 +789,7 @@
     <Compile Include="Models\ViewModels\AspNetUserClaimViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\AspNetUserFullInfoViewModel.cs" />
     <Compile Include="Models\ViewModels\AspNetUserLoginViewModel.cs" />
     <Compile Include="Models\ViewModels\AspNetUserLoginViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
@@ -840,7 +841,9 @@
     </Compile>
     <Compile Include="Models\ViewModels\GroupCreateModel.cs" />
     <Compile Include="Models\ViewModels\GroupDetailViewModel.cs" />
+    <Compile Include="Models\ViewModels\GroupFullInfoViewModel.cs" />
     <Compile Include="Models\ViewModels\GroupMemberDetailViewModel.cs" />
+    <Compile Include="Models\ViewModels\GroupMemberFullInfoModel.cs" />
     <Compile Include="Models\ViewModels\GroupMemberViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -848,6 +851,7 @@
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\HobbyViewModel.cs" />
+    <Compile Include="Models\ViewModels\HobbyDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\HobbyViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -3959,6 +3963,7 @@
     <Content Include="Views\Event\PlaceEvent.cshtml" />
     <Content Include="Views\Group\Index.cshtml" />
     <Content Include="Views\Group\test.cshtml" />
+    <Content Include="Views\Group\FriendListModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

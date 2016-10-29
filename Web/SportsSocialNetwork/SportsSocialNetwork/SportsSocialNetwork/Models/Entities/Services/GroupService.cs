@@ -18,6 +18,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         String ChangeCoverImage(int id,String image);
 
+        bool DeleteGroup(int id);
+
         #endregion
 
         void test();
@@ -64,6 +66,19 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return group.CoverImage;
         }
 
+        public bool DeleteGroup(int id)
+        {
+            Group group = this.FindGroupById(id);
+            if(group != null)
+            {
+                this.Deactivate(group);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         #endregion
 
