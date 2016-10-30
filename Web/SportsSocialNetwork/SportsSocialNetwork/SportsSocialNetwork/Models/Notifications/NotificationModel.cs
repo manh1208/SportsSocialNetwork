@@ -6,9 +6,9 @@ using System.Web;
 
 namespace SportsSocialNetwork.Models.Notifications
 {
-    public class NotificationModel
+    public class NotificationModel : NotificationCustomViewModel
     {
-       public NotificationCustomViewModel noti { get; set; }
+
     }
 
     public class IOSNotification
