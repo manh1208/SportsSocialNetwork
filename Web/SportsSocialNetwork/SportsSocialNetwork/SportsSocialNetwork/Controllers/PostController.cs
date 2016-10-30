@@ -107,6 +107,96 @@ namespace SportsSocialNetwork.Controllers
 
         }
 
+
+        //create group post
+        public ActionResult CreateGroupPost(string content, String sportSelect, IEnumerable<HttpPostedFileBase> uploadImages, int groupId)
+        {
+            var result = new AjaxOperationResult<PostGeneralViewModel>();
+            var _postService = this.Service<IPostService>();
+            var post = new Post();
+            int ImageNumber = 0;
+            bool hasText = false;
+            post.Active = true;
+            post.CreateDate = DateTime.Now;
+            post.UserId = User.Identity.GetUserId();
+            post.GroupId = groupId;
+
+            if (uploadImages != null)
+            {
+                if (uploadImages.ToList()[0] != null && uploadImages.ToList().Count > 0)
+                {
+                    if (uploadImages.ToList().Count == 1)
+                    {
+                        ImageNumber = 1;
+                    }
+                    else
+                    {
+                        ImageNumber = 2;
+                    }
+                }
+            }
+
+            if (!String.IsNullOrEmpty(content))
+            {
+                hasText = true;
+            }
+
+            post.PostContent = content;
+            if (ImageNumber == 0 && hasText)
+            {
+                post.ContentType = (int)ContentPostType.TextOnly;
+            }
+            else if (ImageNumber == 1 && hasText)
+            {
+                post.ContentType = (int)ContentPostType.TextAndImage;
+            }
+            else if (ImageNumber == 2 && hasText)
+            {
+                post.ContentType = (int)ContentPostType.TextAndMultiImages;
+            }
+            else if (ImageNumber == 1 && !hasText)
+            {
+                post.ContentType = (int)ContentPostType.ImageOnly;
+            }
+            else if (ImageNumber == 2 && !hasText)
+            {
+                post.ContentType = (int)ContentPostType.MultiImages;
+            }
+            _postService.Create(post);
+            _postService.Save();
+            if (uploadImages != null)
+            {
+                if (uploadImages.ToList()[0] != null && uploadImages.ToList().Count > 0)
+                {
+                    var _postImageService = this.Service<IPostImageService>();
+                    _postImageService.saveImage(post.Id, uploadImages);
+                }
+            }
+            if (!String.IsNullOrEmpty(sportSelect))
+            {
+                string[] sportId = sportSelect.Split(',');
+                if (sportId != null)
+                {
+                    var _postSport = this.Service<IPostSportService>();
+                    var postSport = new PostSport();
+                    foreach (var item in sportId)
+                    {
+                        if (!item.Equals(""))
+                        {
+                            postSport.PostId = post.Id;
+                            postSport.SportId = Int32.Parse(item);
+                            _postSport.Create(postSport);
+                        }
+                    }
+
+                }
+            }
+
+            result.AdditionalData = Mapper.Map<PostGeneralViewModel>(post);
+            return Json(result);
+
+        }
+
         public ActionResult DeletePost(int id)
         {
             var result = new AjaxOperationResult();
@@ -162,6 +252,7 @@ namespace SportsSocialNetwork.Controllers
             return Json(result);
         }
 
+        [HttpPost]
         public ActionResult UpdatePost(String postEditId, String PostContentEdit, String sportSelectEdit, List<HttpPostedFileBase> uploadImages, List<int> deleteImages, List<int> notDeleteImages)
         {
             int postId = Int32.Parse(postEditId);
