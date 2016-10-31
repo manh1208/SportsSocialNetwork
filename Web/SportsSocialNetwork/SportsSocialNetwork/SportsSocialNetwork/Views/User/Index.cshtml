@@ -1,16 +1,9 @@
-﻿@model SportsSocialNetwork.Models.ViewModels.GroupFullInfoViewModel
+﻿@model SportsSocialNetwork.Models.ViewModels.AspNetUserFullInfoViewModel
 @using SportsSocialNetwork.Models.ViewModels;
 @using Microsoft.AspNet.Identity;
 @{
-    ViewBag.Title = "Group";
+    ViewBag.Title = Model.UserName;
     Layout = "~/Views/Shared/_SSNLayout.cshtml";
-
-    int groupId = ViewBag.groupId;
-
-    var sport = ViewBag.Sport as IEnumerable<SelectListItem>;
-    var friends = ViewBag.friends as IEnumerable<SelectListItem>;
-
-    List<GroupMemberFullInfoModel> GroupMember = ViewBag.groupMember;
 }
 
 <style>
@@ -127,25 +120,24 @@
             <div class="widget-header">
                 <div class="widget-header-content">
                     <a class="avatar avatar-lg" href="javascript:void(0)">
-                        <img class="groupAvatar" src="@Model.Avatar" alt="...">
+                        <img class="groupAvatar" src="@Model.AvatarImage" alt="...">
                     </a>
-                    <div class="profile-user">@Model.Name</div>
-                    <div class="profile-job">@Model.Sport.Name</div>
-                    <p>
-                        @Model.Description
-                    </p>
-                    @{
-                        if (Model.IsMember)
+                    <div class="profile-user">@Model.UserName</div>
+                    <div class="profile-job">@Model.FullName</div>
+                    @{ 
+                        if(Model.isOwner)
                         {
-                            <button type="button" class="btn btn-warning" id="leaveGroupBtn" onclick="leaveGroup(@Model.Id)">Rời nhóm</button>
-                            if (Model.IsAdmin)
-                            {
-                                <button type="button" class="btn btn-danger" id="deleteGroupBtn" onclick="deleteGroup(@Model.Id)">Xóa nhóm</button>
-                            }
+                            <p>@Model.Email</p>
+                        }
+                    }
+                    @{
+                        if (Model.Followed)
+                        {
+                            <button type="button" class="btn btn-warning" id="leaveGroupBtn" onclick="unFollow(@Model.Id)">Bỏ theo dõi</button>
                         }
                         else
                         {
-                            <button type="button" class="btn btn-primary" id="joinGroupBtn" onclick="joinGroup(@Model.Id)">Tham gia nhóm</button>
+                            <button type="button" class="btn btn-primary" id="joinGroupBtn" onclick="follow(@Model.Id)">Theo dõi</button>
                         }
 
 
@@ -155,18 +147,18 @@
             </div>
             <div class="widget-footer">
                 <div class="row no-space">
-                    <div class="col-xs-6">
-                        <strong class="profile-stat-count">@Model.MemberCount</strong>
-                        <span>Thành viên</span>
+                    <div class="col-xs-4">
+                        <strong class="profile-stat-count">@Model.FollowedCount</strong>
+                        <span>Người theo dõi</span>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-xs-4">
+                        <strong class="profile-stat-count">@Model.FollowCount</strong>
+                        <span>Đang theo dõi</span>
+                    </div>
+                    <div class="col-xs-4">
                         <strong class="profile-stat-count">@Model.PostCount</strong>
-                        <span>Số bài post</span>
+                        <span>Bài viết</span>
                     </div>
-                    @*<div class="col-xs-4">
-                            <strong class="profile-stat-count">2000</strong>
-                            <span>Tweets</span>
-                        </div>*@
                 </div>
             </div>
         </div>
@@ -177,13 +169,23 @@
 
         <div class="nav-tabs-horizontal">
             <ul class="nav nav-tabs" data-plugin="nav-tabs" role="tablist" style="background-color:white;">
-                <li class="active" role="presentation" id="disscuss">
-                    <a data-toggle="tab" href="#exampleTabsOne" aria-controls="exampleTabsOne"
-                       role="tab">Thảo luận</a>
+                <li class="active" role="presentation" id="post">
+                    @{
+                        if (Model.isOwner)
+                        {
+                            <a data-toggle="tab" href="#exampleTabsOne" aria-controls="exampleTabsOne"
+                               role="tab">Bài viết</a>
+                        }
+                        else
+                        {
+                            <a data-toggle="tab" href="#exampleTabsOne" aria-controls="exampleTabsOne"
+                               role="tab">Tường nhà</a>
+                        }
+                    }
                 </li>
                 <li role="presentation" id="members">
                     <a data-toggle="tab" href="#exampleTabsTwo" aria-controls="exampleTabsTwo"
-                       role="tab">Thành viên</a>
+                       role="tab">Hình ảnh</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -203,7 +205,17 @@
                                 <input type="file" id="selectImage" name="files" multiple />
                             </div>
                             @*@Html.TextAreaFor(p => p.PostContent, new { rows = "3", @class = "form-control input-lg", placeholder = "Bạn đang nghĩ gì?" })*@
-                            <textarea class="form-control input-lg" placeholder="Viết gì đó cho nhóm của bạn" rows="3" id="PostContent"></textarea>
+                            @{
+                                if (Model.isOwner)
+                                {
+                                    <textarea class="form-control input-lg" placeholder="Bạn đang nghĩ gì..." rows="3" id="PostContent"></textarea>
+                                }
+                                else
+                                {
+                                    <textarea class="form-control input-lg" placeholder="Viết gì đó cho người này" rows="3" id="PostContent"></textarea>
+                                }
+                            }
+                            @*<textarea class="form-control input-lg" placeholder="Viết gì đó cho nhóm của bạn" rows="3" id="PostContent"></textarea>*@
                             <div id="previewImage" class="example margin-0" style="display:none">
                                 <div style="height:120px">
                                     <div data-role="container">
@@ -247,82 +259,7 @@
                     <!--END Post area-->
                 </div>
                 <div class="tab-pane" id="exampleTabsTwo" role="tabpanel" style="background-color:white;">
-                    <div class="row" style="padding:20px 20px;">
-                        @{
-                            foreach (var item in GroupMember)
-                            {
-                                if (item.AspNetUser.Id != User.Identity.GetUserId())
-                                {
-                                    <div class="col-sm-6" style="margin-bottom:20px; padding: 10px 10px 0 10px;">
-                                        <div style="border: 1px solid #e9ebee; overflow:hidden;">
-                                            <div style="float:left; display:block; width:150px; height:150px;">
-                                                @*<a class="avatar avatar-lg" href="javascript:void(0)">
-                                                        <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
-                                                    </a>*@
-                                                <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
-                                            </div>
-                                            <div style="float:left; display:inline-block; margin-left:15px;">
-                                                @{
-                                                    if (Model.IsAdmin)
-                                                    {
-                                                        <div class="btn-group" style="position:absolute; right:10px;">
-                                                            <button type="button" class="btn btn-default dropdown-toggle btn-outline" id="@item.AspNetUser.Id"
-                                                                    data-toggle="dropdown" aria-expanded="false">
-                                                                <span class="caret"></span>
-                                                                <span class="sr-only">Toggle Dropdown</span>
-                                                            </button>
-                                                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="@item.AspNetUser.Id" role="menu">
-                                                                @{
-                                                                    if (item.Admin)
-                                                                    {
-                                                                        <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="removeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Bỏ quyền quản trị</a></li>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="makeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Chọn làm quản trị viên</a></li>
-                                                                    }
-
-                                                                }
-
-                                                            </ul>
-                                                        </div>
-                                                                    }
-                                                }
-
-                                                <a href="@item.AspNetUser.Id"><h3>@item.AspNetUser.FullName</h3></a>
-                                                @{
-                                                    string hobbies = "";
-                                                    for (int i = 0; i < item.AspNetUser.Hobbies.Count(); i++)
-                                                    {
-                                                        if (i == item.AspNetUser.Hobbies.Count() - 1)
-                                                        {
-                                                            hobbies += item.AspNetUser.Hobbies[i].Sport.Name;
-                                                        }
-                                                        else
-                                                        {
-                                                            hobbies += item.AspNetUser.Hobbies[i].Sport.Name + ", ";
-                                                        }
-
-                                                    }
-                                                }
-                                                <p>@hobbies</p>
-                                                @{
-                                                    if (item.isFollowed != true)
-                                                    {
-                                                        <button type="button" class="btn btn-default"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button><br />
-                                                    }
-                                                }
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                                        }
-
-                                                    }
-                        }
-
-
-                    </div>
+                    
                 </div>
             </div>
         </div>

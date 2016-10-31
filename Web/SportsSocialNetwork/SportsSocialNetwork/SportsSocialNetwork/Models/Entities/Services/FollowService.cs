@@ -9,7 +9,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
     {
         #region Code from here
         bool FollowUnfollowUser(String userId, String followerId);
-
+        int GetFollowingCount(string userId);
+        int GetFollowerCount(string userId);
 
         #endregion
 
@@ -49,6 +50,17 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return follow.Active;
         }
 
+        //get number of user that userId following
+        public int GetFollowingCount(string userId)
+        {
+            return this.GetActive(f => f.FollowerId == userId).ToList().Count;
+        }
+
+        //get number of follower that userId had
+        public int GetFollowerCount(string userId)
+        {
+            return this.GetActive(f => f.UserId == userId).ToList().Count;
+        }
 
         #endregion
 
