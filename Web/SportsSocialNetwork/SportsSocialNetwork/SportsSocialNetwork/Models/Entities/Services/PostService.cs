@@ -54,6 +54,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         public Post CreatePost(Post model) {
             model.CreateDate = DateTime.Now;
+            model.LatestInteractionTime = DateTime.Now;
             model.Active = true;
             this.Create(model);
             return model;
@@ -63,6 +64,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
             Post post = FirstOrDefaultActive(x => x.Id == model.Id);
             post.PostContent = model.PostContent;
             post.EditDate = DateTime.Now;
+            post.LatestInteractionTime = DateTime.Now;
             this.Update(post);
             return post;
         }

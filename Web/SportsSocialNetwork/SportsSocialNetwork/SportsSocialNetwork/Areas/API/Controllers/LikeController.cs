@@ -27,6 +27,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             var userService = this.Service<IAspNetUserService>();
 
+            var postService = this.Service<IPostService>();
+
             ResponseModel<Like> response = null;
             try
             {
@@ -50,20 +52,24 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                     response = new ResponseModel<Like>(true, "Đã thích", null);
                     if (createNoti)
                     {
+                        Post post = postService.FirstOrDefaultActive(x=> x.Id == postId);
+
+                        post.LatestInteractionTime = DateTime.Now;
+
                         Notification noti = notiService.SaveNoti(GetPostUserId(postId),userId,"Like",user.FullName + " đã thích bài viết của bạn", (int)NotificationType.Post,postId,null,null);
 
-                        //List<string> registrationIds = GetToken(user.Id);
+                        List<string> registrationIds = GetToken(GetPostUserId(postId));
 
-                        //NotificationModel model = new NotificationModel();
+                        //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
 
-                        //Temporary
-                        List<string> registrationIds = new List<string>();
+                        if (registrationIds != null && registrationIds.Count != 0)
+                        {
+                            NotificationModel model = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
 
-                        registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
+                            Android.Notify(registrationIds, null, model);
+                        }
 
-                        NotificationModel model = Mapper.Map< NotificationModel >(PrepareNotificationViewModel(noti));
 
-                        Android.Notify(registrationIds, null, model);
                     }
                 }
                 else {
@@ -96,14 +102,15 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             List<FirebaseToken> tokenList = service.Get(x => x.UserId.Equals(userId)).ToList();
 
             List<string> registrationIds = new List<string>();
-
-            foreach(var token in tokenList)
+            if (tokenList != null)
             {
-                registrationIds.Add(token.Token);
+                foreach (var token in tokenList)
+                {
+                    registrationIds.Add(token.Token);
+                }
             }
 
             return registrationIds;
-
         }
 
         private String GetPostUserId(int postId) {
