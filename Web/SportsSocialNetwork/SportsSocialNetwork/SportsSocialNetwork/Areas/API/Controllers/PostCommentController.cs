@@ -80,13 +80,17 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 {
                     Notification noti = notiService.SaveNoti(user.Id, commentedUser.Id, "Comment", commentedUser.FullName + " đã bình luận về bài viết của bạn", int.Parse(NotificationType.Post.ToString("d")), post.Id, null,null);
 
-                    List<string> registrationIds = new List<string>();
+                    List<string> registrationIds = GetToken(user.Id);
 
-                    registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
+                    //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
 
-                    NotificationModel model = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+                    if (registrationIds != null && registrationIds.Count != 0)
+                    {
+                        NotificationModel model = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
 
-                    Android.Notify(registrationIds, null, model);
+                        Android.Notify(registrationIds, null, model);
+                    }
+
                 }
 
                 PostCommentDetailViewModel result = PreparePostCommentDetailViewModel(comment);
@@ -117,6 +121,24 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             return result;
 
+        }
+
+        private List<string> GetToken(String userId)
+        {
+            var service = this.Service<IFirebaseTokenService>();
+
+            List<FirebaseToken> tokenList = service.Get(x => x.UserId.Equals(userId)).ToList();
+
+            List<string> registrationIds = new List<string>();
+            if (tokenList != null)
+            {
+                foreach (var token in tokenList)
+                {
+                    registrationIds.Add(token.Token);
+                }
+            }
+
+            return registrationIds;
         }
     }
 }

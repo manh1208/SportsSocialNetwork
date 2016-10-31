@@ -188,13 +188,14 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 {
                     Notification noti = notiService.SaveNoti(follow.FollowerId, follow.UserId, "Post", follow.AspNetUser.FullName + " đã đăng một bài viết", (int)NotificationType.Post, post.Id, null, null);
 
-                    List<string> registrationIds = new List<string>();
+                    List<string> registrationIds = GetToken(follow.FollowerId);
 
-                    registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
+                    if (registrationIds != null && registrationIds.Count != 0)
+                    {
+                        NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
 
-                    NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
-
-                    Android.Notify(registrationIds, null, notiModel);
+                        Android.Notify(registrationIds, null, notiModel);
+                    }
                 }
 
                 //Missing post sport
@@ -438,6 +439,24 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             return result;
 
+        }
+
+        private List<string> GetToken(String userId)
+        {
+            var service = this.Service<IFirebaseTokenService>();
+
+            List<FirebaseToken> tokenList = service.Get(x => x.UserId.Equals(userId)).ToList();
+
+            List<string> registrationIds = new List<string>();
+            if (tokenList != null)
+            {
+                foreach (var token in tokenList)
+                {
+                    registrationIds.Add(token.Token);
+                }
+            }
+
+            return registrationIds;
         }
     }
 }
