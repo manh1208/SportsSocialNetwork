@@ -17,6 +17,8 @@ namespace SportsSocialNetwork.Models.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Group()
         {
+            this.Challenges = new HashSet<Challenge>();
+            this.Challenges1 = new HashSet<Challenge>();
             this.GroupMembers = new HashSet<GroupMember>();
             this.Posts = new HashSet<Post>();
         }
@@ -29,6 +31,10 @@ namespace SportsSocialNetwork.Models.Entities
         public string Avatar { get; set; }
         public bool Active { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Challenge> Challenges { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Challenge> Challenges1 { get; set; }
         public virtual Sport Sport { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GroupMember> GroupMembers { get; set; }

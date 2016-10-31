@@ -20,6 +20,8 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string UserId { get; set; }
     			public virtual int Type { get; set; }
     			public virtual string TeamName { get; set; }
+    			public virtual string Slogan { get; set; }
+    			public virtual string Description { get; set; }
     	
     	public ParticipationViewModel() : base() { }
     	public ParticipationViewModel(SportsSocialNetwork.Models.Entities.Participation entity) : base(entity) { }

@@ -19,6 +19,8 @@ namespace SportsSocialNetwork.Models.Entities
         public string UserId { get; set; }
         public int Type { get; set; }
         public string TeamName { get; set; }
+        public string Slogan { get; set; }
+        public string Description { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual Event Event { get; set; }

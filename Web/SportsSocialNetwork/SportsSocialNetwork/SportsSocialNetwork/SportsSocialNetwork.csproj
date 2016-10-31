@@ -340,6 +340,12 @@
     <Compile Include="Models\Entities\CategorySportRefined.cs">
       <DependentUpon>EntityRefinery.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Challenge.cs">
+      <DependentUpon>SsnEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\ChallengeRefined.cs">
+      <DependentUpon>EntityRefinery.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Entities\EntityRefinery.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -513,6 +519,9 @@
     <Compile Include="Models\Entities\Repositories\CategorySportRepositoryGen.cs">
       <DependentUpon>Repositories.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Repositories\ChallengeRepositoryGen.cs">
+      <DependentUpon>Repositories.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Entities\Repositories\EventRepositoryGen.cs">
       <DependentUpon>Repositories.tt</DependentUpon>
     </Compile>
@@ -621,6 +630,9 @@
     </Compile>
     <Compile Include="Models\Entities\Services\CategorySportService.cs" />
     <Compile Include="Models\Entities\Services\CategorySportServiceGen.cs">
+      <DependentUpon>Services.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entities\Services\ChallengeServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Services\EventService.cs" />
@@ -804,6 +816,9 @@
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\CategoryViewModelGen.cs">
+      <DependentUpon>ViewModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\ChallengeViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\CreateOrderViewModel.cs" />

@@ -85,6 +85,18 @@
           <Property Name="CategoryId" Type="int" Nullable="false" />
           <Property Name="SportId" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Challenge">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FromGroup" Type="int" Nullable="false" />
+          <Property Name="ToGroup" Type="int" Nullable="false" />
+          <Property Name="Accepted" Type="bit" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Event">
           <Key>
             <PropertyRef Name="Id" />
@@ -97,6 +109,7 @@
           <Property Name="PlaceId" Type="int" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Image" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="ParticipationType" Type="int" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
@@ -273,6 +286,7 @@
           <Property Name="Note" Type="nvarchar(max)" />
           <Property Name="Price" Type="float" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="Reason" Type="nvarchar(max)" />
           <Property Name="PaidType" Type="int" />
           <Property Name="OrderCode" Type="nvarchar(max)" />
           <Property Name="TransactionTime" Type="datetime" />
@@ -290,6 +304,8 @@
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Type" Type="int" Nullable="false" />
           <Property Name="TeamName" Type="nvarchar" MaxLength="255" />
+          <Property Name="Slogan" Type="nvarchar(max)" />
+          <Property Name="Description" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Place">
           <Key>
@@ -308,6 +324,7 @@
           <Property Name="Latitude" Type="float" />
           <Property Name="Longitude" Type="float" />
           <Property Name="Avatar" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="AcceptPaymentOnline" Type="bit" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="StartTime" Type="time" Precision="7" Nullable="false" />
@@ -424,6 +441,30 @@
             </Principal>
             <Dependent Role="CategorySport">
               <PropertyRef Name="SportId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Challenge_Group">
+          <End Role="Group" Type="Self.Group" Multiplicity="1" />
+          <End Role="Challenge" Type="Self.Challenge" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Challenge">
+              <PropertyRef Name="FromGroup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Challenge_Group1">
+          <End Role="Group" Type="Self.Group" Multiplicity="1" />
+          <End Role="Challenge" Type="Self.Challenge" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Challenge">
+              <PropertyRef Name="ToGroup" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1043,6 +1084,7 @@
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CategorySport" EntityType="Self.CategorySport" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Challenge" EntityType="Self.Challenge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Field" EntityType="Self.Field" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FieldImage" EntityType="Self.FieldImage" Schema="dbo" store:Type="Tables" />
@@ -1078,6 +1120,14 @@
           <AssociationSet Name="FK_CategorySport_Sport" Association="Self.FK_CategorySport_Sport">
             <End Role="Sport" EntitySet="Sport" />
             <End Role="CategorySport" EntitySet="CategorySport" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Challenge_Group" Association="Self.FK_Challenge_Group">
+            <End Role="Group" EntitySet="Group" />
+            <End Role="Challenge" EntitySet="Challenge" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Challenge_Group1" Association="Self.FK_Challenge_Group1">
+            <End Role="Group" EntitySet="Group" />
+            <End Role="Challenge" EntitySet="Challenge" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -1291,6 +1341,7 @@
           <EntitySet Name="AspNetUsers" EntityType="SSNModel.AspNetUser" />
           <EntitySet Name="Categories" EntityType="SSNModel.Category" />
           <EntitySet Name="CategorySports" EntityType="SSNModel.CategorySport" />
+          <EntitySet Name="Challenges" EntityType="SSNModel.Challenge" />
           <EntitySet Name="Events" EntityType="SSNModel.Event" />
           <EntitySet Name="Fields" EntityType="SSNModel.Field" />
           <EntitySet Name="FieldImages" EntityType="SSNModel.FieldImage" />
@@ -1410,6 +1461,14 @@
           <AssociationSet Name="FK_CategorySport_Sport" Association="SSNModel.FK_CategorySport_Sport">
             <End Role="Sport" EntitySet="Sports" />
             <End Role="CategorySport" EntitySet="CategorySports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Challenge_Group" Association="SSNModel.FK_Challenge_Group">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="Challenge" EntitySet="Challenges" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Challenge_Group1" Association="SSNModel.FK_Challenge_Group1">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="Challenge" EntitySet="Challenges" />
           </AssociationSet>
           <AssociationSet Name="FK_Event_Place" Association="SSNModel.FK_Event_Place">
             <End Role="Place" EntitySet="Places" />
@@ -1624,6 +1683,20 @@
           <NavigationProperty Name="Category" Relationship="SSNModel.FK_CategorySport_Category" FromRole="CategorySport" ToRole="Category" />
           <NavigationProperty Name="Sport" Relationship="SSNModel.FK_CategorySport_Sport" FromRole="CategorySport" ToRole="Sport" />
         </EntityType>
+        <EntityType Name="Challenge">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FromGroup" Type="Int32" Nullable="false" />
+          <Property Name="ToGroup" Type="Int32" Nullable="false" />
+          <Property Name="Accepted" Type="Boolean" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Group" Relationship="SSNModel.FK_Challenge_Group" FromRole="Challenge" ToRole="Group" />
+          <NavigationProperty Name="Group1" Relationship="SSNModel.FK_Challenge_Group1" FromRole="Challenge" ToRole="Group" />
+        </EntityType>
         <EntityType Name="Event">
           <Key>
             <PropertyRef Name="Id" />
@@ -1636,6 +1709,7 @@
           <Property Name="PlaceId" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Image" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ParticipationType" Type="Int32" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Event_AspNetUsers" FromRole="Event" ToRole="AspNetUser" />
@@ -1736,6 +1810,8 @@
           <Property Name="CoverImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Avatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Challenges" Relationship="SSNModel.FK_Challenge_Group" FromRole="Group" ToRole="Challenge" />
+          <NavigationProperty Name="Challenges1" Relationship="SSNModel.FK_Challenge_Group1" FromRole="Group" ToRole="Challenge" />
           <NavigationProperty Name="Sport" Relationship="SSNModel.FK_Group_Sport" FromRole="Group" ToRole="Sport" />
           <NavigationProperty Name="GroupMembers" Relationship="SSNModel.FK_GroupMember_Group" FromRole="Group" ToRole="GroupMember" />
           <NavigationProperty Name="Posts" Relationship="SSNModel.FK_Post_Group" FromRole="Group" ToRole="Post" />
@@ -1852,6 +1928,7 @@
           <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Price" Type="Double" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PaidType" Type="Int32" />
           <Property Name="OrderCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TransactionTime" Type="DateTime" Precision="3" />
@@ -1872,6 +1949,8 @@
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="TeamName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Slogan" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Participation_AspNetUsers" FromRole="Participation" ToRole="AspNetUser" />
           <NavigationProperty Name="Event" Relationship="SSNModel.FK_Participation_Event" FromRole="Participation" ToRole="Event" />
         </EntityType>
@@ -1892,6 +1971,7 @@
           <Property Name="Latitude" Type="Double" />
           <Property Name="Longitude" Type="Double" />
           <Property Name="Avatar" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="AcceptPaymentOnline" Type="Boolean" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <Property Name="StartTime" Type="Time" Nullable="false" Precision="7" />
@@ -2296,6 +2376,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Challenge_Group">
+          <End Type="SSNModel.Group" Role="Group" Multiplicity="1" />
+          <End Type="SSNModel.Challenge" Role="Challenge" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Challenge">
+              <PropertyRef Name="FromGroup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Challenge_Group1">
+          <End Type="SSNModel.Group" Role="Group" Multiplicity="1" />
+          <End Type="SSNModel.Challenge" Role="Challenge" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Challenge">
+              <PropertyRef Name="ToGroup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Event_Place">
           <End Type="SSNModel.Place" Role="Place" Multiplicity="1" />
           <End Type="SSNModel.Event" Role="Event" Multiplicity="*" />
@@ -2624,7 +2728,7 @@
           <End Type="SSNModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="SSNModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -2706,11 +2810,25 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Challenges">
+            <EntityTypeMapping TypeName="SSNModel.Challenge">
+              <MappingFragment StoreEntitySet="Challenge">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Accepted" ColumnName="Accepted" />
+                <ScalarProperty Name="ToGroup" ColumnName="ToGroup" />
+                <ScalarProperty Name="FromGroup" ColumnName="FromGroup" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Events">
             <EntityTypeMapping TypeName="SSNModel.Event">
               <MappingFragment StoreEntitySet="Event">
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ParticipationType" ColumnName="ParticipationType" />
                 <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="PlaceId" ColumnName="PlaceId" />
@@ -2907,6 +3025,7 @@
                 <ScalarProperty Name="TransactionTime" ColumnName="TransactionTime" />
                 <ScalarProperty Name="OrderCode" ColumnName="OrderCode" />
                 <ScalarProperty Name="PaidType" ColumnName="PaidType" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
@@ -2922,6 +3041,8 @@
           <EntitySetMapping Name="Participations">
             <EntityTypeMapping TypeName="SSNModel.Participation">
               <MappingFragment StoreEntitySet="Participation">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Slogan" ColumnName="Slogan" />
                 <ScalarProperty Name="TeamName" ColumnName="TeamName" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -2938,6 +3059,7 @@
                 <ScalarProperty Name="StartTime" ColumnName="StartTime" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="AcceptPaymentOnline" ColumnName="AcceptPaymentOnline" />
                 <ScalarProperty Name="Avatar" ColumnName="Avatar" />
                 <ScalarProperty Name="Longitude" ColumnName="Longitude" />
                 <ScalarProperty Name="Latitude" ColumnName="Latitude" />

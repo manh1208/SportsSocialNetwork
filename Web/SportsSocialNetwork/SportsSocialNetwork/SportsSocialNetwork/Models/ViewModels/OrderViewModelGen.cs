@@ -24,6 +24,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string Note { get; set; }
     			public virtual double Price { get; set; }
     			public virtual int Status { get; set; }
+    			public virtual string Reason { get; set; }
     			public virtual Nullable<int> PaidType { get; set; }
     			public virtual string OrderCode { get; set; }
     			public virtual Nullable<System.DateTime> TransactionTime { get; set; }

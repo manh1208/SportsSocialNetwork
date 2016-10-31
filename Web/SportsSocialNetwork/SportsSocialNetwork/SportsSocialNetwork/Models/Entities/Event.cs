@@ -28,6 +28,7 @@ namespace SportsSocialNetwork.Models.Entities
         public int PlaceId { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
+        public Nullable<int> ParticipationType { get; set; }
         public int Status { get; set; }
         public bool Active { get; set; }
     

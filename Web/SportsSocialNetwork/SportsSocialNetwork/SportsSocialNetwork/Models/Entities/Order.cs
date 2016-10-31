@@ -29,6 +29,7 @@ namespace SportsSocialNetwork.Models.Entities
         public string Note { get; set; }
         public double Price { get; set; }
         public int Status { get; set; }
+        public string Reason { get; set; }
         public Nullable<int> PaidType { get; set; }
         public string OrderCode { get; set; }
         public Nullable<System.DateTime> TransactionTime { get; set; }

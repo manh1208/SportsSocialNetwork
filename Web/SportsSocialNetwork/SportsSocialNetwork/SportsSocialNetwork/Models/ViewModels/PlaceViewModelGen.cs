@@ -28,6 +28,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual Nullable<double> Latitude { get; set; }
     			public virtual Nullable<double> Longitude { get; set; }
     			public virtual string Avatar { get; set; }
+    			public virtual Nullable<bool> AcceptPaymentOnline { get; set; }
     			public virtual int Status { get; set; }
     			public virtual bool Active { get; set; }
     			public virtual System.TimeSpan StartTime { get; set; }

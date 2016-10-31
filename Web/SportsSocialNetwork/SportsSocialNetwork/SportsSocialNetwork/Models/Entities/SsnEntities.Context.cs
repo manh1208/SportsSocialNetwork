@@ -31,6 +31,7 @@ namespace SportsSocialNetwork.Models.Entities
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<CategorySport> CategorySports { get; set; }
+        public virtual DbSet<Challenge> Challenges { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<Field> Fields { get; set; }
         public virtual DbSet<FieldImage> FieldImages { get; set; }

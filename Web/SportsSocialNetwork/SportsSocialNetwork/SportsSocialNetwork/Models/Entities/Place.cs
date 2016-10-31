@@ -36,6 +36,7 @@ namespace SportsSocialNetwork.Models.Entities
         public Nullable<double> Latitude { get; set; }
         public Nullable<double> Longitude { get; set; }
         public string Avatar { get; set; }
+        public Nullable<bool> AcceptPaymentOnline { get; set; }
         public int Status { get; set; }
         public bool Active { get; set; }
         public System.TimeSpan StartTime { get; set; }
