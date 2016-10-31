@@ -24,7 +24,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             return View();
         }
 
-        public string updateStatusOrder(int id, int status)
+        public string updateStatusOrder(int id, int status, string reason)
         {
             var _orderService = this.Service<IOrderService>();
             var _userService = this.Service<IAspNetUserService>();
@@ -57,12 +57,13 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 {
                     subject = "SSN - Đơn đặt sân đã bị từ chối";
                     body = "<p>Đơn đặt sân <strong>" + order.Field.Name + "</strong> từ <strong>" + order.StartTime.ToString() + "</trong> đến <strong>" + order.EndTime.ToString() + "</strong> đã bị chủ sân từ chối</p>"
+                        + "<p>Lí do: " + reason + "</p>"
                         + "<p>Chúng tôi xin lỗi vì sự bất tiện này.</p>"
                         + "<p>Hẹn gặp lại quý khách lần sau!</p>";
 
                     noti.Message = "Đơn đặt sân " + order.Field.Name + "(" + order.StartTime.ToString() + " - " + order.EndTime.ToString() + ") đã bị từ chối";
                 }
-                EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { receiverEmail, "itspace.quy@gmail.com" }, null, null, subject, body, true);
+                //EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { receiverEmail, "itspace.quy@gmail.com" }, null, null, subject, body, true);
                 _notificationService.Create(noti);
                 _notificationService.Save();
                 
@@ -137,10 +138,40 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
             switch (sortColumnIndex)
             {
-                case 2:
+                case 0:
                     filteredListItems = sortDirection == "asc"
                         ? filteredListItems.OrderBy(o => o.Field.Name)
                         : filteredListItems.OrderByDescending(o => o.Field.Name);
+                    break;
+                case 1:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.AspNetUser.FullName)
+                        : filteredListItems.OrderByDescending(o => o.AspNetUser.FullName);
+                    break;
+                case 2:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.CreateDate.ToString("dd/MM/yyyy HH:mm"))
+                        : filteredListItems.OrderByDescending(o => o.CreateDate.ToString("dd/MM/yyyy HH:mm"));
+                    break;
+                case 3:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.StartTime.ToString("dd/MM/yyyy HH:mm"))
+                        : filteredListItems.OrderByDescending(o => o.StartTime.ToString("dd/MM/yyyy HH:mm"));
+                    break;
+                case 4:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.EndTime.ToString("dd/MM/yyyy HH:mm"))
+                        : filteredListItems.OrderByDescending(o => o.EndTime.ToString("dd/MM/yyyy HH:mm"));
+                    break;
+                case 5:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.PaidType)
+                        : filteredListItems.OrderByDescending(o => o.PaidType);
+                    break;
+                case 6:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.Status)
+                        : filteredListItems.OrderByDescending(o => o.Status);
                     break;
             }
 

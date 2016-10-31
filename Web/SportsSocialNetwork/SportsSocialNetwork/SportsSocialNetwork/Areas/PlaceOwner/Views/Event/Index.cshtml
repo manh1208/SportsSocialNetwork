@@ -26,7 +26,7 @@
         <table class="table table-striped table-bordered table-hover" id="listEventTable">
             <thead>
                 <tr>
-                    <th>Số thứ tự</th>
+                    @*<th>Số thứ tự</th>*@
                     <th>Tên sự kiện</th>
                     <th>Hình ảnh</th>
                     <th>Ngày bắt đầu</th>
@@ -60,7 +60,7 @@
 
 
 @section Scripts{
-
+    <script src="~/Content/assets/js/components/asscrollable.js"></script>
     <script>
         var count = 1;
 
@@ -77,6 +77,10 @@
 
         $('body').on('focus', ".datepicker", function () {
             $(this).datepicker();
+        })
+
+        $('body').on('focus', ".asscrollable", function () {
+            $(this).asScrollable();
         })
 
         function deleteEventModal(id) {
@@ -235,6 +239,10 @@
             $(document).on('change', "#endDate", function () {
                 $('#eventForm').formValidation('revalidateField', 'EndDate');
             });
+
+            $('body').on('focus', ".asscrollable", function () {
+                $(this).asScrollable();
+            })
 
             var std = $("#startDate").val();
 
@@ -444,21 +452,20 @@
                     });
                 },*@
                 "aoColumnDefs": [
+                    //{
+                    //    "aTargets": [0],
+                    //    "mRender": function (data, type, o) {
+                    //        return count++;
+                    //    }
+                    //},
                     {
                         "aTargets": [0],
-                        "mRender": function (data, type, o) {
-                            return count++;
-                        }
-                    },
-                    {
-                        "aTargets": [1],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             return o[1];
                         }
                     },
                     {
-                        "aTargets": [2],
+                        "aTargets": [1],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
                             if (o[5] === '' || o[5] == "" || o[5] == null)
@@ -469,8 +476,7 @@
                         }
                     },
                     {
-                        "aTargets": [3],
-                        "bSortable": false,
+                        "aTargets": [2],
                         "mRender": function (data, type, o) {
                             var date = new Date(parseInt(o[3].substr(6)));
                             var month = parseInt(date.getMonth()) + 1;
@@ -479,8 +485,7 @@
                         }
                     },
                     {
-                        "aTargets": [4],
-                        "bSortable": false,
+                        "aTargets": [3],
                         "mRender": function (data, type, o) {
                             var date = new Date(parseInt(o[4].substr(6)));
                             var month = parseInt(date.getMonth()) + 1;
@@ -489,8 +494,7 @@
                         }
                     },
                     {
-                        "aTargets": [5],
-                        "bSortable": false,
+                        "aTargets": [4],
                         "mRender": function (data, type, o) {
                             var label = '';
                             if (o[6] == parseInt('@((int)EventStatus.Operating)')) {
@@ -504,7 +508,7 @@
                         }
                     },
                     {
-                        "aTargets": [6],
+                        "aTargets": [5],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
                             var viewDetailBtn = "<a href='javascript:void(0)' class='btn btn-success' data-target='#modalEventDetail' data-toggle='modal' onclick='showDetail(" + o[0] + ")'><i class='fa fa-eye' aria-hidden='true'></i></a>";

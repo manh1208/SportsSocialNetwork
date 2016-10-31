@@ -170,10 +170,25 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
             switch (sortColumnIndex)
             {
-                case 2:
+                case 0:
                     filteredListItems = sortDirection == "asc"
                         ? filteredListItems.OrderBy(e => e.Name)
                         : filteredListItems.OrderByDescending(e => e.Name);
+                    break;
+                case 2:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(e => e.StartDate)
+                        : filteredListItems.OrderByDescending(e => e.StartDate);
+                    break;
+                case 3:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(e => e.EndDate)
+                        : filteredListItems.OrderByDescending(e => e.EndDate);
+                    break;
+                case 4:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(e => e.Status)
+                        : filteredListItems.OrderByDescending(e => e.Status);
                     break;
             }
 
