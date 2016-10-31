@@ -579,5 +579,6 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             p.PostSports = Mapper.Map<List<PostSportDetailViewModel>>(postSportList);
         }
 
+
     }
 }

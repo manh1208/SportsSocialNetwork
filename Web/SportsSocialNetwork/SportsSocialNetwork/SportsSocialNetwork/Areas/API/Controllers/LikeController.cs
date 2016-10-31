@@ -69,6 +69,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                             Android.Notify(registrationIds, null, model);
                         }
 
+
                     }
                 }
                 else {
