@@ -24,6 +24,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         string CalculatePostAge(DateTime date);
 
+        int GetPostCountOfUser(string userId);
+
         #endregion
 
         void test();
@@ -97,6 +99,11 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 result = hours.ToString() + " giờ trước";
             }
             return result;
+        }
+
+        public int GetPostCountOfUser(string userId)
+        {
+            return this.GetActive(p => p.UserId.Equals(userId) && p.GroupId == null).ToList().Count();
         }
 
         #endregion
