@@ -27,6 +27,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             var userService = this.Service<IAspNetUserService>();
 
+            var postService = this.Service<IPostService>();
+
             ResponseModel<Like> response = null;
             try
             {
@@ -50,6 +52,10 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                     response = new ResponseModel<Like>(true, "Đã thích", null);
                     if (createNoti)
                     {
+                        Post post = postService.FirstOrDefaultActive(x=> x.Id == postId);
+
+                        post.LatestInteractionTime = DateTime.Now;
+
                         Notification noti = notiService.SaveNoti(GetPostUserId(postId),userId,"Like",user.FullName + " đã thích bài viết của bạn", (int)NotificationType.Post,postId,null,null);
 
                         List<string> registrationIds = GetToken(GetPostUserId(postId));

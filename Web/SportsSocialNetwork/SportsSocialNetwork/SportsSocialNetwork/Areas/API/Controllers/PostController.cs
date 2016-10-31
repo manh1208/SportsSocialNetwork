@@ -28,13 +28,91 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         {
             var postService = this.Service<IPostService>();
 
+            var sportService = this.Service<ISportService>();
+
+            var userService = this.Service<IAspNetUserService>();
+
+            var likeService = this.Service<ILikeService>();
+
+            var commentService = this.Service<IPostCommentService>();
+
             List<Post> postList = null;
 
             ResponseModel<List<PostOveralViewModel>> response = null;
 
             try
             {
-                postList = postService.GetAll(skip, take).ToList<Post>();
+                postList = postService.GetActive(p => p.UserId == currentUserId ||
+                p.AspNetUser.Follows.Where(f => f.FollowerId == currentUserId && f.Active).ToList().Count > 0 ||
+                p.Group.GroupMembers.Where(g => g.UserId == currentUserId && g.Active).ToList().Count > 0).ToList();
+
+
+
+                //Calculate rank 
+
+                List<AspNetUser> users = userService.GetActive(p => p.Follows.Where(f => (f.UserId == currentUserId ||
+                f.FollowerId == currentUserId) && f.Active).ToList().Count > 0).ToList();
+                List<AspNetUserRelationViewModel> listUser = Mapper.Map<List<AspNetUserRelationViewModel>>(users);
+                foreach (var user in listUser)
+                {
+                    var totalOfLikeFromUser = likeService.GetActive(p => p.UserId == currentUserId && p.Post.UserId == user.Id).ToList().Count;
+                    var totalOfCommentFromUser = commentService.GetActive(p => p.UserId == currentUserId && p.Post.UserId == user.Id).ToList().Count;
+                    user.relationScore = totalOfCommentFromUser + totalOfLikeFromUser;
+                }
+
+
+                List<PostGeneralViewModel> listPostVM = Mapper.Map<List<PostGeneralViewModel>>(postList);
+
+                foreach (var item in listPostVM)
+                {
+                    PrepareDetailPostData(item, currentUserId);
+                }
+
+                foreach (var post in listPostVM)
+                {
+
+                    //Cal Relation Score
+                    float relaScore = 0;
+                    if (post.UserId == currentUserId)
+                    {
+                        relaScore = 1;
+                    }
+                    foreach (var user in listUser)
+                    {
+                        if (user.Id == post.UserId)
+                        {
+                            relaScore = user.relationScore;
+                            break;
+                        }
+                    }
+
+                    //Cal PostWeight
+                    int postWeight = 0;
+                    List<Sport> sportList = sportService.GetActive(p => p.Hobbies.Where(f =>
+                     f.UserId == currentUserId).ToList().Count > 0).ToList();
+                    if (sportList != null)
+                    {
+                        foreach (var item in post.PostSports)
+                        {
+                            foreach (var sport in sportList)
+                            {
+                                if (item.SportId == sport.Id)
+                                {
+                                    postWeight++;
+                                }
+                            }
+                        }
+
+                    }
+                    post.PostWeight = postWeight;
+
+                    //Cal TimeDecay
+                    post.TimeDecay = postService.CalculateTimeDecay(post.LatestInteractionTime.Value);
+                    //Cal PostRank
+                    post.PostRank = (relaScore * (post.PostWeight + 1)) / post.TimeDecay;
+
+
+                }
 
                 List<PostOveralViewModel> result = Mapper.Map<List<PostOveralViewModel>>(postList);
 
@@ -184,7 +262,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 //Notify all follower
                 List<Follow> followList = GetFollowList(post.UserId);
 
-                foreach(var follow in followList)
+                foreach (var follow in followList)
                 {
                     Notification noti = notiService.SaveNoti(follow.FollowerId, follow.UserId, "Post", follow.AspNetUser.FullName + " đã đăng một bài viết", (int)NotificationType.Post, post.Id, null, null);
 
@@ -325,14 +403,15 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             ResponseModel<bool> response = null;
 
-            try {
+            try
+            {
                 Post post = postService.FirstOrDefaultActive(x => x.Id == id);
 
                 List<PostImage> imageList = post.PostImages.ToList();
 
                 if (imageList != null)
                 {
-                    foreach(var img in imageList)
+                    foreach (var img in imageList)
                     {
                         imageService.Delete(img);
                     }
@@ -343,7 +422,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 response = new ResponseModel<bool>(true, "Xóa bài thành công", null);
 
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 response = ResponseModel<bool>.CreateErrorResponse("Xóa bài thất bại", systemError);
 
@@ -423,7 +503,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             return result;
         }
 
-        private List<Follow> GetFollowList(string userId) {
+        private List<Follow> GetFollowList(string userId)
+        {
             var service = this.Service<IFollowService>();
 
             return service.GetActive(x => x.UserId.Equals(userId)).ToList();
@@ -457,6 +538,45 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             }
 
             return registrationIds;
+        }
+
+        public void PrepareDetailPostData(PostGeneralViewModel p, string curUserId)
+        {
+            var _postService = this.Service<IPostService>();
+            var _likeService = this.Service<ILikeService>();
+            var _postCommentService = this.Service<IPostCommentService>();
+            var _postSportService = this.Service<IPostSportService>();
+
+            //like
+            List<Like> likeList = _likeService.GetLikeListByPostId(p.Id).ToList();
+            p.LikeCount = likeList.Count();
+            foreach (var item in likeList)
+            {
+                if (item.UserId == curUserId)
+                {
+                    p.Liked = true;
+                }
+                else
+                {
+                    p.Liked = false;
+                }
+            }
+
+            //comment
+            List<PostComment> postCmtList = _postCommentService.GetCommentListByPostId(p.Id, 0, 3).ToList();
+            //p.PostAge = _postService.CalculatePostAge(p.EditDate == null ? p.CreateDate : p.EditDate.Value);
+            p.PostAge = _postService.CalculatePostAge(p.CreateDate);
+            p.PostComments = Mapper.Map<List<PostCommentDetailViewModel>>(postCmtList);
+            p.CommentCount = _postCommentService.GetActive(c => c.PostId == p.Id).ToList().Count();
+            foreach (var item in p.PostComments)
+            {
+                //DateTime dt = DateTime.ParseExact(item.CreateDateString, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                item.CommentAge = _postCommentService.CalculateCommentAge(item.CreateDate);
+            }
+
+            //sport
+            List<PostSport> postSportList = _postSportService.GetActive(s => s.PostId == p.Id).ToList();
+            p.PostSports = Mapper.Map<List<PostSportDetailViewModel>>(postSportList);
         }
     }
 }

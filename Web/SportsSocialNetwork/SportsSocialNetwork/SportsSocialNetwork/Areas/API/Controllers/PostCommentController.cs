@@ -74,6 +74,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 Post post = postService.GetPostById(comment.PostId);
 
+                post.LatestInteractionTime = DateTime.Now;
+
                 AspNetUser user = postService.GetUserNameOfPost(post.Id);
 
                 if (!(user.Id == commentedUser.Id))
