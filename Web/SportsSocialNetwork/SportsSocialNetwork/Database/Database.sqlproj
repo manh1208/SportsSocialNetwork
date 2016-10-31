@@ -66,7 +66,6 @@
     <Build Include="dbo\Tables\AspNetUserLogins.sql" />
     <Build Include="dbo\Tables\AspNetUserClaims.sql" />
     <Build Include="dbo\Tables\AspNetRoles.sql" />
-    <Build Include="dbo\Tables\__MigrationHistory.sql" />
     <Build Include="dbo\Tables\UserInvitation.sql" />
     <Build Include="dbo\Tables\TimeBlock.sql" />
     <Build Include="dbo\Tables\Sport.sql" />
@@ -97,5 +96,6 @@
     <Build Include="dbo\Tables\FieldSchedule.sql" />
     <Build Include="dbo\Tables\PostImages.sql" />
     <Build Include="dbo\Tables\FirebaseToken.sql" />
+    <Build Include="dbo\Tables\Challenge.sql" />
   </ItemGroup>
 </Project>
