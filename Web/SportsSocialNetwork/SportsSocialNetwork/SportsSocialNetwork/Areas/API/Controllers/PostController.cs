@@ -1,8 +1,10 @@
-﻿using SkyWeb.DatVM.Mvc;
+﻿using HenchmenWeb.Models.Notifications;
+using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Notifications;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -148,6 +150,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             var aspNetUserService = this.Service<IAspNetUserService>();
 
+            var notiService = this.Service<INotificationService>();
+
             PostOveralViewModel result = null;
 
             ResponseModel<PostOveralViewModel> response = null;
@@ -176,6 +180,22 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 }
 
                 post = service.CreatePost(post);
+
+                //Notify all follower
+                List<Follow> followList = GetFollowList(post.UserId);
+
+                foreach(var follow in followList)
+                {
+                    Notification noti = notiService.SaveNoti(follow.FollowerId, follow.UserId, "Post", follow.AspNetUser.FullName + " đã đăng một bài viết", (int)NotificationType.Post, post.Id, null, null);
+
+                    List<string> registrationIds = new List<string>();
+
+                    registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
+
+                    NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+
+                    Android.Notify(registrationIds, null, notiModel);
+                }
 
                 //Missing post sport
 
@@ -330,44 +350,6 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             return Json(response);
         }
 
-        //private int GetPostType(PostUploadViewModel model)
-        //{
-        //    int contentType = 0;
-
-        //    bool hasText = false;
-
-        //    if (model.PostContent == null)
-        //    {
-        //        hasText = false;
-        //    }
-        //    else
-        //    {
-        //        hasText = true;
-        //    }
-
-
-        //    if (model.UploadImage==null && hasText)
-        //    {
-        //        contentType = int.Parse(ContentPostType.TextOnly.ToString("d"));
-        //    }
-        //    else if (model.UploadImage.Count == 1 && hasText)
-        //    {
-        //        contentType = int.Parse(ContentPostType.TextAndImage.ToString("d"));
-        //    }
-        //    else if (model.UploadImage.Count > 1 && hasText)
-        //    {
-        //        contentType = int.Parse(ContentPostType.TextAndMultiImages.ToString("d"));
-        //    }
-        //    else if (model.UploadImage.Count > 1 && !hasText)
-        //    {
-        //        contentType = int.Parse(ContentPostType.MultiImages.ToString("d"));
-        //    }
-        //    else if (model.UploadImage.Count == 1 && !hasText) {
-        //        contentType = int.Parse(ContentPostType.ImageOnly.ToString("d"));
-        //    }
-
-        //    return contentType;
-        //}
 
         private int GetPostType(PostUploadViewModel model)
         {
@@ -438,6 +420,24 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
 
             return result;
+        }
+
+        private List<Follow> GetFollowList(string userId) {
+            var service = this.Service<IFollowService>();
+
+            return service.GetActive(x => x.UserId.Equals(userId)).ToList();
+        }
+
+        private NotificationCustomViewModel PrepareNotificationViewModel(Notification noti)
+        {
+            NotificationCustomViewModel result = Mapper.Map<NotificationCustomViewModel>(noti);
+
+            result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+
+            result.Avatar = noti.AspNetUser1.AvatarImage;
+
+            return result;
+
         }
     }
 }
