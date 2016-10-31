@@ -16,6 +16,7 @@
     <div class="panel-body">
         @using (Html.BeginForm("createField", "Field", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "fieldForm", @autocomplete = "off" }))
         {
+            <input type="hidden" name="Id" value="" />
             <input type="hidden" name="PlaceId" value="@curPlace.Id" />
             <div class="col-md-6">
                 <div class="panel">
