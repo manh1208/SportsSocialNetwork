@@ -3181,7 +3181,6 @@
     <Content Include="Content\images\cam-icon.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\logo_new.png" />
-    <Content Include="Content\images\logo_orange.png" />
     <Content Include="Content\images\no_image.jpg" />
     <Content Include="Content\js\custom-script.js" />
     <Content Include="Content\js\post-script.js" />
@@ -3896,6 +3895,8 @@
     <Content Include="SSNImages\QRCodeImage\20161021180601CH_08332c10-e64a-4433-b27d-1519b20b26b3.jpg" />
     <Content Include="SSNImages\QRCodeImage\20161021210726CH_b78676fd-e59d-4339-ad70-8fc47ea1ceca.jpg" />
     <Content Include="SSNImages\QRCodeImage\20161022164451CH_b5a0cfbe-ed41-4efc-bc06-e1c326fd2ae8.jpg" />
+    <Content Include="SSNImages\UserImages\img_default_avatar.png" />
+    <Content Include="SSNImages\UserImages\img_default_cover.png" />
     <Content Include="SSN\EventImages\20161015170053PM_c31e8883-08b1-492e-84d9-7dccd4412d54.jpg" />
     <Content Include="SSN\EventImages\20161016170515PM_7b108d33-3f34-454a-8bdf-0575568e71b3.jpg" />
     <Content Include="SSN\EventImages\20161016170515PM_f892f38e-a797-477f-a169-6c313920b0c1.jpg" />

@@ -199,6 +199,8 @@ namespace SportsSocialNetwork.Controllers
                     var userEntity = userService.FindUserByUserName(user.UserName);
                     userEntity.FullName = model.FullName;
                     userEntity.Active = true;
+                    userEntity.AvatarImage = "/SSNImages/UserImages/img_default_avatar.png";
+                    userEntity.CoverImage = "/SSNImages/UserImages/img_default_cover.png";
                     var action = "Login";
                     if (model.PlaceOwner != null)
                     {
