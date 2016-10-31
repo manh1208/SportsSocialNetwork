@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.alexvasilkov.gestures.Settings;
@@ -46,8 +47,8 @@ public class ImageViewerAdapter extends RecyclePagerAdapter<ImageViewerAdapter.V
 //        }
 //        GlideHelper.loadResource(paintings[position].getImageId(), holder.image);
         Picasso.with(context).load(Uri.parse(DataUtils.URL+images[position]))
-                .placeholder(R.drawable.img_default_avatar)
-                .error(R.drawable.placeholder)
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.ic_image_error)
                 .fit()
                 .into(holder.image);
     }
@@ -65,7 +66,7 @@ public class ImageViewerAdapter extends RecyclePagerAdapter<ImageViewerAdapter.V
         final GestureImageView image;
 
         ViewHolder(ViewGroup container) {
-            super(new GestureImageView(container.getContext()));
+            super(LayoutInflater.from(container.getContext()).inflate( R.layout.item_image_viewer,container,false));
             image = (GestureImageView) itemView;
             image.getController().getSettings()
                     .setMaxZoom(5f)
