@@ -275,6 +275,7 @@
     <Compile Include="Areas\Api\Controllers\PostCommentController.cs" />
     <Compile Include="Areas\Api\Controllers\PostController.cs" />
     <Compile Include="Areas\Api\Controllers\PostImageController.cs" />
+    <Compile Include="Areas\Api\Controllers\SportController.cs" />
     <Compile Include="Areas\Moderator\ModeratorAreaRegistration.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\EventController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\FieldController.cs" />
@@ -3846,6 +3847,7 @@
     <Folder Include="Areas\Api\Views\PostImage\" />
     <Folder Include="Areas\Api\Views\Post\" />
     <Folder Include="Areas\Api\Views\Shared\" />
+    <Folder Include="Areas\Api\Views\Sport\" />
     <Folder Include="Areas\Moderator\Controllers\" />
     <Folder Include="Areas\Moderator\Models\" />
     <Folder Include="Areas\Moderator\Views\Shared\" />
