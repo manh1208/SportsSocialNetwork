@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
+import com.capstone.sportssocialnetwork.activity.ImageViewerActivity;
 import com.capstone.sportssocialnetwork.activity.PostDetailActivity;
 import com.capstone.sportssocialnetwork.custom.CustomImage;
 import com.capstone.sportssocialnetwork.custom.RoundedImageView;
@@ -129,6 +130,8 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         viewHolder.btnComment.setOnClickListener(this);
         viewHolder.btnLike.setTag(position);
         viewHolder.btnLike.setOnClickListener(this);
+        viewHolder.ivImage.setTag(position);
+        viewHolder.ivImage.setOnClickListener(this);
         return convertView;
     }
 
@@ -227,6 +230,17 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
 
             case R.id.txt_feed_name:
 
+                break;
+            case R.id.iv_feed_post_image:
+                Feed feed = getItem(position);
+                String[] imageArray = new String[feed.getPostImages().size()];
+                for (int i = 0; i < feed.getPostImages().size(); i++) {
+                    imageArray[i]=feed.getPostImages().get(i).getImage();
+                }
+                intent = new Intent(mContext, ImageViewerActivity.class);
+                intent.putExtra("position", 0);
+                intent.putExtra("listImage", imageArray);
+                mContext.startActivity(intent);
                 break;
         }
     }
