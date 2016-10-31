@@ -80,16 +80,16 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 {
                     if (district != null && district != "")
                     {
-                        places = this.Get(p => p.Fields.Where(f => f.FieldType.SportId == sportId).ToList().Count > 0 && p.City == province && p.District == district).ToList();
+                        places = this.Get(p => (p.Status == (int)PlaceStatus.Active || p.Status == (int)PlaceStatus.Repairing) && p.Fields.Where(f => f.FieldType.SportId == sportId).ToList().Count > 0 && p.City == province && p.District == district).ToList();
                     }
                     else
                     {
-                        places = this.Get(p => p.Fields.Where(f => f.FieldType.SportId == sportId).ToList().Count > 0 && p.City == province).ToList();
+                        places = this.Get(p => (p.Status == (int)PlaceStatus.Active || p.Status == (int)PlaceStatus.Repairing) && p.Fields.Where(f => f.FieldType.SportId == sportId).ToList().Count > 0 && p.City == province).ToList();
                     }
                 }
                 else
                 {
-                    places = this.Get(p => p.Fields.Where(f => f.FieldType.SportId == sportId).ToList().Count > 0).ToList();
+                    places = this.Get(p => (p.Status == (int)PlaceStatus.Active || p.Status == (int)PlaceStatus.Repairing) && p.Fields.Where(f => f.FieldType.SportId == sportId).ToList().Count > 0).ToList();
                 }
             }
             else
@@ -98,11 +98,11 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 {
                     if (district != null && district != "")
                     {
-                        places = this.Get(p => p.City == province && p.District == district).ToList();
+                        places = this.Get(p => (p.Status == (int)PlaceStatus.Active || p.Status == (int)PlaceStatus.Repairing) && p.City == province && p.District == district).ToList();
                     }
                     else
                     {
-                        places = this.Get(p => p.City == province).ToList();
+                        places = this.Get(p => (p.Status == (int)PlaceStatus.Active || p.Status == (int)PlaceStatus.Repairing) && p.City == province).ToList();
                     }
                 }
                 else

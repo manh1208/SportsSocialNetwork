@@ -109,7 +109,9 @@
     </div>
 </div>
 <div class="modal-footer text-right">
-    @if ((Model.PaidType == 1 || Model.PaidType == 2) && Model.Status != 4)
+    @if ((Model.PaidType == (int)OrderPaidType.ChosePayOnline || Model.PaidType == (int)OrderPaidType.ChosePayByCash) &&
+        Model.Status != (int)OrderStatus.Cancel && Model.Status != (int)OrderStatus.Unapproved && 
+        Model.Status != (int)OrderStatus.CheckedIn)
     {
         <form id="onlineform" action="@Url.Action("PayOnlineNow", "Order")" class="form-horizontal padding-bottom-10" method="get">
 

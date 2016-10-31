@@ -58,7 +58,7 @@ namespace SportsSocialNetwork.Controllers
 
             //load group name
             var _groupService = this.Service<IGroupService>();
-            List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f => 
+            List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f =>
             f.UserId == userId).ToList().Count > 0).ToList();
             ViewBag.GroupList = groupList;
 
@@ -169,7 +169,7 @@ namespace SportsSocialNetwork.Controllers
             var curUser = _userService.FirstOrDefaultActive(p => p.Id == userId);
             var Coord = new GeoCoordinate();
             bool checkNearBy = false;
-            if (curUser.Address!=null || curUser.District!=null || curUser.Ward!=null || curUser.City != null)
+            if (curUser.Address != null || curUser.District != null || curUser.Ward != null || curUser.City != null)
             {
                 StringBuilder location = new StringBuilder();
                 location.Append(curUser.Address);
@@ -180,7 +180,7 @@ namespace SportsSocialNetwork.Controllers
                 Coord = new GeoCoordinate(curUserLatitude, curUserLongtitude);
                 checkNearBy = true;
             }
-            
+
 
             var users = _userService.GetActive(p => p.Id != userId && p.Follows.Where(f => f.FollowerId == userId).ToList().Count == 0).ToList();
             foreach (var user in users)
@@ -220,7 +220,7 @@ namespace SportsSocialNetwork.Controllers
                     {
                         if (hobby.SportId == curHobby.SportId)
                         {
-                            model.weight = model.weight + hobbyCount*3;
+                            model.weight = model.weight + hobbyCount * 3;
                             model.sameSport = hobbyCount;
                             hobbyCount++;
                         }
@@ -241,30 +241,89 @@ namespace SportsSocialNetwork.Controllers
         public ActionResult GetNewFeedPost(string userId, int skip, int take)
         {
             var result = new AjaxOperationResult<IEnumerable<PostGeneralViewModel>>();
+
+            var _postService = this.Service<IPostService>();
+            var _postCommentService = this.Service<IPostCommentService>();
+            var _userService = this.Service<IAspNetUserService>();
+            var _likeService = this.Service<ILikeService>();
+            var _commentService = this.Service<IPostCommentService>();
+            var _sportService = this.Service<ISportService>();
+            //Cal Relation Score
+            List<AspNetUser> users = _userService.GetActive(p => p.Follows.Where(f => (f.UserId == userId ||
+            f.FollowerId == userId) && f.Active).ToList().Count > 0).ToList();
+            List<AspNetUserRelationViewModel> listUser = Mapper.Map<List<AspNetUserRelationViewModel>>(users);
+            foreach(var user in listUser)
+            {
+                var totalOfLikeFromUser = _likeService.GetActive(p => p.UserId == userId && p.Post.UserId == user.Id).ToList().Count;
+                var totalOfCommentFromUser = _commentService.GetActive(p => p.UserId == userId && p.Post.UserId == user.Id).ToList().Count;
+                user.relationScore = totalOfCommentFromUser + totalOfLikeFromUser;
+            }
+
+            List<Post> postList = _postService.GetActive(p => p.UserId == userId ||
+            p.AspNetUser.Follows.Where(f => f.FollowerId == userId && f.Active).ToList().Count > 0 ||
+            p.Group.GroupMembers.Where(g => g.UserId == userId && g.Active).ToList().Count > 0).ToList();
+
             
-                var _postService = this.Service<IPostService>();
-                var _postCommentService = this.Service<IPostCommentService>();
+            List<PostGeneralViewModel> listPostVM = Mapper.Map<List<PostGeneralViewModel>>(postList);
 
-                List<Post> postList = _postService.GetActive(p => 
-                p.AspNetUser.Follows.Where(f => f.FollowerId == userId).ToList().Count > 0 ||
-                p.Group.GroupMembers.Where(g => g.UserId == userId).ToList().Count > 0).ToList();
-                List<PostGeneralViewModel> listPostVM = Mapper.Map<List<PostGeneralViewModel>>(postList);
+            foreach (var item in listPostVM)
+            {
+                PrepareDetailPostData(item, userId);
+            }
 
-                foreach (var item in listPostVM)
+            foreach (var post in listPostVM)
+            {
+
+                //Cal Relation Score
+                float relaScore = 0;
+                if(post.UserId == userId)
                 {
-                    PrepareDetailPostData(item, userId);
+                    relaScore = 1;
+                }
+                foreach (var user in listUser)
+                {
+                    if(user.Id == post.UserId)
+                    {
+                        relaScore = user.relationScore;
+                        break;
+                    }
                 }
 
-                result.AdditionalData = listPostVM;
-                result.Succeed = true;
+                //Cal PostWeight
+                int postWeight = 0;
+                List<Sport> sportList = _sportService.GetActive(p => p.Hobbies.Where(f =>
+                 f.UserId == userId).ToList().Count > 0).ToList();
+                if (sportList != null)
+                {
+                    foreach(var item in post.PostSports)
+                    {
+                        foreach (var sport in sportList)
+                        {
+                            if(item.SportId == sport.Id)
+                            {
+                                postWeight++;
+                            }
+                        }
+                    }
+                    
+                }
+                post.PostWeight = postWeight;
+
+                //Cal TimeDecay
+                post.TimeDecay = _postService.CalculateTimeDecay(post.LatestInteractionTime.Value);
+                //Cal PostRank
+                post.PostRank = (relaScore * (post.PostWeight + 1)) / post.TimeDecay;
+
+
+            }
+
+            List<PostGeneralViewModel> listPost = listPostVM.OrderByDescending(p => p.PostRank).Skip(skip).Take(take).ToList();
+
+            result.AdditionalData = listPost;
+            result.Succeed = true;
             return Json(result);
         }
-
-        //public List<Post> ListPostEvaluated(string userId)
-        //{
-        //    List<Post> postList = _postService.GetActive().OrderByDescending(p => p.CreateDate).
-        //            Skip(skip).Take(take).ToList();
-        //}
+        
 
         public void PrepareDetailPostData(PostGeneralViewModel p, string curUserId)
         {
@@ -290,7 +349,8 @@ namespace SportsSocialNetwork.Controllers
 
             //comment
             List<PostComment> postCmtList = _postCommentService.GetCommentListByPostId(p.Id, 0, 3).ToList();
-            p.PostAge = _postService.CalculatePostAge(p.EditDate == null ? p.CreateDate : p.EditDate.Value);
+            //p.PostAge = _postService.CalculatePostAge(p.EditDate == null ? p.CreateDate : p.EditDate.Value);
+            p.PostAge = _postService.CalculatePostAge(p.CreateDate);
             p.PostComments = Mapper.Map<List<PostCommentDetailViewModel>>(postCmtList);
             p.CommentCount = _postCommentService.GetActive(c => c.PostId == p.Id).ToList().Count();
             foreach (var item in p.PostComments)

@@ -85,6 +85,9 @@ namespace SportsSocialNetwork.Controllers
                 PostCommentDetailViewModel result = PreparePostCommentDetailViewModel(comment);
 
                 response = new ResponseModel<PostCommentDetailViewModel>(true, "Bình luận thành công", null, result);
+                post.LatestInteractionTime = DateTime.Now;
+                postService.Update(post);
+                postService.Save();
 
             }
             catch (Exception)
