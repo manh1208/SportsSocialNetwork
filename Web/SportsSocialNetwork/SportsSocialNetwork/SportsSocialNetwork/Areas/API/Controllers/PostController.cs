@@ -578,5 +578,6 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             List<PostSport> postSportList = _postSportService.GetActive(s => s.PostId == p.Id).ToList();
             p.PostSports = Mapper.Map<List<PostSportDetailViewModel>>(postSportList);
         }
+
     }
 }
