@@ -29,6 +29,7 @@ namespace SportsSocialNetwork.Controllers
             bool hasText = false; 
             post.Active = true;
             post.CreateDate = DateTime.Now;
+            post.LatestInteractionTime = post.CreateDate;
             post.UserId = User.Identity.GetUserId();
             
             if(uploadImages != null)
@@ -162,6 +163,7 @@ namespace SportsSocialNetwork.Controllers
             return Json(result);
         }
 
+        [HttpPost]
         public ActionResult UpdatePost(String postEditId, String PostContentEdit, String sportSelectEdit, List<HttpPostedFileBase> uploadImages, List<int> deleteImages, List<int> notDeleteImages)
         {
             int postId = Int32.Parse(postEditId);
@@ -178,6 +180,7 @@ namespace SportsSocialNetwork.Controllers
             if (post != null)
             {
                 post.EditDate = DateTime.Now;
+                post.LatestInteractionTime = post.EditDate;
                 if (deleteImages != null && deleteImages.Count > 0)
                 {
                     foreach (var delete in deleteImages)
@@ -373,7 +376,7 @@ namespace SportsSocialNetwork.Controllers
                 }
 
                 post.EditDate = DateTime.Now;
-
+                post.LatestInteractionTime = post.EditDate;
                 _postService.Update(post);
                 _postService.Save();
 

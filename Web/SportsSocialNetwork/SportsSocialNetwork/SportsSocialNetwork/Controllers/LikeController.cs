@@ -29,9 +29,13 @@ namespace SportsSocialNetwork.Controllers
 
             var userService = this.Service<IAspNetUserService>();
 
+            var postService = this.Service<IPostService>();
+
             ResponseModel<Like> response = null;
             try
             {
+                Post post = postService.FirstOrDefaultActive(p => p.Id == postId);
+                
                 AspNetUser user = userService.FirstOrDefaultActive(x => x.Id == userId);
 
                 bool createNoti = false;
@@ -53,6 +57,9 @@ namespace SportsSocialNetwork.Controllers
                     if (createNoti)
                     {
                         notiService.SaveNoti(GetPostUserId(postId), userId, "Like", user.FullName + " đã thích bài viết của bạn", (int)NotificationType.Post, postId, null, null);
+                        post.LatestInteractionTime = DateTime.Now;
+                        postService.Update(post);
+                        postService.Save();
                     }
                 }
                 else

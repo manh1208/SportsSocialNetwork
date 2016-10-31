@@ -24,6 +24,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         string CalculatePostAge(DateTime date);
 
+        float CalculateTimeDecay(DateTime date);
+
         #endregion
 
         void test();
@@ -104,6 +106,13 @@ namespace SportsSocialNetwork.Models.Entities.Services
         public void test()
         {
 
+        }
+
+        public float CalculateTimeDecay(DateTime date)
+        {
+            TimeSpan a = DateTime.Now - date;
+            int b = (int)a.TotalSeconds;
+            return b;
         }
     }
 }

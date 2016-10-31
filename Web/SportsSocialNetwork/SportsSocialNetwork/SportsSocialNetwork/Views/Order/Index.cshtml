@@ -132,33 +132,28 @@
                     },
                     {
                         "aTargets": [1],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             return o[2];
                         }
                     },
                     {
                         "aTargets": [2],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             return o[3];
                         }
                     },
                     {
                         "aTargets": [3],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             return o[4] +' - '+ o[6]+', Ngày '+ o[5];
                         }
                     },
                     {
                         "aTargets": [4, 5],
-                        "bSortable": false,
                         "bVisible": false
                     },
                     {
                         "aTargets": [6],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             if (o[7] == parseInt('@((int)OrderPaidType.ChosePayOnline)')) {
                                 return "<span class='label label-lg label-outline label-dark'>@Utils.GetEnumDescription(OrderPaidType.ChosePayOnline).ToString()</span>";
@@ -175,7 +170,6 @@
                     },
                     {
                         "aTargets": [7],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             if (o[8] == parseInt('@((int)OrderStatus.Pending)')) {
                                 return "<span class='label label-lg label-outline label-warning'>@Utils.GetEnumDescription(OrderStatus.Pending).ToString()</span>";
@@ -197,7 +191,7 @@
                         "aTargets": [8],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
-                            return "<button class='btn btn-primary' onclick='showDetailModal(" + o[0] + ")' data-target='#orderDetail' data-toggle='modal' type='button'><i class='icon wb-pencil' aria-hidden='true'></i></button>";
+                            return "<button class='btn btn-success' onclick='showDetailModal(" + o[0] + ")' data-target='#orderDetail' data-toggle='modal' type='button'><i class='fa fa-eye' aria-hidden='true'></i></button>";
                         }
                     }
 

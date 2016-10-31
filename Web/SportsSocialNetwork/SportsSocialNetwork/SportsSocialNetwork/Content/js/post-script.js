@@ -577,7 +577,7 @@ function prependPost(data, userId) {
         moreCmtBtn = "<div><a href='javascript:void(0)' onclick='loadMoreComt(" + data.Id + ")'>Xem thêm bình luận</a>";
     }
     var spanLike = "";
-    if (data.Liked) {
+    if (this.Liked) {
         spanLike = "<span><i style='color:#62a8ea' id='likeIcon_" + data.Id + "' onclick='likeUnlikePost(" + data.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + data.Id + "' style='margin-right:10px'> " + data.LikeCount + " lượt thích</span>";
     } else {
         spanLike = "<span><i  id='likeIcon_" + data.Id + "' onclick='likeUnlikePost(" + data.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + data.Id + "' style='margin-right:10px'> " + data.LikeCount + " lượt thích</span>";
@@ -595,22 +595,24 @@ function prependPost(data, userId) {
                    '</div>' +
                    '</div>';
     var post = "<li class='list-group-item' id='post_" + data.Id + "'>"
-                   + "<div class='media'>"
-                       + "<div class='media-left'>"
-                           + "<a class='avatar' href='javascript:void(0)'>"
-                                + "<img style='height:50px;height:50px' class='img-responsive' src='" + data.AspNetUser.AvatarImage + "' alt='...'>"
-                            + "</a>"
-                        + "</div>"
-                        + "<div class='media-body'>"
-                            + "<p class='media-heading'>"
+                                   + "<div class='media'>"
+                                       + "<div class='media-left'>"
+                                           + "<a class='avatar' href='javascript:void(0)'>"
+                                                + "<img style='height:50px' class='img-responsive' src='" + data.AspNetUser.AvatarImage + "' alt='...'>"
+                                            + "</a>"
+                                        + "</div>"
+                                        + "<div class='media-body'>"
+                                            + "<p class='media-heading'>"
                                             + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + data.AspNetUser.UserName + '</a>'
                                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                                             + "</p>"
-                            + "<small>" + data.PostAge + "</small>"
-                            + "<div class='profile-brief'>" + content + "</div>"
-                            + "<div style='font-size:13px' class='text-left'>"
+                                            + "<small>" + data.PostAge + "</small>"
+                                            + "<div class='profile-brief'>" + content + "</div>"
+                                            + "<div class='comment-actions'>"
+                                            + "<div style='font-size:13px' class='text-left'>"
                                                 + spanLike
                                                 + "<span><i class='text-like fa fa-lg fa-comments-o'></i></span><span style='margin-right:10px' id='commentOfPost_" + data.Id + "'> " + data.CommentCount + " lượt bình luận</span>"
+                                            + "</div>"
                                             + "</div>"
                                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
                                              + '<form id="comment-form_' + data.Id + '" class="comment-form" method="post" autocomplete="off"><input type="hidden" name="postId" value="' + data.Id + '"/>'
@@ -639,18 +641,18 @@ function prependPost(data, userId) {
 function prependComment(data) {
     var cmt = "";
     var cmtImage = "";
-        reportDiv = '<div style="position: absolute;right: 0px;top:10px;width: 30px;">' +
-      '<div style="position: relative;width: 100%;text-align: center;">' +
-      '<div class="dropdown" >' +
-                    '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-md fa-angle-down"></i>' +
-                   '</a>' +
-                   '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
-                       '<li><a href="javascript:void(0)" style="font-weight: bold;" onclick="deleteComment(' + data.Id + ',' + data.PostId + ')"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>' +
-                       '<li><a href="javascript:void(0)" style="font-weight: bold;" onclick="editComment(' + data.Id + ')"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chỉnh sửa</a></li>' +
-                   '</ul>' +
-               '</div>' +
-               '</div>' +
-               '</div>';
+    reportDiv = '<div style="position: absolute;right: 0px;top:10px;width: 30px;">' +
+  '<div style="position: relative;width: 100%;text-align: center;">' +
+  '<div class="dropdown" >' +
+                '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-md fa-angle-down"></i>' +
+               '</a>' +
+               '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
+                   '<li><a href="javascript:void(0)" style="font-weight: bold;" onclick="deleteComment(' + data.Id + ',' + data.PostId + ')"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>' +
+                   '<li><a href="javascript:void(0)" style="font-weight: bold;" onclick="editComment(' + data.Id + ')"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chỉnh sửa</a></li>' +
+               '</ul>' +
+           '</div>' +
+           '</div>' +
+           '</div>';
 
     var cmtImage = "";
     if (data.Image != null && data.Image != "") {
@@ -789,6 +791,20 @@ function postComment(data) {
     $(data.PostComments).each(function () {
         var reportDiv = "";
         if (this.UserId == _curUserId) {
+            reportDiv = '<div style="position: absolute;right: 0px;top:10px;width: 30px;">' +
+          '<div style="position: relative;width: 100%;text-align: center;">' +
+          '<div class="dropdown" >' +
+                        '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-md fa-angle-down"></i>' +
+                       '</a>' +
+                       '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
+                           '<li><a href="javascript:void(0)" style="font-weight: bold;" onclick="deleteComment(' + this.Id + ',' + this.PostId + ')"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>' +
+                           '<li><a href="javascript:void(0)" style="font-weight: bold;" onclick="editComment(' + this.Id + ')"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chỉnh sửa</a></li>' +
+                       '</ul>' +
+                   '</div>' +
+                   '</div>' +
+                   '</div>';
+        } else {
+            if (this.Post.UserId == _curUserId) {
                 reportDiv = '<div style="position: absolute;right: 0px;top:10px;width: 30px;">' +
               '<div style="position: relative;width: 100%;text-align: center;">' +
               '<div class="dropdown" >' +
@@ -796,27 +812,13 @@ function postComment(data) {
                            '</a>' +
                            '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
                                '<li><a href="javascript:void(0)" style="font-weight: bold;" onclick="deleteComment(' + this.Id + ',' + this.PostId + ')"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>' +
-                               '<li><a href="javascript:void(0)" style="font-weight: bold;" onclick="editComment(' + this.Id + ')"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chỉnh sửa</a></li>' +
+
                            '</ul>' +
                        '</div>' +
                        '</div>' +
                        '</div>';
-            } else {
-                if (this.Post.UserId == _curUserId) {
-                    reportDiv = '<div style="position: absolute;right: 0px;top:10px;width: 30px;">' +
-                  '<div style="position: relative;width: 100%;text-align: center;">' +
-                  '<div class="dropdown" >' +
-                                '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-md fa-angle-down"></i>' +
-                               '</a>' +
-                               '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
-                                   '<li><a href="javascript:void(0)" style="font-weight: bold;" onclick="deleteComment(' + this.Id + ',' + this.PostId + ')"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>' +
-
-                               '</ul>' +
-                           '</div>' +
-                           '</div>' +
-                           '</div>';
-                }
             }
+        }
         var cmtImage = "";
         if (this.Image != null && this.Image != "") {
             cmtImage = "<div style='max-width:150px;'>"
@@ -946,22 +948,30 @@ function getHashTagSport(data) {
 }
 
 function deletePost(id) {
-    $.ajax({
-        url: _deletePostActionName,
-        async: false,
-        type: 'POST',
-        data: {
-            id: id
-        },
-        success: function (data) {
-            if (data.Succeed) {
-                removePostInList(id)
-            }
-        },
-        error: function () {
+    showConfirmMessage("Bạn có chắc chắn muốn xóa?",
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    url: _deletePostActionName,
+                                    async: false,
+                                    type: 'POST',
+                                    data: {
+                                        id: id
+                                    },
+                                    success: function (data) {
+                                        if (data.Succeed) {
+                                            removePostInList(id);
+                                            showMessage("Đã xóa", "success", "OK");
+                                        }
+                                    },
+                                    error: function () {
 
-        }
-    });
+                                    }
+                                });
+                            }
+                        }
+                        )
+   
 }
 
 
@@ -1255,23 +1265,30 @@ function refreshPost(data) {
 }
 
 function deleteComment(id, postId) {
-    $.ajax({
-        url: _deleteCommentActionName,
-        async: false,
-        type: 'POST',
-        data: {
-            id: id
-        },
-        success: function (data) {
-            if (data.Succeed) {
-                removeCommentInList(id);
-                refreshLikeAndCommentNumber(postId);
-            }
-        },
-        error: function () {
+    showConfirmMessage("Bạn có chắc chắn muốn xóa?",
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    url: _deleteCommentActionName,
+                                    async: false,
+                                    type: 'POST',
+                                    data: {
+                                        id: id
+                                    },
+                                    success: function (data) {
+                                        if (data.Succeed) {
+                                            removeCommentInList(id);
+                                            refreshLikeAndCommentNumber(postId);
+                                            showMessage("Đã xóa", "success", "OK");
+                                        }
+                                    },
+                                    error: function () {
 
-        }
-    });
+                                    }
+                                });
+                            }
+                        })
+
 }
 
 function removeCommentInList(id) {
@@ -1365,7 +1382,7 @@ function removeFileCommentEdit(id) {
 }
 
 function addImageCommentEdit(id) {
-    
+
     $("#selectImageCommentEdit_" + id).click();
 }
 
@@ -1379,8 +1396,8 @@ function handleFileSelectCommentEdit(e, id) {
     }
     var filesArr = Array.prototype.slice.call(files);
     var output = document.getElementById("resultCommentEdit_" + id);
-    
-    
+
+
     filesArr.forEach(function (f) {
 
         if (!f.type.match("image.*")) {
@@ -1464,7 +1481,7 @@ function refreshComment(data) {
                     '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-md fa-angle-down"></i>' +
                    '</a>' +
                    '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
-                       '<li><a href="javascript:void(0)" style="font-weight: bold;" onclick="deleteComment(' + data.Id + ','+data.PostId+')"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>' +
+                       '<li><a href="javascript:void(0)" style="font-weight: bold;" onclick="deleteComment(' + data.Id + ',' + data.PostId + ')"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>' +
                        '<li><a href="javascript:void(0)" style="font-weight: bold;" onclick="editComment(' + data.Id + ')"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chỉnh sửa</a></li>' +
                    '</ul>' +
                '</div>' +
@@ -1527,9 +1544,9 @@ function likeUnlikePost(id) {
         dataType: 'json',
         success: function (data) {
             if (data.Succeed) {
-                if (data.Message == "Liked") {
+                if (data.Message == "Đã thích") {
                     $("#likeIcon_" + id).css("color", "#62a8ea");
-                } else if (data.Message == "Unliked") {
+                } else if (data.Message == "Đã bỏ thích") {
                     $("#likeIcon_" + id).removeAttr("style");
                 }
                 refreshLikeAndCommentNumber(id);
@@ -1552,9 +1569,9 @@ function refreshLikeAndCommentNumber(id) {
         success: function (result) {
             if (result.Succeed) {
                 $("#likeOfPost_" + id).empty();
-                $("#likeOfPost_" + id).append(" "+result.AdditionalData.LikeCount + " lượt thích");
+                $("#likeOfPost_" + id).append(" " + result.AdditionalData.LikeCount + " lượt thích");
                 $("#commentOfPost_" + id).empty();
-                $("#commentOfPost_" + id).append(" "+result.AdditionalData.CommentCount + " lượt bình luận");
+                $("#commentOfPost_" + id).append(" " + result.AdditionalData.CommentCount + " lượt bình luận");
             } else {
                 showErrors(result.Errors);
                 showMessage("Không thể cập nhật.", "error", "OK");

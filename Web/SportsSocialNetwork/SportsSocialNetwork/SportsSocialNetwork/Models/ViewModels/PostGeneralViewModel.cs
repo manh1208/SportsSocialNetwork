@@ -16,5 +16,8 @@ namespace SportsSocialNetwork.Models.ViewModels
         public string PostAge { get; set; }
         public List<PostCommentDetailViewModel> PostComments { get; set; }
         public List<PostSportDetailViewModel> PostSports { get; set; }
+        public float PostRank { get; set; }
+        public float PostWeight { get; set; }
+        public float TimeDecay { get; set; }
     }
 }

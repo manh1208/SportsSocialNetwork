@@ -92,10 +92,36 @@ namespace SportsSocialNetwork.Controllers
 
             switch (sortColumnIndex)
             {
-                case 2:
+                
+                case 0:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.OrderCode)
+                        : filteredListItems.OrderByDescending(o => o.OrderCode);
+                    break;
+                case 1:
                     filteredListItems = sortDirection == "asc"
                         ? filteredListItems.OrderBy(o => o.Field.Name)
                         : filteredListItems.OrderByDescending(o => o.Field.Name);
+                    break;
+                case 2:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.CreateDate)
+                        : filteredListItems.OrderByDescending(o => o.CreateDate);
+                    break;
+                case 3:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.EndTime)
+                        : filteredListItems.OrderByDescending(o => o.EndTime);
+                    break;
+                case 6:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.PaidType)
+                        : filteredListItems.OrderByDescending(o => o.PaidType);
+                    break;
+                case 7:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.Status)
+                        : filteredListItems.OrderByDescending(o => o.Status);
                     break;
             }
 
@@ -423,7 +449,7 @@ namespace SportsSocialNetwork.Controllers
                 "<br/> <strong>Mã đặt sân của bạn : " + order.OrderCode + "</strong>"+
                 "<br/><img src='" +Utils.GetHostName()+order.QRCodeUrl + "'>"+
                 "<br/> Cảm ơn bạn đã sử dụng dịch vụ của SSN. Chúc bạn có những giờ phút thoải mái chơi thể thao!";
-            EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { user.Email }, null, null, subject, body, true);
+            EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { model.PayerEmail }, null, null, subject, body, true);
 
             return Redirect(url);
         }
