@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -214,7 +215,7 @@ public class ProfilePostFragment extends Fragment {
 
     private final class ViewHolder {
         RecyclerView lvProfilePost;
-        Button btnPost;
+        LinearLayout btnPost;
         View header;
         SwipeRefreshLayout layoutRefresh;
         View footer;
@@ -228,7 +229,7 @@ public class ProfilePostFragment extends Fragment {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
                     R.layout.item_load_more, null, false);
 
-            btnPost = (Button) header.findViewById(R.id.btn_feed_post);
+            btnPost = (LinearLayout) header.findViewById(R.id.btn_feed_post);
             layoutRefresh = (SwipeRefreshLayout) v.findViewById(R.id.layout_refresh);
 
         }

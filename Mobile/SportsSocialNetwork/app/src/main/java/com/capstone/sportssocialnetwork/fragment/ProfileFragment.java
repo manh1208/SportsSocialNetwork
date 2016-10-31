@@ -19,12 +19,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
+import com.capstone.sportssocialnetwork.activity.FriendActivity;
+import com.capstone.sportssocialnetwork.activity.GroupActivity;
 import com.capstone.sportssocialnetwork.activity.LoginActivity;
 import com.capstone.sportssocialnetwork.activity.MyOrderActivity;
 import com.capstone.sportssocialnetwork.activity.ProfileActivity;
 import com.capstone.sportssocialnetwork.adapter.MenuProfileAdapter;
 import com.capstone.sportssocialnetwork.custom.RoundedImageView;
 import com.capstone.sportssocialnetwork.model.Group;
+import com.capstone.sportssocialnetwork.model.User;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
@@ -47,7 +50,6 @@ public class ProfileFragment extends Fragment {
     private View headerView;
     private ViewHolder headerHolder;
     private String fullName;
-    private String avatar;
     private String userId;
     private RestService service;
 
@@ -58,7 +60,6 @@ public class ProfileFragment extends Fragment {
         setHasOptionsMenu(true);
         SharedPreferences sharedPreferences = DataUtils.getINSTANCE(getActivity()).getPreferences();
         fullName = sharedPreferences.getString(SharePreferentName.SHARE_USER_FULLNAME,"No name");
-        avatar = sharedPreferences.getString(SharePreferentName.SHARE_USER_AVATAR,"");
         userId = sharedPreferences.getString(SharePreferentName.SHARE_USER_ID,"");
         service = new RestService();
     }
@@ -78,7 +79,11 @@ public class ProfileFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position>1){
                     int curPosition = position-2;
-                    Toast.makeText(getActivity(), "Vị trí:" + curPosition , Toast.LENGTH_SHORT).show();
+                    Group group = adapter.getItem(curPosition);
+                    Intent intent = new Intent(getActivity(), GroupActivity.class);
+                    intent.putExtra("groupId",group.getId());
+                    intent.putExtra("groupName",group.getName());
+                    startActivity(intent);
                 }
             }
         });
@@ -98,14 +103,42 @@ public class ProfileFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        headerHolder.layoutFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FriendActivity.class);
+                startActivity(intent);
+            }
+        });
         headerHolder.txtFullName.setText(fullName);
-        Picasso.with(getActivity()).load(Uri.parse(DataUtils.URL+avatar))
-                .placeholder(R.drawable.img_default_avatar)
-                .error(R.drawable.img_default_avatar_error)
-                .fit()
-                .into(headerHolder.ivAvatar);
+        getUser();
         getGroup();
         return v;
+    }
+    private void getUser(){
+        service.getAccountService().getUserProfile(userId).enqueue(new Callback<ResponseModel<User>>() {
+            @Override
+            public void onResponse(Call<ResponseModel<User>> call, Response<ResponseModel<User>> response) {
+                if (response.isSuccessful()){
+                    if (response.body().isSucceed()){
+                        Picasso.with(getActivity()).load(Uri.parse(DataUtils.URL + response.body().getData().getAvatar()))
+                                .placeholder(R.drawable.img_default_avatar)
+                                .error(R.drawable.img_default_avatar_error)
+                                .fit()
+                                .into(headerHolder.ivAvatar);
+                    }else{
+                        Toast.makeText(getActivity(), response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(getActivity(), response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseModel<User>> call, Throwable t) {
+                Toast.makeText(getActivity(), R.string.failure, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void getGroup(){
@@ -157,6 +190,7 @@ public class ProfileFragment extends Fragment {
     private final class ViewHolder{
         RelativeLayout layoutProfile;
         RelativeLayout layoutMyOrder;
+        RelativeLayout layoutFriend;
         RoundedImageView ivAvatar;
         TextView txtFullName;
 
@@ -165,6 +199,7 @@ public class ProfileFragment extends Fragment {
             layoutMyOrder = (RelativeLayout) v.findViewById(R.id.layout_menu_my_order);
             ivAvatar = (RoundedImageView) v.findViewById(R.id.iv_user_menu_avatar);
             txtFullName = (TextView) v.findViewById(R.id.txt_user_menu_fullname);
+            layoutFriend = (RelativeLayout) v.findViewById(R.id.layout_menu_my_friend);
         }
     }
 }

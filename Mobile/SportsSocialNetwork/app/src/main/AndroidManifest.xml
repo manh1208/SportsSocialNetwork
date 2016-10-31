@@ -10,18 +10,16 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".application.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:largeHeap="false"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".activity.MainActivity"
@@ -78,21 +76,29 @@
         <activity
             android:name=".activity.MyOrderActivity"
             android:label="@string/title_activity_my_order"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <service
             android:name=".firebase.MyFirebaseInstanceIDService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".firebase.MyFirebaseMessagingService"
-            >
+        <service android:name=".firebase.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".activity.GroupActivity"
+            android:label="@string/title_activity_group"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.FriendActivity"
+            android:label="@string/title_activity_friend"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

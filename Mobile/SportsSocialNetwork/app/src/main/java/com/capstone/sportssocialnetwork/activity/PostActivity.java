@@ -58,6 +58,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
     private RestService service;
     private String userId;
     private MultipartBody.Part body;
+    private String groupId;
 
 
     @Override
@@ -104,6 +105,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         btnCamera.setOnClickListener(this);
         service = new RestService();
         userId = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
+        groupId = getIntent().getStringExtra("groupId");
     }
 
 
@@ -197,7 +199,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
                                 MediaType.parse("multipart/form-data"), txtContent.getText().toString());
                 RequestBody groupBody =
                         RequestBody.create(
-                                MediaType.parse("multipart/form-data"), "");
+                                MediaType.parse("multipart/form-data"), groupId+"");
 
                 Call<ResponseModel<Post>> call =  service.getPostService()
                      .createPost(userBody,contentBody,body,groupBody);

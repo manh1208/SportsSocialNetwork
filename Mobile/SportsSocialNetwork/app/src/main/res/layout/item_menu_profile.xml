@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:text="Bóng đá số"
                 android:textColor="#000"/>
         </LinearLayout>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5sp">
+        <LinearLayout
+            android:layout_width="0sp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5sp">
+            <ImageView
+                android:layout_width="10sp"
+                android:layout_height="10sp"
+                android:src="@drawable/ic_check"
+                android:layout_gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đã tham gia"
+                android:layout_gravity="center"
+                android:textSize="12sp"
+                android:textColor="#000"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0sp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5sp">
+            <ImageView
+                android:layout_width="10sp"
+                android:layout_height="10sp"
+                android:src="@drawable/ic_member"
+                android:layout_gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thành viên"
+                android:layout_gravity="center"
+                android:textSize="12sp"
+                android:textColor="#000"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0sp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5sp">
+            <ImageView
+                android:layout_width="10sp"
+                android:layout_height="10sp"
+                android:src="@drawable/ic_infomation"
+                android:layout_gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thông tin"
+                android:layout_gravity="center"
+                android:textSize="12sp"
+                android:textColor="#000"/>
+        </LinearLayout>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="5sp"
+        android:background="@color/separator"/>
+    <LinearLayout
+        android:id="@+id/btn_group_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_group_post_avatar"
+            android:layout_marginLeft="10sp"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/img_default_avatar" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:drawablePadding="10sp"
+            android:gravity="start|center_vertical"
+            android:paddingBottom="20sp"
+            android:paddingLeft="20sp"
+            android:paddingTop="20sp"
+            android:text="Hãy nói điều gì đó..."
+            android:textAllCaps="false"
+            android:textColor="#b3b1b1" />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="5sp"
+        android:background="@color/separator"/>
+</LinearLayout>

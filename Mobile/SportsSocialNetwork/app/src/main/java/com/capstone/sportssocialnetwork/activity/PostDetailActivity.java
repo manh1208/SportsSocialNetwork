@@ -93,7 +93,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_post_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Chi tiết");
+        getSupportActionBar().setTitle("Bài viết");
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
