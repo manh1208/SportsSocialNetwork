@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'Y:\Data\Code\Github\SportsSocialNetwork\Web\SportsSocialNetwork\SportsSocialNetwork\SportsSocialNetwork\Models\Entities\SsnEntities.edmx'. 
+﻿// T4 code generation is enabled for model '\\Mac\Home\Data\Code\Github\SportsSocialNetwork\Web\SportsSocialNetwork\SportsSocialNetwork\SportsSocialNetwork\Models\Entities\SsnEntities.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
