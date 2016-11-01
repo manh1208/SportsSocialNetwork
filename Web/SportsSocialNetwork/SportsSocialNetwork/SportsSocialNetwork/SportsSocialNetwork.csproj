@@ -3012,7 +3012,6 @@
     <Content Include="Content\ckeditor\plugins\a11yhelp\dialogs\lang\vi.js" />
     <Content Include="Content\ckeditor\plugins\a11yhelp\dialogs\lang\zh-cn.js" />
     <Content Include="Content\ckeditor\plugins\a11yhelp\dialogs\lang\zh.js" />
-    <Content Include="Content\ckeditor\plugins\a11yhelp\dialogs\lang\_translationstatus.txt" />
     <Content Include="Content\ckeditor\plugins\about\dialogs\about.js" />
     <Content Include="Content\ckeditor\plugins\about\dialogs\hidpi\logo_ckeditor.png" />
     <Content Include="Content\ckeditor\plugins\about\dialogs\logo_ckeditor.png" />
@@ -3085,7 +3084,6 @@
     <Content Include="Content\ckeditor\plugins\specialchar\dialogs\lang\vi.js" />
     <Content Include="Content\ckeditor\plugins\specialchar\dialogs\lang\zh-cn.js" />
     <Content Include="Content\ckeditor\plugins\specialchar\dialogs\lang\zh.js" />
-    <Content Include="Content\ckeditor\plugins\specialchar\dialogs\lang\_translationstatus.txt" />
     <Content Include="Content\ckeditor\plugins\specialchar\dialogs\specialchar.js" />
     <Content Include="Content\ckeditor\plugins\tabletools\dialogs\tableCell.js" />
     <Content Include="Content\ckeditor\plugins\table\dialogs\table.js" />
@@ -3138,7 +3136,6 @@
     <Content Include="Content\ckeditor\samples\old\xhtmlstyle.html" />
     <Content Include="Content\ckeditor\samples\toolbarconfigurator\css\fontello.css" />
     <Content Include="Content\ckeditor\samples\toolbarconfigurator\font\fontello.svg" />
-    <Content Include="Content\ckeditor\samples\toolbarconfigurator\font\LICENSE.txt" />
     <Content Include="Content\ckeditor\samples\toolbarconfigurator\index.html" />
     <Content Include="Content\ckeditor\samples\toolbarconfigurator\js\abstracttoolbarmodifier.js" />
     <Content Include="Content\ckeditor\samples\toolbarconfigurator\js\fulltoolbareditor.js" />
@@ -3178,7 +3175,6 @@
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.css" />
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome-4.6.3\fonts\fontawesome-webfont.svg" />
-    <Content Include="Content\font-awesome-4.6.3\HELP-US-OUT.txt" />
     <Content Include="Content\images\cam-icon.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\logo_new.png" />
@@ -3741,6 +3737,7 @@
     <Content Include="Content\ckeditor\LICENSE.md" />
     <Content Include="Content\ckeditor\README.md" />
     <Content Include="Areas\PlaceOwner\Views\FieldSchedule\List.cshtml" />
+    <None Include="Properties\PublishProfiles\SSN_Publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -3752,7 +3749,6 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\_references.js" />
     <Content Include="SSNImages\EventImages\20161018134710PM_cb05b5d1-04ad-4580-b4d9-f1ac857d4fec.jpg" />
     <Content Include="SSNImages\EventImages\20161018144753PM_67ee8c92-b7bd-41d1-9544-ea3c2200fedd.png" />
     <Content Include="SSNImages\EventImages\20161018152542PM_c5005cd1-52b4-4bf4-bf6d-bf9b5fe1dee5.jpg" />
@@ -3967,7 +3963,6 @@
     <Content Include="Views\Errors\PageNotFound.cshtml" />
     <Content Include="Views\Errors\NoPermission.cshtml" />
     <Content Include="Views\Errors\DataError.cshtml" />
-    <Content Include="Views\Order\NganLuong.cshtml" />
     <Content Include="Views\Order\PaymentFail.cshtml" />
     <Content Include="Views\Order\PaymentSuccessful.cshtml" />
     <Content Include="Views\Order\BookFieldSuccessful.cshtml" />
