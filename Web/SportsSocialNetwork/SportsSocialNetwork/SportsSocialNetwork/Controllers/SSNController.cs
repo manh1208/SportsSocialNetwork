@@ -3,7 +3,9 @@ using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.Identity;
+using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -54,7 +56,7 @@ namespace SportsSocialNetwork.Controllers
             {
                 newsList = _newsService.GetActive().ToList();
             }
-            ViewBag.SuggestNews = newsList.First();
+            ViewBag.SuggestNews = newsList.FirstOrDefault();
 
             //load group name
             var _groupService = this.Service<IGroupService>();
@@ -79,7 +81,9 @@ namespace SportsSocialNetwork.Controllers
             }
 
 
-            var users = _userService.GetActive(p => p.Id != userId && p.Follows.Where(f => f.Active == true && (f.FollowerId == userId)).ToList().Count == 0).ToList();
+            var users = _userService.GetActive(p => p.Id != userId && p.AspNetRoles.Where(k => 
+            k.Id != "Quản trị viên" && k.Name != "Moderator").ToList().Count > 0 &&
+            p.Follows.Where(f => f.Active == true && (f.FollowerId == userId)).ToList().Count == 0).ToList();
             foreach (var user in users)
             {
                 FollowSuggestViewModel model = Mapper.Map<FollowSuggestViewModel>(user);
@@ -256,7 +260,7 @@ namespace SportsSocialNetwork.Controllers
             {
                 var totalOfLikeFromUser = _likeService.GetActive(p => p.UserId == userId && p.Post.UserId == user.Id).ToList().Count;
                 var totalOfCommentFromUser = _commentService.GetActive(p => p.UserId == userId && p.Post.UserId == user.Id).ToList().Count;
-                user.relationScore = totalOfCommentFromUser + totalOfLikeFromUser;
+                user.relationScore = totalOfCommentFromUser + totalOfLikeFromUser + 1;
             }
 
             List<Post> postList = _postService.GetActive(p => p.UserId == userId ||

@@ -66,7 +66,7 @@ namespace SportsSocialNetwork.Controllers
                 var province = vietnam.VietNamese.Where(p => p.Name.Equals(provinceName)).ToList();
                 if (province != null && province.Count > 0)
                 {
-                    var district = province.First().Districts.ToList();
+                    var district = province.FirstOrDefault().Districts.ToList();
                     districtList = district.Select(m => new SelectListItem
                     {
                         Text = m.Type + " " + m.Name,

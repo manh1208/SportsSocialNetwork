@@ -79,7 +79,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
             int b = (int)a.TotalSeconds;
             if (b / 86400 > 1)
             {
-                result = date.Day + "/" + date.Month + "/" + date.Year + " lúc " + date.Hour + ":" + date.Minute;
+                result = date.Day.ToString("00") + "/" + date.Month.ToString("00") + "/" + date.Year.ToString("0000") 
+                    + " lúc " + date.Hour.ToString("00") + ":" + date.Minute.ToString("00");
             }
             else if (b / 3600 < 1)
             {

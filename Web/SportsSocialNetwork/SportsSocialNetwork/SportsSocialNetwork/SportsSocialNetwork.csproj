@@ -1419,6 +1419,7 @@
     <Content Include="Content\assets\js\datatables\jquery.dataTables_themeroller.css" />
     <Content Include="Content\assets\js\plugins\closeable-tabs.js" />
     <Content Include="Content\assets\js\plugins\closeable-tabs.min.js" />
+    <Content Include="Content\assets\js\plugins\jquery.sticky-kit.min.js" />
     <Content Include="Content\assets\js\plugins\responsive-tabs.js" />
     <Content Include="Content\assets\js\plugins\responsive-tabs.min.js" />
     <Content Include="Content\assets\js\plugins\sticky-header.js" />

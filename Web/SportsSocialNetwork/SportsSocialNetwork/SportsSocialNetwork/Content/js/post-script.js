@@ -112,8 +112,8 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                         content = multiImageTextPost(this);
                     }
                     var moreCmtBtn = "";
-                    if (postComment(this) != null && postComment(this) != "") {
-                        moreCmtBtn = "<div><a href='javascript:void(0)' onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
+                    if (this.CommentCount > 3) {
+                        moreCmtBtn = "<div id='moreCmt_" + this.Id + "'><a href='javascript:void(0)' onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
                     }
                     var spanLike = "";
                     if (this.Liked) {
@@ -150,7 +150,7 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                                    '</div>' +
                                    '</div>';
                     }
-                    var post = "<li class='list-group-item' id='post_" + this.Id + "'>"
+                    var post = "<li class='list-group-item panel' style='margin-bottom:10px' role='tabpanel' id='post_" + this.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
                                            + "<a class='avatar' href='javascript:void(0)'>"
@@ -158,12 +158,12 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                                             + "</a>"
                                         + "</div>"
                                         + "<div class='media-body'>"
-                                            + "<p class='media-heading'>"
-                                            + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + this.AspNetUser.UserName + '</a>'
+                                            + "<p class='media-heading' style='margin-bottom:0'>"
+                                            + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + this.AspNetUser.FullName + '</a>'
                                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                                             + "</p>"
                                             + "<small>" + this.PostAge + "</small>"
-                                            + "<div class='profile-brief'>" + content + "</div>"
+                                            + "<div class='profile-brief' style='margin-bottom:20px'>" + content + "</div>"
                                             + "<div class='comment-actions'>"
                                             + "<div style='font-size:13px' class='text-left'>"
                                                 + spanLike
@@ -240,8 +240,8 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                         content = multiImageTextPost(this);
                     }
                     var moreCmtBtn = "";
-                    if (postComment(this) != null && postComment(this) != "") {
-                        moreCmtBtn = "<div><a href='javascript:void(0)' onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
+                    if (this.CommentCount > 3) {
+                        moreCmtBtn = "<div id='moreCmt_" + this.Id + "'><a href='javascript:void(0)' onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
                     }
                     var spanLike = "";
                     if (this.Liked) {
@@ -278,7 +278,7 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                                    '</div>' +
                                    '</div>';
                     }
-                    var post = "<li class='list-group-item' id='post_" + this.Id + "'>"
+                    var post = "<li class='list-group-item panel' style='margin-bottom:10px' role='tabpanel' id='post_" + this.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
                                            + "<a class='avatar' href='javascript:void(0)'>"
@@ -286,12 +286,12 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                                             + "</a>"
                                         + "</div>"
                                         + "<div class='media-body'>"
-                                            + "<p class='media-heading'>"
-                                            + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + this.AspNetUser.UserName + '</a>'
+                                            + "<p class='media-heading' style='margin-bottom:0'>"
+                                            + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + this.AspNetUser.FullName + '</a>'
                                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                                             + "</p>"
                                             + "<small>" + this.PostAge + "</small>"
-                                            + "<div class='profile-brief'>" + content + "</div>"
+                                            + "<div class='profile-brief' style='margin-bottom:20px'>" + content + "</div>"
                                             + "<div class='comment-actions'>"
                                             + "<div style='font-size:13px' class='text-left'>"
                                                 + spanLike
@@ -367,8 +367,8 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
                         content = multiImageTextPost(this);
                     }
                     var moreCmtBtn = "";
-                    if (postComment(this) != null && postComment(this) != "") {
-                        moreCmtBtn = "<div><a href='javascript:void(0)' onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
+                    if (this.CommentCount > 3) {
+                        moreCmtBtn = "<div id='moreCmt_"+this.Id+"'><a href='javascript:void(0)' onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
                     }
                     var spanLike = "";
                     if (this.Liked) {
@@ -405,7 +405,7 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
                                    '</div>' +
                                    '</div>';
                     }
-                    var post = "<li class='list-group-item' id='post_" + this.Id + "'>"
+                    var post = "<li class='list-group-item panel' style='margin-bottom:10px' role='tabpanel' id='post_" + this.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
                                            + "<a class='avatar' href='javascript:void(0)'>"
@@ -413,12 +413,12 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
                                             + "</a>"
                                         + "</div>"
                                         + "<div class='media-body'>"
-                                            + "<p class='media-heading'>"
-                                            + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + this.AspNetUser.UserName + '</a>'
+                                            + "<p class='media-heading' style='margin-bottom:0'>"
+                                            + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + this.AspNetUser.FullName + '</a>'
                                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                                             + "</p>"
                                             + "<small>" + this.PostAge + "</small>"
-                                            + "<div class='profile-brief'>" + content + "</div>"
+                                            + "<div class='profile-brief' style='margin-bottom:20px'>" + content + "</div>"
                                             + "<div class='comment-actions'>"
                                             + "<div style='font-size:13px' class='text-left'>"
                                                 + spanLike
@@ -573,8 +573,8 @@ function prependPost(data, userId) {
         content = multiImageTextPost(data);
     }
     var moreCmtBtn = "";
-    if (postComment(data) != null && postComment(data) != "") {
-        moreCmtBtn = "<div><a href='javascript:void(0)' onclick='loadMoreComt(" + data.Id + ")'>Xem thêm bình luận</a>";
+    if (this.CommentCount > 3) {
+        moreCmtBtn = "<div id='moreCmt_" + data.Id + "'><a href='javascript:void(0)' onclick='loadMoreComt(" + data.Id + ")'>Xem thêm bình luận</a>";
     }
     var spanLike = "";
     if (this.Liked) {
@@ -594,7 +594,7 @@ function prependPost(data, userId) {
                    '</div>' +
                    '</div>' +
                    '</div>';
-    var post = "<li class='list-group-item' id='post_" + data.Id + "'>"
+    var post = "<li class='list-group-item panel' style='margin-bottom:10px' role='tabpanel' id='post_" + data.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
                                            + "<a class='avatar' href='javascript:void(0)'>"
@@ -602,12 +602,12 @@ function prependPost(data, userId) {
                                             + "</a>"
                                         + "</div>"
                                         + "<div class='media-body'>"
-                                            + "<p class='media-heading'>"
-                                            + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + data.AspNetUser.UserName + '</a>'
+                                            + "<p class='media-heading' style='margin-bottom:0'>"
+                                            + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + data.AspNetUser.FullName + '</a>'
                                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                                             + "</p>"
                                             + "<small>" + data.PostAge + "</small>"
-                                            + "<div class='profile-brief'>" + content + "</div>"
+                                            + "<div class='profile-brief' style='margin-bottom:20px'>" + content + "</div>"
                                             + "<div class='comment-actions'>"
                                             + "<div style='font-size:13px' class='text-left'>"
                                                 + spanLike
@@ -674,7 +674,7 @@ function prependComment(data) {
                             + "</a>"
                         + "</div>"
                         + "<div class='comment-body media-body'>"
-                            + "<a style='font-weight:bold' class='comment-author' href='javascript:void(0)'>" + data.AspNetUser.UserName + "</a>"
+                            + "<a style='font-weight:bold' class='comment-author' href='javascript:void(0)'>" + data.AspNetUser.FullName + "</a>"
                             + "<div class='comment-meta'>"
                                 + "<span class='date'>" + data.CommentAge + "</span>"
                             + "</div>"
@@ -743,7 +743,7 @@ function appendComment(data) {
                             + "</a>"
                         + "</div>"
                         + "<div class='comment-body media-body'>"
-                            + "<a style='font-weight:bold' class='comment-author' href='javascript:void(0)'>" + data.AspNetUser.UserName + "</a>"
+                            + "<a style='font-weight:bold' class='comment-author' href='javascript:void(0)'>" + data.AspNetUser.FullName + "</a>"
                             + "<div class='comment-meta'>"
                                 + "<span class='date'>" + data.CommentAge + "</span>"
                             + "</div>"
@@ -776,14 +776,23 @@ function loadMoreComt(postId) {
                 $(data.AdditionalData).each(function () {
                     appendComment(this);
                 })
-            } else {
-                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
             }
-        },
-        error: function () {
-            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
         }
-    })
+    });
+
+    $.ajax({
+        type: 'POST',
+        url: _loadAPostActionName,
+        async: false,
+        data: { "postId": postId },
+        success: function (result) {
+            if (result.Succeed) {
+                if (result.AdditionalData.CommentCount < skip + take) {
+                    $("#moreCmt_" + postId).remove();
+                }
+            }
+        }
+    });
 }
 
 function postComment(data) {
@@ -839,7 +848,7 @@ function postComment(data) {
                                 + "</a>"
                             + "</div>"
                             + "<div class='comment-body media-body'>"
-                                + "<a style='font-weight:bold' class='comment-author' href='javascript:void(0)'>" + this.AspNetUser.UserName + "</a>"
+                                + "<a style='font-weight:bold' class='comment-author' href='javascript:void(0)'>" + this.AspNetUser.FullName + "</a>"
                                 + "<div class='comment-meta'>"
                                     + "<span class='date'>" + this.CommentAge + "</span>"
                                 + "</div>"
@@ -856,10 +865,10 @@ function postComment(data) {
 function textPost(data) {
     var hashtag = getHashTagSport(data);
     if (hashtag != null && hashtag != "") {
-        hashtag += "<br/>";
+        hashtag = "<br/>" + hashtag;
     }
     var content = data.PostContent;
-    return hashtag + content;
+    return content + hashtag;
 }
 
 function textImagePost(data) {
@@ -1182,8 +1191,8 @@ function refreshPost(data) {
         content = multiImageTextPost(data);
     }
     var moreCmtBtn = "";
-    if (postComment(data) != null && postComment(data) != "") {
-        moreCmtBtn = "<div><a href='javascript:void(0)' onclick='loadMoreComt(" + data.Id + ")'>Xem thêm bình luận</a>";
+    if (this.CommentCount > 3) {
+        moreCmtBtn = "<div id='moreCmt_" + data.Id + "'><a href='javascript:void(0)' onclick='loadMoreComt(" + data.Id + ")'>Xem thêm bình luận</a>";
     }
     var spanLike = "";
     if (data.Liked) {
@@ -1220,7 +1229,7 @@ function refreshPost(data) {
                    '</div>' +
                    '</div>';
     }
-    var post = "<li class='list-group-item' id='post_" + data.Id + "'>"
+    var post = "<li class='list-group-item panel' style='margin-bottom:10px' role='tabpanel' id='post_" + data.Id + "'>"
                    + "<div class='media'>"
                        + "<div class='media-left'>"
                            + "<a class='avatar' href='javascript:void(0)'>"
@@ -1228,12 +1237,12 @@ function refreshPost(data) {
                             + "</a>"
                         + "</div>"
                         + "<div class='media-body'>"
-                           + "<p class='media-heading'>"
-                            + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + data.AspNetUser.UserName + '</a>'
+                           + "<p class='media-heading' style='margin-bottom:0'>"
+                            + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + data.AspNetUser.FullName + '</a>'
                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                             + "</p>"
                             + "<small>" + data.PostAge + "</small>"
-                            + "<div class='profile-brief'>" + content + "</div>"
+                            + "<div class='profile-brief' style='margin-bottom:20px'>" + content + "</div>"
                             + "<div class='comment-actions'>"
                              + "<div style='font-size:13px' class='text-left'>"
                                                 + spanLike
@@ -1523,7 +1532,7 @@ function refreshComment(data) {
                             + "</a>"
                         + "</div>"
                         + "<div class='comment-body media-body'>"
-                            + "<a style='font-weight:bold' class='comment-author' href='javascript:void(0)'>" + data.AspNetUser.UserName + "</a>"
+                            + "<a style='font-weight:bold' class='comment-author' href='javascript:void(0)'>" + data.AspNetUser.FullName + "</a>"
                             + "<div class='comment-meta'>"
                                 + "<span class='date'>" + data.CommentAge + "</span>"
                             + "</div>"
