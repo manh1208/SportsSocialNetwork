@@ -98,6 +98,18 @@
         <activity
             android:name=".activity.FriendActivity"
             android:label="@string/title_activity_friend"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.GroupMemberActivity"
+            android:label="@string/title_activity_group_member"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.GroupInformationActivity"
+            android:label="@string/title_activity_group_information"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.AddMemberActivity"
+            android:label="@string/title_activity_add_member"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

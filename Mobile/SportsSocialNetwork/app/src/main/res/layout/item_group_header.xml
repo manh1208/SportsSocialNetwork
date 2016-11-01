@@ -8,14 +8,15 @@
         android:orientation="horizontal"
         android:padding="5sp">
         <LinearLayout
+            android:id="@+id/layout_group_join"
             android:layout_width="0sp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="5sp">
             <ImageView
-                android:layout_width="10sp"
-                android:layout_height="10sp"
+                android:layout_width="12sp"
+                android:layout_height="12sp"
                 android:src="@drawable/ic_check"
                 android:layout_gravity="center"/>
             <TextView
@@ -23,18 +24,19 @@
                 android:layout_height="wrap_content"
                 android:text="Đã tham gia"
                 android:layout_gravity="center"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 android:textColor="#000"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layout_group_member"
             android:layout_width="0sp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="5sp">
             <ImageView
-                android:layout_width="10sp"
-                android:layout_height="10sp"
+                android:layout_width="12sp"
+                android:layout_height="12sp"
                 android:src="@drawable/ic_member"
                 android:layout_gravity="center"/>
             <TextView
@@ -42,18 +44,19 @@
                 android:layout_height="wrap_content"
                 android:text="Thành viên"
                 android:layout_gravity="center"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 android:textColor="#000"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/layout_group_information"
             android:layout_width="0sp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="5sp">
             <ImageView
-                android:layout_width="10sp"
-                android:layout_height="10sp"
+                android:layout_width="12sp"
+                android:layout_height="12sp"
                 android:src="@drawable/ic_infomation"
                 android:layout_gravity="center"/>
             <TextView
@@ -61,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:text="Thông tin"
                 android:layout_gravity="center"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 android:textColor="#000"/>
         </LinearLayout>
     </LinearLayout>

@@ -2,6 +2,7 @@ package com.capstone.sportssocialnetwork.service;
 
 import com.capstone.sportssocialnetwork.model.Feed;
 import com.capstone.sportssocialnetwork.model.Group;
+import com.capstone.sportssocialnetwork.model.GroupMember;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 
 import java.util.List;
@@ -27,4 +28,7 @@ public interface IGroupService {
     @POST("/api/group/showgroupdetail")
     Call<ResponseModel<Group>> getGroupDetail(@Query("id")int groupId,
                                               @Query("currentUser")String userId);
+
+    @POST("/api/groupmember/showmemberlist")
+    Call<ResponseModel<List<GroupMember>>> getGroupMember(@Query("groupId")int groupId);
 }

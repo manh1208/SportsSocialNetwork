@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="20sp"
+        android:paddingTop="10sp"
+        android:paddingBottom="10sp"
+        android:paddingRight="20sp">
+        <com.capstone.sportssocialnetwork.custom.RoundedImageView
+            android:id="@+id/iv_group_member_avatar"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:src="@drawable/ic_football"
+            android:scaleType="centerInside"
+
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="20sp"
+            android:layout_toRightOf="@+id/iv_group_member_avatar"
+            android:layout_centerVertical="true"
+            >
+            <TextView
+                android:id="@+id/txt_group_member_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="normal"
+                android:text="Bóng đá số"
+                android:textColor="#000"/>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

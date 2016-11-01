@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -51,7 +52,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GroupActivity extends AppCompatActivity {
+public class GroupActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "Group Activity";
     private ViewHolder viewHolder;
     private ProfilePostAdapter adapter;
@@ -156,7 +157,9 @@ public class GroupActivity extends AppCompatActivity {
         viewHolder.lvGroupPost.setLayoutManager(mLayoutManager);
         viewHolder.lvGroupPost.setItemAnimator(new DefaultItemAnimator());
         viewHolder.lvGroupPost.setAdapter(adapter);
-
+        viewHolder.layoutJoin.setOnClickListener(this);
+        viewHolder.layoutMember.setOnClickListener(this);
+        viewHolder.layoutInfomation.setOnClickListener(this);
 
     }
 
@@ -292,6 +295,49 @@ public class GroupActivity extends AppCompatActivity {
 //        viewHolder.lvFeed.removeFooterView(viewHolder.footer);
     }
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.layout_group_join:
+                showPopupMenu(v);
+                break;
+            case R.id.layout_group_member:
+                Intent intent = new Intent(GroupActivity.this,GroupMemberActivity.class);
+                intent.putExtra("groupId",groupId);
+                intent.putExtra("groupName",groupName);
+                startActivity(intent);
+                break;
+            case R.id.layout_group_information:
+                intent = new Intent(GroupActivity.this,GroupInformationActivity.class);
+                intent.putExtra("groupId",groupId);
+                intent.putExtra("groupName",groupName);
+                startActivity(intent);
+                break;
+        }
+
+    }
+
+    public void showPopupMenu(View v) {
+        PopupMenu popupMenu = new PopupMenu(mContext, v);
+        final MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.menu_group_popup, popupMenu.getMenu());
+        popupMenu.show();
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.menu_group_leave_group:
+                        Toast.makeText(mContext, "Rời khỏi nhóm", Toast.LENGTH_SHORT).show();
+                        return true;
+
+                }
+                return false;
+            }
+        });
+    }
+
     private final class ViewHolder {
         RecyclerView lvGroupPost;
         LinearLayout btnPost;
@@ -299,6 +345,9 @@ public class GroupActivity extends AppCompatActivity {
         View footer;
         ImageView ivPostAvatar;
         ImageView ivGroupCover;
+        LinearLayout layoutJoin;
+        LinearLayout layoutMember;
+        LinearLayout layoutInfomation;
 
         ViewHolder() {
             lvGroupPost = (RecyclerView) findViewById(R.id.lv_group_post);
@@ -309,6 +358,9 @@ public class GroupActivity extends AppCompatActivity {
             btnPost = (LinearLayout) findViewById(R.id.btn_group_post);
             layoutRefresh = (SwipeRefreshLayout) findViewById(R.id.layout_refresh);
             ivGroupCover = (ImageView) findViewById(R.id.iv_group_cover);
+            layoutJoin = (LinearLayout) findViewById(R.id.layout_group_join);
+            layoutMember = (LinearLayout) findViewById(R.id.layout_group_member);
+            layoutInfomation = (LinearLayout) findViewById(R.id.layout_group_information);
 
         }
 

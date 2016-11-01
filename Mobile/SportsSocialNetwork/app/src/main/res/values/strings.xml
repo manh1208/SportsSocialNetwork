@@ -20,4 +20,7 @@
     <string name="parse_exception">Dữ liệu ngày tháng bị lỗi. Vui lòng thử lại sau.</string>
     <string name="title_activity_group">GroupActivity</string>
     <string name="title_activity_friend">FriendActivity</string>
+    <string name="title_activity_group_member">GroupMemberActivity</string>
+    <string name="title_activity_group_information">GroupInformationActivity</string>
+    <string name="title_activity_add_member">AddMemberActivity</string>
 </resources>
