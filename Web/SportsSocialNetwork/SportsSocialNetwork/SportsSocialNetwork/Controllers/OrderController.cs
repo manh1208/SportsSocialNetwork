@@ -542,6 +542,7 @@ namespace SportsSocialNetwork.Controllers
         public ActionResult BookFieldNow(int? id)
         {
             var _fieldService = this.Service<IFieldService>();
+            var _placeService = this.Service<IPlaceService>();
             var fieldList = _fieldService.GetActive(p => p.PlaceId == id && p.Status != (int)FieldStatus.Deactive);
             if (fieldList == null || fieldList.ToList().Count == 0)
             {
@@ -559,7 +560,9 @@ namespace SportsSocialNetwork.Controllers
             {
                 ViewBag.user = user;
             }
-            
+            var place = _placeService.FirstOrDefaultActive(p => p.Id == id);
+            var placeOwner = _userService.FirstOrDefaultActive(p => p.Id == place.UserId);
+            ViewBag.PlaceOwnerNganLuong = placeOwner.NganLuongAccount;
             IEnumerable<SelectListItem> selectList = fieldList.Select(s => new SelectListItem
             {
                 Text = s.Name,

@@ -5,130 +5,158 @@
     Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
     var fieldList = ViewBag.FieldList as IEnumerable<SelectListItem>;
 }
-
-<div class="panel padding-top-20 col-md-offset-1 col-md-10">
-    <form id="onlineform" action="@Url.Action("btnSubmit_Click", "Order")" method="get" class="form-horizontal">
-        <div class="panel-body container-fluid">
-            <div class="col-md-12 form-horizontal">
-                <h3 style="text-align:center">Thông tin đặt sân</h3>
-                <div class="summary-errors alert alert-danger alert-dismissible" style="display: none; text-align:left; padding:0px 0px 0px 10px" id="error">
-                    <ul>
-                        <li style="display: none" id="error1">
-                            <span style="color:red; font-size:12px">Thời gian (ngày / giờ) không hợp lệ</span>
-                        </li>
-                        <li style="display: none" id="error2">
-                            <span style="color:red; font-size:12px">Thời gian không nằm trong các khung giờ</span>
-                        </li>
-                        <li style="display: none" id="error3">
-                            <span style="color:red; font-size:12px">Thời gian này sân kín</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="form-group padding-top-10">
-                    <label for="name" class="col-md-4 control-label">Họ Tên:</label>
-                    <div class="col-md-4 input-group">
-                        @Html.TextBoxFor(p => p.PayerName, new { @class = "form-control", @id = "name", @Value = @ViewBag.user.FullName })
+<div class="col-md-5" style="float:left">
+    <div class="panel padding-top-20 ">
+        <form id="onlineform" action="@Url.Action("btnSubmit_Click", "Order")" method="get" class="form-horizontal">
+            <div class="panel-body container-fluid padding-0">
+                <div class="col-md-12 form-horizontal">
+                    <h3 style="text-align:center">Thông tin đặt sân</h3>
+                    <div class="summary-errors alert alert-danger alert-dismissible" style="display: none; text-align:left; padding:0px 0px 0px 10px" id="error">
+                        <ul>
+                            <li style="display: none" id="error1">
+                                <span style="color:red; font-size:12px">Thời gian (ngày / giờ) không hợp lệ</span>
+                            </li>
+                            <li style="display: none" id="error2">
+                                <span style="color:red; font-size:12px">Thời gian không nằm trong các khung giờ</span>
+                            </li>
+                            <li style="display: none" id="error3">
+                                <span style="color:red; font-size:12px">Thời gian này sân kín</span>
+                            </li>
+                        </ul>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="email" class="col-md-4 control-label">Email:</label>
-                    <div class="col-md-4 input-group">
-                        @Html.TextBoxFor(p => p.PayerEmail, new { @class = "form-control", @id = "email", @Value = @ViewBag.user.Email })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="phone" class="col-md-4 control-label">Số Điện thoại:</label>
-                    <div class="col-md-4 input-group">
-                        @Html.TextBoxFor(p => p.PayerPhone, new { @class = "form-control", @id = "phone", @Value = @ViewBag.user.PhoneNumber })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="phone" class="col-md-4 control-label">Chọn sân:</label>
-                    <div class="col-md-4 input-group">
-                        @Html.DropDownListFor(m => m.FieldId, fieldList, new { @class = "orderInfo bs-select-hidden form-control input-sm droplist", @id = "field" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="phone" class="col-md-4 control-label"></label>
-                    <div class="col-md-4 input-group">
-                        <button type="button" class="btn btn-warning col-md-12" id="checkCalendar"><i class="icon wb-calendar" aria-hidden="true"></i> Kiểm tra lịch sân</button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="phone" class="col-md-4 control-label"></label>
-                    <div class="col-md-4 input-group">
-                        <button type="button" class="btn btn-primary col-md-12" id="checkPrice"><i class="fa fa-usd" aria-hidden="true"></i> Bảng giá các khung giờ</button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Ngày chơi:</label>
-                    <div class="col-md-4 input-group">
-                        @Html.TextBoxFor(p => p.CreateDate, "{0:dd-MM-yyyy}", new { @class = "orderInfo form-control", @id = "playDate", @data_plugin = "datepicker", @Value = "" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Giờ bắt đầu</label>
-                    <div class="input-group col-md-4">
-                        @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker orderInfo form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
-                    </div>
-
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Giờ kết thúc</label>
-                    <div class="input-group col-md-4">
-                        @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker orderInfo form-control", @id = "endTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
-                    </div>
-
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Giá tiền</label>
-                    <div class="col-md-4">
-                        <span id="countPrice">0 đồng</span>
-                        @Html.HiddenFor(p => p.Price)
-                    </div>
-
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label">Ghi chú</label>
-                    <div class="input-group col-md-4">
-                        @Html.TextAreaFor(p => p.Note, new { @class = "form-control", @id = "note", @rows = 3 })
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12 padding-0">
-                <p style="font-weight:bold">Phương thức thanh toán:</p>
-                <ul class="list-content">
-                    <li>
-                        <label>
-                            @Html.RadioButtonFor(p => p.PaidType, 2, new { @checked = true })
-                            Thanh toán bằng tiền mặt tại sân
-                        </label>
-                    </li>
-                    <li>
-                        <label>
-                            @Html.RadioButtonFor(p => p.PaidType, 1)
-                            Thanh toán bằng Ví điện tử NgânLượng
-                        </label>
-                        <div class="boxContent">
-                            <p>
-                                Giao dịch. Đăng ký ví NgânLượng.vn  <a href="https://www.nganluong.vn/?portal=nganluong&amp;page=user_register" target="_blank">tại đây</a>
-                            </p>
+                    <div class="form-group padding-top-10">
+                        <label for="name" class="col-md-4 control-label">Họ Tên:</label>
+                        <div class="col-md-7 input-group">
+                            @Html.TextBoxFor(p => p.PayerName, new { @class = "form-control", @id = "name", @Value = @ViewBag.user.FullName })
                         </div>
-                    </li>
-                </ul>
-                <div class="form-group col-md-12 text-center">
-                    <input type="submit" class="btn btn-primary" id="createOrder" value="Đặt sân">
-                    <button type="button" class="btn btn-default btn-outline"
-                            onclick="window.history.back()">
-                        <span>Quay lại</span>
-                    </button>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-md-4 control-label">Email:</label>
+                        <div class="col-md-7 input-group">
+                            @Html.TextBoxFor(p => p.PayerEmail, new { @class = "form-control", @id = "email", @Value = @ViewBag.user.Email })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" class="col-md-4 control-label">Số Điện thoại:</label>
+                        <div class="col-md-7 input-group">
+                            @Html.TextBoxFor(p => p.PayerPhone, new { @class = "form-control", @id = "phone", @Value = @ViewBag.user.PhoneNumber })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" class="col-md-4 control-label">Chọn sân:</label>
+                        <div class="col-md-7 input-group">
+                            @Html.DropDownListFor(m => m.FieldId, fieldList, new { @class = "orderInfo bs-select-hidden form-control input-sm droplist", @id = "field" })
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                        <label for="phone" class="col-md-4 control-label"></label>
+                        <div class="col-md-7 input-group">
+                            <button type="button" class="btn btn-primary col-md-12" id="checkPrice"><i class="fa fa-usd" aria-hidden="true"></i> Bảng giá các khung giờ</button>
+                        </div>
+                    </div>*@
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Ngày chơi:</label>
+                        <div class="col-md-7 input-group">
+                            @Html.TextBoxFor(p => p.CreateDate, "{0:dd-MM-yyyy}", new { @class = "orderInfo form-control", @id = "playDate", @data_plugin = "datepicker", @Value = "" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Giờ bắt đầu</label>
+                        <div class="input-group col-md-7">
+                            @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker orderInfo form-control", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Giờ kết thúc</label>
+                        <div class="input-group col-md-7">
+                            @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker orderInfo form-control", @id = "endTime", @data_plugin = "clockpicker", @data_autoclose = "true", @Value = "", @Placeholder = "HH:MM" })
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Giá tiền</label>
+                        <div class="col-md-7">
+                            <span id="countPrice">0 đồng</span>
+                            @Html.HiddenFor(p => p.Price)
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Ghi chú</label>
+                        <div class="input-group col-md-7">
+                            @Html.TextAreaFor(p => p.Note, new { @class = "form-control", @id = "note", @rows = 3 })
+                        </div>
+                    </div>
+                    <div class="form-group padding-left-10">
+                        <p style="font-weight:bold">Phương thức thanh toán:</p>
+                        <ul class="list-content">
+                            <li>
+                                <label>
+                                    @Html.RadioButtonFor(p => p.PaidType, 2, new { @checked = true })
+                                    Thanh toán bằng tiền mặt tại sân
+                                </label>
+                            </li>
+                            @if (ViewBag.PlaceOwnerNganLuong != null)
+                            {
+                                <li>
+                                    <label>
+                                        @Html.RadioButtonFor(p => p.PaidType, 1)
+                                        Thanh toán bằng Ví điện tử NgânLượng
+                                    </label>
+                                    <div class="boxContent">
+                                        <p>
+                                            Giao dịch. Đăng ký ví NgânLượng.vn  <a href="https://www.nganluong.vn/?portal=nganluong&amp;page=user_register" target="_blank">tại đây</a>
+                                        </p>
+                                    </div>
+                                </li>
+                            }
+                           
+                        </ul>
+                        <div class="form-group col-md-12 text-center">
+                            <input type="submit" class="btn btn-primary" id="createOrder" value="Đặt sân">
+                            <button type="button" class="btn btn-default btn-outline"
+                                    onclick="window.history.back()">
+                                <span>Quay lại</span>
+                            </button>
+                        </div>
+
+                    </div>
                 </div>
 
+            </div>
+        </form>
+    </div>
+</div>
+<div class="col-md-7 panel padding-top-20" style="float:left">
+        <div class="panel-body container-fluid" style="padding:0">
+            <div class="col-md-12 form-horizontal">
+                <h3 style="text-align:center">Lịch sân</h3>
+                <div class="col-md-12 padding-bottom-25" id="calendarForm" style="padding:0" aria-hidden="true" aria-labelledby="CalendarForm"
+                     role="dialog" tabindex="-1">
+                    <div>
+                        <div id="calendar" style="border:solid 1px">
+
+                        </div>
+
+                    </div>
+                </div>
+                
+                <h3 style="text-align:center">Bảng giá</h3>
+                <div class="col-md-12" id="priceForm" style="padding:0" aria-hidden="true"
+                     role="dialog" tabindex="-1">
+                    <div>
+                        <div class="modal-body" id="blockTime">
+
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
-    </form>
 </div>
-<div class="modal fade" id="calendarForm" aria-hidden="true" aria-labelledby="CalendarForm"
+
+@*<div class="modal fade" id="calendarForm" aria-hidden="true" aria-labelledby="CalendarForm"
      role="dialog" tabindex="-1">
     <div class="modal-dialog">
         <form class="modal-content" action="#" method="post" role="form">
@@ -148,9 +176,9 @@
             </div>
         </form>
     </div>
-</div>
+</div>*@
 
-<div class="modal fade" id="priceForm" aria-hidden="true" role="dialog" tabindex="-1">
+@*<div class="modal fade" id="priceForm" aria-hidden="true" role="dialog" tabindex="-1">
     <div class="modal-dialog">
         <form class="modal-content" action="#" method="post" role="form">
             <div class="modal-header">
@@ -167,7 +195,7 @@
             </div>
         </form>
     </div>
-</div>
+</div>*@
 @section Scripts{
     <script>
 
@@ -316,6 +344,8 @@
             $(document).ready(function ($) {
                 Site.run();
                 console.log("a");
+                handleFullcalendar();
+                handlePrice();
             });
 
         })(document, window, jQuery);
@@ -427,7 +457,50 @@
 
         console.log("ad2");
 
-        $('#checkPrice').on('click', function () {
+        //$('#checkPrice').on('click', function () {
+        //    var fieldId = $('#field').val();
+        //    var ddl = $('#blockTime');
+        //    var content = "";
+        //    ddl.empty();
+        //    ddl.append('<div class="table-responsive"><table class="table table-bordered"><thead><tr><th>Khung giờ</th><th>Giá tiền(vnd)</th></tr></thead><tbody id="blockTimePrice"></tbody></table></div>');
+        //    if (fieldId != null) {
+        //        $.ajax({
+        //            url: "/Field/GetTimeBlockPrice",
+        //            type: 'POST',
+        //            data: {
+        //                'id': fieldId,
+        //            },
+        //            dataType: 'json',
+        //            success: function (data) {
+        //                $(data).each(function () {
+        //                    if (this.block != null || this.price != null) {
+        //                        content += '<tr><td>' + this.block + '</td><td>' + this.price + '</td></tr>';
+        //                    }
+        //                });
+
+        //                if (content != "") {
+        //                    $('#blockTimePrice').append(content);
+        //                }
+        //                else {
+        //                    ddl.empty();
+        //                    ddl.append("Hiện tại chưa có bảng giá tham khảo");
+        //                }
+
+        //            }
+        //        });
+        //    }
+        //    //$('#priceForm').modal('show');
+        //});
+
+        //$('#checkCalendar').on('click', function () {
+        //    $('#calendarForm').modal('show');
+        //});
+
+        //$('#calendarForm').on('shown.bs.modal', function () {
+        //    handleFullcalendar();
+        //});
+
+        function handlePrice () {
             var fieldId = $('#field').val();
             var ddl = $('#blockTime');
             var content = "";
@@ -459,19 +532,13 @@
                     }
                 });
             }
-            $('#priceForm').modal('show');
-        });
-
-        $('#checkCalendar').on('click', function () {
-            $('#calendarForm').modal('show');
-        });
-
-        $('#calendarForm').on('shown.bs.modal', function () {
-            handleFullcalendar();
-        });
+            //$('#priceForm').modal('show');
+        }
 
         $('#field').on('change', function () {
             $('#calendar').fullCalendar('destroy');
+            handleFullcalendar();
+            handlePrice();
         });
 
         function handleFullcalendar() {
@@ -495,7 +562,7 @@
                 header: {
                     left: null,
                     center: 'prev,title,next',
-                    right: 'agendaWeek,agendaDay'
+                    right: ''
                 },
                 defaultDate: today,
                 eventSources: [
@@ -505,7 +572,7 @@
 
                 "id": fieldId
             },
-            color: 'blue',
+            color: '#5940de',
             textColor: 'white'
         },
             {
@@ -514,7 +581,7 @@
 
                     "id": fieldId
                 },
-                color: 'red',
+                color: '#c43636',
                 textColor: 'white'
             }
                 ],
