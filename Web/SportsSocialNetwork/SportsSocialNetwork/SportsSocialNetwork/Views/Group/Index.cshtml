@@ -1,5 +1,6 @@
 ﻿@model SportsSocialNetwork.Models.ViewModels.GroupFullInfoViewModel
 @using SportsSocialNetwork.Models.ViewModels;
+@using SportsSocialNetwork.Models.Entities;
 @using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Group";
@@ -11,6 +12,7 @@
     var friends = ViewBag.friends as IEnumerable<SelectListItem>;
 
     List<GroupMemberFullInfoModel> GroupMember = ViewBag.groupMember;
+    List<GroupFullInfoViewModel> suggestGroups = ViewBag.suggestGroups;
 }
 
 <style>
@@ -178,17 +180,114 @@
 
         <div class="nav-tabs-horizontal">
             <ul class="nav nav-tabs" data-plugin="nav-tabs" role="tablist" style="background-color:white;">
-                <li class="active" role="presentation" id="disscuss">
-                    <a data-toggle="tab" href="#exampleTabsOne" aria-controls="exampleTabsOne"
-                       role="tab">Thảo luận</a>
-                </li>
-                <li role="presentation" id="members">
-                    <a data-toggle="tab" href="#exampleTabsTwo" aria-controls="exampleTabsTwo"
-                       role="tab">Thành viên</a>
-                </li>
+                @{
+                    if (!Model.IsMember)
+                    {
+                        <li class="active" role="presentation" id="members">
+                            <a data-toggle="tab" href="#exampleTabsTwo" aria-controls="exampleTabsTwo"
+                               role="tab">Thành viên</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="active" role="presentation" id="disscuss">
+                            <a data-toggle="tab" href="#exampleTabsOne" aria-controls="exampleTabsOne"
+                               role="tab">Thảo luận</a>
+                        </li>
+                        <li role="presentation" id="members">
+                            <a data-toggle="tab" href="#exampleTabsTwo" aria-controls="exampleTabsTwo"
+                               role="tab">Thành viên</a>
+                        </li>
+                    }
+                }
+                
             </ul>
             <div class="tab-content">
-                <div class="tab-pane active" id="exampleTabsOne" role="tabpanel">
+                @{
+                    if (!Model.IsMember)
+                    {
+                        <div class="tab-pane active" id="exampleTabsTwo" role="tabpanel" style="background-color:white;">
+                            <div class="row" style="padding:20px 20px;">
+                                @{
+                                    foreach (var item in GroupMember)
+                                    {
+                                        if (item.AspNetUser.Id != User.Identity.GetUserId())
+                                        {
+                                            <div class="col-sm-6" style="margin-bottom:20px; padding: 10px 10px 0 10px;">
+                                                <div style="border: 1px solid #e9ebee; overflow:hidden;">
+                                                    <div style="float:left; display:block; width:150px; height:150px;">
+                                                        @*<a class="avatar avatar-lg" href="javascript:void(0)">
+                                                                <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
+                                                            </a>*@
+                                                        <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                    </div>
+                                                    <div style="float:left; display:inline-block; margin-left:15px;">
+                                                        @{
+                                                            if (Model.IsAdmin)
+                                                            {
+                                                                <div class="btn-group" style="position:absolute; right:10px;">
+                                                                    <button type="button" class="btn btn-default dropdown-toggle btn-outline" id="@item.AspNetUser.Id"
+                                                                            data-toggle="dropdown" aria-expanded="false">
+                                                                        <span class="caret"></span>
+                                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="@item.AspNetUser.Id" role="menu">
+                                                                        @{
+                                                                            if (item.Admin)
+                                                                            {
+                                                                                <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="removeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Bỏ quyền quản trị</a></li>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="makeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Chọn làm quản trị viên</a></li>
+                                                                            }
+
+                                                                        }
+
+                                                                    </ul>
+                                                                </div>
+                                                                            }
+                                                        }
+
+                                                        <a href="@item.AspNetUser.Id"><h3>@item.AspNetUser.FullName</h3></a>
+                                                        @{
+                                                            string hobbies = "";
+                                                            for (int i = 0; i < item.AspNetUser.Hobbies.Count(); i++)
+                                                            {
+                                                                if (i == item.AspNetUser.Hobbies.Count() - 1)
+                                                                {
+                                                                    hobbies += item.AspNetUser.Hobbies[i].Sport.Name;
+                                                                }
+                                                                else
+                                                                {
+                                                                    hobbies += item.AspNetUser.Hobbies[i].Sport.Name + ", ";
+                                                                }
+
+                                                            }
+                                                        }
+                                                        <p>@hobbies</p>
+                                                        @{
+                                                            if (item.isFollowed != true)
+                                                            {
+                                                                <button type="button" class="btn btn-default"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button><br />
+                                                            }
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                                }
+
+                                                            }
+                                }
+
+
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="tab-pane active" id="exampleTabsOne" role="tabpanel">
                     <!--Posting status area-->
 
                     
@@ -247,84 +346,87 @@
                     </div>
                     <!--END Post area-->
                 </div>
-                <div class="tab-pane" id="exampleTabsTwo" role="tabpanel" style="background-color:white;">
-                    <div class="row" style="padding:20px 20px;">
-                        @{
-                            foreach (var item in GroupMember)
-                            {
-                                if(item.AspNetUser.Id != User.Identity.GetUserId())
-                                {
-                                    <div class="col-sm-6" style="margin-bottom:20px; padding: 10px 10px 0 10px;">
-                                        <div style="border: 1px solid #e9ebee; overflow:hidden;">
-                                            <div style="float:left; display:block; width:150px; height:150px;">
-                                                @*<a class="avatar avatar-lg" href="javascript:void(0)">
-                                                    <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
-                                                </a>*@
-                                                <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
-                                            </div>
-                                            <div style="float:left; display:inline-block; margin-left:15px;">
-                                                @{
-                                                    if (Model.IsAdmin)
-                                                    {
-                                                        <div class="btn-group" style="position:absolute; right:10px;">
-                                                            <button type="button" class="btn btn-default dropdown-toggle btn-outline" id="@item.AspNetUser.Id"
-                                                                    data-toggle="dropdown" aria-expanded="false">
-                                                                <span class="caret"></span>
-                                                                <span class="sr-only">Toggle Dropdown</span>
-                                                            </button>
-                                                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="@item.AspNetUser.Id" role="menu">
-                                                                @{
-                                                                    if (item.Admin)
-                                                                    {
-                                                                        <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="removeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Bỏ quyền quản trị</a></li>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="makeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Chọn làm quản trị viên</a></li>
-                                                                    }
+                        <div class="tab-pane" id="exampleTabsTwo" role="tabpanel" style="background-color:white;">
+                            <div class="row" style="padding:20px 20px;">
+                                @{
+                                    foreach (var item in GroupMember)
+                                    {
+                                        if(item.AspNetUser.Id != User.Identity.GetUserId())
+                                        {
+                                            <div class="col-sm-6" style="margin-bottom:20px; padding: 10px 10px 0 10px;">
+                                                <div style="border: 1px solid #e9ebee; overflow:hidden;">
+                                                    <div style="float:left; display:block; width:150px; height:150px;">
+                                                        @*<a class="avatar avatar-lg" href="javascript:void(0)">
+                                                            <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
+                                                        </a>*@
+                                                        <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                    </div>
+                                                    <div style="float:left; display:inline-block; margin-left:15px;">
+                                                        @{
+                                                            if (Model.IsAdmin)
+                                                            {
+                                                                <div class="btn-group" style="position:absolute; right:10px;">
+                                                                    <button type="button" class="btn btn-default dropdown-toggle btn-outline" id="@item.AspNetUser.Id"
+                                                                            data-toggle="dropdown" aria-expanded="false">
+                                                                        <span class="caret"></span>
+                                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="@item.AspNetUser.Id" role="menu">
+                                                                        @{
+                                                                            if (item.Admin)
+                                                                            {
+                                                                                <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="removeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Bỏ quyền quản trị</a></li>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="makeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Chọn làm quản trị viên</a></li>
+                                                                            }
 
+                                                                        }
+
+                                                                    </ul>
+                                                                </div>
+                                                        }
+                                                        }
+
+                                                        <a href="@item.AspNetUser.Id"><h3>@item.AspNetUser.FullName</h3></a>
+                                                        @{
+                                                            string hobbies = "";
+                                                            for(int i = 0; i < item.AspNetUser.Hobbies.Count(); i++)
+                                                            {
+                                                                if(i == item.AspNetUser.Hobbies.Count() - 1)
+                                                                {
+                                                                    hobbies += item.AspNetUser.Hobbies[i].Sport.Name;
+                                                                }
+                                                                else
+                                                                {
+                                                                    hobbies += item.AspNetUser.Hobbies[i].Sport.Name + ", ";
                                                                 }
 
-                                                            </ul>
-                                                        </div>
-                                                      }
-                                                }
-                                                
-                                                <a href="@item.AspNetUser.Id"><h3>@item.AspNetUser.FullName</h3></a>
-                                                @{
-                                                    string hobbies = "";
-                                                    for(int i = 0; i < item.AspNetUser.Hobbies.Count(); i++)
-                                                    {
-                                                        if(i == item.AspNetUser.Hobbies.Count() - 1)
-                                                        {
-                                                            hobbies += item.AspNetUser.Hobbies[i].Sport.Name;
+                                                            }
                                                         }
-                                                        else
+                                                        <p>@hobbies</p>
+                                                        @{
+                                                        if (item.isFollowed != true)
                                                         {
-                                                            hobbies += item.AspNetUser.Hobbies[i].Sport.Name + ", ";
+                                                            <button type="button" class="btn btn-default"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button><br />
+                                                        }
                                                         }
 
-                                                    }
-                                                }
-                                                <p>@hobbies</p>
-                                                @{
-                                                    if (item.isFollowed != true)
-                                                    {
-                                                        <button type="button" class="btn btn-default"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button><br />
-                                                    }
-                                                }
-                                            
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                }
-                                
-                            }
-                        }
-                        
+                                        }
 
-                    </div>
-                </div>
+                                    }
+                                }
+
+
+                            </div>
+                        </div>
+                    }
+                }
+                
             </div>
         </div>
 
@@ -333,28 +435,89 @@
     <!--END Main-->
 
     <!--Right side-bar-->
-    <div class="col-sm-3">
+    <div class="col-sm-3" id="rightBar">
         <div class="panel">
             <div class="panel-heading">
                 <h3 class="panel-title">Thêm thành viên mới</h3>
             </div>
             <div class="panel-body">
                 <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-pure btn-primary icon wb-plus"></button>
-                        </span>
-                        <input type="text" name="AddFriendToGroupList" id="addFrd" placeholder="Tags">
-                    </div>
+                    <form id="addFrdForm" method="post" autocomplete="off">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-pure btn-primary icon wb-plus"></button>
+                            </span>
+                            <input type="text" name="AddFriendToGroupList" id="addFrd" placeholder="Tags">
+                            <input type="hidden" name="groupId" value="@groupId" />
+                            <input type="hidden" name="userId" value="@User.Identity.GetUserId()" />
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <div class="panel">
+        <div class="panel" id="fixpanel">
             <div class="panel-heading">
                 <h3 class="panel-title">Nhóm đề nghị</h3>
             </div>
             <div class="panel-body" style="padding: 0 0 15px 0;">
-                <div class="suggest-group">
+                @{
+                    GroupFullInfoViewModel last = suggestGroups.Last();
+                    foreach (var item in suggestGroups)
+                    {
+                        if (item.Equals(last))
+                        {
+                            if (item.Id != groupId && item.IsMember != true)
+                            {
+                                <div class="suggest-group lastSuggestGroup" id="suggestGroup_@item.Id">
+                                    <div class="col-sm-12">
+                                        <div class="overlay">
+                                            <img src="@item.Avatar" style="display:block; max-height:100%;max-width:100%;" />
+                                            <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                                <h4><span class="icon wb-heart"> @item.MemberCount</span></h4>
+                                            </figcaption>
+                                        </div>
+                                        <div class="row">
+                                            <div class="clearfix"></div>
+                                            <div class="col-sm-6 height-50 vertical-align">
+                                                <a href="/Group/Index/@item.Id" style="color:#808c97;"><span class="vertical-align-middle"><strong>@item.Name</strong></span></a>
+                                            </div>
+                                            <div class="col-sm-6" style="margin-top:5px;">
+                                                <button type="button" class="btn btn-outline btn-default" title="Tham gia nhóm" onclick="joinSuggestGroup(@item.Id)"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            if (item.Id != groupId && item.IsMember != true)
+                            {
+                                <div class="suggest-group" id="suggestGroup_@item.Id">
+                                    <div class="col-sm-12">
+                                        <div class="overlay">
+                                            <img src="@item.Avatar" style="display:block; max-height:100%;max-width:100%;" />
+                                            <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                                <h4><span class="icon wb-heart"> @item.MemberCount</span></h4>
+                                            </figcaption>
+                                        </div>
+                                        <div class="row">
+                                            <div class="clearfix"></div>
+                                            <div class="col-sm-6 height-50 vertical-align">
+                                                <a href="/Group/Index/@item.Id" style="color:#808c97;"><span class="vertical-align-middle"><strong>@item.Name</strong></span></a>
+                                            </div>
+                                            <div class="col-sm-6" style="margin-top:5px;">
+                                                <button type="button" class="btn btn-outline btn-default" title="Tham gia nhóm" onclick="joinSuggestGroup(@item.Id)"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+                    }
+                }
+                @*<div class="suggest-group">
                     <div class="col-sm-12">
                         <div class="overlay">
                             <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
@@ -372,83 +535,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="suggest-group">
-                    <div class="col-sm-12">
-                        <div class="overlay">
-                            <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
-                            <figcaption class="overlay-bottom overlay-panel overlay-background">
-                                <h4><span class="icon wb-heart"> 255</span></h4>
-                            </figcaption>
-                        </div>
-                        <div class="row">
-                            <div class="clearfix"></div>
-                            <div class="col-sm-6 height-50 vertical-align">
-                                <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
-                            </div>
-                            <div class="col-sm-6" style="margin-top:5px;">
-                                <button type="button" class="btn btn-outline btn-default" title="Tham gia nhóm"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="suggest-group">
-                    <div class="col-sm-12">
-                        <div class="overlay">
-                            <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
-                            <figcaption class="overlay-bottom overlay-panel overlay-background">
-                                <h4><span class="icon wb-heart"> 255</span></h4>
-                            </figcaption>
-                        </div>
-                        <div class="row">
-                            <div class="clearfix"></div>
-                            <div class="col-sm-6 height-50 vertical-align">
-                                <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
-                            </div>
-                            <div class="col-sm-6" style="margin-top:5px;">
-                                <button type="button" class="btn btn-outline btn-default" title="Tham gia nhóm"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="suggest-group">
-                    <div class="col-sm-12">
-                        <div class="overlay">
-                            <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
-                            <figcaption class="overlay-bottom overlay-panel overlay-background">
-                                <h4><span class="icon wb-heart"> 255</span></h4>
-                            </figcaption>
-                        </div>
-                        <div class="row">
-                            <div class="clearfix"></div>
-                            <div class="col-sm-6 height-50 vertical-align">
-                                <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
-                            </div>
-                            <div class="col-sm-6" style="margin-top:5px;">
-                                <button type="button" class="btn btn-outline btn-default" title="Tham gia nhóm"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="suggest-group">
-                    <div class="col-sm-12">
-                        <div class="overlay">
-                            <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
-                            <figcaption class="overlay-bottom overlay-panel overlay-background">
-                                <h4><span class="icon wb-heart"> 255</span></h4>
-                            </figcaption>
-                        </div>
-                        <div class="row">
-                            <div class="clearfix"></div>
-                            <div class="col-sm-6 height-50 vertical-align">
-                                <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
-                            </div>
-                            <div class="col-sm-6" style="margin-top:5px;">
-                                <button type="button" class="btn btn-outline btn-default" title="Tham gia nhóm"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </div>*@
+                
+                
+                
+                
             </div>
         </div>
     </div>
@@ -565,6 +656,26 @@
             data: frdList
         });
 
+        function joinSuggestGroup(groupId) {
+            var elDiv = "#suggestGroup_" + groupId;
+            $.ajax({
+                url: '@Url.Action("JoinGroup")',
+                type: 'POST',
+                data: {
+                    groupId: groupId,
+                    userId: '@User.Identity.GetUserId()'
+                },
+                success: function (data) {
+                    if (data.Succeed) {
+                        $(elDiv).hide('slow', function(){ $(elDiv).remove(); });
+                    }
+                },
+                error: function () {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            })
+        }
+
         function joinGroup(groupId) {
             $.ajax({
                 url: '@Url.Action("JoinGroup")',
@@ -575,7 +686,8 @@
                 },
                 success: function (data) {
                     if (data.Succeed) {
-                        $("#joinGroupBtn").replaceWith('<button type="button" class="btn btn-warning" id="leaveGroupBtn" onclick="leaveGroup(@Model.Id)">Rời nhóm</button>');
+                        @*$("#joinGroupBtn").replaceWith('<button type="button" class="btn btn-warning" id="leaveGroupBtn" onclick="leaveGroup(@Model.Id)">Rời nhóm</button>');*@
+                        location.href = location.href;
                     }
                 },
                 error: function () {
@@ -624,6 +736,7 @@
                                     success: function (data) {
                                         if(data.Succeed) {
                                             showMessage("Rời nhóm thành công", "success", "OK");
+                                            location.href = location.href;
                                         } else {
                                             showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                                         }
@@ -651,6 +764,7 @@
                                     success: function (data) {
                                         if(data.Succeed) {
                                             showMessage("Rời nhóm thành công", "success", "OK");
+                                            location.href = location.href;
                                         } else {
                                             showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                                         }
@@ -871,6 +985,43 @@
             var _updateCommentActionName = '@Url.Action("UpdateComment", "PostComment")';
             var _loadSavedCommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
             updateComment(_updateCommentActionName, _loadSavedCommentActionName, _id);
+        });
+
+        $('#addFrdForm').submit(function(e){
+            e.preventDefault();
+            var groupId = '@groupId';
+            var userId = '@User.Identity.GetUserId()';
+            var formData = new FormData(document.getElementById('addFrdForm'));
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddFriendGroup", "Group")',
+                async: false,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    if(data.Succeed) {
+                        $('#addFrd').val("");
+                        showMessage("Lời mời đã được gửi tới bạn của bạn", "success", "OK");
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function() {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            })
+        });
+
+        var elementPosition = $('.lastSuggestGroup').offset();
+        var $width = $('#rightBar').width();
+        $(window).scroll(function(){
+            if($(window).scrollTop() > elementPosition.top){
+                $('#fixpanel').css('position','fixed').css('bottom','490px').css('right', '50px').css('width', $width);
+            } else {
+                $('#fixpanel').css('position','static');
+            }    
         });
     </script>
 }

@@ -108,7 +108,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         public int GetPostCountOfUser(string userId)
         {
-            return this.GetActive(p => p.UserId.Equals(userId) && p.GroupId == null).ToList().Count();
+            return this.GetActive(p => p.UserId.Equals(userId)).ToList().Count();
         }
 
         #endregion

@@ -10,6 +10,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using SportsSocialNetwork.Models.Utilities;
+using SportsSocialNetwork.Models.Enumerable;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -91,10 +93,25 @@ namespace SportsSocialNetwork.Controllers
                     }
                 }
             }
-            
-            ViewBag.groupMember = ListGroupMemberVM;
 
+            //get suggest group
+            List<Group> suggestGroups = _groupService.GetSuggestGroup(id.Value);
+            List<GroupFullInfoViewModel> suggestGroupsVM = Mapper.Map<List<GroupFullInfoViewModel>>(suggestGroups);
+            foreach (var item in suggestGroupsVM)
+            {
+                item.MemberCount = _groupMemberService.GetActive(g => g.GroupId == item.Id).ToList().Count();
+                foreach (var gm in listGroup)
+                {
+                    if(gm.GroupId == item.Id)
+                    {
+                        item.IsMember = true;
+                    }
+                }
+            }
+
+            ViewBag.groupMember = ListGroupMemberVM;
             ViewBag.groupId = id.Value;
+            ViewBag.suggestGroups = suggestGroupsVM;
             return View(model);
         }
 
@@ -341,5 +358,52 @@ namespace SportsSocialNetwork.Controllers
 
             return Json(result);
         }
+
+        [HttpPost]
+        public ActionResult AddFriendGroup(string AddFriendToGroupList, string userId, int groupId)
+        {
+            var result = new AjaxOperationResult();
+            var _notificationService = this.Service<INotificationService>();
+
+            if (!String.IsNullOrEmpty(AddFriendToGroupList))
+            {
+                string[] frd = AddFriendToGroupList.Split(',');
+                if (frd != null)
+                {
+                    var _userService = this.Service<IAspNetUserService>();
+                    var _groupService = this.Service<IGroupService>();
+
+                    AspNetUser fromUser = _userService.FindUser(userId);
+                    Group group = _groupService.FindGroupById(groupId);
+
+                    foreach (var item in frd)
+                    {
+                        if (!item.Equals(""))
+                        {
+                            Notification noti = new Notification();
+                            noti.UserId = item;
+                            noti.FromUserId = userId;
+                            noti.Title = Utils.GetEnumDescription(NotificationType.Invitation);
+                            noti.Type = (int)NotificationType.Invitation;
+                            noti.Message = fromUser.FullName + " đã mời bạn vào nhóm " + group.Name;
+                            noti.CreateDate = DateTime.Now;
+                            _notificationService.Create(noti);
+                        }
+                    }
+                    result.Succeed = true;
+
+                }
+                else
+                {
+                    result.Succeed = false;
+                }
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+            return Json(result);
+        }
+
     }
 }
