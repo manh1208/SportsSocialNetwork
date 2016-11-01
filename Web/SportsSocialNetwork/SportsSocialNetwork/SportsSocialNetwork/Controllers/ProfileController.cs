@@ -50,7 +50,7 @@ namespace SportsSocialNetwork.Controllers
             var users = _userService.GetActive(p => p.Id != userId && p.Follows.Where(f => f.Active == true && (f.FollowerId == userId)).ToList().Count == 0).ToList();
             foreach (var item in users)
             {
-                FollowSuggestViewModel followsug = Mapper.Map<FollowSuggestViewModel>(user);
+                FollowSuggestViewModel followsug = Mapper.Map<FollowSuggestViewModel>(item);
                 followsug.weight = 0;
                 foreach (var follow in item.Follows)
                 {

@@ -270,17 +270,17 @@
     <!--END Main-->
     <!--Right side-bar-->
     <div class="col-sm-3">
-        <div class="panel" id="suggest-follow-panel">
-            <div class="panel-heading text-center">
-                <h class="panel-title" style="font-family:sans-serif">Gợi ý theo dõi</h>
-            </div>
-            <div class="panel-body">
-                <div class="height-250 check" id="check" data-plugin="scrollable">
-                    <div data-role="container">
-                        <div data-role="content" id="container">
-                            @foreach (FollowSuggestViewModel item in ViewBag.suggestUserList)
-                            {
-                                if (!item.Id.Equals(User.Identity.GetUserId()))
+        @if (ViewBag.suggestUserList != null && ViewBag.suggestUserList.Count > 0)
+            {
+            <div class="panel" id="suggest-follow-panel">
+                <div class="panel-heading text-center">
+                    <h class="panel-title" style="font-family:sans-serif">Gợi ý theo dõi</h>
+                </div>
+                <div class="panel-body">
+                    <div class="height-250 check" id="check" data-plugin="scrollable">
+                        <div data-role="container">
+                            <div data-role="content" id="container">
+                                @foreach (var item in ViewBag.suggestUserList)
                                 {
                                     <div class='comment media suggestion' id="@item.Id">
                                         <div class='media-left'>
@@ -289,7 +289,7 @@
                                             </a>
                                         </div>
                                         <div class='comment-body media-body'>
-                                            <a class='comment-author' href='javascript:void(0)'>@item.UserName</a>
+                                            <a class='comment-author' href='javascript:void(0)'>@item.FullName</a>
                                             <div class='comment-content'>
                                                 @if (@item.sameSport != 0)
                                                 {<p>Có chung @item.sameSport sở thích</p>}
@@ -298,15 +298,15 @@
                                     </div>
                                 }
 
-                            }
+                            </div>
 
                         </div>
 
                     </div>
-
                 </div>
             </div>
-        </div>
+
+        }
         @*<div class="panel">
             <div class="panel-heading">
                 <h3 class="panel-title">Nhóm đề nghị</h3>
