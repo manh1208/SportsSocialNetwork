@@ -158,7 +158,7 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                                    '</div>' +
                                    '</div>';
                     }
-                    else if (this.AspNetUser.Id == userId) {
+                    else if (this.AspNetUser.Id == curUserId) {
                         reportDiv = '<div style="position: absolute;right: 0;top:15px;width: 30px;">' +
                           '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
                           '<div class="dropdown">' +
