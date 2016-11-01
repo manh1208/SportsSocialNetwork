@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
+import com.capstone.sportssocialnetwork.activity.CreateGroupActivity;
 import com.capstone.sportssocialnetwork.activity.FriendActivity;
 import com.capstone.sportssocialnetwork.activity.GroupActivity;
 import com.capstone.sportssocialnetwork.activity.LoginActivity;
@@ -52,6 +53,7 @@ public class ProfileFragment extends Fragment {
     private String fullName;
     private String userId;
     private RestService service;
+    private View footer;
 
 
     @Override
@@ -70,7 +72,9 @@ public class ProfileFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
         lvMenuProfile = (ListView) v.findViewById(R.id.lv_menu_profile);
         headerView = inflater.inflate(R.layout.item_header_menu_profile,null,false);
+        footer = inflater.inflate(R.layout.item_menu_profile_footer,null,false);
         lvMenuProfile.addHeaderView(headerView);
+        lvMenuProfile.addFooterView(footer);
         adapter = new MenuProfileAdapter(getActivity(),R.layout.item_menu_profile,new ArrayList<Group>());
         headerHolder = new ViewHolder(headerView);
         lvMenuProfile.setAdapter(adapter);
@@ -107,6 +111,13 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FriendActivity.class);
+                startActivity(intent);
+            }
+        });
+        footer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CreateGroupActivity.class);
                 startActivity(intent);
             }
         });

@@ -4,7 +4,7 @@
     <!--<color name="colorPrimaryDark">#d65301</color>-->
     <color name="colorPrimary">#F55F00</color>
     <color name="colorPrimaryDark">#ca4f00</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#F55F00</color>
     <color name="black">#000</color>
     <color name="separator">#ffe4d0</color>
     <color name="notification">#ffe4d4</color>

@@ -49,7 +49,6 @@ public class ImageViewerAdapter extends RecyclePagerAdapter<ImageViewerAdapter.V
         Picasso.with(context).load(Uri.parse(DataUtils.URL+images[position]))
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.ic_image_error)
-                .fit()
                 .into(holder.image);
     }
 

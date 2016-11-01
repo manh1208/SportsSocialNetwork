@@ -23,4 +23,5 @@
     <string name="title_activity_group_member">GroupMemberActivity</string>
     <string name="title_activity_group_information">GroupInformationActivity</string>
     <string name="title_activity_add_member">AddMemberActivity</string>
+    <string name="title_activity_create_group">CreateGroupActivity</string>
 </resources>

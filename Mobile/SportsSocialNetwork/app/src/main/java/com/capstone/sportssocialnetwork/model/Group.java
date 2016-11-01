@@ -20,6 +20,8 @@ public class Group {
     private String avatar;
     @SerializedName("Active")
     private boolean active;
+    @SerializedName("IsAdmin")
+    private boolean admin;
 
     public int getId() {
         return id;
@@ -75,5 +77,13 @@ public class Group {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }
