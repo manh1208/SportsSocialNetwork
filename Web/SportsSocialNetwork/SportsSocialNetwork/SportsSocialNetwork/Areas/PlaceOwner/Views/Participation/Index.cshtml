@@ -1,0 +1,430 @@
+﻿@using SportsSocialNetwork.Models.Enumerable;
+@using SportsSocialNetwork.Models.Utilities;
+@{
+    ViewBag.Title = "Quản lí người tham gia";
+}
+<style>
+    .datepicker.datepicker-dropdown.dropdown-menu.datepicker-oritent-left.dataTable-orient-bottom {
+        top: 43%;
+    }
+
+    .timepicker {
+        z-index: 5000 !important;
+    }
+
+    .narrow {
+        padding: 5px;
+        border: 1px solid;
+        width: 8em;
+    }
+
+    .breakAll {
+        word-break: break-all;
+    }
+
+
+    dt, dd {
+        font-size: 15px;
+        color: #000;
+    }
+
+    dt {
+        font-weight: bold;
+    }
+
+    .button {
+        background-color: #008CBA; /* blue */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+    }
+
+    #sport-table {
+        word-wrap: break-word;
+    }
+
+    /*p.alignCenter {
+        text-align: center;
+    }*/
+</style>
+
+<div class="panel">
+    <div class="panel-body">
+        <div class="col-md-6">
+            <h3>Danh sách các người tham gia</h3>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-body">
+        <div class="box">
+            <div class="box-header">
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="table" class="table table-hover dataTable table-bordered dt-responsive nowrap" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th class="breakAll narrow">Số thứ tự</th>
+                                    <th class="breakAll narrow">Sự kiện</th>
+                                    <th class="breakAll narrow">Người tham gia</th>
+                                    <th class="breakAll narrow">Trạng thái sự kiện</th>
+                                    <th class="breakAll narrow">Đội tham gia</th>
+                                    <th class="breakAll narrow">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-warning" id="modelDetail" aria-hidden="true"
+     aria-labelledby="modelDetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="detail-modal-container"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-warning" id="modalCreate" aria-hidden="true"
+     aria-labelledby="modalCreate" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="create-modal-container"></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade modal-warning" id="modalUpdate" aria-hidden="true"
+     aria-labelledby="modalViewdetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="update-modal-container"></div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        (function (document, window, $) {
+            'use strict';
+
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
+                $('#startDay').datepicker({
+                    format: "dd/mm/yyyy"
+                })
+                $('#endDay').datepicker({
+                    format: "dd/mm/yyyy"
+                })
+            });
+        })(document, window, jQuery);
+
+
+        //load init datatable function
+        $(document).ready(function () {
+            initEventTable();
+        });
+
+        //init datatable
+        function initEventTable() {
+            var colDefs = [
+                  {
+                      "aTargets": [1],
+                      "bSortable": false,
+                  },
+                  {
+                      "aTargets": [2],
+                      "mRender": function (data, type, row) {
+                          var fullname = row[2];
+                          var userid = row[6];
+                          var previewBtn = '<a href="/profile/index?userid='+ userid +'" target="_blank">'+ fullname +'</a>';
+                          return previewBtn + '&nbsp;';
+                      },
+                      "bSortable": false
+                  },
+
+                  {
+                      "aTargets": [3],
+                      "mRender": function (data, type, row) {
+                          var label = '';
+                          if (row[3] == parseInt('@((int)EventStatus.Closed)')) {
+                              label = '<span class="label label-outline label-success label-lg">@Utils.GetEnumDescription(EventStatus.Closed).ToString()</span>';
+                          } else if (row[3] == parseInt('@((int)EventStatus.Operating)')) {
+                              label = '<span class="label label-outline label-danger label-lg">@Utils.GetEnumDescription(EventStatus.Operating)</span>';
+                          }
+
+                          return label;
+                      },
+                      "bSortable": false,
+                  },
+
+                   {
+                       "aTargets": [4],
+                       "bSortable": false,
+                   },
+
+                  {
+                      "aTargets": [5],
+                      "mRender": function (data, type, row) {
+                          var previewBtn = '<a class="btn btn-success" data-target="#modalViewdetail" onclick="showDetailModal(\'' + data + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
+                          var deactiveBtn = '<a class="btn btn-danger" data-style="zoom-in" data-plugin="ladda" onclick="deactiveSchedule(\'' + data + '\')"  href="#"> <span class="ladda-label"><i class="fa fa-trash-o "></i></span></a>';
+                          return previewBtn + '&nbsp;' + deactiveBtn;
+                      },
+                      "bSortable": false
+                  },
+            ];
+            var param = {
+                colDefs: colDefs,
+                url: '@Url.Action("IndexList")',
+                data: [{
+                    name: "id", value: '@ViewBag.evenId'
+                }]
+            };
+            $('#table').customDataTable(param);
+
+        }
+
+        //show detail popup
+        function showDetailModal(id) {
+            $.ajax({
+                url: '@Url.Action("Detail")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#detail-modal-container').html(data);
+                    $('#modelDetail').modal('show');
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+        //show sport create popup
+        function showCreateModal() {
+            $.ajax({
+                url: '@Url.Action("Create")',
+                type: 'Get',
+                dataType: "html",
+                //luc khoi tao 1 sport moi thi ko có id
+                success: function (data) {
+                    $('#create-modal-container').html(data);
+                    $('#modalCreate').modal('show');
+                    scriptForPartialView();//de thuc hien java script goi controller xu ly thao tac create
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
+
+        //show sport update popup
+        function showUpdateModal(id) {
+            $.ajax({
+                url: '@Url.Action("Update")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#update-modal-container').html(data);
+                    $('#modalUpdate').modal('show');
+                    scriptForPartialView();
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
+        //this function will change the status from active to deactive
+        function deactiveSchedule(id) {
+            showConfirmDeleteItem("Bạn có chắc chắn muốn xóa người tham gia này?",
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("Deactive")',
+                            data: { id: id },
+                            success: function (data) {
+                                $("#table").reloadDataTable();
+                                if (data.Succeed) {
+                                    showMessage("Xóa thành công", "success", "OK");
+                                } else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                }
+                            },
+                            error: function (error) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        });
+                    }
+                });
+        }
+
+        //function nay de goi controller thuc hien cac thao tac xu ly update, create
+        function scriptForPartialView() {
+            $('#startDay').datepicker({
+                format: "dd/mm/yyyy"
+            });
+            $('#endDay').datepicker({
+                format: "dd/mm/yyyy"
+            });
+            $('#cstartDay').datepicker({
+                format: "dd/mm/yyyy"
+            });
+            $('#cendDay').datepicker({
+                format: "dd/mm/yyyy"
+            });
+
+            //Validation
+            (function () {
+                $('#eventForm').formValidation({
+                    framework: "bootstrap",
+                    button: {
+                        selector: '#submitBtn',
+                        disabled: 'disabled'
+                    },
+                    icon: null,
+                    fields: {
+                        FieldId: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Tên sự kiện không được trống'
+                                }
+                            }
+                        },
+                        PlaceId: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Địa điểm không được trống'
+                                }
+                            }
+                        },
+                        StartDay: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Ngày bắt đầu không được trống'
+                                },
+                                date: {
+                                    format: 'DD/MM/YYYY',
+                                    message: 'Ngày không phù hợp',
+                                    min: '@DateTime.Now.ToString("dd/MM/yyyy")',
+                                    max: 'EndDate'
+                                }
+                            }
+                        },
+                        EndDay: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Ngày kết thúc không được trống'
+                                },
+                                date: {
+                                    format: 'DD/MM/YYYY',
+                                    message: 'Ngày không phù hợp',
+                                    min: 'StartDate'
+                                }
+                            }
+                        },
+                        Description: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Mô tả không được trống'
+                                }
+                            }
+                        }
+                    }
+                });
+            })();
+
+            //update sport function
+            $('#update-form').submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData(document.getElementById('update-form'));
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Update")',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            showMessage("Cập nhật thành công.", "success", "OK");
+                            $('#modalUpdate').modal('hide');
+                            $('#fieldschedule-table').reloadDataTable();
+                        } else {
+                            showErrors(result.Errors);
+                            showMessage("Không thể cập nhật.", "error", "OK");
+
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        $('#modalUpdate').modal('hide');
+                    },
+                });
+            });
+
+            //create sport
+            $('#create-form').submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData(document.getElementById('create-form'));
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Create")',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            showMessage("Thêm mới thành công.", "success", "OK");
+                            $('#modalCreate').modal('hide');
+                            $('#fieldschedule-table').reloadDataTable();
+                        } else {
+                            showErrors(result.Errors);
+                            showMessage("Không tạo được. Vui lòng nhập lại", "error", "OK");
+                        }
+
+                    },
+                    error: function (result) {
+
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+            });
+        }
+
+        $('body').on('focus', ".timepicker", function () {
+            $(this).clockpicker();
+        })
+        $('body').on('focus', ".datepicker", function () {
+            $(this).datepicker();
+        })
+        $('body').on('focus', ".datepair-date", function () {
+            $(this).datepair();
+        })
+        $('body').on('focus', ".datepair-time", function () {
+            $(this).datepair();
+        })
+    </script>
+}
+
+
+
