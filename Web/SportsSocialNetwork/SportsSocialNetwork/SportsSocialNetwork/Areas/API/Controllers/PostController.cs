@@ -114,7 +114,9 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 }
 
-                List<PostOveralViewModel> result = Mapper.Map<List<PostOveralViewModel>>(postList);
+                List<PostGeneralViewModel> orderedList = listPostVM.OrderByDescending(p => p.PostRank).Skip(skip).Take(take).ToList();
+
+                List<PostOveralViewModel> result = Mapper.Map<List<PostOveralViewModel>>(orderedList);
 
                 foreach (var p in result)
                 {
