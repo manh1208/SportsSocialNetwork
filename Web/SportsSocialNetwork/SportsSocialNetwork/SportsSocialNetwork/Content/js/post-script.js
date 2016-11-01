@@ -532,6 +532,7 @@ function createComment(commentActionName, loadSavedCommentActionName, userId, id
             success: function (result) {
                 if (result.Succeed) {
                     prependComment(result.AdditionalData);
+                    broadcastComment(result.AdditionalData);
                 } else {
                     showErrors(result.Errors);
                     showMessage("Không thể cập nhật.", "error", "OK");
@@ -1610,6 +1611,23 @@ function refreshLikeAndCommentNumber(id) {
         error: function (result) {
             showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
         },
+    });
+}
+
+function broadcastComment(data) {
+    // Declare a proxy to reference the hub.
+    var realtimeHub = $.connection.realTimeHub;
+    // Create a function that the hub can call to broadcast messages.
+    realtimeHub.client.broadcastMessage = function (c) {
+        if (c != null) {
+            prependComment(c);
+        }
+        // Add the message to the page.
+    };
+    // Start the connection.
+    $.connection.hub.start().done(function () {
+        realtimeHub.server.notifyComment(data);
+
     });
 }
 
