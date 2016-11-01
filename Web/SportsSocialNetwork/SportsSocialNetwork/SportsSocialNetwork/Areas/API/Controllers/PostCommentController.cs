@@ -105,6 +105,33 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             return Json(response);
         }
 
+        [HttpPost]
+        public ActionResult DeleteComment(int id)
+        {
+            var service = this.Service<IPostCommentService>();
+
+            ResponseModel<bool> response = null;
+
+            try {
+                PostComment comment = service.FirstOrDefaultActive(x => x.Id == id);
+
+                if (comment != null)
+                {
+                    service.Deactivate(comment);
+
+                    response = new ResponseModel<bool>(true, "Đã xóa bài viết", null);
+                }
+                else
+                {
+                    response = ResponseModel<bool>.CreateErrorResponse("Không thể xóa bài viết", systemError);
+                }
+            } catch(Exception)
+            {
+                response = ResponseModel<bool>.CreateErrorResponse("Không thể xóa bài viết", systemError);
+            }
+            return Json(response);
+        }
+
         private PostCommentDetailViewModel PreparePostCommentDetailViewModel(PostComment comment) {
             PostCommentDetailViewModel result = Mapper.Map<PostCommentDetailViewModel>(comment);
 
