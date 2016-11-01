@@ -20,6 +20,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         bool DeleteGroup(int id);
 
+        List<Group> GetSuggestGroup(int groupId);
+
         #endregion
 
         void test();
@@ -85,6 +87,14 @@ namespace SportsSocialNetwork.Models.Entities.Services
         public void test()
         {
 
+        }
+
+        public List<Group> GetSuggestGroup(int groupId)
+        {
+            Group curGroup = this.FindGroupById(groupId);
+
+            List<Group> suggestGroupList = this.GetActive(g => g.SportId == curGroup.SportId).ToList();
+            return suggestGroupList;
         }
     }
 }

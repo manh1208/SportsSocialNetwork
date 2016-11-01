@@ -4,6 +4,8 @@
 @{
     ViewBag.Title = Model.UserName;
     Layout = "~/Views/Shared/_SSNLayout.cshtml";
+
+    var sport = ViewBag.Sport as IEnumerable<SelectListItem>;
 }
 
 <style>
@@ -122,16 +124,14 @@
                     <a class="avatar avatar-lg" href="javascript:void(0)">
                         <img class="groupAvatar" src="@Model.AvatarImage" alt="...">
                     </a>
-                    <div class="profile-user">@Model.UserName</div>
-                    <div class="profile-job">@Model.FullName</div>
-                    @{ 
-                        if(Model.isOwner)
+                    <div class="profile-user">@Model.FullName</div>
+                    <div class="profile-job">@Model.UserName</div>
+                    @{
+                        if (Model.isOwner)
                         {
                             <p>@Model.Email</p>
                         }
-                    }
-                    @{
-                        if (Model.Followed)
+                        else if (Model.Followed)
                         {
                             <button type="button" class="btn btn-warning" id="leaveGroupBtn" onclick="unFollow(@Model.Id)">Bỏ theo dõi</button>
                         }
@@ -169,24 +169,32 @@
 
         <div class="nav-tabs-horizontal">
             <ul class="nav nav-tabs" data-plugin="nav-tabs" role="tablist" style="background-color:white;">
-                <li class="active" role="presentation" id="post">
-                    @{
-                        if (Model.isOwner)
-                        {
+                @{
+                    if (Model.isOwner)
+                    {
+                        <li class="active" role="presentation" id="post">
                             <a data-toggle="tab" href="#exampleTabsOne" aria-controls="exampleTabsOne"
                                role="tab">Bài viết</a>
-                        }
-                        else
-                        {
+                        </li>
+                        <li role="presentation" id="post">
+                            <a data-toggle="tab" href="#exampleTabsTwo" aria-controls="exampleTabsTwo"
+                               role="tab">Thông tin cá nhân</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="active" role="presentation" id="post">
                             <a data-toggle="tab" href="#exampleTabsOne" aria-controls="exampleTabsOne"
                                role="tab">Tường nhà</a>
-                        }
+                        </li>
                     }
-                </li>
+                }
+                
                 <li role="presentation" id="members">
-                    <a data-toggle="tab" href="#exampleTabsTwo" aria-controls="exampleTabsTwo"
+                    <a data-toggle="tab" href="#exampleTabsThree" aria-controls="exampleTabsThree"
                        role="tab">Hình ảnh</a>
                 </li>
+                
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="exampleTabsOne" role="tabpanel">
@@ -238,16 +246,6 @@
                             </div>
                         </div>
                     </form>
-
-
-                    @*<div class="panel text-right panel-status">
-                            <div class="row">
-                                <input type="file" class="btn btn-default" value="Thêm hình ảnh"/>
-                            </div>
-                            <div class="clearfix"></div>
-                            <textarea class="form-control" placeholder="Viết gì đó cho nhóm của bạn" rows="3"></textarea>
-                            <button type="button" style="width: 80px" class="btn btn-round btn-sm btn-primary">Đăng</button>
-                        </div>*@
                     <!--END Posting status area-->
                     <!--Post area-->
                     <div class="panel" id="activities" role="tabpanel">
@@ -259,7 +257,10 @@
                     <!--END Post area-->
                 </div>
                 <div class="tab-pane" id="exampleTabsTwo" role="tabpanel" style="background-color:white;">
-                    
+                    a
+                </div>
+                <div class="tab-pane" id="exampleTabsThree" role="tabpanel" style="background-color:white;">
+                    b
                 </div>
             </div>
         </div>
@@ -269,22 +270,44 @@
     <!--END Main-->
     <!--Right side-bar-->
     <div class="col-sm-3">
-        <div class="panel">
-            <div class="panel-heading">
-                <h3 class="panel-title">Thêm thành viên mới</h3>
+        <div class="panel" id="suggest-follow-panel">
+            <div class="panel-heading text-center">
+                <h class="panel-title" style="font-family:sans-serif">Gợi ý theo dõi</h>
             </div>
             <div class="panel-body">
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-pure btn-primary icon wb-plus"></button>
-                        </span>
-                        <input type="text" name="AddFriendToGroupList" id="addFrd" placeholder="Tags">
+                <div class="height-250 check" id="check" data-plugin="scrollable">
+                    <div data-role="container">
+                        <div data-role="content" id="container">
+                            @foreach (FollowSuggestViewModel item in ViewBag.suggestUserList)
+                            {
+                                if (!item.Id.Equals(User.Identity.GetUserId()))
+                                {
+                                    <div class='comment media suggestion' id="@item.Id">
+                                        <div class='media-left'>
+                                            <a class='avatar avatar-lg' href='javascript:void(0)'>
+                                                <img style='height:50px;width:50px' src='@item.AvatarImage' alt='...'>
+                                            </a>
+                                        </div>
+                                        <div class='comment-body media-body'>
+                                            <a class='comment-author' href='javascript:void(0)'>@item.UserName</a>
+                                            <div class='comment-content'>
+                                                @if (@item.sameSport != 0)
+                                                {<p>Có chung @item.sameSport sở thích</p>}
+                                            </div><button onclick="follow('@item.Id')" class='btn-xs btn-success'><i class='fa fa-rss' aria-hidden='true'></i> Theo dõi</button>
+                                        </div>
+                                    </div>
+                                }
+
+                            }
+
+                        </div>
+
                     </div>
+
                 </div>
             </div>
         </div>
-        <div class="panel">
+        @*<div class="panel">
             <div class="panel-heading">
                 <h3 class="panel-title">Nhóm đề nghị</h3>
             </div>
@@ -385,7 +408,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
     <!--END right side-bar-->
     <div class="modal fade" id="editPostForm" aria-hidden="true" role="dialog">
@@ -432,7 +455,6 @@
     </div>
 </div>
 
-
 @section scripts {
     <script src="~/Content/assets/vendor/magnific-popup/jquery.magnific-popup.js"></script>
     <script src="~/Content/assets/js/components/magnific-popup.js"></script>
@@ -442,30 +464,29 @@
     <script src="~/Content/assets/vendor/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
 
     <script>
-        var _userId = '@User.Identity.GetUserId()';
+        var _userId = '@Model.Id';
+        var _curUserId = '@User.Identity.GetUserId()';
         var _firstSkip = 0;
         var _skip = 10;
         var _firstTake = 10;
         var _take = 5;
-        var _actionName = '@Url.Action("getGroupPost", "Group")';
+        var _actionName = '@Url.Action("getProfilePost", "Profile")';
         var _loadMoreCmtActionName = '@Url.Action("getMoreCmtByPostId")';
         var _deletePostActionName = '@Url.Action("DeletePost","Post")';
         var _loadAPostActionName = '@Url.Action("LoadSavedPost", "Post")';
         var _deleteCommentActionName = '@Url.Action("DeleteComment", "PostComment")';
         var _loadACommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
         var _likeUnlikePostActionName = '@Url.Action("LikeUnlikePost","Like")';
-        var _groupId = @groupId;
+
         $(document).ready(function () {
-            loadGroupPost(_groupId, _userId, _firstSkip, _firstTake, _actionName, _loadMoreCmtActionName,_deletePostActionName, _loadAPostActionName,_deleteCommentActionName,_loadACommentActionName,_likeUnlikePostActionName);
+            loadProfilePost(_userId, _curUserId, _firstSkip, _firstTake, _actionName, _loadMoreCmtActionName,_deletePostActionName, _loadAPostActionName,_deleteCommentActionName,_loadACommentActionName,_likeUnlikePostActionName);
         })
         $(window).scroll(function () {
             if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-                loadGroupPost(_groupId, _userId, _skip, _take, _actionName, _loadMoreCmtActionName,_deletePostActionName, _loadAPostActionName,_deleteCommentActionName,_loadACommentActionName,_likeUnlikePostActionName);
+                loadProfilePost(_userId, _curUserId, _skip, _take, _actionName, _loadMoreCmtActionName,_deletePostActionName, _loadAPostActionName,_deleteCommentActionName,_loadACommentActionName,_likeUnlikePostActionName);
                 _skip = _skip + _take;
             }
         });
-
-
 
         var array = @Html.Raw(Json.Encode(
                          ((IEnumerable<SelectListItem>)sport).Select(m => new
@@ -484,196 +505,6 @@
         });
 
 
-        var frdList = @Html.Raw(Json.Encode(
-                         ((IEnumerable<SelectListItem>)friends).Select(m => new
-                         {
-                             id = m.Value,
-                             text = m.Text
-                         })
-                    ));
-        $('#addFrd').select2({
-            class: 'form-control',
-            width: '100%',
-            multiple: true,
-            maximumSelectionSize: 5,
-            placeholder: "Nhập tên người bạn muốn thêm",
-            data: frdList
-        });
-
-        function joinGroup(groupId) {
-            $.ajax({
-                url: '@Url.Action("JoinGroup")',
-                type: 'POST',
-                data: {
-                    groupId: groupId,
-                    userId: '@User.Identity.GetUserId()'
-                },
-                success: function (data) {
-                    if (data.Succeed) {
-                        $("#joinGroupBtn").replaceWith('<button type="button" class="btn btn-warning" id="leaveGroupBtn" onclick="leaveGroup(@Model.Id)">Rời nhóm</button>');
-                    }
-                },
-                error: function () {
-                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                }
-            })
-        };
-
-        function leaveGroup(groupId) {
-            var isOnlyOneAdmin = false;
-            if('@Model.IsAdmin' == 'True') {
-                $.ajax({
-                    url: '@Url.Action("CheckIsOnlyOneAdmin")',
-                    type: 'POST',
-                    async: false,
-                    data: {
-                        groupId: groupId
-                    },
-                    success: function (data) {
-                        if(data === "true") {
-                            isOnlyOneAdmin = true;
-                        } else {
-                            isOnlyOneAdmin = false;
-                        }
-
-                    },
-                    error: function () {
-                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                    }
-                })
-
-                if(isOnlyOneAdmin) {
-                    showMessage("Bạn đang là quản trị duy nhất của trang. Vui lòng chọn một thành viên khác để thay thế trước khi rời nhóm", "error", "OK");
-                } else {
-                    showConfirmMessage("Bạn có chắc chắn muốn rời nhóm này không?",
-                        function(isConfirm) {
-                            if(isConfirm) {
-                                $.ajax({
-                                    url: '@Url.Action("leaveGroupNotAdmin")',
-                                    type: 'POST',
-                                    async: false,
-                                    data: {
-                                        userId: '@User.Identity.GetUserId()',
-                                        groupId: groupId
-                                    },
-                                    success: function (data) {
-                                        if(data.Succeed) {
-                                            showMessage("Rời nhóm thành công", "success", "OK");
-                                        } else {
-                                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                                        }
-
-                                    },
-                                    error: function () {
-                                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                                    }
-                                })
-                            }
-                        })
-                }
-            } else {
-                showConfirmMessage("Bạn có chắc chắn muốn rời nhóm này không?",
-                        function(isConfirm) {
-                            if(isConfirm) {
-                                $.ajax({
-                                    url: '@Url.Action("leaveGroupNotAdmin")',
-                                    type: 'POST',
-                                    async: false,
-                                    data: {
-                                        userId: '@User.Identity.GetUserId()',
-                                        groupId: groupId
-                                    },
-                                    success: function (data) {
-                                        if(data.Succeed) {
-                                            showMessage("Rời nhóm thành công", "success", "OK");
-                                        } else {
-                                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                                        }
-                                    },
-                                    error: function () {
-                                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                                    }
-                                })
-                            }
-                        })
-            }
-        };
-
-        function makeAsAdmin(userId) {
-            showConfirmMessage("Bạn có chắc chắn muốn gán quyền quản trị cho thành viên này không?",
-                function (isConfirm) {
-                    if (isConfirm) {
-                        $.ajax({
-                            url: '@Url.Action("MakeGroupAdmin")',
-                            type: 'POST',
-                            data: {
-                                groupId: '@groupId',
-                                curAdminId: '@User.Identity.GetUserId()',
-                                desAdminId: userId
-                            },
-                            success: function (data) {
-                                var elButton = "#" + userId;
-                                var uid = "'" + userId + "'";
-                                var outerDiv = $(elButton).parent();
-                                $(outerDiv).find("li").replaceWith('<li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="removeAsAdmin('+ uid +')"><i class="icon wb-user-circle" aria-hidden="true"></i> Bỏ quyền quản trị</a></li>');
-                                showMessage("Thay đổi thành công", "success", "OK");
-                            },
-                            error: function (error) {
-                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                            }
-                        })
-                    }
-                })
-        }
-
-        function removeAsAdmin(userId) {
-            showConfirmMessage("Bạn có chắc chắn muốn xóa quyền quản trị của thành viên này không?",
-                function (isConfirm) {
-                    if (isConfirm) {
-                        $.ajax({
-                            url: '@Url.Action("RemoveGroupAdmin")',
-                            type: 'POST',
-                            data: {
-                                groupId: '@groupId',
-                                curAdminId: '@User.Identity.GetUserId()',
-                                desAdminId: userId
-                            },
-                            success: function (data) {
-                                var elButton = "#" + userId;
-                                var uid = "'" + userId + "'";
-                                var outerDiv = $(elButton).parent();
-                                $(outerDiv).find("li").replaceWith('<li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="makeAsAdmin('+ uid +')"><i class="icon wb-user-circle" aria-hidden="true"></i> Chọn làm quản trị viên</a></li>');
-                                showMessage("Thay đổi thành công", "success", "OK");
-                            },
-                            error: function (error) {
-                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                            }
-                        })
-                    }
-                })
-        }
-
-        function deleteGroup(groupId) {
-            showConfirmDeleteItem("Bạn có chắc chắn muốn xóa nhóm này không?",
-                function (isConfirm) {
-                    if (isConfirm) {
-                        $.ajax({
-                            url: '@Url.Action("DeleteGroup")',
-                            type: 'POST',
-                            data: {
-                                groupId: '@groupId',
-                            },
-                            success: function (data) {
-                                location.href = '@Url.Action("index", "Home")'
-                            },
-                            error: function (error) {
-                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                            }
-                        })
-                    }
-                })
-        }
-
         $('#post-form').submit(function (e) {
             e.preventDefault();
             var postId = "-1";
@@ -681,13 +512,12 @@
             if(storedFiles.length!=0 || postContent){
                 var formData = new FormData(document.getElementById('post-form'));
                 formData.append("content",postContent);
-                formData.append("groupId", @groupId)
                 for(var i=0, len=storedFiles.length; i<len; i++) {
                     formData.append('uploadImages', storedFiles[i]);
                 }
                 $.ajax({
                     type: 'POST',
-                    url: '@Url.Action("CreateGroupPost", "Post")',
+                    url: '@Url.Action("CreateProfilePost", "Post")',
                     async: false,
                     data: formData,
                     cache: false,
@@ -807,5 +637,34 @@
             var _loadSavedCommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
             updateComment(_updateCommentActionName, _loadSavedCommentActionName, _id);
         });
+
+        function follow(id){
+            var update = false;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("FollowUnfollowUser", "Follow")',
+                data:{"userId":id,"followerId":'@User.Identity.GetUserId()'},
+                dataType: 'json',
+                success: function (data) {
+                    if(data.Succeed && data.Message == "Đã theo dõi"){
+                        update = true;
+                        $('#'+id).hide('slow', function(){ $('#'+id).remove(); });
+                        $(".check").resize();
+                        var $item = $(".suggestion");
+                        if($item.length == 2){
+                            $("#check").removeClass("height-250").addClass("height-150");
+                        }
+                        if($item.length == 1){
+                            $('#suggest-follow-panel').hide('slow', function(){ $('#suggest-follow-panel').remove(); });
+                        }
+                    }else{
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
     </script>
 }
