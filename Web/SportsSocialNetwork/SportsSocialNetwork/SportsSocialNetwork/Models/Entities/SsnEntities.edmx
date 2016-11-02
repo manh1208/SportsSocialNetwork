@@ -89,7 +89,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="FromGroup" Type="int" Nullable="false" />
           <Property Name="ToGroup" Type="int" Nullable="false" />
           <Property Name="Accepted" Type="bit" />
@@ -243,6 +243,7 @@
           <Property Name="NewsContent" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Image" Type="nvarchar(max)" Nullable="false" />
           <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="NumOfRead" Type="int" />
           <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="NewsComment">
@@ -1687,7 +1688,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="FromGroup" Type="Int32" Nullable="false" />
           <Property Name="ToGroup" Type="Int32" Nullable="false" />
           <Property Name="Accepted" Type="Boolean" />
@@ -1875,6 +1876,7 @@
           <Property Name="NewsContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="NumOfRead" Type="Int32" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_News_AspNetUsers" FromRole="News" ToRole="AspNetUser" />
           <NavigationProperty Name="Category" Relationship="SSNModel.FK_News_Category" FromRole="News" ToRole="Category" />
@@ -2975,6 +2977,7 @@
             <EntityTypeMapping TypeName="SSNModel.News">
               <MappingFragment StoreEntitySet="News">
                 <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="NumOfRead" ColumnName="NumOfRead" />
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="NewsContent" ColumnName="NewsContent" />

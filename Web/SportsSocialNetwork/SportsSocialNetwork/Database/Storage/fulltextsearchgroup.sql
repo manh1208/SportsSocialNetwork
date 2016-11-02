@@ -1,0 +1,4 @@
+﻿CREATE FULLTEXT CATALOG [fulltextsearchgroup]
+    WITH ACCENT_SENSITIVITY = ON
+    AUTHORIZATION [dbo];
+

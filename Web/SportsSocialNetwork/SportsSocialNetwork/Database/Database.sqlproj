@@ -59,6 +59,7 @@
     <Folder Include="Properties" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
+    <Folder Include="Storage\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\AspNetUsers.sql" />
@@ -97,5 +98,9 @@
     <Build Include="dbo\Tables\PostImages.sql" />
     <Build Include="dbo\Tables\FirebaseToken.sql" />
     <Build Include="dbo\Tables\Challenge.sql" />
+    <Build Include="dbo\Tables\__MigrationHistory.sql" />
+    <Build Include="Storage\fulltextsearchname.sql" />
+    <Build Include="Storage\fulltextsearchgroup.sql" />
+    <Build Include="FullTextIndexes.sql" />
   </ItemGroup>
 </Project>

@@ -3920,7 +3920,9 @@
     <Content Include="SSN\UserImage\CuongPK\20161008203741CH_a6710362-a5f3-4707-8ccb-707f1e893726.jpg" />
     <Content Include="SSN\UserImage\CuongPK\20161010205538CH_30b93ef5-cd2a-41bb-8840-192eb2875213.jpg" />
     <Content Include="SSN\UserImage\CuongPK\DSC_0397.JPG" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
