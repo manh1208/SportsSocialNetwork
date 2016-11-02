@@ -782,6 +782,7 @@
     <Compile Include="Models\Utilities\EmailSender.cs" />
     <Compile Include="Models\Utilities\Setting.cs" />
     <Compile Include="Models\Utilities\Utils.cs" />
+    <Compile Include="Models\VietnameseSymbol.cs" />
     <Compile Include="Models\ViewModels\AjaxOperationResult.cs" />
     <Compile Include="Models\ViewModels\AspNetRoleViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
@@ -845,6 +846,7 @@
     <Compile Include="Models\ViewModels\GroupMemberViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\GroupSearchViewModel.cs" />
     <Compile Include="Models\ViewModels\GroupViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>

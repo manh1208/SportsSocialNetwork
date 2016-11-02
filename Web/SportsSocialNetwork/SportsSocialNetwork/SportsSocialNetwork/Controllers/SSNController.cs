@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using BanleWebsite.Models;
+using Microsoft.AspNet.Identity;
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
@@ -23,6 +24,8 @@ namespace SportsSocialNetwork.Controllers
     [MyAuthorize(Roles = IdentityMultipleRoles.SSN)]
     public class SSNController : BaseController
     {
+        public string ViewNameseSymbol { get; private set; }
+
         public ActionResult Index()
         {
             var _sportService = this.Service<ISportService>();
@@ -393,5 +396,62 @@ namespace SportsSocialNetwork.Controllers
 
             return Json(result);
         }
+
+        public ActionResult GetSearchUserResult(string keyword)
+        {
+            VietnameseSymbol VNS = new VietnameseSymbol();
+            string kw = VNS.ClearSymbol(keyword);
+            var result = new AjaxOperationResult<IEnumerable<FollowSuggestViewModel>>();
+            var userService = this.Service<IAspNetUserService>();
+            //var ResultList = userService.GetActive(p => p.FullName.Contains(kw)).Take(5).ToList();
+            var ResultList = userService.GetActive().ToList();
+            var curUserId = User.Identity.GetUserId();
+            var curUser = userService.FirstOrDefaultActive(p => p.Id == curUserId);
+            List<FollowSuggestViewModel> searchResultList = new List<FollowSuggestViewModel>();
+            //List<FollowSuggestViewModel> searchResultList = Mapper.Map<List<FollowSuggestViewModel>>(ResultList);
+            foreach(var user in ResultList)
+            {
+                var str = VNS.ClearSymbol(user.FullName);
+                //if (VNS.ClearSymbol(user.FullName).Contains(kw))
+                if (VNS.ClearSymbol(user.FullName).Contains(kw))
+                {
+                    FollowSuggestViewModel model = Mapper.Map<FollowSuggestViewModel>(user);
+                    var hobbyCount = 1;
+                    foreach (var hobby in user.Hobbies)
+                    {
+
+                        foreach (var curHobby in curUser.Hobbies)
+                        {
+                            if (hobby.SportId == curHobby.SportId)
+                            {
+                                model.sameSport = hobbyCount;
+                                hobbyCount++;
+                            }
+                        }
+                    }
+                    searchResultList.Add(model);
+                }
+                
+                
+            }
+            
+            result.AdditionalData = searchResultList.Take(5);
+            result.Succeed = true;
+            return Json(result);
+        }
+
+        public ActionResult GetSearchGroupList(string keyword)
+        {
+            VietnameseSymbol VNS = new VietnameseSymbol();
+            string kw = VNS.ClearSymbol(keyword);
+            var result = new AjaxOperationResult<IEnumerable<GroupSearchViewModel>>();
+            var groupService = this.Service<IGroupService>();
+            var searchResultList = groupService.GetActive(p => p.Name.Contains(kw)).Take(2).ToList();
+            List<GroupSearchViewModel> ResultList = Mapper.Map<List<GroupSearchViewModel>>(searchResultList);
+            result.AdditionalData = ResultList;
+            result.Succeed = true;
+            return Json(result);
+        }
+
     }
 }
