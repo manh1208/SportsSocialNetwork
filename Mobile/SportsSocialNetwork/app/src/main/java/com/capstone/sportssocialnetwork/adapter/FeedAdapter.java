@@ -114,7 +114,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
             Picasso.with(mContext).load(Uri.parse(DataUtils.URL + feed.getPostImages().get(0).getImage()))
                     .placeholder(R.drawable.placeholder)
                     .error(R.drawable.placeholder)
-                    .fit()
+                    .noFade()
                     .into(viewHolder.ivImage);
         } else {
             viewHolder.ivImage.setVisibility(View.GONE);
@@ -135,22 +135,22 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         return convertView;
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setLiked(Button btnLike) {
-
-        Drawable[] drawables = btnLike.getCompoundDrawables();
-        drawables[0].setTint(mContext.getResources().getColor(R.color.colorPrimary));
-        btnLike.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
-        btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Drawable[] drawables = btnLike.getCompoundDrawables();
+            drawables[0].setTint(mContext.getResources().getColor(R.color.colorPrimary));
+            btnLike.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+            btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
+        }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setUnLiked(Button btnLike) {
-        Drawable[] drawables = btnLike.getCompoundDrawables();
-        drawables[0].setTint(Color.BLACK);
-        btnLike.setTextColor(Color.BLACK);
-        btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Drawable[] drawables = btnLike.getCompoundDrawables();
+            drawables[0].setTint(Color.BLACK);
+            btnLike.setTextColor(Color.BLACK);
+            btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
+        }
     }
 
     public void setFeeds(List<Feed> feeds) {
