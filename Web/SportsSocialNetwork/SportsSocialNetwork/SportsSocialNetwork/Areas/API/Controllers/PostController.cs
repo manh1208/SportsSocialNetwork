@@ -232,6 +232,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             var notiService = this.Service<INotificationService>();
 
+            var memberService = this.Service<IGroupMemberService>();
+
             PostOveralViewModel result = null;
 
             ResponseModel<PostOveralViewModel> response = null;
@@ -261,23 +263,28 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 post = service.CreatePost(post);
 
-                //Notify all follower
-                List<Follow> followList = GetFollowList(post.UserId);
-
-                foreach (var follow in followList)
+                //Notify all group members
+                if (post.GroupId != null)
                 {
-                    Notification noti = notiService.SaveNoti(follow.FollowerId, follow.UserId, "Post", follow.AspNetUser.FullName + " đã đăng một bài viết", (int)NotificationType.Post, post.Id, null, null);
+                    List<GroupMember> memberList = GetMemberList(post.GroupId);
 
-                    List<string> registrationIds = GetToken(follow.FollowerId);
-
-                    if (registrationIds != null && registrationIds.Count != 0)
+                    foreach (var member in memberList)
                     {
-                        NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+                        if (!(member.UserId.Equals(post.UserId)))
+                        {
+                            Notification noti = notiService.SaveNoti(member.UserId, post.UserId, "Post", member.AspNetUser.FullName + " đã đăng một bài viết", (int)NotificationType.Post, post.Id, null, null);
 
-                        Android.Notify(registrationIds, null, notiModel);
+                            List<string> registrationIds = GetToken(member.UserId);
+
+                            if (registrationIds != null && registrationIds.Count != 0)
+                            {
+                                NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+
+                                Android.Notify(registrationIds, null, notiModel);
+                            }
+                        }
                     }
                 }
-
                 //Missing post sport
 
                 result = Mapper.Map<PostOveralViewModel>(post);
@@ -505,13 +512,6 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             return result;
         }
 
-        private List<Follow> GetFollowList(string userId)
-        {
-            var service = this.Service<IFollowService>();
-
-            return service.GetActive(x => x.UserId.Equals(userId)).ToList();
-        }
-
         private NotificationCustomViewModel PrepareNotificationViewModel(Notification noti)
         {
             NotificationCustomViewModel result = Mapper.Map<NotificationCustomViewModel>(noti);
@@ -581,6 +581,12 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             p.PostSports = Mapper.Map<List<PostSportDetailViewModel>>(postSportList);
         }
 
+        private List<GroupMember> GetMemberList(int? groupId)
+        {
+            var service = this.Service<IGroupMemberService>();
+
+            return service.GetActive(x => x.GroupId == groupId).ToList();
+        }
 
     }
 }

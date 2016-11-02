@@ -134,13 +134,13 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         }
 
         [HttpPost]
-        public ActionResult SetGroupAdmin(int id, String userId) {
+        public ActionResult SetGroupAdmin(int id) {
             var service = this.Service<IGroupMemberService>();
 
             ResponseModel<GroupMemberDetailViewModel> response = null;
 
             try {
-                GroupMember admin = service.SetGroupAdmin(id, userId);
+                GroupMember admin = service.SetGroupAdmin(id);
 
                 GroupMemberDetailViewModel result = PrepareGroupMember(admin);
 
