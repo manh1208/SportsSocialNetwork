@@ -18,7 +18,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         GroupMember CreateGroupAdmin(int groupId, String userId);
 
-        GroupMember SetGroupAdmin(int id, String userId);
+        GroupMember SetGroupAdmin(int id);
 
         bool CheckAdmin(String userId, int groupId);
 
@@ -126,9 +126,9 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return member;
         }
 
-        public GroupMember SetGroupAdmin(int id, String userId)
+        public GroupMember SetGroupAdmin(int id)
         {
-            GroupMember member = this.FirstOrDefaultActive(x => x.Id == id && x.UserId == userId);
+            GroupMember member = this.FirstOrDefaultActive(x => x.Id == id);
 
             member.Admin = true;
 

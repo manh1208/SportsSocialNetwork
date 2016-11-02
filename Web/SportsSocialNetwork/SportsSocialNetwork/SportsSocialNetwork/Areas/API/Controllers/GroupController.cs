@@ -48,7 +48,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
 
         [HttpPost]
-        public ActionResult ShowGroupDetail(int id,String currentUser)
+        public ActionResult ShowGroupDetail(int id,string currentUser)
         {
             var groupService = this.Service<IGroupService>();
 
