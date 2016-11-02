@@ -356,21 +356,33 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         [HttpPost]
         public ActionResult SaveToken(String userId, String token)
         {
-            var service = this.Service<IFirebaseTokenService>();
+            var tokenService = this.Service<IFirebaseTokenService>();
+
+            var userService = this.Service<IAspNetUserService>();
 
             ResponseModel<bool> response = null;
 
             try {
-                FirebaseToken firebaseToken = service.FirstOrDefault(x => x.UserId.Equals(userId) && x.Token.Equals(token));
+                FirebaseToken firebaseToken = tokenService.FirstOrDefault(x => x.UserId.Equals(userId) && x.Token.Equals(token));
+
+                AspNetUser user = userService.FirstOrDefaultActive(x=> x.Id.Equals(userId));
 
                 if (firebaseToken == null)
                 {
                     firebaseToken = new FirebaseToken();
                     firebaseToken.UserId = userId;
                     firebaseToken.Token = token;
-                    service.Create(firebaseToken);
-                    service.Save();
+                    tokenService.Create(firebaseToken);
+                    tokenService.Save();
 
+                }
+                else
+                {
+                    if (user != null) {
+                        firebaseToken.UserId = user.Id;
+                        tokenService.Update(firebaseToken);
+                        tokenService.Save();
+                    }
                 }
 
                 response = new ResponseModel<bool>(true, "Token đã được tạo", null);
