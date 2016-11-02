@@ -19,9 +19,9 @@
     <item android:title="Khác">
         <menu>
             <item
-                android:id="@+id/nav_manage_notice"
-                android:icon="@drawable/ic_notification"
-                android:title="Thông báo" />
+                android:id="@+id/nav_goes_to_ssn"
+                android:icon="@drawable/image_logo"
+                android:title="Qua mạng xã hội" />
 
             <item
                 android:id="@+id/nav_manage_logout"

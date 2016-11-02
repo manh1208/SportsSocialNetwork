@@ -136,22 +136,29 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
         });
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setLiked(Button btnLike) {
 
         Drawable[] drawables = btnLike.getCompoundDrawables();
-        drawables[0].setTint(mContext.getResources().getColor(R.color.colorPrimary));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            drawables[0].setTint(mContext.getResources().getColor(R.color.colorPrimary));
+        }
         btnLike.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
-        btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
+        }
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+
     private void setUnLiked(Button btnLike) {
         Drawable[] drawables = btnLike.getCompoundDrawables();
-        drawables[0].setTint(Color.BLACK);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            drawables[0].setTint(Color.BLACK);
+        }
         btnLike.setTextColor(Color.BLACK);
-        btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
+        }
     }
 
     public void setFeeds(List<Feed> feeds) {

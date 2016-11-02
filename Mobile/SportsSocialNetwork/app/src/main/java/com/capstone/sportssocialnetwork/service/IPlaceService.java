@@ -1,5 +1,6 @@
 package com.capstone.sportssocialnetwork.service;
 
+import com.capstone.sportssocialnetwork.model.Event;
 import com.capstone.sportssocialnetwork.model.Field;
 import com.capstone.sportssocialnetwork.model.FieldType;
 import com.capstone.sportssocialnetwork.model.Place;
@@ -44,4 +45,7 @@ public interface IPlaceService {
                                                       );
     @POST("/api/field/showfieldlist")
     Call<ResponseModel<List<Field>>> getFieldOfPlace(@Query("placeId") int placeId);
+
+    @POST("/api/event/getalleventofplaceowner")
+    Call<ResponseModel<List<Event>>> getEventOfPlaceOwner(@Query("ownerId")String id);
 }

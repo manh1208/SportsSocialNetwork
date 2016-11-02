@@ -136,21 +136,27 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
     }
 
     private void setLiked(Button btnLike) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Drawable[] drawables = btnLike.getCompoundDrawables();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             drawables[0].setTint(mContext.getResources().getColor(R.color.colorPrimary));
-            btnLike.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+        }
+        btnLike.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
         }
+
     }
 
     private void setUnLiked(Button btnLike) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Drawable[] drawables = btnLike.getCompoundDrawables();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             drawables[0].setTint(Color.BLACK);
-            btnLike.setTextColor(Color.BLACK);
+        }
+        btnLike.setTextColor(Color.BLACK);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
         }
+
     }
 
     public void setFeeds(List<Feed> feeds) {

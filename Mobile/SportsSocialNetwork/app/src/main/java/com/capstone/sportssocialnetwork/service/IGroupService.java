@@ -26,9 +26,16 @@ public interface IGroupService {
                                                  @Query("take") int take);
 
     @POST("/api/group/showgroupdetail")
-    Call<ResponseModel<Group>> getGroupDetail(@Query("id")int groupId,
-                                              @Query("currentUser")String userId);
+    Call<ResponseModel<Group>> getGroupDetail(@Query("id") int groupId,
+                                              @Query("currentUser") String userId);
 
     @POST("/api/groupmember/showmemberlist")
-    Call<ResponseModel<List<GroupMember>>> getGroupMember(@Query("groupId")int groupId);
+    Call<ResponseModel<List<GroupMember>>> getGroupMember(@Query("groupId") int groupId);
+
+    @POST("/api/groupmember/leavegroup")
+    Call<ResponseModel<String>> leaveGroup(@Query("groupId") int groupId,
+                                           @Query("userId") String userId);
+
+    @POST("/api/groupmember/kickmember")
+    Call<ResponseModel<GroupMember>> kickFromGroup(@Query("id")int groupMemberId);
 }

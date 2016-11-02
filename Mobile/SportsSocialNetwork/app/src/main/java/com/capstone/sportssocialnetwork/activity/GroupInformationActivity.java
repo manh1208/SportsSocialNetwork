@@ -43,6 +43,7 @@ public class GroupInformationActivity extends AppCompatActivity implements View.
     private Button btnChangeAvatar;
     private Button btnGroupMember;
     private Button btnLeaveGroup;
+    private boolean isAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class GroupInformationActivity extends AppCompatActivity implements View.
     private void init() {
         groupId = getIntent().getIntExtra("groupId", -1);
         groupName = getIntent().getStringExtra("groupName");
+        isAdmin = getIntent().getBooleanExtra("isAdmin",false);
         getSupportActionBar().setTitle("Thông tin nhóm");
         ivGroupAvatar = (RoundedImageView) findViewById(R.id.iv_group_avatar);
         txtGroupName = (TextView) findViewById(txt_group_name);
@@ -84,7 +86,7 @@ public class GroupInformationActivity extends AppCompatActivity implements View.
     private void updateUI() {
         txtGroupName.setText(groupName);
         txtGroupDescription.setText(group.getDescription());
-        txtGroupType.setText(group.getSportId() + "");
+        txtGroupType.setText("Nhóm "+group.getSport().getName() + "");
         if (group.isAdmin()){
             btnChangeAvatar.setVisibility(View.VISIBLE);
             btnChangeCover.setVisibility(View.VISIBLE);
@@ -137,10 +139,32 @@ public class GroupInformationActivity extends AppCompatActivity implements View.
                 Intent intent =  new Intent(GroupInformationActivity.this, GroupMemberActivity.class);
                 intent.putExtra("groupId",groupId);
                 intent.putExtra("groupName",groupName);
+                intent.putExtra("isAdmin",isAdmin);
                 startActivity(intent);
                 break;
             case R.id.btn_group_leave_group:
+                service.getGroupService().leaveGroup(groupId,userId).enqueue(new Callback<ResponseModel<String>>() {
+                    @Override
+                    public void onResponse(Call<ResponseModel<String>> call, Response<ResponseModel<String>> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body().isSucceed()) {
+                                Intent intent = new Intent(GroupInformationActivity.this,MainBottomBarActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(GroupInformationActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(GroupInformationActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<ResponseModel<String>> call, Throwable t) {
+                        Toast.makeText(GroupInformationActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
+                    }
+                });
                 break;
         }
     }

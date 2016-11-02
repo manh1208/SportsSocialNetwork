@@ -33,6 +33,7 @@ public class GroupMemberActivity extends AppCompatActivity implements View.OnCli
     private GroupMemberAdapter adapter;
     private RestService service;
     private FloatingActionButton fabAddMember;
+    private boolean isAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +53,14 @@ public class GroupMemberActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void prepareData() {
-        adapter = new GroupMemberAdapter(this,R.layout.item_group_member,new ArrayList<GroupMember>());
+        adapter = new GroupMemberAdapter(this,R.layout.item_group_member,new ArrayList<GroupMember>(),isAdmin);
         lvGroupMember.setAdapter(adapter);
     }
 
     private void init() {
         groupId = getIntent().getIntExtra("groupId",-1);
         groupName = getIntent().getStringExtra("groupName");
+        isAdmin = getIntent().getBooleanExtra("isAdmin",false);
         getSupportActionBar().setTitle(groupName+" - Thành viên");
         service =new RestService();
         lvGroupMember = (ListView) findViewById(R.id.lv_group_member);
