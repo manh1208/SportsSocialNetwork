@@ -268,11 +268,13 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 {
                     List<GroupMember> memberList = GetMemberList(post.GroupId);
 
+                    AspNetUser postedUser = aspNetUserService.FindUser(post.UserId);
+
                     foreach (var member in memberList)
                     {
                         if (!(member.UserId.Equals(post.UserId)))
                         {
-                            Notification noti = notiService.SaveNoti(member.UserId, post.UserId, "Post", member.AspNetUser.FullName + " đã đăng một bài viết", (int)NotificationType.Post, post.Id, null, null);
+                            Notification noti = notiService.SaveNoti(member.UserId, post.UserId, "Post", postedUser.FullName + " đã đăng một bài viết", (int)NotificationType.Post, post.Id, null, null);
 
                             List<string> registrationIds = GetToken(member.UserId);
 
