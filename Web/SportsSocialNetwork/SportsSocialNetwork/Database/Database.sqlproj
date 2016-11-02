@@ -98,7 +98,6 @@
     <Build Include="dbo\Tables\PostImages.sql" />
     <Build Include="dbo\Tables\FirebaseToken.sql" />
     <Build Include="dbo\Tables\Challenge.sql" />
-    <Build Include="dbo\Tables\__MigrationHistory.sql" />
     <Build Include="Storage\fulltextsearchname.sql" />
     <Build Include="Storage\fulltextsearchgroup.sql" />
     <Build Include="FullTextIndexes.sql" />
