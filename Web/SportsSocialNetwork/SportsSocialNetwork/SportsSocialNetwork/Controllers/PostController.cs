@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using HenchmenWeb.Models.Notifications;
+using Microsoft.AspNet.Identity;
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Notifications;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -201,11 +203,15 @@ namespace SportsSocialNetwork.Controllers
         {
             var result = new AjaxOperationResult<PostGeneralViewModel>();
             var _postService = this.Service<IPostService>();
+            var _notiService = this.Service<INotificationService>();
+            var _memberService = this.Service<IGroupMemberService>();
+            var _userService = this.Service<IAspNetUserService>();
             var post = new Post();
             int ImageNumber = 0;
             bool hasText = false;
             post.Active = true;
             post.CreateDate = DateTime.Now;
+            post.LatestInteractionTime = post.CreateDate;
             post.UserId = User.Identity.GetUserId();
             post.GroupId = groupId;
 
@@ -252,6 +258,32 @@ namespace SportsSocialNetwork.Controllers
             }
             _postService.Create(post);
             _postService.Save();
+
+            if (post.GroupId != null)
+            {
+                List<GroupMember> memberList = _memberService.GetActive(x => x.GroupId == post.GroupId).ToList();
+
+                AspNetUser postedUser = _userService.FirstOrDefaultActive(x => x.Id.Equals(post.UserId));
+
+                foreach (var member in memberList)
+                {
+                    if (!(member.UserId.Equals(post.UserId)))
+                    {
+                        Notification noti = _notiService.SaveNoti(member.UserId, post.UserId, "Post", postedUser.FullName + "đã đăng một bài viết", (int)NotificationType.Post, post.Id, null, null);
+
+                        List<string> registrationIds = GetToken(member.UserId);
+
+                        if (registrationIds != null && registrationIds.Count != 0)
+                        {
+                            NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationCustomViewModel(noti));
+
+                            Android.Notify(registrationIds, null, notiModel);
+                        }
+                    }
+                }
+
+            }
+
             if (uploadImages != null)
             {
                 if (uploadImages.ToList()[0] != null && uploadImages.ToList().Count > 0)
@@ -583,6 +615,36 @@ namespace SportsSocialNetwork.Controllers
                 }
             }
             return Json(result);
+        }
+
+        private NotificationCustomViewModel PrepareNotificationCustomViewModel(Notification noti)
+        {
+            NotificationCustomViewModel result = Mapper.Map<NotificationCustomViewModel>(noti);
+
+            result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+
+            result.Avatar = noti.AspNetUser1.AvatarImage;
+
+            return result;
+
+        }
+
+        private List<string> GetToken(String userId)
+        {
+            var service = this.Service<IFirebaseTokenService>();
+
+            List<FirebaseToken> tokenList = service.Get(x => x.UserId.Equals(userId)).ToList();
+
+            List<string> registrationIds = new List<string>();
+            if (tokenList != null)
+            {
+                foreach (var token in tokenList)
+                {
+                    registrationIds.Add(token.Token);
+                }
+            }
+
+            return registrationIds;
         }
     }
 }
