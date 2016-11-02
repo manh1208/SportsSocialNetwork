@@ -40,6 +40,7 @@
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
 
 
+    <link href="~/Content/assets/vendor/select2/select2.css" rel="stylesheet" />
     <script src="~/Content/assets/vendor/modernizr/modernizr.js"></script>
     <script src="~/Content/assets/vendor/breakpoints/breakpoints.js"></script>
 
@@ -73,6 +74,9 @@
         .page-content {
             padding: 10px 0 0 0;
         }
+        .user-search:hover { 
+    background-color: #62a8ea;
+}
     </style>
     @RenderSection("styles", false)
 </head>
@@ -238,15 +242,18 @@
             </div>
             <!-- End Navbar Collapse -->
             <!-- Site Navbar Seach -->
-            <div class="collapse navbar-search-overlap" id="site-navbar-search">
-                <form role="search">
+            <div class="collapse navbar-search-overlap col-md-6" style="border:solid 1px" id="site-navbar-search">
+                <form role="search" autocomplete="off">
                     <div class="form-group">
                         <div class="input-search">
                             <i class="input-search-icon wb-search" aria-hidden="true"></i>
-                            <input type="text" class="form-control" name="site-search" placeholder="Search...">
+                            <input type="text" id="search-input" class="form-control" name="site-search" placeholder="Search...">
                             <button type="button" class="input-search-close icon wb-close" data-target="#site-navbar-search"
                                     data-toggle="collapse" aria-label="Close"></button>
                         </div>
+                    </div>
+                    <div id="showSearch" style="width:100%;height:auto;display:none">
+
                     </div>
                 </form>
             </div>
@@ -300,13 +307,13 @@
     <script src="~/Content/assets/js/components/slidepanel.min.js"></script>
 
     <script src="~/Content/assets/js/components/switchery.js"></script>
-
     <!--Sweet Alert-->
     <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
 
     <script src="~/Content/assets/js/plugins/responsive-tabs.js"></script>
     <script src="~/Content/assets/js/plugins/closeable-tabs.js"></script>
     <script src="~/Content/assets/js/components/tabs.js"></script>
+    <script src="~/Content/assets/vendor/select2/select2.full.js"></script>
 
     <script>
         (function (document, window, $) {
@@ -314,7 +321,7 @@
 
             var Site = window.Site;
             $(document).ready(function () {
-                Site.run();
+                    Site.run();
             });
         })(document, window, jQuery);
     </script>
@@ -331,6 +338,59 @@
         function searchEvent() {
             $("#form-search-event").submit();
         }
+
+        $("#search-input").on("keyup", function () {
+            var keyword = $("#search-input").val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetSearchUserResult", "SSN")',
+                async: false,
+                data: { "keyword": keyword },
+                success: function (result) {
+                    if (result.Succeed) {
+                        $("#showSearch").empty();
+                        showSearch(result.AdditionalData);
+                        $("#showSearch").show();
+
+                    }
+                }
+            });
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetSearchGroupList", "SSN")',
+                async: false,
+                data: { "keyword": keyword },
+                success: function (result) {
+                    if (result.Succeed) {
+                        showSearch(result.AdditionalData);
+                        $("#showSearch").show();
+
+                    }
+                }
+            });
+        });
+
+        function showSearch(data) {
+            $(data).each(function () {
+                var hobby = "";
+                if (this.sameSport != 0) {
+                    hobby = "<span class='comment-content'><p>Có chung " + this.sameSport
+                        + " sở thích</p></span>";
+                }
+                var info = "<div tabindex='0' style='padding:10px' class='comment media user-search'><a href='javascript:void(0)'>"
+                + "<span class='media-left'>"
+                + "<span class='avatar avatar-lg'>"
+                + "<img style='height:50px;width:50px' src='" + this.AvatarImage + "'>"
+                + "</span></span>"
+                + "<span class='comment-body media-body'>"
+                + "<span class='comment-author'>" + this.FullName + "</span>"
+                + hobby + "</span></a></div>";
+                $("#showSearch").append(info);
+
+            });
+
+        }
+
     </script>
     @RenderSection("scripts", false)
 </body>
