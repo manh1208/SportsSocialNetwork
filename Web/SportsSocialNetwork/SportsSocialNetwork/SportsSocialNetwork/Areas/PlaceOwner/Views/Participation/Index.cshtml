@@ -181,9 +181,8 @@
                   {
                       "aTargets": [5],
                       "mRender": function (data, type, row) {
-                          var previewBtn = '<a class="btn btn-success" data-target="#modalViewdetail" onclick="showDetailModal(\'' + data + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
                           var deactiveBtn = '<a class="btn btn-danger" data-style="zoom-in" data-plugin="ladda" onclick="deactiveSchedule(\'' + data + '\')"  href="#"> <span class="ladda-label"><i class="fa fa-trash-o "></i></span></a>';
-                          return previewBtn + '&nbsp;' + deactiveBtn;
+                          return deactiveBtn;
                       },
                       "bSortable": false
                   },
