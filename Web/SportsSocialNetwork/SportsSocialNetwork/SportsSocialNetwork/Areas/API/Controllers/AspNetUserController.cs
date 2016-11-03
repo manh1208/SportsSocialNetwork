@@ -424,11 +424,21 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
         private bool ValidateRegisterInfo(List<String> errorList, AspNetUserRegisterViewModel model)
         {
+            var service = this.Service<IAspNetUserService>();
+
+            AspNetUser user = service.FirstOrDefaultActive(x=> x.UserName == model.UserName);
+
             bool result = true;
 
             String emailRegex = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
 
             String phoneNumberRegex = @"^([0-9]{10,12})$";
+
+            if (user != null)
+            {
+                errorList.Add("Tên tài khoản đã tồn tại!");
+                result = false;
+            }
 
             if (!Regex.IsMatch(model.Email, emailRegex))
             {
