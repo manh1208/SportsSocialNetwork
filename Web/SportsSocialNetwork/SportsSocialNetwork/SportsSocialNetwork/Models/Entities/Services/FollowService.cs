@@ -11,6 +11,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         bool FollowUnfollowUser(String userId, String followerId);
         int GetFollowingCount(string userId);
         int GetFollowerCount(string userId);
+        bool CheckFollowOrNot(string userId, string followerId);
+        IEnumerable<Follow> GetFollowingList(string userId);
 
         #endregion
 
@@ -62,6 +64,21 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return this.GetActive(f => f.UserId == userId).ToList().Count;
         }
 
+        //check whether followeId is followed userId or not
+        public bool CheckFollowOrNot(string userId, string followerId)
+        {
+            Follow follow = this.FirstOrDefaultActive(x => x.UserId == userId && x.FollowerId == followerId);
+            if(follow != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public IEnumerable<Follow> GetFollowingList(string userId)
+        {
+            return this.GetActive(f => f.FollowerId.Equals(userId));
+        }
         #endregion
 
         public void test()

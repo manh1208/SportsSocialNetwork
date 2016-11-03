@@ -8,6 +8,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
     public partial interface IGroupMemberService
     {
         #region Code from here
+        GroupMember CreateGroupMember(GroupMember groupMember);
+
         IEnumerable<GroupMember> GetMemberList(int groupId);
 
         bool JoinGroup(int groupId, String userId);
@@ -35,6 +37,12 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
 
         #region Code from here
+        public GroupMember CreateGroupMember(GroupMember groupMember)
+        {
+            this.Create(groupMember);
+            return groupMember;
+        }
+
         public bool CheckAdmin(string userId, int groupId)
         {
             GroupMember member = this.FirstOrDefaultActive(x => x.GroupId == groupId && x.UserId == userId);

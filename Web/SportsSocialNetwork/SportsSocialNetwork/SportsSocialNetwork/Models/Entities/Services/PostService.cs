@@ -14,6 +14,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         IEnumerable<Post> GetAllPostOfUser(string userId, int skip, int take);
 
+        IEnumerable<Post> GetAllProfilePost(string userId, int skip, int take);
+
+        IEnumerable<Post> GetAllPostOfUser(string userId);
+
         Post GetPostById(int id);
 
         Post CreatePost(Post model);
@@ -48,6 +52,16 @@ namespace SportsSocialNetwork.Models.Entities.Services
         public IEnumerable<Post> GetAllPostOfUser(string userId, int skip, int take)
         {
             return this.GetActive(x => x.UserId == userId).OrderByDescending(x => x.EditDate == null ? x.CreateDate : x.EditDate).Skip(skip).Take(take);
+        }
+
+        public IEnumerable<Post> GetAllProfilePost(string userId, int skip, int take)
+        {
+            return this.GetActive(x => x.UserId == userId && x.GroupId == null).OrderByDescending(x => x.EditDate == null ? x.CreateDate : x.EditDate).Skip(skip).Take(take);
+        }
+
+        public IEnumerable<Post> GetAllPostOfUser(string userId)
+        {
+            return this.GetActive(x => x.UserId == userId).OrderByDescending(x => x.EditDate == null ? x.CreateDate : x.EditDate);
         }
 
         public Post GetPostById(int id) {
@@ -108,7 +122,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         public int GetPostCountOfUser(string userId)
         {
-            return this.GetActive(p => p.UserId.Equals(userId)).ToList().Count();
+            return this.GetActive(p => p.UserId.Equals(userId) && p.GroupId == null).ToList().Count();
         }
 
         #endregion
