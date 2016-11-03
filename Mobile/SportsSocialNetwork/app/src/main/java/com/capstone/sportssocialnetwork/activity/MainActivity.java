@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
@@ -30,15 +31,19 @@ import android.widget.Toast;
 import com.capstone.sportssocialnetwork.Enumerable.OrderStatusEnum;
 import com.capstone.sportssocialnetwork.Enumerable.PaidTypeEnum;
 import com.capstone.sportssocialnetwork.R;
+import com.capstone.sportssocialnetwork.custom.RoundedImageView;
 import com.capstone.sportssocialnetwork.fragment.ManageEventFragment;
 import com.capstone.sportssocialnetwork.fragment.ManageOrderFragment;
 import com.capstone.sportssocialnetwork.fragment.ManagePlaceFragment;
 import com.capstone.sportssocialnetwork.model.CheckIn;
+import com.capstone.sportssocialnetwork.model.User;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
+import com.capstone.sportssocialnetwork.utils.SharePreferentName;
 import com.capstone.sportssocialnetwork.utils.Utilities;
 import com.google.zxing.Result;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -58,6 +63,11 @@ public class MainActivity extends AppCompatActivity
     private boolean isStartCamera;
     private RestService service;
     private MenuItem menuCheckin;
+    private String userId;
+    private RoundedImageView ivAvatar;
+    private TextView txtFullName;
+    private NavigationView nvView;
+    private View headerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +97,7 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame, new ManagePlaceFragment())
                 .commit();
+        getUser();
     }
 
     private void initialView() {
@@ -94,6 +105,11 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mainLayout = (CoordinatorLayout) findViewById(R.id.app_main);
+        userId = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
+        nvView = (NavigationView) findViewById(R.id.nav_view);
+        headerView = nvView.inflateHeaderView(R.layout.nav_header_main);
+        ivAvatar = (RoundedImageView) headerView.findViewById(R.id.iv_user_avatar);
+        txtFullName = (TextView) headerView.findViewById(R.id.txt_user_fullname);
     }
 
     @Override
@@ -116,6 +132,7 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         menuCheckin = menu.getItem(0);
+        menuCheckin.setVisible(false);
         return true;
     }
 
@@ -336,6 +353,34 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void getUser(){
+        service.getAccountService().getUserProfile(userId).enqueue(new Callback<ResponseModel<User>>() {
+            @Override
+            public void onResponse(Call<ResponseModel<User>> call, Response<ResponseModel<User>> response) {
+                if (response.isSuccessful()){
+                    if (response.body().isSucceed()){
+                        Picasso.with(MainActivity.this).load(Uri.parse(DataUtils.URL + response.body().getData().getAvatar()))
+                                .placeholder(R.drawable.img_default_avatar)
+                                .error(R.drawable.img_default_avatar_error)
+                                .fit()
+                                .into(ivAvatar);
+                        txtFullName.setText(response.body().getData().getFullName());
+                    }else{
+                        Toast.makeText(MainActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(MainActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseModel<User>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
 
     private void checkPermissionCamera() {

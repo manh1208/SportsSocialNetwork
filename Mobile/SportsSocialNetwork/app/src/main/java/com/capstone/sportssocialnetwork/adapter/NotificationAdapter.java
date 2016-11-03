@@ -31,6 +31,8 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
     }
 
 
+
+
     @Override
     public int getCount() {
         return notifications.size();

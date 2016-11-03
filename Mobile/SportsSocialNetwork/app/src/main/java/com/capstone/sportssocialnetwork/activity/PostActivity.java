@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -168,7 +169,8 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
             body =
                     MultipartBody.Part.createFormData("uploadimage", f.getName(), requestFile);
 
-            ivContentImage.setImageURI(data.getData());
+            Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
+            ivContentImage.setImageBitmap(bitmap);
             ivContentImage.setVisibility(View.VISIBLE);
             txtContent.setError(null);
         }

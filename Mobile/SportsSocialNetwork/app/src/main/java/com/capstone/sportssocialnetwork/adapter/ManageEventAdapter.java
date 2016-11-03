@@ -67,23 +67,18 @@ public class ManageEventAdapter extends ArrayAdapter<Event> implements View.OnCl
         }
         Event event = getItem(position);
 
-        Picasso.with(mContext).load(Uri.parse(DataUtils.URL + event.getAvatar()))
+        Picasso.with(mContext).load(Uri.parse(DataUtils.URL + event.getImage()))
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.placeholder)
                 .noFade()
                 .into(viewHolder.ivCoverEvent);
         viewHolder.tvEventName.setText(event.getName());
-        try {
-            viewHolder
-                    .tvEventDate
-                    .setText(Utilities.getDateTimeString(Utilities.getDateTime(event.getStartDateString(), DataUtils.FORMAT_DATE_TIME), "dd/MM/yyyy"));
-            viewHolder
-                    .tvEventDate
-                    .setText(Utilities.getDateTimeString(Utilities.getDateTime(event.getEndDateString(), DataUtils.FORMAT_DATE_TIME), "dd/MM/yyyy"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        viewHolder.tvEventType.setText(event.getPlaceId()+"");
+        viewHolder
+                .tvEventDate
+                .setText(event.getStartDateString() + " - " + event.getEndDateString());
+
+
+        viewHolder.tvEventType.setText(event.getPlaceId() + "");
 //        viewHolder.btnSave.setTag(position);
 //        viewHolder.btnSave.setOnClickListener(this);
         return convertView;

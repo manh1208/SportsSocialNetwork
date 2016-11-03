@@ -7,8 +7,12 @@ import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 /**
@@ -38,4 +42,13 @@ public interface IGroupService {
 
     @POST("/api/groupmember/kickmember")
     Call<ResponseModel<GroupMember>> kickFromGroup(@Query("id")int groupMemberId);
+
+    @Multipart
+    @POST("/api/group/creategroup")
+    Call<ResponseModel<Group>> createGroup(@Part("name")RequestBody name,
+                                           @Part("description")RequestBody description,
+                                           @Part("sportId")int sportId,
+                                           @Part("userId")RequestBody userId,
+                                           @Part MultipartBody.Part avatar
+                                           );
 }

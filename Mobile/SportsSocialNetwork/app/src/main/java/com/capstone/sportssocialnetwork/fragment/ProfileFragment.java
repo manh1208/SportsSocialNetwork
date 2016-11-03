@@ -18,11 +18,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.capstone.sportssocialnetwork.Enumerable.RoleEnum;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.CreateGroupActivity;
 import com.capstone.sportssocialnetwork.activity.FriendActivity;
 import com.capstone.sportssocialnetwork.activity.GroupActivity;
 import com.capstone.sportssocialnetwork.activity.LoginActivity;
+import com.capstone.sportssocialnetwork.activity.MainActivity;
+import com.capstone.sportssocialnetwork.activity.MainBottomBarActivity;
 import com.capstone.sportssocialnetwork.activity.MyOrderActivity;
 import com.capstone.sportssocialnetwork.activity.ProfileActivity;
 import com.capstone.sportssocialnetwork.adapter.MenuProfileAdapter;
@@ -114,6 +117,15 @@ public class ProfileFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        headerHolder.layoutManage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
         footer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,6 +136,11 @@ public class ProfileFragment extends Fragment {
         headerHolder.txtFullName.setText(fullName);
         getUser();
         getGroup();
+        if (DataUtils.getINSTANCE(getActivity()).getPreferences().getInt(SharePreferentName.SHARE_USER_ROLE,-1)== RoleEnum.PLACEOWNER.getValue()){
+           headerHolder.layoutManage.setVisibility(View.VISIBLE);
+        }else{
+            headerHolder.layoutManage.setVisibility(View.GONE);
+        }
         return v;
     }
     private void getUser(){
@@ -202,6 +219,7 @@ public class ProfileFragment extends Fragment {
         RelativeLayout layoutProfile;
         RelativeLayout layoutMyOrder;
         RelativeLayout layoutFriend;
+        RelativeLayout layoutManage;
         RoundedImageView ivAvatar;
         TextView txtFullName;
 
@@ -211,6 +229,7 @@ public class ProfileFragment extends Fragment {
             ivAvatar = (RoundedImageView) v.findViewById(R.id.iv_user_menu_avatar);
             txtFullName = (TextView) v.findViewById(R.id.txt_user_menu_fullname);
             layoutFriend = (RelativeLayout) v.findViewById(R.id.layout_menu_my_friend);
+            layoutManage = (RelativeLayout) v.findViewById(R.id.layout_menu_manage);
         }
     }
 }

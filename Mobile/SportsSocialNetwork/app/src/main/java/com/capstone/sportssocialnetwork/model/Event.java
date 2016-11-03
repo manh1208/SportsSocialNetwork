@@ -29,8 +29,6 @@ public class Event {
     private int status;
     @SerializedName("Active")
     private boolean active;
-    @SerializedName("Avatar")
-    private String avatar;
 
 
     public int getId() {
@@ -121,11 +119,4 @@ public class Event {
         this.active = active;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
 }

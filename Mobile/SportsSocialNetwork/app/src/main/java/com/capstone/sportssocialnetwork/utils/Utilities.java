@@ -150,7 +150,7 @@ public class Utilities {
             f.createNewFile();
             InputStream imageStream = context.getContentResolver().openInputStream(imageUri);
             Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
-            bitmap = scaleDown(bitmap, 2000, false);
+            bitmap = scaleDown(bitmap, maxPicel, false);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             bitmap.compress(imageType, imageQuality /*ignored for PNG*/, bos);
             byte[] bitmapdata = bos.toByteArray();

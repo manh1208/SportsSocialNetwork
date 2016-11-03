@@ -4,15 +4,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_manage_place"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_address"
             android:title="Quản lý sân" />
         <item
             android:id="@+id/nav_manage_order"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_order"
             android:title="Quản lý order" />
         <item
             android:id="@+id/nav_manage_event"
-            android:icon="@drawable/ic_scaner"
+            android:icon="@drawable/ic_event"
             android:title="Quản lý sự kiện" />
     </group>
 
