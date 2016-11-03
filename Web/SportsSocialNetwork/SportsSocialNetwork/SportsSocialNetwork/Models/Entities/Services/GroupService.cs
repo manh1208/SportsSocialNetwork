@@ -18,6 +18,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         String ChangeCoverImage(int id,String image);
 
+        String ChangeAvatarImage(int id, String image);
+
         #endregion
 
         void test();
@@ -62,6 +64,14 @@ namespace SportsSocialNetwork.Models.Entities.Services
             group.CoverImage = image;
             Save();
             return group.CoverImage;
+        }
+
+        public String ChangeAvatarImage(int id, String image)
+        {
+            Group group = this.FindGroupById(id);
+            group.Avatar = image;
+            Save();
+            return group.Avatar;
         }
 
 

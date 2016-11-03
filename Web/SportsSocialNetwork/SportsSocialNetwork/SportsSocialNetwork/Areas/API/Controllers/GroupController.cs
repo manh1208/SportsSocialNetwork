@@ -90,7 +90,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 if (model.UploadImage != null) {
                     FileUploader uploader = new FileUploader();
 
-                    group.CoverImage = uploader.UploadImage(model.UploadImage, userImagePath);
+                    group.Avatar = uploader.UploadImage(model.UploadImage, userImagePath);
                 }
 
                 group = groupService.CreateGroup(group);
@@ -157,7 +157,13 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             try
             {
-                String path = uploader.UploadImage(image, userImagePath);
+                String path = null;
+
+                if (image != null)
+                {
+                    path = uploader.UploadImage(image, userImagePath);
+
+                }
 
                 String result = service.ChangeCoverImage(groupId, path);
 
@@ -170,6 +176,36 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             return Json(response);
 
+        }
+
+        [HttpPost]
+        public ActionResult ChangeGroupAvatar(int groupId, HttpPostedFileBase image) {
+            var service = this.Service<IGroupService>();
+
+            ResponseModel<String> response = null;
+
+            FileUploader uploader = new FileUploader();
+
+            try
+            {
+                String path = null;
+
+                if (image != null)
+                {
+                    path = uploader.UploadImage(image, userImagePath);
+
+                }
+
+                String result = service.ChangeAvatarImage(groupId, path);
+
+                response = new ResponseModel<String>(true, "Ảnh nhóm đã được cập nhật!", null, result);
+            }
+            catch (Exception)
+            {
+                response = ResponseModel<String>.CreateErrorResponse("Ảnh nhóm chưa được cập nhật!", systemError);
+            }
+
+            return Json(response);
         }
 
         [HttpPost]

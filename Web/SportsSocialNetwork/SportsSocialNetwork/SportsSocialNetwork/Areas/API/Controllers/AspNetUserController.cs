@@ -201,7 +201,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             try
             {
-                String path = uploader.UploadImage(image, userImagePath);
+                String path = null;
+
+                if (image != null) {
+                    path = uploader.UploadImage(image, userImagePath);
+                }
 
                 String result = service.ChangeAvatar(userId, path);
 
@@ -227,7 +231,14 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             try
             {
-                String path = uploader.UploadImage(image, userImagePath);
+                String path = null;
+
+                if (image != null)
+                {
+
+                    path = uploader.UploadImage(image, userImagePath);
+                }
+
 
                 String result = service.ChangeCover(userId, path);
 
