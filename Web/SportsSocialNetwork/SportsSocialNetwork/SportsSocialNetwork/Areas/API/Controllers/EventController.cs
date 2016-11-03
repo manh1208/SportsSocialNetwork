@@ -50,6 +50,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             result.EndDateString = result.EndDate.ToString("dd/MM/yyyy");
 
+            result.PlaceName = e.Place.Name;
+
             return result;
         }
     }
