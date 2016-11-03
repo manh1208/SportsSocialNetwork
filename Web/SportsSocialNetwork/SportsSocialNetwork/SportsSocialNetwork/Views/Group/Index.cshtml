@@ -3,7 +3,7 @@
 @using SportsSocialNetwork.Models.Entities;
 @using Microsoft.AspNet.Identity;
 @{
-    ViewBag.Title = "Group";
+    ViewBag.Title = Model.Name;
     Layout = "~/Views/Shared/_SSNLayout.cshtml";
 
     int groupId = ViewBag.groupId;
@@ -13,6 +13,7 @@
 
     List<GroupMemberFullInfoModel> GroupMember = ViewBag.groupMember;
     List<GroupFullInfoViewModel> suggestGroups = ViewBag.suggestGroups;
+    List<Group> groupList = ViewBag.GroupList;
 }
 
 <style>
@@ -111,10 +112,126 @@
     <link href="~/Content/assets/vendor/select2/select2.css" rel="stylesheet" />
 }
 
+@{
+    if (Model.IsAdmin)
+    {
+        <!--Change cover modal-->
+        <div id="coverModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <form id="changeCover-form" method="post" autocomplete="off">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Chọn ảnh bìa</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group form-material floating">
+                                <input type="text" class="form-control input-lg" readonly="" />
+                                <input type="file" id="inputCover" name="inputCover" />
+                                <label class="floating-label">Ảnh bìa</label>
+                            </div><br />
+                            <img id="previewCover" src="#" alt="previewCover" width="200" style="display:none;" />
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-success" value="Cập nhật" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!--Change avatar modal-->
+        <div id="avatarModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <form id="changeAva-form" method="post" autocomplete="off">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Chọn hình đại diện</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group form-material floating">
+                                <input type="text" class="form-control input-lg" readonly="" />
+                                <input type="file" id="inputAvatar" name="inputAvatar" />
+                                <label class="floating-label">Hình đại diện</label>
+                            </div><br />
+                            <img id="previewAva" src="#" alt="previewAva" width="200" style="display:none;" />
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-success" value="Cập nhật" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+}
+
+
+<!--Create group modal-->
+<div id="createGroupModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <form id="createGroup-form" method="post" autocomplete="off">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Tạo nhóm mới</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="GroupCreator" id="GroupCreator" value="@User.Identity.GetUserId()" />
+                    <div class="form-group form-material floating">
+                        <input class="form-control input-lg" type="text" name="GroupName" id="GroupName" />
+                        <label class="floating-label">Tên nhóm</label>
+                    </div>
+                    <div class="form-group form-material floating">
+                        <textarea class="form-control input-lg" rows="2" name="GroupDescription" id="GroupDescription"></textarea>
+                        <label class="floating-label">Mô tả</label>
+                    </div>
+                    <div class="form-group form-material floating">
+                        <select name="GroupSport" id="GroupSport" class="form-control input-lg">
+                            @{
+                                foreach (var item in sport)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                        </select>
+                        <label class="floating-label">Môn thể thao</label>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-success" value="Tạo nhóm" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 <!--Cover area-->
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12" id="coverImg">
+        @{
+            if (Model.IsAdmin)
+            {
+                <div id="changeCoverBtn" style="position:absolute; overflow:hidden; right:15px; bottom:10px; z-index:50; opacity:0.7; display:none;">
+                    <a href="javascript:void(0)" onclick="changeCover()" class="btn btn-dark">
+                        <i class="fa fa-image" aria-hidden="true"></i> Thay ảnh bìa
+                    </a>
+                </div>
+            }
+        }
+        
         <div class="panel panel-cover" style="background-image: url('@Model.CoverImage');
                 padding-top: 30%; background-position:center">
         </div>
@@ -127,10 +244,18 @@
     <div class="col-sm-3">
         <div class="widget widget-shadow text-center">
             <div class="widget-header">
-                <div class="widget-header-content">
+                <div class="widget-header-content" id="userContent">
                     <a class="avatar avatar-lg" href="javascript:void(0)">
                         <img class="groupAvatar" src="@Model.Avatar" alt="...">
                     </a>
+                    @{
+                        if (Model.IsAdmin)
+                        {
+                            <div style="position:absolute; right:20px;top:140px;display:none;" id="changeAvaBtn">
+                                <button type="button" class="btn btn-pure btn-default icon wb-pencil" onclick="changeAva()"></button>
+                            </div>
+                        }
+                    }
                     <div class="profile-user">@Model.Name</div>
                     <div class="profile-job">@Model.Sport.Name</div>
                     <p>
@@ -171,6 +296,36 @@
                     </div>*@
                 </div>
             </div>
+            @if (groupList.Count > 0)
+            {
+                <div class="example-wrap margin-lg-0" style="text-align:left;">
+                    <h4 class="example-title" style="display:inline-block;float:left;">Các nhóm tham gia</h4>
+                    <button type="button" style="display:inline-block; float:right;" class="btn btn-pure btn-dark btn-sm icon wb-plus" onclick="showCreateGroupModal()"> Tạo nhóm</button>
+                    <div class="clearfix"></div>
+                    <ul class="list-group list-group-full">
+                        @{
+                            foreach (var item in groupList)
+                            {
+                                <li class="list-group-item" style="text-align:left;">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a class="avatar" href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))">
+                                                <img class="img-responsive" src="@item.Avatar" alt="...">
+                                            </a>
+                                        </div>
+                                        <div class="media-body vertical-align">
+                                            <a href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))" style="text-decoration:none;color:#37474f;">
+                                                <h4 class="media-heading vertical-align-middle">@item.Name</h4>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+                            }
         </div>
     </div>
     <!--END Left side-bar-->
@@ -179,7 +334,7 @@
     <div class="col-sm-6" style="padding: 0;">
 
         <div class="nav-tabs-horizontal">
-            <ul class="nav nav-tabs" data-plugin="nav-tabs" role="tablist" style="background-color:white;">
+            <ul class="nav nav-tabs nav-tabs-line" data-plugin="nav-tabs" role="tablist" style="background-color:white;">
                 @{
                     if (!Model.IsMember)
                     {
@@ -215,6 +370,32 @@
                                         {
                                             <div class="col-sm-6" style="margin-bottom:20px; padding: 10px 10px 0 10px;">
                                                 <div style="border: 1px solid #e9ebee; overflow:hidden;">
+                                                    @{
+                                                        if (Model.IsAdmin)
+                                                        {
+                                                            <div class="btn-group" style="position:absolute; right:10px; top:10px;">
+                                                                <button type="button" class="btn btn-default dropdown-toggle btn-outline" id="@item.AspNetUser.Id"
+                                                                        data-toggle="dropdown" aria-expanded="false">
+                                                                    <span class="caret"></span>
+                                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="@item.AspNetUser.Id" role="menu">
+                                                                    @{
+                                                                        if (item.Admin)
+                                                                        {
+                                                                            <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="removeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Bỏ quyền quản trị</a></li>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="makeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Chọn làm quản trị viên</a></li>
+                                                                        }
+
+                                                                    }
+
+                                                                </ul>
+                                                            </div>
+                                                        }
+                                                    }
                                                     <div style="float:left; display:block; width:150px; height:150px;">
                                                         @*<a class="avatar avatar-lg" href="javascript:void(0)">
                                                                 <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
@@ -222,32 +403,7 @@
                                                         <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
                                                     </div>
                                                     <div style="float:left; display:inline-block; margin-left:15px;">
-                                                        @{
-                                                            if (Model.IsAdmin)
-                                                            {
-                                                                <div class="btn-group" style="position:absolute; right:10px;">
-                                                                    <button type="button" class="btn btn-default dropdown-toggle btn-outline" id="@item.AspNetUser.Id"
-                                                                            data-toggle="dropdown" aria-expanded="false">
-                                                                        <span class="caret"></span>
-                                                                        <span class="sr-only">Toggle Dropdown</span>
-                                                                    </button>
-                                                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="@item.AspNetUser.Id" role="menu">
-                                                                        @{
-                                                                            if (item.Admin)
-                                                                            {
-                                                                                <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="removeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Bỏ quyền quản trị</a></li>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="makeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Chọn làm quản trị viên</a></li>
-                                                                            }
-
-                                                                        }
-
-                                                                    </ul>
-                                                                </div>
-                                                                            }
-                                                        }
+                                                       
 
                                                         <a href="@item.AspNetUser.Id"><h3>@item.AspNetUser.FullName</h3></a>
                                                         @{
@@ -338,11 +494,8 @@
                     </div>*@
                     <!--END Posting status area-->
                     <!--Post area-->
-                    <div class="panel" id="activities" role="tabpanel">
-                        <div class="panel-body">
-                            <ul class="list-group" id="listPost"></ul>
-                            <a class="btn btn-block btn-default profile-readMore" href="javascript:void(0)" role="button">Xem thêm bài viết</a>
-                        </div>
+                    <div id="activities" role="tabpanel">
+                        <ul class="list-group" id="listPost"></ul>
                     </div>
                     <!--END Post area-->
                 </div>
@@ -1014,14 +1167,157 @@
             })
         });
 
-        var elementPosition = $('.lastSuggestGroup').offset();
-        var $width = $('#rightBar').width();
-        $(window).scroll(function(){
-            if($(window).scrollTop() > elementPosition.top){
-                $('#fixpanel').css('position','fixed').css('bottom','490px').css('right', '50px').css('width', $width);
-            } else {
-                $('#fixpanel').css('position','static');
-            }    
+        //var elementPosition = $('.lastSuggestGroup').offset();
+        //var $width = $('#rightBar').width();
+        //$(window).scroll(function(){
+        //    if($(window).scrollTop() > elementPosition.top){
+        //        $('#fixpanel').css('position','fixed').css('bottom','490px').css('right', '50px').css('width', $width);
+        //    } else {
+        //        $('#fixpanel').css('position','static');
+        //    }
+        //});
+
+
+        // cover
+        $("#coverImg").hover(function(){
+            $("#changeCoverBtn").show(300);
+        },function(){
+            $("#changeCoverBtn").hide(300);
         });
+
+        function changeCover() {
+            $("#coverModal").modal('show');
+        };
+
+        $("#inputCover").change(function(){
+            readURL(this);
+            $("#previewCover").show();
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#previewCover').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+
+        $("#changeCover-form").submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(document.getElementById('changeCover-form'));
+            var groupId = '@Model.Id';
+            formData.append("groupId",groupId);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ChangeCoverImage", "Group")',
+                async: false,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result.Succeed) {
+                        location.href = location.href;
+                    } else {
+                        //showErrors(result.Errors);
+                        showMessage("Không thể cập nhật.", "error", "OK");
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        });
+
+        //change avatar
+        $("#userContent").hover(function(){
+            $("#changeAvaBtn").show(300);
+        },function(){
+            $("#changeAvaBtn").hide(300);
+        });
+
+        function changeAva() {
+            $("#avatarModal").modal('show');
+        };
+
+        $("#inputAvatar").change(function(){
+            readURLAva(this);
+            $("#previewAva").show();
+        });
+
+        function readURLAva(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#previewAva').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+
+        $("#changeAva-form").submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(document.getElementById('changeAva-form'));
+            var groupId = '@Model.Id';
+            formData.append("groupId",groupId);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ChangeAvatarImage", "Group")',
+                async: false,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result.Succeed) {
+                        location.href = location.href;
+                    } else {
+                        //showErrors(result.Errors);
+                        showMessage("Không thể cập nhật.", "error", "OK");
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        });
+
+        //create group
+        function showCreateGroupModal()
+        {
+            $("#createGroupModal").modal('show');
+        }
+
+        $("#createGroup-form").submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(document.getElementById('createGroup-form'));
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateGroup", "Group")',
+                async: false,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result.Succeed) {
+                        location.href = '/Group/Index/' + result.AdditionalData.Id;
+                    } else {
+                        //showErrors(result.Errors);
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        });
+
     </script>
 }

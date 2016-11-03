@@ -14,6 +14,7 @@ using System.Net;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using Teek.Models;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -24,12 +25,14 @@ namespace SportsSocialNetwork.Controllers
         {
             var _userService = this.Service<IAspNetUserService>();
             var _sportService = this.Service<ISportService>();
+            var _followService = this.Service<IFollowService>();
+            var _groupService = this.Service<IGroupService>();
+            
 
             AspNetUser user = _userService.FindUser(userId);
             AspNetUserFullInfoViewModel model = Mapper.Map<AspNetUserFullInfoViewModel>(user);
             this.PrepareUserInfo(model);
 
-            //suggest follower
             //suggest follower
             List<FollowSuggestViewModel> userList = new List<FollowSuggestViewModel>();
             var Coord = new GeoCoordinate();
@@ -105,7 +108,39 @@ namespace SportsSocialNetwork.Controllers
                             }).OrderBy(s => s.Value);
             ViewBag.Sport = sports;
 
+            //get all image of user
+            ViewBag.userPostImages = this.GetAllPostImageOfUser(userId, 0, 12).ToList();
+
+            //get all people that this user follow
+            List<Follow> following = _followService.GetFollowingList(userId).ToList();
+            List<AspNetUser> followingUsers = new List<AspNetUser>();
+            foreach (var item in following)
+            {
+                AspNetUser us = _userService.FirstOrDefaultActive(u => u.Id == item.UserId);
+                followingUsers.Add(us);
+            }
+            ViewBag.followingUsers = followingUsers;
+
+            //get list group that this user joined
+            List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f =>
+            f.UserId == userId).ToList().Count > 0).ToList();
+            ViewBag.GroupList = groupList;
+
             return View(model);
+        }
+
+        public IEnumerable<PostImage> GetAllPostImageOfUser(string userId, int skip, int take)
+        {
+            var _postService = this.Service<IPostService>();
+            var _postImageService = this.Service<IPostImageService>();
+            List<PostImage> userPostImages = new List<PostImage>();
+            List<Post> userPosts = _postService.GetAllPostOfUser(userId).ToList();
+            foreach (var item in userPosts)
+            {
+                List<PostImage> postImages = _postImageService.GetAllPostImage(item.Id).ToList();
+                userPostImages.AddRange(postImages);
+            }
+            return userPostImages.Skip(skip).Take(take);
         }
 
         public DataTable getLocation(string address)
@@ -144,7 +179,7 @@ namespace SportsSocialNetwork.Controllers
             //number of people that follow this person
             p.FollowedCount = _followService.GetFollowerCount(p.Id);
 
-            p.Followed = _followService.FollowUnfollowUser(p.Id, User.Identity.GetUserId());
+            p.Followed = _followService.CheckFollowOrNot(p.Id, User.Identity.GetUserId());
 
             if (User.Identity.GetUserId().Equals(p.Id))
             {
@@ -167,7 +202,7 @@ namespace SportsSocialNetwork.Controllers
                 var _postService = this.Service<IPostService>();
                 var _postCommentService = this.Service<IPostCommentService>();
 
-                List<Post> postList = _postService.GetAllPostOfUser(userId, skip, take).ToList();
+                List<Post> postList = _postService.GetAllProfilePost(userId, skip, take).ToList();
                 List<PostGeneralViewModel> listPostVM = Mapper.Map<List<PostGeneralViewModel>>(postList);
 
                 foreach (var item in listPostVM)
@@ -246,6 +281,122 @@ namespace SportsSocialNetwork.Controllers
                 result.Succeed = false;
             }
 
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult ChangeCoverImage(string userId, HttpPostedFileBase inputCover)
+        {
+            string containingFolder = "CoverImages";
+            var result = new AjaxOperationResult();
+            var _userService = this.Service<IAspNetUserService>();
+
+            AspNetUser user = _userService.FirstOrDefaultActive(u => u.Id.Equals(userId));
+
+            if(user != null && inputCover != null)
+            {
+                FileUploader _fileUploadService = new FileUploader();
+                string filePath = _fileUploadService.UploadImage(inputCover, containingFolder);
+                user.CoverImage = filePath;
+                _userService.UpdateUser(user);
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult ChangeAvatarImage(string userId, HttpPostedFileBase inputAvatar)
+        {
+            string containingFolder = "AvatarImages";
+            var result = new AjaxOperationResult();
+            var _userService = this.Service<IAspNetUserService>();
+
+            AspNetUser user = _userService.FirstOrDefaultActive(u => u.Id.Equals(userId));
+
+            if (user != null && inputAvatar != null)
+            {
+                FileUploader _fileUploadService = new FileUploader();
+                string filePath = _fileUploadService.UploadImage(inputAvatar, containingFolder);
+                user.AvatarImage = filePath;
+                _userService.UpdateUser(user);
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult saveProfile(AspNetUserFullInfoViewModel model, string hobbies)
+        {
+            var result = new AjaxOperationResult();
+            var _userService = this.Service<IAspNetUserService>();
+
+            AspNetUser user = _userService.FindUser(model.Id);
+            if(user != null)
+            {
+                user.UserName = model.UserName;
+                user.FullName = model.FullName;
+                user.Email = model.Email;
+
+                if(_userService.UpdateUser(user) != null)
+                {
+                    if (!String.IsNullOrEmpty(hobbies))
+                    {
+                        string[] newHobbies = hobbies.Split(',');
+                        if (newHobbies != null)
+                        {
+                            var _hobbyService = this.Service<IHobbyService>();
+
+                            //find and delete old hobbies
+                            List<Hobby> oldHobbies = _hobbyService.GetActive(h => h.UserId.Equals(user.Id)).ToList();
+                            foreach (var item in oldHobbies)
+                            {
+                                _hobbyService.Delete(item);
+                            }
+
+                            //add new hobbies
+                            foreach (var item in newHobbies)
+                            {
+                                if (!item.Equals(""))
+                                {
+                                    Hobby hb = new Hobby();
+                                    hb.UserId = user.Id;
+                                    hb.SportId = Int32.Parse(item);
+                                    _hobbyService.Create(hb);
+                                }
+                                
+                            }
+                            result.Succeed = true;
+                        }
+                        else
+                        {
+                            result.Succeed = false;
+                        }
+                    }
+                    else
+                    {
+                        result.Succeed = false;
+                    }
+                }
+                else
+                {
+                    result.Succeed = false;
+                }
+            }
+            else
+            {
+                result.Succeed = false;
+            }
 
             return Json(result);
         }
