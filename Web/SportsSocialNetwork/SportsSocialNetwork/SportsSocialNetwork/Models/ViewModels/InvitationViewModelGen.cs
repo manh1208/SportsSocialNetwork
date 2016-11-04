@@ -18,7 +18,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual int Id { get; set; }
     			public virtual string SenderId { get; set; }
     			public virtual string InvitationContent { get; set; }
-    			public virtual int CreateDate { get; set; }
+    			public virtual System.DateTime CreateDate { get; set; }
     			public virtual bool Active { get; set; }
     	
     	public InvitationViewModel() : base() { }

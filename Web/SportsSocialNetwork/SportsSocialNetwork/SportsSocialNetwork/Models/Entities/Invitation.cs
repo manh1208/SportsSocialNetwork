@@ -24,7 +24,7 @@ namespace SportsSocialNetwork.Models.Entities
         public int Id { get; set; }
         public string SenderId { get; set; }
         public string InvitationContent { get; set; }
-        public int CreateDate { get; set; }
+        public System.DateTime CreateDate { get; set; }
         public bool Active { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
