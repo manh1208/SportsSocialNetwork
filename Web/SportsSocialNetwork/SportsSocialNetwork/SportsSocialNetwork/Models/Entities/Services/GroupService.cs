@@ -18,9 +18,13 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         String ChangeCoverImage(int id,String image);
 
+
         bool DeleteGroup(int id);
 
         List<Group> GetSuggestGroup(int groupId);
+
+        String ChangeAvatarImage(int id, String image);
+
 
         #endregion
 
@@ -81,6 +85,14 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 return false;
             }
         }
+        public String ChangeAvatarImage(int id, String image)
+        {
+            Group group = this.FindGroupById(id);
+            group.Avatar = image;
+            Save();
+            return group.Avatar;
+        }
+
 
         #endregion
 

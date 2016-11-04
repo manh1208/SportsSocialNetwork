@@ -78,6 +78,39 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             return Json(response);
         }
 
+        [HttpPost]
+        public ActionResult GetPeopleFollowYou(string userId)
+        {
+            var service = this.Service<IFollowService>();
+
+            ResponseModel<List<AspNetUserOveralViewModel>> response = null;
+
+            try
+            {
+                List<Follow> followList = service.GetActive(x => x.UserId.Equals(userId)).ToList();
+
+                List<AspNetUserOveralViewModel> result = new List<AspNetUserOveralViewModel>();
+
+                if (followList != null)
+                {
+                    foreach (var follow in followList)
+                    {
+
+
+                        result.Add(PrepareAspNetUserOveralViewModel(follow));
+                    }
+                }
+
+                response = new ResponseModel<List<AspNetUserOveralViewModel>>(true, "Danh sách những người theo dõi bạn:", null, result);
+            }
+            catch (Exception)
+            {
+                response = ResponseModel<List<AspNetUserOveralViewModel>>.CreateErrorResponse("Tải danh sách theo dõi thất bại", systemError);
+            }
+
+            return Json(response);
+        }
+
         private AspNetUserOveralViewModel PrepareAspNetUserOveralViewModel(Follow follow)
         {
             var followService = this.Service<IFollowService>();
