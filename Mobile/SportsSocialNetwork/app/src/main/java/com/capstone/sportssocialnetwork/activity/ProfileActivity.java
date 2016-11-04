@@ -170,6 +170,7 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
     private void handleAlphaOnTitle(float percentage) {
         if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
             if (mIsTheTitleContainerVisible) {
+                toolbar.setVisibility(View.VISIBLE);
                 startAlphaAnimation(linearlayoutTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 mIsTheTitleContainerVisible = false;
             }

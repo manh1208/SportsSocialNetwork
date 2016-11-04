@@ -3,6 +3,8 @@ package com.capstone.sportssocialnetwork.service;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.model.User;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -21,5 +23,11 @@ public interface IAccountService {
     @POST("/api/aspnetuser/savetoken")
     Call<ResponseModel<String>> sentToken(@Query("userId")String userId,
                                           @Query("token")String token);
+
+    @POST("/api/follow/getpeoplefollowyou")
+    Call<ResponseModel<List<User>>> getFollowed(@Query("userId") String userId);
+
+    @POST("/api/follow/getfollowlist")
+    Call<ResponseModel<List<User>>> getFollowing(@Query("userId")String userId);
 
 }
