@@ -137,5 +137,29 @@ namespace SportsSocialNetwork.Models.Enumerable
         TextAndMultiImages = 5
     }
 
+    public enum GroupMemberStatus
+    {
+        [Description("Đã duyệt")]
+        Approved = 1,
+        [Description("Đang chờ duyệt")]
+        Pending = 2
+    }
+
+    public enum JoinLeaveGroupResult
+    {
+        Leaved = 1,
+        RequestSent = 2,
+        ReJoined = 3,
+        CancelRequest = 4,
+        CannotLeave = 5
+    }
+
+    public enum GroupMemberRole
+    {
+        NotMember = 1,
+        Member = 2,
+        Admin = 3,
+        PendingMember = 4
+    }
 
 }

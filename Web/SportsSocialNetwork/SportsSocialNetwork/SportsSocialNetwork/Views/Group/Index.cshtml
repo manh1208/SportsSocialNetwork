@@ -2,6 +2,7 @@
 @using SportsSocialNetwork.Models.ViewModels;
 @using SportsSocialNetwork.Models.Entities;
 @using Microsoft.AspNet.Identity;
+@using SportsSocialNetwork.Models.Enumerable;
 @{
     ViewBag.Title = Model.Name;
     Layout = "~/Views/Shared/_SSNLayout.cshtml";
@@ -14,6 +15,8 @@
     List<GroupMemberFullInfoModel> GroupMember = ViewBag.groupMember;
     List<GroupFullInfoViewModel> suggestGroups = ViewBag.suggestGroups;
     List<Group> groupList = ViewBag.GroupList;
+
+    bool hasFollowed = false;
 }
 
 <style>
@@ -248,34 +251,66 @@
                     <a class="avatar avatar-lg" href="javascript:void(0)">
                         <img class="groupAvatar" src="@Model.Avatar" alt="...">
                     </a>
-                    @{
+                    @*@{
                         if (Model.IsAdmin)
                         {
                             <div style="position:absolute; right:20px;top:140px;display:none;" id="changeAvaBtn">
                                 <button type="button" class="btn btn-pure btn-default icon wb-pencil" onclick="changeAva()"></button>
                             </div>
                         }
-                    }
+                    }*@
+                    @*<div style="position:absolute; right:20px;top:140px;display:none;" id="changeAvaBtn">
+                        <button type="button" class="btn btn-pure btn-default icon wb-settings" onclick="changeAva()"></button>
+                    </div>*@
                     <div class="profile-user">@Model.Name</div>
                     <div class="profile-job">@Model.Sport.Name</div>
                     <p>
                         @Model.Description
                     </p>
+           
                     @{
                         if (Model.IsMember)
                         {
-                            <button type="button" class="btn btn-warning" id="leaveGroupBtn" onclick="leaveGroup(@Model.Id)">Rời nhóm</button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-pure btn-default icon wb-settings dropdown-toggle" id="@Model.Id"
+                                        data-toggle="dropdown" aria-expanded="false">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="@Model.Id" role="menu">
+                                    <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="leaveGroup(@Model.Id)"><i class="fa fa-minus-circle" aria-hidden="true"></i> Rời nhóm</a></li>
+                                    @{
+                                        if (Model.IsAdmin)
+                                        {
+                                            <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="deleteGroup(@Model.Id)"><i class="fa fa-times-circle" aria-hidden="true"></i> Xóa nhóm</a></li>
+                                        }
+
+                                    }
+
+                                </ul>
+                            </div>
+
+                            @*<button type="button" class="btn btn-warning" id="leaveGroupBtn" onclick="leaveGroup(@Model.Id)">Rời nhóm</button>
                             if (Model.IsAdmin)
                             {
                                 <button type="button" class="btn btn-danger" id="deleteGroupBtn" onclick="deleteGroup(@Model.Id)">Xóa nhóm</button>
+                            }*@
                             }
-                        }
                         else
                         {
-                            <button type="button" class="btn btn-primary" id="joinGroupBtn" onclick="joinGroup(@Model.Id)">Tham gia nhóm</button>
+                            if(Model.isPendingMember)
+                            {
+                                <button type="button" class="btn btn-default" id="joinLeaveGroupBtn" onclick="joinLeaveGroup(@Model.Id)"><i class="fa fa-times-circle" aria-hidden="true"></i> Hủy yêu cầu tham gia nhóm</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-default" id="joinLeaveGroupBtn" onclick="joinLeaveGroup(@Model.Id)"><i class="fa fa-plus-circle" aria-hidden="true"></i> Tham gia nhóm</button>
+                            }
+                            
+                            @*<button type="button" class="btn btn-primary" id="joinGroupBtn" onclick="joinGroup(@Model.Id)">Tham gia nhóm</button>*@
                         }
 
-                        
+
                     }
                     
                 </div>
@@ -353,6 +388,10 @@
                             <a data-toggle="tab" href="#exampleTabsTwo" aria-controls="exampleTabsTwo"
                                role="tab">Thành viên</a>
                         </li>
+                        <li role="presentation" id="members">
+                            <a data-toggle="tab" href="#exampleTabsThree" aria-controls="exampleTabsThree"
+                               role="tab">Lịch sử thách đấu</a>
+                        </li>
                     }
                 }
                 
@@ -363,16 +402,31 @@
                     {
                         <div class="tab-pane active" id="exampleTabsTwo" role="tabpanel" style="background-color:white;">
                             <div class="row" style="padding:20px 20px;">
+                                
                                 @{
+                                    //check whether has friend in this group
                                     foreach (var item in GroupMember)
                                     {
-                                        if (item.AspNetUser.Id != User.Identity.GetUserId())
+                                        if ((item.AspNetUser.Id != User.Identity.GetUserId()) && item.isFollowed == true)
                                         {
-                                            <div class="col-sm-6" style="margin-bottom:20px; padding: 10px 10px 0 10px;">
-                                                <div style="border: 1px solid #e9ebee; overflow:hidden;">
-                                                    @{
-                                                        if (Model.IsAdmin)
-                                                        {
+                                            hasFollowed = true;
+                                        }
+
+                                    }
+                                    if (hasFollowed == true)
+                                    {
+                                        <div class="row">
+                                            <h3 class="popover-title">Đang theo dõi</h3>
+                                            @{
+                                                foreach (var item in GroupMember)
+                                                {
+                                                    if ((item.AspNetUser.Id != User.Identity.GetUserId()) && hasFollowed == true && item.isFollowed == true)
+                                                    {
+                                                        <div class="col-sm-6" style="margin-bottom:20px; padding: 10px 10px 0 10px;">
+                                                            <div style="border: 1px solid #e9ebee; overflow:hidden;">
+                                                                @{
+                                                                    if (Model.IsAdmin)
+                                                                    {
                                                             <div class="btn-group" style="position:absolute; right:10px; top:10px;">
                                                                 <button type="button" class="btn btn-default dropdown-toggle btn-outline" id="@item.AspNetUser.Id"
                                                                         data-toggle="dropdown" aria-expanded="false">
@@ -381,60 +435,231 @@
                                                                 </button>
                                                                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="@item.AspNetUser.Id" role="menu">
                                                                     @{
-                                                                        if (item.Admin)
-                                                                        {
+                                                                                if (item.Admin)
+                                                                                {
                                                                             <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="removeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Bỏ quyền quản trị</a></li>
-                                                                        }
-                                                                        else
-                                                                        {
+                                                                                }
+                                                                                else
+                                                                                {
                                                                             <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="makeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Chọn làm quản trị viên</a></li>
-                                                                        }
+                                                                                }
 
                                                                     }
 
                                                                 </ul>
                                                             </div>
-                                                        }
+                                                                                }
+                                                                }
+                                                                <div style="float:left; display:block; width:150px; height:150px;">
+                                                                    @*<a class="avatar avatar-lg" href="javascript:void(0)">
+                                                                            <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
+                                                                        </a>*@
+                                                                    <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                                </div>
+                                                                <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
+
+
+                                                                    <a href="@item.AspNetUser.Id"><h3>@item.AspNetUser.FullName</h3></a>
+                                                                    @{
+                                                                    string hobbies = "";
+                                                                    for (int i = 0; i < item.AspNetUser.Hobbies.Count(); i++)
+                                                                    {
+                                                                        if (i == item.AspNetUser.Hobbies.Count() - 1)
+                                                                        {
+                                                                            hobbies += item.AspNetUser.Hobbies[i].Sport.Name;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            hobbies += item.AspNetUser.Hobbies[i].Sport.Name + ", ";
+                                                                        }
+
+                                                                    }
+                                                                    }
+                                                                    <p>@hobbies</p>
+                                                                    @{
+                                                                    if (item.isFollowed != true)
+                                                                    {
+                                                                        <button type="button" class="btn btn-default" onclick="followUnfollow('@item.AspNetUser.Id')"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button><br />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <button type="button" class="btn btn-default" onclick="followUnfollow('@item.AspNetUser.Id')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button><br />
+                                                                    }
+                                                                    }
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     }
-                                                    <div style="float:left; display:block; width:150px; height:150px;">
-                                                        @*<a class="avatar avatar-lg" href="javascript:void(0)">
-                                                                <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
-                                                            </a>*@
-                                                        <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
-                                                    </div>
-                                                    <div style="float:left; display:inline-block; margin-left:15px;">
-                                                       
+                                                }
+                                            }
+                                        </div>
 
-                                                        <a href="@item.AspNetUser.Id"><h3>@item.AspNetUser.FullName</h3></a>
-                                                        @{
-                                                            string hobbies = "";
-                                                            for (int i = 0; i < item.AspNetUser.Hobbies.Count(); i++)
-                                                            {
-                                                                if (i == item.AspNetUser.Hobbies.Count() - 1)
+                                    }
+
+                                    <div class="row">
+                                        @{
+                                            //show admin
+                                            <h3 class="popover-title">Nhóm trưởng</h3>
+                                            foreach (var item in GroupMember)
+                                            {
+                                                if ((item.AspNetUser.Id != User.Identity.GetUserId()) && item.Admin)
+                                                {
+                                                    <div class="col-sm-6" style="margin-bottom:20px; padding: 10px 10px 0 10px;">
+                                                        <div style="border: 1px solid #e9ebee; overflow:hidden;">
+                                                            @{
+                                                                if (Model.IsAdmin)
                                                                 {
-                                                                    hobbies += item.AspNetUser.Hobbies[i].Sport.Name;
+                                                                    <div class="btn-group" style="position:absolute; right:10px; top:10px;">
+                                                                        <button type="button" class="btn btn-default dropdown-toggle btn-outline" id="@item.AspNetUser.Id"
+                                                                                data-toggle="dropdown" aria-expanded="false">
+                                                                            <span class="caret"></span>
+                                                                            <span class="sr-only">Toggle Dropdown</span>
+                                                                        </button>
+                                                                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="@item.AspNetUser.Id" role="menu">
+                                                                            @{
+                                                                                if (item.Admin)
+                                                                                {
+                                                                                    <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="removeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Bỏ quyền quản trị</a></li>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="makeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Chọn làm quản trị viên</a></li>
+                                                                                }
+
+                                                                            }
+
+                                                                        </ul>
+                                                                    </div>
                                                                 }
-                                                                else
-                                                                {
-                                                                    hobbies += item.AspNetUser.Hobbies[i].Sport.Name + ", ";
+                                                            }
+                                                            <div style="float:left; display:block; width:150px; height:150px;">
+                                                                @*<a class="avatar avatar-lg" href="javascript:void(0)">
+                                                                        <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
+                                                                    </a>*@
+                                                                <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                            </div>
+                                                            <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
+
+
+                                                                <a href="@item.AspNetUser.Id"><h3>@item.AspNetUser.FullName</h3></a>
+                                                                @{
+                                                                    string hobbies = "";
+                                                                    for (int i = 0; i < item.AspNetUser.Hobbies.Count(); i++)
+                                                                    {
+                                                                        if (i == item.AspNetUser.Hobbies.Count() - 1)
+                                                                        {
+                                                                            hobbies += item.AspNetUser.Hobbies[i].Sport.Name;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            hobbies += item.AspNetUser.Hobbies[i].Sport.Name + ", ";
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                                <p>@hobbies</p>
+                                                                @{
+                                                                    if (item.isFollowed != true)
+                                                                    {
+                                                                        <button type="button" class="btn btn-default" onclick="followUnfollow('@item.AspNetUser.Id')"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button><br />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <button type="button" class="btn btn-default" onclick="followUnfollow('@item.AspNetUser.Id')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button><br />
+                                                                    }
                                                                 }
 
-                                                            }
-                                                        }
-                                                        <p>@hobbies</p>
-                                                        @{
-                                                            if (item.isFollowed != true)
-                                                            {
-                                                                <button type="button" class="btn btn-default"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button><br />
-                                                            }
-                                                        }
-
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                    
+                                    
+                                    <div class="row">
+                                        @{
+                                            //show orther member
+                                            <h3 class="popover-title">Thành viên khác</h3>
+                                            foreach (var item in GroupMember)
+                                            {
+                                                if ((item.AspNetUser.Id != User.Identity.GetUserId()) && item.Admin == false && item.isFollowed == false)
+                                                {
+                                                    <div class="col-sm-6" style="margin-bottom:20px; padding: 10px 10px 0 10px;">
+                                                        <div style="border: 1px solid #e9ebee; overflow:hidden;">
+                                                            @{
+                                                                if (Model.IsAdmin)
+                                                                {
+                                                                    <div class="btn-group" style="position:absolute; right:10px; top:10px;">
+                                                                        <button type="button" class="btn btn-default dropdown-toggle btn-outline" id="@item.AspNetUser.Id"
+                                                                                data-toggle="dropdown" aria-expanded="false">
+                                                                            <span class="caret"></span>
+                                                                            <span class="sr-only">Toggle Dropdown</span>
+                                                                        </button>
+                                                                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="@item.AspNetUser.Id" role="menu">
+                                                                            @{
+                                                                                if (item.Admin)
+                                                                                {
+                                                                                    <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="removeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Bỏ quyền quản trị</a></li>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="makeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Chọn làm quản trị viên</a></li>
+                                                                                }
+
+                                                                            }
+
+                                                                        </ul>
+                                                                    </div>
+                                                                                }
+                                                            }
+                                                            <div style="float:left; display:block; width:150px; height:150px;">
+                                                                @*<a class="avatar avatar-lg" href="javascript:void(0)">
+                                                                        <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
+                                                                    </a>*@
+                                                                <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                            </div>
+                                                            <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
+
+
+                                                                <a href="@item.AspNetUser.Id"><h3>@item.AspNetUser.FullName</h3></a>
+                                                                @{
+                                                                    string hobbies = "";
+                                                                    for (int i = 0; i < item.AspNetUser.Hobbies.Count(); i++)
+                                                                    {
+                                                                        if (i == item.AspNetUser.Hobbies.Count() - 1)
+                                                                        {
+                                                                            hobbies += item.AspNetUser.Hobbies[i].Sport.Name;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            hobbies += item.AspNetUser.Hobbies[i].Sport.Name + ", ";
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                                <p>@hobbies</p>
+                                                                @{
+                                                                    if (item.isFollowed != true)
+                                                                    {
+                                                                        <button type="button" class="btn btn-default" onclick="followUnfollow('@item.AspNetUser.Id')"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button><br />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <button type="button" class="btn btn-default" onclick="followUnfollow('@item.AspNetUser.Id')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button><br />
+                                                                    }
                                                                 }
 
-                                                            }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                    
                                 }
 
 
@@ -514,11 +739,11 @@
                                                         </a>*@
                                                         <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
                                                     </div>
-                                                    <div style="float:left; display:inline-block; margin-left:15px;">
+                                                    <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
                                                         @{
                                                             if (Model.IsAdmin)
                                                             {
-                                                                <div class="btn-group" style="position:absolute; right:10px;">
+                                                                <div class="btn-group" style="position:absolute; right:10px;top:10px;">
                                                                     <button type="button" class="btn btn-default dropdown-toggle btn-outline" id="@item.AspNetUser.Id"
                                                                             data-toggle="dropdown" aria-expanded="false">
                                                                         <span class="caret"></span>
@@ -560,10 +785,14 @@
                                                         }
                                                         <p>@hobbies</p>
                                                         @{
-                                                        if (item.isFollowed != true)
-                                                        {
-                                                            <button type="button" class="btn btn-default"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button><br />
-                                                        }
+                                                            if (item.isFollowed != true)
+                                                            {
+                                                                <button type="button" class="btn btn-default" onclick="followUnfollowAD('@item.AspNetUser.Id')"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button><br />
+                                                            }
+                                                            else
+                                                            {
+                                                                <button type="button" class="btn btn-default" onclick="followUnfollowAD('@item.AspNetUser.Id')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button><br />
+                                                            }
                                                         }
 
                                                     </div>
@@ -575,6 +804,13 @@
                                 }
 
 
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="exampleTabsThree" role="tabpanel" style="background-color:white;">
+                            <div class="row" style="padding:20px 20px;">
+                                @{
+                                    
+                                }
                             </div>
                         </div>
                     }
@@ -598,7 +834,7 @@
                     <form id="addFrdForm" method="post" autocomplete="off">
                         <div class="input-group">
                             <span class="input-group-btn">
-                                <button type="submit" class="btn btn-pure btn-primary icon wb-plus"></button>
+                                <button type="submit" class="btn btn-pure btn-primary icon wb-plus" style="margin-left:-15px;"></button>
                             </span>
                             <input type="text" name="AddFriendToGroupList" id="addFrd" placeholder="Tags">
                             <input type="hidden" name="groupId" value="@groupId" />
@@ -1318,6 +1554,93 @@
                 },
             });
         });
+
+        //follow unfollow
+        function followUnfollow(id){
+            var update = false;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("FollowUnfollowUser", "Follow")',
+                data:{"userId":id,"followerId":'@User.Identity.GetUserId()'},
+                dataType: 'json',
+                success: function (data) {
+                    if(data.Succeed && data.Message == "Đã bỏ theo dõi"){
+                        var outerDiv = "#following_" + id;
+                        var uid = "'" + id + "'";
+                        $(outerDiv).find("button").replaceWith('<button type="button" class="btn btn-default" onclick="followUnFollow(' + uid + ')"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button>')
+                    } else if(data.Succeed && data.Message == "Đã theo dõi") {
+                        var outerDiv = "#following_" + id;
+                        var uid = "'" + id + "'";
+                        $(outerDiv).find("button").replaceWith('<button type="button" class="btn btn-default" onclick="followUnfollow(' + uid + ')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button>')
+                    }
+                    else{
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
+
+        function followUnfollowAD(id){
+            var update = false;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("FollowUnfollowUser", "Follow")',
+                data:{"userId":id,"followerId":'@User.Identity.GetUserId()'},
+                dataType: 'json',
+                success: function (data) {
+                    if(data.Succeed && data.Message == "Đã bỏ theo dõi"){
+                        var outerDiv = "#following_" + id;
+                        var uid = "'" + id + "'";
+                        $(outerDiv).find("button").slice(1).replaceWith('<button type="button" class="btn btn-default" onclick="followUnfollowAD(' + uid + ')"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button>')
+                    } else if(data.Succeed && data.Message == "Đã theo dõi") {
+                        var outerDiv = "#following_" + id;
+                        var uid = "'" + id + "'";
+                        $(outerDiv).find("button").slice(1).replaceWith('<button type="button" class="btn btn-default" onclick="followUnfollowAD(' + uid + ')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button>')
+                    }
+                    else{
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
+
+        function joinLeaveGroup(groupId) {
+            var curUserId = '@User.Identity.GetUserId()';
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("JoinLeaveGroup", "Group")',
+                data:{
+                    userId: curUserId,
+                    groupId: groupId
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if(data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.Leaved)'){
+                        location.href = location.href;
+                    } else if(data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.RequestSent)') {
+                        $('#joinLeaveGroupBtn').replaceWith('<button type="button" class="btn btn-default" id="joinLeaveGroupBtn" onclick="joinLeaveGroup(@Model.Id)"><i class="fa fa-times-circle" aria-hidden="true"></i> Hủy yêu cầu tham gia nhóm</button>')
+                    } else if(data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.CancelRequest)') {
+                        $('#joinLeaveGroupBtn').replaceWith('<button type="button" class="btn btn-default" id="joinLeaveGroupBtn" onclick="joinLeaveGroup(@Model.Id)"><i class="fa fa-plus-circle" aria-hidden="true"></i> Tham gia nhóm</button>')
+                    } else if(data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.CannotLeave)') {
+                        showMessage("Bạn đang là quản trị duy nhất của trang. Vui lòng chọn một thành viên khác để thay thế trước khi rời nhóm", "error", "OK");
+                    } else if(data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.ReJoined)') {
+                        $('#joinLeaveGroupBtn').replaceWith('<button type="button" class="btn btn-default" id="joinLeaveGroupBtn" onclick="joinLeaveGroup(@Model.Id)"><i class="fa fa-times-circle" aria-hidden="true"></i> Hủy yêu cầu tham gia nhóm</button>')
+                    }
+                    else{
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
 
     </script>
 }

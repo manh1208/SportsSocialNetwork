@@ -30,20 +30,50 @@ namespace SportsSocialNetwork.Controllers
 
             GroupFullInfoViewModel model = Mapper.Map<GroupFullInfoViewModel>(_groupService.FirstOrDefaultActive(g => g.Id == id));
 
-            //list that current user is member
+            //check current user role
             string curUserId = User.Identity.GetUserId();
-            List<GroupMember> listGroup = _groupMemberService.GetActive(g => g.UserId.Equals(curUserId)).ToList();
-            foreach (var item in listGroup)
+
+            GroupMemberRole role = _groupMemberService.CheckRoleMember(curUserId, id.Value);
+
+            switch (role)
             {
-                if(item.GroupId == model.Id)
-                {
+                case GroupMemberRole.Admin:
+                    model.IsAdmin = true;
                     model.IsMember = true;
-                    if(item.Admin)
-                    {
-                        model.IsAdmin = true;
-                    }
-                }
+                    model.isPendingMember = false;
+                    break;
+
+                case GroupMemberRole.Member:
+                    model.IsAdmin = false;
+                    model.IsMember = true;
+                    model.isPendingMember = false;
+                    break;
+
+                case GroupMemberRole.NotMember:
+                    model.IsAdmin = false;
+                    model.IsMember = false;
+                    model.isPendingMember = false;
+                    break;
+
+                case GroupMemberRole.PendingMember:
+                    model.IsAdmin = false;
+                    model.IsMember = false;
+                    model.isPendingMember = true;
+                    break;
             }
+
+            //List<GroupMember> listGroup = _groupMemberService.GetActive(g => g.UserId.Equals(curUserId)).ToList();
+            //foreach (var item in listGroup)
+            //{
+            //    if(item.GroupId == model.Id)
+            //    {
+            //        model.IsMember = true;
+            //        if(item.Admin)
+            //        {
+            //            model.IsAdmin = true;
+            //        }
+            //    }
+            //}
 
             //post count
             model.PostCount = _postService.GetActive(p => p.GroupId == id).ToList().Count();
@@ -95,7 +125,9 @@ namespace SportsSocialNetwork.Controllers
                 }
             }
 
+            //WWWWWWWWWWWWWWWWWWWWWWWWTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
             //get suggest group
+            List<GroupMember> listGroup = _groupMemberService.GetActive(g => g.UserId.Equals(curUserId)).ToList();
             List<Group> suggestGroups = _groupService.GetSuggestGroup(id.Value);
             List<GroupFullInfoViewModel> suggestGroupsVM = Mapper.Map<List<GroupFullInfoViewModel>>(suggestGroups);
             foreach (var item in suggestGroupsVM)
@@ -510,6 +542,24 @@ namespace SportsSocialNetwork.Controllers
             }
 
             return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult JoinLeaveGroup(string userId, int groupId)
+        {
+            var _groupMemberService = this.Service<IGroupMemberService>();
+            ResponseModel<bool> response = null;
+
+            try
+            {
+                int result = _groupMemberService.JoinLeaveGroup(userId, groupId);
+                response = new ResponseModel<bool>(true, result.ToString(), null);
+            }
+            catch (Exception)
+            {
+                response = new ResponseModel<bool>(false, "fail", null);
+            }
+            return Json(response);
         }
     }
 }
