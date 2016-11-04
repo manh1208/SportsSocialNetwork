@@ -18,6 +18,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         IEnumerable<AspNetUser> FindUserByName(String name, int skip, int take);
 
+        IEnumerable<AspNetUser> FindUserByName(SSNEntities context, String name, int skip, int take);
+
         AspNetUser UpdateUser(AspNetUser userInfo);
 
         void DeactivateUser(AspNetUser user);
@@ -72,6 +74,14 @@ namespace SportsSocialNetwork.Models.Entities.Services
         public IEnumerable<AspNetUser> FindUserByName(String name, int skip, int take)
         {
             return GetActive(x => x.Email.Contains(name)||x.UserName.Contains(name)||x.FullName.Contains(name)).OrderBy(x => x.FullName).Skip(skip).Take(take);
+
+        }
+        
+        public IEnumerable<AspNetUser> FindUserByName(SSNEntities context, String name, int skip, int take)
+        {
+            string query = string.Format("select * from AspNetUsers where Contains((FullName,Email,UserName), '\" *{0} *\"')", name);
+            var list = context.AspNetUsers.SqlQuery(query).Where(u => u.Active == true).Skip(skip).Take(take);
+            return list;
 
         }
 

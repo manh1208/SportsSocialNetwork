@@ -1,5 +1,7 @@
 ﻿using BanleWebsite.Models;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
@@ -15,9 +17,14 @@ using System.Device.Location;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -26,7 +33,7 @@ namespace SportsSocialNetwork.Controllers
     {
         public string ViewNameseSymbol { get; private set; }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var _sportService = this.Service<ISportService>();
             var sports = _sportService.GetActive()
@@ -76,7 +83,7 @@ namespace SportsSocialNetwork.Controllers
                 StringBuilder location = new StringBuilder();
                 location.Append(curUser.Address);
                 location.Append(" " + curUser.Ward + " " + curUser.District + " " + curUser.City);
-                DataTable coordinate = getLocation(location.ToString());
+                DataTable coordinate = await getLocation(location.ToString());
                 double curUserLatitude = Double.Parse(coordinate.Rows[0]["Latitude"].ToString());
                 double curUserLongtitude = Double.Parse(coordinate.Rows[0]["Longitude"].ToString());
                 Coord = new GeoCoordinate(curUserLatitude, curUserLongtitude);
@@ -85,7 +92,7 @@ namespace SportsSocialNetwork.Controllers
 
 
             var users = _userService.GetActive(p => p.Id != userId && p.AspNetRoles.Where(k => 
-            k.Id != "Quản trị viên" && k.Name != "Moderator").ToList().Count > 0 &&
+            k.Name != "Quản trị viên" && k.Name != "Moderator").ToList().Count > 0 &&
             p.Follows.Where(f => f.Active == true && (f.FollowerId == userId)).ToList().Count == 0).ToList();
             foreach (var user in users)
             {
@@ -106,7 +113,7 @@ namespace SportsSocialNetwork.Controllers
                     StringBuilder userLocation = new StringBuilder();
                     userLocation.Append(user.Address);
                     userLocation.Append(" " + user.Ward + " " + user.District + " " + user.City);
-                    DataTable userCoordinate = getLocation(userLocation.ToString());
+                    DataTable userCoordinate = await getLocation(userLocation.ToString());
                     double userLatitude = Double.Parse(userCoordinate.Rows[0]["Latitude"].ToString());
                     double userLongtitude = Double.Parse(userCoordinate.Rows[0]["Longitude"].ToString());
                     var userCoord = new GeoCoordinate(userLatitude, userLongtitude);
@@ -142,33 +149,137 @@ namespace SportsSocialNetwork.Controllers
             return View();
         }
 
-        public DataTable getLocation(string address)
+        public async Task<ActionResult> GetUserBySport(int sportId, int skip, int take)
         {
-            DataTable dtCoordinates = new DataTable();
-            string url = "http://maps.google.com/maps/api/geocode/xml?address=" + address + "&sensor=false";
-            WebRequest request = WebRequest.Create(url);
-            using (WebResponse response = (HttpWebResponse)request.GetResponse())
+            var result = new AjaxOperationResult<List<FollowSuggestViewModel>>();
+            var userService = this.Service<IAspNetUserService>();
+            var userId = User.Identity.GetUserId();
+            var curUser = userService.FirstOrDefaultActive(p => p.Id == userId);
+            List<FollowSuggestViewModel> userList = new List<FollowSuggestViewModel>();
+            var Coord = new GeoCoordinate();
+            bool checkNearBy = false;
+            if (curUser.Address != null || curUser.District != null || curUser.Ward != null || curUser.City != null)
             {
-                using (StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+                StringBuilder location = new StringBuilder();
+                location.Append(curUser.Address);
+                location.Append(" " + curUser.Ward + " " + curUser.District + " " + curUser.City);
+                DataTable coordinate = await getLocation(location.ToString());
+                double curUserLatitude = Double.Parse(coordinate.Rows[0]["Latitude"].ToString());
+                double curUserLongtitude = Double.Parse(coordinate.Rows[0]["Longitude"].ToString());
+                Coord = new GeoCoordinate(curUserLatitude, curUserLongtitude);
+                checkNearBy = true;
+            }
+
+            var users = userService.GetActive(p => p.Id != userId && p.AspNetRoles.Where(k =>
+            k.Name != "Quản trị viên" && k.Name != "Moderator").ToList().Count > 0 &&
+            p.Follows.Where(f => f.Active == true && (f.FollowerId == userId)).ToList().Count == 0 &&
+            p.Hobbies.Where(m => m.SportId == sportId).ToList().Count > 0).ToList();
+            foreach (var user in users)
+            {
+                FollowSuggestViewModel model = Mapper.Map<FollowSuggestViewModel>(user);
+                if (checkNearBy && (user.Address != null || user.District != null || user.Ward != null || user.City != null))
                 {
-                    DataSet dsResult = new DataSet();
-                    dsResult.ReadXml(reader);
-                    dtCoordinates.Columns.AddRange(new DataColumn[4] { new DataColumn("Id", typeof(int)),
-                        new DataColumn("Address", typeof(string)),
-                        new DataColumn("Latitude",typeof(string)),
-                        new DataColumn("Longitude",typeof(string)) });
-                    foreach (DataRow row in dsResult.Tables["result"].Rows)
+
+                    StringBuilder userLocation = new StringBuilder();
+                    userLocation.Append(user.Address);
+                    userLocation.Append(" " + user.Ward + " " + user.District + " " + user.City);
+                    DataTable userCoordinate = await getLocation(userLocation.ToString());
+                    double userLatitude = Double.Parse(userCoordinate.Rows[0]["Latitude"].ToString());
+                    double userLongtitude = Double.Parse(userCoordinate.Rows[0]["Longitude"].ToString());
+                    var userCoord = new GeoCoordinate(userLatitude, userLongtitude);
+                    var dis = Coord.GetDistanceTo(userCoord);
+                    if (Coord.GetDistanceTo(userCoord) < 5000)
                     {
-                        string geometry_id = dsResult.Tables["geometry"].Select("result_id = " + row["result_id"].ToString())[0]["geometry_id"].ToString();
-                        DataRow location = dsResult.Tables["location"].Select("geometry_id = " + geometry_id)[0];
-                        dtCoordinates.Rows.Add(row["result_id"], row["formatted_address"], location["lat"], location["lng"]);
+                        userList.Add(model);
                     }
                 }
             }
+            List<FollowSuggestViewModel> suggestUserList = userList.OrderBy(p => p.FullName).Skip(skip).Take(take).ToList();
+            result.AdditionalData = suggestUserList;
+            result.Succeed = true;
+            return Json(result);
+        }
+
+        public async Task<DataTable> getLocation(string address)
+        {
+            DataTable dtCoordinates = new DataTable();
+            string url = "http://maps.google.com/maps/api/geocode/json?address=" + address + "&sensor=false";
+            var googleResults = await loadLocation(url);
+
+            //WebRequest request = WebRequest.Create(url);
+            //using (WebResponse response = (HttpWebResponse)request.GetResponse())
+            //{
+            //    using (StreamReader streamReader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+            //    {
+            //        using (JsonTextReader jsonReader = new JsonTextReader(streamReader))
+            //        {
+            //            JObject oo = (JObject)JToken.ReadFrom(jsonReader);
+
+            //            //Country vietnam = oo.ToObject<Country>();
+
+            //        }
+            //        //DataSet dsResult = new DataSet();
+            //        //dsResult.ReadXml(reader);
+            //        //dtCoordinates.Columns.AddRange(new DataColumn[4] { new DataColumn("Id", typeof(int)),
+            //        //    new DataColumn("Address", typeof(string)),
+            //        //    new DataColumn("Latitude",typeof(string)),
+            //        //    new DataColumn("Longitude",typeof(string)) });
+            //        //foreach (DataRow row in dsResult.Tables["result"].Rows)
+            //        //{
+            //        //    string geometry_id = dsResult.Tables["geometry"].Select("result_id = " + row["result_id"].ToString())[0]["geometry_id"].ToString();
+            //        //    DataRow location = dsResult.Tables["location"].Select("geometry_id = " + geometry_id)[0];
+            //        //    dtCoordinates.Rows.Add(row["result_id"], row["formatted_address"], location["lat"], location["lng"]);
+            //        //}
+            //    }
+            //}
+            dtCoordinates.Columns.AddRange(new DataColumn[4] { new DataColumn("Id", typeof(string)),
+                        new DataColumn("Address", typeof(string)),
+                        new DataColumn("Latitude",typeof(string)),
+                        new DataColumn("Longitude",typeof(string)) });
+            System.Diagnostics.Debug.WriteLine("Address: " + address);
+            System.Diagnostics.Debug.WriteLine("Result size: " + googleResults.Count);
+            foreach (GoogleResult result in googleResults)
+            {
+               
+                dtCoordinates.Rows.Add(result.place_id, 
+                                       result.formatted_address, 
+                                       result.geometry.location.lat, 
+                                       result.geometry.location.lng);
+            }
+
+
             return dtCoordinates;
         }
 
-        public ActionResult GetSuggestFollow(int pageIndex, int pageSize)
+        private async Task<List<GoogleResult>> loadLocation(String url)
+        {
+            List<GoogleResult> results = new List<GoogleResult>();
+            using (var handler = new HttpClientHandler())
+            using (var client = new HttpClient(handler))
+            {
+                client.BaseAddress = new Uri(url);
+                var response = await client.GetAsync("");
+                String json = await response.Content.ReadAsStringAsync();
+                JavaScriptSerializer json_serial = new JavaScriptSerializer();
+                var googleResult =json_serial.Deserialize<GoogleLocation>(json);
+                if (googleResult.status.Equals("OK"))
+                {
+                    results = googleResult.results;
+                }else
+                {
+                    System.Diagnostics.Debug.WriteLine("Status: " + googleResult.status);
+                }
+            }
+            //HttpClient client = new HttpClient();
+            //client.BaseAddress = new Uri(url);
+            //client.DefaultRequestHeaders.Accept.Clear();
+            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+          
+            
+            return results;
+        }
+
+        public async Task<ActionResult> GetSuggestFollow(int pageIndex, int pageSize)
         {
             var userId = User.Identity.GetUserId();
             var _userService = this.Service<IAspNetUserService>();
@@ -181,7 +292,7 @@ namespace SportsSocialNetwork.Controllers
                 StringBuilder location = new StringBuilder();
                 location.Append(curUser.Address);
                 location.Append(" " + curUser.Ward + " " + curUser.District + " " + curUser.City);
-                DataTable coordinate = getLocation(location.ToString());
+                DataTable coordinate = await getLocation(location.ToString());
                 double curUserLatitude = Double.Parse(coordinate.Rows[0]["Latitude"].ToString());
                 double curUserLongtitude = Double.Parse(coordinate.Rows[0]["Longitude"].ToString());
                 Coord = new GeoCoordinate(curUserLatitude, curUserLongtitude);
@@ -209,7 +320,7 @@ namespace SportsSocialNetwork.Controllers
                     StringBuilder userLocation = new StringBuilder();
                     userLocation.Append(user.Address);
                     userLocation.Append(" " + user.Ward + " " + user.District + " " + user.City);
-                    DataTable userCoordinate = getLocation(userLocation.ToString());
+                    DataTable userCoordinate =await getLocation(userLocation.ToString());
                     double userLatitude = Double.Parse(userCoordinate.Rows[0]["Latitude"].ToString());
                     double userLongtitude = Double.Parse(userCoordinate.Rows[0]["Longitude"].ToString());
                     var userCoord = new GeoCoordinate(userLatitude, userLongtitude);
@@ -397,29 +508,31 @@ namespace SportsSocialNetwork.Controllers
             return Json(result);
         }
 
-        public ActionResult GetSearchUserResult(string keyword)
+        public ActionResult GetSearchUserResult(string keyword, int skip, int take)
         {
-            VietnameseSymbol VNS = new VietnameseSymbol();
-            string kw = VNS.ClearSymbol(keyword);
-            var result = new AjaxOperationResult<IEnumerable<FollowSuggestViewModel>>();
+            
+            var result = new AjaxOperationResult<ShowUserSearchViewModel>();
             var userService = this.Service<IAspNetUserService>();
-            //var ResultList = userService.GetActive(p => p.FullName.Contains(kw)).Take(5).ToList();
-            var ResultList = userService.GetActive().ToList();
+            //var resultList = new List<AspNetUser>();
+            //using (var db = new SSNEntities())
+            //{
+            //    resultList = userService.FindUserByName(db, keyword, 0, 5).ToList();
+            //}
+            var followService = this.Service<IFollowService>();
+            var userCount = userService.GetActive(p => p.FullName.Contains(keyword) || p.UserName.Contains(keyword) ||
+            p.Email.Contains(keyword)).OrderBy(p => p.FullName).ToList().Count;
+            var resultList = userService.GetActive(p => p.FullName.Contains(keyword) || p.UserName.Contains(keyword) ||
+            p.Email.Contains(keyword)).OrderBy(p => p.FullName).Skip(skip).Take(take).ToList();
             var curUserId = User.Identity.GetUserId();
             var curUser = userService.FirstOrDefaultActive(p => p.Id == curUserId);
             List<FollowSuggestViewModel> searchResultList = new List<FollowSuggestViewModel>();
             //List<FollowSuggestViewModel> searchResultList = Mapper.Map<List<FollowSuggestViewModel>>(ResultList);
-            foreach(var user in ResultList)
+            foreach(var user in resultList)
             {
-                var str = VNS.ClearSymbol(user.FullName);
-                //if (VNS.ClearSymbol(user.FullName).Contains(kw))
-                if (VNS.ClearSymbol(user.FullName).Contains(kw))
-                {
                     FollowSuggestViewModel model = Mapper.Map<FollowSuggestViewModel>(user);
                     var hobbyCount = 1;
-                    foreach (var hobby in user.Hobbies)
+                    foreach (var hobby in user.Hobbies.ToList())
                     {
-
                         foreach (var curHobby in curUser.Hobbies)
                         {
                             if (hobby.SportId == curHobby.SportId)
@@ -429,28 +542,177 @@ namespace SportsSocialNetwork.Controllers
                             }
                         }
                     }
-                    searchResultList.Add(model);
+                var tmp = followService.GetActive(p => p.FollowerId == curUserId && p.UserId == user.Id).ToList().Count;
+                if(tmp > 0)
+                {
+                    model.isFollowed = true;
+                }else
+                {
+                    model.isFollowed = false;
                 }
-                
-                
+                    searchResultList.Add(model);
+            }
+            ShowUserSearchViewModel searchResult = new ShowUserSearchViewModel();
+            searchResult.userCount = userCount;
+            searchResult.userList = searchResultList;
+            if(searchResultList.Count > 0)
+            {
+                result.AdditionalData = searchResult;
             }
             
-            result.AdditionalData = searchResultList.Take(5);
             result.Succeed = true;
             return Json(result);
         }
 
-        public ActionResult GetSearchGroupList(string keyword)
+        public ActionResult GetSearchGroupList(string keyword, int skip, int take)
         {
+            var userId = User.Identity.GetUserId();
             VietnameseSymbol VNS = new VietnameseSymbol();
             string kw = VNS.ClearSymbol(keyword);
-            var result = new AjaxOperationResult<IEnumerable<GroupSearchViewModel>>();
+            var result = new AjaxOperationResult<ShowGroupSearchViewModel>();
             var groupService = this.Service<IGroupService>();
-            var searchResultList = groupService.GetActive(p => p.Name.Contains(kw)).Take(2).ToList();
+            var groupMemberService = this.Service<IGroupMemberService>();
+            var groupCount = groupService.GetActive(p => p.Name.Contains(keyword)).ToList().Count;
+            var searchResultList = groupService.GetActive(p => p.Name.Contains(keyword)).OrderBy(p => p.Name).Skip(skip).Take(take).ToList();
             List<GroupSearchViewModel> ResultList = Mapper.Map<List<GroupSearchViewModel>>(searchResultList);
-            result.AdditionalData = ResultList;
+            foreach(var item in ResultList)
+            {
+                var tmp = groupMemberService.GetActive(p => p.GroupId == item.Id && p.UserId == userId).ToList().Count;
+                if(tmp > 0)
+                {
+                    item.isFollowed = true;
+                }else
+                {
+                    item.isFollowed = false;
+                }
+
+                tmp = groupMemberService.GetActive(p => p.GroupId == item.Id && p.UserId == userId && p.Admin).ToList().Count;
+                if (tmp > 0)
+                {
+                    item.isAdmin = true;
+                }
+                else
+                {
+                    item.isAdmin = false;
+                }
+            }
+            ShowGroupSearchViewModel searchResult = new ShowGroupSearchViewModel();
+            searchResult.groupCount = groupCount;
+            searchResult.listGroup = ResultList;
+            if (ResultList.Count > 0)
+            {
+                result.AdditionalData = searchResult;
+            }
             result.Succeed = true;
             return Json(result);
+        }
+
+        public async Task<ActionResult> SearchDetail(string keyword)
+        {
+            var _userService = this.Service<IAspNetUserService>();
+            var userId = User.Identity.GetUserId();
+            var curUser = _userService.FirstOrDefaultActive(p => p.Id == userId);
+            if (curUser == null)
+            {
+                return RedirectToAction("PageNotFound", "Errors");
+            }
+            ViewBag.User = curUser;
+            ViewBag.Keyword = keyword;
+            //suggest news
+            var _newsService = this.Service<INewsService>();
+            List<News> newsList = new List<News>();
+            foreach (var hobby in curUser.Hobbies)
+            {
+                List<News> list = _newsService.GetActive(p => p.Category.CategorySports.Where(f =>
+                f.SportId == hobby.SportId).ToList().Count > 0).ToList();
+                newsList.AddRange(list);
+            }
+
+            if (newsList.Count == 0)
+            {
+                newsList = _newsService.GetActive().ToList();
+            }
+            ViewBag.SuggestNews = newsList.FirstOrDefault();
+
+            //load group name
+            var _groupService = this.Service<IGroupService>();
+            List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f =>
+            f.UserId == userId).ToList().Count > 0).ToList();
+            ViewBag.GroupList = groupList;
+
+            //suggest follower
+            List<FollowSuggestViewModel> userList = new List<FollowSuggestViewModel>();
+            var Coord = new GeoCoordinate();
+            bool checkNearBy = false;
+            if (curUser.Address != null || curUser.District != null || curUser.Ward != null || curUser.City != null)
+            {
+                StringBuilder location = new StringBuilder();
+                location.Append(curUser.Address);
+                location.Append(" " + curUser.Ward + " " + curUser.District + " " + curUser.City);
+                DataTable coordinate = await getLocation(location.ToString());
+                double curUserLatitude = Double.Parse(coordinate.Rows[0]["Latitude"].ToString());
+                double curUserLongtitude = Double.Parse(coordinate.Rows[0]["Longitude"].ToString());
+                Coord = new GeoCoordinate(curUserLatitude, curUserLongtitude);
+                checkNearBy = true;
+            }
+
+
+            var users = _userService.GetActive(p => p.Id != userId && p.AspNetRoles.Where(k =>
+            k.Name != "Quản trị viên" && k.Name != "Moderator").ToList().Count > 0 &&
+            p.Follows.Where(f => f.Active == true && (f.FollowerId == userId)).ToList().Count == 0).ToList();
+            foreach (var user in users)
+            {
+                FollowSuggestViewModel model = Mapper.Map<FollowSuggestViewModel>(user);
+                model.weight = 0;
+                foreach (var follow in user.Follows)
+                {
+                    if (follow.UserId == curUser.Id)
+                    {
+                        model.weight += 1;
+                        break;
+                    }
+                }
+
+                if (checkNearBy && (user.Address != null || user.District != null || user.Ward != null || user.City != null))
+                {
+
+                    StringBuilder userLocation = new StringBuilder();
+                    userLocation.Append(user.Address);
+                    userLocation.Append(" " + user.Ward + " " + user.District + " " + user.City);
+                    DataTable userCoordinate = await getLocation(userLocation.ToString());
+                    double userLatitude = Double.Parse(userCoordinate.Rows[0]["Latitude"].ToString());
+                    double userLongtitude = Double.Parse(userCoordinate.Rows[0]["Longitude"].ToString());
+                    var userCoord = new GeoCoordinate(userLatitude, userLongtitude);
+                    var dis = Coord.GetDistanceTo(userCoord);
+                    if (Coord.GetDistanceTo(userCoord) < 5000)
+                    {
+                        model.weight += 2;
+                    }
+                }
+
+                int hobbyCount = 1;
+                foreach (var hobby in user.Hobbies)
+                {
+                    foreach (var curHobby in curUser.Hobbies)
+                    {
+                        if (hobby.SportId == curHobby.SportId)
+                        {
+                            model.weight = model.weight + hobbyCount * 3;
+                            model.sameSport = hobbyCount;
+                            hobbyCount++;
+                        }
+                    }
+                }
+                userList.Add(model);
+            }
+            List<FollowSuggestViewModel> suggestUserList = userList.OrderByDescending(p => p.weight).Take(10).ToList();
+            ViewBag.suggestUserList = suggestUserList;
+
+            //load follow numbers
+            var _followService = this.Service<IFollowService>();
+            ViewBag.Following = _followService.GetActive(p => p.FollowerId == curUser.Id).Count();
+            ViewBag.Follower = _followService.GetActive(p => p.UserId == curUser.Id).Count();
+            return View();
         }
 
     }
