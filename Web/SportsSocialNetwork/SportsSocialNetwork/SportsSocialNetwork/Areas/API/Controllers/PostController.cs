@@ -57,7 +57,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 {
                     var totalOfLikeFromUser = likeService.GetActive(p => p.UserId == currentUserId && p.Post.UserId == user.Id).ToList().Count;
                     var totalOfCommentFromUser = commentService.GetActive(p => p.UserId == currentUserId && p.Post.UserId == user.Id).ToList().Count;
-                    user.relationScore = totalOfCommentFromUser + totalOfLikeFromUser;
+                    user.relationScore = totalOfCommentFromUser + totalOfLikeFromUser + 1;
                 }
 
 

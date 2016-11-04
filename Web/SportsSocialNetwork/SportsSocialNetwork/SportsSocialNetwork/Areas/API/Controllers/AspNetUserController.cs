@@ -374,7 +374,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             ResponseModel<bool> response = null;
 
             try {
-                FirebaseToken firebaseToken = tokenService.FirstOrDefault(x => x.UserId.Equals(userId) && x.Token.Equals(token));
+                FirebaseToken firebaseToken = tokenService.FirstOrDefault(x => x.Token.Equals(token));
 
                 AspNetUser user = userService.FirstOrDefaultActive(x=> x.Id.Equals(userId));
 
