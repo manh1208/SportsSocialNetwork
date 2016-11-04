@@ -32,6 +32,8 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string City { get; set; }
     			public virtual string District { get; set; }
     			public virtual string Ward { get; set; }
+    			public virtual Nullable<double> Latitude { get; set; }
+    			public virtual Nullable<double> Longitude { get; set; }
     			public virtual string AvatarImage { get; set; }
     			public virtual string CoverImage { get; set; }
     			public virtual Nullable<System.DateTime> Birthday { get; set; }

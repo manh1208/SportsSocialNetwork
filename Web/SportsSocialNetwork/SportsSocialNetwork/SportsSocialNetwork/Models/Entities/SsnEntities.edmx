@@ -60,6 +60,8 @@
           <Property Name="City" Type="nvarchar" MaxLength="255" />
           <Property Name="District" Type="nvarchar" MaxLength="255" />
           <Property Name="Ward" Type="nvarchar" MaxLength="255" />
+          <Property Name="Latitude" Type="float" />
+          <Property Name="Longitude" Type="float" />
           <Property Name="AvatarImage" Type="nvarchar" MaxLength="255" />
           <Property Name="CoverImage" Type="nvarchar" MaxLength="255" />
           <Property Name="Birthday" Type="date" />
@@ -1634,6 +1636,8 @@
           <Property Name="City" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="District" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Ward" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" />
           <Property Name="AvatarImage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="CoverImage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Birthday" Type="DateTime" Precision="0" />
@@ -2774,6 +2778,8 @@
                 <ScalarProperty Name="Birthday" ColumnName="Birthday" />
                 <ScalarProperty Name="CoverImage" ColumnName="CoverImage" />
                 <ScalarProperty Name="AvatarImage" ColumnName="AvatarImage" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
                 <ScalarProperty Name="Ward" ColumnName="Ward" />
                 <ScalarProperty Name="District" ColumnName="District" />
                 <ScalarProperty Name="City" ColumnName="City" />

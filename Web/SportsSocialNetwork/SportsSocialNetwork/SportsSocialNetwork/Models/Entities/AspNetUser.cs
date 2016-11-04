@@ -57,6 +57,8 @@ namespace SportsSocialNetwork.Models.Entities
         public string City { get; set; }
         public string District { get; set; }
         public string Ward { get; set; }
+        public Nullable<double> Latitude { get; set; }
+        public Nullable<double> Longitude { get; set; }
         public string AvatarImage { get; set; }
         public string CoverImage { get; set; }
         public Nullable<System.DateTime> Birthday { get; set; }
