@@ -29,6 +29,8 @@ public class Event {
     private int status;
     @SerializedName("Active")
     private boolean active;
+    @SerializedName("PlaceName")
+    private String placeName;
 
 
     public int getId() {
@@ -119,4 +121,11 @@ public class Event {
         this.active = active;
     }
 
+    public String getPlaceName() {
+        return placeName;
+    }
+
+    public void setPlaceName(String placeName) {
+        this.placeName = placeName;
+    }
 }

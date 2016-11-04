@@ -589,7 +589,8 @@ public class BookingActivity extends AppCompatActivity {
 
         Picasso.with(this).load(Uri.parse(DataUtils.URL + order.getqRCodeUrl()))
                 .placeholder(R.drawable.image_logo)
-                .error(R.drawable.img_default_avatar)
+                .error(R.drawable.ic_image_error)
+                .noFade()
                 .into(ivQR);
 //                Toast.makeText(mContext, (DataUtils.URL+order.getqRCodeUrl()), Toast.LENGTH_SHORT).show();
 

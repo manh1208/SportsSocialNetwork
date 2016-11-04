@@ -78,7 +78,7 @@ public class ManageEventAdapter extends ArrayAdapter<Event> implements View.OnCl
                 .setText(event.getStartDateString() + " - " + event.getEndDateString());
 
 
-        viewHolder.tvEventType.setText(event.getPlaceId() + "");
+        viewHolder.tvEventType.setText(event.getPlaceName());
 //        viewHolder.btnSave.setTag(position);
 //        viewHolder.btnSave.setOnClickListener(this);
         return convertView;
@@ -98,13 +98,13 @@ public class ManageEventAdapter extends ArrayAdapter<Event> implements View.OnCl
     }
 
     private class ViewHolder {
-        CustomImage ivCoverEvent;
+        ImageView ivCoverEvent;
         TextView tvEventName;
         TextView tvEventDate;
         TextView tvEventType;
 
         ViewHolder(View convertView) {
-            ivCoverEvent = (CustomImage) convertView.findViewById(R.id.iv_event_cover);
+            ivCoverEvent = (ImageView) convertView.findViewById(R.id.iv_event_cover);
             tvEventName = (TextView) convertView.findViewById(R.id.tv_event_name);
             tvEventDate = (TextView) convertView.findViewById(R.id.tv_event_date_time);
             tvEventType = (TextView) convertView.findViewById(R.id.txt_event_place);

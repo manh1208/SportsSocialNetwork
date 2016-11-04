@@ -297,34 +297,30 @@ public class PlaceFragment extends Fragment {
         int id = item.getItemId();
         switch (id) {
             case R.id.menu_filter:
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                View v= getActivity().getLayoutInflater().inflate(R.layout.dialog_place_filter,null,false);
-                sportSpinner = (Spinner) v.findViewById(R.id.sp_filter_sport);
-                provinceSpinner = (Spinner) v.findViewById(R.id.sp_filter_province);
-                districtSpinner = (Spinner) v.findViewById(R.id.sp_filter_district);
-                createSportSpinner();
-                createProvinceSpinner();
-                createDistrictSpinner();
-                builder.setView(v)
-                        .setPositiveButton("Lọc", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .setNegativeButton("Tìm sân quanh đây", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                                        && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                                    getData();
-                                } else {
-                                    requestPermission();
-                                }
-                               
-                            }
-                        })
-                        .create().show();
+                getData();
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                View v= getActivity().getLayoutInflater().inflate(R.layout.dialog_place_filter,null,false);
+//                sportSpinner = (Spinner) v.findViewById(R.id.sp_filter_sport);
+//                provinceSpinner = (Spinner) v.findViewById(R.id.sp_filter_province);
+//                districtSpinner = (Spinner) v.findViewById(R.id.sp_filter_district);
+//                createSportSpinner();
+//                createProvinceSpinner();
+//                createDistrictSpinner();
+//                builder.setView(v)
+//                        .setPositiveButton("Lọc", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//
+//                            }
+//                        })
+//                        .setNegativeButton("Tìm sân quanh đây", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                            getData();
+//
+//                            }
+//                        })
+//                        .create().show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -352,31 +348,37 @@ public class PlaceFragment extends Fragment {
     }
 
     private void getData() {
-         lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Call<ResponseModel<List<PlaceResponseModel>>>  call =  service.getPlaceService().findArroundPlace(latitude,longitude,"","","");
-            call.enqueue(new Callback<ResponseModel<List<PlaceResponseModel>>>() {
-                @Override
-                public void onResponse(Call<ResponseModel<List<PlaceResponseModel>>> call, Response<ResponseModel<List<PlaceResponseModel>>> response) {
-                    if (response.isSuccessful()){
-                        if (response.body().isSucceed()){
-                            adapter.loadNew();
-                            adapter.setAppendFeed(response.body().getData());
+            lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                Call<ResponseModel<List<PlaceResponseModel>>>  call =  service.getPlaceService().findArroundPlace(latitude,longitude,"","","");
+                call.enqueue(new Callback<ResponseModel<List<PlaceResponseModel>>>() {
+                    @Override
+                    public void onResponse(Call<ResponseModel<List<PlaceResponseModel>>> call, Response<ResponseModel<List<PlaceResponseModel>>> response) {
+                        if (response.isSuccessful()){
+                            if (response.body().isSucceed()){
+                                adapter.loadNew();
+                                adapter.setAppendFeed(response.body().getData());
+                            }else{
+                                Toast.makeText(getActivity(),response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                            }
                         }else{
-                            Toast.makeText(getActivity(),response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), response.message(), Toast.LENGTH_SHORT).show();
                         }
-                    }else{
-                        Toast.makeText(getActivity(), response.message(), Toast.LENGTH_SHORT).show();
                     }
-                }
 
-                @Override
-                public void onFailure(Call<ResponseModel<List<PlaceResponseModel>>> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Lỗi kết nối server", Toast.LENGTH_SHORT).show();
-                }
-            });
+                    @Override
+                    public void onFailure(Call<ResponseModel<List<PlaceResponseModel>>> call, Throwable t) {
+                        Toast.makeText(getActivity(), "Lỗi kết nối server", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        } else {
+            requestPermission();
         }
+
 
     }
 

@@ -20,10 +20,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.capstone.sportssocialnetwork.custom.CustomImage
+            <ImageView
                 android:id="@+id/iv_event_cover"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="150sp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/placeholder" />
         </RelativeLayout>
 
