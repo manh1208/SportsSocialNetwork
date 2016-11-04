@@ -57,13 +57,13 @@ namespace SportsSocialNetwork.Utilities
         {
             using (StreamReader file = new StreamReader(path))
 
-            using (JsonTextReader reader = new JsonTextReader(file))
-            {
-                JObject oo = (JObject)JToken.ReadFrom(reader);
+                using (JsonTextReader reader = new JsonTextReader(file))
+                {
+                    JObject oo = (JObject)JToken.ReadFrom(reader);
 
-                Country vietnam = oo.ToObject<Country>();
-                return vietnam;
-            }
+                    Country vietnam = oo.ToObject<Country>();
+                    return vietnam;
+                }
            
         }
 
