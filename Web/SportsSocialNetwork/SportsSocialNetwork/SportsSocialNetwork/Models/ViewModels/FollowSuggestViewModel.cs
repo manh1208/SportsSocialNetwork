@@ -7,7 +7,8 @@ namespace SportsSocialNetwork.Models.ViewModels
 {
     public class FollowSuggestViewModel : AspNetUserViewModel
     {
-        public int weight;
-        public int sameSport;
+        public int weight { get; set; }
+        public int sameSport { get; set; }
+        public bool isFollowed { get; set; }
     }
 }

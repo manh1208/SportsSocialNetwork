@@ -301,6 +301,7 @@
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\SSNController.cs" />
+    <Compile Include="Controllers\UserInvitationController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -785,6 +786,7 @@
     </Compile>
     <Compile Include="Models\Enumerable\DbEnums.cs" />
     <Compile Include="Models\FileUploader.cs" />
+    <Compile Include="Models\GoogleLocation.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Identity\IdentityRoles.cs" />
     <Compile Include="Models\Identity\MyAuthorizeAttribute.cs" />
@@ -794,6 +796,7 @@
     <Compile Include="Models\Notifications\IOS.cs" />
     <Compile Include="Models\Notifications\NotificationModel.cs" />
     <Compile Include="Models\Utilities\EmailSender.cs" />
+    <Compile Include="Models\Utilities\JsonDeserializer.cs" />
     <Compile Include="Models\Utilities\Setting.cs" />
     <Compile Include="Models\Utilities\Utils.cs" />
     <Compile Include="Models\VietnameseSymbol.cs" />
@@ -933,6 +936,8 @@
     </Compile>
     <Compile Include="Models\ViewModels\SearchPlaceViewModel.cs" />
     <Compile Include="Models\ViewModels\ResponseModel.cs" />
+    <Compile Include="Models\ViewModels\ShowGroupSearchViewModel.cs" />
+    <Compile Include="Models\ViewModels\ShowUserSearchViewModel.cs" />
     <Compile Include="Models\ViewModels\SportViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -3984,6 +3989,8 @@
     <Content Include="Views\Group\test.cshtml" />
     <Content Include="Views\Group\FriendListModal.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\SSN\SearchDetail.cshtml" />
+    <Content Include="Views\UserInvitation\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

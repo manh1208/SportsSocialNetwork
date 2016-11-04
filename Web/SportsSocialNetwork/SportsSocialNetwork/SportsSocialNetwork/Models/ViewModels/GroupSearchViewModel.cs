@@ -8,5 +8,8 @@ namespace SportsSocialNetwork.Models.ViewModels
     public class GroupSearchViewModel : GroupViewModel
     {
         public SportViewModel sport { get; set; }
+        public bool isFollowed { get; set; }
+
+        public bool isAdmin { get; set; }
     }
 }
