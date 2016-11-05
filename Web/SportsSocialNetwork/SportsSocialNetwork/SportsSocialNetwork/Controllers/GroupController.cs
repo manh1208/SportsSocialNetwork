@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.Enumerable;
+using Teek.Models;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -26,23 +27,54 @@ namespace SportsSocialNetwork.Controllers
             var _sportService = this.Service<ISportService>();
             var _followService = this.Service<IFollowService>();
             var _userService = this.Service<IAspNetUserService>();
+            var _challengeService = this.Service<IChallengeService>();
 
             GroupFullInfoViewModel model = Mapper.Map<GroupFullInfoViewModel>(_groupService.FirstOrDefaultActive(g => g.Id == id));
 
-            //list that current user is member
+            //check current user role
             string curUserId = User.Identity.GetUserId();
-            List<GroupMember> listGroup = _groupMemberService.GetActive(g => g.UserId.Equals(curUserId)).ToList();
-            foreach (var item in listGroup)
+
+            GroupMemberRole role = _groupMemberService.CheckRoleMember(curUserId, id.Value);
+
+            switch (role)
             {
-                if(item.GroupId == model.Id)
-                {
+                case GroupMemberRole.Admin:
+                    model.IsAdmin = true;
                     model.IsMember = true;
-                    if(item.Admin)
-                    {
-                        model.IsAdmin = true;
-                    }
-                }
+                    model.isPendingMember = false;
+                    break;
+
+                case GroupMemberRole.Member:
+                    model.IsAdmin = false;
+                    model.IsMember = true;
+                    model.isPendingMember = false;
+                    break;
+
+                case GroupMemberRole.NotMember:
+                    model.IsAdmin = false;
+                    model.IsMember = false;
+                    model.isPendingMember = false;
+                    break;
+
+                case GroupMemberRole.PendingMember:
+                    model.IsAdmin = false;
+                    model.IsMember = false;
+                    model.isPendingMember = true;
+                    break;
             }
+
+            //List<GroupMember> listGroup = _groupMemberService.GetActive(g => g.UserId.Equals(curUserId)).ToList();
+            //foreach (var item in listGroup)
+            //{
+            //    if(item.GroupId == model.Id)
+            //    {
+            //        model.IsMember = true;
+            //        if(item.Admin)
+            //        {
+            //            model.IsAdmin = true;
+            //        }
+            //    }
+            //}
 
             //post count
             model.PostCount = _postService.GetActive(p => p.GroupId == id).ToList().Count();
@@ -94,7 +126,9 @@ namespace SportsSocialNetwork.Controllers
                 }
             }
 
+            //WWWWWWWWWWWWWWWWWWWWWWWWTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
             //get suggest group
+            List<GroupMember> listGroup = _groupMemberService.GetActive(g => g.UserId.Equals(curUserId)).ToList();
             List<Group> suggestGroups = _groupService.GetSuggestGroup(id.Value);
             List<GroupFullInfoViewModel> suggestGroupsVM = Mapper.Map<List<GroupFullInfoViewModel>>(suggestGroups);
             foreach (var item in suggestGroupsVM)
@@ -109,6 +143,27 @@ namespace SportsSocialNetwork.Controllers
                 }
             }
 
+            //get list group that this user joined
+            List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f =>
+            f.UserId == curUserId).ToList().Count > 0).ToList();
+            ViewBag.GroupList = groupList;
+
+            //get challenge request
+            List<ChallengeDetailViewModel> challengeRequestList = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetAllChallengeRequest(id.Value).ToList());
+
+            //get list that this group was fighted
+            List<ChallengeDetailViewModel> challengedList = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetChallengedList(id.Value).ToList());
+
+            //get not operate challenge list
+            List<ChallengeDetailViewModel> notOperateChallengeList = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetNotOperateChallengeList(id.Value).ToList());
+
+            //get sent challenge request
+            List<ChallengeDetailViewModel> sentChallengeRequest = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetSentChallengeRequest(id.Value).ToList());
+
+            ViewBag.sentChallengeRequest = sentChallengeRequest;
+            ViewBag.notOperateChallengeList = notOperateChallengeList;
+            ViewBag.challengedList = challengedList;
+            ViewBag.challengeRequestList = challengeRequestList;
             ViewBag.groupMember = ListGroupMemberVM;
             ViewBag.groupId = id.Value;
             ViewBag.suggestGroups = suggestGroupsVM;
@@ -405,5 +460,157 @@ namespace SportsSocialNetwork.Controllers
             return Json(result);
         }
 
+        [HttpPost]
+        public ActionResult CreateGroup(string GroupCreator, string GroupName, string GroupDescription, string GroupSport)
+        {
+            var result = new AjaxOperationResult<GroupViewModel>();
+            var _groupService = this.Service<IGroupService>();
+            var _groupMemberService = this.Service<IGroupMemberService>();
+            if(!String.IsNullOrEmpty(GroupCreator) && !String.IsNullOrEmpty(GroupName) && !String.IsNullOrEmpty(GroupDescription) && !String.IsNullOrEmpty(GroupSport))
+            {
+                int _GroupSport = -1;
+                if(int.TryParse(GroupSport, out _GroupSport) == false)
+                {
+                    result.Succeed = false;
+                }
+                Group group = new Group();
+                group.Name = GroupName;
+                group.Description = GroupDescription;
+                group.SportId = _GroupSport;
+                group.Avatar = "/SSNImages/UserImages/img_default_avatar.png";
+                group.CoverImage = "/SSNImages/UserImages/img_default_cover.png";
+
+                if (_groupService.CreateGroup(group) != null)
+                {
+                    GroupMember gm = new GroupMember();
+                    gm.GroupId = group.Id;
+                    gm.UserId = GroupCreator;
+                    gm.Admin = true;
+                    gm.Status = 1; //mốt sửa khi có enum group status
+                    
+                    if(_groupMemberService.CreateGroupMember(gm) != null)
+                    {
+                        GroupViewModel model = Mapper.Map<GroupViewModel>(group);
+                        result.AdditionalData = model;
+                        result.Succeed = true;
+                    }
+                    else
+                    {
+                        result.Succeed = false;
+                    }
+                }
+                else
+                {
+                    result.Succeed = false;
+                }
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult ChangeCoverImage(int groupId, HttpPostedFileBase inputCover)
+        {
+            string containingFolder = "CoverImages";
+            var result = new AjaxOperationResult();
+            var _groupService = this.Service<IGroupService>();
+
+            Group group = _groupService.FirstOrDefaultActive(u => u.Id == groupId);
+
+            if (group != null && inputCover != null)
+            {
+                FileUploader _fileUploadService = new FileUploader();
+                string filePath = _fileUploadService.UploadImage(inputCover, containingFolder);
+                group.CoverImage = filePath;
+                _groupService.UpdateGroup(group);
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult ChangeAvatarImage(int groupId, HttpPostedFileBase inputAvatar)
+        {
+            string containingFolder = "AvatarImages";
+            var result = new AjaxOperationResult();
+            var _groupService = this.Service<IGroupService>();
+
+            Group group = _groupService.FirstOrDefaultActive(u => u.Id == groupId);
+
+            if (group != null && inputAvatar != null)
+            {
+                FileUploader _fileUploadService = new FileUploader();
+                string filePath = _fileUploadService.UploadImage(inputAvatar, containingFolder);
+                group.Avatar = filePath;
+                _groupService.UpdateGroup(group);
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult JoinLeaveGroup(string userId, int groupId)
+        {
+            var _groupMemberService = this.Service<IGroupMemberService>();
+            ResponseModel<bool> response = null;
+
+            try
+            {
+                int result = _groupMemberService.JoinLeaveGroup(userId, groupId);
+                response = new ResponseModel<bool>(true, result.ToString(), null);
+            }
+            catch (Exception)
+            {
+                response = new ResponseModel<bool>(false, "fail", null);
+            }
+            return Json(response);
+        }
+
+        [HttpPost]
+        public ActionResult SendChallengeRequest(int fromGroup, int toGroup, string description)
+        {
+            var _challengeService = this.Service<IChallengeService>();
+            var result = new AjaxOperationResult();
+
+            if(_challengeService.CreateChallengeRequest(fromGroup, toGroup, description) != null)
+            {
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateChallenge(int challengeId, int status)
+        {
+            var _challengeService = this.Service<IChallengeService>();
+            var result = new AjaxOperationResult();
+            if(_challengeService.UpdateChallenge(challengeId, status) == true)
+            {
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+
+            return Json(result);
+        }
     }
 }

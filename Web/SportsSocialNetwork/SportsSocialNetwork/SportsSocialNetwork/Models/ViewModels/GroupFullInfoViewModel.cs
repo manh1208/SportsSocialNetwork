@@ -12,5 +12,6 @@ namespace SportsSocialNetwork.Models.ViewModels
         public bool IsMember { get; set; }
         public int MemberCount { get; set; }
         public int PostCount { get; set; }
+        public bool isPendingMember { get; set; }
     }
 }
