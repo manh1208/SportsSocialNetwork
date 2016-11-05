@@ -120,6 +120,7 @@ namespace SportsSocialNetwork.Controllers
             bool hasText = false;
             post.Active = true;
             post.CreateDate = DateTime.Now;
+            post.LatestInteractionTime = DateTime.Now;
             post.UserId = User.Identity.GetUserId();
 
             if (uploadImages != null)

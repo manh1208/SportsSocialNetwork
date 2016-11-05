@@ -162,4 +162,16 @@ namespace SportsSocialNetwork.Models.Enumerable
         PendingMember = 4
     }
 
+    public enum ChallengeStatus
+    {
+        [Description("Chưa diễn ra")]
+        NotOperate = 1,
+        [Description("Đã đấu xong")]
+        Done = 2,
+        [Description("Đang chờ chấp nhận")]
+        Pending = 3,
+        [Description("Hủy")]
+        NotAvailable = 4
+    }
+
 }

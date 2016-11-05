@@ -634,6 +634,7 @@
     <Compile Include="Models\Entities\Services\CategorySportServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\ChallengeService.cs" />
     <Compile Include="Models\Entities\Services\ChallengeServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -822,6 +823,7 @@
     <Compile Include="Models\ViewModels\CategoryViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\ChallengeDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\ChallengeViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>

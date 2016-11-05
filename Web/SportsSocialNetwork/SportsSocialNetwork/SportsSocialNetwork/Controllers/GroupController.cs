@@ -27,6 +27,7 @@ namespace SportsSocialNetwork.Controllers
             var _sportService = this.Service<ISportService>();
             var _followService = this.Service<IFollowService>();
             var _userService = this.Service<IAspNetUserService>();
+            var _challengeService = this.Service<IChallengeService>();
 
             GroupFullInfoViewModel model = Mapper.Map<GroupFullInfoViewModel>(_groupService.FirstOrDefaultActive(g => g.Id == id));
 
@@ -147,6 +148,22 @@ namespace SportsSocialNetwork.Controllers
             f.UserId == curUserId).ToList().Count > 0).ToList();
             ViewBag.GroupList = groupList;
 
+            //get challenge request
+            List<ChallengeDetailViewModel> challengeRequestList = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetAllChallengeRequest(id.Value).ToList());
+
+            //get list that this group was fighted
+            List<ChallengeDetailViewModel> challengedList = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetChallengedList(id.Value).ToList());
+
+            //get not operate challenge list
+            List<ChallengeDetailViewModel> notOperateChallengeList = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetNotOperateChallengeList(id.Value).ToList());
+
+            //get sent challenge request
+            List<ChallengeDetailViewModel> sentChallengeRequest = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetSentChallengeRequest(id.Value).ToList());
+
+            ViewBag.sentChallengeRequest = sentChallengeRequest;
+            ViewBag.notOperateChallengeList = notOperateChallengeList;
+            ViewBag.challengedList = challengedList;
+            ViewBag.challengeRequestList = challengeRequestList;
             ViewBag.groupMember = ListGroupMemberVM;
             ViewBag.groupId = id.Value;
             ViewBag.suggestGroups = suggestGroupsVM;
@@ -560,6 +577,40 @@ namespace SportsSocialNetwork.Controllers
                 response = new ResponseModel<bool>(false, "fail", null);
             }
             return Json(response);
+        }
+
+        [HttpPost]
+        public ActionResult SendChallengeRequest(int fromGroup, int toGroup, string description)
+        {
+            var _challengeService = this.Service<IChallengeService>();
+            var result = new AjaxOperationResult();
+
+            if(_challengeService.CreateChallengeRequest(fromGroup, toGroup, description) != null)
+            {
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateChallenge(int challengeId, int status)
+        {
+            var _challengeService = this.Service<IChallengeService>();
+            var result = new AjaxOperationResult();
+            if(_challengeService.UpdateChallenge(challengeId, status) == true)
+            {
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+
+            return Json(result);
         }
     }
 }
