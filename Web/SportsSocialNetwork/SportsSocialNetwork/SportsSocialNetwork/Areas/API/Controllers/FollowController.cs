@@ -97,7 +97,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                     {
 
 
-                        result.Add(PrepareAspNetUserOveralViewModel(follow));
+                        result.Add(PreparePeopleFollowYou(follow));
                     }
                 }
 
@@ -142,6 +142,48 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             result.Followed = true;
 
             result.FollowCount = followService.GetActive(x=> x.FollowerId.Equals(user.Id)).Count();
+
+            result.FollowedCount = user.Follows.Where(x => x.UserId == user.Id).Count();
+
+            result.PostCount = user.Posts.Count();
+
+
+            return result;
+        }
+
+        private AspNetUserOveralViewModel PreparePeopleFollowYou(Follow follow)
+        {
+            var followService = this.Service<IFollowService>();
+
+            var userService = this.Service<IAspNetUserService>();
+
+            AspNetUser user = userService.FirstOrDefaultActive(x => x.Id.Equals(follow.FollowerId));
+
+            AspNetUserOveralViewModel result = Mapper.Map<AspNetUserOveralViewModel>(user);
+
+            if (result.Hobbies != null)
+            {
+                var service = this.Service<ISportService>();
+                foreach (var hobby in result.Hobbies)
+                {
+
+                    hobby.SportName = service.GetSportName(hobby.SportId);
+                }
+            }
+
+            if (user.Gender != null)
+            {
+                result.Gender = Utils.GetEnumDescription((Gender)user.Gender);
+            }
+
+            if (user.Birthday != null)
+            {
+                result.BirthdayString = result.Birthday.ToString("dd/MM/yyyy");
+            }
+
+            result.Followed = true;
+
+            result.FollowCount = followService.GetActive(x => x.FollowerId.Equals(user.Id)).Count();
 
             result.FollowedCount = user.Follows.Where(x => x.UserId == user.Id).Count();
 
