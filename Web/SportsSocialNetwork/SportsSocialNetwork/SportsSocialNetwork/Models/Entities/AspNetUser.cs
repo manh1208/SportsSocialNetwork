@@ -34,6 +34,7 @@ namespace SportsSocialNetwork.Models.Entities
             this.Participations = new HashSet<Participation>();
             this.Places = new HashSet<Place>();
             this.Posts = new HashSet<Post>();
+            this.Posts1 = new HashSet<Post>();
             this.PostComments = new HashSet<PostComment>();
             this.Ratings = new HashSet<Rating>();
             this.UserInvitations = new HashSet<UserInvitation>();
@@ -102,6 +103,8 @@ namespace SportsSocialNetwork.Models.Entities
         public virtual ICollection<Place> Places { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Post> Posts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Post> Posts1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PostComment> PostComments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

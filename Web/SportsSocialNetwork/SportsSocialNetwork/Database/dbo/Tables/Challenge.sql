@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[Challenge] (
-    [Id]          INT            NOT NULL,
+    [Id]          INT            IDENTITY (1, 1) NOT NULL,
     [FromGroup]   INT            NOT NULL,
     [ToGroup]     INT            NOT NULL,
     [Accepted]    BIT            NULL,
@@ -10,6 +10,8 @@
     CONSTRAINT [FK_Challenge_Group] FOREIGN KEY ([FromGroup]) REFERENCES [dbo].[Group] ([Id]),
     CONSTRAINT [FK_Challenge_Group1] FOREIGN KEY ([ToGroup]) REFERENCES [dbo].[Group] ([Id])
 );
+
+
 
 
 

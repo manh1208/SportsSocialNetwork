@@ -23,6 +23,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual Nullable<System.DateTime> EditDate { get; set; }
     			public virtual Nullable<System.DateTime> LatestInteractionTime { get; set; }
     			public virtual bool Active { get; set; }
+    			public virtual string ProfileId { get; set; }
     			public virtual Nullable<int> GroupId { get; set; }
     	
     	public PostViewModel() : base() { }

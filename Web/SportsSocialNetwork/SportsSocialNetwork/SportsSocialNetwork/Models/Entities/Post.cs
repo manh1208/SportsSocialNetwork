@@ -32,9 +32,11 @@ namespace SportsSocialNetwork.Models.Entities
         public Nullable<System.DateTime> EditDate { get; set; }
         public Nullable<System.DateTime> LatestInteractionTime { get; set; }
         public bool Active { get; set; }
+        public string ProfileId { get; set; }
         public Nullable<int> GroupId { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
+        public virtual AspNetUser AspNetUser1 { get; set; }
         public virtual Group Group { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Like> Likes { get; set; }

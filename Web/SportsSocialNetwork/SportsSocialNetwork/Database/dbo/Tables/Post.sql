@@ -7,11 +7,15 @@
     [EditDate]              DATETIME       NULL,
     [LatestInteractionTime] DATETIME       NULL,
     [Active]                BIT            NOT NULL,
+    [ProfileId]             NVARCHAR (128) NULL,
     [GroupId]               INT            NULL,
     CONSTRAINT [PK_Post] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Post_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id]),
+    CONSTRAINT [FK_Post_AspNetUsers1] FOREIGN KEY ([ProfileId]) REFERENCES [dbo].[AspNetUsers] ([Id]),
     CONSTRAINT [FK_Post_Group] FOREIGN KEY ([GroupId]) REFERENCES [dbo].[Group] ([Id])
 );
+
+
 
 
 

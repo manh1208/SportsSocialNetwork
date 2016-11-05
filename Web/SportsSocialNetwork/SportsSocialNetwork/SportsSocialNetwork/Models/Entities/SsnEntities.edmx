@@ -91,7 +91,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FromGroup" Type="int" Nullable="false" />
           <Property Name="ToGroup" Type="int" Nullable="false" />
           <Property Name="Accepted" Type="bit" />
@@ -354,6 +354,7 @@
           <Property Name="EditDate" Type="datetime" />
           <Property Name="LatestInteractionTime" Type="datetime" />
           <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="ProfileId" Type="nvarchar" MaxLength="128" />
           <Property Name="GroupId" Type="int" />
         </EntityType>
         <EntityType Name="PostComment">
@@ -947,6 +948,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Post_AspNetUsers1">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="ProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Post_Group">
           <End Role="Group" Type="Self.Group" Multiplicity="0..1" />
           <End Role="Post" Type="Self.Post" Multiplicity="*" />
@@ -1288,6 +1301,10 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Post" EntitySet="Post" />
           </AssociationSet>
+          <AssociationSet Name="FK_Post_AspNetUsers1" Association="Self.FK_Post_AspNetUsers1">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
           <AssociationSet Name="FK_Post_Group" Association="Self.FK_Post_Group">
             <End Role="Group" EntitySet="Group" />
             <End Role="Post" EntitySet="Post" />
@@ -1438,6 +1455,10 @@
             <End Role="Place" EntitySet="Places" />
           </AssociationSet>
           <AssociationSet Name="FK_Post_AspNetUsers" Association="SSNModel.FK_Post_AspNetUsers">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_AspNetUsers1" Association="SSNModel.FK_Post_AspNetUsers1">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="Post" EntitySet="Posts" />
           </AssociationSet>
@@ -1663,6 +1684,7 @@
           <NavigationProperty Name="Participations" Relationship="SSNModel.FK_Participation_AspNetUsers" FromRole="AspNetUser" ToRole="Participation" />
           <NavigationProperty Name="Places" Relationship="SSNModel.FK_Place_AspNetUsers" FromRole="AspNetUser" ToRole="Place" />
           <NavigationProperty Name="Posts" Relationship="SSNModel.FK_Post_AspNetUsers" FromRole="AspNetUser" ToRole="Post" />
+          <NavigationProperty Name="Posts1" Relationship="SSNModel.FK_Post_AspNetUsers1" FromRole="AspNetUser" ToRole="Post" />
           <NavigationProperty Name="PostComments" Relationship="SSNModel.FK_PostComment_AspNetUsers" FromRole="AspNetUser" ToRole="PostComment" />
           <NavigationProperty Name="Ratings" Relationship="SSNModel.FK_Rating_AspNetUsers" FromRole="AspNetUser" ToRole="Rating" />
           <NavigationProperty Name="UserInvitations" Relationship="SSNModel.FK_UserInvitation_AspNetUsers" FromRole="AspNetUser" ToRole="UserInvitation" />
@@ -1692,7 +1714,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FromGroup" Type="Int32" Nullable="false" />
           <Property Name="ToGroup" Type="Int32" Nullable="false" />
           <Property Name="Accepted" Type="Boolean" />
@@ -2010,8 +2032,10 @@
           <Property Name="EditDate" Type="DateTime" Precision="3" />
           <Property Name="LatestInteractionTime" Type="DateTime" Precision="3" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="ProfileId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="GroupId" Type="Int32" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Post_AspNetUsers" FromRole="Post" ToRole="AspNetUser" />
+          <NavigationProperty Name="AspNetUser1" Relationship="SSNModel.FK_Post_AspNetUsers1" FromRole="Post" ToRole="AspNetUser" />
           <NavigationProperty Name="Group" Relationship="SSNModel.FK_Post_Group" FromRole="Post" ToRole="Group" />
           <NavigationProperty Name="Likes" Relationship="SSNModel.FK_Like_Post" FromRole="Post" ToRole="Like" />
           <NavigationProperty Name="Notifications" Relationship="SSNModel.FK_Notification_Post" FromRole="Post" ToRole="Notification" />
@@ -2307,6 +2331,18 @@
             </Principal>
             <Dependent Role="Post">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_AspNetUsers1">
+          <End Type="SSNModel.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
+          <End Type="SSNModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="ProfileId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3098,6 +3134,7 @@
             <EntityTypeMapping TypeName="SSNModel.Post">
               <MappingFragment StoreEntitySet="Post">
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="ProfileId" ColumnName="ProfileId" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="LatestInteractionTime" ColumnName="LatestInteractionTime" />
                 <ScalarProperty Name="EditDate" ColumnName="EditDate" />
