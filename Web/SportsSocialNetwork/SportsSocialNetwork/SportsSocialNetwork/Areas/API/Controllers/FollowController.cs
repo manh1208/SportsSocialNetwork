@@ -97,7 +97,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                     {
 
 
-                        result.Add(PrepareAspNetUserOveralViewModel(follow));
+                        result.Add(PreparePeopleFollowYou(follow));
                     }
                 }
 
@@ -155,7 +155,9 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         {
             var followService = this.Service<IFollowService>();
 
-            AspNetUser user = follow.AspNetUser;
+            var userService = this.Service<IAspNetUserService>();
+
+            AspNetUser user = userService.FirstOrDefaultActive(x => x.Id.Equals(follow.FollowerId));
 
             AspNetUserOveralViewModel result = Mapper.Map<AspNetUserOveralViewModel>(user);
 
