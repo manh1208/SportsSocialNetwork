@@ -16,6 +16,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         string saveEvtImage(HttpPostedFileBase image);
         List<Event> GetAllPlaceOwnerEvent(String ownerId);
 
+        List<Event> GetAllEvent(int skip, int take);
+
         #endregion
 
         void test();
@@ -76,6 +78,10 @@ namespace SportsSocialNetwork.Models.Entities.Services
         public List<Event> GetAllPlaceOwnerEvent(String ownerId)
         {
             return this.GetActive(x => x.CreatorId == ownerId).OrderBy(x => x.StartDate).ToList();
+        }
+
+        public List<Event> GetAllEvent(int skip, int take) {
+            return this.GetActive(x => x.Status == (int)EventStatus.Operating && x.EndDate >= DateTime.Now).OrderBy(x => x.StartDate).ToList();
         }
 
 

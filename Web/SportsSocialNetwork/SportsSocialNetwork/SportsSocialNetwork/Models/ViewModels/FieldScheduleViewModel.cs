@@ -7,6 +7,7 @@ namespace SportsSocialNetwork.Models.ViewModels
 {
     public partial class FieldScheduleViewModel
     {
+        public string FieldName { get; set; }
         public String TypeString { get; set; }
         public String StartTimeString { get; set; }
         public String EndTimeString { get; set; }
