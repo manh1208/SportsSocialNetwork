@@ -16,8 +16,8 @@ namespace SportsSocialNetwork.Models.Entities
     {
         public int Id { get; set; }
         public int InvitationId { get; set; }
-        public string ReciverId { get; set; }
-        public bool Accepted { get; set; }
+        public string ReceiverId { get; set; }
+        public Nullable<bool> Accepted { get; set; }
         public bool Active { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }

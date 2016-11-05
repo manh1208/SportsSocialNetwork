@@ -419,8 +419,8 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InvitationId" Type="int" Nullable="false" />
-          <Property Name="ReciverId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="Accepted" Type="bit" Nullable="false" />
+          <Property Name="ReceiverId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Accepted" Type="bit" />
           <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_CategorySport_Category">
@@ -1063,7 +1063,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="UserInvitation">
-              <PropertyRef Name="ReciverId" />
+              <PropertyRef Name="ReceiverId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2096,8 +2096,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="InvitationId" Type="Int32" Nullable="false" />
-          <Property Name="ReciverId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="Accepted" Type="Boolean" Nullable="false" />
+          <Property Name="ReceiverId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Accepted" Type="Boolean" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_UserInvitation_AspNetUsers" FromRole="UserInvitation" ToRole="AspNetUser" />
           <NavigationProperty Name="Invitation" Relationship="SSNModel.FK_UserInvitation_Invitation" FromRole="UserInvitation" ToRole="Invitation" />
@@ -2342,7 +2342,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="UserInvitation">
-              <PropertyRef Name="ReciverId" />
+              <PropertyRef Name="ReceiverId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3177,7 +3177,7 @@
               <MappingFragment StoreEntitySet="UserInvitation">
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Accepted" ColumnName="Accepted" />
-                <ScalarProperty Name="ReciverId" ColumnName="ReciverId" />
+                <ScalarProperty Name="ReceiverId" ColumnName="ReceiverId" />
                 <ScalarProperty Name="InvitationId" ColumnName="InvitationId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
