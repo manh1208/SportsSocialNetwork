@@ -150,5 +150,45 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             return result;
         }
+
+        private AspNetUserOveralViewModel PreparePeopleFollowYou(Follow follow)
+        {
+            var followService = this.Service<IFollowService>();
+
+            AspNetUser user = follow.AspNetUser;
+
+            AspNetUserOveralViewModel result = Mapper.Map<AspNetUserOveralViewModel>(user);
+
+            if (result.Hobbies != null)
+            {
+                var service = this.Service<ISportService>();
+                foreach (var hobby in result.Hobbies)
+                {
+
+                    hobby.SportName = service.GetSportName(hobby.SportId);
+                }
+            }
+
+            if (user.Gender != null)
+            {
+                result.Gender = Utils.GetEnumDescription((Gender)user.Gender);
+            }
+
+            if (user.Birthday != null)
+            {
+                result.BirthdayString = result.Birthday.ToString("dd/MM/yyyy");
+            }
+
+            result.Followed = true;
+
+            result.FollowCount = followService.GetActive(x => x.FollowerId.Equals(user.Id)).Count();
+
+            result.FollowedCount = user.Follows.Where(x => x.UserId == user.Id).Count();
+
+            result.PostCount = user.Posts.Count();
+
+
+            return result;
+        }
     }
 }
