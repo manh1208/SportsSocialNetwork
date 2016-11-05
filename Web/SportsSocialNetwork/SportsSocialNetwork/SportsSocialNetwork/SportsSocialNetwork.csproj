@@ -876,6 +876,7 @@
     <Compile Include="Models\ViewModels\HobbyViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\InvitationViewModel.cs" />
     <Compile Include="Models\ViewModels\InvitationViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -940,6 +941,7 @@
     <Compile Include="Models\ViewModels\TimeBlockViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\UserInvitationViewModel.cs" />
     <Compile Include="Models\ViewModels\UserInvitationViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
