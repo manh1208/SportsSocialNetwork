@@ -63,19 +63,11 @@ namespace SportsSocialNetwork.Controllers
             List<FollowSuggestViewModel> userList = new List<FollowSuggestViewModel>();
             var Coord = new GeoCoordinate();
             bool checkNearBy = false;
-            if (curUser.Address != null || curUser.District != null || curUser.Ward != null || curUser.City != null)
+            if (curUser.Longitude != null && curUser.Latitude != null)
             {
-                StringBuilder location = new StringBuilder();
-                location.Append(curUser.Address);
-                location.Append(" " + curUser.Ward + " " + curUser.District + " " + curUser.City);
-                DataTable coordinate = getLocation(location.ToString());
-                double curUserLatitude = Double.Parse(coordinate.Rows[0]["Latitude"].ToString());
-                double curUserLongtitude = Double.Parse(coordinate.Rows[0]["Longitude"].ToString());
-                Coord = new GeoCoordinate(curUserLatitude, curUserLongtitude);
+                Coord = new GeoCoordinate(curUser.Latitude.Value, curUser.Longitude.Value);
                 checkNearBy = true;
             }
-
-
             var users = _userService.GetActive(p => p.Id != userId && p.AspNetRoles.Where(k =>
             k.Name != "Quản trị viên" && k.Name != "Moderator").ToList().Count > 0 &&
             p.Follows.Where(f => f.Active == true && (f.FollowerId == userId)).ToList().Count == 0).ToList();
@@ -92,16 +84,9 @@ namespace SportsSocialNetwork.Controllers
                     }
                 }
 
-                if (checkNearBy && (user.Address != null || user.District != null || user.Ward != null || user.City != null))
+                if (checkNearBy && (user.Longitude != null && user.Latitude != null))
                 {
-
-                    StringBuilder userLocation = new StringBuilder();
-                    userLocation.Append(user.Address);
-                    userLocation.Append(" " + user.Ward + " " + user.District + " " + user.City);
-                    DataTable userCoordinate = getLocation(userLocation.ToString());
-                    double userLatitude = Double.Parse(userCoordinate.Rows[0]["Latitude"].ToString());
-                    double userLongtitude = Double.Parse(userCoordinate.Rows[0]["Longitude"].ToString());
-                    var userCoord = new GeoCoordinate(userLatitude, userLongtitude);
+                    var userCoord = new GeoCoordinate(user.Latitude.Value, user.Longitude.Value);
                     var dis = Coord.GetDistanceTo(userCoord);
                     if (Coord.GetDistanceTo(userCoord) < 5000)
                     {
@@ -160,7 +145,34 @@ namespace SportsSocialNetwork.Controllers
             return dtCoordinates;
         }
 
-        
+        public ActionResult CreateInvitation(string[] userId, string sportSelect, string inviteContent, string orderInfo)
+        {
+            var userInvitationService = this.Service<IUserInvitationService>();
+            var invitationService = this.Service<IInvitationService>();
+            var orderService = this.Service<IOrderService>();
+            var curUserId = User.Identity.GetUserId();
+            UserInvitation UIn = new UserInvitation();
+            string content = "";
+            if (orderInfo != null && orderInfo!= "")
+            {
+                var order = orderService.FirstOrDefaultActive(p => p.OrderCode == orderInfo);
+                content = " .Thời gian: " + order.StartTime.ToString("HH:mm") + " - " + order.EndTime.ToString("HH:mm")
+                    + " Ngày " + order.StartTime.ToString("dd/MM/yyyy") +". Tại sân: "+order.Field.Name+" ,địa điểm: "
+                    +order.Field.Place.Name;
+            }
+            
+            foreach (var id in userId)
+            {
+                UIn.Invitation.SenderId = curUserId;
+                UIn.Invitation.InvitationContent = inviteContent + content;
+                UIn.Invitation.CreateDate = DateTime.Now;
+                UIn.ReciverId = id;
+
+            }
+            
+            userInvitationService.Create(UIn);
+            return View();
+        }
     }
 
     

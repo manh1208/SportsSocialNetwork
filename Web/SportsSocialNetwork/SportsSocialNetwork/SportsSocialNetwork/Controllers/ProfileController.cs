@@ -34,19 +34,11 @@ namespace SportsSocialNetwork.Controllers
             List<FollowSuggestViewModel> userList = new List<FollowSuggestViewModel>();
             var Coord = new GeoCoordinate();
             bool checkNearBy = false;
-            if (user.Address != null || user.District != null || user.Ward != null || user.City != null)
+            if (user.Longitude != null && user.Latitude != null)
             {
-                StringBuilder location = new StringBuilder();
-                location.Append(user.Address);
-                location.Append(" " + user.Ward + " " + user.District + " " + user.City);
-                DataTable coordinate = getLocation(location.ToString());
-                double curUserLatitude = Double.Parse(coordinate.Rows[0]["Latitude"].ToString());
-                double curUserLongtitude = Double.Parse(coordinate.Rows[0]["Longitude"].ToString());
-                Coord = new GeoCoordinate(curUserLatitude, curUserLongtitude);
+                Coord = new GeoCoordinate(user.Latitude.Value, user.Longitude.Value);
                 checkNearBy = true;
             }
-
-
             var users = _userService.GetActive(p => p.Id != userId && p.Follows.Where(f => f.Active == true && (f.FollowerId == userId)).ToList().Count == 0).ToList();
             foreach (var item in users)
             {
@@ -61,23 +53,16 @@ namespace SportsSocialNetwork.Controllers
                     }
                 }
 
-                if (checkNearBy && (user.Address != null || user.District != null || user.Ward != null || user.City != null))
+                if (checkNearBy && (item.Longitude != null && item.Latitude != null))
                 {
-
-                    StringBuilder userLocation = new StringBuilder();
-                    userLocation.Append(user.Address);
-                    userLocation.Append(" " + user.Ward + " " + user.District + " " + user.City);
-                    DataTable userCoordinate = getLocation(userLocation.ToString());
-                    double userLatitude = Double.Parse(userCoordinate.Rows[0]["Latitude"].ToString());
-                    double userLongtitude = Double.Parse(userCoordinate.Rows[0]["Longitude"].ToString());
-                    var userCoord = new GeoCoordinate(userLatitude, userLongtitude);
+                    var userCoord = new GeoCoordinate(item.Latitude.Value, item.Longitude.Value);
                     var dis = Coord.GetDistanceTo(userCoord);
                     if (Coord.GetDistanceTo(userCoord) < 5000)
                     {
                         followsug.weight += 2;
                     }
                 }
-
+                
                 int hobbyCount = 1;
                 foreach (var hobby in user.Hobbies)
                 {
