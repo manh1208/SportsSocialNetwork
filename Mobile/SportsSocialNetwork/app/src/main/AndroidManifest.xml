@@ -44,6 +44,10 @@
             android:label="@string/title_activity_place_detail"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".activity.ManagePlaceDetailActivity"
+            android:label="@string/title_activity_place_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activity.ImageViewerActivity"
             android:label="@string/title_activity_image_viewer"
             android:theme="@style/AppTheme.NoActionBar" />

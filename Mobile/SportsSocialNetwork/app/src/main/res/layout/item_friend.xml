@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textStyle="normal"
-                android:text="Nguyễn Văn Mạnh"
+                android:text=""
                 android:textColor="#000"/>
             <TextView
                 android:id="@+id/txt_friend_hobbies"
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textStyle="normal"
-                android:text="Bóng đá, bóng rổ"
+                android:text=""
                 android:textColor="#4e4e4e"/>
         </LinearLayout>
         <ImageButton
