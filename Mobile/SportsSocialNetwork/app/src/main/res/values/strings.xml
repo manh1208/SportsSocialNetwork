@@ -25,4 +25,5 @@
     <string name="title_activity_add_member">AddMemberActivity</string>
     <string name="title_activity_create_group">CreateGroupActivity</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_create_field_schedule">CreateFieldScheduleActivity</string>
 </resources>

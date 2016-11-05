@@ -122,6 +122,10 @@
         <activity
             android:name=".activity.Main2Activity"
             android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.CreateFieldScheduleActivity"
+            android:label="@string/title_activity_create_field_schedule"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

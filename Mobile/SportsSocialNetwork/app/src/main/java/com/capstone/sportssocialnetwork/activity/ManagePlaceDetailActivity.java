@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.capstone.sportssocialnetwork.R;
+import com.capstone.sportssocialnetwork.adapter.ManagePlacePageAdapter;
 import com.capstone.sportssocialnetwork.adapter.PlacePageAdapter;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.squareup.picasso.Picasso;
@@ -19,7 +20,7 @@ import com.squareup.picasso.Picasso;
 public class ManagePlaceDetailActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout tabLayout;
-    private FloatingActionButton fabBooking;
+    private FloatingActionButton fabFieldSchedule;
     private int placeId;
     private String placeName;
     private String placeAvatar;
@@ -52,7 +53,7 @@ public class ManagePlaceDetailActivity extends AppCompatActivity {
     }
 
     private void prepareData() {
-        PlacePageAdapter adapter = new PlacePageAdapter(getSupportFragmentManager(),placeId);
+        ManagePlacePageAdapter adapter = new ManagePlacePageAdapter(getSupportFragmentManager(),placeId);
         viewPager.setAdapter(adapter);
         tabLayout.post(new Runnable() {
             @Override
@@ -65,15 +66,23 @@ public class ManagePlaceDetailActivity extends AppCompatActivity {
                 .error(R.drawable.placeholder)
                 .fit()
                 .into(ivCover);
+        fabFieldSchedule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ManagePlaceDetailActivity.this,CreateFieldScheduleActivity.class);
+                intent.putExtra("placeId",placeId);
+                startActivity(intent);
+            }
+        });
 
     }
-
-
 
     private void initView() {
         tabLayout = (TabLayout) findViewById(R.id.tabs_place_detail);
         viewPager = (ViewPager) findViewById(R.id.viewpager_place_detail);
         ivCover = (ImageView) findViewById(R.id.iv_detail_place_cover);
+        fabFieldSchedule = (FloatingActionButton) findViewById(R.id.fab_create_field_schedule);
+
     }
 
     @Override

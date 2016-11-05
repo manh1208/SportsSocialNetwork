@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,13 +27,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.capstone.sportssocialnetwork.Enumerable.OrderStatusEnum;
-import com.capstone.sportssocialnetwork.Enumerable.PaidTypeEnum;
+import com.capstone.sportssocialnetwork.enumerable.OrderStatusEnum;
+import com.capstone.sportssocialnetwork.enumerable.PaidTypeEnum;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.model.Field;
 import com.capstone.sportssocialnetwork.model.FieldType;
 import com.capstone.sportssocialnetwork.model.Order;
-import com.capstone.sportssocialnetwork.model.Place;
 import com.capstone.sportssocialnetwork.model.request.OrderRequestModel;
 import com.capstone.sportssocialnetwork.model.response.PlaceResponseModel;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
@@ -46,11 +42,8 @@ import com.capstone.sportssocialnetwork.utils.SharePreferentName;
 import com.capstone.sportssocialnetwork.utils.Utilities;
 import com.squareup.picasso.Picasso;
 
-import java.sql.Time;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -274,8 +267,7 @@ public class BookingActivity extends AppCompatActivity {
     }
 
     private void createPlaceSpinner() {
-//        List<String> sports = new ArrayList<String>();
-//        sports.add(txtPlaceName);
+
         placeAdapter = new ArrayAdapter(this, R.layout.item_spinner, new ArrayList());
         placeAdapter.setDropDownViewResource(R.layout.item_spinner);
         spPlace.setAdapter(placeAdapter);
@@ -283,11 +275,6 @@ public class BookingActivity extends AppCompatActivity {
     }
 
     private void createSportSpinner() {
-//        List<String> sports = new ArrayList<String>();
-//        sports.add("Tất cả");
-//        sports.add("Bóng đá");
-//        sports.add("Bóng rổ");
-//        sports.add("Bóng chuyền");
         sportAdapter = new ArrayAdapter(this, R.layout.item_spinner, new ArrayList());
         sportAdapter.setDropDownViewResource(R.layout.item_spinner);
         spSport.setAdapter(sportAdapter);
@@ -295,11 +282,6 @@ public class BookingActivity extends AppCompatActivity {
     }
 
     private void createFieldSpinner() {
-//        List<String> sports = new ArrayList<String>();
-//        sports.add("Tất cả");
-//        sports.add("Bóng đá");
-//        sports.add("Bóng rổ");
-//        sports.add("Bóng chuyền");
         fieldAdapter = new ArrayAdapter(this, R.layout.item_spinner, new ArrayList());
         fieldAdapter.setDropDownViewResource(R.layout.item_spinner);
         spField.setAdapter(fieldAdapter);

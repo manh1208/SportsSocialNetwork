@@ -28,8 +28,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.capstone.sportssocialnetwork.Enumerable.OrderStatusEnum;
-import com.capstone.sportssocialnetwork.Enumerable.PaidTypeEnum;
+import com.capstone.sportssocialnetwork.enumerable.OrderStatusEnum;
+import com.capstone.sportssocialnetwork.enumerable.PaidTypeEnum;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.custom.RoundedImageView;
 import com.capstone.sportssocialnetwork.fragment.ManageEventFragment;

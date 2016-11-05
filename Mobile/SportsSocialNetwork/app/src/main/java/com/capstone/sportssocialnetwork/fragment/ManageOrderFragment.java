@@ -1,6 +1,5 @@
 package com.capstone.sportssocialnetwork.fragment;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -19,8 +18,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.capstone.sportssocialnetwork.Enumerable.OrderStatusEnum;
-import com.capstone.sportssocialnetwork.Enumerable.PaidTypeEnum;
+import com.capstone.sportssocialnetwork.enumerable.OrderStatusEnum;
+import com.capstone.sportssocialnetwork.enumerable.PaidTypeEnum;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.adapter.ManageOrderAdapter;
 import com.capstone.sportssocialnetwork.model.Order;
@@ -32,7 +31,6 @@ import com.capstone.sportssocialnetwork.utils.Utilities;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
