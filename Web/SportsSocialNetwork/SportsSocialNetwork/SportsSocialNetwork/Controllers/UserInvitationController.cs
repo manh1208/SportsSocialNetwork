@@ -2,6 +2,7 @@
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -147,11 +148,14 @@ namespace SportsSocialNetwork.Controllers
 
         public ActionResult CreateInvitation(string[] userId, string sportSelect, string inviteContent, string orderInfo)
         {
+            var result = new AjaxOperationResult();
             var userInvitationService = this.Service<IUserInvitationService>();
             var invitationService = this.Service<IInvitationService>();
             var orderService = this.Service<IOrderService>();
+            var userService = this.Service<IAspNetUserService>();
             var curUserId = User.Identity.GetUserId();
-            UserInvitation UIn = new UserInvitation();
+            var curUser = userService.FirstOrDefaultActive(p => p.Id == curUserId);
+            var notiService = this.Service<INotificationService>();
             string content = "";
             if (orderInfo != null && orderInfo!= "")
             {
@@ -163,15 +167,30 @@ namespace SportsSocialNetwork.Controllers
             
             foreach (var id in userId)
             {
-                UIn.Invitation.SenderId = curUserId;
-                UIn.Invitation.InvitationContent = inviteContent + content;
-                UIn.Invitation.CreateDate = DateTime.Now;
-                UIn.ReciverId = id;
-
+                UserInvitation UIn = new UserInvitation();
+                Notification noti = new Notification();
+                Invitation invi = new Invitation();
+                invi.SenderId = curUserId;
+                invi.InvitationContent = inviteContent + content;
+                invi.CreateDate = DateTime.Now;
+                invi.Active = true;
+                UIn.Invitation = invi;
+                UIn.ReceiverId = id;
+                UIn.Active = true;
+                userInvitationService.Create(UIn);
+                noti.InvitationId = UIn.InvitationId;
+                noti.UserId = id;
+                noti.FromUserId = curUserId;
+                noti.CreateDate = DateTime.Now;
+                noti.Active = true;
+                noti.Type = (int)NotificationType.Invitation;
+                noti.Message = curUser.FullName + " đã gửi lời mời bạn cùng chơi thể thao";
+                noti.Title = "Invite";
+                noti.MarkRead = false;
+                notiService.Create(noti);
             }
-            
-            userInvitationService.Create(UIn);
-            return View();
+            result.Succeed = true;
+            return Json(result);
         }
     }
 

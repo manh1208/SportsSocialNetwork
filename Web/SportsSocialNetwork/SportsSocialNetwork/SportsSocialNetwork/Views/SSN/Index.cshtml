@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/Content/assets/vendor/magnific-popup/magnific-popup.css">
     <link rel="stylesheet" href="~/Content/js/sweetAlert/sweetalert.css" />
     <style>
+        
         .media{
             overflow:visible
         }
@@ -156,7 +157,7 @@
                     <a class="avatar avatar-lg" href="javascript:void(0)">
                         <img src="@ViewBag.User.AvatarImage" style="height:130px;width:130px">
                     </a>
-                    <div class="profile-user">@User.Identity.Name</div>
+                    <div class="profile-user"><a style="color:#37474f" href="/profile/index?userid=@ViewBag.User.Id">@ViewBag.User.FullName</a></div>
                 </div>
             </div>
             <div class="widget-footer">
@@ -253,8 +254,8 @@
                                                     <img style='height:50px;width:50px' src='@item.AvatarImage' alt='...'>
                                                 </a>
                                             </div>
-                                            <div class='comment-body media-body'>
-                                                <a class='comment-author' href='javascript:void(0)'>@item.FullName</a>
+                                            <div class='comment-body media-body' >
+                                                <a class='comment-author' href='/profile/index?userid=@item.Id'>@item.FullName</a>
                                                 <div class='comment-content'>
                                                     @if (item.sameSport != 0)
                                                     {<p>Có chung @item.sameSport sở thích</p>}

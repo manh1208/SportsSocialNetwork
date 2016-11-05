@@ -183,7 +183,7 @@
                 <div class="col-sm-6 padding-left-0">
                     <input id="sportSelect" name="sportSelect" type="text" class="form-control input-cmnt" placeholder="Chọn môn thể thao">
                     <br />
-                    <textarea name="inviteContent" class="form-control input-cmnt" style="resize:none" rows="7" placeholder="Nhập nội dung mời..."></textarea>
+                    <textarea name="inviteContent" id="inviteContent" class="form-control input-cmnt" style="resize:none" rows="10" placeholder="Nhập nội dung mời (bắt buộc)"></textarea>
 
 
                 </div>
@@ -201,7 +201,7 @@
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="exampleTabsOne" role="tabpanel">
-                                <div style="border:1px solid #e4eaec" class="padding-10 height-250 tabNearBy" id="check1" data-plugin="scrollable">
+                                <div style="border:1px solid #e4eaec;height:262px" class="padding-10 tabNearBy" id="check1" data-plugin="scrollable">
                                     <div data-role="container" class="tabNearBy" id="containerNearByUser">
                                         <div data-role="content" id="contentNearByUser" class="tabNearBy">
 
@@ -227,7 +227,7 @@
 
 
                 </div>
-                <div class="col-sm-12 margin-top-15 padding-right-0 padding-left-0">
+                <div class="col-sm-12 margin-top-30 padding-right-0 padding-left-0">
                     <p style="font-size:12px">※Bạn đã đặt sân? Hãy chia sẻ thông tin đặt sân với người mà bạn muốn mời</p>
                     <div class="form-group padding-0">
                         <div class="col-sm-8 padding-0">
@@ -239,8 +239,8 @@
                 </div>
                 <br />
                 <div class="col-sm-12 margin-top-50 form-group text-center">
-                    <button type="submit" class="btn btn-primary">Đồng ý</button>
-                    <button type="reset" class="btn btn-default">Hủy bỏ</button>
+                    <button id="createInvi" type="submit" class="btn btn-primary">Đồng ý</button>
+                    <button id="resetForm" type="reset" class="btn btn-default">Hủy bỏ</button>
                 </div>
             </form>
         </div>
@@ -342,37 +342,52 @@
     <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
     <script>
 
+        function resetForm(){
+            $('.user').prop('checked', false);
+            $("#inviteContent").val("");
+            $("#orderInfo").val("");
+        }
+        
+        $("#resetForm").on("click",function(){
+            resetForm();
+        })
+
         $('#invite-form').submit(function (e) {
             e.preventDefault();
+            var content = $("#inviteContent").val();
             var formData = new FormData(document.getElementById('invite-form'));
             var checkedValue = [];
             $('.user:checked').each(function() {
                 checkedValue.push($(this).attr('value'));
             });
-            for(var i = 0; i< checkedValue.length; i++){
-                formData.append('userId', checkedValue[i]);
-            }
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("CreateInvitation", "UserInvitation")',
-                data: formData,
-                async: false,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (result) {
-                    if (result.Succeed) {
-                        showMessage("Cập nhật thành công.", "success", "OK");
-                    } else {
-                        showErrors(result.Errors);
-                        showMessage("Không thể cập nhật.", "error", "OK");
+            if(checkedValue.length > 0 && content ){
+                for(var i = 0; i< checkedValue.length; i++){
+                    formData.append('userId', checkedValue[i]);
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CreateInvitation", "UserInvitation")',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            showMessage("Gửi lời mời thành công", "success", "OK");
+                            resetForm();
+                        } else {
+                            showErrors(result.Errors);
+                            showMessage("Không thể cập nhật.", "error", "OK");
 
-                    }
-                },
-                error: function (result) {
-                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                },
-            });
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+            }
+            
         });
 
         var nearByUserSkip = 0;
@@ -417,6 +432,7 @@
             nearByUserSkip = 0;
             nearByUserTake = 10;
             $("#containerNearByUser").empty();
+            $("#orderInfo").val("");
             var sport = $("#sportSelect").val();
             loadNearByUser(sport);
             loadOrder(sport);

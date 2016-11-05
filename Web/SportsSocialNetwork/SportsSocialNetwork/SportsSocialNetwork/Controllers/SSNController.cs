@@ -373,9 +373,8 @@ namespace SportsSocialNetwork.Controllers
             }
 
             List<Post> postList = _postService.GetActive(p => p.UserId == userId ||
-            p.AspNetUser.Follows.Where(f => f.FollowerId == userId && f.Active).ToList().Count > 0 ||
-            p.Group.GroupMembers.Where(g => g.UserId == userId && g.Active).ToList().Count > 0).ToList();
-
+            p.AspNetUser.Follows.Where(f => f.FollowerId == userId && f.Active).ToList().Count > 0 && 
+            p.GroupId == null).ToList();
             
             List<PostGeneralViewModel> listPostVM = Mapper.Map<List<PostGeneralViewModel>>(postList);
 
