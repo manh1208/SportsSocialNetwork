@@ -181,7 +181,7 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                                         + "</div>"
                                         + "<div class='media-body'>"
                                             + "<p class='media-heading' style='margin-bottom:0'>"
-                                            + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + this.AspNetUser.FullName + '</a>'
+                                            + '<a style="font-weight:bold" class="comment-author" href="/profile/index?userid='+this.AspNetUser.Id+'">' + this.AspNetUser.FullName + '</a>'
                                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                                             + "</p>"
                                             + "<small>" + this.PostAge + "</small>"
@@ -309,7 +309,7 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                                         + "</div>"
                                         + "<div class='media-body'>"
                                             + "<p class='media-heading' style='margin-bottom:0'>"
-                                            + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + this.AspNetUser.FullName + '</a>'
+                                            + '<a style="font-weight:bold" class="comment-author" href="/profile/index?userid=' + this.AspNetUser.Id + '">' + this.AspNetUser.FullName + '</a>'
                                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                                             + "</p>"
                                             + "<small>" + this.PostAge + "</small>"
@@ -435,7 +435,7 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
                                         + "</div>"
                                         + "<div class='media-body'>"
                                             + "<p class='media-heading' style='margin-bottom:0'>"
-                                            + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + this.AspNetUser.FullName + '</a>'
+                                            + '<a style="font-weight:bold" class="comment-author" href="/profile/index?userid=' + this.AspNetUser.Id + '">' + this.AspNetUser.FullName + '</a>'
                                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                                             + "</p>"
                                             + "<small>" + this.PostAge + "</small>"
@@ -624,7 +624,7 @@ function prependPost(data, userId) {
                                         + "</div>"
                                         + "<div class='media-body'>"
                                             + "<p class='media-heading' style='margin-bottom:0'>"
-                                            + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + data.AspNetUser.FullName + '</a>'
+                                            + '<a style="font-weight:bold" class="comment-author" href="/profile/index?userid=' + data.AspNetUser.Id + '">' + data.AspNetUser.FullName + '</a>'
                                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                                             + "</p>"
                                             + "<small>" + data.PostAge + "</small>"
@@ -695,7 +695,7 @@ function prependComment(data) {
                             + "</a>"
                         + "</div>"
                         + "<div class='comment-body media-body'>"
-                            + "<a style='font-weight:bold' class='comment-author' href='javascript:void(0)'>" + data.AspNetUser.FullName + "</a>"
+                            + "<a style='font-weight:bold' class='comment-author' href='/profile/index?userid="+data.AspNetUser.Id+"'>" + data.AspNetUser.FullName + "</a>"
                             + "<div class='comment-meta'>"
                                 + "<span class='date'>" + data.CommentAge + "</span>"
                             + "</div>"
@@ -764,7 +764,7 @@ function appendComment(data) {
                             + "</a>"
                         + "</div>"
                         + "<div class='comment-body media-body'>"
-                            + "<a style='font-weight:bold' class='comment-author' href='javascript:void(0)'>" + data.AspNetUser.FullName + "</a>"
+                            + "<a style='font-weight:bold' class='comment-author' href='/profile/index?userid="+data.AspNetUser.Id+"'>" + data.AspNetUser.FullName + "</a>"
                             + "<div class='comment-meta'>"
                                 + "<span class='date'>" + data.CommentAge + "</span>"
                             + "</div>"
@@ -871,7 +871,7 @@ function postComment(data) {
                                 + "</a>"
                             + "</div>"
                             + "<div class='comment-body media-body'>"
-                                + "<a style='font-weight:bold' class='comment-author' href='javascript:void(0)'>" + this.AspNetUser.FullName + "</a>"
+                                + "<a style='font-weight:bold' class='comment-author' href='/profile/index?userid="+this.AspNetUser.Id+"'>" + this.AspNetUser.FullName + "</a>"
                                 + "<div class='comment-meta'>"
                                     + "<span class='date'>" + this.CommentAge + "</span>"
                                 + "</div>"
@@ -1261,7 +1261,7 @@ function refreshPost(data) {
                         + "</div>"
                         + "<div class='media-body'>"
                            + "<p class='media-heading' style='margin-bottom:0'>"
-                            + '<a style="font-weight:bold" class="comment-author" href="javascript:void(0)">' + data.AspNetUser.FullName + '</a>'
+                            + '<a style="font-weight:bold" class="comment-author" href="/profile/index?userid=' + data.AspNetUser.Id + '">' + data.AspNetUser.FullName + '</a>'
                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                             + "</p>"
                             + "<small>" + data.PostAge + "</small>"
@@ -1552,7 +1552,7 @@ function refreshComment(data) {
                             + "</a>"
                         + "</div>"
                         + "<div class='comment-body media-body'>"
-                            + "<a style='font-weight:bold' class='comment-author' href='javascript:void(0)'>" + data.AspNetUser.FullName + "</a>"
+                            + "<a style='font-weight:bold' class='comment-author' href=/profile/index?userid="+data.AspNetUser.Id+"'>" + data.AspNetUser.FullName + "</a>"
                             + "<div class='comment-meta'>"
                                 + "<span class='date'>" + data.CommentAge + "</span>"
                             + "</div>"

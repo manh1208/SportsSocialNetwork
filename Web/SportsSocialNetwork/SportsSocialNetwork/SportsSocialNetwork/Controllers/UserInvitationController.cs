@@ -115,8 +115,10 @@ namespace SportsSocialNetwork.Controllers
 
             //load follow numbers
             var _followService = this.Service<IFollowService>();
+            var _postService = this.Service<IPostService>();
             ViewBag.Following = _followService.GetActive(p => p.FollowerId == curUser.Id).Count();
             ViewBag.Follower = _followService.GetActive(p => p.UserId == curUser.Id).Count();
+            ViewBag.PostCount = _postService.GetActive(p => p.UserId == curUser.Id).Count();
             return View();
         }
 

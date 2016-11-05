@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity;
+@using SportsSocialNetwork.Models.Enumerable;
 @{
     ViewBag.Title = "SearchDetail";
     Layout = "~/Views/Shared/_SSNLayout.cshtml";
@@ -376,14 +377,26 @@
         function JoinOutGroup(id) {
             $.ajax({
                 type: 'POST',
-                url: '@Url.Action("JoinGroup", "Group")',
+                url: '@Url.Action("JoinLeaveGroup", "Group")',
                 data: { "groupId": id, "userId": '@User.Identity.GetUserId()' },
                 async: false,
                 dataType: 'json',
                 success: function (data) {
-                    if (data.Succeed) {
+                    if (data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.Leaved)') {
+                        location.href = location.href;
+                    } else if (data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.RequestSent)') {
                         $("#" + id).empty();
-                        $("#" + id).append('<i class="fa fa-minus-circle" aria-hidden="true"></i> Rời nhóm')
+                        $("#" + id).append('<i class="fa fa-times-circle" aria-hidden="true"></i> Hủy yêu cầu tham gia nhóm')
+                        
+                    } else if (data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.CancelRequest)') {
+                        $("#" + id).empty();
+                        $("#" + id).append('<i class="fa fa-plus-circle" aria-hidden="true"></i> Tham gia nhóm')
+                        
+                    } else if (data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.CannotLeave)') {
+                        showMessage("Bạn đang là quản trị duy nhất của trang. Vui lòng chọn một thành viên khác để thay thế trước khi rời nhóm", "error", "OK");
+                    } else if (data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.ReJoined)') {
+                        $("#" + id).empty();
+                        $("#" + id).append('<i class="fa fa-times-circle" aria-hidden="true"></i> Hủy yêu cầu tham gia nhóm')
                     }
                     else {
                         showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
@@ -392,6 +405,7 @@
                 error: function (data) {
                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                 },
+                
             });
         }
 

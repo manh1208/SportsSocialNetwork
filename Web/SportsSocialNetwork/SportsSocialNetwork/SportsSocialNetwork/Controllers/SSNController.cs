@@ -129,8 +129,10 @@ namespace SportsSocialNetwork.Controllers
 
             //load follow numbers
             var _followService = this.Service<IFollowService>();
+            var _postService = this.Service<IPostService>();
             ViewBag.Following = _followService.GetActive(p => p.FollowerId == curUser.Id).Count();
             ViewBag.Follower = _followService.GetActive(p => p.UserId == curUser.Id).Count();
+            ViewBag.PostCount = _postService.GetActive(p => p.UserId == curUser.Id).Count();
             return View();
         }
 
@@ -374,7 +376,7 @@ namespace SportsSocialNetwork.Controllers
 
             List<Post> postList = _postService.GetActive(p => p.UserId == userId ||
             p.AspNetUser.Follows.Where(f => f.FollowerId == userId && f.Active).ToList().Count > 0 && 
-            p.GroupId == null).ToList();
+            p.GroupId == null && p.ProfileId == null).ToList();
             
             List<PostGeneralViewModel> listPostVM = Mapper.Map<List<PostGeneralViewModel>>(postList);
 
@@ -689,8 +691,10 @@ namespace SportsSocialNetwork.Controllers
 
             //load follow numbers
             var _followService = this.Service<IFollowService>();
+            var _postService = this.Service<IPostService>();
             ViewBag.Following = _followService.GetActive(p => p.FollowerId == curUser.Id).Count();
             ViewBag.Follower = _followService.GetActive(p => p.UserId == curUser.Id).Count();
+            ViewBag.PostCount = _postService.GetActive(p => p.UserId == curUser.Id).Count();
             return View();
         }
 
