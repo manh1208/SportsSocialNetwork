@@ -33,7 +33,7 @@ namespace SportsSocialNetwork.Controllers
     {
         public string ViewNameseSymbol { get; private set; }
 
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             var _sportService = this.Service<ISportService>();
             var sports = _sportService.GetActive()
@@ -78,19 +78,11 @@ namespace SportsSocialNetwork.Controllers
             List<FollowSuggestViewModel> userList = new List<FollowSuggestViewModel>();
             var Coord = new GeoCoordinate();
             bool checkNearBy = false;
-            if (curUser.Address != null || curUser.District != null || curUser.Ward != null || curUser.City != null)
+            if (curUser.Longitude != null && curUser.Latitude != null)
             {
-                StringBuilder location = new StringBuilder();
-                location.Append(curUser.Address);
-                location.Append(" " + curUser.Ward + " " + curUser.District + " " + curUser.City);
-                DataTable coordinate = await getLocation(location.ToString());
-                double curUserLatitude = Double.Parse(coordinate.Rows[0]["Latitude"].ToString());
-                double curUserLongtitude = Double.Parse(coordinate.Rows[0]["Longitude"].ToString());
-                Coord = new GeoCoordinate(curUserLatitude, curUserLongtitude);
+                Coord = new GeoCoordinate(curUser.Latitude.Value, curUser.Longitude.Value);
                 checkNearBy = true;
             }
-
-
             var users = _userService.GetActive(p => p.Id != userId && p.AspNetRoles.Where(k => 
             k.Name != "Quản trị viên" && k.Name != "Moderator").ToList().Count > 0 &&
             p.Follows.Where(f => f.Active == true && (f.FollowerId == userId)).ToList().Count == 0).ToList();
@@ -107,16 +99,9 @@ namespace SportsSocialNetwork.Controllers
                     }
                 }
 
-                if (checkNearBy && (user.Address != null || user.District != null || user.Ward != null || user.City != null))
+                if (checkNearBy && (user.Longitude != null && user.Latitude != null))
                 {
-
-                    StringBuilder userLocation = new StringBuilder();
-                    userLocation.Append(user.Address);
-                    userLocation.Append(" " + user.Ward + " " + user.District + " " + user.City);
-                    DataTable userCoordinate = await getLocation(userLocation.ToString());
-                    double userLatitude = Double.Parse(userCoordinate.Rows[0]["Latitude"].ToString());
-                    double userLongtitude = Double.Parse(userCoordinate.Rows[0]["Longitude"].ToString());
-                    var userCoord = new GeoCoordinate(userLatitude, userLongtitude);
+                    var userCoord = new GeoCoordinate(user.Latitude.Value, user.Longitude.Value);
                     var dis = Coord.GetDistanceTo(userCoord);
                     if (Coord.GetDistanceTo(userCoord) < 5000)
                     {
@@ -149,7 +134,43 @@ namespace SportsSocialNetwork.Controllers
             return View();
         }
 
-        public async Task<ActionResult> GetUserBySport(int sportId, int skip, int take)
+        public ActionResult GetFollowingUser(int skip, int take)
+        {
+            var result = new AjaxOperationResult<List<FollowSuggestViewModel>>();
+            var userService = this.Service<IAspNetUserService>();
+            var userId = User.Identity.GetUserId();
+            var userList = userService.GetActive(p => p.Follows.Where(f => f.FollowerId == userId && f.Active).ToList().Count > 0).OrderBy(p => p.FullName).Skip(skip).Take(take).ToList();
+            List<FollowSuggestViewModel> suggestUserList = Mapper.Map<List<FollowSuggestViewModel>>(userList);
+            result.AdditionalData = suggestUserList;
+            result.Succeed = true;
+            return Json(result);
+
+        }
+
+        public ActionResult GetOrderBySport(int sportId)
+        {
+            var result = new AjaxOperationResult<List<OrderSimpleViewModel>>();
+            var userId = User.Identity.GetUserId();
+            var placeService = this.Service<IPlaceService>();
+            var orderService = this.Service<IOrderService>();
+            DateTime today = DateTime.Now;
+            var orderList = orderService.GetActive(p => p.Field.FieldType.SportId == sportId && p.UserId == userId &&
+            p.Status != (int)OrderStatus.Cancel && p.Status != (int)OrderStatus.Unapproved && p.StartTime > today).OrderByDescending(p => p.CreateDate).ToList();
+            List<OrderSimpleViewModel> resultList = Mapper.Map<List<OrderSimpleViewModel>>(orderList);
+            foreach(var item in resultList)
+            {
+                var place = placeService.FirstOrDefaultActive(p => p.Fields.Where(f => f.Id == item.FieldId).ToList().Count > 0);
+                item.PlaceName = place.Name;
+                item.StartTimeString = item.StartTime.ToString("HH:mm");
+                item.EndTimeString = item.EndTime.ToString("HH:mm");
+                item.PlayDateString = item.StartTime.ToString("dd/MM/yyyy");
+            }
+            result.AdditionalData = resultList;
+            result.Succeed = true;
+            return Json(result);
+        }
+
+        public ActionResult GetUserBySport(int sportId, int skip, int take)
         {
             var result = new AjaxOperationResult<List<FollowSuggestViewModel>>();
             var userService = this.Service<IAspNetUserService>();
@@ -158,15 +179,9 @@ namespace SportsSocialNetwork.Controllers
             List<FollowSuggestViewModel> userList = new List<FollowSuggestViewModel>();
             var Coord = new GeoCoordinate();
             bool checkNearBy = false;
-            if (curUser.Address != null || curUser.District != null || curUser.Ward != null || curUser.City != null)
+            if (curUser.Longitude!=null && curUser.Latitude!=null)
             {
-                StringBuilder location = new StringBuilder();
-                location.Append(curUser.Address);
-                location.Append(" " + curUser.Ward + " " + curUser.District + " " + curUser.City);
-                DataTable coordinate = await getLocation(location.ToString());
-                double curUserLatitude = Double.Parse(coordinate.Rows[0]["Latitude"].ToString());
-                double curUserLongtitude = Double.Parse(coordinate.Rows[0]["Longitude"].ToString());
-                Coord = new GeoCoordinate(curUserLatitude, curUserLongtitude);
+                Coord = new GeoCoordinate(curUser.Latitude.Value, curUser.Longitude.Value);
                 checkNearBy = true;
             }
 
@@ -177,16 +192,9 @@ namespace SportsSocialNetwork.Controllers
             foreach (var user in users)
             {
                 FollowSuggestViewModel model = Mapper.Map<FollowSuggestViewModel>(user);
-                if (checkNearBy && (user.Address != null || user.District != null || user.Ward != null || user.City != null))
+                if (checkNearBy && (user.Longitude != null && user.Latitude != null))
                 {
-
-                    StringBuilder userLocation = new StringBuilder();
-                    userLocation.Append(user.Address);
-                    userLocation.Append(" " + user.Ward + " " + user.District + " " + user.City);
-                    DataTable userCoordinate = await getLocation(userLocation.ToString());
-                    double userLatitude = Double.Parse(userCoordinate.Rows[0]["Latitude"].ToString());
-                    double userLongtitude = Double.Parse(userCoordinate.Rows[0]["Longitude"].ToString());
-                    var userCoord = new GeoCoordinate(userLatitude, userLongtitude);
+                    var userCoord = new GeoCoordinate(user.Latitude.Value, user.Longitude.Value);
                     var dis = Coord.GetDistanceTo(userCoord);
                     if (Coord.GetDistanceTo(userCoord) < 5000)
                     {
@@ -279,7 +287,7 @@ namespace SportsSocialNetwork.Controllers
             return results;
         }
 
-        public async Task<ActionResult> GetSuggestFollow(int pageIndex, int pageSize)
+        public ActionResult GetSuggestFollow(int pageIndex, int pageSize)
         {
             var userId = User.Identity.GetUserId();
             var _userService = this.Service<IAspNetUserService>();
@@ -287,15 +295,9 @@ namespace SportsSocialNetwork.Controllers
             var curUser = _userService.FirstOrDefaultActive(p => p.Id == userId);
             var Coord = new GeoCoordinate();
             bool checkNearBy = false;
-            if (curUser.Address != null || curUser.District != null || curUser.Ward != null || curUser.City != null)
+            if (curUser.Longitude != null && curUser.Latitude != null)
             {
-                StringBuilder location = new StringBuilder();
-                location.Append(curUser.Address);
-                location.Append(" " + curUser.Ward + " " + curUser.District + " " + curUser.City);
-                DataTable coordinate = await getLocation(location.ToString());
-                double curUserLatitude = Double.Parse(coordinate.Rows[0]["Latitude"].ToString());
-                double curUserLongtitude = Double.Parse(coordinate.Rows[0]["Longitude"].ToString());
-                Coord = new GeoCoordinate(curUserLatitude, curUserLongtitude);
+                Coord = new GeoCoordinate(curUser.Latitude.Value, curUser.Longitude.Value);
                 checkNearBy = true;
             }
 
@@ -314,16 +316,9 @@ namespace SportsSocialNetwork.Controllers
                     }
                 }
 
-                if (checkNearBy && (user.Address != null || user.District != null || user.Ward != null || user.City != null))
+                if (checkNearBy && (user.Longitude != null && user.Latitude != null))
                 {
-
-                    StringBuilder userLocation = new StringBuilder();
-                    userLocation.Append(user.Address);
-                    userLocation.Append(" " + user.Ward + " " + user.District + " " + user.City);
-                    DataTable userCoordinate =await getLocation(userLocation.ToString());
-                    double userLatitude = Double.Parse(userCoordinate.Rows[0]["Latitude"].ToString());
-                    double userLongtitude = Double.Parse(userCoordinate.Rows[0]["Longitude"].ToString());
-                    var userCoord = new GeoCoordinate(userLatitude, userLongtitude);
+                    var userCoord = new GeoCoordinate(user.Latitude.Value, user.Longitude.Value);
                     var dis = Coord.GetDistanceTo(userCoord);
                     if (Coord.GetDistanceTo(userCoord) < 5000)
                     {
@@ -607,7 +602,7 @@ namespace SportsSocialNetwork.Controllers
             return Json(result);
         }
 
-        public async Task<ActionResult> SearchDetail(string keyword)
+        public ActionResult SearchDetail(string keyword)
         {
             var _userService = this.Service<IAspNetUserService>();
             var userId = User.Identity.GetUserId();
@@ -644,19 +639,11 @@ namespace SportsSocialNetwork.Controllers
             List<FollowSuggestViewModel> userList = new List<FollowSuggestViewModel>();
             var Coord = new GeoCoordinate();
             bool checkNearBy = false;
-            if (curUser.Address != null || curUser.District != null || curUser.Ward != null || curUser.City != null)
+            if (curUser.Longitude != null && curUser.Latitude != null)
             {
-                StringBuilder location = new StringBuilder();
-                location.Append(curUser.Address);
-                location.Append(" " + curUser.Ward + " " + curUser.District + " " + curUser.City);
-                DataTable coordinate = await getLocation(location.ToString());
-                double curUserLatitude = Double.Parse(coordinate.Rows[0]["Latitude"].ToString());
-                double curUserLongtitude = Double.Parse(coordinate.Rows[0]["Longitude"].ToString());
-                Coord = new GeoCoordinate(curUserLatitude, curUserLongtitude);
+                Coord = new GeoCoordinate(curUser.Latitude.Value, curUser.Longitude.Value);
                 checkNearBy = true;
             }
-
-
             var users = _userService.GetActive(p => p.Id != userId && p.AspNetRoles.Where(k =>
             k.Name != "Quản trị viên" && k.Name != "Moderator").ToList().Count > 0 &&
             p.Follows.Where(f => f.Active == true && (f.FollowerId == userId)).ToList().Count == 0).ToList();
@@ -673,23 +660,16 @@ namespace SportsSocialNetwork.Controllers
                     }
                 }
 
-                if (checkNearBy && (user.Address != null || user.District != null || user.Ward != null || user.City != null))
+                if (checkNearBy && (user.Longitude != null && user.Latitude != null))
                 {
-
-                    StringBuilder userLocation = new StringBuilder();
-                    userLocation.Append(user.Address);
-                    userLocation.Append(" " + user.Ward + " " + user.District + " " + user.City);
-                    DataTable userCoordinate = await getLocation(userLocation.ToString());
-                    double userLatitude = Double.Parse(userCoordinate.Rows[0]["Latitude"].ToString());
-                    double userLongtitude = Double.Parse(userCoordinate.Rows[0]["Longitude"].ToString());
-                    var userCoord = new GeoCoordinate(userLatitude, userLongtitude);
+                    var userCoord = new GeoCoordinate(user.Latitude.Value, user.Longitude.Value);
                     var dis = Coord.GetDistanceTo(userCoord);
                     if (Coord.GetDistanceTo(userCoord) < 5000)
                     {
                         model.weight += 2;
                     }
                 }
-
+                
                 int hobbyCount = 1;
                 foreach (var hobby in user.Hobbies)
                 {

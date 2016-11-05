@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="~/Content/assets/vendor/magnific-popup/magnific-popup.css">
     <link rel="stylesheet" href="~/Content/js/sweetAlert/sweetalert.css" />
     <style>
+        #orderTable tr:hover{
+            cursor: pointer;
+            background-color: #62a8ea;
+        }
         .media {
             overflow: visible;
         }
@@ -173,43 +177,72 @@
     <div class="col-sm-6">
         <!--Post area-->
         <div class="col-sm-12 panel padding-30" id="activities" role="tabpanel">
-            <h4 class="title" style="padding:0 0 10px">Mời người xung quanh cùng chơi thể thao</h4>
-            <div class="col-sm-6">
-                <textarea class="form-control input-cmnt" rows="5" placeholder="Nhập nội dung gửi đến người chơi"></textarea>
-                <br />
-                <input id="sportSelect" type="text" class="form-control input-cmnt" placeholder="Chọn môn thể thao">
-            </div>
-            <div class="col-sm-6">
-                <div class="nav-tabs-horizontal">
-                    <ul class="nav nav-tabs" data-plugin="nav-tabs" role="tablist" style="background-color:white;">
-                        <li class="active" role="presentation" id="disscuss">
-                            <a data-toggle="tab" href="#exampleTabsOne" aria-controls="exampleTabsOne"
-                               role="tab">Xung quanh</a>
-                        </li>
-                        <li role="presentation" id="members">
-                            <a data-toggle="tab" href="#exampleTabsTwo" aria-controls="exampleTabsTwo"
-                               role="tab">Theo dõi</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="exampleTabsOne" role="tabpanel">
-                            <div style="border:1px solid #e4eaec" class="height-250 check" id="check1" data-plugin="scrollable">
-                                <div data-role="container" class="check" id="check2">
-                                    <div data-role="content" id="containerNearByUser" class="padding-10 check">
+            <form id="invite-form" method="post" autocomplete="off">
+                <h3 class="title" style="padding:0 0 10px">Mời người xung quanh cùng chơi thể thao</h3>
+                <p style="font-size:12px">※Hãy chọn môn thể thao bạn muốn chơi, nhập nội dung mời và chọn người bạn muốn chơi cùng để gửi lời mời này</p>
+                <div class="col-sm-6 padding-left-0">
+                    <input id="sportSelect" name="sportSelect" type="text" class="form-control input-cmnt" placeholder="Chọn môn thể thao">
+                    <br />
+                    <textarea name="inviteContent" class="form-control input-cmnt" style="resize:none" rows="7" placeholder="Nhập nội dung mời..."></textarea>
+
+
+                </div>
+                <div class="col-sm-6 padding-0">
+                    <div class="nav-tabs-horizontal">
+                        <ul class="nav nav-tabs" data-plugin="nav-tabs" role="tablist" style="background-color:white;">
+                            <li class="active" role="presentation" id="disscuss">
+                                <a style="border:1px solid #e4eaec;padding:5px;font-size:12px" data-toggle="tab" onclick="changeSize1()" href="#exampleTabsOne" aria-controls="exampleTabsOne"
+                                   role="tab">Xung quanh</a>
+                            </li>
+                            <li role="presentation" id="members">
+                                <a style="border:1px solid #e4eaec;padding:5px;font-size:12px" data-toggle="tab" onclick="changeSize2()" href="#exampleTabsTwo" aria-controls="exampleTabsTwo"
+                                   role="tab">Đang theo dõi</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="exampleTabsOne" role="tabpanel">
+                                <div style="border:1px solid #e4eaec" class="padding-10 height-250 tabNearBy" id="check1" data-plugin="scrollable">
+                                    <div data-role="container" class="tabNearBy" id="containerNearByUser">
+                                        <div data-role="content" id="contentNearByUser" class="tabNearBy">
+
+                                        </div>
 
                                     </div>
 
                                 </div>
+                            </div>
+                            <div class="tab-pane" id="exampleTabsTwo" role="tabpanel" style="background-color:white;">
+                                <div style="border:1px solid #e4eaec" class="padding-10 height-250 tabFollowing" id="check1" data-plugin="scrollable">
+                                    <div data-role="container" class="tabFollowing" id="containerFollowingUser">
+                                        <div data-role="content" id="contentFollowingUser" class="tabFollowing">
 
+                                        </div>
+
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
-                        <div class="tab-pane" id="exampleTabsTwo" role="tabpanel" style="background-color:white;">
-                        </div>
                     </div>
-                </div>
-                
 
-            </div>
+
+                </div>
+                <div class="col-sm-12 margin-top-15 padding-right-0 padding-left-0">
+                    <p style="font-size:12px">※Bạn đã đặt sân? Hãy chia sẻ thông tin đặt sân với người mà bạn muốn mời</p>
+                    <div class="form-group padding-0">
+                        <div class="col-sm-8 padding-0">
+                            <input name="orderInfo" id="orderInfo" style="resize:none" type="text" class="form-control input-cmnt" readonly placeholder="Mã đơn đặt sân">
+                        </div>
+                        <button type="button" id="chooseOrder" class="btn btn-primary col-sm-4">Chọn đơn đặt sân</button>
+                    </div>
+
+                </div>
+                <br />
+                <div class="col-sm-12 margin-top-50 form-group text-center">
+                    <button type="submit" class="btn btn-primary">Đồng ý</button>
+                    <button type="reset" class="btn btn-default">Hủy bỏ</button>
+                </div>
+            </form>
         </div>
         <!--END Post area-->
     </div>
@@ -219,39 +252,39 @@
     <div class="col-sm-3">
         @if (ViewBag.suggestUserList != null && ViewBag.suggestUserList.Count > 0)
             {
-            <div class="panel" id="suggest-follow-panel">
-                <div class="panel-heading text-center">
-                    <h class="panel-title" style="font-family:sans-serif">Gợi ý theo dõi</h>
-                </div>
-                <div class="panel-body">
-                    <div class="height-250 check" id="check" data-plugin="scrollable">
-                        <div data-role="container">
-                            <div data-role="content" id="container">
-                                @foreach (var item in ViewBag.suggestUserList)
+        <div class="panel" id="suggest-follow-panel">
+            <div class="panel-heading text-center">
+                <h class="panel-title" style="font-family:sans-serif">Gợi ý theo dõi</h>
+            </div>
+            <div class="panel-body">
+                <div class="height-250 check" id="check" data-plugin="scrollable">
+                    <div data-role="container">
+                        <div data-role="content" id="container">
+                            @foreach (var item in ViewBag.suggestUserList)
                                 {
-                                    <div class='comment media suggestion' id="@item.Id">
-                                        <div class='media-left'>
-                                            <a class='avatar avatar-lg' href='javascript:void(0)'>
-                                                <img style='height:50px;width:50px' src='@item.AvatarImage' alt='...'>
-                                            </a>
-                                        </div>
-                                        <div class='comment-body media-body'>
-                                            <a class='comment-author' href='javascript:void(0)'>@item.FullName</a>
-                                            <div class='comment-content'>
-                                                @if (item.sameSport != 0)
-                                                {<p>Có chung @item.sameSport sở thích</p>}
-                                            </div><button onclick="follow('@item.Id')" class='btn-xs btn-success'><i class='fa fa-rss' aria-hidden='true'></i> Theo dõi</button>
-                                        </div>
+                                <div class='comment media suggestion' id="@item.Id">
+                                    <div class='media-left'>
+                                        <a class='avatar avatar-lg' href='javascript:void(0)'>
+                                            <img style='height:50px;width:50px' src='@item.AvatarImage' alt='...'>
+                                        </a>
                                     </div>
+                                    <div class='comment-body media-body'>
+                                        <a class='comment-author' href='javascript:void(0)'>@item.FullName</a>
+                                        <div class='comment-content'>
+                                            @if (item.sameSport != 0)
+                                                {<p>Có chung @item.sameSport sở thích</p>}
+                                        </div><button onclick="follow('@item.Id')" class='btn-xs btn-success'><i class='fa fa-rss' aria-hidden='true'></i> Theo dõi</button>
+                                    </div>
+                                </div>
                                 }
-
-                            </div>
 
                         </div>
 
                     </div>
+
                 </div>
             </div>
+        </div>
 
         }
 
@@ -284,7 +317,22 @@
     </div>
 </div>
 <!--END right side-bar-->
+<div class="modal fade" id="orderForm" aria-hidden="true" role="dialog" tabindex="-1">
+    <div class="modal-dialog panel">
+        <div class="modal-header">
+            <button type="button" class="close" aria-hidden="true" data-dismiss="modal">×</button>
+            <h4 class="modal-title">Danh sách các đơn đặt sân khả dụng</h4>
+        </div>
+        <div class="modal-body" id="orderList">
 
+        </div>
+        <div class="modal-footer">
+            <div class="form-actions">
+                <button class="btn btn-primary" data-dismiss="modal" type="button">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts{
     <script src="~/Content/assets/js/plugins/jquery.sticky-kit.min.js"></script>
@@ -294,10 +342,63 @@
     <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
     <script>
 
+        $('#invite-form').submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(document.getElementById('invite-form'));
+            var checkedValue = [];
+            $('.user:checked').each(function() {
+                checkedValue.push($(this).attr('value'));
+            });
+            for(var i = 0; i< checkedValue.length; i++){
+                formData.append('userId', checkedValue[i]);
+            }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateInvitation", "UserInvitation")',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result.Succeed) {
+                        showMessage("Cập nhật thành công.", "success", "OK");
+                    } else {
+                        showErrors(result.Errors);
+                        showMessage("Không thể cập nhật.", "error", "OK");
+
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        });
+
         var nearByUserSkip = 0;
         var nearByUserTake = 10;
+        var followingUserSkip = 0;
+        var followingUserTake = 10;
 
-        $(".check").scroll(function(){
+        $(document).ready(function () {
+            loadFollowingUser();
+        });
+
+        function changeSize1(){
+            var x = $("#containerFollowingUser").width();
+            var y = $("#contentFollowingUser").width();
+            $("#containerNearByUser").width(x);
+            $("#contentNearByUser").width(y);
+        }
+
+        function changeSize2(){
+            var x = $("#containerNearByUser").width();
+            var y = $("#contentNearByUser").width();
+            $("#containerFollowingUser").width(x);
+            $("#contentFollowingUser").width(y);
+        }
+
+        $(".tabNearBy").scroll(function(){
             if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight){
                 nearByUserSkip = nearByUserSkip + nearByUserTake;
                 var sport = $("#sportSelect").val();
@@ -305,12 +406,81 @@
             }
         });
 
+        $(".tabFollowing").scroll(function(){
+            if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight){
+                followingUserSkip = followingUserSkip + followingUserTake;
+                loadFollowingUser();
+            }
+        });
+
         $("#sportSelect").on("change", function(){
             nearByUserSkip = 0;
             nearByUserTake = 10;
+            $("#containerNearByUser").empty();
             var sport = $("#sportSelect").val();
             loadNearByUser(sport);
+            loadOrder(sport);
         })
+
+        function loadOrder(id){
+            var ddl = $('#orderList');
+                var content = "";
+                ddl.empty();
+                ddl.append('<div class="table-responsive"><table class="table table-bordered"><thead><tr><th>Mã đơn</th><th>Thời gian</th><th>Địa điểm</th></tr></thead><tbody id="orderTable"></tbody></table></div>');
+            $.ajax({
+                url: '@Url.Action("GetOrderBySport", "SSN")',
+                type: 'POST',
+                data: {
+                    'sportId': id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if(data.Succeed){
+                        $(data.AdditionalData).each(function () {
+                            if (this.OrderCode != null) {
+                                content += '<tr onclick="getOrder('+this.OrderCode+')"><td>' + this.OrderCode + '</td><td>' 
+                                    + this.StartTimeString + ' - ' + this.EndTimeString
+                                    + ' Ngày '+ this.PlayDateString +'</td>'
+                                    +'<td>Sân: '+ this.FieldName +', Địa điểm: '+ this.PlaceName +'</td></tr>';
+                            }
+                        });
+
+                        if (content != "") {
+                            $('#orderTable').append(content);
+                        }
+                        else {
+                            ddl.empty();
+                            ddl.append("Chưa có đơn đặt sân khả dụng");
+                        }
+                    }
+                }
+            });
+        }
+
+        function getOrder(code){
+            $('#orderForm').modal('toggle');
+            $("#orderInfo").val("");
+            $("#orderInfo").val(code);
+        }
+
+        function loadFollowingUser(){
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetFollowingUser", "SSN")',
+                data: { "skip": followingUserSkip, "take": followingUserTake },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Succeed) {
+                        appendFollowingUser(data.AdditionalData);
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
 
         function loadNearByUser(id){
             $.ajax({
@@ -333,10 +503,19 @@
 
         function appendNearByUser(data){
             $(data).each(function () {
-                var info = '<input type="checkbox" name="nearbyUser" value="'+this.Id+'"><a class="avatar avatar-lg" href="javascript:void(0)">'
-                          +'<img style="height:50px;width:50px" src="'+this.AvatarImage+'">'+this.FullName
+                var info = '<input type="checkbox" class="user" name="user" value="'+this.Id+'"><a class="avatar avatar-lg" href="javascript:void(0)">'
+                          +'<img style="height:50px;width:50px" src="'+this.AvatarImage+'"> '+this.FullName
                           +'</a><br><br>';
                 $("#containerNearByUser").append(info);
+            })
+        }
+
+        function appendFollowingUser(data){
+            $(data).each(function () {
+                var info = '<input type="checkbox" class="user" name="user" value="'+this.Id+'"><a class="avatar avatar-lg" href="javascript:void(0)">'
+                          +'<img style="height:50px;width:50px" src="'+this.AvatarImage+'"> '+this.FullName
+                          +'</a><br><br>';
+                $("#containerFollowingUser").append(info);
             })
         }
 
@@ -386,6 +565,9 @@
             });
         }
 
+        $('#chooseOrder').on('click', function () {
+            $('#orderForm').modal('show');
+        });
 
     </script>
 }
