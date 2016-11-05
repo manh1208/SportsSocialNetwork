@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="~/Content/assets/vendor/intro-js/introjs.css">
     <link rel="stylesheet" href="~/Content/assets/vendor/slidepanel/slidePanel.css">
     <link rel="stylesheet" href="~/Content/assets/vendor/flag-icon-css/flag-icon.css">
-
+    <link rel="stylesheet" href="~/Content/assets/vendor/formvalidation/formValidation.css">
     <link rel="stylesheet" href="~/Content/font-awesome-4.6.3/css/font-awesome.min.css">
 
     <!-- Page -->
@@ -242,7 +242,7 @@
             </div>
             <!-- End Navbar Collapse -->
             <!-- Site Navbar Seach -->
-            <div class="collapse navbar-search-overlap col-md-6" style="border:solid 1px" id="site-navbar-search">
+            <div class="collapse navbar-search-overlap col-md-6" style="border:solid 1px;padding:0" id="site-navbar-search">
                 <form role="search" autocomplete="off">
                     <div class="form-group">
                         <div class="input-search">
@@ -305,7 +305,8 @@
     <script src="~/Content/assets/js/components/asscrollable.js"></script>
     <script src="~/Content/assets/js/components/animsition.js"></script>
     <script src="~/Content/assets/js/components/slidepanel.min.js"></script>
-
+    <script src="~/Content/assets/vendor/formvalidation/formValidation.min.js"></script>
+    <script src="~/Content/assets/vendor/formvalidation/framework/bootstrap.min.js"></script>
     <script src="~/Content/assets/js/components/switchery.js"></script>
     <!--Sweet Alert-->
     <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
@@ -338,20 +339,23 @@
         function searchEvent() {
             $("#form-search-event").submit();
         }
-
+        var hasUser = false;
+        var hasGroup = false;
         $("#search-input").on("keyup", function () {
             var keyword = $("#search-input").val();
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("GetSearchUserResult", "SSN")',
                 async: false,
-                data: { "keyword": keyword },
+                data: { "keyword": keyword, "skip": 0, "take": 5 },
                 success: function (result) {
                     if (result.Succeed) {
                         $("#showSearch").empty();
-                        showSearch(result.AdditionalData);
-                        $("#showSearch").show();
-
+                        if (result.AdditionalData != null) {
+                            showSearchUser(result.AdditionalData);
+                            $("#showSearch").show();
+                            hasUser = true;
+                        }
                     }
                 }
             });
@@ -359,25 +363,33 @@
                 type: 'POST',
                 url: '@Url.Action("GetSearchGroupList", "SSN")',
                 async: false,
-                data: { "keyword": keyword },
+                data: { "keyword": keyword, "skip": 0, "take": 2 },
                 success: function (result) {
                     if (result.Succeed) {
-                        showSearch(result.AdditionalData);
-                        $("#showSearch").show();
-
+                        if (result.AdditionalData != null) {
+                            showSearchGroup(result.AdditionalData);
+                            $("#showSearch").show();
+                            hasGroup = true;
+                        }
+                        
                     }
                 }
             });
+            if (hasGroup || hasUser) {
+                $("#showSearch").append("<div tabindex='0' style='padding:10px' class='comment media user-search'><a href='/SSN/SearchDetail?keyword="+keyword+"'>"
+                    + "<i class='icon wb-search' aria-hidden='true'></i> Xem toàn bộ kết quả</a></div>");
+            }
         });
 
-        function showSearch(data) {
-            $(data).each(function () {
+        function showSearchUser(data) {
+            $("#showSearch").append("<div style='background-color:#ffefdf;margin-bottom:5px' tabindex='0' class='padding-left-10'>Cá nhân</div>");
+            $(data.userList).each(function () {
                 var hobby = "";
                 if (this.sameSport != 0) {
                     hobby = "<span class='comment-content'><p>Có chung " + this.sameSport
                         + " sở thích</p></span>";
                 }
-                var info = "<div tabindex='0' style='padding:10px' class='comment media user-search'><a href='javascript:void(0)'>"
+                var info = "<div tabindex='0' style='padding:0 0 0 10px' class='comment media user-search'><a href='javascript:void(0)'>"
                 + "<span class='media-left'>"
                 + "<span class='avatar avatar-lg'>"
                 + "<img style='height:50px;width:50px' src='" + this.AvatarImage + "'>"
@@ -385,6 +397,24 @@
                 + "<span class='comment-body media-body'>"
                 + "<span class='comment-author'>" + this.FullName + "</span>"
                 + hobby + "</span></a></div>";
+                $("#showSearch").append(info);
+
+            });
+
+        }
+
+        function showSearchGroup(data) {
+            $("#showSearch").append("<div style='background-color:#ffefdf;margin-bottom:5px' tabindex='0' class='padding-left-10'>Hội nhóm</div>");
+            $(data.listGroup).each(function () {
+                var info = "<div tabindex='0' style='padding:0 0 0 10px' class='comment media user-search'><a href='/Group/Index/"+this.Id+"'>"
+                + "<span class='media-left'>"
+                + "<span class='avatar avatar-lg'>"
+                + "<img style='height:50px;width:50px' src='" + this.Avatar + "'>"
+                + "</span></span>"
+                + "<span class='comment-body media-body'>"
+                + "<span class='comment-author'>" + this.Name + "</span>"
+                + "<span class='comment-content'><p>Nhóm " + this.sport.Name
+                        + " </p></span>" + "</span></a></div>";
                 $("#showSearch").append(info);
 
             });

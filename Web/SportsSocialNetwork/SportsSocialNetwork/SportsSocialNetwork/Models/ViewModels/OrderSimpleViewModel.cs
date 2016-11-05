@@ -32,5 +32,6 @@ namespace SportsSocialNetwork.Models.ViewModels
         public string PayerEmail { get; set; }
         public String OrderCode { get; set; }
         public String QRCodeUrl { get; set; }
+        public String PlayDateString { get; set; }
     }
 }

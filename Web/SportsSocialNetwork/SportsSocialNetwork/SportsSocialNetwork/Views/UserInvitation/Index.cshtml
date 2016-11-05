@@ -1,0 +1,589 @@
+﻿@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_SSNLayout.cshtml";
+    var sport = ViewBag.Sport as IEnumerable<SelectListItem>;
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/Content/assets/vendor/asscrollable/asScrollable.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/magnific-popup/magnific-popup.css">
+    <link rel="stylesheet" href="~/Content/js/sweetAlert/sweetalert.css" />
+    <style>
+        #orderTable tr:hover{
+            cursor: pointer;
+            background-color: #62a8ea;
+        }
+        .media {
+            overflow: visible;
+        }
+
+        .media-body {
+            overflow: visible;
+        }
+
+        .select2-dropdown {
+            z-index: 99999;
+        }
+
+        .panel-cover {
+            margin: 0 0 10px 0;
+        }
+
+        .panel-status {
+            margin-bottom: 15px;
+        }
+
+        .suggest-group {
+            border: 1px solid lightgray;
+            overflow: hidden;
+            padding-top: 15px;
+            margin: 10px;
+        }
+
+        .after-run .site-menubar-fold .page, .after-run .site-menubar-fold .site-footer {
+            margin-left: 0;
+        }
+
+        .after-run .site-menubar-unfold .page, .after-run .site-menubar-unfold .site-footer {
+            margin-left: 0;
+        }
+
+        .page-aside-inner {
+            max-width: 600px;
+        }
+
+        .page-main .panel-body {
+            padding-top: 0;
+        }
+
+        .page-main .page-content {
+            padding: 10px;
+            padding-right: 0px;
+        }
+
+        .panel {
+            margin-bottom: 10px;
+            font-family: sans-serif;
+        }
+
+            .panel.panel-cover {
+                margin: 0px;
+            }
+
+        .page-aside {
+            top: 10px;
+        }
+
+            .page-aside .widget-header {
+                padding-top: 0px;
+            }
+
+        .panel-cover img {
+            height: 150px;
+        }
+
+        .status-panel {
+            padding-top: 5px;
+        }
+
+            .status-panel textarea {
+                border: none;
+                border-bottom: 1px whitesmoke solid;
+                resize: none;
+            }
+
+        @@media(max-width: 768px) {
+            .page-aside-inner {
+                position: unset;
+            }
+
+            .page-main .page-content {
+                padding: 10px;
+            }
+        }
+
+        .list-group-item {
+            font-size: 16px;
+        }
+
+        .load {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .list-inline li {
+            margin: 5px;
+            padding: 0;
+            height: 100px;
+            width: 100px;
+        }
+
+        .list-inline {
+            white-space: nowrap;
+        }
+
+        #check {
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+        }
+    </style>
+}
+
+<div class="row" style="font-family:sans-serif">
+    <!--Left side-bar-->
+    <div class="col-sm-3">
+        <div class="widget widget-shadow text-center">
+            <div class="widget-header">
+                <div class="widget-header-content">
+                    <a class="avatar avatar-lg" href="javascript:void(0)">
+                        <img src="@ViewBag.User.AvatarImage" style="height:130px;width:130px">
+                    </a>
+                    <div class="profile-user">@User.Identity.Name</div>
+                </div>
+            </div>
+            <div class="widget-footer">
+                <div class="row no-space">
+                    <div class="col-xs-6">
+                        <strong class="profile-stat-count">@ViewBag.Follower</strong>
+                        <span>Người theo dõi</span>
+                    </div>
+                    <div class="col-xs-6">
+                        <strong class="profile-stat-count">@ViewBag.Following</strong>
+                        <span>Đang theo dõi</span>
+                    </div>
+                </div>
+            </div>
+            @if (ViewBag.GroupList.Count > 0)
+            {
+                <div class="widget-header">
+                    <div class="widget-header-content">
+                        <h3>Nhóm thể thao</h3>
+                        @foreach (var item in ViewBag.GroupList)
+                        {
+                            <a class="list-group-item" href="javascript:void(0)">@item.Name</a>
+                        }
+
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+    <!--END Left side-bar-->
+    <!--Main-->
+    <div class="col-sm-6">
+        <!--Post area-->
+        <div class="col-sm-12 panel padding-30" id="activities" role="tabpanel">
+            <form id="invite-form" method="post" autocomplete="off">
+                <h3 class="title" style="padding:0 0 10px">Mời người xung quanh cùng chơi thể thao</h3>
+                <p style="font-size:12px">※Hãy chọn môn thể thao bạn muốn chơi, nhập nội dung mời và chọn người bạn muốn chơi cùng để gửi lời mời này</p>
+                <div class="col-sm-6 padding-left-0">
+                    <input id="sportSelect" name="sportSelect" type="text" class="form-control input-cmnt" placeholder="Chọn môn thể thao">
+                    <br />
+                    <textarea name="inviteContent" id="inviteContent" class="form-control input-cmnt" style="resize:none" rows="10" placeholder="Nhập nội dung mời (bắt buộc)"></textarea>
+
+
+                </div>
+                <div class="col-sm-6 padding-0">
+                    <div class="nav-tabs-horizontal">
+                        <ul class="nav nav-tabs" data-plugin="nav-tabs" role="tablist" style="background-color:white;">
+                            <li class="active" role="presentation" id="disscuss">
+                                <a style="border:1px solid #e4eaec;padding:5px;font-size:12px" data-toggle="tab" onclick="changeSize1()" href="#exampleTabsOne" aria-controls="exampleTabsOne"
+                                   role="tab">Xung quanh</a>
+                            </li>
+                            <li role="presentation" id="members">
+                                <a style="border:1px solid #e4eaec;padding:5px;font-size:12px" data-toggle="tab" onclick="changeSize2()" href="#exampleTabsTwo" aria-controls="exampleTabsTwo"
+                                   role="tab">Đang theo dõi</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="exampleTabsOne" role="tabpanel">
+                                <div style="border:1px solid #e4eaec;height:262px" class="padding-10 tabNearBy" id="check1" data-plugin="scrollable">
+                                    <div data-role="container" class="tabNearBy" id="containerNearByUser">
+                                        <div data-role="content" id="contentNearByUser" class="tabNearBy">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="exampleTabsTwo" role="tabpanel" style="background-color:white;">
+                                <div style="border:1px solid #e4eaec" class="padding-10 height-250 tabFollowing" id="check1" data-plugin="scrollable">
+                                    <div data-role="container" class="tabFollowing" id="containerFollowingUser">
+                                        <div data-role="content" id="contentFollowingUser" class="tabFollowing">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-sm-12 margin-top-30 padding-right-0 padding-left-0">
+                    <p style="font-size:12px">※Bạn đã đặt sân? Hãy chia sẻ thông tin đặt sân với người mà bạn muốn mời</p>
+                    <div class="form-group padding-0">
+                        <div class="col-sm-8 padding-0">
+                            <input name="orderInfo" id="orderInfo" style="resize:none" type="text" class="form-control input-cmnt" readonly placeholder="Mã đơn đặt sân">
+                        </div>
+                        <button type="button" id="chooseOrder" class="btn btn-primary col-sm-4">Chọn đơn đặt sân</button>
+                    </div>
+
+                </div>
+                <br />
+                <div class="col-sm-12 margin-top-50 form-group text-center">
+                    <button id="createInvi" type="submit" class="btn btn-primary">Đồng ý</button>
+                    <button id="resetForm" type="reset" class="btn btn-default">Hủy bỏ</button>
+                </div>
+            </form>
+        </div>
+        <!--END Post area-->
+    </div>
+    <!--END Main-->
+    <!--Right side-bar-->
+
+    <div class="col-sm-3">
+        @if (ViewBag.suggestUserList != null && ViewBag.suggestUserList.Count > 0)
+            {
+        <div class="panel" id="suggest-follow-panel">
+            <div class="panel-heading text-center">
+                <h class="panel-title" style="font-family:sans-serif">Gợi ý theo dõi</h>
+            </div>
+            <div class="panel-body">
+                <div class="height-250 check" id="check" data-plugin="scrollable">
+                    <div data-role="container">
+                        <div data-role="content" id="container">
+                            @foreach (var item in ViewBag.suggestUserList)
+                                {
+                                <div class='comment media suggestion' id="@item.Id">
+                                    <div class='media-left'>
+                                        <a class='avatar avatar-lg' href='javascript:void(0)'>
+                                            <img style='height:50px;width:50px' src='@item.AvatarImage' alt='...'>
+                                        </a>
+                                    </div>
+                                    <div class='comment-body media-body'>
+                                        <a class='comment-author' href='javascript:void(0)'>@item.FullName</a>
+                                        <div class='comment-content'>
+                                            @if (item.sameSport != 0)
+                                                {<p>Có chung @item.sameSport sở thích</p>}
+                                        </div><button onclick="follow('@item.Id')" class='btn-xs btn-success'><i class='fa fa-rss' aria-hidden='true'></i> Theo dõi</button>
+                                    </div>
+                                </div>
+                                }
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        }
+
+        <div class="panel">
+            <div class="panel-heading text-center">
+                <h3 class="panel-title" style="font-family:sans-serif">Gợi ý tin tức nên xem</h3>
+            </div>
+            <div class="panel-body" style="padding:0;padding-bottom:10px">
+                <div class="suggest-group">
+                    <div class="col-sm-12">
+                        <div class="overlay">
+                            <img src="@ViewBag.SuggestNews.Image" style="display:block; max-height:100%;max-width:100%;" />
+                            <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                <h4><span class="fa fa-eye"> 255</span></h4>
+                            </figcaption>
+                        </div>
+                        <div class="row">
+                            <div class="clearfix"></div>
+                            <div class="col-sm-12 height-60">
+                                <span class="vertical-align-middle" style="font-weight:bold">@ViewBag.SuggestNews.Title</span>
+                                <span class="vertical-align-middle"><i class="fa fa-pencil" aria-hidden="true"></i> bởi @ViewBag.SuggestNews.AspNetUser.UserName</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right"><em>Xem những tin khác</em></div>
+
+        </div>
+    </div>
+</div>
+<!--END right side-bar-->
+<div class="modal fade" id="orderForm" aria-hidden="true" role="dialog" tabindex="-1">
+    <div class="modal-dialog panel">
+        <div class="modal-header">
+            <button type="button" class="close" aria-hidden="true" data-dismiss="modal">×</button>
+            <h4 class="modal-title">Danh sách các đơn đặt sân khả dụng</h4>
+        </div>
+        <div class="modal-body" id="orderList">
+
+        </div>
+        <div class="modal-footer">
+            <div class="form-actions">
+                <button class="btn btn-primary" data-dismiss="modal" type="button">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/assets/js/plugins/jquery.sticky-kit.min.js"></script>
+    <script src="~/Content/assets/vendor/magnific-popup/jquery.magnific-popup.js"></script>
+    <script src="~/Content/assets/js/components/magnific-popup.js"></script>
+    <script src="~/Content/js/custom-script.js"></script>
+    <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
+    <script>
+
+        function resetForm(){
+            $('.user').prop('checked', false);
+            $("#inviteContent").val("");
+            $("#orderInfo").val("");
+        }
+        
+        $("#resetForm").on("click",function(){
+            resetForm();
+        })
+
+        $('#invite-form').submit(function (e) {
+            e.preventDefault();
+            var content = $("#inviteContent").val();
+            var formData = new FormData(document.getElementById('invite-form'));
+            var checkedValue = [];
+            $('.user:checked').each(function() {
+                checkedValue.push($(this).attr('value'));
+            });
+            if(checkedValue.length > 0 && content ){
+                for(var i = 0; i< checkedValue.length; i++){
+                    formData.append('userId', checkedValue[i]);
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CreateInvitation", "UserInvitation")',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            showMessage("Gửi lời mời thành công", "success", "OK");
+                            resetForm();
+                        } else {
+                            showErrors(result.Errors);
+                            showMessage("Không thể cập nhật.", "error", "OK");
+
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+            }
+            
+        });
+
+        var nearByUserSkip = 0;
+        var nearByUserTake = 10;
+        var followingUserSkip = 0;
+        var followingUserTake = 10;
+
+        $(document).ready(function () {
+            loadFollowingUser();
+        });
+
+        function changeSize1(){
+            var x = $("#containerFollowingUser").width();
+            var y = $("#contentFollowingUser").width();
+            $("#containerNearByUser").width(x);
+            $("#contentNearByUser").width(y);
+        }
+
+        function changeSize2(){
+            var x = $("#containerNearByUser").width();
+            var y = $("#contentNearByUser").width();
+            $("#containerFollowingUser").width(x);
+            $("#contentFollowingUser").width(y);
+        }
+
+        $(".tabNearBy").scroll(function(){
+            if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight){
+                nearByUserSkip = nearByUserSkip + nearByUserTake;
+                var sport = $("#sportSelect").val();
+                loadNearByUser(sport);
+            }
+        });
+
+        $(".tabFollowing").scroll(function(){
+            if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight){
+                followingUserSkip = followingUserSkip + followingUserTake;
+                loadFollowingUser();
+            }
+        });
+
+        $("#sportSelect").on("change", function(){
+            nearByUserSkip = 0;
+            nearByUserTake = 10;
+            $("#containerNearByUser").empty();
+            $("#orderInfo").val("");
+            var sport = $("#sportSelect").val();
+            loadNearByUser(sport);
+            loadOrder(sport);
+        })
+
+        function loadOrder(id){
+            var ddl = $('#orderList');
+                var content = "";
+                ddl.empty();
+                ddl.append('<div class="table-responsive"><table class="table table-bordered"><thead><tr><th>Mã đơn</th><th>Thời gian</th><th>Địa điểm</th></tr></thead><tbody id="orderTable"></tbody></table></div>');
+            $.ajax({
+                url: '@Url.Action("GetOrderBySport", "SSN")',
+                type: 'POST',
+                data: {
+                    'sportId': id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if(data.Succeed){
+                        $(data.AdditionalData).each(function () {
+                            if (this.OrderCode != null) {
+                                content += '<tr onclick="getOrder('+this.OrderCode+')"><td>' + this.OrderCode + '</td><td>' 
+                                    + this.StartTimeString + ' - ' + this.EndTimeString
+                                    + ' Ngày '+ this.PlayDateString +'</td>'
+                                    +'<td>Sân: '+ this.FieldName +', Địa điểm: '+ this.PlaceName +'</td></tr>';
+                            }
+                        });
+
+                        if (content != "") {
+                            $('#orderTable').append(content);
+                        }
+                        else {
+                            ddl.empty();
+                            ddl.append("Chưa có đơn đặt sân khả dụng");
+                        }
+                    }
+                }
+            });
+        }
+
+        function getOrder(code){
+            $('#orderForm').modal('toggle');
+            $("#orderInfo").val("");
+            $("#orderInfo").val(code);
+        }
+
+        function loadFollowingUser(){
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetFollowingUser", "SSN")',
+                data: { "skip": followingUserSkip, "take": followingUserTake },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Succeed) {
+                        appendFollowingUser(data.AdditionalData);
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
+
+        function loadNearByUser(id){
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetUserBySport", "SSN")',
+                data: { "sportId": id, "skip": nearByUserSkip, "take": nearByUserTake },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Succeed) {
+                        appendNearByUser(data.AdditionalData);
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
+
+        function appendNearByUser(data){
+            $(data).each(function () {
+                var info = '<input type="checkbox" class="user" name="user" value="'+this.Id+'"><a class="avatar avatar-lg" href="javascript:void(0)">'
+                          +'<img style="height:50px;width:50px" src="'+this.AvatarImage+'"> '+this.FullName
+                          +'</a><br><br>';
+                $("#containerNearByUser").append(info);
+            })
+        }
+
+        function appendFollowingUser(data){
+            $(data).each(function () {
+                var info = '<input type="checkbox" class="user" name="user" value="'+this.Id+'"><a class="avatar avatar-lg" href="javascript:void(0)">'
+                          +'<img style="height:50px;width:50px" src="'+this.AvatarImage+'"> '+this.FullName
+                          +'</a><br><br>';
+                $("#containerFollowingUser").append(info);
+            })
+        }
+
+        var array = @Html.Raw(Json.Encode(
+ ((IEnumerable<SelectListItem>)sport).Select(m => new
+ {
+     id = m.Value,
+     text = m.Text
+ })
+));
+
+        $('#sportSelect').select2({
+            class: 'form-control input-cmnt',
+            width: '100%',
+            multiple: false,
+            maximumSelectionSize: 5,
+            placeholder: "Chọn môn thể thao",
+            data: array
+        });
+
+        function follow(id) {
+            var update = false;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("FollowUnfollowUser", "Follow")',
+                data: { "userId": id, "followerId": '@User.Identity.GetUserId()' },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Succeed && data.Message == "Đã theo dõi") {
+                        update = true;
+                        $('#' + id).hide('slow', function () { $('#' + id).remove(); });
+                        $(".check").resize();
+                        var $item = $(".suggestion");
+                        if ($item.length == 2) {
+                            $("#check").removeClass("height-250").addClass("height-150");
+                        }
+                        if ($item.length == 1) {
+                            $('#suggest-follow-panel').hide('slow', function () { $('#suggest-follow-panel').remove(); });
+                        }
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
+
+        $('#chooseOrder').on('click', function () {
+            $('#orderForm').modal('show');
+        });
+
+    </script>
+}
