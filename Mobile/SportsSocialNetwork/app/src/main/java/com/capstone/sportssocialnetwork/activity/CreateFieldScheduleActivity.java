@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.enumerable.FieldScheduleTypeEnum;
 import com.capstone.sportssocialnetwork.model.Field;
+import com.capstone.sportssocialnetwork.model.FieldSchedule;
+import com.capstone.sportssocialnetwork.model.request.CreateFieldScheduleRequestModel;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
@@ -155,7 +157,33 @@ public class CreateFieldScheduleActivity extends AppCompatActivity {
         switch (id) {
             case R.id.menu_create_field_schedule:
                 if (isValidation()) {
+                    int type = typeHash.get(spType.getSelectedItem());
+                    int fieldId = fieldHash.get(spField.getSelectedItem());
+                    CreateFieldScheduleRequestModel requestModel = new CreateFieldScheduleRequestModel();
+                    requestModel.setType(type);
+                    requestModel.setFieldId(fieldId);
+                    requestModel.setStartTime(txtStartTime.getText().toString());
+                    requestModel.setEndTime(txtEndTime.getText().toString());
+                    requestModel.setDescription(txtDescription.getText().toString());
+                    service.getPlaceService().createFieldSchedule(requestModel).enqueue(new Callback<ResponseModel<FieldSchedule>>() {
+                        @Override
+                        public void onResponse(Call<ResponseModel<FieldSchedule>> call, Response<ResponseModel<FieldSchedule>> response) {
+                            if (response.isSuccessful()){
+                                if (response.body().isSucceed()){
+                                    onBackPressed();
+                                }else{
+                                    Toast.makeText(CreateFieldScheduleActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                                }
+                            }else{
+                                Toast.makeText(CreateFieldScheduleActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
 
+                        @Override
+                        public void onFailure(Call<ResponseModel<FieldSchedule>> call, Throwable t) {
+                            Toast.makeText(CreateFieldScheduleActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
 
                 return true;
