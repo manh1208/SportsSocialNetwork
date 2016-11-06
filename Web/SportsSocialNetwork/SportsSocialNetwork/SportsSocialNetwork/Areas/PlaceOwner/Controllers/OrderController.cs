@@ -94,6 +94,34 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             return this.PartialView(model);
         }
 
+        [HttpPost]
+        public ActionResult UpdateNganLuongAccount(string userId, string accNL)
+        {
+            var _userService = this.Service<IAspNetUserService>();
+            var result = new AjaxOperationResult();
+
+            AspNetUser user = _userService.FindUser(userId);
+
+            if (user != null)
+            {
+                user.NganLuongAccount = accNL;
+                if (_userService.UpdateUser(user) != null)
+                {
+                    result.Succeed = true;
+                }
+                else
+                {
+                    result.Succeed = false;
+                }
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+
+            return Json(result);
+        }
+
         public ActionResult GetData(JQueryDataTableParamModel param)
         {
             string userID = Request["userID"];

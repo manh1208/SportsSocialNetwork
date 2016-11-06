@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity;
+
+<!DOCTYPE html>
 <html class="no-js before-run" lang="en">
 <head>
     <meta charset="utf-8">
@@ -232,6 +234,11 @@
                                     <span class="fa fa-globe"></span> Trang chủ
                                 </a>
                             </li>
+                            <li role="presentation">
+                                <a href="javascript:void(0)" role="menuitem" onclick="showUpdateAccNLModal()">
+                                    <span class="fa fa-user"></span> Cập nhật thông tin thanh toán
+                                </a>
+                            </li>
                             @*<li role="presentation">
                                 <a href="@Url.Action("index", "SSN", new { area = "" })" role="menuitem">
                                     <span class="fa fa-globe"></span> Quay lại mạng xã hội
@@ -329,6 +336,31 @@
       
     </div>
    
+    <div id="accNLModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <form id="accNL-form" method="post" autocomplete="off">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Cập nhật tài khoản thanh toán online</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group form-material floating">
+                            <input type="text" name="accNL" class="form-control input-lg" />
+                            <label class="floating-label">Nhập tài khoản Ngân Lượng của bạn</label>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-success" value="Cập nhật" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
 
     <!-- Page -->
@@ -444,9 +476,42 @@
     <script src="~/Content/js/custom-script.js"></script>
     <script src="~/Content/ckeditor/ckeditor.js"></script>
     <script>
-       function logout(){
-           $("#form-log-out").submit();
-        }
+        function logout() {
+            $("#form-log-out").submit();
+        };
+
+        //update Ngan Lương account
+        function showUpdateAccNLModal() {
+            $("#accNLModal").modal('show');
+        };
+
+        $("#accNL-form").submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(document.getElementById('accNL-form'));
+            var userId = '@User.Identity.GetUserId()';
+            formData.append("userId", userId);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("UpdateNganLuongAccount", "Order", new { Area = "PlaceOwner" })',
+                async: false,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result.Succeed) {
+                        showMessage("Cập nhật thành công.", "success", "OK");
+                        $("#accNLModal").modal('hide');
+                    } else {
+                        //showErrors(result.Errors);
+                        showMessage("Không thể cập nhật.", "error", "OK");
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        });
     </script>
 
     @RenderSection("Scripts", false)
