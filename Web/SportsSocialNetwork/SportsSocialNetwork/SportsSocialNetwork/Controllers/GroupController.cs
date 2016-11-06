@@ -101,7 +101,7 @@ namespace SportsSocialNetwork.Controllers
             ViewBag.friends = friends;
 
             //member
-            List<GroupMember> ListGroupMember = _groupMemberService.GetActive(g => g.GroupId == id).ToList();
+            List<GroupMember> ListGroupMember = _groupMemberService.GetActive(g => g.GroupId == id && g.Status == (int)GroupMemberStatus.Approved).ToList();
             List<GroupMemberFullInfoModel> ListGroupMemberVM = Mapper.Map<List<GroupMemberFullInfoModel>>(ListGroupMember);
             for(int i = 0; i < ListGroupMember.Count(); i++)
             {
@@ -110,6 +110,18 @@ namespace SportsSocialNetwork.Controllers
                 AspNetUserFullInfoViewModel userFull = Mapper.Map<AspNetUserFullInfoViewModel>(user);
                 ListGroupMemberVM[i].AspNetUser = userFull;
             }
+
+            //list pending member
+            List<GroupMember> ListPendingMember = _groupMemberService.GetActive(g => g.GroupId == id && g.Status == (int)GroupMemberStatus.Pending).ToList();
+            List<GroupMemberFullInfoModel> ListPendingMemberVM = Mapper.Map<List<GroupMemberFullInfoModel>>(ListPendingMember);
+            for (int i = 0; i < ListPendingMember.Count(); i++)
+            {
+                GroupMember gm = ListPendingMember.ElementAt(i);
+                AspNetUser user = _userService.FirstOrDefaultActive(u => u.Id == gm.UserId);
+                AspNetUserFullInfoViewModel userFull = Mapper.Map<AspNetUserFullInfoViewModel>(user);
+                ListPendingMemberVM[i].AspNetUser = userFull;
+            }
+
             //get list user that cur user followed
             List<Follow> listFollow = _followService.GetActive(f => f.FollowerId == curUserId).ToList();
             if(listFollow != null && listFollow.Count > 0)
@@ -165,6 +177,7 @@ namespace SportsSocialNetwork.Controllers
             ViewBag.challengedList = challengedList;
             ViewBag.challengeRequestList = challengeRequestList;
             ViewBag.groupMember = ListGroupMemberVM;
+            ViewBag.pendingMembers = ListPendingMemberVM;
             ViewBag.groupId = id.Value;
             ViewBag.suggestGroups = suggestGroupsVM;
             return View(model);
@@ -353,6 +366,23 @@ namespace SportsSocialNetwork.Controllers
                 _GroupMemberService.Update(desAdmin);
                 _GroupMemberService.Save();
 
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult ApproveMember(string userId)
+        {
+            var result = new AjaxOperationResult();
+            var _groupMemberService = this.Service<IGroupMemberService>();
+            if(_groupMemberService.ApproveMember(userId) == true)
+            {
                 result.Succeed = true;
             }
             else
@@ -603,6 +633,26 @@ namespace SportsSocialNetwork.Controllers
             var result = new AjaxOperationResult();
             if(_challengeService.UpdateChallenge(challengeId, status) == true)
             {
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult ShowRequestChallengeDetail(int id)
+        {
+            var result = new AjaxOperationResult<ChallengeDetailViewModel>();
+            var _challengeService = this.Service<IChallengeService>();
+            Challenge cha = _challengeService.FindById(id);
+            if(cha != null)
+            {
+                ChallengeDetailViewModel model = Mapper.Map<ChallengeDetailViewModel>(cha);
+                result.AdditionalData = model;
                 result.Succeed = true;
             }
             else

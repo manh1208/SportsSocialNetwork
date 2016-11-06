@@ -34,6 +34,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         bool isOnlyOneAdmin(string userId, int groupId);
 
         GroupMemberRole CheckRoleMember(string userId, int groupId);
+
+        bool ApproveMember(string userId);
         #endregion
 
 
@@ -253,6 +255,25 @@ namespace SportsSocialNetwork.Models.Entities.Services
                     }
                 }
             }
+            return result;
+        }
+
+        public bool ApproveMember(string userId)
+        {
+            bool result = false;
+            GroupMember gm = this.FirstOrDefaultActive(g => g.UserId == userId && g.Status == (int)GroupMemberStatus.Pending);
+            if(gm != null)
+            {
+                gm.Status = (int)GroupMemberStatus.Approved;
+                this.Update(gm);
+                this.Save();
+                result = true;
+            }
+            else
+            {
+                result = false;
+            }
+
             return result;
         }
         #endregion

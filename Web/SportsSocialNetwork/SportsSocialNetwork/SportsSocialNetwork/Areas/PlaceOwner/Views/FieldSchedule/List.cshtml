@@ -143,6 +143,11 @@
             initEventTable();
         });
 
+        function switchToUpdate(id) {
+            $('#modelDetail').modal('toggle');
+            showUpdateModal(id);
+        }
+
         //init datatable
         function initEventTable() {
             var colDefs = [

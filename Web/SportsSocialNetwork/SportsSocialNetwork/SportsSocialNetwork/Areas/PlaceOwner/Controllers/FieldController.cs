@@ -94,7 +94,11 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         public ActionResult FieldInfoModal(int id)
         {
             var _fieldService = this.Service<IFieldService>();
+            var _timeBlockService = this.Service<ITimeBlockService>();
+
             Field field = _fieldService.FirstOrDefaultActive(f => f.Id == id);
+            List<TimeBlock> listTimeBlock = _timeBlockService.GetActive(t => t.FieldId == id).ToList();
+            ViewBag.timeblock = listTimeBlock;
             return this.PartialView(field);
         }
 

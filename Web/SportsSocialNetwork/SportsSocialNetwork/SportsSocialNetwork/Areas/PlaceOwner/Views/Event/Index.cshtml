@@ -240,10 +240,6 @@
                 $('#eventForm').formValidation('revalidateField', 'EndDate');
             });
 
-            $('body').on('focus', ".asscrollable", function () {
-                $(this).asScrollable();
-            })
-
             var std = $("#startDate").val();
 
             //Validation
@@ -393,6 +389,12 @@
             oTable._fnAjaxUpdate();
         };
 
+        function switchToUpdate(id)
+        {
+            $('#modalEventDetail').modal('toggle');
+            showUpdate(id)
+        }
+
         function InitDatatable() {
 
             $("#listEventTable").DataTable({
@@ -512,7 +514,7 @@
                         "bSortable": false,
                         "mRender": function (data, type, o) {
                             var viewDetailBtn = "<a href='javascript:void(0)' class='btn btn-success' data-target='#modalEventDetail' data-toggle='modal' onclick='showDetail(" + o[0] + ")'><i class='fa fa-eye' aria-hidden='true'></i></a>";
-                            var updateBtn = "<a href='javascript:void(0)' class='btn btn-warning' data-target='#updateEventModal' data-toggle='modal' onclick='showUpdate(" + o[0] + ")'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>";
+                            var updateBtn = "<a href='javascript:void(0)' class='btn btn-warning' id='updateBtn' data-target='#updateEventModal' data-toggle='modal' onclick='showUpdate(" + o[0] + ")'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>";
                             var deleteBtn = "<a href='javascript:void(0)' class='btn btn-danger' onclick='deleteEvent(" + o[0] + ")'><i class='fa fa-trash-o' aria-hidden='true'></i></a>";
                             return viewDetailBtn + '&nbsp;' + updateBtn + '&nbsp;' + deleteBtn;;
                         }

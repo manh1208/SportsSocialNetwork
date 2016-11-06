@@ -56,23 +56,17 @@
         </div>
         <div class="col-sm-12">
             <label>Mô tả</label>
-            @Html.Raw(Model.Description)
-            @*<div class="height-400 asscrollable" data-plugin="scrollable">
-                <div data-role="container">
-                    <div data-role="content">
-
-                        
-                        
-
-                    </div>
-                </div>
-            </div>*@
+            
+            <div class="height-200 asscrollable" style="overflow-y:auto;">
+                @Html.Raw(Model.Description)
+            </div>
             
         </div>
     </div>
     
-    </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <button type="button" class="btn btn-success" onclick="switchToUpdate(@Model.Id)">Cập nhật</button>
+</div>
 
