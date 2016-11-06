@@ -249,11 +249,11 @@
                         }
                         else if (Model.Followed)
                         {
-                            <button type="button" class="btn btn-warning" id="leaveGroupBtn" onclick="followUnFollow(@Model.Id)">Bỏ theo dõi</button>
+                            <button type="button" class="btn btn-default" id="unfollowBtn" onclick="followUnFollowLeft('@Model.Id')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button>
                         }
                         else
                         {
-                            <button type="button" class="btn btn-primary" id="joinGroupBtn" onclick="followUnFollow(@Model.Id)">Theo dõi</button>
+                            <button type="button" class="btn btn-default" id="followBtn" onclick="followUnFollowLeft('@Model.Id')"><i class="fa fa-user-plus" aria-hidden="true"></i>Theo dõi</button>
                         }
 
 
@@ -917,11 +917,38 @@
             });
         }
 
+        function followUnFollowLeft(id){
+            var update = false;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("FollowUnfollowUser", "Follow", new { Area = "Api" })',
+                data:{"userId":id,"followerId":'@User.Identity.GetUserId()'},
+                dataType: 'json',
+                success: function (data) {
+                    if(data.Succeed && data.Message == "Đã bỏ theo dõi"){
+                        var outerDiv = "#following_" + id;
+                        var uid = "'" + id + "'";
+                        $("#unfollowBtn").replaceWith('<button type="button" class="btn btn-default" id="followBtn" onclick="followUnFollowLeft(' + uid + ')"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button>')
+                    } else if(data.Succeed && data.Message == "Đã theo dõi") {
+                        var outerDiv = "#following_" + id;
+                        var uid = "'" + id + "'";
+                        $("#followBtn").replaceWith('<button type="button" class="btn btn-default" id="unfollowBtn" onclick="followUnFollowLeft(' + uid + ')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button>')
+                    }
+                    else{
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
+
         function followUnFollow(id){
             var update = false;
             $.ajax({
                 type: 'POST',
-                url: '@Url.Action("FollowUnfollowUser", "Follow")',
+                url: '@Url.Action("FollowUnfollowUser", "Follow", new { Area = "Api" })',
                 data:{"userId":id,"followerId":'@User.Identity.GetUserId()'},
                 dataType: 'json',
                 success: function (data) {
