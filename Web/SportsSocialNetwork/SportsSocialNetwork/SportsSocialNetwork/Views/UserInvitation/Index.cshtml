@@ -355,6 +355,46 @@
         </div>
     </div>
 </div>
+<div id="createGroupModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <form id="createGroup-form" method="post" autocomplete="off">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Tạo nhóm mới</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="GroupCreator" id="GroupCreator" value="@User.Identity.GetUserId()" />
+                    <div class="form-group form-material floating">
+                        <input class="form-control input-lg" type="text" name="GroupName" id="GroupName" />
+                        <label class="floating-label">Tên nhóm</label>
+                    </div>
+                    <div class="form-group form-material floating">
+                        <textarea class="form-control input-lg" rows="2" name="GroupDescription" id="GroupDescription"></textarea>
+                        <label class="floating-label">Mô tả</label>
+                    </div>
+                    <div class="form-group form-material floating">
+                        <select name="GroupSport" id="GroupSport" class="form-control input-lg">
+                            @{
+                                foreach (var item in sport)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                        </select>
+                        <label class="floating-label">Môn thể thao</label>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-success" value="Tạo nhóm" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 @section scripts{
     <script src="~/Content/assets/js/plugins/jquery.sticky-kit.min.js"></script>
@@ -369,7 +409,7 @@
             $("#inviteContent").val("");
             $("#orderInfo").val("");
         }
-        
+
         $("#resetForm").on("click",function(){
             resetForm();
         })
@@ -409,7 +449,7 @@
                     },
                 });
             }
-            
+
         });
 
         var nearByUserSkip = 0;
@@ -476,7 +516,7 @@
                     if(data.Succeed){
                         $(data.AdditionalData).each(function () {
                             if (this.OrderCode != null) {
-                                content += '<tr onclick="getOrder('+this.OrderCode+')"><td>' + this.OrderCode + '</td><td>' 
+                                content += '<tr onclick="getOrder('+this.OrderCode+')"><td>' + this.OrderCode + '</td><td>'
                                     + this.StartTimeString + ' - ' + this.EndTimeString
                                     + ' Ngày '+ this.PlayDateString +'</td>'
                                     +'<td>Sân: '+ this.FieldName +', Địa điểm: '+ this.PlaceName +'</td></tr>';
@@ -605,6 +645,37 @@
 
         $('#chooseOrder').on('click', function () {
             $('#orderForm').modal('show');
+        });
+
+        //create group
+        function showCreateGroupModal()
+        {
+            $("#createGroupModal").modal('show');
+        }
+
+        $("#createGroup-form").submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(document.getElementById('createGroup-form'));
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateGroup", "Group")',
+                async: false,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result.Succeed) {
+                        location.href = '/Group/Index/' + result.AdditionalData.Id;
+                    } else {
+                        //showErrors(result.Errors);
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
         });
 
     </script>

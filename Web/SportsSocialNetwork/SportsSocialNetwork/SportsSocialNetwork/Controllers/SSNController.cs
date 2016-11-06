@@ -605,6 +605,14 @@ namespace SportsSocialNetwork.Controllers
 
         public ActionResult SearchDetail(string keyword)
         {
+            var _sportService = this.Service<ISportService>();
+            var sports = _sportService.GetActive()
+                            .Select(s => new SelectListItem
+                            {
+                                Text = s.Name,
+                                Value = s.Id.ToString()
+                            }).OrderBy(s => s.Value);
+            ViewBag.Sport = sports;
             var _userService = this.Service<IAspNetUserService>();
             var userId = User.Identity.GetUserId();
             var curUser = _userService.FirstOrDefaultActive(p => p.Id == userId);
