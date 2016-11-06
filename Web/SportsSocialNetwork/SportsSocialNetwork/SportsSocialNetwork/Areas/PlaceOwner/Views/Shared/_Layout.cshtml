@@ -230,7 +230,7 @@
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li role="presentation">
-                                <a href="javascript:void(0)" role="menuitem">
+                                <a href="@Url.Action("index", "Place", new { area = "PlaceOwner"})" role="menuitem">
                                     <span class="fa fa-globe"></span> Trang chủ
                                 </a>
                             </li>
@@ -239,11 +239,11 @@
                                     <span class="fa fa-user"></span> Cập nhật thông tin thanh toán
                                 </a>
                             </li>
-                            @*<li role="presentation">
-                                <a href="@Url.Action("index", "SSN", new { area = "" })" role="menuitem">
+                            <li role="presentation">
+                                <a href="@Url.Action("index", "SSN", new { area = ""})" role="menuitem">
                                     <span class="fa fa-globe"></span> Quay lại mạng xã hội
                                 </a>
-                            </li>*@
+                            </li>
                             @*<li role="presentation">
                                 <a href="javascript:void(0)" role="menuitem">
                                     <span class="fa fa-users"></span> Tìm người cùng sở thích ở gần bạn
@@ -301,13 +301,13 @@
                 <div>
                     <ul class="site-menu">
                         <li class="site-menu-category">Chủ sân</li>
-                        <li class="site-menu-item">
+                        @*<li class="site-menu-item">
                             <a href="/" data-slug="dashboard">
                                 <i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
                                 <span class="site-menu-title">Mạng xã hội</span>
 
                             </a>
-                        </li>
+                        </li>*@
                         <li class="site-menu-item">
                             <a href="@Url.Action("index","Place")" data-slug="dashboard">
                                 <i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
