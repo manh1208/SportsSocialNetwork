@@ -1,0 +1,158 @@
+﻿@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_SSNLayout.cshtml";
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/Content/assets/vendor/asscrollable/asScrollable.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/magnific-popup/magnific-popup.css">
+    <link rel="stylesheet" href="~/Content/js/sweetAlert/sweetalert.css" />
+    <style>
+        #orderTable tr:hover {
+            cursor: pointer;
+            background-color: #62a8ea;
+        }
+
+        .media {
+            overflow: visible;
+        }
+
+        .media-body {
+            overflow: visible;
+        }
+
+        .select2-dropdown {
+            z-index: 99999;
+        }
+
+        .panel-cover {
+            margin: 0 0 10px 0;
+        }
+
+        .panel-status {
+            margin-bottom: 15px;
+        }
+
+        .suggest-group {
+            border: 1px solid lightgray;
+            overflow: hidden;
+            padding-top: 15px;
+            margin: 10px;
+        }
+
+        .after-run .site-menubar-fold .page, .after-run .site-menubar-fold .site-footer {
+            margin-left: 0;
+        }
+
+        .after-run .site-menubar-unfold .page, .after-run .site-menubar-unfold .site-footer {
+            margin-left: 0;
+        }
+
+        .page-aside-inner {
+            max-width: 600px;
+        }
+
+        .page-main .panel-body {
+            padding-top: 0;
+        }
+
+        .page-main .page-content {
+            padding: 10px;
+            padding-right: 0px;
+        }
+
+        .panel {
+            margin-bottom: 10px;
+            font-family: sans-serif;
+        }
+
+            .panel.panel-cover {
+                margin: 0px;
+            }
+
+        .page-aside {
+            top: 10px;
+        }
+
+            .page-aside .widget-header {
+                padding-top: 0px;
+            }
+
+        .panel-cover img {
+            height: 150px;
+        }
+
+        .status-panel {
+            padding-top: 5px;
+        }
+
+            .status-panel textarea {
+                border: none;
+                border-bottom: 1px whitesmoke solid;
+                resize: none;
+            }
+
+        @@media(max-width: 768px) {
+            .page-aside-inner {
+                position: unset;
+            }
+
+            .page-main .page-content {
+                padding: 10px;
+            }
+        }
+
+        .list-group-item {
+            font-size: 16px;
+        }
+
+        .load {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .list-inline li {
+            margin: 5px;
+            padding: 0;
+            height: 100px;
+            width: 100px;
+        }
+
+        .list-inline {
+            white-space: nowrap;
+        }
+
+        #check {
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+        }
+    </style>
+}
+
+<div class="row" style="font-family:sans-serif">
+    <!--Left side-bar-->
+    <div class="col-sm-3">
+        <div class="widget widget-shadow text-center">
+        </div>
+    </div>
+    <!--END Left side-bar-->
+    <!--Main-->
+    <div class="col-sm-9">
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/assets/js/plugins/jquery.sticky-kit.min.js"></script>
+    <script src="~/Content/assets/vendor/magnific-popup/jquery.magnific-popup.js"></script>
+    <script src="~/Content/assets/js/components/magnific-popup.js"></script>
+    <script src="~/Content/js/custom-script.js"></script>
+    <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
+    
+}
+
+
+
+
