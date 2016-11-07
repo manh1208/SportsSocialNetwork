@@ -12,8 +12,8 @@ import com.capstone.sportssocialnetwork.fragment.FollowingFriendFragment;
 /**
  * Created by ManhNV on 11/5/16.
  */
-public class HomeTabAdapter extends FragmentPagerAdapter {
-    public HomeTabAdapter(android.support.v4.app.FragmentManager fragmentManager) {
+public class FriendTabAdapter extends FragmentPagerAdapter {
+    public FriendTabAdapter(android.support.v4.app.FragmentManager fragmentManager) {
         super(fragmentManager);
     }
 

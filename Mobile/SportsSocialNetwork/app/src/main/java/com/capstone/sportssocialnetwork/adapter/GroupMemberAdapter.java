@@ -20,7 +20,9 @@ import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.GroupInformationActivity;
 import com.capstone.sportssocialnetwork.activity.GroupMemberActivity;
 import com.capstone.sportssocialnetwork.activity.MainBottomBarActivity;
+import com.capstone.sportssocialnetwork.activity.ProfileActivity;
 import com.capstone.sportssocialnetwork.custom.RoundedImageView;
+import com.capstone.sportssocialnetwork.model.Feed;
 import com.capstone.sportssocialnetwork.model.GroupMember;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
@@ -106,6 +108,10 @@ public class GroupMemberAdapter extends ArrayAdapter<GroupMember> implements Vie
         }
         viewHolder.btnDropdown.setTag(position);
         viewHolder.btnDropdown.setOnClickListener(this);
+        viewHolder.ivAvatar.setTag(position);
+        viewHolder.ivAvatar.setOnClickListener(this);
+        viewHolder.txtName.setTag(position);
+        viewHolder.txtName.setOnClickListener(this);
         return convertView;
     }
 
@@ -116,6 +122,13 @@ public class GroupMemberAdapter extends ArrayAdapter<GroupMember> implements Vie
         switch (id){
             case R.id.btn_group_member_menu_down:
                 showPopupMenu(v,position);
+                break;
+            case R.id.iv_group_member_avatar:
+            case R.id.txt_group_member_name:
+                GroupMember groupMember= getItem(position);
+                Intent intent = new Intent(mContext, ProfileActivity.class);
+                intent.putExtra("userId",groupMember.getUser().getId());
+                mContext.startActivity(intent);
                 break;
         }
     }

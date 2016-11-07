@@ -63,6 +63,7 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
     private TabLayout tabLayout;
     private User user;
     private String userId;
+    private String currentId;
     private RestService service;
     private Window window;
 
@@ -87,7 +88,7 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
 
 
     private void prepareData() {
-        ProfilePageAdapter adapter = new ProfilePageAdapter(getSupportFragmentManager());
+        ProfilePageAdapter adapter = new ProfilePageAdapter(getSupportFragmentManager(), userId);
         viewPager.setAdapter(adapter);
         tabLayout.post(new Runnable() {
             @Override
@@ -105,7 +106,6 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         startAlphaAnimation(textviewTitle, 0, View.INVISIBLE);
 
         //set avatar and cover
@@ -115,7 +115,8 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
 
     private void initView() {
         service = new RestService();
-        userId = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID, "");
+        userId = getIntent().getStringExtra("userId");
+        currentId = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
         tabLayout = (TabLayout) findViewById(R.id.tabs_profile);
         viewPager = (ViewPager) findViewById(R.id.viewpager_profile);
         appbar = (AppBarLayout) findViewById(R.id.appbar);
@@ -186,7 +187,7 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
 
 
     private void loadUserProfile() {
-        service.getAccountService().getUserProfile(userId).enqueue(new Callback<ResponseModel<User>>() {
+        service.getAccountService().getUserProfile(userId,currentId).enqueue(new Callback<ResponseModel<User>>() {
             @Override
             public void onResponse(Call<ResponseModel<User>> call, Response<ResponseModel<User>> response) {
                 if (response.isSuccessful()) {

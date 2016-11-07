@@ -248,7 +248,7 @@ public class ProfilePostFragment extends Fragment {
 
 
     private void initView(View v) {
-        userId = DataUtils.getINSTANCE(getActivity()).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
+        userId = getArguments().getString("userId");
         viewHolder = new ViewHolder(v);
         service = new RestService();
     }

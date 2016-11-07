@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.capstone.sportssocialnetwork.activity.InvitationActivity;
 import com.capstone.sportssocialnetwork.enumerable.RoleEnum;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.CreateGroupActivity;
@@ -98,6 +99,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                intent.putExtra("userId",userId);
                 startActivity(intent);
             }
         });
@@ -126,6 +128,14 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        headerHolder.layoutInvitation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), InvitationActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         footer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,7 +155,7 @@ public class ProfileFragment extends Fragment {
         return v;
     }
     private void getUser(){
-        service.getAccountService().getUserProfile(userId).enqueue(new Callback<ResponseModel<User>>() {
+        service.getAccountService().getUserProfile(userId,userId).enqueue(new Callback<ResponseModel<User>>() {
             @Override
             public void onResponse(Call<ResponseModel<User>> call, Response<ResponseModel<User>> response) {
                 if (response.isSuccessful()){

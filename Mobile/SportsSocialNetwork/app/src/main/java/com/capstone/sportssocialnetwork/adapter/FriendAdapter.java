@@ -23,7 +23,9 @@ import com.capstone.sportssocialnetwork.custom.RoundedImageView;
 import com.capstone.sportssocialnetwork.model.GroupMember;
 import com.capstone.sportssocialnetwork.model.User;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
+import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
+import com.capstone.sportssocialnetwork.utils.SharePreferentName;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -40,12 +42,16 @@ public class FriendAdapter extends ArrayAdapter<User> implements View.OnClickLis
     private Context mContext;
     private List<User> users;
     private boolean followed;
+    private RestService service;
+    private String userId;
 
-    public FriendAdapter(Context context, int resource, List<User> objects,boolean followed) {
+    public FriendAdapter(Context context, int resource, List<User> objects, boolean followed) {
         super(context, resource, objects);
         this.mContext = context;
         this.users = objects;
         this.followed = followed;
+        service = new RestService();
+        userId = DataUtils.getINSTANCE(mContext).getPreferences().getString(SharePreferentName.SHARE_USER_ID, "");
     }
 
     @Nullable
@@ -63,11 +69,11 @@ public class FriendAdapter extends ArrayAdapter<User> implements View.OnClickLis
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-        if (convertView ==null){
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_friend,parent,false);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_friend, parent, false);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
-        }else{
+        } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
@@ -77,10 +83,19 @@ public class FriendAdapter extends ArrayAdapter<User> implements View.OnClickLis
                 .error(R.drawable.img_default_avatar_error)
                 .fit()
                 .into(viewHolder.ivAvatar);
+
         viewHolder.txtName.setText(user.getFullName());
         viewHolder.txtHobby.setText(user.getListSport());
         viewHolder.btnDropdown.setTag(position);
         viewHolder.btnDropdown.setOnClickListener(this);
+        if (followed) {
+            if (user.isFollowed()) {
+                viewHolder.btnDropdown.setVisibility(View.GONE);
+            } else {
+                viewHolder.btnDropdown.setVisibility(View.VISIBLE);
+            }
+        }
+
         return convertView;
     }
 
@@ -90,9 +105,9 @@ public class FriendAdapter extends ArrayAdapter<User> implements View.OnClickLis
         inflater.inflate(R.menu.menu_friend, popupMenu.getMenu());
         popupMenu.show();
         MenuItem item = popupMenu.getMenu().getItem(0);
-        if (followed){
+        if (followed) {
             item.setTitle("Theo dõi");
-        }else{
+        } else {
             item.setTitle("Bỏ theo dõi");
         }
         final User user = getItem(position);
@@ -102,12 +117,30 @@ public class FriendAdapter extends ArrayAdapter<User> implements View.OnClickLis
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.menu_follow:
+                        service.getAccountService()
+                                .followUser(user.getId(), userId)
+                                .enqueue(new Callback<ResponseModel<String>>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseModel<String>> call, Response<ResponseModel<String>> response) {
+                                        if (response.isSuccessful()) {
+                                            if (response.body().isSucceed()) {
+                                                if (!followed) {
+                                                    users.remove(user);
+                                                    notifyDataSetChanged();
+                                                }
+                                            } else {
+                                                Toast.makeText(mContext, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
 
-                        if (followed){
-                            Toast.makeText(mContext, "Theo dõi: "+user.getFullName(), Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(mContext, "Bỏ theo dõi: "+user.getFullName(), Toast.LENGTH_SHORT).show();
-                        }
+                                    @Override
+                                    public void onFailure(Call<ResponseModel<String>> call, Throwable t) {
+                                        Toast.makeText(mContext, R.string.failure, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                         return true;
 
                 }
@@ -120,9 +153,9 @@ public class FriendAdapter extends ArrayAdapter<User> implements View.OnClickLis
     public void onClick(View v) {
         int id = v.getId();
         int position = (int) v.getTag();
-        switch (id){
+        switch (id) {
             case R.id.btn_friend_menu_down:
-                showPopupMenu(v,position);
+                showPopupMenu(v, position);
                 break;
         }
     }
@@ -132,12 +165,13 @@ public class FriendAdapter extends ArrayAdapter<User> implements View.OnClickLis
         notifyDataSetChanged();
     }
 
-    private final class ViewHolder{
+    private final class ViewHolder {
         RoundedImageView ivAvatar;
         TextView txtName;
         TextView txtHobby;
         ImageButton btnDropdown;
-        ViewHolder(View v){
+
+        ViewHolder(View v) {
             ivAvatar = (RoundedImageView) v.findViewById(R.id.iv_friend_avatar);
             txtName = (TextView) v.findViewById(R.id.txt_friend_name);
             txtHobby = (TextView) v.findViewById(R.id.txt_friend_hobbies);

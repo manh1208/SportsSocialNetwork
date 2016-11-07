@@ -33,6 +33,7 @@ public class ProfileContentFragment extends Fragment {
     private User user;
     ProfileDetailAdapter adapter;
     private String userId;
+    private String currentUserId;
     private RestService service;
 
     @Nullable
@@ -54,7 +55,8 @@ public class ProfileContentFragment extends Fragment {
 
     private void initView(View v) {
         service = new RestService();
-        userId = DataUtils.getINSTANCE(getActivity()).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
+        currentUserId = DataUtils.getINSTANCE(getActivity()).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
+        userId = getArguments().getString("userId");
         lvProfileDetail = (RecyclerView) v.findViewById(R.id.lv_profile_detail);
     }
 
@@ -69,7 +71,7 @@ public class ProfileContentFragment extends Fragment {
     }
 
     private void loadData() {
-        service.getAccountService().getUserProfile(userId).enqueue(new Callback<ResponseModel<User>>() {
+        service.getAccountService().getUserProfile(userId,currentUserId).enqueue(new Callback<ResponseModel<User>>() {
             @Override
             public void onResponse(Call<ResponseModel<User>> call, Response<ResponseModel<User>> response) {
                 if (response.isSuccessful()){

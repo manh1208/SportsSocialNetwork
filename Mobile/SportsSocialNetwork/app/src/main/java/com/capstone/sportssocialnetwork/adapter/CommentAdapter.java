@@ -12,11 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
+import com.capstone.sportssocialnetwork.activity.ImageViewerActivity;
 import com.capstone.sportssocialnetwork.activity.PostDetailActivity;
+import com.capstone.sportssocialnetwork.activity.ProfileActivity;
 import com.capstone.sportssocialnetwork.custom.CustomImage;
 import com.capstone.sportssocialnetwork.custom.RoundedImageView;
 import com.capstone.sportssocialnetwork.model.Comment;
 import com.capstone.sportssocialnetwork.model.Feed;
+import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.capstone.sportssocialnetwork.utils.Utilities;
 import com.squareup.picasso.Picasso;
@@ -26,10 +29,14 @@ import org.w3c.dom.Text;
 import java.text.ParseException;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * Created by ManhNV on 9/6/16.
  */
-public class CommentAdapter extends ArrayAdapter<Comment> {
+public class CommentAdapter extends ArrayAdapter<Comment> implements View.OnClickListener {
     private Context mContext;
     private List<Comment> comments;
 
@@ -70,12 +77,12 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
                 .placeholder(R.drawable.img_default_avatar)
                 .error(R.drawable.img_default_avatar_error)
                 .fit()
-                .into(viewHolder.imageView);
+                .into(viewHolder.ivAvatar);
         viewHolder.txtName.setText(comment.getUser().getFullName());
         viewHolder.txtComment.setText(comment.getComment());
-        if (comment.getImage()==null || comment.getImage().equals("")){
+        if (comment.getImage() == null || comment.getImage().equals("")) {
             viewHolder.ivImage.setVisibility(View.GONE);
-        }else{
+        } else {
             viewHolder.ivImage.setVisibility(View.VISIBLE);
             Picasso.with(mContext).load(Uri.parse(DataUtils.URL + comment.getImage()))
                     .placeholder(R.drawable.placeholder)
@@ -95,6 +102,11 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 //                mContext.startActivity(intent);
 //            }
 //        });
+        viewHolder.ivAvatar.setTag(position);
+        viewHolder.ivAvatar.setOnClickListener(this);
+        viewHolder.txtName.setTag(position);
+        viewHolder.txtName.setOnClickListener(this);
+
         return convertView;
     }
 
@@ -103,15 +115,30 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         notifyDataSetChanged();
     }
 
+    @Override
+    public void onClick(final View v) {
+        int id = v.getId();
+        final int position = (int) v.getTag();
+        switch (id) {
+            case R.id.iv_comment_avatar:
+            case R.id.txt_comment_name:
+                Comment comment = getItem(position);
+                Intent intent = new Intent(mContext, ProfileActivity.class);
+                intent.putExtra("userId", comment.getUserId());
+                mContext.startActivity(intent);
+                break;
+        }
+    }
+
     private final class ViewHolder {
-        RoundedImageView imageView;
+        RoundedImageView ivAvatar;
         TextView txtName;
         TextView txtComment;
         TextView txtTime;
         CustomImage ivImage;
 
         public ViewHolder(View v) {
-            imageView = (RoundedImageView) v.findViewById(R.id.iv_comment_avatar);
+            ivAvatar = (RoundedImageView) v.findViewById(R.id.iv_comment_avatar);
             txtName = (TextView) v.findViewById(R.id.txt_comment_name);
             txtComment = (TextView) v.findViewById(R.id.txt_comment_content);
             txtTime = (TextView) v.findViewById(R.id.txt_comment_time);

@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.PostDetailActivity;
+import com.capstone.sportssocialnetwork.activity.ProfileActivity;
 import com.capstone.sportssocialnetwork.custom.CustomImage;
 import com.capstone.sportssocialnetwork.custom.RoundedImageView;
 import com.capstone.sportssocialnetwork.model.Feed;
@@ -134,6 +135,10 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
                     mContext.startActivity(intent);
             }
         });
+        viewHolder.ivAvatar.setTag(position);
+        viewHolder.ivAvatar.setOnClickListener(this);
+        viewHolder.txtName.setTag(position);
+        viewHolder.txtName.setOnClickListener(this);
     }
 
     private void setLiked(Button btnLike) {
@@ -236,8 +241,12 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
                 showPopupMenu(v);
                 break;
 
+            case R.id.iv_feed_avatar:
             case R.id.txt_feed_name:
-
+                Feed feed = getItem(position);
+                intent = new Intent(mContext, ProfileActivity.class);
+                intent.putExtra("userId",feed.getUserId());
+                mContext.startActivity(intent);
                 break;
         }
     }

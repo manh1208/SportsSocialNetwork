@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.ImageViewerActivity;
 import com.capstone.sportssocialnetwork.activity.PostDetailActivity;
+import com.capstone.sportssocialnetwork.activity.ProfileActivity;
 import com.capstone.sportssocialnetwork.custom.CustomImage;
 import com.capstone.sportssocialnetwork.custom.RoundedImageView;
 import com.capstone.sportssocialnetwork.model.Feed;
@@ -132,6 +133,10 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         viewHolder.btnLike.setOnClickListener(this);
         viewHolder.ivImage.setTag(position);
         viewHolder.ivImage.setOnClickListener(this);
+        viewHolder.ivAvatar.setTag(position);
+        viewHolder.ivAvatar.setOnClickListener(this);
+        viewHolder.txtName.setTag(position);
+        viewHolder.txtName.setOnClickListener(this);
         return convertView;
     }
 
@@ -234,9 +239,6 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                 showPopupMenu(v);
                 break;
 
-            case R.id.txt_feed_name:
-
-                break;
             case R.id.iv_feed_post_image:
                 Feed feed = getItem(position);
                 String[] imageArray = new String[feed.getPostImages().size()];
@@ -246,6 +248,13 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                 intent = new Intent(mContext, ImageViewerActivity.class);
                 intent.putExtra("position", 0);
                 intent.putExtra("listImage", imageArray);
+                mContext.startActivity(intent);
+                break;
+            case R.id.iv_feed_avatar:
+            case R.id.txt_feed_name:
+                feed = getItem(position);
+                intent = new Intent(mContext, ProfileActivity.class);
+                intent.putExtra("userId",feed.getUserId());
                 mContext.startActivity(intent);
                 break;
         }
