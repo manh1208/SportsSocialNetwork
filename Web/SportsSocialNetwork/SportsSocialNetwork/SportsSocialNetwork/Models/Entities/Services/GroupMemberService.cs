@@ -35,7 +35,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         GroupMemberRole CheckRoleMember(string userId, int groupId);
 
-        bool ApproveMember(string userId);
+        GroupMember ApproveMember(string userId);
         #endregion
 
 
@@ -114,7 +114,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 member.GroupId = groupId;
                 member.UserId = userId;
                 member.Admin = false;
-                member.Status = 1;
+                member.Status = (int)GroupMemberStatus.Pending;
                 member.Active = true;
                 this.Create(member);
                 if (this.FirstOrDefaultActive(x => x.Id == member.Id) != null)
@@ -205,6 +205,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
                             }
                             else
                             {
+                                gm.Admin = false;
                                 this.Deactivate(gm);
                                 result = (int)JoinLeaveGroupResult.Leaved;
                             }
@@ -258,23 +259,21 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return result;
         }
 
-        public bool ApproveMember(string userId)
+        public GroupMember ApproveMember(string userId)
         {
-            bool result = false;
             GroupMember gm = this.FirstOrDefaultActive(g => g.UserId == userId && g.Status == (int)GroupMemberStatus.Pending);
             if(gm != null)
             {
                 gm.Status = (int)GroupMemberStatus.Approved;
                 this.Update(gm);
                 this.Save();
-                result = true;
+                return gm;
             }
             else
             {
-                result = false;
+                return null;
             }
 
-            return result;
         }
         #endregion
 

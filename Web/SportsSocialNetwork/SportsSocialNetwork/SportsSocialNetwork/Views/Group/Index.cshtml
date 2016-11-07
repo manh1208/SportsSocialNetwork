@@ -521,16 +521,17 @@
                                                                 </button>
                                                                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="@item.AspNetUser.Id" role="menu">
                                                                     @{
-                                                                                if (item.Admin)
-                                                                                {
+                                                                        if (item.Admin)
+                                                                        {
                                                                             <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="removeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Bỏ quyền quản trị</a></li>
-                                                                                }
-                                                                                else
-                                                                                {
+                                                                        }
+                                                                        else
+                                                                        {
                                                                             <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="makeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Chọn làm quản trị viên</a></li>
-                                                                                }
+                                                                        }
 
                                                                     }
+                                                                    <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="banMember('@item.AspNetUser.Id')"><i class="fa fa-user-times" aria-hidden="true"></i> Loại ra khỏi nhóm</a></li>
 
                                                                 </ul>
                                                             </div>
@@ -908,6 +909,7 @@
                                                                             }
 
                                                                         }
+                                                                        <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="banMember('@item.AspNetUser.Id')"><i class="fa fa-user-times" aria-hidden="true"></i> Loại ra khỏi nhóm</a></li>
 
                                                                     </ul>
                                                                 </div>
@@ -1249,12 +1251,13 @@
             </div>
             <div class="panel-body" style="padding: 0 0 15px 0;">
                 @{
+                    int count = 1;
                     GroupFullInfoViewModel last = suggestGroups.Last();
                     foreach (var item in suggestGroups)
                     {
                         if (item.Equals(last))
                         {
-                            if (item.Id != groupId && item.IsMember != true)
+                            if (item.Id != groupId && item.IsMember != true && count <= 5)
                             {
                                 <div class="suggest-group lastSuggestGroup" id="suggestGroup_@item.Id">
                                     <div class="col-sm-12">
@@ -1269,7 +1272,7 @@
                                             <div class="col-sm-6 height-50 vertical-align">
                                                 <a href="/Group/Index/@item.Id" style="color:#808c97;"><span class="vertical-align-middle"><strong>@item.Name</strong></span></a>
                                             </div>
-                                            <div class="col-sm-6" style="margin-top:5px;">
+                                            <div class="col-sm-6" style="margin-top:5px; text-align:right;">
                                                 <button type="button" class="btn btn-outline btn-default" title="Tham gia nhóm" onclick="joinSuggestGroup(@item.Id)"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
                                             </div>
                                         </div>
@@ -1279,7 +1282,7 @@
                         }
                         else
                         {
-                            if (item.Id != groupId && item.IsMember != true)
+                            if (item.Id != groupId && item.IsMember != true && count <= 5)
                             {
                                 <div class="suggest-group" id="suggestGroup_@item.Id">
                                     <div class="col-sm-12">
@@ -1294,7 +1297,7 @@
                                             <div class="col-sm-6 height-50 vertical-align">
                                                 <a href="/Group/Index/@item.Id" style="color:#808c97;"><span class="vertical-align-middle"><strong>@item.Name</strong></span></a>
                                             </div>
-                                            <div class="col-sm-6" style="margin-top:5px;">
+                                            <div class="col-sm-6" style="margin-top:5px; text-align:right;">
                                                 <button type="button" class="btn btn-outline btn-default" title="Tham gia nhóm" onclick="joinSuggestGroup(@item.Id)"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
                                             </div>
                                         </div>
@@ -1302,7 +1305,7 @@
                                 </div>
                             }
                         }
-
+                        count++;
                     }
                 }
                 @*<div class="suggest-group">
@@ -1630,7 +1633,7 @@
                             url: '@Url.Action("ApproveMember")',
                             type: 'POST',
                             data: {
-                                userId: userId
+                                userId: userId,
                             },
                             success: function (data) {
                                 showMessage("Thêm thành viên mới thành công", "success", "OK");
@@ -2063,6 +2066,46 @@
                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                 },
             });
+        };
+
+        function banMember(userId) {
+
+            showConfirmMessage("Bạn có chắc chắn muốn loại người này ra khỏi nhóm?",
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("JoinLeaveGroup", "Group")',
+                        data:{
+                            userId: userId,
+                            groupId: '@Model.Id'
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            if(data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.Leaved)'){
+                                showMessage("Thay đổi thành công", "success", "OK");
+                                location.href = location.href;
+                            } else if(data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.RequestSent)') {
+                                $('#joinLeaveGroupBtn').replaceWith('<button type="button" class="btn btn-default" id="joinLeaveGroupBtn" onclick="joinLeaveGroup(@Model.Id)"><i class="fa fa-times-circle" aria-hidden="true"></i> Hủy yêu cầu tham gia nhóm</button>')
+                            } else if(data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.CancelRequest)') {
+                                $('#joinLeaveGroupBtn').replaceWith('<button type="button" class="btn btn-default" id="joinLeaveGroupBtn" onclick="joinLeaveGroup(@Model.Id)"><i class="fa fa-plus-circle" aria-hidden="true"></i> Tham gia nhóm</button>')
+                            } else if(data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.CannotLeave)') {
+                                showMessage("Bạn đang là quản trị duy nhất của trang. Vui lòng chọn một thành viên khác để thay thế trước khi rời nhóm", "error", "OK");
+                            } else if(data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.ReJoined)') {
+                                $('#joinLeaveGroupBtn').replaceWith('<button type="button" class="btn btn-default" id="joinLeaveGroupBtn" onclick="joinLeaveGroup(@Model.Id)"><i class="fa fa-times-circle" aria-hidden="true"></i> Hủy yêu cầu tham gia nhóm</button>')
+                            }
+                            else{
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        },
+                        error: function (data) {
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        },
+                    });
+                }
+            });
+
+
         }
 
         //send challenge request
@@ -2086,6 +2129,7 @@
                     if (result.Succeed) {
                         showMessage("Gửi lời mời thách đấu thành công!", "success", "OK");
                         $("#challengeModal").modal('toggle');
+                        location.href = location.href;
                     } else {
                         //showErrors(result.Errors);
                         showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
@@ -2113,6 +2157,7 @@
                     if(data.Succeed) {
                         $(el).hide(300);
                         showMessage("Chấp nhận thách đấu thành công", "success", "OK");
+                        //location.href = location.href;
                     }
                     else
                     {
