@@ -518,6 +518,7 @@ namespace SportsSocialNetwork.Controllers
                                 noti.Type = (int)NotificationType.Invitation;
                                 noti.Message = fromUser.FullName + " đã mời bạn vào nhóm " + group.Name;
                                 noti.CreateDate = DateTime.Now;
+                                noti.MarkRead = false;
                                 _notificationService.Create(noti);
                                 result.Succeed = true;
                             }
