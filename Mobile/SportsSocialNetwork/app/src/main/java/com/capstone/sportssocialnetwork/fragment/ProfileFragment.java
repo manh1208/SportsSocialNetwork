@@ -125,6 +125,8 @@ public class ProfileFragment extends Fragment {
                 getActivity().finish();
             }
         });
+
+
         footer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,6 +221,7 @@ public class ProfileFragment extends Fragment {
         RelativeLayout layoutMyOrder;
         RelativeLayout layoutFriend;
         RelativeLayout layoutManage;
+        RelativeLayout layoutInvitation;
         RoundedImageView ivAvatar;
         TextView txtFullName;
 
@@ -229,6 +232,7 @@ public class ProfileFragment extends Fragment {
             txtFullName = (TextView) v.findViewById(R.id.txt_user_menu_fullname);
             layoutFriend = (RelativeLayout) v.findViewById(R.id.layout_menu_my_friend);
             layoutManage = (RelativeLayout) v.findViewById(R.id.layout_menu_manage);
+            layoutInvitation  = (RelativeLayout) v.findViewById(R.id.layout_menu_invitation);
         }
     }
 }

@@ -126,6 +126,10 @@
         <activity
             android:name=".activity.CreateFieldScheduleActivity"
             android:label="@string/title_activity_create_field_schedule"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.InvitationActivity"
+            android:label="@string/title_activity_invitation"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
