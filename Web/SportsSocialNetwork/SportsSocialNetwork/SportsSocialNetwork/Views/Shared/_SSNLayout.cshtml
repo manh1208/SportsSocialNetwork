@@ -1,4 +1,5 @@
-﻿
+﻿@using Microsoft.AspNet.Identity;
+
 @{
     Layout = null;
 }
@@ -132,15 +133,15 @@
                         <a data-toggle="dropdown" href="javascript:void(0)" title="Notifications" aria-expanded="false"
                            data-animation="slide-bottom" role="button">
                             <i class="icon wb-bell" aria-hidden="true"></i>
-                            <span class="badge badge-danger up">5</span>
+                            <span class="badge badge-danger up" id="notiCount">5</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media" role="menu">
-                            <li class="dropdown-menu-header" role="presentation">
+                        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media" role="menu" id="listNoti">
+                            <li class="dropdown-menu-header" role="presentation" id="headNoti">
                                 <h5>NOTIFICATIONS</h5>
-                                <span class="label label-round label-danger">New 5</span>
+                                <span class="label label-round label-danger" id="notiLabelCount">New 5</span>
                             </li>
 
-                            <li class="list-group" role="presentation">
+                            <li class="list-group" role="presentation" id="notiId_5">
                                 <div data-role="container">
                                     <div data-role="content">
                                         <a class="list-group-item" href="javascript:void(0)" role="menuitem">
@@ -315,6 +316,9 @@
     <script src="~/Content/assets/js/plugins/closeable-tabs.js"></script>
     <script src="~/Content/assets/js/components/tabs.js"></script>
     <script src="~/Content/assets/vendor/select2/select2.full.js"></script>
+    <!--Signalr-->
+    <script src="Scripts/jquery.signalR-2.2.1.min.js"></script>
+    <script src="signalr/hubs"></script>
 
     <script>
         (function (document, window, $) {
@@ -327,6 +331,8 @@
         })(document, window, jQuery);
     </script>
     <script>
+        var totalUnreadCount = 0;
+
         function logout() {
             $("#form-log-out").submit();
         }
@@ -422,6 +428,99 @@
         }
 
     </script>
+
+    <script type="text/javascript">
+        $(function signalr() {
+            // Declare a proxy to reference the hub.
+            var commenthub = $.connection.realTimeHub;
+            // Create a function that the hub can call to broadcast messages.
+            commenthub.client.send = function (c) {
+                //process
+
+                appendNoti(c);  
+
+            };
+            // Start the connection.
+            $.connection.hub.start();
+        });
+
+        $(document).ready(function () {
+            //Load Noti Count
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetUnreadCount", "Notification")',
+                data: { "userId": '@User.Identity.GetUserId()' },
+                success: function (result) {
+                    if (result != "") {
+                        totalUnreadCount = parseInt(result);
+                        $("#notiCount").text(totalUnreadCount);
+                        $("#notiLabelCount").text(totalUnreadCount);
+                    }
+                }
+
+            });
+
+            //Load Noti List
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("LoadNoti", "Notification")',
+                data: { "userId": '@User.Identity.GetUserId()', "skip": 0 , "take": 5 },
+                success: function (result) {
+                    var data = result.Data;
+
+                    $(data).each(function () {
+                        var noti = '<li class="list-group" role="presentation" id="notiId_'+ this.Id +'">'+
+                                '<div data-role="container">'+
+                                    '<div data-role="content">'+
+                                        '<a class="list-group-item" href="javascript:void(0)" role="menuitem">'+
+                                            '<div class="media">'+
+                                                '<div class="media-left padding-right-10">'+
+                                                    '<i class="icon wb-settings bg-red-600 white icon-circle" aria-hidden="true"></i>'+
+                                                '</div>'+
+                                                '<div class="media-body">'+
+                                                    '<h6 class="media-heading">'+ this.Message +'</h6>'+
+                                                    '<time class="media-meta" datetime="2015-06-11T14:05:00+08:00">'+ this.CreateDateString +'</time>'+
+                                                '</div>'+
+                                            '</div>'+
+                                        '</a>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</li>';
+                        $(noti).insertAfter("#headNoti");
+                    })
+                }
+
+            });
+        })
+    </script>
+
+    <script>
+        function appendNoti(data) {
+            var noti = '<li class="list-group" role="presentation" id="notiId_' + data.Id + '">' +
+                    '<div data-role="container">' +
+                        '<div data-role="content">' +
+                            '<a class="list-group-item" href="javascript:void(0)" role="menuitem">' +
+                                '<div class="media">' +
+                                    '<div class="media-left padding-right-10">' +
+                                        '<i class="icon wb-settings bg-red-600 white icon-circle" aria-hidden="true"></i>' +
+                                    '</div>' +
+                                    '<div class="media-body">' +
+                                        '<h6 class="media-heading">' + data.Message + '</h6>' +
+                                        '<time class="media-meta" datetime="2015-06-11T14:05:00+08:00">' + data.CreateDateString + '</time>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</a>' +
+                        '</div>' +
+                    '</div>' +
+                '</li>';
+            totalUnreadCount++;
+            $(noti).insertAfter("#headNoti");
+            $("#notiCount").text(totalUnreadCount);
+            $("#notiLabelCount").text(totalUnreadCount);
+        }
+    </script>
+
+
     @RenderSection("scripts", false)
 </body>
 
