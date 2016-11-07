@@ -174,7 +174,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             try
             {
-                postList = postService.GetAllPostOfUser(userId, skip, take).ToList<Post>();
+                postList = postService.GetAllProfilePost(userId, skip, take).ToList<Post>();
 
                 List<PostOveralViewModel> result = Mapper.Map<List<PostOveralViewModel>>(postList);
 
