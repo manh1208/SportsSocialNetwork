@@ -220,6 +220,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SenderId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Subject" Type="nvarchar(max)" />
           <Property Name="InvitationContent" Type="nvarchar(max)" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
@@ -1872,6 +1873,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SenderId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Subject" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="InvitationContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
@@ -2999,6 +3001,7 @@
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="InvitationContent" ColumnName="InvitationContent" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
                 <ScalarProperty Name="SenderId" ColumnName="SenderId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

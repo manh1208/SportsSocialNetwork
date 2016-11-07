@@ -23,6 +23,7 @@ namespace SportsSocialNetwork.Models.Entities
     
         public int Id { get; set; }
         public string SenderId { get; set; }
+        public string Subject { get; set; }
         public string InvitationContent { get; set; }
         public System.DateTime CreateDate { get; set; }
         public bool Active { get; set; }
