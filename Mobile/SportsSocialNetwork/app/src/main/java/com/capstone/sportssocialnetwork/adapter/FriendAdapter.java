@@ -88,13 +88,7 @@ public class FriendAdapter extends ArrayAdapter<User> implements View.OnClickLis
         viewHolder.txtHobby.setText(user.getListSport());
         viewHolder.btnDropdown.setTag(position);
         viewHolder.btnDropdown.setOnClickListener(this);
-        if (followed) {
-            if (user.isFollowed()) {
-                viewHolder.btnDropdown.setVisibility(View.GONE);
-            } else {
-                viewHolder.btnDropdown.setVisibility(View.VISIBLE);
-            }
-        }
+
 
         return convertView;
     }
@@ -105,12 +99,17 @@ public class FriendAdapter extends ArrayAdapter<User> implements View.OnClickLis
         inflater.inflate(R.menu.menu_friend, popupMenu.getMenu());
         popupMenu.show();
         MenuItem item = popupMenu.getMenu().getItem(0);
+        final User user = getItem(position);
         if (followed) {
-            item.setTitle("Theo dõi");
+            if(user.isFollowed()){
+                item.setTitle("Bỏ theo dõi");
+            }else {
+                item.setTitle("Theo dõi");
+            }
         } else {
             item.setTitle("Bỏ theo dõi");
         }
-        final User user = getItem(position);
+
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
