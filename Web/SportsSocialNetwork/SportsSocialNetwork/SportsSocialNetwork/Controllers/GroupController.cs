@@ -140,7 +140,7 @@ namespace SportsSocialNetwork.Controllers
 
             //WWWWWWWWWWWWWWWWWWWWWWWWTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
             //get suggest group
-            List<GroupMember> listGroup = _groupMemberService.GetActive(g => g.UserId.Equals(curUserId)).ToList();
+            List<GroupMember> listGroup = _groupMemberService.GetActive(g => g.UserId.Equals(curUserId) && g.Status == (int)GroupMemberStatus.Approved).ToList();
             List<Group> suggestGroups = _groupService.GetSuggestGroup(id.Value);
             List<GroupFullInfoViewModel> suggestGroupsVM = Mapper.Map<List<GroupFullInfoViewModel>>(suggestGroups);
             foreach (var item in suggestGroupsVM)

@@ -1251,12 +1251,13 @@
             </div>
             <div class="panel-body" style="padding: 0 0 15px 0;">
                 @{
+                    int count = 1;
                     GroupFullInfoViewModel last = suggestGroups.Last();
                     foreach (var item in suggestGroups)
                     {
                         if (item.Equals(last))
                         {
-                            if (item.Id != groupId && item.IsMember != true)
+                            if (item.Id != groupId && item.IsMember != true && count <= 5)
                             {
                                 <div class="suggest-group lastSuggestGroup" id="suggestGroup_@item.Id">
                                     <div class="col-sm-12">
@@ -1271,7 +1272,7 @@
                                             <div class="col-sm-6 height-50 vertical-align">
                                                 <a href="/Group/Index/@item.Id" style="color:#808c97;"><span class="vertical-align-middle"><strong>@item.Name</strong></span></a>
                                             </div>
-                                            <div class="col-sm-6" style="margin-top:5px;">
+                                            <div class="col-sm-6" style="margin-top:5px; text-align:right;">
                                                 <button type="button" class="btn btn-outline btn-default" title="Tham gia nhóm" onclick="joinSuggestGroup(@item.Id)"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
                                             </div>
                                         </div>
@@ -1281,7 +1282,7 @@
                         }
                         else
                         {
-                            if (item.Id != groupId && item.IsMember != true)
+                            if (item.Id != groupId && item.IsMember != true && count <= 5)
                             {
                                 <div class="suggest-group" id="suggestGroup_@item.Id">
                                     <div class="col-sm-12">
@@ -1296,7 +1297,7 @@
                                             <div class="col-sm-6 height-50 vertical-align">
                                                 <a href="/Group/Index/@item.Id" style="color:#808c97;"><span class="vertical-align-middle"><strong>@item.Name</strong></span></a>
                                             </div>
-                                            <div class="col-sm-6" style="margin-top:5px;">
+                                            <div class="col-sm-6" style="margin-top:5px; text-align:right;">
                                                 <button type="button" class="btn btn-outline btn-default" title="Tham gia nhóm" onclick="joinSuggestGroup(@item.Id)"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
                                             </div>
                                         </div>
@@ -1304,7 +1305,7 @@
                                 </div>
                             }
                         }
-
+                        count++;
                     }
                 }
                 @*<div class="suggest-group">
