@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
@@ -61,7 +62,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PostDetailActivity extends AppCompatActivity implements View.OnClickListener{
+public class PostDetailActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int SELECT_PICTURE = 1994;
     private static final String TAG = "PostDetailActivity";
     private ListView lvComment;
@@ -116,10 +117,10 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.e(TAG,s.toString());
-                if (s.length()>0 || body!=null){
+                Log.e(TAG, s.toString());
+                if (s.length() > 0 || body != null) {
                     btnSent.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     btnSent.setVisibility(View.GONE);
                 }
             }
@@ -136,7 +137,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (firstVisibleItem + visibleItemCount >= totalItemCount-1 && totalItemCount >1) {
+                if (firstVisibleItem + visibleItemCount >= totalItemCount - 1 && totalItemCount > 1) {
                     if (!flag_loading && !isFull) {
                         loadData();
                     }
@@ -147,37 +148,36 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
     private void loadData() {
         flag_loading = true;
-        Call<ResponseModel<List<Comment>>> call =  service.getPostService()
-                .getComment(postId,skip,take);
+        Call<ResponseModel<List<Comment>>> call = service.getPostService()
+                .getComment(postId, skip, take);
         call.enqueue(new Callback<ResponseModel<List<Comment>>>() {
             @Override
             public void onResponse(Call<ResponseModel<List<Comment>>> call, Response<ResponseModel<List<Comment>>> response) {
-                flag_loading =false;
-                if(response.isSuccessful())
-                {
-                    if (response.body().isSucceed()){
-                        if (response.body().getData()!=null &&
-                                response.body().getData().size()>0) {
+                flag_loading = false;
+                if (response.isSuccessful()) {
+                    if (response.body().isSucceed()) {
+                        if (response.body().getData() != null &&
+                                response.body().getData().size() > 0) {
                             adapter.setAppendFeed(response.body().getData());
                             if (adapter.getCount() < (skip + take)) {
                                 isFull = true;
                             }
 
                             skip = skip + take;
-                        }else{
+                        } else {
                             isFull = true;
                         }
-                    }else{
+                    } else {
                         Toast.makeText(PostDetailActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
                     }
-                }else{
+                } else {
                     Toast.makeText(PostDetailActivity.this, response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseModel<List<Comment>>> call, Throwable t) {
-                flag_loading=false;
+                flag_loading = false;
                 Toast.makeText(PostDetailActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
             }
         });
@@ -185,15 +185,15 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
     private void prepareData() {
 
-        adapter = new CommentAdapter(this,R.layout.item_comment,new ArrayList<Comment>());
+        adapter = new CommentAdapter(this, R.layout.item_comment, new ArrayList<Comment>());
         lvComment.addHeaderView(header);
         lvComment.setAdapter(adapter);
         init();
     }
 
     private void initView() {
-        postId = getIntent().getIntExtra("postId",-1);
-        userId = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
+        postId = getIntent().getIntExtra("postId", -1);
+        userId = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID, "");
         lvComment = (ListView) findViewById(R.id.lv_comment);
         txtComment = (EditText) findViewById(R.id.txt_post_comment);
         btnCamera = (ImageButton) findViewById(R.id.btn_post_comment_image);
@@ -203,7 +203,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         btnCamera.setOnClickListener(this);
         ivDeleteImage.setOnClickListener(this);
         btnSent.setOnClickListener(this);
-        header= ((LayoutInflater)
+        header = ((LayoutInflater)
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(
                 R.layout.item_feed, null, false);
         headerViewHolder = new ViewHolder(header);
@@ -214,7 +214,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    private void init(){
+    private void init() {
         skip = 0;
         take = MAX_TAKE;
         flag_loading = false;
@@ -227,45 +227,44 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         adapter.addNew();
     }
 
-    private void loadNewData(){
+    private void loadNewData() {
         init();
         flag_loading = true;
-        Call<ResponseModel<PostDetailResponseModel>> call =  service.getPostService()
-                                                            .getPostDetail(postId,userId,skip,take);
+        Call<ResponseModel<PostDetailResponseModel>> call = service.getPostService()
+                .getPostDetail(postId, userId, skip, take);
         call.enqueue(new Callback<ResponseModel<PostDetailResponseModel>>() {
             @Override
             public void onResponse(Call<ResponseModel<PostDetailResponseModel>> call, Response<ResponseModel<PostDetailResponseModel>> response) {
-                flag_loading =false;
-                if(response.isSuccessful())
-                {
-                    if (response.body().isSucceed()){
+                flag_loading = false;
+                if (response.isSuccessful()) {
+                    if (response.body().isSucceed()) {
                         updateHeaderUI(response.body().getData().getPost());
-                        if (response.body().getData().getComments()!=null &&
-                                response.body().getData().getComments().size()>0) {
+                        if (response.body().getData().getComments() != null &&
+                                response.body().getData().getComments().size() > 0) {
                             adapter.setAppendFeed(response.body().getData().getComments());
                             if (adapter.getCount() < (skip + take)) {
                                 isFull = true;
                             }
 
                             skip = skip + take;
-                        }else{
+                        } else {
                             isFull = true;
                         }
-                    }else{
+                    } else {
                         Toast.makeText(PostDetailActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
                     }
-                }else{
+                } else {
                     Toast.makeText(PostDetailActivity.this, response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseModel<PostDetailResponseModel>> call, Throwable t) {
-                flag_loading=false;
+                flag_loading = false;
                 Toast.makeText(PostDetailActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
             }
         });
-        
+
     }
 
     @Override
@@ -279,13 +278,13 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         headerViewHolder.txtNumOfComment.setText(feed.getCommentCount() + " bình luận");
         if (feed.isLiked()) {
             setLiked(headerViewHolder.btnLike);
-            isLiked=true;
+            isLiked = true;
         } else {
             setUnLiked(headerViewHolder.btnLike);
-            isLiked=false;
+            isLiked = false;
         }
         likeCount = feed.getLikeCount();
-        
+
         Picasso.with(this).load(Uri.parse(DataUtils.URL + feed.getUser().getAvatar()))
                 .placeholder(R.drawable.img_default_avatar)
                 .error(R.drawable.img_default_avatar_error)
@@ -298,7 +297,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         }
         headerViewHolder.txtName.setText(feed.getUser().getFullName());
         headerViewHolder.txtContent.setText(feed.getPostContent());
-        if (feed.getPostImages().size()>0) {
+        if (feed.getPostImages().size() > 0) {
             headerViewHolder.ivImage.setVisibility(View.VISIBLE);
             Picasso.with(this).load(Uri.parse(DataUtils.URL + feed.getPostImages().get(0).getImage()))
                     .placeholder(R.drawable.placeholder)
@@ -308,9 +307,9 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         } else {
             headerViewHolder.ivImage.setVisibility(View.GONE);
         }
-        if (userId.equals(feed.getUser().getId())){
+        if (userId.equals(feed.getUser().getId())) {
             headerViewHolder.btnMenuPopUp.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             headerViewHolder.btnMenuPopUp.setVisibility(View.GONE);
         }
         headerViewHolder.btnMenuPopUp.setTag(feed);
@@ -329,28 +328,28 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         switch (id) {
             case R.id.btn_feed_like:
                 headerViewHolder.btnLike.setEnabled(false);
-                Call<ResponseModel<String>> callLike = service.getPostService().likePost(postId,userId);
+                Call<ResponseModel<String>> callLike = service.getPostService().likePost(postId, userId);
                 callLike.enqueue(new Callback<ResponseModel<String>>() {
                     @Override
                     public void onResponse(Call<ResponseModel<String>> call, Response<ResponseModel<String>> response) {
                         headerViewHolder.btnLike.setEnabled(true);
-                        if(response.isSuccessful()){
-                            if (response.body().isSucceed()){
+                        if (response.isSuccessful()) {
+                            if (response.body().isSucceed()) {
                                 isLiked = !isLiked;
                                 if (isLiked) {
                                     setLiked((Button) v);
                                     likeCount++;
-                                    headerViewHolder.txtNumOfLike.setText(likeCount+"");
-                                }else{
-                                    setUnLiked((Button)v);
+                                    headerViewHolder.txtNumOfLike.setText(likeCount + "");
+                                } else {
+                                    setUnLiked((Button) v);
                                     likeCount--;
-                                    headerViewHolder.txtNumOfLike.setText(likeCount+"");
+                                    headerViewHolder.txtNumOfLike.setText(likeCount + "");
                                 }
 
-                            }else{
+                            } else {
                                 Toast.makeText(PostDetailActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
                             }
-                        }else{
+                        } else {
                             Toast.makeText(PostDetailActivity.this, response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -392,9 +391,9 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.iv_write_comment_delete:
                 body = null;
-                if (txtComment.getText()==null || txtComment.getText().toString().equals("")){
+                if (txtComment.getText() == null || txtComment.getText().toString().equals("")) {
                     btnSent.setVisibility(View.GONE);
-                }else{
+                } else {
                     btnSent.setVisibility(View.VISIBLE);
                 }
                 ivCommentImage.setVisibility(View.GONE);
@@ -410,20 +409,20 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 RequestBody content =
                         RequestBody.create(
                                 MediaType.parse("multipart/form-data"), txtComment.getText().toString());
-                Call<ResponseModel<Comment>> call =  service.getPostService().commentPost(postId,userBody,content,body);
+                Call<ResponseModel<Comment>> call = service.getPostService().commentPost(postId, userBody, content, body);
                 call.enqueue(new Callback<ResponseModel<Comment>>() {
                     @Override
                     public void onResponse(Call<ResponseModel<Comment>> call, Response<ResponseModel<Comment>> response) {
-                        if (response.isSuccessful()){
-                            if (response.body().isSucceed()){
+                        if (response.isSuccessful()) {
+                            if (response.body().isSucceed()) {
                                 ivCommentImage.setVisibility(View.GONE);
                                 ivDeleteImage.setVisibility(View.GONE);
-                                body=null;
+                                body = null;
                                 loadNewData();
-                            }else{
+                            } else {
                                 Toast.makeText(PostDetailActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
                             }
-                        }else{
+                        } else {
                             Toast.makeText(PostDetailActivity.this, response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -459,12 +458,13 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             body =
                     MultipartBody.Part.createFormData("image", f.getName(), requestFile);
 
-            ivCommentImage.setImageURI(data.getData());
+            Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
+            ivCommentImage.setImageBitmap(bitmap);
             ivCommentImage.setVisibility(View.VISIBLE);
             ivDeleteImage.setVisibility(View.VISIBLE);
-            if (body !=null){
+            if (body != null) {
                 btnSent.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 btnSent.setVisibility(View.GONE);
             }
         }
@@ -493,22 +493,28 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setLiked(Button btnLike) {
 
         Drawable[] drawables = btnLike.getCompoundDrawables();
-        drawables[0].setTint(getResources().getColor(R.color.colorPrimary));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            drawables[0].setTint(getResources().getColor(R.color.colorPrimary));
+        }
         btnLike.setTextColor(getResources().getColor(R.color.colorPrimary));
-        btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
+        }
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setUnLiked(Button btnLike) {
         Drawable[] drawables = btnLike.getCompoundDrawables();
-        drawables[0].setTint(Color.BLACK);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            drawables[0].setTint(Color.BLACK);
+        }
         btnLike.setTextColor(Color.BLACK);
-        btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
+        }
     }
 
     private final class ViewHolder {

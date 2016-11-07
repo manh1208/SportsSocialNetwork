@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.ImageViewerActivity;
 import com.capstone.sportssocialnetwork.activity.PostDetailActivity;
+import com.capstone.sportssocialnetwork.activity.ProfileActivity;
 import com.capstone.sportssocialnetwork.custom.CustomImage;
 import com.capstone.sportssocialnetwork.custom.RoundedImageView;
 import com.capstone.sportssocialnetwork.model.Feed;
@@ -132,25 +133,35 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
         viewHolder.btnLike.setOnClickListener(this);
         viewHolder.ivImage.setTag(position);
         viewHolder.ivImage.setOnClickListener(this);
+        viewHolder.ivAvatar.setTag(position);
+        viewHolder.ivAvatar.setOnClickListener(this);
+        viewHolder.txtName.setTag(position);
+        viewHolder.txtName.setOnClickListener(this);
         return convertView;
     }
 
     private void setLiked(Button btnLike) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Drawable[] drawables = btnLike.getCompoundDrawables();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             drawables[0].setTint(mContext.getResources().getColor(R.color.colorPrimary));
-            btnLike.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+        }
+        btnLike.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
         }
+
     }
 
     private void setUnLiked(Button btnLike) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Drawable[] drawables = btnLike.getCompoundDrawables();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             drawables[0].setTint(Color.BLACK);
-            btnLike.setTextColor(Color.BLACK);
+        }
+        btnLike.setTextColor(Color.BLACK);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
         }
+
     }
 
     public void setFeeds(List<Feed> feeds) {
@@ -228,9 +239,6 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                 showPopupMenu(v);
                 break;
 
-            case R.id.txt_feed_name:
-
-                break;
             case R.id.iv_feed_post_image:
                 Feed feed = getItem(position);
                 String[] imageArray = new String[feed.getPostImages().size()];
@@ -240,6 +248,13 @@ public class FeedAdapter extends ArrayAdapter<Feed> implements View.OnClickListe
                 intent = new Intent(mContext, ImageViewerActivity.class);
                 intent.putExtra("position", 0);
                 intent.putExtra("listImage", imageArray);
+                mContext.startActivity(intent);
+                break;
+            case R.id.iv_feed_avatar:
+            case R.id.txt_feed_name:
+                feed = getItem(position);
+                intent = new Intent(mContext, ProfileActivity.class);
+                intent.putExtra("userId",feed.getUserId());
                 mContext.startActivity(intent);
                 break;
         }

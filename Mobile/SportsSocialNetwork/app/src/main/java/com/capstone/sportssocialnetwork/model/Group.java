@@ -22,6 +22,8 @@ public class Group {
     private boolean active;
     @SerializedName("IsAdmin")
     private boolean admin;
+    @SerializedName("Sport")
+    private Sport sport;
 
     public int getId() {
         return id;
@@ -85,5 +87,13 @@ public class Group {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public Sport getSport() {
+        return sport;
+    }
+
+    public void setSport(Sport sport) {
+        this.sport = sport;
     }
 }

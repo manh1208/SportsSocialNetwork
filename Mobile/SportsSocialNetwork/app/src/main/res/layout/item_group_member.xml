@@ -24,6 +24,8 @@
             android:orientation="vertical"
             android:layout_marginLeft="20sp"
             android:layout_toRightOf="@+id/iv_group_member_avatar"
+            android:layout_toLeftOf="@+id/btn_group_member_menu_down"
+            android:layout_marginRight="10sp"
             android:layout_centerVertical="true"
             >
             <TextView
@@ -32,8 +34,19 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textStyle="normal"
-                android:text="Bóng đá số"
+                android:text="Nguyễn Văn Mạnh"
                 android:textColor="#000"/>
         </LinearLayout>
+        <ImageButton
+            android:visibility="gone"
+            android:layout_alignParentRight="true"
+            android:id="@+id/btn_group_member_menu_down"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:src="@drawable/ic_down"
+            android:scaleType="fitCenter"
+            android:layout_centerVertical="true"
+            android:padding="5sp"
+            android:background="@null"/>
     </RelativeLayout>
 </LinearLayout>

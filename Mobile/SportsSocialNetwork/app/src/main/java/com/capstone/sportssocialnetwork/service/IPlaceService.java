@@ -1,14 +1,19 @@
 package com.capstone.sportssocialnetwork.service;
 
+import com.capstone.sportssocialnetwork.activity.CreateFieldScheduleActivity;
+import com.capstone.sportssocialnetwork.model.Event;
 import com.capstone.sportssocialnetwork.model.Field;
+import com.capstone.sportssocialnetwork.model.FieldSchedule;
 import com.capstone.sportssocialnetwork.model.FieldType;
 import com.capstone.sportssocialnetwork.model.Place;
+import com.capstone.sportssocialnetwork.model.request.CreateFieldScheduleRequestModel;
 import com.capstone.sportssocialnetwork.model.response.PlaceResponseModel;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -44,4 +49,13 @@ public interface IPlaceService {
                                                       );
     @POST("/api/field/showfieldlist")
     Call<ResponseModel<List<Field>>> getFieldOfPlace(@Query("placeId") int placeId);
+
+    @POST("/api/event/getalleventofplaceowner")
+    Call<ResponseModel<List<Event>>> getEventOfPlaceOwner(@Query("ownerId")String id);
+
+    @POST("/api/fieldschedule/createfieldschedule")
+    Call<ResponseModel<FieldSchedule>> createFieldSchedule(@Body CreateFieldScheduleRequestModel requestModel);
+
+    @POST("/api/fieldschedule/showallschedule")
+    Call<ResponseModel<List<FieldSchedule>>> getFieldSchedule(@Query("placeId")int placeId);
 }

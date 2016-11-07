@@ -1,4 +1,4 @@
-package com.capstone.sportssocialnetwork.Enumerable;
+package com.capstone.sportssocialnetwork.enumerable;
 
 /**
  * Created by ManhNV on 10/14/16.

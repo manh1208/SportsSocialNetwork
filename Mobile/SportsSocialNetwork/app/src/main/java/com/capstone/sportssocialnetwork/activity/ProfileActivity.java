@@ -2,16 +2,21 @@ package com.capstone.sportssocialnetwork.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -58,7 +63,9 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
     private TabLayout tabLayout;
     private User user;
     private String userId;
+    private String currentId;
     private RestService service;
+    private Window window;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +88,7 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
 
 
     private void prepareData() {
-        ProfilePageAdapter adapter = new ProfilePageAdapter(getSupportFragmentManager());
+        ProfilePageAdapter adapter = new ProfilePageAdapter(getSupportFragmentManager(), userId);
         viewPager.setAdapter(adapter);
         tabLayout.post(new Runnable() {
             @Override
@@ -91,10 +98,14 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
         });
         toolbar.setTitle("");
         appbar.addOnOffsetChangedListener(this);
-
         setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         startAlphaAnimation(textviewTitle, 0, View.INVISIBLE);
 
         //set avatar and cover
@@ -104,7 +115,8 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
 
     private void initView() {
         service = new RestService();
-        userId = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID, "");
+        userId = getIntent().getStringExtra("userId");
+        currentId = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
         tabLayout = (TabLayout) findViewById(R.id.tabs_profile);
         viewPager = (ViewPager) findViewById(R.id.viewpager_profile);
         appbar = (AppBarLayout) findViewById(R.id.appbar);
@@ -116,6 +128,12 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
         textviewTitle = (TextView) findViewById(R.id.textview_title);
         avatar = (RoundedImageView) findViewById(R.id.avatar);
         txtFullName = (TextView) findViewById(R.id.txt_fullName);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        }
     }
 
 
@@ -123,7 +141,11 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
     public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
         int maxScroll = appBarLayout.getTotalScrollRange();
         float percentage = (float) Math.abs(offset) / (float) maxScroll;
-
+        if (!(percentage<0.01f||percentage>=0.99)) {
+            LinearLayout.LayoutParams params = new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, (int) (percentage * 150), 0, 0);
+            tabLayout.setLayoutParams(params);
+        }
         handleAlphaOnTitle(percentage);
         handleToolbarTitleVisibility(percentage);
     }
@@ -132,6 +154,7 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
 
             if (!mIsTheTitleVisible) {
+
                 startAlphaAnimation(textviewTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 mIsTheTitleVisible = true;
             }
@@ -148,6 +171,7 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
     private void handleAlphaOnTitle(float percentage) {
         if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
             if (mIsTheTitleContainerVisible) {
+                toolbar.setVisibility(View.VISIBLE);
                 startAlphaAnimation(linearlayoutTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 mIsTheTitleContainerVisible = false;
             }
@@ -163,7 +187,7 @@ public class ProfileActivity extends AppCompatActivity implements AppBarLayout.O
 
 
     private void loadUserProfile() {
-        service.getAccountService().getUserProfile(userId).enqueue(new Callback<ResponseModel<User>>() {
+        service.getAccountService().getUserProfile(userId,currentId).enqueue(new Callback<ResponseModel<User>>() {
             @Override
             public void onResponse(Call<ResponseModel<User>> call, Response<ResponseModel<User>> response) {
                 if (response.isSuccessful()) {

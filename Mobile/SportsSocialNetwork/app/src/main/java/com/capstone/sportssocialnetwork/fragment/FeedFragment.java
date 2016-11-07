@@ -271,7 +271,7 @@ public class FeedFragment extends Fragment {
     }
 
     private void getUser(){
-        service.getAccountService().getUserProfile(userId).enqueue(new Callback<ResponseModel<User>>() {
+        service.getAccountService().getUserProfile(userId,userId).enqueue(new Callback<ResponseModel<User>>() {
             @Override
             public void onResponse(Call<ResponseModel<User>> call, Response<ResponseModel<User>> response) {
                 if (response.isSuccessful()){

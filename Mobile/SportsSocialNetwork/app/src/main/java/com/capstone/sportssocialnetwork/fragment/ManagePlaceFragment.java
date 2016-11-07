@@ -1,15 +1,19 @@
 package com.capstone.sportssocialnetwork.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
+import com.capstone.sportssocialnetwork.activity.ManagePlaceDetailActivity;
+import com.capstone.sportssocialnetwork.activity.PlaceDetailActivity;
 import com.capstone.sportssocialnetwork.adapter.ManagePlaceAdapter;
 import com.capstone.sportssocialnetwork.model.Place;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
@@ -45,6 +49,16 @@ public class ManagePlaceFragment extends Fragment {
 
     private void prepareDate() {
         viewHolder.lvPlace.setAdapter(adapter);
+        viewHolder.lvPlace.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), ManagePlaceDetailActivity.class);
+                intent.putExtra("placeId",adapter.getItem(position).getId());
+                intent.putExtra("placeName",adapter.getItem(position).getName());
+                intent.putExtra("placeAvatar",adapter.getItem(position).getAvatar());
+                startActivity(intent);
+            }
+        });
     }
 
     private void initView(View v) {

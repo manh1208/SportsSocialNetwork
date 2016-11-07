@@ -1,5 +1,6 @@
 package com.capstone.sportssocialnetwork.adapter;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,22 +17,35 @@ import com.capstone.sportssocialnetwork.fragment.ProfilePostFragment;
  */
 public class ProfilePageAdapter extends FragmentPagerAdapter {
 
+    private String userId;
 
-    public ProfilePageAdapter(FragmentManager fm) {
+    public ProfilePageAdapter(FragmentManager fm, String userId) {
         super(fm);
+        this.userId = userId;
     }
 
     @Override
     public Fragment getItem(int position) {
-        switch (position){
+        Fragment fragment = null;
+        switch (position) {
             case 0:
-                return new ProfileContentFragment();
+                fragment = new ProfileContentFragment();
+                break;
             case 1:
-                return new ProfilePostFragment();
+                fragment = new ProfilePostFragment();
+                break;
             case 2:
-                return new ProfileImageFragment();
+                fragment = new ProfileImageFragment();
+                break;
+
         }
-        return null;
+
+        if (fragment != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString("userId", userId);
+            fragment.setArguments(bundle);
+        }
+        return fragment;
     }
 
     @Override
@@ -42,7 +56,7 @@ public class ProfilePageAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 return "Thông tin cá nhân";
             case 1:

@@ -7,13 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.capstone.sportssocialnetwork.Enumerable.OrderStatusEnum;
-import com.capstone.sportssocialnetwork.Enumerable.PaidTypeEnum;
+import com.capstone.sportssocialnetwork.enumerable.OrderStatusEnum;
+import com.capstone.sportssocialnetwork.enumerable.PaidTypeEnum;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.model.Order;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
@@ -98,7 +97,8 @@ public class MyOrderAdapter extends ArrayAdapter<Order> {
 
         Picasso.with(mContext).load(Uri.parse(DataUtils.URL + order.getqRCodeUrl()))
                 .placeholder(R.drawable.image_logo)
-                .error(R.drawable.img_default_avatar_error)
+                .error(R.drawable.ic_image_error)
+                .noFade()
                 .into(ivQR);
 //                Toast.makeText(mContext, (DataUtils.URL+order.getqRCodeUrl()), Toast.LENGTH_SHORT).show();
 

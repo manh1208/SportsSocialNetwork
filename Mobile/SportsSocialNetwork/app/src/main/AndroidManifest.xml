@@ -44,6 +44,10 @@
             android:label="@string/title_activity_place_detail"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".activity.ManagePlaceDetailActivity"
+            android:label="@string/title_activity_place_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activity.ImageViewerActivity"
             android:label="@string/title_activity_image_viewer"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -114,6 +118,18 @@
         <activity
             android:name=".activity.CreateGroupActivity"
             android:label="@string/title_activity_create_group"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.CreateFieldScheduleActivity"
+            android:label="@string/title_activity_create_field_schedule"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.InvitationActivity"
+            android:label="@string/title_activity_invitation"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

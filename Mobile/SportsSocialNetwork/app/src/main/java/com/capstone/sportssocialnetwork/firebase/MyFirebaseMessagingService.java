@@ -56,7 +56,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.image_logo)
                 .setContentTitle("Sport Social Network")
                 .setContentText(message)
-                .setColor(getColor(R.color.colorPrimary))
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setPriority(android.app.Notification.PRIORITY_HIGH);

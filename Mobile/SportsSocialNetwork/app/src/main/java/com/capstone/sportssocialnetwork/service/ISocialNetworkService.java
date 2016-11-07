@@ -1,6 +1,7 @@
 package com.capstone.sportssocialnetwork.service;
 
 import com.capstone.sportssocialnetwork.model.Feed;
+import com.capstone.sportssocialnetwork.model.Sport;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 
 import java.util.List;
@@ -18,4 +19,7 @@ public interface ISocialNetworkService {
     Call<ResponseModel<List<Feed>>> getAllPost(@Query("currentUserId") String currentUserId,
                                                @Query("take")int take,
                                                 @Query("skip")int skip);
+
+    @POST("/api/sport/getallsport")
+    Call<ResponseModel<List<Sport>>> getAllSport();
 }

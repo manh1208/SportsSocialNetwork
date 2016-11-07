@@ -52,7 +52,7 @@ public class ProfileImageFragment extends Fragment {
     }
 
     private void initView(View v) {
-        userId = DataUtils.getINSTANCE(getActivity()).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
+        userId = getArguments().getString("userId");
         service = new RestService();
         lvProfileImage = (GridView) v.findViewById(R.id.lv_profile_image);
     }

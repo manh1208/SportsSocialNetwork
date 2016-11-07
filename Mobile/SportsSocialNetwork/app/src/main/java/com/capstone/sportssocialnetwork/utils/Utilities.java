@@ -74,6 +74,20 @@ public class Utilities {
         return res;
     }
 
+    public static Date getZeroSecondTimeDate(Date fecha) {
+        Date res = fecha;
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime( fecha );
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        res = calendar.getTime();
+
+        return res;
+    }
+
+
     public static int exifToDegrees(int exifOrientation) {
         if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
         else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
@@ -150,7 +164,7 @@ public class Utilities {
             f.createNewFile();
             InputStream imageStream = context.getContentResolver().openInputStream(imageUri);
             Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
-            bitmap = scaleDown(bitmap, 2000, false);
+            bitmap = scaleDown(bitmap, maxPicel, false);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             bitmap.compress(imageType, imageQuality /*ignored for PNG*/, bos);
             byte[] bitmapdata = bos.toByteArray();

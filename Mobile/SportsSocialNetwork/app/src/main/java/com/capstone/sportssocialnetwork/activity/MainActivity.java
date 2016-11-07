@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
@@ -27,17 +28,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.capstone.sportssocialnetwork.Enumerable.OrderStatusEnum;
-import com.capstone.sportssocialnetwork.Enumerable.PaidTypeEnum;
+import com.capstone.sportssocialnetwork.enumerable.OrderStatusEnum;
+import com.capstone.sportssocialnetwork.enumerable.PaidTypeEnum;
 import com.capstone.sportssocialnetwork.R;
+import com.capstone.sportssocialnetwork.custom.RoundedImageView;
+import com.capstone.sportssocialnetwork.fragment.ManageEventFragment;
 import com.capstone.sportssocialnetwork.fragment.ManageOrderFragment;
 import com.capstone.sportssocialnetwork.fragment.ManagePlaceFragment;
 import com.capstone.sportssocialnetwork.model.CheckIn;
+import com.capstone.sportssocialnetwork.model.User;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
+import com.capstone.sportssocialnetwork.utils.SharePreferentName;
 import com.capstone.sportssocialnetwork.utils.Utilities;
 import com.google.zxing.Result;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -56,6 +62,12 @@ public class MainActivity extends AppCompatActivity
     private ZXingScannerView mScannerView;
     private boolean isStartCamera;
     private RestService service;
+    private MenuItem menuCheckin;
+    private String userId;
+    private RoundedImageView ivAvatar;
+    private TextView txtFullName;
+    private NavigationView nvView;
+    private View headerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +76,7 @@ public class MainActivity extends AppCompatActivity
         initialView();
         checkPermissionCamera();
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Quản lý");
+        getSupportActionBar().setTitle("Quản lý địa điểm");
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
@@ -81,13 +93,23 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, new ManagePlaceFragment())
+                .commit();
+        getUser();
     }
 
     private void initialView() {
-        service  = new RestService();
+        service = new RestService();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mainLayout = (CoordinatorLayout) findViewById(R.id.app_main);
+        userId = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
+        nvView = (NavigationView) findViewById(R.id.nav_view);
+        headerView = nvView.inflateHeaderView(R.layout.nav_header_main);
+        ivAvatar = (RoundedImageView) headerView.findViewById(R.id.iv_user_avatar);
+        txtFullName = (TextView) headerView.findViewById(R.id.txt_user_fullname);
     }
 
     @Override
@@ -109,6 +131,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        menuCheckin = menu.getItem(0);
+        menuCheckin.setVisible(false);
         return true;
     }
 
@@ -211,16 +235,16 @@ public class MainActivity extends AppCompatActivity
         call.enqueue(new Callback<ResponseModel<CheckIn>>() {
             @Override
             public void onResponse(Call<ResponseModel<CheckIn>> call, Response<ResponseModel<CheckIn>> response) {
-                if (response.isSuccessful()){
-                    if (response.body().isSucceed()){
+                if (response.isSuccessful()) {
+                    if (response.body().isSucceed()) {
                         showDialog(response.body().getData());
-                    }else {
+                    } else {
                         Toast.makeText(MainActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
-                        if (response.body().getData()!=null) {
+                        if (response.body().getData() != null) {
                             showDialog(response.body().getData());
                         }
                     }
-                }else{
+                } else {
                     Toast.makeText(MainActivity.this, response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -233,7 +257,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void showDialog(CheckIn order){
+    private void showDialog(CheckIn order) {
 
         AlertDialog.Builder buider = new AlertDialog.Builder(MainActivity.this);
         View v = getLayoutInflater().inflate(R.layout.dialog_order_info, null, false);
@@ -247,15 +271,15 @@ public class MainActivity extends AppCompatActivity
         field.setText(order.getFieldName());
         TextView useDate = (TextView) v.findViewById(R.id.txt_order_detail_use_date);
         try {
-            Date date = Utilities.getDateTime(order.getStartTime(),DataUtils.FORMAT_DATE_TIME);
-            useDate.setText( Utilities.getDateTimeString(date,DataUtils.FORMAT_DATE));
+            Date date = Utilities.getDateTime(order.getStartTime(), DataUtils.FORMAT_DATE_TIME);
+            useDate.setText(Utilities.getDateTimeString(date, DataUtils.FORMAT_DATE));
         } catch (ParseException e) {
             Toast.makeText(MainActivity.this, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
         TextView startTime = (TextView) v.findViewById(R.id.txt_order_detail_start_time);
         try {
-            Date date = Utilities.getDateTime(order.getStartTime(),DataUtils.FORMAT_DATE_TIME);
-            startTime.setText( Utilities.getDateTimeString(date,DataUtils.FORMAT_TIME));
+            Date date = Utilities.getDateTime(order.getStartTime(), DataUtils.FORMAT_DATE_TIME);
+            startTime.setText(Utilities.getDateTimeString(date, DataUtils.FORMAT_TIME));
         } catch (ParseException e) {
             Toast.makeText(MainActivity.this, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
@@ -263,8 +287,8 @@ public class MainActivity extends AppCompatActivity
 
         TextView endTime = (TextView) v.findViewById(R.id.txt_order_detail_end_time);
         try {
-            Date date = Utilities.getDateTime(order.getEndTime(),DataUtils.FORMAT_DATE_TIME);
-            endTime.setText( Utilities.getDateTimeString(date,DataUtils.FORMAT_TIME));
+            Date date = Utilities.getDateTime(order.getEndTime(), DataUtils.FORMAT_DATE_TIME);
+            endTime.setText(Utilities.getDateTimeString(date, DataUtils.FORMAT_TIME));
         } catch (ParseException e) {
             Toast.makeText(MainActivity.this, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
@@ -289,18 +313,30 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         Fragment fragment = null;
+        menuCheckin.setVisible(false);
         switch (id) {
             case R.id.nav_manage_place:
                 fragment = new ManagePlaceFragment();
                 getSupportActionBar().setTitle("Quản lý địa điểm");
                 break;
             case R.id.nav_manage_order:
+                menuCheckin.setVisible(true);
                 fragment = new ManageOrderFragment();
                 getSupportActionBar().setTitle("Quản lý đơn đặt sân");
                 break;
+            case R.id.nav_manage_event:
+                fragment = new ManageEventFragment();
+                getSupportActionBar().setTitle("Quản lý sự kiện");
+                break;
+            case R.id.nav_goes_to_ssn:
+                Intent intent = new Intent(MainActivity.this,MainBottomBarActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                finish();
+                break;
             case R.id.nav_manage_logout:
                 DataUtils.getINSTANCE(this).getPreferences().edit().clear().commit();
-                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                 intent = new Intent(MainActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 finish();
@@ -317,6 +353,35 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void getUser(){
+        service.getAccountService().getUserProfile(userId,userId).enqueue(new Callback<ResponseModel<User>>() {
+            @Override
+            public void onResponse(Call<ResponseModel<User>> call, Response<ResponseModel<User>> response) {
+                if (response.isSuccessful()){
+                    if (response.body().isSucceed()){
+                        Picasso.with(MainActivity.this).load(Uri.parse(DataUtils.URL + response.body().getData().getAvatar()))
+                                .placeholder(R.drawable.img_default_avatar)
+                                .error(R.drawable.img_default_avatar_error)
+                                .fit()
+                                .into(ivAvatar);
+                        txtFullName.setText(response.body().getData().getFullName());
+                    }else{
+                        Toast.makeText(MainActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(MainActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseModel<User>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 
     private void checkPermissionCamera() {
         if (ContextCompat.checkSelfPermission(this,

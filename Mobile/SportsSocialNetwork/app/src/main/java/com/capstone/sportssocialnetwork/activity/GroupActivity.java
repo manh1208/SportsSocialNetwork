@@ -72,6 +72,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
     private Toolbar toolbar;
     private ActionBar actionBar;
     private String groupName;
+    private boolean isAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -239,7 +240,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void getUser(){
-        service.getAccountService().getUserProfile(userId).enqueue(new Callback<ResponseModel<User>>() {
+        service.getAccountService().getUserProfile(userId,userId).enqueue(new Callback<ResponseModel<User>>() {
             @Override
             public void onResponse(Call<ResponseModel<User>> call, Response<ResponseModel<User>> response) {
                 if (response.isSuccessful()){
@@ -276,6 +277,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
                                 .error(R.drawable.img_default_avatar_error)
                                 .fit()
                                 .into(viewHolder.ivGroupCover);
+                        isAdmin = response.body().getData().isAdmin();
                     }else{
                         Toast.makeText(mContext, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
                     }
@@ -306,12 +308,14 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
                 Intent intent = new Intent(GroupActivity.this,GroupMemberActivity.class);
                 intent.putExtra("groupId",groupId);
                 intent.putExtra("groupName",groupName);
+                intent.putExtra("isAdmin",isAdmin);
                 startActivity(intent);
                 break;
             case R.id.layout_group_information:
                 intent = new Intent(GroupActivity.this,GroupInformationActivity.class);
                 intent.putExtra("groupId",groupId);
                 intent.putExtra("groupName",groupName);
+                intent.putExtra("isAdmin",isAdmin);
                 startActivity(intent);
                 break;
         }
@@ -329,7 +333,28 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.menu_group_leave_group:
-                        Toast.makeText(mContext, "Rời khỏi nhóm", Toast.LENGTH_SHORT).show();
+                        service.getGroupService().leaveGroup(groupId,userId).enqueue(new Callback<ResponseModel<String>>() {
+                            @Override
+                            public void onResponse(Call<ResponseModel<String>> call, Response<ResponseModel<String>> response) {
+                                if (response.isSuccessful()) {
+                                    if (response.body().isSucceed()) {
+                                        Intent intent = new Intent(GroupActivity.this,MainBottomBarActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        Toast.makeText(GroupActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(GroupActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseModel<String>> call, Throwable t) {
+                                Toast.makeText(GroupActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
+                            }
+                        });
                         return true;
 
                 }

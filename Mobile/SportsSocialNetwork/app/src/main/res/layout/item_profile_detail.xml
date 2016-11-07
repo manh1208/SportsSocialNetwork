@@ -103,11 +103,11 @@
 
         <Button
             android:textColor="#fff"
-            android:id="@+id/btn_profile_detail"
+            android:id="@+id/btn_profile_follow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:text="Chỉnh sửa"
+            android:text="Theo dõi"
             android:textSize="15sp" />
 
     </LinearLayout>

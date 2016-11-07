@@ -1,21 +1,16 @@
 package com.capstone.sportssocialnetwork.activity;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.capstone.sportssocialnetwork.Enumerable.OrderStatusEnum;
+import com.capstone.sportssocialnetwork.enumerable.OrderStatusEnum;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.adapter.MyOrderAdapter;
 import com.capstone.sportssocialnetwork.model.Order;
@@ -23,12 +18,8 @@ import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.capstone.sportssocialnetwork.utils.SharePreferentName;
-import com.capstone.sportssocialnetwork.utils.Utilities;
-import com.squareup.picasso.Picasso;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;

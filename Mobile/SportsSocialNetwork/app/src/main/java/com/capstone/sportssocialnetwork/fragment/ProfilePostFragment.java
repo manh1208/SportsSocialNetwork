@@ -48,6 +48,7 @@ public class ProfilePostFragment extends Fragment {
     private ViewHolder viewHolder;
     private ISocialNetworkService sSNService;
     private String userId;
+    private String currentUserId;
     private static final int MAX_TAKE = 5;
     private int skip;
     private int take;
@@ -156,7 +157,7 @@ public class ProfilePostFragment extends Fragment {
 
     private void loadData() {
         flag_loading = true;
-        Call<ResponseModel<List<Feed>>> callback = service.getPostService().getUserPost(userId,userId, take, skip);
+        Call<ResponseModel<List<Feed>>> callback = service.getPostService().getUserPost(userId,currentUserId, take, skip);
         callback.enqueue(new Callback<ResponseModel<List<Feed>>>() {
             @Override
             public void onResponse(Call<ResponseModel<List<Feed>>> call, Response<ResponseModel<List<Feed>>> response) {
@@ -248,7 +249,8 @@ public class ProfilePostFragment extends Fragment {
 
 
     private void initView(View v) {
-        userId = DataUtils.getINSTANCE(getActivity()).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
+        userId = getArguments().getString("userId");
+        currentUserId = DataUtils.getINSTANCE(getActivity()).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
         viewHolder = new ViewHolder(v);
         service = new RestService();
     }
