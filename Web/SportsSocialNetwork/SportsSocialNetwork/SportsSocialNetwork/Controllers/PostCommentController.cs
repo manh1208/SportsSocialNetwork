@@ -106,7 +106,7 @@ namespace SportsSocialNetwork.Controllers
                     IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
 
                     // Notify clients in the group
-                    hubContext.Clients.User(userId).send(model);
+                    hubContext.Clients.User(post.UserId).send(model);
 
                 }
 

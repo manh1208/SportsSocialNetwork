@@ -100,7 +100,7 @@ namespace SportsSocialNetwork.Controllers
         }
 
         [HttpPost]
-        public int GetUnreadCount(string userId)
+        public string GetUnreadCount(string userId)
         {
             var service = this.Service<INotificationService>();
 
@@ -111,9 +111,9 @@ namespace SportsSocialNetwork.Controllers
 
             } catch (Exception)
             {
-                return 0;
+                return "";
             }
-            return result;
+            return result.ToString();
 
         }
 
