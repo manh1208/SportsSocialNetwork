@@ -132,15 +132,15 @@
                         <a data-toggle="dropdown" href="javascript:void(0)" title="Notifications" aria-expanded="false"
                            data-animation="slide-bottom" role="button">
                             <i class="icon wb-bell" aria-hidden="true"></i>
-                            <span class="badge badge-danger up">5</span>
+                            <span class="badge badge-danger up" id="notiCount">5</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media" role="menu">
+                        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media" role="menu" id="listNoti">
                             <li class="dropdown-menu-header" role="presentation">
                                 <h5>NOTIFICATIONS</h5>
-                                <span class="label label-round label-danger">New 5</span>
+                                <span class="label label-round label-danger" id="notiLabelCount">New 5</span>
                             </li>
 
-                            <li class="list-group" role="presentation">
+                            <li class="list-group" role="presentation" id="notiId_5">
                                 <div data-role="container">
                                     <div data-role="content">
                                         <a class="list-group-item" href="javascript:void(0)" role="menuitem">
@@ -444,6 +444,29 @@
             // Start the connection.
             $.connection.hub.start();
         });
+    </script>
+
+    <script>
+        function appendNoti(data) {
+            var noti = '<li class="list-group" role="presentation" id="notiId_' + data.Data.Id + '">' +
+                                '<div data-role="container">' +
+                                    '<div data-role="content">' +
+                                        '<a class="list-group-item" href="javascript:void(0)" role="menuitem">' +
+                                            '<div class="media">' +
+                                                '<div class="media-left padding-right-10">' +
+                                                    '<i class="icon wb-settings bg-red-600 white icon-circle" aria-hidden="true"></i>' +
+                                                '</div>' +
+                                                '<div class="media-body">' +
+                                                    '<h6 class="media-heading">' + data.Data.Message + '</h6>' +
+                                                    '<time class="media-meta" datetime="2015-06-11T14:05:00+08:00">' + data.Data.CreateDate + '</time>' +
+                                                '</div>' +
+                                            '/div>' +
+                                        '</a>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</li>';
+            $("#listNoti").append(noti);
+        }
     </script>
 
 

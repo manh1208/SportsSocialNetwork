@@ -42,6 +42,82 @@ namespace SportsSocialNetwork.Controllers
             return Json(response);
         }
 
+        [HttpPost]
+        public ActionResult MarkAsRead(int id)
+        {
+            var service = this.Service<INotificationService>();
+
+            ResponseModel<bool> response = null;
+
+            try
+            {
+                bool result = service.MarkAsRead(id);
+                if (result)
+                {
+                    response = new ResponseModel<bool>(result, "Đã đánh dấu", null);
+                }
+
+                else
+                {
+                    response = new ResponseModel<bool>(result, "Không có thông báo nào để đánh dấu", null);
+
+                }
+            }
+            catch (Exception)
+            {
+                response = ResponseModel<bool>.CreateErrorResponse("Không thể đánh dấu", systemError);
+            }
+
+            return Json(response);
+        }
+
+        [HttpPost]
+        public ActionResult MarkAllAsRead(String userId)
+        {
+            var service = this.Service<INotificationService>();
+
+            ResponseModel<bool> response = null;
+
+            try
+            {
+                bool result = service.MarkAllAsRead(userId);
+                if (result)
+                {
+                    response = new ResponseModel<bool>(result, "Đã đánh dấu", null);
+                }
+                else
+                {
+                    response = new ResponseModel<bool>(result, "Không có thông báo nào để đánh dấu", null);
+                }
+
+            }
+            catch (Exception)
+            {
+                response = ResponseModel<bool>.CreateErrorResponse("Không thể đánh dấu", systemError);
+            }
+
+            return Json(response);
+        }
+
+        [HttpPost]
+        public int GetUnreadCount(string userId)
+        {
+            var service = this.Service<INotificationService>();
+
+            int result = 0;
+
+            try {
+                result = service.GetActive(x => x.UserId.Equals(userId) && (x.MarkRead == false || x.MarkRead == null)).ToList().Count;
+
+            } catch (Exception)
+            {
+                return 0;
+            }
+            return result;
+
+        }
+
+
         private NotificationCustomViewModel PrepareNotificationViewModel(Notification noti)
         {
             NotificationCustomViewModel result = Mapper.Map<NotificationCustomViewModel>(noti);
