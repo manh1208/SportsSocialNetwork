@@ -91,6 +91,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
 
+            result.Sender = PrepareAspNetUserOveralViewModel(invitation.AspNetUser);
+
             return result;
 
         }
@@ -159,6 +161,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             }
 
             result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+
+            result.Sender = PrepareAspNetUserOveralViewModel(invitation.AspNetUser);
 
             return result;
 
