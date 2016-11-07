@@ -113,63 +113,69 @@
     <link href="~/Content/assets/vendor/select2/select2.css" rel="stylesheet" />
 }
 
-<!--Change cover modal-->
-<div id="coverModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <form id="changeCover-form" method="post" autocomplete="off">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Chọn ảnh bìa</h4>
-                </div>
-                <div class="modal-body">
+@{
+    if (Model.isOwner)
+    {
+        <!--Change cover modal-->
+        <div id="coverModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <form id="changeCover-form" method="post" autocomplete="off">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Chọn ảnh bìa</h4>
+                        </div>
+                        <div class="modal-body">
 
-                    <div class="form-group form-material floating">
-                        <input type="text" class="form-control input-lg" readonly="" />
-                        <input type="file" id="inputCover" name="inputCover" />
-                        <label class="floating-label">Ảnh bìa</label>
-                    </div><br />
-                    <img id="previewCover" src="#" alt="previewCover" width="200" style="display:none;"/>
+                            <div class="form-group form-material floating">
+                                <input type="text" class="form-control input-lg" readonly="" />
+                                <input type="file" id="inputCover" name="inputCover" />
+                                <label class="floating-label">Ảnh bìa</label>
+                            </div><br />
+                            <img id="previewCover" src="#" alt="previewCover" width="200" style="display:none;" />
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-success" value="Cập nhật" />
-                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-success" value="Cập nhật" />
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-</div>
+        </div>
 
-<!--Change avatar modal-->
-<div id="avatarModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <form id="changeAva-form" method="post" autocomplete="off">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Chọn hình đại diện</h4>
-                </div>
-                <div class="modal-body">
+        <!--Change avatar modal-->
+        <div id="avatarModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <form id="changeAva-form" method="post" autocomplete="off">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Chọn hình đại diện</h4>
+                        </div>
+                        <div class="modal-body">
 
-                    <div class="form-group form-material floating">
-                        <input type="text" class="form-control input-lg" readonly="" />
-                        <input type="file" id="inputAvatar" name="inputAvatar" />
-                        <label class="floating-label">Hình đại diện</label>
-                    </div><br />
-                    <img id="previewAva" src="#" alt="previewAva" width="200" style="display:none;" />
+                            <div class="form-group form-material floating">
+                                <input type="text" class="form-control input-lg" readonly="" />
+                                <input type="file" id="inputAvatar" name="inputAvatar" />
+                                <label class="floating-label">Hình đại diện</label>
+                            </div><br />
+                            <img id="previewAva" src="#" alt="previewAva" width="200" style="display:none;" />
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-success" value="Cập nhật" />
-                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-success" value="Cập nhật" />
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-</div>
+        </div>
+    }
+}
+
 
 <!--Create group modal-->
 <div id="createGroupModal" class="modal fade" role="dialog">
@@ -182,7 +188,7 @@
                     <h4 class="modal-title">Tạo nhóm mới</h4>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="GroupCreator" id="GroupCreator" value="@Model.Id" />
+                    <input type="hidden" name="GroupCreator" id="GroupCreator" value="@User.Identity.GetUserId()" />
                     <div class="form-group form-material floating">
                         <input class="form-control input-lg" type="text" name="GroupName" id="GroupName" />
                         <label class="floating-label">Tên nhóm</label>
@@ -215,14 +221,23 @@
 
 <!--Cover area-->
 <div class="row">
-    <div class="col-md-12" id="coverImg">
-        <div id="changeCoverBtn" style="position:absolute; overflow:hidden; right:15px; bottom:10px; z-index:50; opacity:0.7; display:none;">
-            <a href="javascript:void(0)" onclick="changeCover()" class="btn btn-dark">
-                <i class="fa fa-image" aria-hidden="true"></i> Thay ảnh bìa
-            </a>
-        </div> 
-        <div class="panel panel-cover" style="background-image: url('@Model.CoverImage');
+    <div class="col-md-12 height-500" id="coverImg">
+        @{
+            if (Model.isOwner)
+            {
+                <div id="changeCoverBtn" style="position:absolute; overflow:hidden; right:15px; bottom:10px; z-index:50; opacity:0.7; display:none;">
+                    <a href="javascript:void(0)" onclick="changeCover()" class="btn btn-dark">
+                        <i class="fa fa-image" aria-hidden="true"></i> Thay ảnh bìa
+                    </a>
+                </div>
+            }
+        }
+        
+        @*<div class="panel panel-cover" style="background-image: url('@Model.CoverImage');
                 padding-top: 30%; background-position:center">
+        </div>*@
+        <div class="panel panel-cover" style="height:500px;">
+            <img style="width:100%;height:100%; display:block;" src="@Model.CoverImage" />
         </div>
     </div>
 </div>
@@ -237,9 +252,13 @@
                     <a class="avatar avatar-lg" href="javascript:void(0)">
                         <img class="groupAvatar" src="@Model.AvatarImage" alt="...">
                     </a>
-                    <div style="position:absolute; right:20px;top:140px; display:none;" id="changeAvaBtn">
-                        <button type="button" class="btn btn-pure btn-default icon wb-pencil" title="Đổi ảnh đại diện" onclick="changeAva()"></button>
-                    </div>
+                    @if (Model.isOwner)
+                    {
+                        <div style="position:absolute; right:20px;top:140px; display:none;" id="changeAvaBtn">
+                            <button type="button" class="btn btn-pure btn-default icon wb-pencil" title="Đổi ảnh đại diện" onclick="changeAva()"></button>
+                        </div>
+                    }
+                    
                     <div class="profile-user">@Model.FullName</div>
                     <div class="profile-job">@Model.Email</div>
                     @{
