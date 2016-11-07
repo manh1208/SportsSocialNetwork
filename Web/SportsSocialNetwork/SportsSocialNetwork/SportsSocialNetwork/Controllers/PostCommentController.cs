@@ -1,9 +1,11 @@
 ﻿using HenchmenWeb.Models.Notifications;
+using Microsoft.AspNet.SignalR;
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Hubs;
 using SportsSocialNetwork.Models.Notifications;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
@@ -87,16 +89,24 @@ namespace SportsSocialNetwork.Controllers
                 {
                     Notification noti = notiService.SaveNoti(user.Id, commentedUser.Id, "Comment", commentedUser.FullName + " đã bình luận về bài viết của bạn", int.Parse(NotificationType.Post.ToString("d")), post.Id, null, null);
 
+                    //Fire base noti
                     List<string> registrationIds = GetToken(user.Id);
 
                     //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
 
+                    NotificationModel model = Mapper.Map<NotificationModel>(PrepareNotificationCustomViewModel(noti));
+
                     if (registrationIds != null && registrationIds.Count != 0)
                     {
-                        NotificationModel model = Mapper.Map<NotificationModel>(PrepareNotificationCustomViewModel(noti));
-
                         Android.Notify(registrationIds, null, model);
                     }
+
+                    //SignalR Noti
+                    // Get the context for the Pusher hub
+                    IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                    // Notify clients in the group
+                    hubContext.Clients.User(userId).send(model);
 
                 }
 

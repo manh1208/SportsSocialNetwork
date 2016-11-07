@@ -46,7 +46,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         public IEnumerable<Notification> GetNoti(string userId, int skip, int take)
         {
-            return this.GetActive(x => x.UserId == userId).OrderBy(x => x.Id).Skip(skip).Take(take);
+            return this.GetActive(x => x.UserId == userId).OrderBy(x => x.CreateDate).Skip(skip).Take(take);
         }
 
         public bool MarkAsRead(int id)

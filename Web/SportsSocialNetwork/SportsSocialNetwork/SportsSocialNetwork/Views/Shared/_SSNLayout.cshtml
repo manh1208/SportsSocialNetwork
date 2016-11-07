@@ -315,6 +315,9 @@
     <script src="~/Content/assets/js/plugins/closeable-tabs.js"></script>
     <script src="~/Content/assets/js/components/tabs.js"></script>
     <script src="~/Content/assets/vendor/select2/select2.full.js"></script>
+    <!--Signalr-->
+    <script src="Scripts/jquery.signalR-2.2.1.min.js"></script>
+    <script src="signalr/hubs"></script>
 
     <script>
         (function (document, window, $) {
@@ -422,6 +425,28 @@
         }
 
     </script>
+
+    <script type="text/javascript">
+        $(function signalr() {
+            // Declare a proxy to reference the hub.
+            var commenthub = $.connection.realTimeHub;
+            // Create a function that the hub can call to broadcast messages.
+            commenthub.client.send = function (c) {
+                //process
+                var count = 0;
+
+                if (c != null) {
+                    count++;
+                }
+                alert(count);
+
+            };
+            // Start the connection.
+            $.connection.hub.start();
+        });
+    </script>
+
+
     @RenderSection("scripts", false)
 </body>
 
