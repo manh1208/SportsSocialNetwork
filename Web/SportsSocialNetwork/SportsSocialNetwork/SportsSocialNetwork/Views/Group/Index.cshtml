@@ -13,6 +13,7 @@
     var friends = ViewBag.friends as IEnumerable<SelectListItem>;
 
     List<GroupMemberFullInfoModel> GroupMember = ViewBag.groupMember;
+    List<GroupMemberFullInfoModel> PendingMembers = ViewBag.pendingMembers;
     List<GroupFullInfoViewModel> suggestGroups = ViewBag.suggestGroups;
     List<Group> groupList = ViewBag.GroupList;
     List<ChallengeDetailViewModel> challengedList = ViewBag.challengedList;
@@ -223,6 +224,39 @@
         </div>
     }
 }
+
+<!--challenge request detail-->
+<div id="challengeDetailModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <form id="challenge-form" method="post" autocomplete="off">
+            <input type="hidden" name="fromGroup" value="@Model.Id" />
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Lời mời thách đấu</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <img style="max-width:100%;" src="" id="RQCImage"/>
+                        </div>
+                        <div class="col-sm-7">
+                            <h3 id="RQCName"></h3>
+                            <p id="RQCDes"></p>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 
 <!--Create group modal-->
@@ -783,7 +817,62 @@
                     <!--END Post area-->
                 </div>
                         <div class="tab-pane" id="exampleTabsTwo" role="tabpanel" style="background-color:white;">
+                            @{
+                                if (PendingMembers != null && PendingMembers.Count > 0 && Model.IsAdmin)
+                                {
+                                    <div class="row" style="padding:20px 20px;">
+                                        <h3>Thành viên đang chờ duyệt</h3>
+                                        @{
+                                            foreach (var item in PendingMembers)
+                                            {
+                                                if (item.AspNetUser.Id != User.Identity.GetUserId())
+                                                {
+                                                    <div class="col-sm-6" style="margin-bottom:20px; padding: 10px 10px 0 10px;">
+                                                        <div style="border: 1px solid #e9ebee; overflow:hidden;">
+                                                            <div style="float:left; display:block; width:150px; height:150px;">
+                                                                @*<a class="avatar avatar-lg" href="javascript:void(0)">
+                                                                        <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
+                                                                    </a>*@
+                                                                <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                            </div>
+                                                            <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
+                                                             
+
+                                                                <a href="/Profile/Index?userId=@item.AspNetUser.Id"><h3>@item.AspNetUser.FullName</h3></a>
+                                                                @{
+                                                                    string hobbies = "";
+                                                                    for (int i = 0; i < item.AspNetUser.Hobbies.Count(); i++)
+                                                                    {
+                                                                        if (i == item.AspNetUser.Hobbies.Count() - 1)
+                                                                        {
+                                                                            hobbies += item.AspNetUser.Hobbies[i].Sport.Name;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            hobbies += item.AspNetUser.Hobbies[i].Sport.Name + ", ";
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                                <p>@hobbies</p>
+                                                                <button type="button" class="btn btn-default" onclick="approveMember('@item.AspNetUser.Id')"><i class="fa fa-check" aria-hidden="true"></i> Chấp nhận</button><br />
+                                                             
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+
+                                            }
+                                        }
+
+
+                                    </div>
+                                }
+                            }
+
                             <div class="row" style="padding:20px 20px;">
+                                <h3>Thành viên hiện có</h3>
                                 @{
                                     foreach (var item in GroupMember)
                                     {
@@ -908,23 +997,28 @@
                                                         </div>
                                                         <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.Id">
 
-                                                            @{
-                                                                if (Model.IsAdmin)
-                                                                {
-                                                                    <div class="btn-group" style="position:absolute; right:10px;top:10px;">
-                                                                        <button type="button" class="btn btn-default dropdown-toggle btn-outline" id="@item.Id"
-                                                                                data-toggle="dropdown" aria-expanded="false">
-                                                                            <span class="caret"></span>
-                                                                            <span class="sr-only">Toggle Dropdown</span>
-                                                                        </button>
-                                                                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="@item.Id" role="menu">
+                                                            <div class="btn-group" style="position:absolute; right:10px;top:10px;">
+                                                                <button type="button" class="btn btn-default dropdown-toggle btn-outline" id="@item.Id"
+                                                                        data-toggle="dropdown" aria-expanded="false">
+                                                                    <span class="caret"></span>
+                                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="@item.Id" role="menu">
+                                                                    <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="showRequestChallengeDetail(@item.Id)"><i class="fa fa-eye" aria-hidden="true"></i> Xem chi tiết</a></li>
+                                                                    @{
+                                                                        if (Model.IsAdmin)
+                                                                        {
                                                                             <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="cancelChallenge(@item.Id)"><i class="fa fa-remove" aria-hidden="true"></i> Hủy bỏ</a></li>
-                                                                            
+                                                                        }
+                                                                    }
 
-                                                                        </ul>
-                                                                    </div>
-                                                                }
-                                                            }
+                                                                    
+
+
+                                                                </ul>
+                                                            </div>
+
+                                                            
                                                             
                                                             <a href="/Group/Index/@id"><h3>@name</h3></a>
                                                             @{
@@ -978,19 +1072,22 @@
                                                         </div>
                                                         <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.Group1.Id">
                                                             
+                                                            <div class="btn-group" style="position:absolute; right:10px;top:10px;">
+                                                                <button type="button" class="btn btn-default dropdown-toggle btn-outline" id="@item.Id"
+                                                                        data-toggle="dropdown" aria-expanded="false">
+                                                                    <span class="caret"></span>
+                                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="@item.Id" role="menu">
+                                                                    <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="showRequestChallengeDetail(@item.Id)"><i class="fa fa-eye" aria-hidden="true"></i> Xem chi tiết</a></li>
+
+
+                                                                </ul>
+                                                            </div>
 
                                                             <a href="/Group/Index/@item.Id"><h3>@item.Group1.Name</h3></a>
                                                             <button type="button" class="btn btn-default" onclick="cancelChallenge(@item.Id)"><i class="fa fa-close" aria-hidden="true"></i> Hủy bỏ lời mời</button><br />
-                                                            @*@{
-                                                                if (item.isFollowed != true)
-                                                                {
-                                                                    <button type="button" class="btn btn-default" onclick="followUnfollowAD('@item.AspNetUser.Id')"><i class="fa fa-user-plus" aria-hidden="true"></i> Hủy bỏ lời mời</button><br />
-                                                                }
-                                                                else
-                                                                {
-                                                                    <button type="button" class="btn btn-default" onclick="followUnfollowAD('@item.AspNetUser.Id')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button><br />
-                                                                }
-                                                            }*@
+                                                 
 
                                                         </div>
                                                     </div>
@@ -1092,7 +1189,7 @@
                                                         {
 
                                                             <div class="col-sm-10" style="padding-left:0; padding-right:10px;">
-                                                                <p>@item.Group.Name</p>
+                                                                <a href="javascript:void(0)" onclick="showRequestChallengeDetail(@item.Id)">@item.Group.Name</a>
                                                             </div>
                                                             <div class="col-sm-2" style="padding:0;">
                                                                 <div class="btn-group">
@@ -1516,6 +1613,28 @@
                                 var outerDiv = $(elButton).parent();
                                 $(outerDiv).find("li").replaceWith('<li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="makeAsAdmin('+ uid +')"><i class="icon wb-user-circle" aria-hidden="true"></i> Chọn làm quản trị viên</a></li>');
                                 showMessage("Thay đổi thành công", "success", "OK");
+                            },
+                            error: function (error) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        })
+                    }
+                })
+        }
+
+        function approveMember(userId) {
+            showConfirmMessage("Bạn có chắc chắn muốn thêm thành viên này vào nhóm?",
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            url: '@Url.Action("ApproveMember")',
+                            type: 'POST',
+                            data: {
+                                userId: userId
+                            },
+                            success: function (data) {
+                                showMessage("Thêm thành viên mới thành công", "success", "OK");
+                                location.href = location.href;
                             },
                             error: function (error) {
                                 showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
@@ -1981,7 +2100,7 @@
         //accept challenge request
         function acceptChalenge(id) {
             var status = parseInt('@((int)ChallengeStatus.NotOperate)');
-            var el = "rqchallenge_" + id;
+            var el = "#rqchallenge_" + id;
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("UpdateChallenge", "Group")',
@@ -2101,6 +2220,46 @@
                             showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                         }
                     });
+                }
+            });
+        }
+
+        function showRequestChallengeDetail(id) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ShowRequestChallengeDetail", "Group")',
+                data: {
+                    id: id,
+                },
+                dataType: 'json',
+                success: function(data) {
+                    if(data.Succeed) {
+                        var curGroupID = '@Model.Id';
+                        var image;
+                        var name;
+                        var desc;
+                        if(curGroupID == data.AdditionalData.Group.Id) {
+                            image = data.AdditionalData.Group1.Avatar;
+                            name = data.AdditionalData.Group1.Name;
+                            desc = data.AdditionalData.Description;
+                        } else {
+                            image = data.AdditionalData.Group.Avatar;
+                            name = data.AdditionalData.Group.Name;
+                            desc = data.AdditionalData.Description;
+                        }
+                        $("#RQCImage").attr("src",image);
+                        $("#RQCName").text(name);
+                        $("#RQCDes").text(desc);
+
+                        $("#challengeDetailModal").modal('show');
+                    }
+                    else
+                    {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function() {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                 }
             });
         }

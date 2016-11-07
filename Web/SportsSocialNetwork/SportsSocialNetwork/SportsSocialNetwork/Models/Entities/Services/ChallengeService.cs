@@ -21,6 +21,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         IEnumerable<Challenge> GetSentChallengeRequest(int groupId);
 
         bool UpdateChallenge(int challengeId, int status);
+
+        Challenge FindById(int id);
         #endregion
 
     }
@@ -100,6 +102,12 @@ namespace SportsSocialNetwork.Models.Entities.Services
             }
 
             return result;
+        }
+
+        public Challenge FindById(int id)
+        {
+            Challenge cha = this.FirstOrDefaultActive(c => c.Id == id);
+            return cha;
         }
 
         #endregion

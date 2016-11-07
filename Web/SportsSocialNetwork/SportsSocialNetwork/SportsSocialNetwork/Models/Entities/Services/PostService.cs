@@ -56,7 +56,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         public IEnumerable<Post> GetAllProfilePost(string userId, int skip, int take)
         {
-            return this.GetActive(x => x.UserId == userId && x.GroupId == null).OrderByDescending(x => x.EditDate == null ? x.CreateDate : x.EditDate).Skip(skip).Take(take);
+            return this.GetActive(x => x.UserId == userId && x.GroupId == null && x.ProfileId == userId).OrderByDescending(x => x.EditDate == null ? x.CreateDate : x.EditDate).Skip(skip).Take(take);
         }
 
         public IEnumerable<Post> GetAllPostOfUser(string userId)
