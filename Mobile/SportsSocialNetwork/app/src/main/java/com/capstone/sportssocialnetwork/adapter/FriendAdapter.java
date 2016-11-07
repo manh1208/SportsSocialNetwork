@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.GroupMemberActivity;
 import com.capstone.sportssocialnetwork.activity.MainBottomBarActivity;
+import com.capstone.sportssocialnetwork.activity.ProfileActivity;
 import com.capstone.sportssocialnetwork.custom.RoundedImageView;
 import com.capstone.sportssocialnetwork.model.GroupMember;
 import com.capstone.sportssocialnetwork.model.User;
@@ -88,7 +89,10 @@ public class FriendAdapter extends ArrayAdapter<User> implements View.OnClickLis
         viewHolder.txtHobby.setText(user.getListSport());
         viewHolder.btnDropdown.setTag(position);
         viewHolder.btnDropdown.setOnClickListener(this);
-
+        viewHolder.ivAvatar.setTag(position);
+        viewHolder.ivAvatar.setOnClickListener(this);
+        viewHolder.txtName.setTag(position);
+        viewHolder.txtName.setOnClickListener(this);
 
         return convertView;
     }
@@ -155,6 +159,13 @@ public class FriendAdapter extends ArrayAdapter<User> implements View.OnClickLis
         switch (id) {
             case R.id.btn_friend_menu_down:
                 showPopupMenu(v, position);
+                break;
+            case R.id.iv_friend_avatar:
+            case R.id.txt_friend_name:
+                User user = getItem(position);
+                Intent intent = new Intent(mContext, ProfileActivity.class);
+                intent.putExtra("userId",user.getId());
+                mContext.startActivity(intent);
                 break;
         }
     }
