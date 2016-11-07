@@ -294,6 +294,7 @@
     <Compile Include="Controllers\FieldController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\LikeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
@@ -3996,6 +3997,7 @@
     <Content Include="Views\Profile\Index.cshtml" />
     <Content Include="Views\SSN\SearchDetail.cshtml" />
     <Content Include="Views\UserInvitation\Index.cshtml" />
+    <Content Include="Views\Invitation\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

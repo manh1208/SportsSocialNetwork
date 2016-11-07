@@ -166,17 +166,17 @@ namespace SportsSocialNetwork.Controllers
                     + " Ngày " + order.StartTime.ToString("dd/MM/yyyy") +". Tại sân: "+order.Field.Name+" ,địa điểm: "
                     +order.Field.Place.Name;
             }
-            
+            Invitation invi = new Invitation();
+            invi.SenderId = curUserId;
+            invi.InvitationContent = inviteContent + content;
+            invi.CreateDate = DateTime.Now;
+            invi.Active = true;
+            invitationService.Create(invi);
             foreach (var id in userId)
             {
                 UserInvitation UIn = new UserInvitation();
                 Notification noti = new Notification();
-                Invitation invi = new Invitation();
-                invi.SenderId = curUserId;
-                invi.InvitationContent = inviteContent + content;
-                invi.CreateDate = DateTime.Now;
-                invi.Active = true;
-                UIn.Invitation = invi;
+                UIn.InvitationId = invi.Id;
                 UIn.ReceiverId = id;
                 UIn.Active = true;
                 userInvitationService.Create(UIn);
