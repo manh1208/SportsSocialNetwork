@@ -111,7 +111,7 @@ namespace SportsSocialNetwork.Controllers
         }
 
         //create profile post
-        public ActionResult CreateProfilePost(string content, String sportSelect, IEnumerable<HttpPostedFileBase> uploadImages)
+        public ActionResult CreateProfilePost(string content, String sportSelect, IEnumerable<HttpPostedFileBase> uploadImages, string userId, string profileId)
         {
             var result = new AjaxOperationResult<PostGeneralViewModel>();
             var _postService = this.Service<IPostService>();
@@ -121,7 +121,8 @@ namespace SportsSocialNetwork.Controllers
             post.Active = true;
             post.CreateDate = DateTime.Now;
             post.LatestInteractionTime = DateTime.Now;
-            post.UserId = User.Identity.GetUserId();
+            post.UserId = userId;
+            post.ProfileId = profileId;
 
             if (uploadImages != null)
             {

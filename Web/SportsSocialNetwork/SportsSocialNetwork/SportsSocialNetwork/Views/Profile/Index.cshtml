@@ -398,11 +398,8 @@
                             </form>
                             <!--END Posting status area-->
                             <!--Post area-->
-                            <div class="panel" id="activities" role="tabpanel">
-                                <div class="panel-body">
-                                    <ul class="list-group" id="listPost"></ul>
-                                    <a class="btn btn-block btn-default profile-readMore" href="javascript:void(0)" role="button">Xem thêm bài viết</a>
-                                </div>
+                            <div id="activities" role="tabpanel">
+                                <ul class="list-group" id="listPost"></ul>
                             </div>
                             <!--END Post area-->
                         </div>
@@ -497,13 +494,10 @@
                     {
                         <div class="tab-pane active" id="exampleTabsOne" role="tabpanel">
                             <!--Posting status area-->
-
-
-
                             <form id="post-form" method="post" autocomplete="off">
                                 <div class="panel status-panel">
                                     <div class="panel-heading" style="border-bottom: solid 1px #efefef; padding:5px 0 5px 15px;">
-                                        <a href='javascript:void(0)' class="post-heading" onclick="addImage()" style="color:#76838f">
+                                        <a href="javascript:void(0)" class="post-heading" onclick="addImage()" style="color:#76838f">
                                             <i class="fa fa-camera post-heading-icon"></i> Thêm hình ảnh
                                         </a>
                                     </div>
@@ -519,7 +513,7 @@
                                         else
                                         {
                                             <textarea class="form-control input-lg" placeholder="Viết gì đó cho người này" rows="3" id="PostContent"></textarea>
-                                            }
+                                        }
                                     }
                                     @*<textarea class="form-control input-lg" placeholder="Viết gì đó cho nhóm của bạn" rows="3" id="PostContent"></textarea>*@
                                     <div id="previewImage" class="example margin-0" style="display:none">
@@ -546,11 +540,8 @@
                             </form>
                             <!--END Posting status area-->
                             <!--Post area-->
-                            <div class="panel" id="activities" role="tabpanel">
-                                <div class="panel-body">
-                                    <ul class="list-group" id="listPost"></ul>
-                                    <a class="btn btn-block btn-default profile-readMore" href="javascript:void(0)" role="button">Xem thêm bài viết</a>
-                                </div>
+                            <div id="activities" role="tabpanel">
+                                <ul class="list-group" id="listPost"></ul>
                             </div>
                             <!--END Post area-->
                         </div>
@@ -743,24 +734,18 @@
             data: array
         });
 
-        var selctedHobbies = @Html.Raw(Json.Encode((List<int>)hobbiesInt));
-        $('#hobbies').select2({
-            class: 'form-control',
-            width: '100%',
-            multiple: true,
-            maximumSelectionSize: 5,
-            placeholder: "Sở thích",
-            data: array
-        }).select2('val',selctedHobbies)
-
 
         $('#post-form').submit(function (e) {
             e.preventDefault();
             var postId = "-1";
             var postContent = $("#PostContent").val().trim();
+            var curUserId = '@User.Identity.GetUserId()';
+            var profileId = '@Model.Id';
             if(storedFiles.length!=0 || postContent){
                 var formData = new FormData(document.getElementById('post-form'));
                 formData.append("content",postContent);
+                formData.append("userId", curUserId);
+                formData.append("profileId", profileId);
                 for(var i=0, len=storedFiles.length; i<len; i++) {
                     formData.append('uploadImages', storedFiles[i]);
                 }
@@ -1142,6 +1127,23 @@
                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                 },
             })
+        });
+
+
+        $(document).ready(function(){
+            var u = '@Model.Id';
+            var f = '@User.Identity.GetUserId()';
+            if(u === f) {
+                var selctedHobbies = @Html.Raw(Json.Encode((List<int>)hobbiesInt));
+                $('#hobbies').select2({
+                    class: 'form-control',
+                    width: '100%',
+                    multiple: true,
+                    maximumSelectionSize: 5,
+                    placeholder: "Sở thích",
+                    data: array
+                }).select2('val',selctedHobbies)
+            }
         })
     </script>
 }
