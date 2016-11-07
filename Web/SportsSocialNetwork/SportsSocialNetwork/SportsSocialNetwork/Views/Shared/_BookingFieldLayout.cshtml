@@ -71,6 +71,36 @@
     <script>
         Breakpoints();
     </script>
+    <style>
+        .logo-link {
+            color: #fff;
+        }
+
+            .logo-link a span {
+                color: #fff;
+            }
+
+            .logo-link a {
+                text-decoration: none;
+            }
+    </style>
+    <style>
+        body {
+            background-color: #f1f4f5;
+        }
+
+        .page {
+            margin-right: 260px;
+        }
+
+        .page-content {
+            padding: 10px 0 0 0;
+        }
+
+        .user-search:hover {
+            background-color: #62a8ea;
+        }
+    </style>
 </head>
 <body class="dashboard">
     <!--[if lt IE 8]>
@@ -94,10 +124,14 @@
                 <span class="sr-only">Toggle Search</span>
                 <i class="icon wb-search" aria-hidden="true"></i>
             </button>
-            <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
-                <img class="navbar-brand-logo" src="~/Content/images/logo.png" title="Sports" />
-                <span class="navbar-brand-text"> Sports social network</span>
-            </div>
+            <a href="@Url.Action("Index","SSN", new { areas=""})">
+                <div class="navbar-brand navbar-brand-center site-gridmenu-toggle logo-link">
+
+                    <img class="navbar-brand-logo" src="~/Content/images/logo.png" title="Sports" />
+                    <span class="navbar-brand-text"> Sports social network</span>
+
+                </div>
+            </a>
         </div>
 
         <div class="navbar-container container-fluid" >
