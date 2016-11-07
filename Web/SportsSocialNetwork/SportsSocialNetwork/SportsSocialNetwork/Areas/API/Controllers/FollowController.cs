@@ -181,7 +181,17 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 result.BirthdayString = result.Birthday.ToString("dd/MM/yyyy");
             }
 
-            result.Followed = true;
+
+            Follow followCheck = user.Follows.FirstOrDefault(x => x.UserId.Equals(follow.FollowerId) && x.FollowerId.Equals(follow.UserId) && x.Active == true);
+
+            if (followCheck != null)
+            {
+                result.Followed = true;
+            }
+            else
+            {
+                result.Followed = false;
+            }
 
             result.FollowCount = followService.GetActive(x => x.FollowerId.Equals(user.Id)).Count();
 
