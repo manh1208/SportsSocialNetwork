@@ -296,32 +296,38 @@
 
             }
 
-            <div class="panel">
-                <div class="panel-heading text-center">
-                    <h3 class="panel-title" style="font-family:sans-serif">Gợi ý tin tức nên xem</h3>
-                </div>
-                <div class="panel-body" style="padding:0;padding-bottom:10px">
-                    <div class="suggest-group">
-                        <div class="col-sm-12">
-                            <div class="overlay">
-                                <img src="@ViewBag.SuggestNews.Image" style="display:block; max-height:100%;max-width:100%;" />
-                                <figcaption class="overlay-bottom overlay-panel overlay-background">
-                                    <h4><span class="fa fa-eye"> 255</span></h4>
-                                </figcaption>
-                            </div>
-                            <div class="row">
-                                <div class="clearfix"></div>
-                                <div class="col-sm-12 height-60">
-                                    <span class="vertical-align-middle" style="font-weight:bold">@ViewBag.SuggestNews.Title</span>
-                                    <span class="vertical-align-middle"><i class="fa fa-pencil" aria-hidden="true"></i> bởi @ViewBag.SuggestNews.AspNetUser.UserName</span>
+            @{
+                if (ViewBag.SuggestNews != null && ViewBag.SuggestNews.Count > 0)
+                {
+                    <div class="panel">
+                        <div class="panel-heading text-center">
+                            <h3 class="panel-title" style="font-family:sans-serif">Gợi ý tin tức nên xem</h3>
+                        </div>
+                        <div class="panel-body" style="padding:0;padding-bottom:10px">
+                            <div class="suggest-group">
+                                <div class="col-sm-12">
+                                    <div class="overlay">
+                                        <img src="@ViewBag.SuggestNews.Image" style="display:block; max-height:100%;max-width:100%;" />
+                                        <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                            <h4><span class="fa fa-eye"> 255</span></h4>
+                                        </figcaption>
+                                    </div>
+                                    <div class="row">
+                                        <div class="clearfix"></div>
+                                        <div class="col-sm-12 height-60">
+                                            <span class="vertical-align-middle" style="font-weight:bold">@ViewBag.SuggestNews.Title</span>
+                                            <span class="vertical-align-middle"><i class="fa fa-pencil" aria-hidden="true"></i> bởi @ViewBag.SuggestNews.AspNetUser.UserName</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="text-right"><em>Xem những tin khác</em></div>
+                        <div class="text-right"><em>Xem những tin khác</em></div>
 
-            </div>
+                    </div>
+                }
+            }
+            
         </div>
     </div>
     <!--END right side-bar-->
