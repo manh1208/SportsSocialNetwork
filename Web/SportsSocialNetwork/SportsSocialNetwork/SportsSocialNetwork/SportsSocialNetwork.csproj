@@ -280,6 +280,7 @@
     <Compile Include="Areas\PlaceOwner\Controllers\FieldController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\FieldScheduleController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\OrderController.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\ParticipationController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\PlaceController.cs" />
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\FieldScheduleDetailViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDatatableViewModel.cs" />
@@ -3725,6 +3726,8 @@
     <Content Include="Content\ckeditor\LICENSE.md" />
     <Content Include="Content\ckeditor\README.md" />
     <Content Include="Areas\PlaceOwner\Views\FieldSchedule\List.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Participation\Detail.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Participation\Index.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
