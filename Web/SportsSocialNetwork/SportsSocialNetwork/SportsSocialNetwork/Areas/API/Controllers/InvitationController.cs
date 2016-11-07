@@ -118,6 +118,32 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult RefuseInvitation(int id)
+        {
+            var service = this.Service<IUserInvitationService>();
+
+            ResponseModel<bool> response = null;
+            try
+            {
+                UserInvitation invi = service.FirstOrDefaultActive(x => x.Id == id);
+
+                invi.Accepted = false;
+
+                service.Update(invi);
+
+                service.Save();
+
+                response = new ResponseModel<bool>(true, "Đã từ chối lời mời", null);
+            }
+            catch (Exception)
+            {
+                response = ResponseModel<bool>.CreateErrorResponse("Thao tác thất bại", systemError);
+            }
+            return Json(response);
+
+        }
+
         private InvitationViewModel PrepareInvitationViewModelForReceiver(Invitation invitation, string currentUserId)
         {
             InvitationViewModel result = Mapper.Map<InvitationViewModel>(invitation);
