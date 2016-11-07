@@ -273,6 +273,7 @@
           <Property Name="PostId" Type="int" />
           <Property Name="InvitationId" Type="int" />
           <Property Name="OrderId" Type="int" />
+          <Property Name="GroupId" Type="int" />
           <Property Name="CreateDate" Type="datetime" />
           <Property Name="MarkRead" Type="bit" />
           <Property Name="Active" Type="bit" Nullable="false" />
@@ -829,6 +830,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Notification_Group">
+          <End Role="Group" Type="Self.Group" Multiplicity="0..1" />
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Notification_Invitation">
           <End Role="Invitation" Type="Self.Invitation" Multiplicity="0..1" />
           <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
@@ -1262,6 +1275,10 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Notification" EntitySet="Notification" />
           </AssociationSet>
+          <AssociationSet Name="FK_Notification_Group" Association="Self.FK_Notification_Group">
+            <End Role="Group" EntitySet="Group" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
           <AssociationSet Name="FK_Notification_Invitation" Association="Self.FK_Notification_Invitation">
             <End Role="Invitation" EntitySet="Invitation" />
             <End Role="Notification" EntitySet="Notification" />
@@ -1546,6 +1563,10 @@
           <AssociationSet Name="FK_GroupMember_Group" Association="SSNModel.FK_GroupMember_Group">
             <End Role="Group" EntitySet="Groups" />
             <End Role="GroupMember" EntitySet="GroupMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_Group" Association="SSNModel.FK_Notification_Group">
+            <End Role="Group" EntitySet="Groups" />
+            <End Role="Notification" EntitySet="Notifications" />
           </AssociationSet>
           <AssociationSet Name="FK_Post_Group" Association="SSNModel.FK_Post_Group">
             <End Role="Group" EntitySet="Groups" />
@@ -1842,6 +1863,7 @@
           <NavigationProperty Name="Challenges1" Relationship="SSNModel.FK_Challenge_Group1" FromRole="Group" ToRole="Challenge" />
           <NavigationProperty Name="Sport" Relationship="SSNModel.FK_Group_Sport" FromRole="Group" ToRole="Sport" />
           <NavigationProperty Name="GroupMembers" Relationship="SSNModel.FK_GroupMember_Group" FromRole="Group" ToRole="GroupMember" />
+          <NavigationProperty Name="Notifications" Relationship="SSNModel.FK_Notification_Group" FromRole="Group" ToRole="Notification" />
           <NavigationProperty Name="Posts" Relationship="SSNModel.FK_Post_Group" FromRole="Group" ToRole="Post" />
         </EntityType>
         <EntityType Name="GroupMember">
@@ -1936,11 +1958,13 @@
           <Property Name="PostId" Type="Int32" />
           <Property Name="InvitationId" Type="Int32" />
           <Property Name="OrderId" Type="Int32" />
+          <Property Name="GroupId" Type="Int32" />
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <Property Name="MarkRead" Type="Boolean" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Notification_AspNetUsers" FromRole="Notification" ToRole="AspNetUser" />
           <NavigationProperty Name="AspNetUser1" Relationship="SSNModel.FK_Notification_AspNetUsers1" FromRole="Notification" ToRole="AspNetUser" />
+          <NavigationProperty Name="Group" Relationship="SSNModel.FK_Notification_Group" FromRole="Notification" ToRole="Group" />
           <NavigationProperty Name="Invitation" Relationship="SSNModel.FK_Notification_Invitation" FromRole="Notification" ToRole="Invitation" />
           <NavigationProperty Name="Order" Relationship="SSNModel.FK_Notification_Order" FromRole="Notification" ToRole="Order" />
           <NavigationProperty Name="Post" Relationship="SSNModel.FK_Notification_Post" FromRole="Notification" ToRole="Post" />
@@ -2600,6 +2624,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Notification_Group">
+          <End Type="SSNModel.Group" Role="Group" Multiplicity="0..1" />
+          <End Type="SSNModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Post_Group">
           <End Type="SSNModel.Group" Role="Group" Multiplicity="0..1" />
           <End Type="SSNModel.Post" Role="Post" Multiplicity="*" />
@@ -3051,6 +3087,7 @@
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="MarkRead" ColumnName="MarkRead" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="InvitationId" ColumnName="InvitationId" />
                 <ScalarProperty Name="PostId" ColumnName="PostId" />

@@ -20,6 +20,7 @@ namespace SportsSocialNetwork.Models.Entities
             this.Challenges = new HashSet<Challenge>();
             this.Challenges1 = new HashSet<Challenge>();
             this.GroupMembers = new HashSet<GroupMember>();
+            this.Notifications = new HashSet<Notification>();
             this.Posts = new HashSet<Post>();
         }
     
@@ -38,6 +39,8 @@ namespace SportsSocialNetwork.Models.Entities
         public virtual Sport Sport { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GroupMember> GroupMembers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Notification> Notifications { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Post> Posts { get; set; }
     }
