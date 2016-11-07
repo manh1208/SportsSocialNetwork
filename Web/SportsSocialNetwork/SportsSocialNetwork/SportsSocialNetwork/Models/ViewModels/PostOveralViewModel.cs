@@ -18,6 +18,7 @@ namespace SportsSocialNetwork.Models
         public String EditDateString { get; set; }
         public List<PostImageViewModel> PostImages { get; set; }
         public bool Active { get; set; }
+        public string ProfileId { get; set; }
         public Nullable<int> GroupId { get; set; }
         public AspNetUserSimpleModel AspNetUser { get; set; }
         public int LikeCount { get; set; }
