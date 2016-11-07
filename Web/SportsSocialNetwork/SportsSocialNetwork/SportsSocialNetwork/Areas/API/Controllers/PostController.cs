@@ -241,6 +241,90 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             try
             {
                 Post post = Mapper.Map<Post>(model);
+                post.ProfileId = post.UserId;
+                if (model.PostContent == null)
+                {
+                    post.PostContent = "";
+                }
+                post.ContentType = GetPostType(model);
+
+                if (post.ContentType != int.Parse(ContentPostType.TextOnly.ToString("d")))
+                {
+                    FileUploader uploader = new FileUploader();
+
+                    foreach (var img in model.UploadImage)
+                    {
+                        PostImage image = new PostImage();
+
+                        image.Image = uploader.UploadImage(img, userImagePath);
+
+                        post.PostImages.Add(image);
+                    }
+                }
+
+                post = service.CreatePost(post);
+
+                //Notify all group members
+                if (post.GroupId != null)
+                {
+                    List<GroupMember> memberList = GetMemberList(post.GroupId);
+
+                    AspNetUser postedUser = aspNetUserService.FindUser(post.UserId);
+
+                    foreach (var member in memberList)
+                    {
+                        if (!(member.UserId.Equals(post.UserId)))
+                        {
+                            Notification noti = notiService.SaveNoti(member.UserId, post.UserId, "Post", postedUser.FullName + " đã đăng một bài viết", (int)NotificationType.Post, post.Id, null, null);
+
+                            List<string> registrationIds = GetToken(member.UserId);
+
+                            if (registrationIds != null && registrationIds.Count != 0)
+                            {
+                                NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+
+                                Android.Notify(registrationIds, null, notiModel);
+                            }
+                        }
+                    }
+                }
+                //Missing post sport
+
+                result = Mapper.Map<PostOveralViewModel>(post);
+
+                result.AspNetUser = Mapper.Map<AspNetUserSimpleModel>(aspNetUserService.FindUser(result.UserId));
+
+                PreparePostOveralData(result, post.UserId);
+
+                response = new ResponseModel<PostOveralViewModel>(true, "Đăng bài thành công!", null, result);
+            }
+            catch (Exception)
+            {
+                response = ResponseModel<PostOveralViewModel>.CreateErrorResponse("Đăng bài thất bại!", systemError);
+            }
+
+            return Json(response);
+        }
+
+        [HttpPost]
+        public ActionResult PostOnTimeLine(PostUploadViewModel model, string profileId)
+        {
+            var service = this.Service<IPostService>();
+
+            var aspNetUserService = this.Service<IAspNetUserService>();
+
+            var notiService = this.Service<INotificationService>();
+
+            var memberService = this.Service<IGroupMemberService>();
+
+            PostOveralViewModel result = null;
+
+            ResponseModel<PostOveralViewModel> response = null;
+
+            try
+            {
+                Post post = Mapper.Map<Post>(model);
+                post.ProfileId = profileId;
                 if (model.PostContent == null)
                 {
                     post.PostContent = "";
