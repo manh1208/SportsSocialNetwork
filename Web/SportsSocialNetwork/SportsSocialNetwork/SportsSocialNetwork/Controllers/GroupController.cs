@@ -324,6 +324,7 @@ namespace SportsSocialNetwork.Controllers
         public ActionResult MakeGroupAdmin(int groupId, string curAdminId, string desAdminId)
         {
             var _GroupMemberService = this.Service<IGroupMemberService>();
+            var _notificationService = this.Service<INotificationService>();
             var result = new AjaxOperationResult();
 
             GroupMember curAdmin = _GroupMemberService.FirstOrDefaultActive(g => g.GroupId == groupId && g.UserId == curAdminId && g.Admin == true);
@@ -337,6 +338,19 @@ namespace SportsSocialNetwork.Controllers
                 //_GroupMemberService.Update(curAdmin);
                 _GroupMemberService.Update(desAdmin);
                 _GroupMemberService.Save();
+
+                //save noti
+                Notification noti = new Notification();
+                noti.UserId = desAdminId;
+                noti.FromUserId = curAdminId;
+                noti.Message = curAdmin.AspNetUser.FullName + " đã gán quyền quản trị cho bạn trong nhóm " + curAdmin.Group.Name;
+                noti.MarkRead = false;
+                noti.Type = (int)NotificationType.Other;
+                noti.Title = Utils.GetEnumDescription(NotificationType.Other);
+                noti.CreateDate = DateTime.Now;
+                _notificationService.Create(noti);
+                _notificationService.Save();
+
 
                 result.Succeed = true;
             }
@@ -352,6 +366,7 @@ namespace SportsSocialNetwork.Controllers
         public ActionResult RemoveGroupAdmin(int groupId, string curAdminId, string desAdminId)
         {
             var _GroupMemberService = this.Service<IGroupMemberService>();
+            var _notificationService = this.Service<INotificationService>();
             var result = new AjaxOperationResult();
 
             GroupMember curAdmin = _GroupMemberService.FirstOrDefaultActive(g => g.GroupId == groupId && g.UserId == curAdminId && g.Admin == true);
@@ -365,6 +380,18 @@ namespace SportsSocialNetwork.Controllers
                 //_GroupMemberService.Update(curAdmin);
                 _GroupMemberService.Update(desAdmin);
                 _GroupMemberService.Save();
+
+                //save noti
+                Notification noti = new Notification();
+                noti.UserId = desAdminId;
+                noti.FromUserId = curAdminId;
+                noti.Message = curAdmin.AspNetUser.FullName + " đã bỏ quyền quản trị cho bạn trong nhóm " + curAdmin.Group.Name;
+                noti.MarkRead = false;
+                noti.Type = (int)NotificationType.Other;
+                noti.Title = Utils.GetEnumDescription(NotificationType.Other);
+                noti.CreateDate = DateTime.Now;
+                _notificationService.Create(noti);
+                _notificationService.Save();
 
                 result.Succeed = true;
             }
@@ -381,8 +408,22 @@ namespace SportsSocialNetwork.Controllers
         {
             var result = new AjaxOperationResult();
             var _groupMemberService = this.Service<IGroupMemberService>();
-            if(_groupMemberService.ApproveMember(userId) == true)
+            var _notificationService = this.Service<INotificationService>();
+
+            GroupMember gm = _groupMemberService.ApproveMember(userId);
+            if (gm != null)
             {
+                //save noti
+                Notification noti = new Notification();
+                noti.UserId = userId;
+                noti.Message = "Bạn đã được chấp nhận làm thành viên trong nhóm " + gm.Group.Name;
+                noti.MarkRead = false;
+                noti.Type = (int)NotificationType.Other;
+                noti.Title = Utils.GetEnumDescription(NotificationType.Other);
+                noti.CreateDate = DateTime.Now;
+                _notificationService.Create(noti);
+                _notificationService.Save();
+
                 result.Succeed = true;
             }
             else
@@ -457,6 +498,7 @@ namespace SportsSocialNetwork.Controllers
                 {
                     var _userService = this.Service<IAspNetUserService>();
                     var _groupService = this.Service<IGroupService>();
+                    var _groupMemverService = this.Service<IGroupMemberService>();
 
                     AspNetUser fromUser = _userService.FindUser(userId);
                     Group group = _groupService.FindGroupById(groupId);
@@ -465,17 +507,31 @@ namespace SportsSocialNetwork.Controllers
                     {
                         if (!item.Equals(""))
                         {
-                            Notification noti = new Notification();
-                            noti.UserId = item;
-                            noti.FromUserId = userId;
-                            noti.Title = Utils.GetEnumDescription(NotificationType.Invitation);
-                            noti.Type = (int)NotificationType.Invitation;
-                            noti.Message = fromUser.FullName + " đã mời bạn vào nhóm " + group.Name;
-                            noti.CreateDate = DateTime.Now;
-                            _notificationService.Create(noti);
+                            //add to group
+                            if (_groupMemverService.JoinGroup(groupId, item))
+                            {
+                                //save noti
+                                Notification noti = new Notification();
+                                noti.UserId = item;
+                                noti.FromUserId = userId;
+                                noti.Title = Utils.GetEnumDescription(NotificationType.Invitation);
+                                noti.Type = (int)NotificationType.Invitation;
+                                noti.Message = fromUser.FullName + " đã mời bạn vào nhóm " + group.Name;
+                                noti.CreateDate = DateTime.Now;
+                                _notificationService.Create(noti);
+                                result.Succeed = true;
+                            }
+                            else
+                            {
+                                result.Succeed = false;
+                            }
+                        }
+                        else
+                        {
+                            result.Succeed = false;
                         }
                     }
-                    result.Succeed = true;
+                    
 
                 }
                 else
@@ -614,9 +670,25 @@ namespace SportsSocialNetwork.Controllers
         {
             var _challengeService = this.Service<IChallengeService>();
             var result = new AjaxOperationResult();
+            Challenge cha = _challengeService.CreateChallengeRequest(fromGroup, toGroup, description);
 
-            if(_challengeService.CreateChallengeRequest(fromGroup, toGroup, description) != null)
+            if (cha != null)
             {
+                var _notificationService = this.Service<INotificationService>();
+                var _groupMemberService = this.Service<IGroupMemberService>();
+
+                GroupMember gm = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == toGroup && g.Admin == true && g.Status == (int)GroupMemberStatus.Approved);
+                GroupMember fgm = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == fromGroup && g.Admin == true && g.Status == (int)GroupMemberStatus.Approved);
+                //save noti
+                Notification noti = new Notification();
+                noti.UserId = gm.UserId;
+                //noti.FromUserId = userId;
+                noti.Title = Utils.GetEnumDescription(NotificationType.Other);
+                noti.Type = (int)NotificationType.Other;
+                noti.Message = fgm.Group.Name + " đã gửi một lời mời thách đấu cho nhóm của bạn";
+                noti.CreateDate = DateTime.Now;
+                _notificationService.Create(noti);
+
                 result.Succeed = true;
             }
             else
