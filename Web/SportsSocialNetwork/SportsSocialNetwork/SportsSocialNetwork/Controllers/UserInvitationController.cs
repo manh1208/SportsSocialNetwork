@@ -52,13 +52,19 @@ namespace SportsSocialNetwork.Controllers
             {
                 newsList = _newsService.GetActive().ToList();
             }
-            ViewBag.SuggestNews = newsList.FirstOrDefault();
+            if (newsList != null)
+            {
+                ViewBag.SuggestNews = newsList.FirstOrDefault();
+            }
 
             //load group name
             var _groupService = this.Service<IGroupService>();
             List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f =>
             f.UserId == userId).ToList().Count > 0).ToList();
-            ViewBag.GroupList = groupList;
+            if (groupList != null)
+            {
+                ViewBag.GroupList = groupList;
+            }
 
             //suggest follower
             List<FollowSuggestViewModel> userList = new List<FollowSuggestViewModel>();
@@ -111,7 +117,10 @@ namespace SportsSocialNetwork.Controllers
                 userList.Add(model);
             }
             List<FollowSuggestViewModel> suggestUserList = userList.OrderByDescending(p => p.weight).Take(10).ToList();
-            ViewBag.suggestUserList = suggestUserList;
+            if (suggestUserList != null)
+            {
+                ViewBag.suggestUserList = suggestUserList;
+            }
 
             //load follow numbers
             var _followService = this.Service<IFollowService>();

@@ -82,7 +82,10 @@ namespace SportsSocialNetwork.Controllers
                 userList.Add(followsug);
             }
             List<FollowSuggestViewModel> suggestUserList = userList.OrderByDescending(p => p.weight).Take(10).ToList();
-            ViewBag.suggestUserList = suggestUserList;
+            if (suggestUserList != null)
+            {
+                ViewBag.suggestUserList = suggestUserList;
+            }
 
             //get sport list for post
             var sports = _sportService.GetActive()
@@ -109,7 +112,10 @@ namespace SportsSocialNetwork.Controllers
             //get list group that this user joined
             List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f =>
             f.UserId == userId).ToList().Count > 0).ToList();
-            ViewBag.GroupList = groupList;
+            if (groupList != null)
+            {
+                ViewBag.GroupList = groupList;
+            }
 
             return View(model);
         }
