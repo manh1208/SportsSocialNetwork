@@ -3771,8 +3771,9 @@
     <Content Include="Areas\PlaceOwner\Views\FieldSchedule\List.cshtml" />
     <Content Include="Areas\Moderator\Views\Article\Create.cshtml" />
     <Content Include="Areas\Moderator\Views\Article\Edit.cshtml" />
-    <Content Include="Areas\Moderator\Views\Article\Index.cshtml" />
     <Content Include="Areas\Moderator\Views\Article\Preview.cshtml" />
+    <Content Include="Areas\Moderator\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Moderator\Views\Article\Index.cshtml" />
     <None Include="Properties\PublishProfiles\SSN_Publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -4036,7 +4037,6 @@
     <Folder Include="Areas\Api\Views\Shared\" />
     <Folder Include="Areas\Api\Views\Sport\" />
     <Folder Include="Areas\Moderator\Models\" />
-    <Folder Include="Areas\Moderator\Views\Shared\" />
     <Folder Include="SSN\PostImages\" />
     <Folder Include="Views\Comment\" />
     <Folder Include="Views\Like\" />
