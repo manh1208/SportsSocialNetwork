@@ -130,43 +130,6 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/layout_menu_sport"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="20sp"
-        android:paddingLeft="20sp"
-        android:paddingRight="20sp"
-        android:paddingTop="20sp">
-
-        <com.capstone.sportssocialnetwork.custom.RoundedImageView
-            android:id="@+id/iv_menu_image_sport"
-            android:layout_width="30sp"
-            android:layout_height="30sp"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_football"
-
-            />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20sp"
-            android:layout_toRightOf="@+id/iv_menu_image_sport"
-            android:orientation="vertical">
-
-            <TextView
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sự kiện đang diễn ra"
-                android:textColor="#000"
-                android:textSize="18sp"
-                android:textStyle="normal" />
-        </LinearLayout>
-    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/layout_menu_my_order"
