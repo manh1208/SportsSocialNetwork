@@ -340,16 +340,21 @@ namespace SportsSocialNetwork.Controllers
                 _GroupMemberService.Save();
 
                 //save noti
-                Notification noti = new Notification();
-                noti.UserId = desAdminId;
-                noti.FromUserId = curAdminId;
-                noti.Message = curAdmin.AspNetUser.FullName + " đã gán quyền quản trị cho bạn trong nhóm " + curAdmin.Group.Name;
-                noti.MarkRead = false;
-                noti.Type = (int)NotificationType.Other;
-                noti.Title = Utils.GetEnumDescription(NotificationType.Other);
-                noti.CreateDate = DateTime.Now;
-                _notificationService.Create(noti);
-                _notificationService.Save();
+                string title = Utils.GetEnumDescription(NotificationType.Other);
+                int type = (int)NotificationType.Other;
+                string message = curAdmin.AspNetUser.FullName + " đã gán quyền quản trị cho bạn trong nhóm " + curAdmin.Group.Name;
+
+                Notification noti = _notificationService.CreateNoti(desAdminId, curAdminId, title, message, type, null, null, null, curAdmin.Group.Id);
+                //Notification noti = new Notification();
+                //noti.UserId = desAdminId;
+                //noti.FromUserId = curAdminId;
+                //noti.Message = curAdmin.AspNetUser.FullName + " đã gán quyền quản trị cho bạn trong nhóm " + curAdmin.Group.Name;
+                //noti.MarkRead = false;
+                //noti.Type = (int)NotificationType.Other;
+                //noti.Title = Utils.GetEnumDescription(NotificationType.Other);
+                //noti.CreateDate = DateTime.Now;
+                //_notificationService.Create(noti);
+                //_notificationService.Save();
 
 
                 result.Succeed = true;
@@ -381,17 +386,25 @@ namespace SportsSocialNetwork.Controllers
                 _GroupMemberService.Update(desAdmin);
                 _GroupMemberService.Save();
 
+
                 //save noti
-                Notification noti = new Notification();
-                noti.UserId = desAdminId;
-                noti.FromUserId = curAdminId;
-                noti.Message = curAdmin.AspNetUser.FullName + " đã bỏ quyền quản trị cho bạn trong nhóm " + curAdmin.Group.Name;
-                noti.MarkRead = false;
-                noti.Type = (int)NotificationType.Other;
-                noti.Title = Utils.GetEnumDescription(NotificationType.Other);
-                noti.CreateDate = DateTime.Now;
-                _notificationService.Create(noti);
-                _notificationService.Save();
+                string title = Utils.GetEnumDescription(NotificationType.Other);
+                int type = (int)NotificationType.Other;
+                string message = curAdmin.AspNetUser.FullName + " đã bỏ quyền quản trị cho bạn trong nhóm " + curAdmin.Group.Name;
+
+                Notification noti = _notificationService.CreateNoti(desAdminId, curAdminId, title, message, type, null, null, null, curAdmin.Group.Id);
+
+
+                //Notification noti = new Notification();
+                //noti.UserId = desAdminId;
+                //noti.FromUserId = curAdminId;
+                //noti.Message = curAdmin.AspNetUser.FullName + " đã bỏ quyền quản trị cho bạn trong nhóm " + curAdmin.Group.Name;
+                //noti.MarkRead = false;
+                //noti.Type = (int)NotificationType.Other;
+                //noti.Title = Utils.GetEnumDescription(NotificationType.Other);
+                //noti.CreateDate = DateTime.Now;
+                //_notificationService.Create(noti);
+                //_notificationService.Save();
 
                 result.Succeed = true;
             }
@@ -414,15 +427,22 @@ namespace SportsSocialNetwork.Controllers
             if (gm != null)
             {
                 //save noti
-                Notification noti = new Notification();
-                noti.UserId = userId;
-                noti.Message = "Bạn đã được chấp nhận làm thành viên trong nhóm " + gm.Group.Name;
-                noti.MarkRead = false;
-                noti.Type = (int)NotificationType.Other;
-                noti.Title = Utils.GetEnumDescription(NotificationType.Other);
-                noti.CreateDate = DateTime.Now;
-                _notificationService.Create(noti);
-                _notificationService.Save();
+                string title = Utils.GetEnumDescription(NotificationType.Other);
+                int type = (int)NotificationType.Other;
+                string message = "Bạn đã được chấp nhận làm thành viên trong nhóm " + gm.Group.Name;
+
+                Notification noti = _notificationService.CreateNoti(userId, "", title, message, type, null, null, null, gm.Group.Id);
+
+
+                //Notification noti = new Notification();
+                //noti.UserId = userId;
+                //noti.Message = "Bạn đã được chấp nhận làm thành viên trong nhóm " + gm.Group.Name;
+                //noti.MarkRead = false;
+                //noti.Type = (int)NotificationType.Other;
+                //noti.Title = Utils.GetEnumDescription(NotificationType.Other);
+                //noti.CreateDate = DateTime.Now;
+                //_notificationService.Create(noti);
+                //_notificationService.Save();
 
                 result.Succeed = true;
             }
@@ -511,15 +531,23 @@ namespace SportsSocialNetwork.Controllers
                             if (_groupMemverService.JoinGroup(groupId, item))
                             {
                                 //save noti
-                                Notification noti = new Notification();
-                                noti.UserId = item;
-                                noti.FromUserId = userId;
-                                noti.Title = Utils.GetEnumDescription(NotificationType.Invitation);
-                                noti.Type = (int)NotificationType.Invitation;
-                                noti.Message = fromUser.FullName + " đã mời bạn vào nhóm " + group.Name;
-                                noti.CreateDate = DateTime.Now;
-                                noti.MarkRead = false;
-                                _notificationService.Create(noti);
+                                string title = Utils.GetEnumDescription(NotificationType.GroupInvitation);
+                                int type = (int)NotificationType.GroupInvitation;
+                                string message = fromUser.FullName + " đã mời bạn vào nhóm " + group.Name;
+
+                                Notification noti = _notificationService.CreateNoti(userId, "", title, message, type, null, null, null, group.Id);
+
+
+                                //Notification noti = new Notification();
+                                //noti.UserId = item;
+                                //noti.FromUserId = userId;
+                                //noti.Title = Utils.GetEnumDescription(NotificationType.Invitation);
+                                //noti.Type = (int)NotificationType.Invitation;
+                                //noti.Message = fromUser.FullName + " đã mời bạn vào nhóm " + group.Name;
+                                //noti.GroupId = group.Id;
+                                //noti.CreateDate = DateTime.Now;
+                                //noti.MarkRead = false;
+                                //_notificationService.Create(noti);
                                 result.Succeed = true;
                             }
                             else
@@ -681,14 +709,23 @@ namespace SportsSocialNetwork.Controllers
                 GroupMember gm = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == toGroup && g.Admin == true && g.Status == (int)GroupMemberStatus.Approved);
                 GroupMember fgm = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == fromGroup && g.Admin == true && g.Status == (int)GroupMemberStatus.Approved);
                 //save noti
-                Notification noti = new Notification();
-                noti.UserId = gm.UserId;
-                //noti.FromUserId = userId;
-                noti.Title = Utils.GetEnumDescription(NotificationType.Other);
-                noti.Type = (int)NotificationType.Other;
-                noti.Message = fgm.Group.Name + " đã gửi một lời mời thách đấu cho nhóm của bạn";
-                noti.CreateDate = DateTime.Now;
-                _notificationService.Create(noti);
+                string title = Utils.GetEnumDescription(NotificationType.GroupChallengeInvitation);
+                int type = (int)NotificationType.GroupChallengeInvitation;
+                string message = fgm.Group.Name + " đã gửi một lời mời thách đấu cho nhóm " + gm.Group.Name + " của bạn";
+
+                Notification noti = _notificationService.CreateNoti(gm.UserId, null, title, message, type, null, null, null, gm.GroupId);
+
+
+
+                //Notification noti = new Notification();
+                //noti.UserId = gm.UserId;
+                ////noti.FromUserId = userId;
+                //noti.Title = Utils.GetEnumDescription(NotificationType.Other);
+                //noti.Type = (int)NotificationType.Other;
+                //noti.Message = fgm.Group.Name + " đã gửi một lời mời thách đấu cho nhóm " + gm.Group.Name;
+                //noti.GroupId = gm.Id;
+                //noti.CreateDate = DateTime.Now;
+                //_notificationService.Create(noti);
 
                 result.Succeed = true;
             }

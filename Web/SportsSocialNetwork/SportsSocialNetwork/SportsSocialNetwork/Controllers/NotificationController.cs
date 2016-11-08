@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -15,29 +16,44 @@ namespace SportsSocialNetwork.Controllers
     {
         private String systemError = "Đã có lỗi xảy ra!";
 
+        public ActionResult Index()
+        {
+            string userId = User.Identity.GetUserId();
+            var _notificationService = this.Service<INotificationService>();
+            List<Notification> notiList = _notificationService.GetNoti(userId, 0, 20).ToList();
+            List<NotificationFullInfoViewModel> notiListVM = new List<NotificationFullInfoViewModel>();
+
+            foreach (var item in notiList)
+            {
+                notiListVM.Add(this.PrepareNotificationViewModel(item));
+            }
+
+            return View();
+        }
+
         [HttpPost]
         public ActionResult LoadNoti(String userId, int skip, int take)
         {
             var service = this.Service<INotificationService>();
 
-            ResponseModel<List<NotificationCustomViewModel>> response = null;
+            ResponseModel<List<NotificationFullInfoViewModel>> response = null;
 
             try
             {
                 List<Notification> notiList = service.GetNoti(userId, skip, take).ToList();
 
-                List<NotificationCustomViewModel> result = new List<NotificationCustomViewModel>();
+                List<NotificationFullInfoViewModel> result = new List<NotificationFullInfoViewModel>();
 
                 foreach (var noti in notiList)
                 {
                     result.Add(PrepareNotificationViewModel(noti));
                 }
 
-                response = new ResponseModel<List<NotificationCustomViewModel>>(true, "Thông báo mới của bạn:", null, result);
+                response = new ResponseModel<List<NotificationFullInfoViewModel>>(true, "Thông báo mới của bạn:", null, result);
             }
             catch (Exception)
             {
-                response = ResponseModel<List<NotificationCustomViewModel>>.CreateErrorResponse("Không thể tải thông báo", systemError);
+                response = ResponseModel<List<NotificationFullInfoViewModel>>.CreateErrorResponse("Không thể tải thông báo", systemError);
             }
             return Json(response);
         }
@@ -118,13 +134,24 @@ namespace SportsSocialNetwork.Controllers
         }
 
 
-        private NotificationCustomViewModel PrepareNotificationViewModel(Notification noti)
+        //private NotificationCustomViewModel PrepareNotificationViewModel(Notification noti)
+        //{
+        //    NotificationCustomViewModel result = Mapper.Map<NotificationCustomViewModel>(noti);
+
+        //    result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+
+        //    result.Avatar = noti.AspNetUser1.AvatarImage;
+
+        //    return result;
+
+        //}
+
+        private NotificationFullInfoViewModel PrepareNotificationViewModel(Notification noti)
         {
-            NotificationCustomViewModel result = Mapper.Map<NotificationCustomViewModel>(noti);
+            NotificationFullInfoViewModel result = Mapper.Map<NotificationFullInfoViewModel>(noti);
 
-            result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
-
-            result.Avatar = noti.AspNetUser1.AvatarImage;
+            result.CreateDateString = result.CreateDate.Value.Day.ToString("00") + "/" + result.CreateDate.Value.Month.ToString("00") + "/" + result.CreateDate.Value.Year.ToString("0000")
+                    + " lúc " + result.CreateDate.Value.Hour.ToString("00") + ":" + result.CreateDate.Value.Minute.ToString("00");
 
             return result;
 

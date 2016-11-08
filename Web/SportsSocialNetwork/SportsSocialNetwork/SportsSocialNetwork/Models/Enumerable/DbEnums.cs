@@ -120,7 +120,11 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("Invitation")]
         Invitation = 3,
         [Description("Other")]
-        Other = 4
+        Other = 4,
+        [Description("GroupIvitation")]
+        GroupInvitation = 5,
+        [Description("GroupChallengeInvitation")]
+        GroupChallengeInvitation = 6,
     }
 
     public enum ContentPostType
