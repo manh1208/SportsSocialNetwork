@@ -1,0 +1,66 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.NewsViewModel
+<!-- Modal -->
+<div class="modal fade example-modal-lg" id="edit-modal" aria-hidden="true"
+     role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" >@Model.Title</h4>
+            </div>
+            <form id="edit-form">
+                <div class="modal-body">
+                    @Html.TextBoxFor(q => q.Id, new { hidden = "hidden" })
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label class="control-label" for="inputBasicFirstName">Tiêu đề</label>
+                            @Html.TextBoxFor(q => q.Title, new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label" for="inputBasicLastName">Hình ảnh</label>
+                            <input type="file" name="ImageFile" />
+                            <img src="@Model.Image" width="80" height="80" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label class="control-label" for="inputBasicFirstName">Danh muc</label>
+                            <select class="form-control" id="CategoryId" name="CategoryId">
+                                @foreach (var item in Model.Categories)
+                                {
+                                    if (item.Id == Model.CategoryId)
+                                    {
+                                <option selected value="@item.Id">@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                <option value="@item.Id">@item.Name</option>
+
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Nội dung</label>
+                        <div>
+                            <textarea name="ContentEdit" id="ContentEdit"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default margin-top-5" data-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary margin-top-5">Lưu thay đổi</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
+
+<script>
+    CKEDITOR.replace('ContentEdit');
+    CKEDITOR.instances.ContentEdit.setData('@Html.Raw(Model.NewsContent.Replace("'", "\""))');
+</script>
