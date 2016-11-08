@@ -148,7 +148,7 @@ namespace SportsSocialNetwork.Controllers
             return dtCoordinates;
         }
 
-        public ActionResult CreateInvitation(string[] userId, string sportSelect, string inviteContent, string orderInfo)
+        public ActionResult CreateInvitation(string[] userId, string sportSelect, string inviteContent, string orderInfo, string groupChatName)
         {
             var result = new AjaxOperationResult();
             var userInvitationService = this.Service<IUserInvitationService>();
@@ -171,6 +171,11 @@ namespace SportsSocialNetwork.Controllers
             invi.InvitationContent = inviteContent + content;
             invi.CreateDate = DateTime.Now;
             invi.Active = true;
+            if(groupChatName == null || groupChatName == "")
+            {
+                groupChatName = "Không tiêu đề";
+            }
+            invi.Subject = groupChatName;
             invitationService.Create(invi);
             foreach (var id in userId)
             {

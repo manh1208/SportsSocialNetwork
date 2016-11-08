@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="~/Content/assets/vendor/asscrollable/asScrollable.css">
     <link rel="stylesheet" href="~/Content/assets/vendor/magnific-popup/magnific-popup.css">
     <link rel="stylesheet" href="~/Content/js/sweetAlert/sweetalert.css" />
+    <link href="~/Content/friendly-chat/main.css" rel="stylesheet" />
     <style>
-        #orderTable tr:hover {
+        .chatGroup:hover {
             cursor: pointer;
-            background-color: #62a8ea;
+            background-color: #FDB286;
         }
 
         .media {
@@ -134,23 +135,131 @@
 
 <div class="row" style="font-family:sans-serif">
     <!--Left side-bar-->
-    <div class="col-sm-3">
-        <div class="widget widget-shadow text-center">
+    <div class="col-sm-3 panel">
+        <h4 class="text-center padding-bottom-10">Các nhóm tán gẫu</h4>
+        <div style="height:550px" class="check" id="check" data-plugin="scrollable">
+            <div data-role="container">
+                <div data-role="content" id="chatGroupContainer">
+                    
+                </div>
+            </div>
         </div>
     </div>
     <!--END Left side-bar-->
     <!--Main-->
     <div class="col-sm-9">
+            <div class="panel">
+                <div style="height:600px;width:100%;margin-top:0" id="messages-card" class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--6-col-tablet mdl-cell--6-col-desktop">
+                    <div class="mdl-card__supporting-text">
+                        <div id="messages" class="padding-15">
+                        </div>
+                        <form id="message-form" style="width:100%" action="#">
+                            <div style="padding-right:0" class="form-group col-sm-12">
+                                <div class="col-sm-10 padding-0">
+                                    <input class="form-control input-cmnt" autocomplete="off" type="text" id="message" placeholder="Nhập nội dung tin nhắn...">
+                                </div>
+                                <div class="col-sm-2">
+                                    <button style="margin:0" id="submit" disabled type="submit" class="btn btn-primary">Gửi</button>
+                                </div>
+                                
+                            </div>
+                            
+                        </form>
+                        @*<form id="image-form" action="#">
+                            <input class="mediaCapture" id="mediaCapture" type="file" accept="image/*,capture=camera">
+                            <button style="margin:0;padding:6px" id="submitImage" title="Add an image" class="submitImage btn btn-lg btn-default">
+                                <i class="fa fa-camera post-heading-icon"></i>
+                            </button>
+                        </form>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    <button hidden id="sign-out"></button>
     </div>
-</div>
-
 @section scripts{
+
+
     <script src="~/Content/assets/js/plugins/jquery.sticky-kit.min.js"></script>
     <script src="~/Content/assets/vendor/magnific-popup/jquery.magnific-popup.js"></script>
     <script src="~/Content/assets/js/components/magnific-popup.js"></script>
     <script src="~/Content/js/custom-script.js"></script>
     <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
-    
+    <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyANrpPvczmdQlxbqFOqizMzYq93lHmSv84",
+            authDomain: "sportsocialnetwo-1475334764388.firebaseapp.com",
+            databaseURL: "https://sportsocialnetwo-1475334764388.firebaseio.com",
+            storageBucket: "sportsocialnetwo-1475334764388.appspot.com",
+            messagingSenderId: "883711178874"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <script src="~/Content/friendly-chat/main.js"></script>
+    <script>
+        var focusGroup = -1;
+        var _userId = '@User.Identity.GetUserId()';
+        var _getUserActionName = '@Url.Action("GetUserListInGroupChat", "Invitation")';
+        window.onload = function () {
+            loadGroupChat();
+            var _invitationId = focusGroup;
+            $("#chat_" + focusGroup).css("background-color", "#FDB286");
+            //$(".mediaCapture").attr("id", "mediaCapture_" + _invitationId);
+            //$(".submitImage").attr("id", "submitImage_" + _invitationId);
+            window.friendlyChat = new FriendlyChat(_userId, _invitationId, _getUserActionName);
+        };
+
+
+        function loadGroupChat() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("LoadGroupChat", "Invitation")',
+                async: false,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Succeed) {
+                        var tmp = data.AdditionalData
+                        focusGroup = tmp[0].Id;
+                        appendGroupChat(data.AdditionalData);
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
+
+        function appendGroupChat(data) {
+            $(data).each(function () {
+                $("#chatGroupContainer").append(
+                    '<div id="chat_' + this.Id + '" class="chatGroup" style="border: 1px solid #e9ebee; overflow:hidden;">'
+                     + '<a href="javascript:void(0)"><span style="float:left; display:inline-block; margin-left:15px;" id="group_' + this.Id + '">'
+                     + '<h4>' + this.Subject + '</h4>'
+                     + '<p style="color:#37474f">Người tạo: ' + this.Host + '</p>'
+                     + '<p style="color:#37474f">Số người: ' + this.numOfUser + '</p>'
+                     + '</span></a>'
+                     + '</div>');
+
+                document.getElementById('group_' + this.Id).addEventListener('click', function () {
+                    $("#sign-out").click();
+                    var tmp = $(this).attr("id");
+                    var result = tmp.split("_");
+                    $(".chatGroup").css("background-color", "white");
+                    $("#chat_" + result[1]).css("background-color", "#FDB286");
+                    focusGroup = result[1];
+                    $("#messages").empty();
+                    //$(".mediaCapture").attr("id", "mediaCapture_" + focusGroup);
+                    //$(".submitImage").attr("id", "submitImage_" + focusGroup);
+                    window.friendlyChat = new FriendlyChat(_userId, focusGroup, _getUserActionName);
+                }, false);
+
+            })
+        }
+    </script>
 }
 
 

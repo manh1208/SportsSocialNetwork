@@ -9,5 +9,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     {
         public string CreateDateString { get; set; }
         public List<UserInvitationViewModel> UserInvitations { get; set; }
+        public int numOfUser { get; set; }
+        public string Host { get; set; }
     }
 }

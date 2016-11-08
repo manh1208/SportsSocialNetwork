@@ -177,8 +177,8 @@
                         </a>
                         <ul class="dropdown-menu width-250" role="menu">
                             <li role="presentation">
-                                <form action="" style="margin:10px" method="post" id="form-">
-                                    <a href="#" role="menuitem" onclick="">
+                                <form action="@Url.Action("Index","SSN", new { area = "" })" style="margin:10px" method="post" id="form-home-page">
+                                    <a href="#" role="menuitem" onclick="homePage()">
                                         <span class="fa fa-globe"></span> Trang chủ
                                     </a>
                                 </form>
@@ -191,16 +191,16 @@
                                 </form>
                             </li>
                             <li role="presentation">
-                                <form action="" style="margin:10px" method="post" id="form-">
-                                    <a href="#" role="menuitem" onclick="">
-                                        <span class="fa fa-users"></span> Tìm người cùng sở thích
+                                <form action="@Url.Action("Index","UserInvitation", new { area = "" })" style="margin:10px" method="post" id="form-invite-player">
+                                    <a href="#" role="menuitem" onclick="invitePlayer()">
+                                        <span class="fa fa-pencil-square-o"></span> Mời chơi thể thao
                                     </a>
                                 </form>
                             </li>
                             <li role="presentation">
-                                <form action="" style="margin:10px" method="post" id="form-">
-                                    <a href="#" role="menuitem" onclick="">
-                                        <span class="fa fa-pencil-square-o"></span> Mời chơi thể thao
+                                <form action="@Url.Action("Index","Invitation", new { area = "" })" style="margin:10px" method="post" id="form-invite-history">
+                                    <a href="#" role="menuitem" onclick="inviteHistory()">
+                                        <span class="fa fa-users"></span> Lịch sử mời chơi thể thao
                                     </a>
                                 </form>
                             </li>
@@ -338,6 +338,15 @@
         }
         function searchEvent() {
             $("#form-search-event").submit();
+        }
+        function invitePlayer() {
+            $("#form-invite-player").submit();
+        }
+        function inviteHistory() {
+            $("#form-invite-history").submit();
+        }
+        function homePage() {
+            $("#form-home-page").submit();
         }
         var hasUser = false;
         var hasGroup = false;
