@@ -143,25 +143,25 @@
                                 @*<span class="label label-round label-danger" id="notiLabelCount"></span>*@
                             </li>
 
-                            @*<li class="list-group" role="presentation" id="notiId_5">
-                                <div data-role="container">
-                                    <div data-role="content">
-                                        <a class="list-group-item" href="javascript:void(0)" role="menuitem">
+
+                            <li class="list-group notiDiv" role="presentation" style="max-height:400px;">
+                                <div data-role="container" style="height:400px;" class="notiDiv">
+                                    <div data-role="content" id="notiItems" class="notiDiv">
+                                        @*<a class="list-group-item" href="javascript:void(0)" role="menuitem">
                                             <div class="media">
                                                 <div class="media-left padding-right-10">
-                                                    <i class="icon wb-settings bg-red-600 white icon-circle" aria-hidden="true"></i>
+                                                    <i class="icon wb-order bg-red-600 white icon-circle" aria-hidden="true"></i>
                                                 </div>
                                                 <div class="media-body">
-                                                    <h6 class="media-heading">Settings updated</h6>
-                                                    <time class="media-meta" datetime="2015-06-11T14:05:00+08:00">2 days ago</time>
+                                                    <h6 class="media-heading">A new order has been placed</h6>
+                                                    <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">5 hours ago</time>
                                                 </div>
                                             </div>
-                                        </a>
+                                        </a>*@
                                     </div>
                                 </div>
-
-
-                            </li>*@
+                            </li>
+                            
                             <li class="dropdown-menu-footer" role="presentation" id="notiBottom">
                                 <a class="dropdown-menu-footer-btn" href="javascript:void(0)" role="button">
                                     <i class="icon wb-settings" aria-hidden="true"></i>
@@ -336,6 +336,10 @@
     </script>
     <script>
         var totalUnreadCount = 0;
+        var _notiFirstSkip = 0;
+        var _notiFirstTake = 10;
+        var _notiSkip = 10;
+        var _notiTake = 5;
 
         function logout() {
             $("#form-log-out").submit();
@@ -466,50 +470,31 @@
             });
 
             //Load Noti List
-            $.ajax({
+            @*$.ajax({
                 type: 'POST',
                 url: '@Url.Action("LoadNoti", "Notification")',
-                data: { "userId": '@User.Identity.GetUserId()', "skip": 0 , "take": 5 },
+                data: { "userId": '@User.Identity.GetUserId()', "skip": _notiFirstSkip , "take": _notiFirstTake },
                 success: function (result) {
                     var data = result.Data;
 
                     $(data).each(function () {
                         var noti = renderNoti(this);
-                        //$("#listNoti").append(noti);
-                        //$(noti).insertAfter("#headNoti");
-                        $(noti).insertBefore("#notiBottom");
+                        $("#notiItems").append(noti);
+
                     })
                 }
 
-            });
+            });*@
+            loadNoti(_notiFirstSkip, _notiFirstTake);
         })
 
-        function appendNoti(data) {
-            //var noti = '<li class="list-group" role="presentation" id="notiId_' + data.Id + '">' +
-            //        '<div data-role="container">' +
-            //            '<div data-role="content">' +
-            //                '<a class="list-group-item" href="javascript:void(0)" role="menuitem">' +
-            //                    '<div class="media">' +
-            //                        '<div class="media-left padding-right-10">' +
-            //                            '<i class="icon wb-settings bg-red-600 white icon-circle" aria-hidden="true"></i>' +
-            //                        '</div>' +
-            //                        '<div class="media-body">' +
-            //                            '<h6 class="media-heading">' + data.Message + '</h6>' +
-            //                            '<time class="media-meta" datetime="2015-06-11T14:05:00+08:00">' + data.CreateDateString + '</time>' +
-            //                        '</div>' +
-            //                    '</div>' +
-            //                '</a>' +
-            //            '</div>' +
-            //        '</div>' +
-            //    '</li>';
+        function appendNoti(data) {        
             var noti = renderNoti(data);
             totalUnreadCount++;
-            $(noti).insertAfter("#headNoti");
-            //$("#notiCount").text(totalUnreadCount);
+            $("#notiItems").prepend(noti);
             if (totalUnreadCount != 0) {
                 showPopNoti(totalUnreadCount);
             }
-            //$("#notiLabelCount").text(totalUnreadCount);
         }
 
         function renderNoti(data) {
@@ -518,7 +503,7 @@
             var colorUnread = "";
 
             if (data.MarkRead == false) {
-                styleUnread = "background-color:#edf2fa;";
+                styleUnread = "background-color:#f1f0f0;";
             } else {
                 styleUnread = "";
             }
@@ -543,11 +528,8 @@
 
             }
 
-            var noti = '<li class="list-group" role="presentation" id="notiId_' + data.Id + '" style="border-bottom: 1px solid #e4eaec;">' +
-                '<div data-role="container">' +
-                    '<div data-role="content">' +
-                    '<a class="list-group-item" href="' + url + '" onclick="markAsRead(' + data.Id + ')" role="menuitem" style="padding:0;' + styleUnread + '">' +
-                    '<div class="row height-100" style="margin:0;">' +
+            var noti = '<a class="list-group-item" href="' + url + '" role="menuitem" style="padding: 10px 15px;" onclick="markAsRead('+ data.Id +')">' +
+                           '<div class="row height-100">' +
                             '<div class="col-sm-3 vertical-align height-100">' +
                                 '<img class="vertical-align-middle" src="' + image + '" width="60" height="60" />' +
                             '</div>' +
@@ -556,10 +538,8 @@
                                 '<p class="list-group-item-text">' + data.CreateDateString + '</p>' +
                             '</div>' +
                         '</div>' +
-                        '</a>' +
-                       '</div>' +
-                   '</div>' +
-                '</li>';
+                        '</a>';
+
             return noti;
         }
 
@@ -578,14 +558,38 @@
             })
         };
 
-        function showPopNoti(count)
-        {
-            var lable = '<span class="badge badge-danger up" id="notiCount">'+ count +'</span>'
+        function showPopNoti(count) {
+            var lable = '<span class="badge badge-danger up" id="notiCount">' + count + '</span>'
             $(lable).insertAfter("#notibell");
 
             var titleCount = '<span class="label label-round label-danger" id="notiLabelCount">' + count + '</span>';
             $(lable).insertAfter("#notiTitle");
-        }
+        };
+
+        function loadNoti(skip, take) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("LoadNoti", "Notification")',
+                data: { "userId": '@User.Identity.GetUserId()', "skip": skip, "take": take },
+                success: function (result) {
+                    var data = result.Data;
+
+                    $(data).each(function () {
+                        var noti = renderNoti(this);
+                        $("#notiItems").append(noti);
+
+                    })
+                }
+
+            });
+        };
+
+        $(".notiDiv").scroll(function () {
+            if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+                loadNoti(_notiSkip, _notiTake);
+                _notiSkip = _notiSkip + _notiTake;
+            }
+        });
     </script>
 
 

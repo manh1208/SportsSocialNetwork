@@ -4012,7 +4012,6 @@
     <Content Include="Views\SSN\SearchDetail.cshtml" />
     <Content Include="Views\UserInvitation\Index.cshtml" />
     <Content Include="Views\Invitation\Index.cshtml" />
-    <Content Include="Views\Notification\All.cshtml" />
     <Content Include="Views\Notification\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
