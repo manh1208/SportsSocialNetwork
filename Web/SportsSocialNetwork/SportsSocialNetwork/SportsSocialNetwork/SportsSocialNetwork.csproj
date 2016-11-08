@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
@@ -291,6 +291,7 @@
     <Compile Include="Areas\PlaceOwner\Controllers\FieldController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\FieldScheduleController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\OrderController.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\ParticipationController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\PlaceController.cs" />
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\FieldScheduleDetailViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDatatableViewModel.cs" />
@@ -3779,6 +3780,8 @@
     <Content Include="Areas\Moderator\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Moderator\Views\Article\Index.cshtml" />
     <None Include="Properties\PublishProfiles\SSN_Publish.pubxml" />
+    <Content Include="Areas\PlaceOwner\Views\Participation\Detail.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Participation\Index.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
