@@ -383,8 +383,8 @@ namespace SportsSocialNetwork.Controllers
                 user.relationScore = totalOfCommentFromUser + totalOfLikeFromUser + 1;
             }
 
-            List<Post> postList = _postService.GetActive(p => p.UserId == userId || p.ProfileId == userId ||
-            p.AspNetUser.Follows.Where(f => f.FollowerId == userId && f.Active && (p.ProfileId == f.UserId || p.ProfileId == null)).ToList().Count > 0
+            List<Post> postList = _postService.GetActive(p => (p.UserId == userId || p.ProfileId == userId ||
+            p.AspNetUser.Follows.Where(f => f.FollowerId == userId && f.Active && (p.ProfileId == f.UserId || p.ProfileId == null)).ToList().Count > 0)
             && p.GroupId == null).ToList();
             
             List<PostGeneralViewModel> listPostVM = Mapper.Map<List<PostGeneralViewModel>>(postList);
