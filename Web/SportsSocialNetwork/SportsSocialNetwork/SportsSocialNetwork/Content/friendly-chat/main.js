@@ -260,7 +260,7 @@ FriendlyChat.prototype.displayMessage = function (key, sender, userId, message, 
     //div.querySelector('.pic').style.backgroundImage = 'url(' + picUrl + ')';
     $("#avatar" + key).append(
 '<a style="width:40px" class="avatar" data-toggle="tooltip" href="#" >' +
-'<img src="' + picUrl + '" >' +
+'<img style="width:40px;height:40px" src="' + picUrl + '" >' +
 '</a>')
 
     div.querySelector('.name').textContent = sender;
