@@ -10,6 +10,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         #region Code from here
         Notification SaveNoti(String userId, String fromUserId, String title, String message, int type, Nullable<int> postId, Nullable<int> invitationId, Nullable<int> orderId);
 
+        Notification CreateNoti(string userId, string fromUserId, string title, string message, int type, Nullable<int> postId, Nullable<int> invitationId, Nullable<int> orderId, Nullable<int> groupId);
+
         IEnumerable<Notification> GetNoti(String userId, int skip, int take);
 
         bool MarkAsRead(int id);
@@ -44,9 +46,29 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return noti;
         }
 
+        public Notification CreateNoti(string userId, string fromUserId, string title, string message, int type, Nullable<int> postId, Nullable<int> invitationId, Nullable<int> orderId, Nullable<int> groupId)
+        {
+            Notification noti = new Notification();
+            noti.UserId = userId;
+            noti.FromUserId = fromUserId;
+            noti.Title = title;
+            noti.Message = message;
+            noti.Type = type;
+            noti.PostId = postId;
+            noti.CreateDate = DateTime.Now;
+            noti.InvitationId = invitationId;
+            noti.OrderId = orderId;
+            noti.GroupId = groupId;
+            noti.MarkRead = false;
+            noti.Active = true;
+            this.Create(noti);
+            this.Save();
+            return noti;
+        }
+
         public IEnumerable<Notification> GetNoti(string userId, int skip, int take)
         {
-            return this.GetActive(x => x.UserId == userId).OrderBy(x => x.CreateDate).Skip(skip).Take(take);
+            return this.GetActive(x => x.UserId == userId).OrderByDescending(x => x.Id).Skip(skip).Take(take);
         }
 
         public bool MarkAsRead(int id)

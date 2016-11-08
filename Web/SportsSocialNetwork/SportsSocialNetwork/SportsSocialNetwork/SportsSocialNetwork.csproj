@@ -909,6 +909,7 @@
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\NotificationCustomViewModel.cs" />
+    <Compile Include="Models\ViewModels\NotificationFullInfoViewModel.cs" />
     <Compile Include="Models\ViewModels\NotificationViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -4011,6 +4012,8 @@
     <Content Include="Views\SSN\SearchDetail.cshtml" />
     <Content Include="Views\UserInvitation\Index.cshtml" />
     <Content Include="Views\Invitation\Index.cshtml" />
+    <Content Include="Views\Notification\All.cshtml" />
+    <Content Include="Views\Notification\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -4035,7 +4038,6 @@
     <Folder Include="SSN\PostImages\" />
     <Folder Include="Views\Comment\" />
     <Folder Include="Views\Like\" />
-    <Folder Include="Views\Notification\" />
     <Folder Include="Views\PostComment\" />
     <Folder Include="Views\Post\" />
   </ItemGroup>
