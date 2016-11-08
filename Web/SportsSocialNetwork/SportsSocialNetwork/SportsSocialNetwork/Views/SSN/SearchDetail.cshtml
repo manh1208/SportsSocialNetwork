@@ -179,7 +179,7 @@
                     </div>
                 </div>
             </div>
-            @if (ViewBag.GroupList.Count > 0)
+            @if (ViewBag.GroupList != null)
             {
                 <div class="example-wrap margin-lg-0" style="text-align:left;">
                     <h4 class="example-title" style="display:inline-block;float:left;">Các nhóm tham gia</h4>
@@ -233,6 +233,8 @@
     <!--Right side-bar-->
 
     <div class="col-sm-3">
+@if (ViewBag.SuggestNews != null)
+{
         <div class="panel">
             <div class="panel-heading text-center">
                 <h3 class="panel-title" style="font-family:sans-serif">Gợi ý tin tức nên xem</h3>
@@ -243,7 +245,7 @@
                         <div class="overlay">
                             <img src="@ViewBag.SuggestNews.Image" style="display:block; max-height:100%;max-width:100%;" />
                             <figcaption class="overlay-bottom overlay-panel overlay-background">
-                                <h4><span class="fa fa-eye"> 255</span></h4>
+                                <h4><span class="fa fa-eye"> @ViewBag.SuggestNews.NumOfRead</span></h4>
                             </figcaption>
                         </div>
                         <div class="row">
@@ -259,6 +261,7 @@
             <div class="text-right"><em>Xem những tin khác</em></div>
 
         </div>
+}
     </div>
 </div>
 <!--END right side-bar-->

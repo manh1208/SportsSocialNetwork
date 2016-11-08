@@ -273,7 +273,7 @@
     <!--Right side-bar-->
 
     <div class="col-sm-3">
-        @if (ViewBag.suggestUserList != null && ViewBag.suggestUserList.Count > 0)
+        @if (ViewBag.suggestUserList != null)
             {
         <div class="panel" id="suggest-follow-panel">
             <div class="panel-heading text-center">
@@ -310,7 +310,8 @@
         </div>
 
         }
-
+@if (ViewBag.SuggestNews != null)
+{
         <div class="panel">
             <div class="panel-heading text-center">
                 <h3 class="panel-title" style="font-family:sans-serif">Gợi ý tin tức nên xem</h3>
@@ -337,6 +338,7 @@
             <div class="text-right"><em>Xem những tin khác</em></div>
 
         </div>
+}
     </div>
 </div>
 <!--END right side-bar-->
