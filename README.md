@@ -23,19 +23,19 @@ b. Program:
         -	[x] Post question on new feed.
         -	[x] View all sport centers.
         -	[x] Order field and payment online
-        -	Read news
+        -	[ ] Read news
       -	On mobile:
         -	[x] Booking playfield
         -	[x] View new feed.
-        -	Setting notification.
-        -	Read news.
-        -	Send notification to invite friend play together.
+        -	[ ]Setting notification.
+        -	[ ]Read news.
+        -	[ ]Send notification to invite friend play together.
     -	As a Place Owner:
       -	On web:
         -	[x] Manage fields
         -	[x] Manage orders
         -	[x] Manage events
-        -	Send notification about event.
+        -	[ ] Send notification about event.
       -	On mobile:
         -	[x] Manage order
         -	[x] Manage event
