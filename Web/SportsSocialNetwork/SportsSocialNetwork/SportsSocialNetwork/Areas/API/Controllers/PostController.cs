@@ -42,10 +42,12 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             try
             {
-                postList = postService.GetActive(p => p.UserId == currentUserId ||
-                p.AspNetUser.Follows.Where(f => f.FollowerId == currentUserId && f.Active).ToList().Count > 0 ||
-                p.Group.GroupMembers.Where(g => g.UserId == currentUserId && g.Active).ToList().Count > 0).ToList();
-
+                //postList = postService.GetActive(p => p.UserId == currentUserId ||
+                //p.AspNetUser.Follows.Where(f => f.FollowerId == currentUserId && f.Active).ToList().Count > 0 ||
+                //p.Group.GroupMembers.Where(g => g.UserId == currentUserId && g.Active).ToList().Count > 0).ToList();
+                postList = postService.GetActive(p => p.UserId == currentUserId || p.ProfileId == currentUserId ||
+                p.AspNetUser.Follows.Where(f => f.FollowerId == currentUserId && f.Active && (p.ProfileId == f.UserId || p.ProfileId == null)).ToList().Count > 0
+                && p.GroupId == null).ToList();
 
 
                 //Calculate rank 
