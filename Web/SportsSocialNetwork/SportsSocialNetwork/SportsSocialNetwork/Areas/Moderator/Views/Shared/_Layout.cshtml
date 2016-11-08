@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html class="no-js before-run" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="bootstrap admin template">
+    <meta name="author" content="">
+
+    <title>SSN - @ViewBag.Title</title>
+    <link rel="apple-touch-icon" href="~/Content/assets/images/apple-touch-icon.png">
+    <link rel="shortcut icon" href="~/Content/images/logo_new.png">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap-extend.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/site.min.css">
+
+    <link rel="stylesheet" href="~/Content/assets/vendor/animsition/animsition.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/asscrollable/asScrollable.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/switchery/switchery.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/intro-js/introjs.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/slidepanel/slidePanel.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/flag-icon-css/flag-icon.css">
+
+    <!-- Plugin -->
+    <link rel="stylesheet" href="~/Content/assets/vendor/chartist-js/chartist.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/jvectormap/jquery-jvectormap.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.css">
+
+    <!-- Page -->
+    <link rel="stylesheet" href="~/Content/assets/css/../fonts/weather-icons/weather-icons.css">
+    <link rel="stylesheet" href="~/Content/assets/css/dashboard/v1.css">
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="~/Content/assets/fonts/web-icons/web-icons.min.css">
+    <link rel="stylesheet" href="~/Content/assets/fonts/brand-icons/brand-icons.min.css">
+    <link rel="stylesheet" href="~/Content/font-awesome-4.6.3/css/font-awesome.min.css">
+
+    <!-- Data table -->
+    @*<link href="~/Content/assets/js/bootstrap/css/bootstrap.min.css" rel="stylesheet" />*@
+    <link href="~/Content/assets/js/bootstrap/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    
+    <link href="~/Content/js/sweetAlert/sweetalert.css" rel="stylesheet" />
+
+    <link href="~/Content/css/custom-css.css" rel="stylesheet" />
+    <!--[if lt IE 9]>
+      <script src="~/Content/assets/vendor/html5shiv/html5shiv.min.js"></script>
+      <![endif]-->
+    <!--[if lt IE 10]>
+      <script src="~/Content/assets/vendor/media-match/media.match.min.js"></script>
+      <script src="~/Content/assets/vendor/respond/respond.min.js"></script>
+      <![endif]-->
+    <!-- Scripts -->
+    <script src="~/Content/assets/vendor/modernizr/modernizr.js"></script>
+    <script src="~/Content/assets/vendor/breakpoints/breakpoints.js"></script>
+    <script>
+    Breakpoints();
+    </script>
+</head>
+<body class="dashboard">
+    <!--[if lt IE 8]>
+          <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+      <![endif]-->
+
+    <nav class="site-navbar navbar navbar-default navbar-fixed-top navbar-mega" role="navigation">
+
+        <div class="navbar-header" style="background:#f55f00">
+            <button type="button" class="navbar-toggle hamburger hamburger-close navbar-toggle-left hided"
+                    data-toggle="menubar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="hamburger-bar"></span>
+            </button>
+            <button type="button" class="navbar-toggle collapsed" data-target="#site-navbar-collapse"
+                    data-toggle="collapse">
+                <i class="icon wb-more-horizontal" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="navbar-toggle collapsed" data-target="#site-navbar-search"
+                    data-toggle="collapse">
+                <span class="sr-only">Toggle Search</span>
+                <i class="icon wb-search" aria-hidden="true"></i>
+            </button>
+            <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
+                <img class="navbar-brand-logo" src="~/Content/images/logo.png" title="Sports"/>
+                <span class="navbar-brand-text"> Sports social network</span>
+            </div>
+        </div>
+
+        <div class="navbar-container container-fluid">
+            <!-- Navbar Collapse -->
+            <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
+                <!-- Navbar Toolbar -->
+                <ul class="nav navbar-toolbar">
+                    <li class="hidden-float" id="toggleMenubar">
+                        <a data-toggle="menubar" href="#" role="button">
+                            <i class="icon hamburger hamburger-arrow-left">
+                                <span class="sr-only">Toggle menubar</span>
+                                <span class="hamburger-bar"></span>
+                            </i>
+                        </a>
+                    </li>
+                    <li class="hidden-float">
+                        <a class="icon wb-search" data-toggle="collapse" href="#site-navbar-search" role="button">
+                            <span class="sr-only">Toggle Search</span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- End Navbar Toolbar -->
+                <!-- Navbar Toolbar Right -->
+                <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
+                    <li class="dropdown">
+                        <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
+                           data-animation="slide-bottom" role="button">
+                            <span class="avatar avatar-online">
+                                <img src="~/Content/assets/portraits/5.jpg" alt="...">
+                                <i></i>
+                            </span>
+                        </a>
+                    </li>
+
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" href="javascript:void(0)" title="Notifications" aria-expanded="false"
+                           data-animation="slide-bottom" role="button">
+                            <i class="icon wb-bell" aria-hidden="true"></i>
+                            <span class="badge badge-danger up">5</span>
+                        </a>
+                        <!--Start notification-->
+                        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media" role="menu">
+                            <li class="dropdown-menu-header" role="presentation">
+                                <h5>Thông báo</h5>
+                                <span class="label label-round label-danger">5</span>
+                            </li>
+
+                            <li class="list-group" role="presentation">
+                                <div data-role="container">
+                                    <div data-role="content">
+                                        <a class="list-group-item" href="javascript:void(0)" role="menuitem">
+                                            <div class="media">
+                                                <div class="media-left padding-right-10">
+                                                    <i class="icon wb-order bg-red-600 white icon-circle" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h6 class="media-heading">Thứ 7 gặp thầy</h6>
+                                                    <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">5 hours ago</time>
+                                                </div>
+                                            </div>
+                                        </a>
+                                       
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="dropdown-menu-footer" role="presentation">
+                                <a class="dropdown-menu-footer-btn" href="javascript:void(0)" role="button">
+                                    <i class="icon wb-settings" aria-hidden="true"></i>
+                                </a>
+                                <a href="javascript:void(0)" role="menuitem">
+                                    Tất cả thông báo
+                                </a>
+                            </li>
+                        </ul>
+                        <!--End notification-->
+                    </li>
+                  
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" data-animation="slide-bottom"
+                           aria-expanded="false" role="button">
+                            <span class="icon wb-settings"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li role="presentation">
+                                <form action="@Url.Action("LogOff","Account", new { area = "" })" method="post" id="form-log-out">
+                                    @Html.AntiForgeryToken()
+                                    <a href="#" role="menuitem" onclick="logout()">
+                                        <span class="icon wb-power"></span> Đăng xuất
+                                    </a>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- End Navbar Toolbar Right -->
+            </div>
+            <!-- End Navbar Collapse -->
+            <!-- Site Navbar Seach -->
+            <div class="collapse navbar-search-overlap" id="site-navbar-search">
+                <form role="search">
+                    <div class="form-group">
+                        <div class="input-search">
+                            <i class="input-search-icon wb-search" aria-hidden="true"></i>
+                            <input type="text" class="form-control" name="site-search" placeholder="Search...">
+                            <button type="button" class="input-search-close icon wb-close" data-target="#site-navbar-search"
+                                    data-toggle="collapse" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- End Site Navbar Seach -->
+        </div>
+    </nav>
+    <div class="site-menubar">
+        <div class="site-menubar-body">
+            <div>
+                <div>
+                    <ul class="site-menu">
+                        <li class="site-menu-item active">
+                            <a href="@Url.Action("Index","Article")" data-slug="dashboard">
+                                <i class="site-menu-icon wb-dashboard" aria-hidden="true"></i>
+                                <span class="site-menu-title">Quản lý tin tức</span>
+                            </a>
+
+                        </li>
+                        </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="site-menubar-footer">
+           
+        </div>
+    </div>
+   
+
+    <!-- Page -->
+    <div class="page" style="font-size:1.2em; background-color:whitesmoke">
+        <div class="page-content padding-30 container-fluid">
+            @RenderBody()
+        </div>
+    </div>
+    <!-- End Page -->
+    <!-- Footer -->
+    <footer class="site-footer">
+        <span class="site-footer-legal">© 2016 SSN - Capstone Project</span>
+        <div class="site-footer-right">
+            
+        </div>
+    </footer>
+
+    <!-- Core  -->
+    <script src="~/Content/assets/vendor/jquery/jquery.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap/bootstrap.js"></script>
+    <script src="~/Content/assets/vendor/animsition/jquery.animsition.js"></script>
+    <script src="~/Content/assets/vendor/asscroll/jquery-asScroll.js"></script>
+    <script src="~/Content/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
+    <script src="~/Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
+    <script src="~/Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+
+    <!-- Plugins -->
+    <script src="~/Content/assets/vendor/switchery/switchery.min.js"></script>
+    <script src="~/Content/assets/vendor/intro-js/intro.js"></script>
+    <script src="~/Content/assets/vendor/screenfull/screenfull.js"></script>
+    <script src="~/Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
+
+    <script src="~/Content/assets/vendor/skycons/skycons.js"></script>
+    <script src="~/Content/assets/vendor/chartist-js/chartist.min.js"></script>
+    <script src="~/Content/assets/vendor/aspieprogress/jquery-asPieProgress.min.js"></script>
+    <script src="~/Content/assets/vendor/jvectormap/jquery-jvectormap.min.js"></script>
+    <script src="~/Content/assets/vendor/jvectormap/maps/jquery-jvectormap-ca-lcc-en.js"></script>
+    <script src="~/Content/assets/vendor/matchheight/jquery.matchHeight-min.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+
+    <!-- Scripts -->
+    <script src="~/Content/assets/js/core.js"></script>
+    <script src="~/Content/assets/js/site.js"></script>
+
+    <script src="~/Content/assets/js/sections/menu.js"></script>
+    <script src="~/Content/assets/js/sections/menubar.js"></script>
+    <script src="~/Content/assets/js/sections/sidebar.js"></script>
+
+    <script src="~/Content/assets/js/configs/config-colors.js"></script>
+    <script src="~/Content/assets/js/configs/config-tour.js"></script>
+
+    <script src="~/Content/assets/js/components/asscrollable.js"></script>
+    <script src="~/Content/assets/js/components/animsition.js"></script>
+    @*<script src="~/Content/assets/js/components/slidepanel.js"></script>*@
+    <script src="~/Content/assets/js/components/switchery.js"></script>
+    <script src="~/Content/assets/js/components/matchheight.js"></script>
+    @*<script src="~/Content/assets/js/components/jvectormap.js"></script>*@
+
+    <script src="~/Content/assets/js/components/jquery-placeholder.js"></script>
+    <script src="~/Content/assets/js/components/material.js"></script>
+    
+
+    <script src="~/Content/assets/js/datatables/jquery.dataTables.js"></script>
+    <script src="~/Content/assets/js/bootstrap/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Content/assets/js/bootstrap/js/dataTables.responsive.min_2.js"></script>
+    <script src="~/Content/assets/js/bootstrap/js/responsive.bootstrap.min.js"></script>
+    <script src="~/Content/js/custom-script.js"></script>
+
+    <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
+
+    <script src="~/Content/assets/js/components/bootstrap-datepicker.js"></script>
+    <script src="~/Content/assets/js/components/jt-timepicker.js"></script>
+    <script src="~/Content/assets/js/components/datepair-js.js"></script>
+    <script>
+       function logout(){
+           $("#form-log-out").submit();
+        }
+    </script>
+    </body>
+@RenderSection("Scripts", false)
+
+</html>

@@ -93,21 +93,28 @@ namespace SportsSocialNetwork.Controllers
                 case SignInStatus.Success:
                     var service = this.Service<IAspNetUserService>();
                     var user = service.FindUserByUserName(model.Username);
-                    if (user.AspNetRoles.FirstOrDefault().Id.Equals( UserRole.Admin.ToString("d")))
+                    if (user.AspNetRoles.FirstOrDefault().Id.Equals(UserRole.Admin.ToString("d")))
                     {
                         return RedirectToAction("Index", "Account", new { area = "Admin" });
-                    }else if (user.AspNetRoles.FirstOrDefault().Id.Equals(UserRole.PlaceOwner.ToString("d")))
+                    }
+                    else if (user.AspNetRoles.FirstOrDefault().Id.Equals(UserRole.PlaceOwner.ToString("d")))
                     {
                         if (user.Status.Value == (int)UserStatus.Active)
                         {
                             return RedirectToAction("Index", "Place", new { area = "PlaceOwner" });
-                        }else
-                        {
-                            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-                            ModelState.AddModelError("LoginError", "Tài khoản của bạn đang chờ duyệt");
-                            return View(model);
                         }
-                    }else { 
+                        else
+                        {
+                            return RedirectToAction("Index", "SSN");
+                            //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                            //ModelState.AddModelError("LoginError", "Tài khoản của bạn đang chờ duyệt");
+                            //return View(model);
+                        }
+                    }
+                    else if (user.AspNetRoles.FirstOrDefault().Id.Equals(UserRole.Moderator.ToString("d"))) {
+                        return RedirectToAction("Index", "Article", new { area = "Moderator" });
+
+                    } else { 
                     return RedirectToAction("Index", "SSN");
                     }
                 case SignInStatus.LockedOut:
