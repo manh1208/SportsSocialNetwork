@@ -122,21 +122,6 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                         spanLike = "<span><i  id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + this.Id + "' style='margin-right:10px'> " + this.LikeCount + " lượt thích</span>";
                     }
                     var reportDiv = "";
-                    if (this.AspNetUser.Id != curUserId) {
-                        //            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
-                        reportDiv = '<div style="position: absolute;right: 0;top:15px;width: 30px;">' +
-                          '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
-                          '<div class="dropdown">' +
-                                        '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-lg fa-angle-down"></i>' +
-                                       '</a>' +
-                                       '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
-                                           '<li><a style="font-weight: bold;" onclick="report(' + this.Id + ')"><i class="fa fa-fw fa-warning"></i> Báo cáo vi phạm</a></li>' +
-                                       '</ul>' +
-                                   '</div>' +
-                                   '</div>' +
-                                   '</div>';
-                    }
-
                     var spanLike = "";
                     if (this.Liked) {
                         spanLike = "<span><i style='color:#62a8ea' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + this.Id + "' style='margin-right:10px'> " + this.LikeCount + " lượt thích</span>";
@@ -144,22 +129,8 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                         spanLike = "<span><i  id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + this.Id + "' style='margin-right:10px'> " + this.LikeCount + " lượt thích</span>";
                     }
                     var reportDiv = "";
-                    if (this.AspNetUser.Id != curUserId) {
-                        //            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
-                        reportDiv = '<div style="position: absolute;right: 0;top:15px;width: 30px;">' +
-                          '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
-                          '<div class="dropdown">' +
-                                        '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-lg fa-angle-down"></i>' +
-                                       '</a>' +
-                                       '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
-                                           '<li><a style="font-weight: bold;" onclick="report(' + this.Id + ')"><i class="fa fa-fw fa-warning"></i> Báo cáo vi phạm</a></li>' +
-                                       '</ul>' +
-                                   '</div>' +
-                                   '</div>' +
-                                   '</div>';
-                    }
-                    else if (this.AspNetUser.Id == curUserId) {
-                        reportDiv = '<div style="position: absolute;right: 0;top:15px;width: 30px;">' +
+                    if (this.AspNetUser.Id == curUserId) {
+                        reportDiv = '<div style="position: absolute;right:5px;top:15px;width: 30px;">' +
                           '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
                           '<div class="dropdown">' +
                                         '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-lg fa-angle-down"></i>' +
@@ -272,22 +243,8 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                         spanLike = "<span><i  id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + this.Id + "' style='margin-right:10px'> " + this.LikeCount + " lượt thích</span>";
                     }
                     var reportDiv = "";
-                    if (this.AspNetUser.Id != userId) {
-                        //            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
-                        reportDiv = '<div style="position: absolute;right: 0;top:15px;width: 30px;">' +
-                          '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
-                          '<div class="dropdown">' +
-                                        '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-lg fa-angle-down"></i>' +
-                                       '</a>' +
-                                       '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
-                                           '<li><a style="font-weight: bold;" onclick="report(' + this.Id + ')"><i class="fa fa-fw fa-warning"></i> Báo cáo vi phạm</a></li>' +
-                                       '</ul>' +
-                                   '</div>' +
-                                   '</div>' +
-                                   '</div>';
-                    }
-                    else if (this.AspNetUser.Id == userId) {
-                        reportDiv = '<div style="position: absolute;right: 0;top:15px;width: 30px;">' +
+                    if (this.AspNetUser.Id == userId) {
+                        reportDiv = '<div style="position: absolute;right:5px;top:15px;width: 30px;">' +
                           '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
                           '<div class="dropdown">' +
                                         '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-lg fa-angle-down"></i>' +
@@ -398,22 +355,8 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
                         spanLike = "<span><i  id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + this.Id + "' style='margin-right:10px'> " + this.LikeCount + " lượt thích</span>";
                     }
                     var reportDiv = "";
-                    if (this.AspNetUser.Id != userId) {
-                        //            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
-                        reportDiv = '<div style="position: absolute;right: 0;top:15px;width: 30px;">' +
-                          '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
-                          '<div class="dropdown">' +
-                                        '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-lg fa-angle-down"></i>' +
-                                       '</a>' +
-                                       '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
-                                           '<li><a style="font-weight: bold;" onclick="report(' + this.Id + ')"><i class="fa fa-fw fa-warning"></i> Báo cáo vi phạm</a></li>' +
-                                       '</ul>' +
-                                   '</div>' +
-                                   '</div>' +
-                                   '</div>';
-                    }
-                    else if (this.AspNetUser.Id == userId) {
-                        reportDiv = '<div style="position: absolute;right: 0;top:15px;width: 30px;">' +
+                    if (this.AspNetUser.Id == userId) {
+                        reportDiv = '<div style="position: absolute;right:5px;top:15px;width: 30px;">' +
                           '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
                           '<div class="dropdown">' +
                                         '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-lg fa-angle-down"></i>' +
@@ -603,7 +546,7 @@ function prependPost(data, userId) {
     } else {
         spanLike = "<span><i  id='likeIcon_" + data.Id + "' onclick='likeUnlikePost(" + data.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + data.Id + "' style='margin-right:10px'> " + data.LikeCount + " lượt thích</span>";
     }
-    var reportDiv = '<div style="position: absolute;right: 0;top:15px;width: 30px;">' +
+    var reportDiv = '<div style="position: absolute;right:5px;top:15px;width: 30px;">' +
           '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
           '<div class="dropdown">' +
                         '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-lg fa-angle-down"></i>' +
@@ -1224,22 +1167,8 @@ function refreshPost(data) {
         spanLike = "<span><i  id='likeIcon_" + data.Id + "' onclick='likeUnlikePost(" + data.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + data.Id + "' style='margin-right:10px'> " + data.LikeCount + " lượt thích</span>";
     }
     var reportDiv = "";
-    if (data.AspNetUser.Id != _curUserId) {
-        //            reportDiv = '<div href="" class="btn btn-white btn-xs pull-right" onclick="report(' + postObject['Id'] + ')"><i class="fa fa-fw fa-warning"></i></div>';
-        reportDiv = '<div style="position: absolute;right: 0;top:15px;width: 30px;">' +
-          '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
-          '<div class="dropdown">' +
-                        '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-lg fa-angle-down"></i>' +
-                       '</a>' +
-                       '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
-                           '<li><a style="font-weight: bold;" onclick="report(' + data.Id + ')"><i class="fa fa-fw fa-warning"></i> Báo cáo vi phạm</a></li>' +
-                       '</ul>' +
-                   '</div>' +
-                   '</div>' +
-                   '</div>';
-    }
-    else if (data.AspNetUser.Id == _curUserId) {
-        reportDiv = '<div style="position: absolute;right: 0;top:15px;width: 30px;">' +
+    if (data.AspNetUser.Id == _curUserId) {
+        reportDiv = '<div style="position: absolute;right:5px;top:15px;width: 30px;">' +
           '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
           '<div class="dropdown">' +
                         '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-lg fa-angle-down"></i>' +

@@ -7,9 +7,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using System.Web.Security;
+using SportsSocialNetwork.Models.Identity;
 
 namespace SportsSocialNetwork.Controllers
 {
+    [MyAuthorize(Roles = IdentityMultipleRoles.SSN)]
     public class InvitationController : BaseController
     {
         // GET: Invitation
@@ -23,7 +26,7 @@ namespace SportsSocialNetwork.Controllers
             var result = new AjaxOperationResult<List<InvitationViewModel>>();
             var userId = User.Identity.GetUserId();
             var inviService = this.Service<IInvitationService>();
-            var invitations = inviService.GetActive(p => p.SenderId == userId || p.UserInvitations.Where(f => f.ReceiverId == userId).ToList().Count>0).OrderByDescending(p => p.CreateDate).ToList();
+            var invitations = inviService.GetActive(p => (p.SenderId == userId || p.UserInvitations.Where(f => f.ReceiverId == userId && f.Accepted != false).ToList().Count>0)).OrderByDescending(p => p.CreateDate).ToList();
             List<InvitationViewModel> rsList = new List<InvitationViewModel>();
             if (invitations != null)
             {
@@ -31,7 +34,8 @@ namespace SportsSocialNetwork.Controllers
                 {
                     InvitationViewModel rs = Mapper.Map<InvitationViewModel>(item);
                     rs.Host = item.AspNetUser.FullName;
-                    rs.numOfUser = item.UserInvitations.Count + 1;
+                    var tmp = item.UserInvitations.Where(p => p.Accepted != true).ToList().Count;
+                    rs.numOfUser = item.UserInvitations.Count - tmp + 1;
                     rsList.Add(rs);
                 }
                 result.AdditionalData = rsList;

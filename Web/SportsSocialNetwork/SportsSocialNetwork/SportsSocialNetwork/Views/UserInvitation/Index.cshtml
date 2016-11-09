@@ -266,6 +266,7 @@
                     <button id="resetForm" type="reset" class="btn btn-default">Hủy bỏ</button>
                 </div>
             </form>
+            <button style="display:none" id="submitForm"></button>
         </div>
         <!--END Post area-->
     </div>
@@ -405,6 +406,19 @@
     <script src="~/Content/assets/js/components/magnific-popup.js"></script>
     <script src="~/Content/js/custom-script.js"></script>
     <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+    <script>
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyANrpPvczmdQlxbqFOqizMzYq93lHmSv84",
+                authDomain: "sportsocialnetwo-1475334764388.firebaseapp.com",
+                databaseURL: "https://sportsocialnetwo-1475334764388.firebaseio.com",
+                storageBucket: "sportsocialnetwo-1475334764388.appspot.com",
+                messagingSenderId: "883711178874"
+            };
+            firebase.initializeApp(config);
+    </script>
+    <script src="~/Content/friendly-chat/initialize-message.js"></script>
     <script>
 
         function resetForm(){
@@ -439,8 +453,19 @@
                     processData: false,
                     success: function (result) {
                         if (result.Succeed) {
-                            showMessage("Gửi lời mời thành công", "success", "OK");
                             resetForm();
+                            var data = result.AdditionalData;
+                            window.friendlyChat = new FriendlyChat(data.SenderId, data.Id, data.Host, data.InvitationContent);
+                            $("#submitForm").click();
+                            swal({
+                                title: "Hoàn tất",
+                                text: "Gửi lời mời thành công",
+                                type: "success"
+                            },
+                              function(){
+                                  window.location.href = '@Url.Action("Index","Invitation")';
+                              });
+
                         } else {
                             showErrors(result.Errors);
                             showMessage("Không thể cập nhật.", "error", "OK");
