@@ -66,16 +66,15 @@
                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                 }
             })
-        }
+        };
 
         function renderNoti_page(data) {
-
             var image = "";
             var url = "";
             var styleUnread = "";
 
             if (data.MarkRead == false) {
-                styleUnread = "background-color:#edf2fa;";
+                styleUnread = "background-color:#f1f0f0;";
             } else {
                 styleUnread = "";
             }
