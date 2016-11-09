@@ -1,0 +1,216 @@
+﻿@using SportsSocialNetwork.Models.Entities;
+@{
+    ViewBag.Title = "Tin tức";
+    Layout = "~/Views/Shared/_SSNLayout.cshtml";
+
+    List<Category> categories = ViewBag.categories;
+    List<News> PopularNews = ViewBag.PopularNews;
+    Dictionary<Category, List<News>> ListNews = ViewBag.ListNews;
+}
+
+@section styles{
+    <link rel="stylesheet" href="~/Content/assets/vendor/owl-carousel/owl.carousel.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/slick-carousel/slick.css">
+
+    <style>
+        .owl-carousel-shortcode .item {
+      text-align: center;
+    }
+    
+    .slider {
+      margin: 0 25px 30px;
+      text-align: center;
+    }
+    
+    .slider img {
+      width: 100%;
+      border: 5px solid #fff;
+    }
+    
+    .slider h3 {
+      position: relative;
+      padding: 10px;
+      margin: 0 10px;
+      font-size: 36px;
+      line-height: 100px;
+      background: #f3f7f9;
+    }
+    </style>
+    }
+
+<div class="col-sm-10 col-sm-offset-1">
+    <div class="row">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <div class="navbar navbar-default navbar-mega">
+                        <div class="container-fluid">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle hamburger hamburger-close collapsed"
+                                        data-toggle="collapse" data-target="#navbar-collapse-1">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="hamburger-bar"></span>
+                                </button>
+                                <a class="navbar-brand" href="/News">Trang chủ tin tức</a>
+                            </div>
+                            <div class="navbar-collapse collapse" id="navbar-collapse-1">
+                                <ul class="nav navbar-nav">
+                                    @{
+                                        foreach (var item in categories)
+                                        {
+                                            <li>
+                                                <a href="/News/Category/@item.Id">@item.Name</a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="ribbon ribbon-bookmark ribbon-danger">
+                        <span class="ribbon-inner">TRANG NHẤT</span>
+                    </div>
+                    <div>
+                        <img class="img-responsive" src="@PopularNews.First().Image" />
+                        <h1><a href="/News/NewsDetail/@PopularNews.First().Id" style="text-decoration:none; color:#76838f;">@PopularNews.First().Title</a></h1>
+                        <p id="hotnewsContent">
+                            @*minifyString('@Html.Raw(PopularNews.First().NewsContent)')*@
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <span class="label label-lg label-outline label-danger">TIN NỔI BẬT</span>
+                    <div class="list-group height-500" data-plugin="scrollable" style="margin-top:20px;">
+                        <div data-role="container">
+                            <div data-role="content">
+                                @{
+                                    foreach (var item in PopularNews.Skip(1))
+                                    {
+                                        <a class="list-group-item" href="/News/NewsDetail/@item.Id" role="menuitem">
+                                            <div class="media">
+                                                <div class="media-left padding-right-10">
+                                                    <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h6 class="media-heading">@item.Title</h6>
+                                                    @*<time class="media-meta" datetime="2015-06-11T18:29:20+08:00">2 days ago</time>*@
+                                                </div>
+                                            </div>
+                                        </a>
+                                    }
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @{
+                    foreach (var item in ListNews)
+                    {
+                        Category c = item.Key;
+                        List<News> n = item.Value;
+
+                        if (n != null && n.Count > 0)
+                        {
+                            <div class="col-sm-12" style="margin-top:20px;">
+                                <div class="example-wrap" style="margin-bottom:0;">
+                                    <span class="label label-lg label-success">@c.Name</span>
+                                    <div class="slider snews" id="carouselNews_@c.Id">
+                                        @{
+                                            foreach (var i in n)
+                                            {
+                                                <div>
+                                                    <a href="/News/NewsDetail/@i.Id">
+                                                        <img class="img-responsive" width="80" height="80" src="@i.Image" />
+                                                        <h5>@i.Title</h5>
+                                                    </a>
+                                                </div>
+                                            }
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+                @*<div class="col-sm-12" style="margin-top:20px;">
+                    <div class="example-wrap" style="margin-bottom:0;">
+                        <span class="label label-lg label-success">Bóng đá</span>
+                        <div class="slider snews" id="exampleMultipleItems">
+                            <div>
+                                <a href="javascript:void(0)">
+                                    <img class="img-responsive" width="80" height="80" src="~/Content/assets/images/noimagefound.jpg" />
+                                    <h5>Miền Bắc rét nhất 8 độ C </h5>
+                                </a>
+                            </div>
+                            <div>
+                                <img class="img-responsive" width="80" height="80" src="~/Content/assets/images/noimagefound.jpg" />
+                                <h5>Miền Bắc rét nhất 8 độ C </h5>
+                            </div>
+                            <div>
+                                <img class="img-responsive" width="80" height="80" src="~/Content/assets/images/noimagefound.jpg" />
+                                <h5>Miền Bắc rét nhất 8 độ C </h5>
+                            </div>
+                            <div>
+                                <img class="img-responsive" width="80" height="80" src="~/Content/assets/images/noimagefound.jpg" />
+                                <h5>Miền Bắc rét nhất 8 độ C </h5>
+                            </div>
+                            <div>
+                                <img class="img-responsive" width="80" height="80" src="~/Content/assets/images/noimagefound.jpg" />
+                                <h5>Miền Bắc rét nhất 8 độ C </h5>
+                            </div>
+                            <div>
+                                <img class="img-responsive" width="80" height="80" src="~/Content/assets/images/noimagefound.jpg" />
+                                <h5>Miền Bắc rét nhất 8 độ C </h5>
+                            </div>
+                            <div>
+                                <img class="img-responsive" width="80" height="80" src="~/Content/assets/images/noimagefound.jpg" />
+                                <h5>Miền Bắc rét nhất 8 độ C </h5>
+                            </div>
+                            <div>
+                                <img class="img-responsive" width="80" height="80" src="~/Content/assets/images/noimagefound.jpg" />
+                                <h5>Miền Bắc rét nhất 8 độ C </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/assets/vendor/owl-carousel/owl.carousel.js"></script>
+    <script src="~/Content/assets/vendor/slick-carousel/slick.js"></script>
+    <script src="~/Content/assets/js/components/owl-carousel.js"></script>
+    
+
+    <script>
+        $(document).ready(function () {
+            minifyString();
+        })
+
+        // Example Slick Multiple Items
+        // ----------------------------
+        $('.snews').slick({
+            infinite: true,
+            slidesToShow: 4,
+            slidesToScroll: 3
+        });
+
+        function minifyString() {
+            var minimize_character_count = 200;
+            var content = '@Html.Raw(PopularNews.First().NewsContent)';
+            if (content.length < minimize_character_count) return;
+            var minimized_content = content.slice(0, minimize_character_count);
+            var result = minimized_content.replace(/(<([^>]+)>)/ig, "");
+            $("#hotnewsContent").text(result);
+        }
+    </script>
+    }

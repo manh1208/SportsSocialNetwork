@@ -1,0 +1,75 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.NewsViewModel
+@using SportsSocialNetwork.Models.Entities;
+@{
+    ViewBag.Title = "NewsDetail";
+    Layout = "~/Views/Shared/_SSNLayout.cshtml";
+
+    List<Category> categories = ViewBag.categories;
+    List<News> relativeNews = ViewBag.relativeNews;
+}
+
+<div class="col-sm-10 col-sm-offset-1">
+    <div class="row">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <div class="navbar navbar-default navbar-mega">
+                        <div class="container-fluid">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle hamburger hamburger-close collapsed"
+                                        data-toggle="collapse" data-target="#navbar-collapse-1">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="hamburger-bar"></span>
+                                </button>
+                                <a class="navbar-brand" href="/News">Trang chủ tin tức</a>
+                            </div>
+                            <div class="navbar-collapse collapse" id="navbar-collapse-1">
+                                <ul class="nav navbar-nav">
+                                    @{
+                                        foreach (var item in categories)
+                                        {
+                                            <li>
+                                                <a href="/News/Category/@item.Id">@item.Name</a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-9">
+                    <h1>@Model.Title</h1>
+
+                    <div>
+                        @Html.Raw(Model.NewsContent)
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <h3>Các bài viết liên quan</h3>
+                    <div class="list-group height-500" style="margin-top:20px;">
+                        @{
+                            foreach (var item in relativeNews)
+                            {
+                                <a class="list-group-item" href="/News/NewsDetail/@item.Id" role="menuitem">
+                                    <div class="media">
+                                        <div class="media-left padding-right-10">
+                                            <i class="fa fa-newspaper-o bg-green-600 white icon-circle" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="media-body">
+                                            <h6 class="media-heading">@item.Title</h6>
+                                            @*<time class="media-meta" datetime="2015-06-11T18:29:20+08:00">2 days ago</time>*@
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        }
+                        
+                    </div>
+                </div>       
+            </div>
+        </div>
+
+    </div>
+</div>
