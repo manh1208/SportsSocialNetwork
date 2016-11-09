@@ -278,6 +278,7 @@
     <Compile Include="Areas\Api\Controllers\GroupMemberController.cs" />
     <Compile Include="Areas\Api\Controllers\InvitationController.cs" />
     <Compile Include="Areas\Api\Controllers\LikeController.cs" />
+    <Compile Include="Areas\Api\Controllers\NewsController.cs" />
     <Compile Include="Areas\Api\Controllers\NotificationController.cs" />
     <Compile Include="Areas\Api\Controllers\OrderController.cs" />
     <Compile Include="Areas\Api\Controllers\PlaceController.cs" />
@@ -4038,6 +4039,7 @@
     <Folder Include="Areas\Api\Views\Group\" />
     <Folder Include="Areas\Api\Views\Invitation\" />
     <Folder Include="Areas\Api\Views\Like\" />
+    <Folder Include="Areas\Api\Views\News\" />
     <Folder Include="Areas\Api\Views\Notification\" />
     <Folder Include="Areas\Api\Views\PostComment\" />
     <Folder Include="Areas\Api\Views\PostImage\" />
