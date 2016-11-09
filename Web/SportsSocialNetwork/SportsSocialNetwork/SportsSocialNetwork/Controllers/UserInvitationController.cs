@@ -3,6 +3,7 @@ using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Identity;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ using System.Web.Mvc;
 
 namespace SportsSocialNetwork.Controllers
 {
+    [MyAuthorize(Roles = IdentityMultipleRoles.SSN)]
     public class UserInvitationController : BaseController
     {
         // GET: UserInvitation
@@ -159,7 +161,7 @@ namespace SportsSocialNetwork.Controllers
 
         public ActionResult CreateInvitation(string[] userId, string sportSelect, string inviteContent, string orderInfo, string groupChatName)
         {
-            var result = new AjaxOperationResult();
+            var result = new AjaxOperationResult<InvitationViewModel>();
             var userInvitationService = this.Service<IUserInvitationService>();
             var invitationService = this.Service<IInvitationService>();
             var orderService = this.Service<IOrderService>();
@@ -205,10 +207,96 @@ namespace SportsSocialNetwork.Controllers
                 noti.MarkRead = false;
                 notiService.Create(noti);
             }
+            InvitationViewModel model = Mapper.Map<InvitationViewModel>(invi);
+            model.Host = curUser.FullName;
+            result.AdditionalData = model;
             result.Succeed = true;
             return Json(result);
         }
+
+        public ActionResult DenyInvitation(int id)
+        {
+            var result = new AjaxOperationResult();
+            var userInviService = this.Service<IUserInvitationService>();
+            var userId = User.Identity.GetUserId();
+            var uin = userInviService.FirstOrDefaultActive(p => p.InvitationId == id && p.ReceiverId == userId);
+            if (uin != null)
+            {
+                uin.Accepted = false;
+                userInviService.Update(uin);
+                userInviService.Save();
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+           
+            return Json(result);
+        }
+
+        public ActionResult AcceptInvitation(int id)
+        {
+            var result = new AjaxOperationResult();
+            var userInviService = this.Service<IUserInvitationService>();
+            var userId = User.Identity.GetUserId();
+            var uin = userInviService.FirstOrDefaultActive(p => p.InvitationId == id && p.ReceiverId == userId);
+            if (uin != null)
+            {
+                uin.Accepted = true;
+                userInviService.Update(uin);
+                userInviService.Save();
+                result.Succeed = true;
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+            return Json(result);
+        }
+
+        public ActionResult CheckConfirm(int id)
+        {
+            var result = new AjaxOperationResult<InvitationViewModel>();
+            var userInviService = this.Service<IUserInvitationService>();
+            var userId = User.Identity.GetUserId();
+            var inviService = this.Service<IInvitationService>();
+            var invi = inviService.FirstOrDefaultActive(p => p.SenderId == userId && p.Id == id);
+            var inviTmp = inviService.FirstOrDefaultActive(p => p.Id == id);
+            if (invi != null)
+            {
+                result.Succeed = true;
+            }
+            else
+            {
+                var uin = userInviService.FirstOrDefaultActive(p => p.InvitationId == id && p.ReceiverId == userId);
+                if (uin.Accepted == null)
+                {
+                    InvitationViewModel model = Mapper.Map<InvitationViewModel>(inviTmp);
+                    model.Host = inviTmp.AspNetUser.FullName;
+                    result.Succeed = false;
+                    result.AdditionalData = model;
+                }
+                else
+                {
+                    if (uin.Accepted.Value)
+                    {
+                        result.Succeed = true;
+                    }
+                    else
+                    {
+                        InvitationViewModel model = Mapper.Map<InvitationViewModel>(inviTmp);
+                        model.Host = inviTmp.AspNetUser.FullName;
+                        result.Succeed = false;
+                        result.AdditionalData = model;
+                    }
+                }
+            }
+            
+            return Json(result);
+        }
+
     }
 
-    
+
 }

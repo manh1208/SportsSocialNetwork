@@ -3211,6 +3211,7 @@
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.css" />
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome-4.6.3\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\friendly-chat\initialize-message.js" />
     <Content Include="Content\friendly-chat\main.css" />
     <Content Include="Content\friendly-chat\main.js" />
     <Content Include="Content\friendly-chat\profile_placeholder.png" />
