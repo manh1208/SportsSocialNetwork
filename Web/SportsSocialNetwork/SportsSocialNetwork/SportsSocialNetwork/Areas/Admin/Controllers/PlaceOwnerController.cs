@@ -140,7 +140,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                     string subject = "[SSN] - Chấp nhận tài khoản";
                     string body = "Hi <strong>" + user.FullName + "</strong>"+
                         "<br/><br>/Tài khoản của bạn đã được chấp nhận" +
-                        " Vui lòng vào <a href=\"" + Url.Action("Login", "Account", new { areas = "" }) + "\">link</a> để đăng nhập" +
+                        " Vui lòng vào <a href=\"" + Url.Action("Login", "Account", new { area = "" }) + "\">link</a> để đăng nhập" +
                         "<br/> <strong>Tên tài khoản : " + user.UserName + "</strong>" +
                         "<br/> Password : Your password" + "</strong>";
                     EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { user.Email }, null, null, subject, body, true);

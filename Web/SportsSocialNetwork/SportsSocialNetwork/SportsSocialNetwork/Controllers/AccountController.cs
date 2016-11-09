@@ -115,7 +115,7 @@ namespace SportsSocialNetwork.Controllers
                         return RedirectToAction("Index", "Article", new { area = "Moderator" });
 
                     } else { 
-                    return RedirectToAction("Index", "SSN");
+                    return RedirectToAction("Index", "SSN", new { area = "" });
                     }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
