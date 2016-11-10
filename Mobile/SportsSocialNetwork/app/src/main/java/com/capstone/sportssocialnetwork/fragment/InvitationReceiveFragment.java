@@ -1,5 +1,6 @@
 package com.capstone.sportssocialnetwork.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,10 +8,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
+import com.capstone.sportssocialnetwork.activity.InvitationChatActivity;
 import com.capstone.sportssocialnetwork.adapter.FriendAdapter;
 import com.capstone.sportssocialnetwork.adapter.InvitationReceiveAdapter;
 import com.capstone.sportssocialnetwork.model.Invitation;
@@ -59,6 +62,15 @@ public class InvitationReceiveFragment extends Fragment {
             @Override
             public void onRefresh() {
                 loadData();
+            }
+        });
+        viewHolder.lvFollowed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Invitation invitation = adapter.getItem(position);
+                Intent intent = new Intent(getActivity(), InvitationChatActivity.class);
+                intent.putExtra("invitationId",invitation.getId());
+                getActivity().startActivity(intent);
             }
         });
     }
