@@ -175,9 +175,7 @@
                     <li class="dropdown">
                         <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
                            data-animation="slide-bottom" role="button">
-                            <span class="avatar avatar-online">
-                                <img src="~/Content/assets/portraits/5.jpg" alt="...">
-                                <i></i>
+                            <span id="ava" class="avatar avatar-online">
                             </span>
                         </a>
                         <ul class="dropdown-menu width-250" role="menu">
@@ -330,11 +328,28 @@
 
             var Site = window.Site;
             $(document).ready(function () {
-                    Site.run();
+                Site.run();
+                loadAvatar();
             });
         })(document, window, jQuery);
     </script>
     <script>
+        function loadAvatar() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetAvatarImage", "SSN")',
+                async: false,
+                success: function (result) {
+                    if (result.Succeed) {
+                        $("#ava").empty();
+                        if (result.AdditionalData != null) {
+                            $("#ava").append('<img src="' + result.AdditionalData + '" style="height:30px;width:30px"><i></i>');
+                        }
+                    }
+                }
+            });
+        }
+
         var totalUnreadCount = 0;
 
         function logout() {
@@ -390,7 +405,7 @@
                             $("#showSearch").show();
                             hasGroup = true;
                         }
-                        
+
                     }
                 }
             });

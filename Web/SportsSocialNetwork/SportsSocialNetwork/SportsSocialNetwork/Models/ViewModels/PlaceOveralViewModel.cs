@@ -27,5 +27,6 @@ namespace SportsSocialNetwork.Models.ViewModels
         public String EndTime { get; set; }
         public bool Approve { get; set; }
         public List<SportViewModel> SportList { get; set; }
+        public double rate { get; set; }
     }
 }
