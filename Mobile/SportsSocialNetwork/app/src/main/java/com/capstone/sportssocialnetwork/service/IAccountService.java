@@ -7,6 +7,7 @@ import com.capstone.sportssocialnetwork.model.User;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -46,6 +47,11 @@ public interface IAccountService {
     @POST("/api/follow/followunfollowuser")
     Call<ResponseModel<String>> followUser(@Query("userId")String userId,
                                            @Query("followerId")String followerId);
+
+    @GET("/api/aspnetuser/finduser")
+    Call<ResponseModel<List<User>>> findUser(@Query("query")String query,
+                                             @Query("skip")int skip,
+                                             @Query("take")int take);
 
 
 }

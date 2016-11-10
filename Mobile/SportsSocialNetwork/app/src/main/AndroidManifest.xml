@@ -138,6 +138,10 @@
         <activity
             android:name=".activity.NewsDetailActivity"
             android:label="@string/title_activity_news_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.SearchActivity"
+            android:label="@string/title_activity_search"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

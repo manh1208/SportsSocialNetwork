@@ -7,10 +7,4 @@
         android:icon="@drawable/ic_search"
         android:title="Search"
         app:showAsAction="collapseActionView|ifRoom"  />
-    <item
-        android:id="@+id/menu_notice"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_notification"
-        android:title="Filter"
-        app:showAsAction="always" />
 </menu>
