@@ -13,6 +13,7 @@ using System.Device.Location;
 using SportsSocialNetwork.Models.Identity;
 using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.Enumerable;
+using Microsoft.AspNet.Identity;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -70,7 +71,7 @@ namespace SportsSocialNetwork.Controllers
         {
             var _placeService = this.Service<IPlaceService>();
             List<Place> placeList = new List<Place>();
-
+            List<PlaceOveralViewModel> resultList = new List<PlaceOveralViewModel>();
 
             if (lat != null && lat != "" && lng != null && lng != "")
             {
@@ -92,17 +93,38 @@ namespace SportsSocialNetwork.Controllers
             {
                 placeList = _placeService.getPlace(sport, province, district).ToList();
             }
+            
+            if(placeList!=null && placeList.Count > 0)
+            {
+                var rateService = this.Service<IRatingService>();
+                foreach(var item in placeList)
+                {
+                    PlaceOveralViewModel model = Mapper.Map<PlaceOveralViewModel>(item);
+                    var rates = rateService.GetActive(p => p.PlaceId == item.Id).ToList();
+                    double averagePoint = 0;
+                    if(rates!=null && rates.Count > 0)
+                    {
+                        foreach(var itemRate in rates)
+                        {
+                            averagePoint += itemRate.Point;
+                        }
+                        averagePoint = averagePoint / rates.Count;
+                    }
+                    model.rate = averagePoint;
+                    resultList.Add(model);
+                }
+            }
 
-            IEnumerable<Place> filteredListItems;
+            IEnumerable<PlaceOveralViewModel> filteredListItems;
             if (!string.IsNullOrEmpty(param.sSearch))
             {
-                filteredListItems = placeList.Where(
+                filteredListItems = resultList.Where(
                     d => (d.Name != null && d.Name.ToLower().Contains(param.sSearch.ToLower()))
-                );
+                ).OrderByDescending(p => p.rate);
             }
             else
             {
-                filteredListItems = placeList;
+                filteredListItems = resultList.OrderByDescending(p => p.rate);
             }
             // Sort.
             var sortColumnIndex = Convert.ToInt32(Request["iSortCol_0"]);
@@ -194,6 +216,74 @@ namespace SportsSocialNetwork.Controllers
                 }).ToList();
             ViewBag.fieldSport = list;
             return View(place);
+        }
+
+        public ActionResult GetRateInfo(int id)
+        {
+            var result = new AjaxOperationResult<RateInfoViewModel>();
+            var rateService = this.Service<IRatingService>();
+            var rate = rateService.GetActive(p => p.PlaceId == id).ToList();
+            RateInfoViewModel model = new RateInfoViewModel();
+            int numOfRate = 0;
+            double averagePoint = 0;
+            if (rate != null && rate.Count > 0)
+            {
+                foreach(var item in rate)
+                {
+                    averagePoint += item.Point;
+                }
+                numOfRate = rate.Count;
+                averagePoint = averagePoint / numOfRate;
+            }
+            model.AverageRate = Math.Round(averagePoint,1);
+            model.NumberOfRate = numOfRate;
+            result.Succeed = true;
+            result.AdditionalData = model;
+            return Json(result);
+        }
+
+        public ActionResult LoadRating(int placeId)
+        {
+            var result = new AjaxOperationResult<RateInfoViewModel>();
+            var rateService = this.Service<IRatingService>();
+            var userId = User.Identity.GetUserId();
+            var rate = rateService.FirstOrDefault(p => p.PlaceId == placeId && p.UserId == userId);
+            RateInfoViewModel model = new RateInfoViewModel();
+            if (rate != null)
+            {
+                model.AverageRate = rate.Point;
+            }else
+            {
+                model.AverageRate = 0;
+            }
+            result.Succeed = true;
+            result.AdditionalData = model;
+            return Json(result);
+        }
+
+        public ActionResult Rating(int placeId, int score)
+        {
+            var result = new AjaxOperationResult();
+            var rateService = this.Service<IRatingService>();
+            var userId = User.Identity.GetUserId();
+            var rate = rateService.FirstOrDefaultActive(p => p.PlaceId == placeId && p.UserId == userId);
+            if (rate != null)
+            {
+                rate.Point = score;
+                rateService.Update(rate);
+                rateService.Save();
+            }
+            else
+            {
+                Rating rating = new Rating();
+                rating.PlaceId = placeId;
+                rating.Point = score;
+                rating.UserId = userId;
+                rateService.Create(rating);
+                rateService.Save();
+            }
+            result.Succeed = true;
+            return Json(result);
         }
     }
 

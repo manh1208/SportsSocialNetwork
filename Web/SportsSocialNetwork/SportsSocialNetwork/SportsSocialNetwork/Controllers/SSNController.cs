@@ -146,6 +146,22 @@ namespace SportsSocialNetwork.Controllers
             return View();
         }
 
+        public ActionResult GetAvatarImage()
+        {
+            var result = new AjaxOperationResult<string>();
+            var userId = User.Identity.GetUserId();
+            var userService = this.Service<IAspNetUserService>();
+            var user = userService.FirstOrDefaultActive(p => p.Id == userId);
+            if (user != null)
+            {
+                result.Succeed = true;
+                result.AdditionalData = user.AvatarImage;
+            }else
+            {
+                result.Succeed = false;
+            }
+            return Json(result);
+        }
         public ActionResult GetFollowingUser(int skip, int take)
         {
             var result = new AjaxOperationResult<List<FollowSuggestViewModel>>();

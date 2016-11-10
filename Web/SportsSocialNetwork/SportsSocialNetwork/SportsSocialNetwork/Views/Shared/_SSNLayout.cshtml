@@ -172,23 +172,23 @@
                                     <div data-role="container" style="height:400px;" class="notiDiv">
                                         <div data-role="content" id="notiItems" class="notiDiv">
                                             @*<a class="list-group-item" href="javascript:void(0)" role="menuitem">
-                                                    <div class="media">
-                                                        <div class="media-left padding-right-10">
-                                                            <i class="icon wb-order bg-red-600 white icon-circle" aria-hidden="true"></i>
-                                                        </div>
-                                                        <div class="media-body">
-                                                            <h6 class="media-heading">A new order has been placed</h6>
-                                                            <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">5 hours ago</time>
-                                                        </div>
-                                                    </div>
-                                                </a>*@
+                                        <div class="media">
+                                            <div class="media-left padding-right-10">
+                                                <i class="icon wb-order bg-red-600 white icon-circle" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="media-body">
+                                                <h6 class="media-heading">A new order has been placed</h6>
+                                                <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">5 hours ago</time>
+                                            </div>
+                                        </div>
+                                    </a>*@
                                         </div>
                                     </div>
                                 </li>
-
                                 <li class="dropdown-menu-footer" role="presentation" id="notiBottom">
                                     <a class="dropdown-menu-footer-btn" href="javascript:void(0)" role="button">
                                         <i class="icon wb-settings" aria-hidden="true"></i>
+
                                     </a>
                                     <a href="@Url.Action("Index", "Notification")" role="menuitem">
                                         Xem tất cả thông báo
@@ -197,74 +197,72 @@
                             </ul>
                         </li>
 
-                        <li class="dropdown">
-                            <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
-                               data-animation="slide-bottom" role="button">
-                                <span class="avatar avatar-online">
-                                    <img src="~/Content/assets/portraits/5.jpg" alt="...">
-                                    <i></i>
-                                </span>
-                            </a>
-                            <ul class="dropdown-menu width-250" role="menu">
-                                <li role="presentation">
-                                    <form action="@Url.Action("Index","SSN", new { area = "" })" style="margin:10px" method="post" id="form-home-page">
-                                        <a href="#" role="menuitem" onclick="homePage()">
-                                            <span class="fa fa-globe"></span> Trang chủ
-                                        </a>
-                                    </form>
-                                </li>
-                                <li role="presentation">
-                                    <form action="" style="margin:10px" method="post" id="form-">
-                                        <a href="#" role="menuitem" onclick="">
-                                            <span class="fa fa-key"></span> Đổi mật khẩu
-                                        </a>
-                                    </form>
-                                </li>
-                                <li role="presentation">
-                                    <form action="@Url.Action("Index","UserInvitation", new { area = "" })" style="margin:10px" method="post" id="form-invite-player">
-                                        <a href="#" role="menuitem" onclick="invitePlayer()">
-                                            <span class="fa fa-pencil-square-o"></span> Mời chơi thể thao
-                                        </a>
-                                    </form>
-                                </li>
-                                <li role="presentation">
-                                    <form action="@Url.Action("Index","Invitation", new { area = "" })" style="margin:10px" method="post" id="form-invite-history">
-                                        <a href="#" role="menuitem" onclick="inviteHistory()">
-                                            <span class="fa fa-users"></span> Lịch sử mời chơi thể thao
-                                        </a>
-                                    </form>
-                                </li>
-                                <li role="presentation">
-                                    <form action="@Url.Action("Index","Event", new { area = "" })" style="margin:10px" method="post" id="form-search-event">
-                                        <a href="#" role="menuitem" onclick="searchEvent()">
-                                            <span class="fa fa-bullhorn"></span> Các sự kiện thể thao
-                                        </a>
-                                    </form>
-                                </li>
-                                <li role="presentation">
-                                    <form action="@Url.Action("Index","Place", new { area = "" })" style="margin:10px" method="post" id="form-search-place">
-                                        <a href="#" role="menuitem" onclick="searchPlace()">
-                                            <span class="fa fa-futbol-o"></span> Tìm nơi chơi thể thao
-                                        </a>
-                                    </form>
-                                </li>
-                                <li role="presentation">
-                                    <form action="@Url.Action("Index","Order", new { area = "" })" style="margin:10px" method="post" id="form-order-history">
-                                        <a href="#" role="menuitem" onclick="orderHistory()">
-                                            <span class="fa fa-history"></span> Lịch sử đặt sân
-                                        </a>
-                                    </form>
-                                </li>
-                                <li role="presentation">
-                                    <form action="@Url.Action("LogOff","Account", new { area = "" })" style="margin:10px" method="post" id="form-log-out">
-                                        @Html.AntiForgeryToken()
-                                        <a href="#" role="menuitem" onclick="logout()">
-                                            <span class="icon wb-power"></span> Đăng xuất
-                                        </a>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
+                            <li class="dropdown">
+                                <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
+                                   data-animation="slide-bottom" role="button">
+                                    <span id="ava" class="avatar avatar-online">
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu width-250" role="menu">
+                                    <li role="presentation">
+                                        <form action="@Url.Action("Index","SSN", new { area = "" })" style="margin:10px" method="post" id="form-home-page">
+                                            <a href="#" role="menuitem" onclick="homePage()">
+                                                <span class="fa fa-globe"></span> Trang chủ
+                                            </a>
+                                        </form>
+                                    </li>
+                                    <li role="presentation">
+                                        <form action="" style="margin:10px" method="post" id="form-">
+                                            <a href="#" role="menuitem" onclick="">
+                                                <span class="fa fa-key"></span> Đổi mật khẩu
+                                            </a>
+                                        </form>
+                                    </li>
+                                    <li role="presentation">
+                                        <form action="@Url.Action("Index","UserInvitation", new { area = "" })" style="margin:10px" method="post" id="form-invite-player">
+                                            <a href="#" role="menuitem" onclick="invitePlayer()">
+                                                <span class="fa fa-pencil-square-o"></span> Mời chơi thể thao
+                                            </a>
+                                        </form>
+                                    </li>
+                                    <li role="presentation">
+                                        <form action="@Url.Action("Index","Invitation", new { area = "" })" style="margin:10px" method="post" id="form-invite-history">
+                                            <a href="#" role="menuitem" onclick="inviteHistory()">
+                                                <span class="fa fa-users"></span> Lịch sử mời chơi thể thao
+                                            </a>
+                                        </form>
+                                    </li>
+                                    <li role="presentation">
+                                        <form action="@Url.Action("Index","Event", new { area = "" })" style="margin:10px" method="post" id="form-search-event">
+                                            <a href="#" role="menuitem" onclick="searchEvent()">
+                                                <span class="fa fa-bullhorn"></span> Các sự kiện thể thao
+                                            </a>
+                                        </form>
+                                    </li>
+                                    <li role="presentation">
+                                        <form action="@Url.Action("Index","Place", new { area = "" })" style="margin:10px" method="post" id="form-search-place">
+                                            <a href="#" role="menuitem" onclick="searchPlace()">
+                                                <span class="fa fa-futbol-o"></span> Tìm nơi chơi thể thao
+                                            </a>
+                                        </form>
+                                    </li>
+                                    <li role="presentation">
+                                        <form action="@Url.Action("Index","Order", new { area = "" })" style="margin:10px" method="post" id="form-order-history">
+                                            <a href="#" role="menuitem" onclick="orderHistory()">
+                                                <span class="fa fa-history"></span> Lịch sử đặt sân
+                                            </a>
+                                        </form>
+                                    </li>
+                                    <li role="presentation">
+                                        <form action="@Url.Action("LogOff","Account", new { area = "" })" style="margin:10px" method="post" id="form-log-out">
+                                            @Html.AntiForgeryToken()
+                                            <a href="#" role="menuitem" onclick="logout()">
+                                                <span class="icon wb-power"></span> Đăng xuất
+                                            </a>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
                     }
                     else
                     {
@@ -275,245 +273,257 @@
                     }
 
                 </ul>
-                <!-- End Navbar Toolbar Right -->
-            </div>
-            <!-- End Navbar Collapse -->
-            <!-- Site Navbar Seach -->
-            <div class="collapse navbar-search-overlap col-md-6" style="border:solid 1px;padding:0" id="site-navbar-search">
-                <form role="search" autocomplete="off">
-                    <div class="form-group">
-                        <div class="input-search">
-                            <i class="input-search-icon wb-search" aria-hidden="true"></i>
-                            <input type="text" id="search-input" class="form-control" name="site-search" placeholder="Search...">
-                            <button type="button" class="input-search-close icon wb-close" data-target="#site-navbar-search"
-                                    data-toggle="collapse" aria-label="Close"></button>
+                    <!-- End Navbar Toolbar Right -->
+                </div>
+                <!-- End Navbar Collapse -->
+                <!-- Site Navbar Seach -->
+                <div class="collapse navbar-search-overlap col-md-6" style="border:solid 1px;padding:0" id="site-navbar-search">
+                    <form role="search" autocomplete="off">
+                        <div class="form-group">
+                            <div class="input-search">
+                                <i class="input-search-icon wb-search" aria-hidden="true"></i>
+                                <input type="text" id="search-input" class="form-control" name="site-search" placeholder="Search...">
+                                <button type="button" class="input-search-close icon wb-close" data-target="#site-navbar-search"
+                                        data-toggle="collapse" aria-label="Close"></button>
+                            </div>
                         </div>
-                    </div>
-                    <div id="showSearch" style="width:100%;height:auto;display:none">
+                        <div id="showSearch" style="width:100%;height:auto;display:none">
 
-                    </div>
-                </form>
+                        </div>
+                    </form>
+                </div>
+                <!-- End Site Navbar Seach -->
+                </div>
+            </nav>
+            <!-- Page -->
+            <div class="page animsition" style="margin: 0 50px;">
+                <div class="page-content container-fluid">
+                    @RenderBody()
+                </div>
             </div>
-            <!-- End Site Navbar Seach -->
-        </div>
-    </nav>
-    <!-- Page -->
-    <div class="page animsition" style="margin: 0 50px;">
-        <div class="page-content container-fluid">
-            @RenderBody()
-        </div>
-    </div>
-    <!-- End Page -->
-    <!-- Footer -->
-    <footer class="site-footer">
-        <span class="site-footer-legal">© 2016 SSN - Capstone Project</span>
-        <div class="site-footer-right">
+            <!-- End Page -->
+            <!-- Footer -->
+            <footer class="site-footer">
+                <span class="site-footer-legal">© 2016 SSN - Capstone Project</span>
+                <div class="site-footer-right">
 
-        </div>
-    </footer>
+                </div>
+            </footer>
 
 
-    <!-- Core  -->
-    <script src="~/Content/assets/vendor/jquery/jquery.js"></script>
-    <script src="~/Content/assets/vendor/bootstrap/bootstrap.js"></script>
-    <script src="~/Content/assets/vendor/animsition/jquery.animsition.js"></script>
-    <script src="~/Content/assets/vendor/asscroll/jquery-asScroll.js"></script>
-    <script src="~/Content/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
-    <script src="~/Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
-    <script src="~/Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+            <!-- Core  -->
+            <script src="~/Content/assets/vendor/jquery/jquery.js"></script>
+            <script src="~/Content/assets/vendor/bootstrap/bootstrap.js"></script>
+            <script src="~/Content/assets/vendor/animsition/jquery.animsition.js"></script>
+            <script src="~/Content/assets/vendor/asscroll/jquery-asScroll.js"></script>
+            <script src="~/Content/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
+            <script src="~/Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
+            <script src="~/Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
 
-    <!-- Plugins -->
-    <script src="~/Content/assets/vendor/switchery/switchery.min.js"></script>
-    <script src="~/Content/assets/vendor/intro-js/intro.js"></script>
-    <script src="~/Content/assets/vendor/screenfull/screenfull.js"></script>
-    <script src="~/Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
+            <!-- Plugins -->
+            <script src="~/Content/assets/vendor/switchery/switchery.min.js"></script>
+            <script src="~/Content/assets/vendor/intro-js/intro.js"></script>
+            <script src="~/Content/assets/vendor/screenfull/screenfull.js"></script>
+            <script src="~/Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
 
-    <!-- Scripts -->
-    <script src="~/Content/assets/js/core.js"></script>
-    <script src="~/Content/assets/js/site.js"></script>
+            <!-- Scripts -->
+            <script src="~/Content/assets/js/core.js"></script>
+            <script src="~/Content/assets/js/site.js"></script>
 
-    <script src="~/Content/assets/js/sections/menu.js"></script>
-    <script src="~/Content/assets/js/sections/menubar.js"></script>
-    <script src="~/Content/assets/js/sections/sidebar.js"></script>
+            <script src="~/Content/assets/js/sections/menu.js"></script>
+            <script src="~/Content/assets/js/sections/menubar.js"></script>
+            <script src="~/Content/assets/js/sections/sidebar.js"></script>
 
-    <script src="~/Content/assets/js/configs/config-colors.js"></script>
-    <script src="~/Content/assets/js/configs/config-tour.js"></script>
+            <script src="~/Content/assets/js/configs/config-colors.js"></script>
+            <script src="~/Content/assets/js/configs/config-tour.js"></script>
 
-    <script src="~/Content/assets/js/components/asscrollable.js"></script>
-    <script src="~/Content/assets/js/components/animsition.js"></script>
-    <script src="~/Content/assets/js/components/slidepanel.min.js"></script>
-    <script src="~/Content/assets/vendor/formvalidation/formValidation.min.js"></script>
-    <script src="~/Content/assets/vendor/formvalidation/framework/bootstrap.min.js"></script>
-    <script src="~/Content/assets/js/components/switchery.js"></script>
-    <!--Sweet Alert-->
-    <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
+            <script src="~/Content/assets/js/components/asscrollable.js"></script>
+            <script src="~/Content/assets/js/components/animsition.js"></script>
+            <script src="~/Content/assets/js/components/slidepanel.min.js"></script>
+            <script src="~/Content/assets/vendor/formvalidation/formValidation.min.js"></script>
+            <script src="~/Content/assets/vendor/formvalidation/framework/bootstrap.min.js"></script>
+            <script src="~/Content/assets/js/components/switchery.js"></script>
+            <!--Sweet Alert-->
+            <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
 
-    <script src="~/Content/assets/js/plugins/responsive-tabs.js"></script>
-    <script src="~/Content/assets/js/plugins/closeable-tabs.js"></script>
-    <script src="~/Content/assets/js/components/tabs.js"></script>
-    <script src="~/Content/assets/vendor/select2/select2.full.js"></script>
-    <!--Signalr-->
-    <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
-    <script src="~/signalr/hubs"></script>
+            <script src="~/Content/assets/js/plugins/responsive-tabs.js"></script>
+            <script src="~/Content/assets/js/plugins/closeable-tabs.js"></script>
+            <script src="~/Content/assets/js/components/tabs.js"></script>
+            <script src="~/Content/assets/vendor/select2/select2.full.js"></script>
+            <!--Signalr-->
+            <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
+            <script src="~/signalr/hubs"></script>
 
-    <script>
-        (function (document, window, $) {
-            'use strict';
+            <script>
+                (function (document, window, $) {
+                    'use strict';
 
-            var Site = window.Site;
-            $(document).ready(function () {
-                Site.run();
-            });
-        })(document, window, jQuery);
-    </script>
-    @if (User != null && User.Identity.IsAuthenticated)
-    {
-        <script>
-            var totalUnreadCount = 0;
-            var _notiFirstSkip = 0;
-            var _notiFirstTake = 10;
-            var _notiSkip = 10;
-            var _notiTake = 5;
-
-            function logout() {
-                $("#form-log-out").submit();
-            }
-            function searchPlace() {
-                $("#form-search-place").submit();
-            }
-            function orderHistory() {
-                $("#form-order-history").submit();
-            }
-            function searchEvent() {
-                $("#form-search-event").submit();
-            }
-            function invitePlayer() {
-                $("#form-invite-player").submit();
-            }
-            function inviteHistory() {
-                $("#form-invite-history").submit();
-            }
-            function homePage() {
-                $("#form-home-page").submit();
-            }
-            var hasUser = false;
-            var hasGroup = false;
-            $("#search-input").on("keyup", function () {
-                var keyword = $("#search-input").val();
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("GetSearchUserResult", "SSN")',
-                    async: false,
-                    data: { "keyword": keyword, "skip": 0, "take": 5 },
-                    success: function (result) {
-                        if (result.Succeed) {
-                            $("#showSearch").empty();
-                            if (result.AdditionalData != null) {
-                                showSearchUser(result.AdditionalData);
-                                $("#showSearch").show();
-                                hasUser = true;
+                    var Site = window.Site;
+                    $(document).ready(function () {
+                        Site.run();
+                        loadAvatar();
+                    });
+                })(document, window, jQuery);
+            </script>
+            <script>
+                function loadAvatar() {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("GetAvatarImage", "SSN")',
+                        async: false,
+                        success: function (result) {
+                            if (result.Succeed) {
+                                $("#ava").empty();
+                                if (result.AdditionalData != null) {
+                                    $("#ava").append('<img src="' + result.AdditionalData + '" style="height:30px;width:30px"><i></i>');
+                                }
                             }
                         }
-                    }
-                });
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("GetSearchGroupList", "SSN")',
-                    async: false,
-                    data: { "keyword": keyword, "skip": 0, "take": 2 },
-                    success: function (result) {
-                        if (result.Succeed) {
-                            if (result.AdditionalData != null) {
-                                showSearchGroup(result.AdditionalData);
-                                $("#showSearch").show();
-                                hasGroup = true;
-                            }
-
-                        }
-                    }
-                });
-                if (hasGroup || hasUser) {
-                    $("#showSearch").append("<div tabindex='0' style='padding:10px' class='comment media user-search'><a href='/SSN/SearchDetail?keyword=" + keyword + "'>"
-                        + "<i class='icon wb-search' aria-hidden='true'></i> Xem toàn bộ kết quả</a></div>");
+                    });
                 }
-            });
 
-            function showSearchUser(data) {
-                $("#showSearch").append("<div style='background-color:#ffefdf;margin-bottom:5px' tabindex='0' class='padding-left-10'>Cá nhân</div>");
-                $(data.userList).each(function () {
-                    var hobby = "";
-                    if (this.sameSport != 0) {
-                        hobby = "<span class='comment-content'><p>Có chung " + this.sameSport
-                            + " sở thích</p></span>";
-                    }
-                    var info = "<div tabindex='0' style='padding:0 0 0 10px' class='comment media user-search'><a href='/profile/index?userid=" + this.Id + "'>"
-                    + "<span class='media-left'>"
-                    + "<span class='avatar avatar-lg'>"
-                    + "<img style='height:50px;width:50px' src='" + this.AvatarImage + "'>"
-                    + "</span></span>"
-                    + "<span class='comment-body media-body'>"
-                    + "<span class='comment-author'>" + this.FullName + "</span>"
-                    + hobby + "</span></a></div>";
-                    $("#showSearch").append(info);
+                var totalUnreadCount = 0;
 
-                });
-
-            }
-
-            function showSearchGroup(data) {
-                $("#showSearch").append("<div style='background-color:#ffefdf;margin-bottom:5px' tabindex='0' class='padding-left-10'>Hội nhóm</div>");
-                $(data.listGroup).each(function () {
-                    var info = "<div tabindex='0' style='padding:0 0 0 10px' class='comment media user-search'><a href='/Group/Index/" + this.Id + "'>"
-                    + "<span class='media-left'>"
-                    + "<span class='avatar avatar-lg'>"
-                    + "<img style='height:50px;width:50px' src='" + this.Avatar + "'>"
-                    + "</span></span>"
-                    + "<span class='comment-body media-body'>"
-                    + "<span class='comment-author'>" + this.Name + "</span>"
-                    + "<span class='comment-content'><p>Nhóm " + this.sport.Name
-                            + " </p></span>" + "</span></a></div>";
-                    $("#showSearch").append(info);
-
-                });
-
-            }
-
-        </script>
-
-        <script type="text/javascript">
-            $(function signalr() {
-                // Declare a proxy to reference the hub.
-                var commenthub = $.connection.realTimeHub;
-                // Create a function that the hub can call to broadcast messages.
-                commenthub.client.send = function (c) {
-                    //process
-
-                    appendNoti(c);
-
-                };
-                // Start the connection.
-                $.connection.hub.start();
-            });
-
-            $(document).ready(function () {
-                //Load Noti Count
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("GetUnreadCount", "Notification")',
-                    data: { "userId": '@User.Identity.GetUserId()' },
-                    success: function (result) {
-                        if (result != "") {
-                            totalUnreadCount = parseInt(result);
-                            if (totalUnreadCount != 0) {
-                                showPopNoti(totalUnreadCount);
+                function logout() {
+                    $("#form-log-out").submit();
+                }
+                function searchPlace() {
+                    $("#form-search-place").submit();
+                }
+                function orderHistory() {
+                    $("#form-order-history").submit();
+                }
+                function searchEvent() {
+                    $("#form-search-event").submit();
+                }
+                function invitePlayer() {
+                    $("#form-invite-player").submit();
+                }
+                function inviteHistory() {
+                    $("#form-invite-history").submit();
+                }
+                function homePage() {
+                    $("#form-home-page").submit();
+                }
+                var hasUser = false;
+                var hasGroup = false;
+                $("#search-input").on("keyup", function () {
+                    var keyword = $("#search-input").val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("GetSearchUserResult", "SSN")',
+                        async: false,
+                        data: { "keyword": keyword, "skip": 0, "take": 5 },
+                        success: function (result) {
+                            if (result.Succeed) {
+                                $("#showSearch").empty();
+                                if (result.AdditionalData != null) {
+                                    showSearchUser(result.AdditionalData);
+                                    $("#showSearch").show();
+                                    hasUser = true;
+                                }
                             }
                         }
-                    }
+                    });
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("GetSearchGroupList", "SSN")',
+                        async: false,
+                        data: { "keyword": keyword, "skip": 0, "take": 2 },
+                        success: function (result) {
+                            if (result.Succeed) {
+                                if (result.AdditionalData != null) {
+                                    showSearchGroup(result.AdditionalData);
+                                    $("#showSearch").show();
+                                    hasGroup = true;
+                                }
 
+                            }
+
+                        }
+                    });
+                    if (hasGroup || hasUser) {
+                        $("#showSearch").append("<div tabindex='0' style='padding:10px' class='comment media user-search'><a href='/SSN/SearchDetail?keyword=" + keyword + "'>"
+                            + "<i class='icon wb-search' aria-hidden='true'></i> Xem toàn bộ kết quả</a></div>");
+                    }
                 });
 
-                //Load Noti List
-                @*$.ajax({
+                function showSearchUser(data) {
+                    $("#showSearch").append("<div style='background-color:#ffefdf;margin-bottom:5px' tabindex='0' class='padding-left-10'>Cá nhân</div>");
+                    $(data.userList).each(function () {
+                        var hobby = "";
+                        if (this.sameSport != 0) {
+                            hobby = "<span class='comment-content'><p>Có chung " + this.sameSport
+                                + " sở thích</p></span>";
+                        }
+                        var info = "<div tabindex='0' style='padding:0 0 0 10px' class='comment media user-search'><a href='/profile/index?userid=" + this.Id + "'>"
+                        + "<span class='media-left'>"
+                        + "<span class='avatar avatar-lg'>"
+                        + "<img style='height:50px;width:50px' src='" + this.AvatarImage + "'>"
+                        + "</span></span>"
+                        + "<span class='comment-body media-body'>"
+                        + "<span class='comment-author'>" + this.FullName + "</span>"
+                        + hobby + "</span></a></div>";
+                        $("#showSearch").append(info);
+
+                    });
+
+                }
+
+                function showSearchGroup(data) {
+                    $("#showSearch").append("<div style='background-color:#ffefdf;margin-bottom:5px' tabindex='0' class='padding-left-10'>Hội nhóm</div>");
+                    $(data.listGroup).each(function () {
+                        var info = "<div tabindex='0' style='padding:0 0 0 10px' class='comment media user-search'><a href='/Group/Index/" + this.Id + "'>"
+                        + "<span class='media-left'>"
+                        + "<span class='avatar avatar-lg'>"
+                        + "<img style='height:50px;width:50px' src='" + this.Avatar + "'>"
+                        + "</span></span>"
+                        + "<span class='comment-body media-body'>"
+                        + "<span class='comment-author'>" + this.Name + "</span>"
+                        + "<span class='comment-content'><p>Nhóm " + this.sport.Name
+                                + " </p></span>" + "</span></a></div>";
+                        $("#showSearch").append(info);
+
+                    });
+
+                }
+
+            </script>
+
+            <script type="text/javascript">
+                $(function signalr() {
+                    // Declare a proxy to reference the hub.
+                    var commenthub = $.connection.realTimeHub;
+                    // Create a function that the hub can call to broadcast messages.
+                    commenthub.client.send = function (c) {
+                        //process
+
+                        appendNoti(c);
+
+                    };
+                    // Start the connection.
+                    $.connection.hub.start();
+                });
+
+                $(document).ready(function () {
+                    //Load Noti Count
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("GetUnreadCount", "Notification")',
+                        data: { "userId": '@User.Identity.GetUserId()' },
+                        success: function (result) {
+                            if (result != "") {
+                                totalUnreadCount = parseInt(result);
+                                if (totalUnreadCount != 0) {
+                                    showPopNoti(totalUnreadCount);
+                                }
+                            }
+                        }
+
+                    });
+
+                    //Load Noti List
+                    @*$.ajax({
                 type: 'POST',
                 url: '@Url.Action("LoadNoti", "Notification")',
                 data: { "userId": '@User.Identity.GetUserId()', "skip": _notiFirstSkip , "take": _notiFirstTake },
@@ -528,119 +538,119 @@
                 }
 
             });*@
-                loadNoti(_notiFirstSkip, _notiFirstTake);
-            })
-
-            function appendNoti(data) {
-                var noti = renderNoti(data);
-                totalUnreadCount++;
-                $("#notiItems").prepend(noti);
-                if (totalUnreadCount != 0) {
-                    showPopNoti(totalUnreadCount);
-                }
-            }
-
-            function renderNoti(data) {
-                var image = "";
-                var url = "";
-                var colorUnread = "";
-
-                if (data.MarkRead == false) {
-                    styleUnread = "background-color:#f1f0f0;";
-                } else {
-                    styleUnread = "";
-                }
-
-
-            if (data.Type == parseInt('@((int)NotificationType.Post)')) {
-                image = data.AspNetUser1.AvatarImage;
-                url = "/Profile/Index?userId=" + data.AspNetUser.Id;
-            } else if(data.Type == parseInt('@((int)NotificationType.Order)')) {
-                image = "";
-                url = "";
-            } else if(data.Type == parseInt('@((int)NotificationType.Invitation)')) {
-                image = data.AspNetUser1.AvatarImage;
-                url = "/Profile/Index?userId=" + data.AspNetUser1.Id;
-            } else if(data.Type == parseInt('@((int)NotificationType.GroupInvitation)')) {
-                image = data.AspNetUser1.AvatarImage;
-                url = "/Group/Index/" + data.Group.Id;
-            } else if (data.Type == parseInt('@((int)NotificationType.GroupChallengeInvitation)')) {
-                image = data.Group.Avatar;
-                url = "/Group/Index/" + data.Group.Id;
-            } else if (data.Type == parseInt('@((int)NotificationType.GroupMemberAction)')) {
-                image = data.AspNetUser1.AvatarImage;
-                url = "/Group/Index/" + data.Group.Id;
-            }
-            else {
-
-                }
-
-
-            var noti = '<a class="list-group-item" href="' + url + '" role="menuitem" style="padding: 10px 15px;'+ styleUnread +'" onclick="markAsRead('+ data.Id +')">' +
-                           '<div class="row height-100">' +
-                            '<div class="col-sm-3 vertical-align height-100">' +
-                                '<img class="vertical-align-middle" src="' + image + '" width="60" height="60" />' +
-                            '</div>' +
-                            '<div class="col-sm-9 height-100" style="padding-top:10px;">' +
-                                '<h4 class="list-group-item-heading">' + data.Message + '</h4>' +
-                                '<p class="list-group-item-text">' + data.CreateDateString + '</p>' +
-                            '</div>' +
-                            '</a>';
-
-                return noti;
-            }
-
-            function markAsRead(id) {
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("MarkAsRead", "Notification")',
-                    data: { "id": id },
-                    success: function (result) {
-                        if (result.Succeed) {
-
-                        } else {
-                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                        }
-                    }
+                    loadNoti(_notiFirstSkip, _notiFirstTake);
                 })
-            };
 
-            function showPopNoti(count) {
-                var lable = '<span class="badge badge-danger up" id="notiCount">' + count + '</span>'
-                $(lable).insertAfter("#notibell");
+                function appendNoti(data) {
+                    var noti = renderNoti(data);
+                    totalUnreadCount++;
+                    $("#notiItems").prepend(noti);
+                    if (totalUnreadCount != 0) {
+                        showPopNoti(totalUnreadCount);
+                    }
+                }
 
-                var titleCount = '<span class="label label-round label-danger" id="notiLabelCount">' + count + '</span>';
-                $(lable).insertAfter("#notiTitle");
-            };
+                function renderNoti(data) {
+                    var image = "";
+                    var url = "";
+                    var colorUnread = "";
 
-            function loadNoti(skip, take) {
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("LoadNoti", "Notification")',
-                    data: { "userId": '@User.Identity.GetUserId()', "skip": skip, "take": take },
-                    success: function (result) {
-                        var data = result.Data;
-
-                        $(data).each(function () {
-                            var noti = renderNoti(this);
-                            $("#notiItems").append(noti);
-
-                        })
+                    if (data.MarkRead == false) {
+                        styleUnread = "background-color:#f1f0f0;";
+                    } else {
+                        styleUnread = "";
                     }
 
-                });
-            };
 
-            $(".notiDiv").scroll(function () {
-                if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-                    loadNoti(_notiSkip, _notiTake);
-                    _notiSkip = _notiSkip + _notiTake;
+                    if (data.Type == parseInt('@((int)NotificationType.Post)')) {
+                        image = data.AspNetUser1.AvatarImage;
+                        url = "/Profile/Index?userId=" + data.AspNetUser.Id;
+                    } else if (data.Type == parseInt('@((int)NotificationType.Order)')) {
+                        image = "";
+                        url = "";
+                    } else if (data.Type == parseInt('@((int)NotificationType.Invitation)')) {
+                        image = data.AspNetUser1.AvatarImage;
+                        url = "/Profile/Index?userId=" + data.AspNetUser1.Id;
+                    } else if (data.Type == parseInt('@((int)NotificationType.GroupInvitation)')) {
+                        image = data.AspNetUser1.AvatarImage;
+                        url = "/Group/Index/" + data.Group.Id;
+                    } else if (data.Type == parseInt('@((int)NotificationType.GroupChallengeInvitation)')) {
+                        image = data.Group.Avatar;
+                        url = "/Group/Index/" + data.Group.Id;
+                    } else if (data.Type == parseInt('@((int)NotificationType.GroupMemberAction)')) {
+                        image = data.AspNetUser1.AvatarImage;
+                        url = "/Group/Index/" + data.Group.Id;
+                    }
+                    else {
+
+                    }
+
+
+                    var noti = '<a class="list-group-item" href="' + url + '" role="menuitem" style="padding: 10px 15px;' + styleUnread + '" onclick="markAsRead(' + data.Id + ')">' +
+                                   '<div class="row height-100">' +
+                                    '<div class="col-sm-3 vertical-align height-100">' +
+                                        '<img class="vertical-align-middle" src="' + image + '" width="60" height="60" />' +
+                                    '</div>' +
+                                    '<div class="col-sm-9 height-100" style="padding-top:10px;">' +
+                                        '<h4 class="list-group-item-heading">' + data.Message + '</h4>' +
+                                        '<p class="list-group-item-text">' + data.CreateDateString + '</p>' +
+                                    '</div>' +
+                                    '</a>';
+
+                    return noti;
                 }
-            });
-        </script>
-    }
 
-    @RenderSection("scripts", false)
-</body>
+                function markAsRead(id) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("MarkAsRead", "Notification")',
+                        data: { "id": id },
+                        success: function (result) {
+                            if (result.Succeed) {
 
-</html>
+                            } else {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        }
+                    })
+                };
+
+                function showPopNoti(count) {
+                    var lable = '<span class="badge badge-danger up" id="notiCount">' + count + '</span>'
+                    $(lable).insertAfter("#notibell");
+
+                    var titleCount = '<span class="label label-round label-danger" id="notiLabelCount">' + count + '</span>';
+                    $(lable).insertAfter("#notiTitle");
+                };
+
+                function loadNoti(skip, take) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("LoadNoti", "Notification")',
+                        data: { "userId": '@User.Identity.GetUserId()', "skip": skip, "take": take },
+                        success: function (result) {
+                            var data = result.Data;
+
+                            $(data).each(function () {
+                                var noti = renderNoti(this);
+                                $("#notiItems").append(noti);
+
+                            })
+                        }
+
+                    });
+                };
+
+                $(".notiDiv").scroll(function () {
+                    if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+                        loadNoti(_notiSkip, _notiTake);
+                        _notiSkip = _notiSkip + _notiTake;
+                    }
+                });
+            </script>
+            }
+
+            @RenderSection("scripts", false)
+        </body>
+
+    </html>

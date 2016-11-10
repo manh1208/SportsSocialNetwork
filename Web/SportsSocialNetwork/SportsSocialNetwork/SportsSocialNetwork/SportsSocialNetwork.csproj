@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
@@ -132,6 +132,9 @@
     <Reference Include="QRCoder, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>External Lib\QRCoder.dll</HintPath>
+    </Reference>
+    <Reference Include="Shield.Mvc.UI">
+      <HintPath>C:\Users\HUYTVSE61249\Downloads\shieldui-aspnet-mvc.1.7.26-Trial\shieldui-aspnet-mvc.1.7.26-Trial\NET40\Shield.Mvc.UI.dll</HintPath>
     </Reference>
     <Reference Include="SkyWeb.DatVM.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -954,6 +957,7 @@
     <Compile Include="Models\ViewModels\PostViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\RateInfoViewModel.cs" />
     <Compile Include="Models\ViewModels\RatingViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -3208,6 +3212,7 @@
     <Content Include="Content\ckeditor\skins\moono\images\refresh.png" />
     <Content Include="Content\ckeditor\skins\moono\images\spinner.gif" />
     <Content Include="Content\ckeditor\styles.js" />
+    <Content Include="Content\css\all.min.css" />
     <Content Include="Content\css\custom-css.css" />
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.css" />
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.min.css" />
@@ -3222,6 +3227,7 @@
     <Content Include="Content\images\no_image.jpg" />
     <Content Include="Content\js\custom-script.js" />
     <Content Include="Content\js\post-script.js" />
+    <Content Include="Content\js\shieldui-all.min.js" />
     <Content Include="Content\js\sweetAlert\sweetalert.css" />
     <Content Include="Content\js\sweetAlert\sweetalert.min.js" />
     <Content Include="External Lib\QRCoder.dll" />
@@ -4034,6 +4040,7 @@
     <Folder Include="Areas\Api\Views\Shared\" />
     <Folder Include="Areas\Api\Views\Sport\" />
     <Folder Include="Areas\Moderator\Models\" />
+    <Folder Include="Content\img\" />
     <Folder Include="Views\Comment\" />
     <Folder Include="Views\Like\" />
     <Folder Include="Views\PostComment\" />
