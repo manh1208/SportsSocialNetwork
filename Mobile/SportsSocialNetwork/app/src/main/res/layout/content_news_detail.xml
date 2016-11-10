@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_news_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.capstone.sportssocialnetwork.activity.NewsDetailActivity"
+    tools:showIn="@layout/activity_news_detail">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <TextView
+        android:padding="10sp"
+        android:id="@+id/txt_news_detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Việt Nam càng thắng càng lo lắng."
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:textSize="30sp"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#7b7b7b"
+            android:text="Đăng bởi: "
+            android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/txt_news_detail_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nguyễn văn Mạnh"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#7b7b7b"
+            android:text="Chuyên mục: "
+            android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/txt_news_detail_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bóng đá ao làng"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="1sp"
+        android:background="@color/separator"
+        android:layout_margin="10sp"
+        />
+    <TextView
+        android:id="@+id/txt_news_detail_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ahihi nội dung nè"
+        android:textColor="#000"
+        android:padding="10sp"/>
+    </LinearLayout>
+
+</ScrollView>

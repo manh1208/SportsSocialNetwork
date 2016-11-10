@@ -278,6 +278,7 @@
     <Compile Include="Areas\Api\Controllers\GroupMemberController.cs" />
     <Compile Include="Areas\Api\Controllers\InvitationController.cs" />
     <Compile Include="Areas\Api\Controllers\LikeController.cs" />
+    <Compile Include="Areas\Api\Controllers\NewsController.cs" />
     <Compile Include="Areas\Api\Controllers\NotificationController.cs" />
     <Compile Include="Areas\Api\Controllers\OrderController.cs" />
     <Compile Include="Areas\Api\Controllers\PlaceController.cs" />
@@ -285,11 +286,13 @@
     <Compile Include="Areas\Api\Controllers\PostController.cs" />
     <Compile Include="Areas\Api\Controllers\PostImageController.cs" />
     <Compile Include="Areas\Api\Controllers\SportController.cs" />
+    <Compile Include="Areas\Moderator\Controllers\ArticleController.cs" />
     <Compile Include="Areas\Moderator\ModeratorAreaRegistration.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\EventController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\FieldController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\FieldScheduleController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\OrderController.cs" />
+    <Compile Include="Areas\PlaceOwner\Controllers\ParticipationController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\PlaceController.cs" />
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\FieldScheduleDetailViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDatatableViewModel.cs" />
@@ -305,6 +308,7 @@
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\LikeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
@@ -905,10 +909,12 @@
     <Compile Include="Models\ViewModels\NewsCommentViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\NewsViewModel.cs" />
     <Compile Include="Models\ViewModels\NewsViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\NotificationCustomViewModel.cs" />
+    <Compile Include="Models\ViewModels\NotificationFullInfoViewModel.cs" />
     <Compile Include="Models\ViewModels\NotificationViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -3205,6 +3211,10 @@
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.css" />
     <Content Include="Content\font-awesome-4.6.3\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome-4.6.3\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\friendly-chat\initialize-message.js" />
+    <Content Include="Content\friendly-chat\main.css" />
+    <Content Include="Content\friendly-chat\main.js" />
+    <Content Include="Content\friendly-chat\profile_placeholder.png" />
     <Content Include="Content\images\cam-icon.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\logo_new.png" />
@@ -3767,7 +3777,14 @@
     <Content Include="Content\ckeditor\LICENSE.md" />
     <Content Include="Content\ckeditor\README.md" />
     <Content Include="Areas\PlaceOwner\Views\FieldSchedule\List.cshtml" />
+    <Content Include="Areas\Moderator\Views\Article\Create.cshtml" />
+    <Content Include="Areas\Moderator\Views\Article\Edit.cshtml" />
+    <Content Include="Areas\Moderator\Views\Article\Preview.cshtml" />
+    <Content Include="Areas\Moderator\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Moderator\Views\Article\Index.cshtml" />
     <None Include="Properties\PublishProfiles\SSN_Publish.pubxml" />
+    <Content Include="Areas\PlaceOwner\Views\Participation\Detail.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Participation\Index.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -3926,26 +3943,6 @@
     <Content Include="SSNImages\QRCodeImage\20161022164451CH_b5a0cfbe-ed41-4efc-bc06-e1c326fd2ae8.jpg" />
     <Content Include="SSNImages\UserImages\img_default_avatar.png" />
     <Content Include="SSNImages\UserImages\img_default_cover.png" />
-    <Content Include="SSN\EventImages\20161015170053PM_c31e8883-08b1-492e-84d9-7dccd4412d54.jpg" />
-    <Content Include="SSN\EventImages\20161016170515PM_7b108d33-3f34-454a-8bdf-0575568e71b3.jpg" />
-    <Content Include="SSN\EventImages\20161016170515PM_f892f38e-a797-477f-a169-6c313920b0c1.jpg" />
-    <Content Include="SSN\EventImages\20161016171651PM_dbc0d590-a903-4b9b-a8de-4d227b9632c9.jpg" />
-    <Content Include="SSN\FieldImages\20161016170428PM_ab024037-09d5-4084-8442-8bdef090dff6.jpg" />
-    <Content Include="SSN\PlaceImages\20161016170120PM_17381596-f9d0-4f71-b1dd-9ee0a30bf955.png" />
-    <Content Include="SSN\PlaceImages\20161016170120PM_cbd6e88f-fec1-40fc-bad7-85d7c51e2d6f.jpg" />
-    <Content Include="SSN\PlaceImages\20161017104535AM_2f1bf086-6231-4625-b5c7-74af22f0f1d9.jpg" />
-    <Content Include="SSN\PlaceImages\20161017104607AM_3e93cc86-a5e7-4672-a245-be6e0bc7c3a6.png" />
-    <Content Include="SSN\Post\20161016163909CH_03b7d4b0-60a1-4b29-9d50-ffeb814f091b.jpg" />
-    <Content Include="SSN\UserImage\CuongPK\12472562_1076222005784422_7468429074863474822_n.jpg" />
-    <Content Include="SSN\UserImage\CuongPK\12961601_1076478049092151_26188844484776346_n.jpg" />
-    <Content Include="SSN\UserImage\CuongPK\13177491_1229522080398924_8669244253177149204_n.jpg" />
-    <Content Include="SSN\UserImage\CuongPK\20161006133025CH_9ca1a452-4ffe-49d8-b112-b081ed7b873a.jpg" />
-    <Content Include="SSN\UserImage\CuongPK\20161006135128CH_0e3699ef-cd88-4a82-8224-6d76be63747e.jpg" />
-    <Content Include="SSN\UserImage\CuongPK\20161007141636CH_c4bd6fdd-7c40-45f6-9511-65eccf84b1ee.jpg" />
-    <Content Include="SSN\UserImage\CuongPK\20161007145214CH_640b2376-ffc1-4075-91ab-0b83003ab531.jpg" />
-    <Content Include="SSN\UserImage\CuongPK\20161008203741CH_a6710362-a5f3-4707-8ccb-707f1e893726.jpg" />
-    <Content Include="SSN\UserImage\CuongPK\20161010205538CH_30b93ef5-cd2a-41bb-8840-192eb2875213.jpg" />
-    <Content Include="SSN\UserImage\CuongPK\DSC_0397.JPG" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -4011,6 +4008,10 @@
     <Content Include="Views\SSN\SearchDetail.cshtml" />
     <Content Include="Views\UserInvitation\Index.cshtml" />
     <Content Include="Views\Invitation\Index.cshtml" />
+    <Content Include="Views\Notification\Index.cshtml" />
+    <Content Include="Views\News\Index.cshtml" />
+    <Content Include="Views\News\NewsDetail.cshtml" />
+    <Content Include="Views\News\Category.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -4023,19 +4024,16 @@
     <Folder Include="Areas\Api\Views\Group\" />
     <Folder Include="Areas\Api\Views\Invitation\" />
     <Folder Include="Areas\Api\Views\Like\" />
+    <Folder Include="Areas\Api\Views\News\" />
     <Folder Include="Areas\Api\Views\Notification\" />
     <Folder Include="Areas\Api\Views\PostComment\" />
     <Folder Include="Areas\Api\Views\PostImage\" />
     <Folder Include="Areas\Api\Views\Post\" />
     <Folder Include="Areas\Api\Views\Shared\" />
     <Folder Include="Areas\Api\Views\Sport\" />
-    <Folder Include="Areas\Moderator\Controllers\" />
     <Folder Include="Areas\Moderator\Models\" />
-    <Folder Include="Areas\Moderator\Views\Shared\" />
-    <Folder Include="SSN\PostImages\" />
     <Folder Include="Views\Comment\" />
     <Folder Include="Views\Like\" />
-    <Folder Include="Views\Notification\" />
     <Folder Include="Views\PostComment\" />
     <Folder Include="Views\Post\" />
   </ItemGroup>

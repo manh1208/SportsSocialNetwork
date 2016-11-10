@@ -25,6 +25,12 @@ public class News {
     private int categoryId;
     @SerializedName("NumOfRead")
     private int numOfRead;
+    @SerializedName("Author")
+    private String author;
+    @SerializedName("CategoryName")
+    private String categoryName;
+    @SerializedName("CreateDateString")
+    private String createDateString;
 
     public Category getCategory() {
         return category;
@@ -96,5 +102,29 @@ public class News {
 
     public void setNumOfRead(int numOfRead) {
         this.numOfRead = numOfRead;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getCreateDateString() {
+        return createDateString;
+    }
+
+    public void setCreateDateString(String createDateString) {
+        this.createDateString = createDateString;
     }
 }

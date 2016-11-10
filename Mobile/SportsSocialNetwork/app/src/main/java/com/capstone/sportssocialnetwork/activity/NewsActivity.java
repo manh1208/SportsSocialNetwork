@@ -40,10 +40,11 @@ public class NewsActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         initView();
         prepareData();
     }
+
+
 
     private void initView() {
         tabLayout = (TabLayout) findViewById(R.id.tabs_news);
