@@ -128,7 +128,7 @@
                            role="button">Trang chủ</a>
                     </li>
                     <li class="dropdown">
-                        <a href="#" aria-expanded="false"
+                        <a href="@Url.Action("Index","News",new { areas = "" })" aria-expanded="false"
                             role="button">Tin tức</a>
                     </li>
                     <li class="dropdown">
@@ -523,12 +523,15 @@
             } else if (data.Type == parseInt('@((int)NotificationType.GroupChallengeInvitation)')) {
                 image = data.Group.Avatar;
                 url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.GroupMemberAction)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Group/Index/" + data.Group.Id;
             }
             else {
 
             }
 
-            var noti = '<a class="list-group-item" href="' + url + '" role="menuitem" style="padding: 10px 15px;" onclick="markAsRead('+ data.Id +')">' +
+            var noti = '<a class="list-group-item" href="' + url + '" role="menuitem" style="padding: 10px 15px;'+ styleUnread +'" onclick="markAsRead('+ data.Id +')">' +
                            '<div class="row height-100">' +
                             '<div class="col-sm-3 vertical-align height-100">' +
                                 '<img class="vertical-align-middle" src="' + image + '" width="60" height="60" />' +

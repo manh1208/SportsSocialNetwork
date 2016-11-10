@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SportsSocialNetwork.Models.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -17,6 +18,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         bool MarkAsRead(int id);
 
         bool MarkAllAsRead(String userId);
+
+        NotificationFullInfoViewModel PrepareNoti(NotificationFullInfoViewModel model);
         #endregion
 
         void test();
@@ -94,6 +97,14 @@ namespace SportsSocialNetwork.Models.Entities.Services
             }
             this.Save();
             return true;
+        }
+
+        public NotificationFullInfoViewModel PrepareNoti(NotificationFullInfoViewModel model)
+        {
+            model.CreateDateString = model.CreateDate.Value.Day.ToString("00") + "/" + model.CreateDate.Value.Month.ToString("00") + "/" + model.CreateDate.Value.Year.ToString("0000")
+                    + " lúc " + model.CreateDate.Value.Hour.ToString("00") + ":" + model.CreateDate.Value.Minute.ToString("00");
+
+            return model;
         }
 
         #endregion

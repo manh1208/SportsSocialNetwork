@@ -13,6 +13,8 @@ using Microsoft.AspNet.Identity;
 using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.Enumerable;
 using Teek.Models;
+using Microsoft.AspNet.SignalR;
+using SportsSocialNetwork.Models.Hubs;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -341,10 +343,23 @@ namespace SportsSocialNetwork.Controllers
 
                 //save noti
                 string title = Utils.GetEnumDescription(NotificationType.Other);
-                int type = (int)NotificationType.Other;
+                int type = (int)NotificationType.GroupMemberAction;
                 string message = curAdmin.AspNetUser.FullName + " đã gán quyền quản trị cho bạn trong nhóm " + curAdmin.Group.Name;
 
                 Notification noti = _notificationService.CreateNoti(desAdminId, curAdminId, title, message, type, null, null, null, curAdmin.Group.Id);
+
+                //////////////////////////////////////////////
+                //signalR noti
+                NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                // Get the context for the Pusher hub
+                IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                // Notify clients in the group
+                hubContext.Clients.User(notiModel.UserId).send(notiModel);
+
+
+
                 //Notification noti = new Notification();
                 //noti.UserId = desAdminId;
                 //noti.FromUserId = curAdminId;
@@ -389,11 +404,20 @@ namespace SportsSocialNetwork.Controllers
 
                 //save noti
                 string title = Utils.GetEnumDescription(NotificationType.Other);
-                int type = (int)NotificationType.Other;
+                int type = (int)NotificationType.GroupMemberAction;
                 string message = curAdmin.AspNetUser.FullName + " đã bỏ quyền quản trị cho bạn trong nhóm " + curAdmin.Group.Name;
 
                 Notification noti = _notificationService.CreateNoti(desAdminId, curAdminId, title, message, type, null, null, null, curAdmin.Group.Id);
 
+                //////////////////////////////////////////////
+                //signalR noti
+                NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                // Get the context for the Pusher hub
+                IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                // Notify clients in the group
+                hubContext.Clients.User(notiModel.UserId).send(notiModel);
 
                 //Notification noti = new Notification();
                 //noti.UserId = desAdminId;
@@ -428,11 +452,21 @@ namespace SportsSocialNetwork.Controllers
             {
                 //save noti
                 string title = Utils.GetEnumDescription(NotificationType.Other);
-                int type = (int)NotificationType.Other;
+                int type = (int)NotificationType.GroupMemberAction;
                 string message = "Bạn đã được chấp nhận làm thành viên trong nhóm " + gm.Group.Name;
 
                 Notification noti = _notificationService.CreateNoti(userId, "", title, message, type, null, null, null, gm.Group.Id);
 
+
+                //////////////////////////////////////////////
+                //signalR noti
+                NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                // Get the context for the Pusher hub
+                IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                // Notify clients in the group
+                hubContext.Clients.User(notiModel.UserId).send(notiModel);
 
                 //Notification noti = new Notification();
                 //noti.UserId = userId;
@@ -538,6 +572,16 @@ namespace SportsSocialNetwork.Controllers
                                 Notification noti = _notificationService.CreateNoti(userId, "", title, message, type, null, null, null, group.Id);
 
 
+                                //////////////////////////////////////////////
+                                //signalR noti
+                                NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                                // Get the context for the Pusher hub
+                                IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                                // Notify clients in the group
+                                hubContext.Clients.User(notiModel.UserId).send(notiModel);
+
                                 //Notification noti = new Notification();
                                 //noti.UserId = item;
                                 //noti.FromUserId = userId;
@@ -601,7 +645,7 @@ namespace SportsSocialNetwork.Controllers
                     gm.GroupId = group.Id;
                     gm.UserId = GroupCreator;
                     gm.Admin = true;
-                    gm.Status = 1; //mốt sửa khi có enum group status
+                    gm.Status = (int)GroupMemberStatus.Approved; //mốt sửa khi có enum group status
                     
                     if(_groupMemberService.CreateGroupMember(gm) != null)
                     {
@@ -685,6 +729,7 @@ namespace SportsSocialNetwork.Controllers
             try
             {
                 int result = _groupMemberService.JoinLeaveGroup(userId, groupId);
+
                 response = new ResponseModel<bool>(true, result.ToString(), null);
             }
             catch (Exception)
@@ -715,6 +760,15 @@ namespace SportsSocialNetwork.Controllers
 
                 Notification noti = _notificationService.CreateNoti(gm.UserId, null, title, message, type, null, null, null, gm.GroupId);
 
+                //////////////////////////////////////////////
+                //signalR noti
+                NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                // Get the context for the Pusher hub
+                IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                // Notify clients in the group
+                hubContext.Clients.User(notiModel.UserId).send(notiModel);
 
 
                 //Notification noti = new Notification();

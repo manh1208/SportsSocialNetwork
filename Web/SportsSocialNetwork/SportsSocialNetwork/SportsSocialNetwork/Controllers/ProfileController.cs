@@ -3,6 +3,7 @@ using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -108,7 +109,7 @@ namespace SportsSocialNetwork.Controllers
 
             //get list group that this user joined
             List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f =>
-            f.UserId == userId).ToList().Count > 0).ToList();
+            f.UserId == userId && f.Status == (int)GroupMemberStatus.Approved).ToList().Count > 0).ToList();
             ViewBag.GroupList = groupList;
 
             return View(model);

@@ -177,11 +177,12 @@
                     </div>
                 </div>
             </div>
-            @if (ViewBag.GroupList.Count > 0)
-            {
-                <div class="example-wrap margin-lg-0" style="text-align:left;">
-                    <h4 class="example-title" style="display:inline-block;float:left;">Các nhóm tham gia</h4>
-                    <button type="button" style="display:inline-block; float:right;" class="btn btn-pure btn-dark btn-sm icon wb-plus" onclick="showCreateGroupModal()"> Tạo nhóm</button>
+            <div class="example-wrap margin-lg-0" style="text-align:left;">
+                <h4 class="example-title" style="display:inline-block;float:left;">Các nhóm tham gia</h4>
+                <button type="button" style="display:inline-block; float:right;" class="btn btn-pure btn-dark btn-sm icon wb-plus" onclick="showCreateGroupModal()"> Tạo nhóm</button>
+                @if (ViewBag.GroupList.Count > 0)
+                {
+
                     <div class="clearfix"></div>
                     <ul class="list-group list-group-full">
                         @{
@@ -189,7 +190,7 @@
                             {
                                 <li class="list-group-item" style="text-align:left;">
                                     <div class="media">
-                                        <div class="media-left">
+                                        <div class="media-left" style="padding-left:20px;">
                                             <a class="avatar" href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))">
                                                 <img class="img-responsive" src="@item.Avatar" alt="...">
                                             </a>
@@ -205,14 +206,17 @@
                             }
                         }
                     </ul>
-                </div>
+
                             }
+            </div>
+
+
 
         </div>
     </div>
     <!--END Left side-bar-->
     <!--Main-->
-    <div class="col-sm-6">
+    <div class="col-sm-6" style="padding: 0;">
         <!--Posting status area-->
         <form id="post-form" method="post" autocomplete="off">
             <div class="panel status-panel">
@@ -281,7 +285,7 @@
                                                 <div class='comment-content'>
                                                     @if (item.sameSport != 0)
                                                     {<p>Có chung @item.sameSport sở thích</p>}
-                                                </div><button onclick="follow('@item.Id')" class='btn-xs btn-success'><i class='fa fa-rss' aria-hidden='true'></i> Theo dõi</button>
+                                                </div><button onclick="follow('@item.Id')" class='btn btn-xs btn-success'><i class='fa fa-rss' aria-hidden='true'></i> Theo dõi</button>
                                             </div>
                                         </div>
                                     }
@@ -297,7 +301,7 @@
             }
 
             @{
-                if (ViewBag.SuggestNews != null && ViewBag.SuggestNews.Count > 0)
+                if (ViewBag.SuggestNews != null)
                 {
                     <div class="panel">
                         <div class="panel-heading text-center">
@@ -309,20 +313,20 @@
                                     <div class="overlay">
                                         <img src="@ViewBag.SuggestNews.Image" style="display:block; max-height:100%;max-width:100%;" />
                                         <figcaption class="overlay-bottom overlay-panel overlay-background">
-                                            <h4><span class="fa fa-eye"> 255</span></h4>
+                                            <h4><span class="fa fa-eye"> @ViewBag.SuggestNews.NumOfRead</span></h4>
                                         </figcaption>
                                     </div>
                                     <div class="row">
                                         <div class="clearfix"></div>
                                         <div class="col-sm-12 height-60">
-                                            <span class="vertical-align-middle" style="font-weight:bold">@ViewBag.SuggestNews.Title</span>
+                                            <a href="/News/NewsDetail/@ViewBag.SuggestNews.Id" style="color:#37474f;"> <span class="vertical-align-middle" style="font-weight:bold">@ViewBag.SuggestNews.Title</span></a>
                                             <span class="vertical-align-middle"><i class="fa fa-pencil" aria-hidden="true"></i> bởi @ViewBag.SuggestNews.AspNetUser.UserName</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="text-right"><em>Xem những tin khác</em></div>
+                        <div class="text-right"><em><a href="/News" style="color:#76838f;">Xem những tin khác</a></em></div>
 
                     </div>
                 }

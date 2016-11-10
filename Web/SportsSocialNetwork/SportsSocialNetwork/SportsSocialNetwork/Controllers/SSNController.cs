@@ -71,7 +71,7 @@ namespace SportsSocialNetwork.Controllers
             //load group name
             var _groupService = this.Service<IGroupService>();
             List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f =>
-            f.UserId == userId).ToList().Count > 0).ToList();
+            f.UserId == userId && f.Status == (int)GroupMemberStatus.Approved).ToList().Count > 0).ToList();
             ViewBag.GroupList = groupList;
 
             //suggest follower
