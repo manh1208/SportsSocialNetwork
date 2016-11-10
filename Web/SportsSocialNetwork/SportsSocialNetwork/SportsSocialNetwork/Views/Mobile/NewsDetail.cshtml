@@ -1,0 +1,27 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.NewsViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>NewsDetail</title>
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap-extend.min.css">
+    <link rel="stylesheet" href="~/Content/assets/css/site.min.css">
+</head>
+<body>
+        @Html.Raw(Model.NewsContent)
+    <script src="~/Content/assets/vendor/jquery/jquery.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap/bootstrap.js"></script>
+    <script src="~/Content/assets/vendor/animsition/jquery.animsition.js"></script>
+    <script src="~/Content/assets/vendor/asscroll/jquery-asScroll.js"></script>
+    <script src="~/Content/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
+    <script src="~/Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
+    <script src="~/Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
+</body>
+</html>
