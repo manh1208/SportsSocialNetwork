@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#fff"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.capstone.sportssocialnetwork.activity.NewsDetailActivity"
     tools:showIn="@layout/activity_news_detail">
@@ -66,13 +67,11 @@
         android:background="@color/separator"
         android:layout_margin="10sp"
         />
-    <TextView
-        android:id="@+id/txt_news_detail_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ahihi nội dung nè"
-        android:textColor="#000"
-        android:padding="10sp"/>
+        <WebView
+            android:id="@+id/wv_news_content"
+            android:layout_width="match_parent"
+            android:layout_margin="5sp"
+            android:layout_height="wrap_content"></WebView>
     </LinearLayout>
 
 </ScrollView>

@@ -7,6 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.View;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +18,7 @@ import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.model.News;
 import com.capstone.sportssocialnetwork.model.response.ResponseModel;
 import com.capstone.sportssocialnetwork.service.RestService;
+import com.capstone.sportssocialnetwork.utils.DataUtils;
 
 import java.util.List;
 
@@ -27,7 +32,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     private TextView txtTitle;
     private TextView txtAuthor;
     private TextView txtCategory;
-    private TextView txtContent;
+    private WebView wvContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,14 +57,20 @@ public class NewsDetailActivity extends AppCompatActivity {
         txtTitle = (TextView) findViewById(R.id.txt_news_detail_title);
         txtAuthor = (TextView) findViewById(R.id.txt_news_detail_author);
         txtCategory = (TextView) findViewById(R.id.txt_news_detail_category);
-        txtContent = (TextView) findViewById(R.id.txt_news_detail_content);
+        wvContent = (WebView) findViewById(R.id.wv_news_content);
     }
 
     private void updateUI(News news) {
         txtTitle.setText(news.getTitle());
         txtAuthor.setText(news.getAuthor()+"");
         txtCategory.setText(news.getCategoryName()+"");
-        txtContent.setText(Html.fromHtml(news.getContent()));
+        wvContent.loadUrl(DataUtils.URL+"/mobile/newsdetail/"+news.getId());
+        wvContent.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+            }
+        });
     }
 
     private void loadNews() {
