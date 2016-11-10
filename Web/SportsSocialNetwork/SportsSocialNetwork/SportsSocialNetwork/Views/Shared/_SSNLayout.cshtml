@@ -151,6 +151,7 @@
                     <li class="dropdown">
                         <a href="@Url.Action("Index","News",new { area = "" })" aria-expanded="false"
                            role="button">Tin tức</a>
+
                     </li>
                     @if (User != null && User.Identity.IsAuthenticated)
                     {
@@ -550,35 +551,39 @@
                     styleUnread = "";
                 }
 
-                if (data.Type == parseInt('@((int)NotificationType.Post)')) {
-                    image = data.AspNetUser1.AvatarImage;
-                    url = "/Profile/Index?userId=" + data.AspNetUser.Id;
-                } else if (data.Type == parseInt('@((int)NotificationType.Order)')) {
-                    image = "";
-                    url = "";
-                } else if (data.Type == parseInt('@((int)NotificationType.Invitation)')) {
-                    image = data.AspNetUser1.AvatarImage;
-                    url = "/Profile/Index?userId=" + data.AspNetUser1.Id;
-                } else if (data.Type == parseInt('@((int)NotificationType.GroupInvitation)')) {
-                    image = data.AspNetUser1.AvatarImage;
-                    url = "/Group/Index/" + data.Group.Id;
-                } else if (data.Type == parseInt('@((int)NotificationType.GroupChallengeInvitation)')) {
-                    image = data.Group.Avatar;
-                    url = "/Group/Index/" + data.Group.Id;
-                }
-                else {
+
+            if (data.Type == parseInt('@((int)NotificationType.Post)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Profile/Index?userId=" + data.AspNetUser.Id;
+            } else if(data.Type == parseInt('@((int)NotificationType.Order)')) {
+                image = "";
+                url = "";
+            } else if(data.Type == parseInt('@((int)NotificationType.Invitation)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Profile/Index?userId=" + data.AspNetUser1.Id;
+            } else if(data.Type == parseInt('@((int)NotificationType.GroupInvitation)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.GroupChallengeInvitation)')) {
+                image = data.Group.Avatar;
+                url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.GroupMemberAction)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Group/Index/" + data.Group.Id;
+            }
+            else {
 
                 }
 
-                var noti = '<a class="list-group-item" href="' + url + '" role="menuitem" style="padding: 10px 15px;" onclick="markAsRead(' + data.Id + ')">' +
-                               '<div class="row height-100">' +
-                                '<div class="col-sm-3 vertical-align height-100">' +
-                                    '<img class="vertical-align-middle" src="' + image + '" width="60" height="60" />' +
-                                '</div>' +
-                                '<div class="col-sm-9 height-100" style="padding-top:10px;">' +
-                                    '<h4 class="list-group-item-heading">' + data.Message + '</h4>' +
-                                    '<p class="list-group-item-text">' + data.CreateDateString + '</p>' +
-                                '</div>' +
+
+            var noti = '<a class="list-group-item" href="' + url + '" role="menuitem" style="padding: 10px 15px;'+ styleUnread +'" onclick="markAsRead('+ data.Id +')">' +
+                           '<div class="row height-100">' +
+                            '<div class="col-sm-3 vertical-align height-100">' +
+                                '<img class="vertical-align-middle" src="' + image + '" width="60" height="60" />' +
+                            '</div>' +
+                            '<div class="col-sm-9 height-100" style="padding-top:10px;">' +
+                                '<h4 class="list-group-item-heading">' + data.Message + '</h4>' +
+                                '<p class="list-group-item-text">' + data.CreateDateString + '</p>' +
                             '</div>' +
                             '</a>';
 

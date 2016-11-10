@@ -252,14 +252,11 @@
                     <a class="avatar avatar-lg" href="javascript:void(0)">
                         <img class="groupAvatar" src="@Model.AvatarImage" alt="...">
                     </a>
-                    @if (Model.isOwner)
-                    {
-                        <div style="position:absolute; right:20px;top:140px; display:none;" id="changeAvaBtn">
-                            <button type="button" class="btn btn-pure btn-default icon wb-pencil" title="Đổi ảnh đại diện" onclick="changeAva()"></button>
-                        </div>
-                    }
-                    
-                    <div class="profile-user">@Model.FullName</div>
+
+                    <div style="position:absolute; right:20px;top:140px; display:none;" id="changeAvaBtn">
+                        <button type="button" class="btn btn-pure btn-default icon wb-pencil" title="Đổi ảnh đại diện" onclick="changeAva()"></button>
+                    </div>
+                    <div class="profile-user"><a style="color:#37474f" href="/profile/index?userid=@Model.Id"> @Model.FullName</a></div>
                     <div class="profile-job">@Model.Email</div>
                     @{
                         if (Model.isOwner)
@@ -296,11 +293,12 @@
                     </div>
                 </div>
             </div>
-            @if (groupList.Count > 0)
-            {
-                <div class="example-wrap margin-lg-0" style="text-align:left;">
-                    <h4 class="example-title" style="display:inline-block;float:left;">Các nhóm tham gia</h4>
-                    <button type="button" style="display:inline-block; float:right;" class="btn btn-pure btn-dark btn-sm icon wb-plus" onclick="showCreateGroupModal()"> Tạo nhóm</button>
+            <div class="example-wrap margin-lg-0" style="text-align:left;">
+                <h4 class="example-title" style="display:inline-block;float:left;">Các nhóm tham gia</h4>
+                <button type="button" style="display:inline-block; float:right;" class="btn btn-pure btn-dark btn-sm icon wb-plus" onclick="showCreateGroupModal()"> Tạo nhóm</button>
+                @if (groupList.Count > 0)
+                {
+
                     <div class="clearfix"></div>
                     <ul class="list-group list-group-full">
                         @{
@@ -308,7 +306,7 @@
                             {
                                 <li class="list-group-item" style="text-align:left;">
                                     <div class="media">
-                                        <div class="media-left">
+                                        <div class="media-left" style="padding-left:20px;">
                                             <a class="avatar" href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))">
                                                 <img class="img-responsive" src="@item.Avatar" alt="...">
                                             </a>
@@ -324,8 +322,10 @@
                             }
                         }
                     </ul>
-                </div>
-            }
+
+                }
+            </div>
+
         </div>
     </div>
     <!--END Left side-bar-->
@@ -614,7 +614,7 @@
                                             <div class='comment-content'>
                                                 @if (@item.sameSport != 0)
                                                 {<p>Có chung @item.sameSport sở thích</p>}
-                                            </div><button onclick="followSG('@item.Id')" class='btn-xs btn-success'><i class='fa fa-rss' aria-hidden='true'></i> Theo dõi</button>
+                                            </div><button onclick="followSG('@item.Id')" class='btn btn-xs btn-default'><i class='fa fa-user-plus' aria-hidden='true'></i> Theo dõi</button>
                                         </div>
                                     </div>
                                 }

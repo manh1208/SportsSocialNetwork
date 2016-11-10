@@ -104,7 +104,9 @@ namespace SportsSocialNetwork.Models.Entities.Services
             if (member != null)
             {
                 member.Active = true;
+                member.Status = (int)GroupMemberStatus.Pending;
                 this.Update(member);
+                this.Save();
                 return true;
             }
             else
@@ -117,6 +119,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 member.Status = (int)GroupMemberStatus.Pending;
                 member.Active = true;
                 this.Create(member);
+                this.Save();
                 if (this.FirstOrDefaultActive(x => x.Id == member.Id) != null)
                 {
                     return true;
@@ -194,6 +197,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
                     {
                         if (gm.Admin == false)
                         {
+                            gm.Status = (int)GroupMemberStatus.Pending;
                             this.Deactivate(gm);
                             result = (int)JoinLeaveGroupResult.Leaved;
                         }
@@ -205,6 +209,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
                             }
                             else
                             {
+                                gm.Status = (int)GroupMemberStatus.Pending;
                                 gm.Admin = false;
                                 this.Deactivate(gm);
                                 result = (int)JoinLeaveGroupResult.Leaved;

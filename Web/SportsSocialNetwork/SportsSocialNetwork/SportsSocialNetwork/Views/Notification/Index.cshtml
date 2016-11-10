@@ -94,6 +94,9 @@
             } else if (data.Type == parseInt('@((int)NotificationType.GroupChallengeInvitation)')) {
                 image = data.Group.Avatar;
                 url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.GroupMemberAction)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Group/Index/" + data.Group.Id;
             }
             else {
 

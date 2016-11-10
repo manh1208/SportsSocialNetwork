@@ -430,7 +430,7 @@
                         {
                             <li class="list-group-item" style="text-align:left;">
                                 <div class="media">
-                                    <div class="media-left">
+                                    <div class="media-left" style="padding-left:20px;">
                                         <a class="avatar" href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))">
                                             <img class="img-responsive" src="@item.Avatar" alt="...">
                                         </a>
@@ -1450,6 +1450,7 @@
                 },
                 success: function (data) {
                     if (data.Succeed) {
+                        showMessage("Yên cầu tham gia nhóm gửi thành công", "success", "OK");
                         $(elDiv).hide('slow', function(){ $(elDiv).remove(); });
                     }
                 },
@@ -1577,7 +1578,7 @@
                                 var elButton = "#" + userId;
                                 var uid = "'" + userId + "'";
                                 var outerDiv = $(elButton).parent();
-                                $(outerDiv).find("li").replaceWith('<li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="removeAsAdmin('+ uid +')"><i class="icon wb-user-circle" aria-hidden="true"></i> Bỏ quyền quản trị</a></li>');
+                                $(outerDiv).find("li:first").replaceWith('<li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="removeAsAdmin('+ uid +')"><i class="icon wb-user-circle" aria-hidden="true"></i> Bỏ quyền quản trị</a></li>');
                                 showMessage("Thay đổi thành công", "success", "OK");
                             },
                             error: function (error) {
@@ -1604,7 +1605,7 @@
                                 var elButton = "#" + userId;
                                 var uid = "'" + userId + "'";
                                 var outerDiv = $(elButton).parent();
-                                $(outerDiv).find("li").replaceWith('<li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="makeAsAdmin('+ uid +')"><i class="icon wb-user-circle" aria-hidden="true"></i> Chọn làm quản trị viên</a></li>');
+                                $(outerDiv).find("li:first").replaceWith('<li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="makeAsAdmin('+ uid +')"><i class="icon wb-user-circle" aria-hidden="true"></i> Chọn làm quản trị viên</a></li>');
                                 showMessage("Thay đổi thành công", "success", "OK");
                             },
                             error: function (error) {
@@ -2073,7 +2074,6 @@
                         dataType: 'json',
                         success: function (data) {
                             if(data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.Leaved)'){
-                                showMessage("Thay đổi thành công", "success", "OK");
                                 location.href = location.href;
                             } else if(data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.RequestSent)') {
                                 $('#joinLeaveGroupBtn').replaceWith('<button type="button" class="btn btn-default" id="joinLeaveGroupBtn" onclick="joinLeaveGroup(@Model.Id)"><i class="fa fa-times-circle" aria-hidden="true"></i> Hủy yêu cầu tham gia nhóm</button>')
