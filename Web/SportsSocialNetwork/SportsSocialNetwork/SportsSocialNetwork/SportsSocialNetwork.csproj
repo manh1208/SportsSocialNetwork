@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
@@ -3263,16 +3263,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ViewModels.cs</LastGenOutput>
     </Content>
-    <Content Include="QRCodeImage\Orders\20161014163151PM_c3b8799c-bffa-42e5-b212-223d6f61e1ae.jpg" />
-    <Content Include="QRCodeImage\Orders\20161014163707PM_b12531c6-82cd-45cf-adcd-749fa2dcd2ff.jpg" />
-    <Content Include="QRCodeImage\Orders\20161014170528PM_b21ee835-b752-4883-b5f8-9e30b7eeb610.jpg" />
-    <Content Include="QRCodeImage\Orders\20161014170757PM_079d64de-382e-47c1-90d6-b3cc208df7ce.jpg" />
-    <Content Include="QRCodeImage\Orders\20161014170959PM_2dd7b574-161b-415a-9c9c-8b17e21094b8.jpg" />
-    <Content Include="QRCodeImage\Orders\20161014233453PM_ac7af448-e9cb-40b6-aa07-48ec2b9ddb68.jpg" />
-    <Content Include="QRCodeImage\Orders\20161014235858PM_517013d9-bda5-42ef-9722-52ca3a01f1dd.jpg" />
-    <Content Include="QRCodeImage\Orders\20161016005059AM_372dac7a-c4ed-41e5-9e2f-3a84440993db.jpg" />
-    <Content Include="QRCodeImage\Orders\20161016005220AM_b6eaffd0-59a9-418f-b855-543da507c998.jpg" />
-    <Content Include="QRCodeImage\Orders\20161016005834AM_f6bb24d9-05c6-457a-94c5-a9b80d708797.jpg" />
     <Content Include="Scripts\ai.0.22.19-build00125.js" />
     <Content Include="Scripts\ai.0.22.19-build00125.min.js" />
     <Content Include="Scripts\bootstrap.js" />
