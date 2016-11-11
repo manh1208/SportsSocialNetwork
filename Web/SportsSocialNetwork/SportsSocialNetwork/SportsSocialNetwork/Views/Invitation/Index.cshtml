@@ -189,6 +189,7 @@
         </div>
         </div>
     <button hidden id="sign-out"></button>
+    <button hidden id="btnChangeBranch"></button>
     </div>
 @section scripts{
 
@@ -202,11 +203,11 @@
     <script>
         // Initialize Firebase
         var config = {
-            apiKey: "AIzaSyANrpPvczmdQlxbqFOqizMzYq93lHmSv84",
-            authDomain: "sportsocialnetwo-1475334764388.firebaseapp.com",
-            databaseURL: "https://sportsocialnetwo-1475334764388.firebaseio.com",
-            storageBucket: "sportsocialnetwo-1475334764388.appspot.com",
-            messagingSenderId: "883711178874"
+            apiKey: "AIzaSyC2khUE8T27qj0vWXQzxWo2g1YRY6NP7Vk",
+            authDomain: "sportsocialnetwork-1ff07.firebaseapp.com",
+            databaseURL: "https://sportsocialnetwork-1ff07.firebaseio.com",
+            storageBucket: "sportsocialnetwork-1ff07.appspot.com",
+            messagingSenderId: "727248131277"
         };
         firebase.initializeApp(config);
     </script>
@@ -293,7 +294,7 @@
                      + '</div>');
 
                 document.getElementById('group_' + this.Id).addEventListener('click', function () {
-                    $("#sign-out").click();
+                    //$("#sign-out").click();
                     var tmp = $(this).attr("id");
                     var senderId = $(this).attr("data-creator");
                     var result = tmp.split("_");
@@ -310,7 +311,7 @@
                     //$(".mediaCapture").attr("id", "mediaCapture_" + focusGroup);
                     //$(".submitImage").attr("id", "submitImage_" + focusGroup);
                     validConfirmYet();
-                    window.friendlyChat = new FriendlyChat(_userId, focusGroup, _getUserActionName);
+                    $("#btnChangeBranch").click();
                 }, false);
 
             })

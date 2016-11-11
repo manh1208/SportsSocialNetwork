@@ -5,6 +5,7 @@ var _loadACommentActionName = "";
 var _deleteCommentActionName = "";
 var _likeUnlikePostActionName = "";
 var _curUserId = "";
+var _goNewFeedActionName = "";
 $('body').on('focus', ".magnific", function () {
     $(this).magnificPopup({
         type: 'image',
@@ -156,7 +157,7 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                                             + "</p>"
                                             + "<small>" + this.PostAge + "</small>"
-                                            + "<div class='profile-brief' style='margin-bottom:20px'>" + content + "</div>"
+                                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px'>" + content + "</div>"
                                             + "<div class='comment-actions'>"
                                             + "<div style='font-size:13px' class='text-left'>"
                                                 + spanLike
@@ -270,7 +271,7 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                                             + "</p>"
                                             + "<small>" + this.PostAge + "</small>"
-                                            + "<div class='profile-brief' style='margin-bottom:20px'>" + content + "</div>"
+                                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px'>" + content + "</div>"
                                             + "<div class='comment-actions'>"
                                             + "<div style='font-size:13px' class='text-left'>"
                                                 + spanLike
@@ -382,7 +383,7 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
                                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                                             + "</p>"
                                             + "<small>" + this.PostAge + "</small>"
-                                            + "<div class='profile-brief' style='margin-bottom:20px'>" + content + "</div>"
+                                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px'>" + content + "</div>"
                                             + "<div class='comment-actions'>"
                                             + "<div style='font-size:13px' class='text-left'>"
                                                 + spanLike
@@ -421,6 +422,116 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
     });
 }
 
+function loadSpecificPost(userId, postId, actionName, loadMoreCmtActionName, loadMoreCmtActionName, deletePostActionName, deleteCommentActionName, loadACommentActionName, likeUnlikePostActionName, goNewFeedActionName) {
+    _loadMoreCmtActionName = loadMoreCmtActionName;
+    _deletePostActionName = deletePostActionName;
+    _deleteCommentActionName = deleteCommentActionName;
+    _loadACommentActionName = loadACommentActionName;
+    _loadMoreCmtActionName = loadMoreCmtActionName;
+    _likeUnlikePostActionName = likeUnlikePostActionName;
+    _curUserId = userId;
+    goNewFeedActionName = _goNewFeedActionName;
+    $.ajax({
+        url: actionName,
+        type: 'POST',
+        data: {
+            postId: postId
+        },
+        success: function (data) {
+            if (data.Succeed) {
+                var dt = data.AdditionalData;
+                    var content = "";
+                    if (dt.ContentType == 1) {
+                        content = textPost(dt);
+                    }
+                    if (dt.ContentType == 2) {
+                        content = textImagePost(dt);
+                    }
+                    if (dt.ContentType == 3) {
+                        content = imagePost(dt);
+                    }
+                    if (dt.ContentType == 4) {
+                        content = multiImagePost(dt);
+                    }
+                    if (dt.ContentType == 5) {
+                        content = multiImageTextPost(dt);
+                    }
+                    var moreCmtBtn = "";
+                    if (dt.CommentCount > 3) {
+                        moreCmtBtn = "<div id='moreCmt_" + dt.Id + "'><a href='javascript:void(0)' onclick='loadMoreComt(" + dt.Id + ")'>Xem thêm bình luận</a>";
+                    }
+                    var spanLike = "";
+                    if (dt.Liked) {
+                        spanLike = "<span><i style='color:#62a8ea' id='likeIcon_" + dt.Id + "' onclick='likeUnlikePost(" + dt.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + dt.Id + "' style='margin-right:10px'> " + dt.LikeCount + " lượt thích</span>";
+                    } else {
+                        spanLike = "<span><i  id='likeIcon_" + dt.Id + "' onclick='likeUnlikePost(" + dt.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + dt.Id + "' style='margin-right:10px'> " + dt.LikeCount + " lượt thích</span>";
+                    }
+                    var reportDiv = "";
+                    if (dt.AspNetUser.Id == userId) {
+                        reportDiv = '<div style="position: absolute;right:5px;top:15px;width: 30px;">' +
+                          '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
+                          '<div class="dropdown">' +
+                                        '<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-lg fa-angle-down"></i>' +
+                                       '</a>' +
+                                       '<ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">' +
+                                           '<li><a href="javascript:void(0)" style="font-weight: bold;" onclick="deletePost(' + dt.Id + ')"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>' +
+                                           '<li><a href="javascript:void(0)" style="font-weight: bold;" onclick="editPost(' + dt.Id + ')"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chỉnh sửa</a></li>' +
+                                       '</ul>' +
+                                   '</div>' +
+                                   '</div>' +
+                                   '</div>';
+                    }
+                    var post = "<li class='list-group-item panel' style='margin-bottom:10px' role='tabpanel' id='post_" + dt.Id + "'>"
+                                   + "<div class='media'>"
+                                       + "<div class='media-left'>"
+                                           + "<a class='avatar' href='javascript:void(0)'>"
+                                                + "<img style='height:50px' class='img-responsive' src='" + dt.AspNetUser.AvatarImage + "' alt='...'>"
+                                            + "</a>"
+                                        + "</div>"
+                                        + "<div class='media-body'>"
+                                            + "<p class='media-heading' style='margin-bottom:0'>"
+                                            + '<a style="font-weight:bold" class="comment-author" href="/profile/index?userid=' + dt.AspNetUser.Id + '">' + dt.AspNetUser.FullName + '</a>'
+                                                + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
+                                            + "</p>"
+                                            + "<small>" + dt.PostAge + "</small>"
+                                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px'>" + content + "</div>"
+                                            + "<div class='comment-actions'>"
+                                            + "<div style='font-size:13px' class='text-left'>"
+                                                + spanLike
+                                                + "<span><i class='text-like fa fa-lg fa-comments-o'></i></span><span style='margin-right:10px' id='commentOfPost_" + dt.Id + "'> " + dt.CommentCount + " lượt bình luận</span>"
+                                            + "</div>"
+                                            + "</div>"
+                                             + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
+                                             + '<form id="comment-form_' + dt.Id + '" class="comment-form" method="post" autocomplete="off"><input type="hidden" name="postId" value="' + dt.Id + '"/>'
+                                            + '<input name="content" id="contentDetail_' + dt.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px" placeholder="Viết bình luận của bạn..."/>'
+                                            + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style="position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2" onclick="addImageComment(' + dt.Id + ')"></button>'
+                                            + '<div style="height:0px;overflow:hidden">'
+                                            + '<input type="file" id="selectImageComment_' + dt.Id + '" name="image" /></div></div></form>'
+                                            + '<div id="previewImageComment_' + dt.Id + '" class="example margin-0" style="display:none"><div data-role="container">'
+                                            + '<div data-role="content"><div class="Document"><ul id="resultComment_' + dt.Id + '" class="list-inline"></ul></div></div></div></div>'
+                                            + "<div class='comments'  style='margin-top:20px' id='postComments_" + dt.Id + "'>"
+                                                    + postComment(dt)
+                                            + "</div>"
+                                            + moreCmtBtn
+                                        + "</div>"
+                                    + "</div>"
+                                    + reportDiv
+                                + "</li>";
+                    $(post).hide().appendTo("#listPost").fadeIn("slow");
+                    document.getElementById('selectImageComment_' + dt.Id).addEventListener('change', function () {
+                        var tmp = $(this).attr('id');
+                        var result = tmp.split("_");
+                        handleFileSelectComment(event, result[1]);
+                    }, false);
+            } else {
+
+            }
+        },
+        error: function (error) {
+        }
+    });
+}
+
 function addImageComment(id) {
     $("#selectImageComment_" + id).click();
 }
@@ -433,6 +544,7 @@ function removeFileComment(id) {
             storedFilesComment.splice(i, 1);
         }
     }
+    $("#selectImageComment_"+id).val("");
     $("#resultComment_" + id).empty();
     $("#previewImageComment_" + id).hide();
 }
@@ -511,6 +623,7 @@ function handleFileSelectComment(e, id) {
             var li = document.createElement("li");
             li.innerHTML = "<img class='loadImage' src='" + e.target.result + "'" +
                         "title='" + f.name + "'/> <a href='javascript:void(0)' data-file='" + f.name + "' onclick='removeFileComment(" + id + ")' class='fa fa-times' style='position:absolute'></a>";
+            $("#resultComment_" + id).empty();
             output.insertBefore(li, null);
 
         }
@@ -571,7 +684,7 @@ function prependPost(data, userId) {
                                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                                             + "</p>"
                                             + "<small>" + data.PostAge + "</small>"
-                                            + "<div class='profile-brief' style='margin-bottom:20px'>" + content + "</div>"
+                                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px'>" + content + "</div>"
                                             + "<div class='comment-actions'>"
                                             + "<div style='font-size:13px' class='text-left'>"
                                                 + spanLike
@@ -935,8 +1048,13 @@ function deletePost(id) {
                                     },
                                     success: function (data) {
                                         if (data.Succeed) {
-                                            removePostInList(id);
-                                            showMessage("Đã xóa", "success", "OK");
+                                            var loc = (location.href).toLowerCase();
+                                            if (loc.indexOf("postdetail") != -1) {
+                                                location.href = _goNewFeedActionName;
+                                            } else {
+                                                removePostInList(id);
+                                                showMessage("Đã xóa", "success", "OK");
+                                            }
                                         }
                                     },
                                     error: function () {
@@ -1194,7 +1312,7 @@ function refreshPost(data) {
                                 + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
                             + "</p>"
                             + "<small>" + data.PostAge + "</small>"
-                            + "<div class='profile-brief' style='margin-bottom:20px'>" + content + "</div>"
+                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px'>" + content + "</div>"
                             + "<div class='comment-actions'>"
                              + "<div style='font-size:13px' class='text-left'>"
                                                 + spanLike
@@ -1339,6 +1457,7 @@ function cancelEditComment(id) {
 function removeFileCommentEdit(id) {
     deleteOldImg = true;
     $("#resultCommentEdit_" + id).empty();
+    $("#selectImageCommentEdit_" + id).val("");
     $("#previewImageCommentEdit_" + id).hide();
 }
 

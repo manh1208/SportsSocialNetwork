@@ -44,6 +44,7 @@ function FriendlyChat(userId, invitationId, getUserActionName) {
     //this.userPic = document.getElementById('user-pic');
     //this.userName = document.getElementById('user-name');
     //this.signInButton = document.getElementById('sign-in');
+    this.changeBranchButton = document.getElementById('btnChangeBranch');
     this.signOutButton = document.getElementById('sign-out');
     this.leaveGroupChatButton = document.getElementById('btnLeaveGroupChat');
     this.denyGroupChatButton = document.getElementById('btnDenyGroupChat');
@@ -56,6 +57,7 @@ function FriendlyChat(userId, invitationId, getUserActionName) {
     this.leaveGroupChatButton.addEventListener('click', this.LeaveMessage.bind(this));
     this.denyGroupChatButton.addEventListener('click', this.DenyJoinMessage.bind(this));
     this.acceptGroupChatButton.addEventListener('click', this.AcceptJoinMessage.bind(this));
+    this.changeBranchButton.addEventListener('click', this.ChangeBranch.bind(this));
     //this.signInButton.addEventListener('click', this.signIn.bind(this));
 
     // Toggle for the button.
@@ -63,7 +65,7 @@ function FriendlyChat(userId, invitationId, getUserActionName) {
     this.messageInput.addEventListener('keyup', buttonTogglingHandler);
     this.messageInput.addEventListener('change', buttonTogglingHandler);
 
-    // Events for image upload.
+    //Events for image upload.
     //this.submitImageButton.addEventListener('click', function () {
     //    this.mediaCapture.click();
     //}.bind(this));
@@ -77,7 +79,7 @@ FriendlyChat.prototype.AcceptJoinMessage = function(){
     this.messagesRef.push({
         sender: "System",
         message: _userFullName+" đã chấp nhận lời mời tham gia",
-        userId: -1
+        userId: "-1"
     }).then(function () {
     }.bind(this)).catch(function (error) {
         console.error('Error writing new message to Firebase Database', error);
@@ -88,7 +90,7 @@ FriendlyChat.prototype.DenyJoinMessage = function() {
     this.messagesRef.push({
         sender: "System",
         message: _userFullName + " đã từ chối lời mời tham gia",
-        userId: -1
+        userId: "-1"
     }).then(function () {
     }.bind(this)).catch(function (error) {
         console.error('Error writing new message to Firebase Database', error);
@@ -99,7 +101,7 @@ FriendlyChat.prototype.LeaveMessage = function() {
     this.messagesRef.push({
         sender: "System",
         message: _userFullName + " đã thoát khỏi nhóm tán gẫu",
-        userId: -1
+        userId: "-1"
     }).then(function () {
     }.bind(this)).catch(function (error) {
         console.error('Error writing new message to Firebase Database', error);
@@ -364,3 +366,10 @@ FriendlyChat.prototype.signOut = function () {
     // TODO(DEVELOPER): Sign out of Firebase.
     this.messagesRef = this.database.ref('messages/trash');
 };
+
+FriendlyChat.prototype.ChangeBranch = function () {
+    //_invitationId = $("#inviId").val();
+    _invitationId = focusGroup;
+    this.messagesRef = this.database.ref('messages/' + _invitationId);
+    this.loadMessages();
+}

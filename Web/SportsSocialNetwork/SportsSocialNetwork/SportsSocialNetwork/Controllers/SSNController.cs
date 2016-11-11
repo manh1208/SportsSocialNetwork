@@ -145,6 +145,24 @@ namespace SportsSocialNetwork.Controllers
             return View();
         }
 
+        public ActionResult PostDetail(int postId)
+        {
+            var _sportService = this.Service<ISportService>();
+            var sports = _sportService.GetActive()
+                            .Select(s => new SelectListItem
+                            {
+                                Text = s.Name,
+                                Value = s.Id.ToString()
+                            }).OrderBy(s => s.Value);
+            ViewBag.Sport = sports;
+            var postService = this.Service<IPostService>();
+            var post = postService.FirstOrDefaultActive(p => p.Active && p.Id == postId);
+            if (post != null)
+            {
+                ViewBag.PostId = postId;
+            }
+            return View();
+        }
         public ActionResult GetAvatarImage()
         {
             var result = new AjaxOperationResult<string>();
