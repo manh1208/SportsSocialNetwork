@@ -256,9 +256,12 @@ public class PlaceFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_place, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
         MenuItem searchItem = menu.findItem(R.id.menu_search);
+//        MenuItem notiItem = menu.findItem(R.id.menu_notice);
+//        notiItem.setVisible(false);
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView = null;
         if (searchItem != null) {
@@ -271,7 +274,7 @@ public class PlaceFragment extends Fragment {
                 @Override
                 public boolean onQueryTextChange(String newText) {
                     adapter.filter(newText);
-                    Log.i("onQueryTextChange", newText);
+                    Log.i("Place onQueryTextChange", newText);
 //                    if (newText.length()<=0){
 //                        eventAdapter.setEventList(mEvents);
 //                        flag_loading =false;
@@ -282,7 +285,7 @@ public class PlaceFragment extends Fragment {
 
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    Log.i("onQueryTextSubmit", query);
+                    Log.i("Place onQueryTextSubmit", query);
 //                    doSearchAPI(query);
                     return true;
                 }

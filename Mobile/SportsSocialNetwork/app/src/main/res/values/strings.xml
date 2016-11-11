@@ -27,4 +27,8 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_create_field_schedule">CreateFieldScheduleActivity</string>
     <string name="title_activity_invitation">InvitationActivity</string>
+    <string name="title_activity_news">NewsActivity</string>
+    <string name="title_activity_news_detail">NewsDetailActivity</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_invitation_chat">InvitationChatActivity</string>
 </resources>

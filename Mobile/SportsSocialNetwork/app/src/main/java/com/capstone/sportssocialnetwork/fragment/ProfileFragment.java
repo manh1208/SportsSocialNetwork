@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.capstone.sportssocialnetwork.activity.NewsActivity;
 import com.capstone.sportssocialnetwork.activity.InvitationActivity;
 import com.capstone.sportssocialnetwork.enumerable.RoleEnum;
 import com.capstone.sportssocialnetwork.R;
@@ -136,6 +137,14 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        headerHolder.layoutNews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), NewsActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         footer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,6 +241,7 @@ public class ProfileFragment extends Fragment {
         RelativeLayout layoutFriend;
         RelativeLayout layoutManage;
         RelativeLayout layoutInvitation;
+        RelativeLayout layoutNews;
         RoundedImageView ivAvatar;
         TextView txtFullName;
 
@@ -242,6 +252,7 @@ public class ProfileFragment extends Fragment {
             txtFullName = (TextView) v.findViewById(R.id.txt_user_menu_fullname);
             layoutFriend = (RelativeLayout) v.findViewById(R.id.layout_menu_my_friend);
             layoutManage = (RelativeLayout) v.findViewById(R.id.layout_menu_manage);
+            layoutNews = (RelativeLayout) v.findViewById(R.id.layout_menu_news);
             layoutInvitation  = (RelativeLayout) v.findViewById(R.id.layout_menu_invitation);
         }
     }

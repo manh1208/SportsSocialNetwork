@@ -28,6 +28,7 @@ import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.NotificationActivity;
 import com.capstone.sportssocialnetwork.activity.PostActivity;
 import com.capstone.sportssocialnetwork.activity.PostDetailActivity;
+import com.capstone.sportssocialnetwork.activity.SearchActivity;
 import com.capstone.sportssocialnetwork.adapter.FeedAdapter;
 import com.capstone.sportssocialnetwork.model.Feed;
 import com.capstone.sportssocialnetwork.model.User;
@@ -100,9 +101,9 @@ public class FeedFragment extends Fragment {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (firstVisibleItem + visibleItemCount >= totalItemCount-1 && totalItemCount >1) {
+                if (firstVisibleItem + visibleItemCount >= totalItemCount - 1 && totalItemCount > 1) {
                     if (!flag_loading && !isFull) {
-                        Log.i(TAG,"scroll");
+                        Log.i(TAG, "scroll");
                         loadData();
                     } else {
                         removeFooter();
@@ -114,8 +115,8 @@ public class FeedFragment extends Fragment {
         viewHolder.lvFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position>0) {
-                    Feed feed = adapter.getItem(position-1);
+                if (position > 0) {
+                    Feed feed = adapter.getItem(position - 1);
                     Intent intent = new Intent(getActivity(), PostDetailActivity.class);
                     intent.putExtra("postId", feed.getId());
                     getActivity().startActivity(intent);
@@ -157,7 +158,7 @@ public class FeedFragment extends Fragment {
 //            viewHolder.lvFeed.addFooterView(viewHolder.footer);
 //        adapter.notifyDataSetChanged();
         if (!flag_loading) {
-            Log.i(TAG,"Resume");
+            Log.i(TAG, "Resume");
             loadData();
         }
     }
@@ -180,37 +181,38 @@ public class FeedFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_feed, menu);
-        MenuItem searchItem = menu.findItem(R.id.menu_search);
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        searchView = null;
-        if (searchItem != null) {
-            searchView = (SearchView) searchItem.getActionView();
-        }
-        if (searchView != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-
-            queryTextListener = new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    Log.i("onQueryTextChange", newText);
-//                    if (newText.length()<=0){
-//                        eventAdapter.setEventList(mEvents);
-//                        flag_loading =false;
-//                    }
-////                    doSearch(newText);
-                    return true;
-                }
-
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    Log.i("onQueryTextSubmit", query);
-//                    doSearchAPI(query);
-                    return true;
-                }
-            };
-            searchView.setOnQueryTextListener(queryTextListener);
-            searchView.onActionViewCollapsed();
-        }
+//        MenuItem searchItem = menu.findItem(R.id.menu_search);
+//        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+//        searchView = null;
+//        if (searchItem != null) {
+//            searchView = (SearchView) searchItem.getActionView();
+//        }
+//        if (searchView != null) {
+//            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+//
+//            queryTextListener = new SearchView.OnQueryTextListener() {
+//                @Override
+//                public boolean onQueryTextChange(String newText) {
+//                    Log.i("onQueryTextChange", newText);
+////                    if (newText.length()<=0){
+////                        eventAdapter.setEventList(mEvents);
+////                        flag_loading =false;
+////                    }
+//////                    doSearch(newText);
+//                    return true;
+//                }
+//
+//                @Override
+//                public boolean onQueryTextSubmit(String query) {
+//                    Log.i("onQueryTextSubmit", query);
+////                    doSearchAPI(query);
+//
+//                    return true;
+//                }
+//            };
+//            searchView.setOnQueryTextListener(queryTextListener);
+//            searchView.onActionViewCollapsed();
+//        }
     }
 
     @Override
@@ -220,6 +222,10 @@ public class FeedFragment extends Fragment {
         switch (id) {
             case R.id.menu_notice:
                 Intent intent = new Intent(getActivity(), NotificationActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.menu_search:
+                intent = new Intent(getActivity(), SearchActivity.class);
                 startActivity(intent);
                 return true;
         }
@@ -270,21 +276,21 @@ public class FeedFragment extends Fragment {
         });
     }
 
-    private void getUser(){
-        service.getAccountService().getUserProfile(userId,userId).enqueue(new Callback<ResponseModel<User>>() {
+    private void getUser() {
+        service.getAccountService().getUserProfile(userId, userId).enqueue(new Callback<ResponseModel<User>>() {
             @Override
             public void onResponse(Call<ResponseModel<User>> call, Response<ResponseModel<User>> response) {
-                if (response.isSuccessful()){
-                    if (response.body().isSucceed()){
+                if (response.isSuccessful()) {
+                    if (response.body().isSucceed()) {
                         Picasso.with(mContext).load(Uri.parse(DataUtils.URL + response.body().getData().getAvatar()))
                                 .placeholder(R.drawable.img_default_avatar)
                                 .error(R.drawable.img_default_avatar_error)
                                 .fit()
                                 .into(viewHolder.ivPostAvatar);
-                    }else{
+                    } else {
                         Toast.makeText(mContext, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
                     }
-                }else{
+                } else {
                     Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
                 }
             }

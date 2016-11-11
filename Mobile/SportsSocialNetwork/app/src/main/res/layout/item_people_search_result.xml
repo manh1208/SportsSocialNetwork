@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10sp">
+    <ImageView
+        android:id="@+id/iv_user_result_image"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:src="@drawable/img_default_avatar"/>
+    <LinearLayout
+        android:layout_toRightOf="@+id/iv_user_result_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10sp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nguyễn Văn Mạnh"
+            android:textColor="#000"
+            android:textSize="18sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bóng đá bóng rổ"
+            android:textColor="#000"
+            android:textSize="18sp"/>
+    </LinearLayout>
+</RelativeLayout>
