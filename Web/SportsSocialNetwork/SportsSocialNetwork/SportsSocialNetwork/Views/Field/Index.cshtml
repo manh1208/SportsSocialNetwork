@@ -128,7 +128,7 @@
                                 {
                                     <tr>
                                         <td>@item.StartTime - @item.EndTime</td>
-                                        <td>@item.Price</td>
+                                        <td>@item.Price.ToString("n0")</td>
                                     </tr>
                                 }
                             </tbody>
@@ -331,19 +331,19 @@
                 header: {
                     left: null,
                     center: 'prev,title,next',
-                    right: 'agendaWeek,agendaDay'
+                    right: ''
                 },
                 defaultDate: today,
                 eventSources: [
         {
             url: "@Url.Action("GetOrderCalendar", new { id = Model.Id})",
-            color: 'blue',
+            color: '#5940de',
             textColor: 'white'
         },
         {
             url: "@Url.Action("GetScheduleCalendar", new { id = Model.Id})",
             color: 'red',
-            textColor: 'white'
+            textColor: '#c43636'
         }
                 ],
                 lang: 'vi',

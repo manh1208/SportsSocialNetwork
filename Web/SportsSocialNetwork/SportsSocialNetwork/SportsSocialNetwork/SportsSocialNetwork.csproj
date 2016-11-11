@@ -4020,6 +4020,7 @@
     <Content Include="Views\News\NewsDetail.cshtml" />
     <Content Include="Views\News\Category.cshtml" />
     <Content Include="Views\Mobile\NewsDetail.cshtml" />
+    <Content Include="Views\SSN\PostDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

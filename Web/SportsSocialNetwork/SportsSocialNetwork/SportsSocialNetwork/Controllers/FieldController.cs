@@ -81,7 +81,7 @@ namespace SportsSocialNetwork.Controllers
         {
             var _timeBlockService = this.Service<ITimeBlockService>();
             List<TimeBlock> timeBlocks = _timeBlockService.GetActive(p => p.FieldId == id).ToList();
-            return Json(timeBlocks.Select(f => new { block = f.StartTime + " - " + f.EndTime, price = f.Price }).ToArray()
+            return Json(timeBlocks.Select(f => new { block = f.StartTime + " - " + f.EndTime, price = f.Price.ToString("n0") }).ToArray()
                 , JsonRequestBehavior.AllowGet);
         }
     }

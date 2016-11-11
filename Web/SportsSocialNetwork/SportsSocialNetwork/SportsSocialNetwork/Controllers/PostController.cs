@@ -374,6 +374,8 @@ namespace SportsSocialNetwork.Controllers
             return Json(result);
         }
 
+
+
         [HttpPost]
         public ActionResult UpdatePost(String postEditId, String PostContentEdit, String sportSelectEdit, List<HttpPostedFileBase> uploadImages, List<int> deleteImages, List<int> notDeleteImages)
         {

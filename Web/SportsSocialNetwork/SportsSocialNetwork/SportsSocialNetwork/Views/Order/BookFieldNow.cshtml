@@ -78,7 +78,7 @@
                         <label class="col-md-4 control-label">Giá tiền</label>
                         <div class="col-md-7">
                             <span id="countPrice">0 đồng</span>
-                            @Html.HiddenFor(p => p.Price)
+                            <input type="hidden" id="Price" />
                         </div>
 
                     </div>
@@ -375,10 +375,8 @@
                         "endTime": endTime
                     },
                     success: function (result) {
-                        var price = parseInt(result.price)
                         $("#countPrice").empty();
-                        $("#countPrice").text(price + " đồng");
-                        $("#Price").val(price);
+                        $("#countPrice").text(result.price + " đồng");
                     }
                 });
             }

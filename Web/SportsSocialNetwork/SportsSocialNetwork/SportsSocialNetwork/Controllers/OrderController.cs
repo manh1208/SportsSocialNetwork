@@ -236,7 +236,7 @@ namespace SportsSocialNetwork.Controllers
             }
             return Json(new
             {
-                price = price
+                price = price.ToString("n0")
             }, JsonRequestBehavior.AllowGet);
 
         }
@@ -445,7 +445,7 @@ namespace SportsSocialNetwork.Controllers
             string body = "Hi <strong>" + User.Identity.Name + "</strong>" +
                 ",<br/><br/>Bạn đã đặt sân: "+field.Name+"<br/> Thời gian: "+order.StartTime.ToString("HH:mm")+" - "+
                 order.EndTime.ToString("HH:mm") +", ngày "+order.StartTime.ToString("dd/MM/yyyy")+
-                "<br/> Giá tiền : " + order.Price + " đồng" +
+                "<br/> Giá tiền : " + order.Price.ToString("n0") + " đồng" +
                 "<br/> <strong>Mã đặt sân của bạn : " + order.OrderCode + "</strong>"+
                 "<br/><img src='" +Utils.GetHostName()+order.QRCodeUrl + "'>"+
                 "<br/> Cảm ơn bạn đã sử dụng dịch vụ của SSN. Chúc bạn có những giờ phút thoải mái chơi thể thao!";
@@ -487,7 +487,7 @@ namespace SportsSocialNetwork.Controllers
                         "<li> Tên sân: "+order.Field.Name + "</li>"+
                         "<li> Thời gian: " + order.StartTime.ToString("HH:mm") + " - " +
                         order.EndTime.ToString("HH:mm") + ", ngày " + order.StartTime.ToString("dd/MM/yyyy") +"</li>"+
-                        "<li> Giá tiền : " + order.Price + " đồng</li></ul>" +
+                        "<li> Giá tiền : " + order.Price.ToString("n0") + " đồng</li></ul>" +
                         "<br/> Cảm ơn bạn đã sử dụng dịch vụ của SSN. Chúc bạn có những giờ phút thoải mái chơi thể thao!";
                     EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { user.Email }, null, null, subject, body, true);
                     var url = Url.Action("PaymentSuccessful", "Order",
