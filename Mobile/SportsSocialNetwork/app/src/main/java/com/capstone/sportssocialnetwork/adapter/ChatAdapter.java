@@ -62,21 +62,28 @@ public class ChatAdapter extends ArrayAdapter<Message> {
         }
 
         Message message = getItem(position);
-        if (message.getUserId().equals(userId)){
-            viewHolder.txtSender.setVisibility(View.GONE);
+        if (message.getSender().equals("System")){
+            viewHolder.txtSender.setVisibility(View.VISIBLE);
+            viewHolder.txtSender.setText(message.getMessage());
             viewHolder.txtReceive.setVisibility(View.GONE);
-            viewHolder.txtSend.setVisibility(View.VISIBLE);
-            viewHolder.txtSend.setText(message.getMessage());
-        }else{
-            viewHolder.txtReceive.setVisibility(View.VISIBLE);
             viewHolder.txtSend.setVisibility(View.GONE);
-            if (position>0 && getItem(position).getUserId().equals(getItem(position-1).getUserId())){
+        }else {
+            if (message.getUserId().equals(userId)) {
                 viewHolder.txtSender.setVisibility(View.GONE);
-            }else{
-                viewHolder.txtSender.setVisibility(View.VISIBLE);
+                viewHolder.txtReceive.setVisibility(View.GONE);
+                viewHolder.txtSend.setVisibility(View.VISIBLE);
+                viewHolder.txtSend.setText(message.getMessage());
+            } else {
+                viewHolder.txtReceive.setVisibility(View.VISIBLE);
+                viewHolder.txtSend.setVisibility(View.GONE);
+                if (position > 0 && getItem(position).getUserId().equals(getItem(position - 1).getUserId())) {
+                    viewHolder.txtSender.setVisibility(View.GONE);
+                } else {
+                    viewHolder.txtSender.setVisibility(View.VISIBLE);
+                }
+                viewHolder.txtSender.setText(message.getSender());
+                viewHolder.txtReceive.setText(message.getMessage());
             }
-            viewHolder.txtSender.setText(message.getSender());
-            viewHolder.txtReceive.setText(message.getMessage());
         }
 
         return convertView;

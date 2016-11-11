@@ -10,15 +10,19 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.adapter.ChatAdapter;
 import com.capstone.sportssocialnetwork.model.Message;
+import com.capstone.sportssocialnetwork.model.response.ResponseModel;
+import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.capstone.sportssocialnetwork.utils.SharePreferentName;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,6 +36,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class InvitationChatActivity extends AppCompatActivity implements ChildEventListener {
     private DatabaseReference mDatabase;
     private int invitationId;
@@ -43,6 +51,7 @@ public class InvitationChatActivity extends AppCompatActivity implements ChildEv
     private String userId;
     private String fullName;
     private String subject;
+    private RestService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +70,9 @@ public class InvitationChatActivity extends AppCompatActivity implements ChildEv
         invitationId = getIntent().getIntExtra("invitationId",-1);
         subject = getIntent().getStringExtra("subject");
         getSupportActionBar().setTitle(subject);
-        mRef = mDatabase.child(invitationId+"");
+        mRef = mDatabase.child("messages/"+invitationId+"");
         mRef.addChildEventListener(this);
-
+        service = new RestService();
         init();
     }
 
@@ -113,12 +122,12 @@ public class InvitationChatActivity extends AppCompatActivity implements ChildEv
     private void writeMessage(String userId, String sender, String message) {
         // Create new post at /user-posts/$userid/$postid and at
         // /posts/$postid simultaneously
-        String key = mDatabase.child(invitationId+"").push().getKey();
+        String key = mDatabase.child("messages/"+invitationId+"").push().getKey();
         Message mess = new Message(sender,message,userId);
         Map<String, Object> postValues = mess.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/"+invitationId +"/"+ key, postValues);
+        childUpdates.put("messages/"+invitationId +"/"+ key, postValues);
         mDatabase.updateChildren(childUpdates);
 
     }
@@ -157,6 +166,37 @@ public class InvitationChatActivity extends AppCompatActivity implements ChildEv
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_chat,menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.menu_chat_leave_group:
+                service.getAccountService().refuseInvitation(invitationId).enqueue(new Callback<ResponseModel<String>>() {
+                    @Override
+                    public void onResponse(Call<ResponseModel<String>> call, Response<ResponseModel<String>> response) {
+                        if (response.isSuccessful()){
+                            if (response.body().isSucceed()){
+                                writeMessage("-1","System",fullName+" đã thoát khỏi nhóm tán gẫu");
+                                onBackPressed();
+                            }else{
+                                Toast.makeText(InvitationChatActivity.this, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(InvitationChatActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseModel<String>> call, Throwable t) {
+                        Toast.makeText(InvitationChatActivity.this, R.string.failure, Toast.LENGTH_SHORT).show();
+                    }
+                });
+              
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
