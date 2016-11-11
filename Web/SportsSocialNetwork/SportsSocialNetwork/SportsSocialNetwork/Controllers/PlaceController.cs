@@ -76,6 +76,12 @@ namespace SportsSocialNetwork.Controllers
             if (lat != null && lat != "" && lng != null && lng != "")
             {
                 var places = _placeService.getAllPlace();
+                if (sport != null && sport != "")
+                {
+                    int sportID = Int32.Parse(sport);
+                    places = _placeService.GetActive(p => (p.Status == (int)PlaceStatus.Active || p.Status == (int)PlaceStatus.Repairing) && 
+                    p.Fields.Where(f => f.FieldType.SportId == sportID).ToList().Count > 0);
+                }
                 var latitude = float.Parse(lat);
                 var longtitude = float.Parse(lng);
                 var Coord = new GeoCoordinate(latitude, longtitude);
