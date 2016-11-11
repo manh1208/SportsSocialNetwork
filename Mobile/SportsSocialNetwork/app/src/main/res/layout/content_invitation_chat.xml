@@ -16,6 +16,8 @@
         android:divider="#fff"
         android:dividerHeight="0sp"
         android:clickable="false"
+        android:transcriptMode="alwaysScroll"
+        android:stackFromBottom="true"
         >
 
     </ListView>
