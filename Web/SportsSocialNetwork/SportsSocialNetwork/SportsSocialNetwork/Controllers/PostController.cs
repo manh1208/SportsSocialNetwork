@@ -88,11 +88,12 @@ namespace SportsSocialNetwork.Controllers
             if (!String.IsNullOrEmpty(sportSelect))
             {
                 string[] sportId = sportSelect.Split(',');
+                string[] tmp = sportId.Distinct().ToArray();
                 if (sportId != null)
                 {
                     var _postSport = this.Service<IPostSportService>();
                     var postSport = new PostSport();
-                    foreach (var item in sportId)
+                    foreach (var item in tmp)
                     {
                         if (!item.Equals(""))
                         {
@@ -461,10 +462,11 @@ namespace SportsSocialNetwork.Controllers
                 if (!String.IsNullOrEmpty(sportSelectEdit))
                 {
                     string[] sportId = sportSelectEdit.Split(',');
+                    string[] tmp = sportId.Distinct().ToArray();
                     if (sportId != null)
                     {
                         
-                        foreach (var item in sportId)
+                        foreach (var item in tmp)
                         {
                             if (!item.Equals(""))
                             {

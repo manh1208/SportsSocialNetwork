@@ -144,7 +144,7 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                                    '</div>' +
                                    '</div>';
                     }
-                    var post = "<li class='list-group-item panel' style='margin-bottom:10px' role='tabpanel' id='post_" + this.Id + "'>"
+                    var post = "<li class='list-group-item panel' style='margin-bottom:10px;padding:25px' role='tabpanel' id='post_" + this.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
                                            + "<a class='avatar' href='javascript:void(0)'>"
@@ -258,7 +258,7 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                                    '</div>' +
                                    '</div>';
                     }
-                    var post = "<li class='list-group-item panel' style='margin-bottom:10px' role='tabpanel' id='post_" + this.Id + "'>"
+                    var post = "<li class='list-group-item panel' style='margin-bottom:10px;padding:25px' role='tabpanel' id='post_" + this.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
                                            + "<a class='avatar' href='javascript:void(0)'>"
@@ -370,7 +370,7 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
                                    '</div>' +
                                    '</div>';
                     }
-                    var post = "<li class='list-group-item panel' style='margin-bottom:10px' role='tabpanel' id='post_" + this.Id + "'>"
+                    var post = "<li class='list-group-item panel' style='margin-bottom:10px;padding:25px' role='tabpanel' id='post_" + this.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
                                            + "<a class='avatar' href='javascript:void(0)'>"
@@ -481,7 +481,7 @@ function loadSpecificPost(userId, postId, actionName, loadMoreCmtActionName, loa
                                    '</div>' +
                                    '</div>';
                     }
-                    var post = "<li class='list-group-item panel' style='margin-bottom:10px' role='tabpanel' id='post_" + dt.Id + "'>"
+                    var post = "<li class='list-group-item panel' style='margin-bottom:10px;padding:25px' role='tabpanel' id='post_" + dt.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
                                            + "<a class='avatar' href='javascript:void(0)'>"
@@ -671,7 +671,7 @@ function prependPost(data, userId) {
                    '</div>' +
                    '</div>' +
                    '</div>';
-    var post = "<li class='list-group-item panel' style='margin-bottom:10px' role='tabpanel' id='post_" + data.Id + "'>"
+    var post = "<li class='list-group-item panel' style='margin-bottom:10px;padding:25px' role='tabpanel' id='post_" + data.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
                                            + "<a class='avatar' href='javascript:void(0)'>"
@@ -1299,7 +1299,7 @@ function refreshPost(data) {
                    '</div>' +
                    '</div>';
     }
-    var post = "<li class='list-group-item panel' style='margin-bottom:10px' role='tabpanel' id='post_" + data.Id + "'>"
+    var post = "<li class='list-group-item panel' style='margin-bottom:10px;padding:25px' role='tabpanel' id='post_" + data.Id + "'>"
                    + "<div class='media'>"
                        + "<div class='media-left'>"
                            + "<a class='avatar' href='javascript:void(0)'>"
