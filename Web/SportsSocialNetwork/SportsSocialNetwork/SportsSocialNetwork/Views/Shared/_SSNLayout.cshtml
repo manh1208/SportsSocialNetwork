@@ -383,6 +383,10 @@
                 }
 
                 var totalUnreadCount = 0;
+                var _notiFirstSkip = 0;
+                var _notiFirstTake = 10;
+                var _notiSkip = 10;
+                var _notiTake = 5;
 
                 function logout() {
                     $("#form-log-out").submit();
