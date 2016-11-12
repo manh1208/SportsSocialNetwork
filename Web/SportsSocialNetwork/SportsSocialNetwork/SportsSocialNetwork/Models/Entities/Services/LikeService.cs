@@ -13,6 +13,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         Like LikeUnlikePost(int postId, String userId);
 
+        IEnumerable<Like> GetAllRelativeLikeDistinct(int postId);
+
         #endregion
 
         void test();
@@ -50,6 +52,11 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 this.Save();
             }
             return like;
+        }
+
+        public IEnumerable<Like> GetAllRelativeLikeDistinct(int postId)
+        {
+            return this.GetActive(x => x.PostId == postId).GroupBy(p => p.UserId).Select(p => p.FirstOrDefault());
         }
 
         #endregion

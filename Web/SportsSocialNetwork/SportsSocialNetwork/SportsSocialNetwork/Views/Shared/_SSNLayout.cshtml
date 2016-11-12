@@ -186,9 +186,8 @@
                                     </div>
                                 </li>
                                 <li class="dropdown-menu-footer" role="presentation" id="notiBottom">
-                                    <a class="dropdown-menu-footer-btn" href="javascript:void(0)" role="button">
-                                        <i class="icon wb-settings" aria-hidden="true"></i>
-
+                                    <a class="dropdown-menu-footer-btn" href="javascript:void(0)" role="button" onclick="markAllAsRead()">
+                                        <i class="icon wb-check-circle" aria-hidden="true"></i>Đánh dấu xem tất cả
                                     </a>
                                     <a href="@Url.Action("Index", "Notification")" role="menuitem">
                                         Xem tất cả thông báo
@@ -566,40 +565,45 @@
                     }
 
 
-                    if (data.Type == parseInt('@((int)NotificationType.Post)')) {
-                        image = data.AspNetUser1.AvatarImage;
-                        url = "/Profile/Index?userId=" + data.AspNetUser.Id;
-                    } else if (data.Type == parseInt('@((int)NotificationType.Order)')) {
-                        image = "";
-                        url = "";
-                    } else if (data.Type == parseInt('@((int)NotificationType.Invitation)')) {
-                        image = data.AspNetUser1.AvatarImage;
-                        url = "/Profile/Index?userId=" + data.AspNetUser1.Id;
-                    } else if (data.Type == parseInt('@((int)NotificationType.GroupInvitation)')) {
-                        image = data.AspNetUser1.AvatarImage;
-                        url = "/Group/Index/" + data.Group.Id;
-                    } else if (data.Type == parseInt('@((int)NotificationType.GroupChallengeInvitation)')) {
-                        image = data.Group.Avatar;
-                        url = "/Group/Index/" + data.Group.Id;
-                    } else if (data.Type == parseInt('@((int)NotificationType.GroupMemberAction)')) {
-                        image = data.AspNetUser1.AvatarImage;
-                        url = "/Group/Index/" + data.Group.Id;
-                    }
-                    else {
+                if (data.Type == parseInt('@((int)NotificationType.Post)')) {
+                    image = data.AspNetUser1.AvatarImage;
+                    url = "/SSN/PostDetail?postId=" + data.PostId;
+                } else if(data.Type == parseInt('@((int)NotificationType.Order)')) {
+                    image = "/Content/images/flag-xxl.png";
+                    url = "/Order";
+                } else if(data.Type == parseInt('@((int)NotificationType.Invitation)')) {
+                    image = data.AspNetUser1.AvatarImage;
+                    url = "/Invitation";
+                } else if(data.Type == parseInt('@((int)NotificationType.GroupInvitation)')) {
+                    image = data.AspNetUser1.AvatarImage;
+                    url = "/Group/Index/" + data.Group.Id;
+                } else if (data.Type == parseInt('@((int)NotificationType.GroupChallengeInvitation)')) {
+                    image = data.Group.Avatar;
+                    url = "/Group/Index/" + data.Group.Id;
+                } else if (data.Type == parseInt('@((int)NotificationType.GroupMemberAction)')) {
+                    image = data.AspNetUser1.AvatarImage;
+                    url = "/Group/Index/" + data.Group.Id;
+                } else if (data.Type == parseInt('@((int)NotificationType.GroupPost)')) {
+                    image = data.AspNetUser1.AvatarImage;
+                    url = "/Group/Index/" + data.Group.Id;
+                } else {
 
                     }
 
 
-                    var noti = '<a class="list-group-item" href="' + url + '" role="menuitem" style="padding: 10px 15px;' + styleUnread + '" onclick="markAsRead(' + data.Id + ')">' +
-                                   '<div class="row height-100">' +
-                                    '<div class="col-sm-3 vertical-align height-100">' +
+                var noti = '<a class="list-group-item" href="' + url + '" role="menuitem" style="padding: 10px 15px;'+ styleUnread +'" onclick="markAsRead('+ data.Id +')">' +
+                           '<div class="row height-100">' +
+                                '<div class="col-sm-3 vertical-align" style="padding-top:5px; padding-left:10px;">' +
+                                    '<span class="avatar" style="width:90px;">' +
                                         '<img class="vertical-align-middle" src="' + image + '" width="60" height="60" />' +
-                                    '</div>' +
-                                    '<div class="col-sm-9 height-100" style="padding-top:10px;">' +
-                                        '<h4 class="list-group-item-heading">' + data.Message + '</h4>' +
-                                        '<p class="list-group-item-text">' + data.CreateDateString + '</p>' +
-                                    '</div>' +
-                                    '</a>';
+                                    '</span>' +
+                                '</div>' +
+                                '<div class="col-sm-9 height-100" style="padding-top:10px;">' +
+                                    '<h4 class="list-group-item-heading">' + data.Message + '</h4>' +
+                                    '<p class="list-group-item-text">' + data.CreateDateString + '</p>' +
+                                '</div>' +
+                            '</div>' +
+                        '</a>';
 
                     return noti;
                 }
@@ -619,13 +623,41 @@
                     })
                 };
 
-                function showPopNoti(count) {
+
+            function markAllAsRead(id) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("MarkAllAsRead", "Notification")',
+                    data: { "userId": '@User.Identity.GetUserId()' },
+                    success: function (result) {
+                        if (result.Succeed) {
+                            $("#notiItems").find("a").css("background-color", "");
+                            $("#notiCount").remove();
+                            $("#notiLabelCount").remove();
+                        } else {
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        }
+                    }
+                })
+            };
+
+            function showPopNoti(count) {
+                if ($("#notiCount").length) {
+                    $("#notiCount").text(count);
+                }
+                else {
                     var lable = '<span class="badge badge-danger up" id="notiCount">' + count + '</span>'
                     $(lable).insertAfter("#notibell");
+                }
 
+                if ($("#notiLabelCount").length) {
+                    $("#notiLabelCount").text(count);
+                }
+                else {
                     var titleCount = '<span class="label label-round label-danger" id="notiLabelCount">' + count + '</span>';
-                    $(lable).insertAfter("#notiTitle");
-                };
+                    $(titleCount).insertAfter("#notiTitle");
+                }
+            };
 
                 function loadNoti(skip, take) {
                     $.ajax({

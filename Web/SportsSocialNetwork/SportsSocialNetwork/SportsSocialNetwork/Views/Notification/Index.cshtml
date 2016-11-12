@@ -14,7 +14,6 @@
             </div>
             <div class="panel-body">
                 <div class="list-group" id="listNotiPage">
-                   
                 </div>
             </div>
         </div>
@@ -83,11 +82,11 @@
                 image = data.AspNetUser1.AvatarImage;
                 url = "/Profile/Index?userId=" + data.AspNetUser.Id;
             } else if(data.Type == parseInt('@((int)NotificationType.Order)')) {
-                image = "";
-                url = "";
+                image = "/Content/images/flag-xxl.png";
+                url = "/Order";
             } else if(data.Type == parseInt('@((int)NotificationType.Invitation)')) {
                 image = data.AspNetUser1.AvatarImage;
-                url = "/Profile/Index?userId=" + data.AspNetUser1.Id;
+                url = "/Invitation";
             } else if(data.Type == parseInt('@((int)NotificationType.GroupInvitation)')) {
                 image = data.AspNetUser1.AvatarImage;
                 url = "/Group/Index/" + data.Group.Id;
@@ -97,15 +96,19 @@
             } else if (data.Type == parseInt('@((int)NotificationType.GroupMemberAction)')) {
                 image = data.AspNetUser1.AvatarImage;
                 url = "/Group/Index/" + data.Group.Id;
-            }
-            else {
+            } else if (data.Type == parseInt('@((int)NotificationType.GroupPost)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Group/Index/" + data.Group.Id;
+            } else {
 
             }
 
             var noti = '<a class="list-group-item" href="' + url + '" style="height:100px; padding:0;'+ styleUnread +'">' +
                         '<div class="row height-100">' +
-                            '<div class="col-sm-3 vertical-align height-100">' +
-                                '<img class="vertical-align-middle" src="'+ image +'" width="90" height="90" />' +
+                            '<div class="col-sm-2 height-100" style="padding-top:5px;">' +
+                                '<span class="avatar" style="width:90px;">' +
+                                    '<img class="img-responsive" src="' + image + '" style="width:90px;height:90px;" />' +
+                                '</span>' +
                             '</div>' +
                             '<div class="col-sm-9 height-100" style="padding-top:10px;">' +
                                 '<h4 class="list-group-item-heading">' + data.Message + '</h4>' +

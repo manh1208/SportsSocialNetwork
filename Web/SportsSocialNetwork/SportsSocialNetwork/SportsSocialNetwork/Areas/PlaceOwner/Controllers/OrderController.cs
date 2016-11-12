@@ -12,6 +12,9 @@ using System.Web;
 using System.Web.Mvc;
 using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.Enumerable;
+using Microsoft.AspNet.SignalR;
+using SportsSocialNetwork.Models.Hubs;
+using Microsoft.AspNet.Identity;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
@@ -37,6 +40,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 //save noti
                 Notification noti = new Notification();
                 noti.UserId = order.UserId;
+                noti.FromUserId = User.Identity.GetUserId();
                 noti.Title = Utils.GetEnumDescription(NotificationType.Order);
                 noti.Type = (int)NotificationType.Order;
                 //send mail
@@ -63,11 +67,21 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
                     noti.Message = "Đơn đặt sân " + order.Field.Name + "(" + order.StartTime.ToString() + " - " + order.EndTime.ToString() + ") đã bị từ chối";
                 }
-                //EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { receiverEmail, "itspace.quy@gmail.com" }, null, null, subject, body, true);
+                EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { receiverEmail, "itspace.quy@gmail.com" }, null, null, subject, body, true);
                 _notificationService.Create(noti);
                 _notificationService.Save();
-                
-                
+
+
+                //////////////////////////////////////////////
+                //signalR noti
+                NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                // Get the context for the Pusher hub
+                IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                // Notify clients in the group
+                hubContext.Clients.User(notiModel.UserId).send(notiModel);
+
                 return "success";
             }
             else
