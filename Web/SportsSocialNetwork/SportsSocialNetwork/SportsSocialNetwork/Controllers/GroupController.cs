@@ -292,6 +292,7 @@ namespace SportsSocialNetwork.Controllers
             if(gm != null)
             {
                 gm.Admin = false;
+                gm.Status = (int)GroupMemberStatus.Pending;
                 _groupMemberService.Update(gm);
                 _groupMemberService.Deactivate(gm);
                 result.Succeed = true;

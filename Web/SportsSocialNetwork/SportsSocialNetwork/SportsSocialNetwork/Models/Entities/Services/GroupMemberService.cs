@@ -184,6 +184,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 if(gm.Active == false)
                 {
                     gm.Status = (int)GroupMemberStatus.Pending;
+                    gm.Admin = false;
                     this.Activate(gm);
                     result = (int)JoinLeaveGroupResult.ReJoined;
                 }
@@ -199,6 +200,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
                         if (gm.Admin == false)
                         {
                             gm.Status = (int)GroupMemberStatus.Pending;
+                            gm.Admin = false;
                             this.Deactivate(gm);
                             result = (int)JoinLeaveGroupResult.Leaved;
                         }
