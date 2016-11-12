@@ -13,6 +13,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         PostComment Comment(int postId, String userId, String content, String image);
 
         string CalculateCommentAge(DateTime date);
+
+        IEnumerable<PostComment> GetAllRelativeCmtDistinct(int postId);
     }
 
     public partial class PostCommentService
@@ -67,6 +69,11 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 result = hours.ToString() + " giờ trước";
             }
             return result;
+        }
+
+        public IEnumerable<PostComment> GetAllRelativeCmtDistinct(int postId)
+        {
+            return this.GetActive(x => x.PostId == postId).GroupBy(p => p.UserId).Select(p => p.FirstOrDefault());
         }
     }
 }

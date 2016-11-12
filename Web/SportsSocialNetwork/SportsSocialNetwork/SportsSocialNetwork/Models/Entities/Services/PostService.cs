@@ -32,6 +32,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         int GetPostCountOfUser(string userId);
 
+        bool checkPostOwner(string userId, int postId);
+
         #endregion
 
         void test();
@@ -137,6 +139,16 @@ namespace SportsSocialNetwork.Models.Entities.Services
             TimeSpan a = DateTime.Now - date;
             int b = (int)a.TotalSeconds;
             return b;
+        }
+
+        public bool checkPostOwner(string userId, int postId)
+        {
+            Post post = this.FirstOrDefaultActive(p => p.Id == postId && p.UserId.Equals(userId));
+            if(post != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -228,7 +228,7 @@
 <!--challenge request detail-->
 <div id="challengeDetailModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-        <form id="challenge-form" method="post" autocomplete="off">
+        <form id="challengeDetail-form" method="post" autocomplete="off">
             <input type="hidden" name="fromGroup" value="@Model.Id" />
             <!-- Modal content-->
             <div class="modal-content">
@@ -249,8 +249,10 @@
 
 
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <div class="modal-footer" id="cdf">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default pull-left" onclick="denyChallenge(id)">Từ chối</button>
+                    <button type="button" class="btn btn-default pull-left" onclick="acceptChalenge(id)">Chấp nhận</button>
                 </div>
             </div>
         </form>
@@ -432,7 +434,7 @@
                                 <div class="media">
                                     <div class="media-left" style="padding-left:20px;">
                                         <a class="avatar" href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))">
-                                            <img class="img-responsive" src="@item.Avatar" alt="...">
+                                            <img class="img-responsive" style="width:50px;height:50px;" src="@item.Avatar" alt="...">
                                         </a>
                                     </div>
                                     <div class="media-body vertical-align">
@@ -1175,19 +1177,19 @@
                                         @{
                                             foreach (var item in challengeRequestList)
                                             {
-                                                <li class="list-group-item" id="rqchallenge_@item.Id">
+                                                <li class="list-group-item" id="rqchallenge_@item.Id" style="height:50px;">
                                                     @{
                                                         if (Model.IsAdmin)
                                                         {
 
-                                                            <div class="col-sm-10" style="padding-left:0; padding-right:10px;">
-                                                                <a href="javascript:void(0)" onclick="showRequestChallengeDetail(@item.Id)">@item.Group.Name</a>
+                                                            <div class="col-sm-10 vertical-align" style="padding-left:0; padding-right:10px; height:36px;">
+                                                                <a class="vertical-align-middle" href="javascript:void(0)" onclick="showRequestChallengeDetail(@item.Id)" style="color:#808c97;">@item.Group.Name</a>
                                                             </div>
                                                             <div class="col-sm-2" style="padding:0;">
                                                                 <div class="btn-group">
                                                                     <button type="button" class="btn btn-pure btn-default dropdown-toggle"
                                                                             id="exampleSizingDropdown3" data-toggle="dropdown" aria-expanded="false">
-                                                                        <span class="caret"></span>
+                                                                        <span class="fa fa-ellipsis-v"></span>
                                                                     </button>
                                                                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="exampleSizingDropdown3" role="menu">
                                                                         <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="acceptChalenge(@item.Id)"><i class="fa fa-check" aria-hidden="true"></i> Chấp nhận</a></li>
@@ -2147,6 +2149,7 @@
                     if(data.Succeed) {
                         $(el).hide(300);
                         showMessage("Chấp nhận thách đấu thành công", "success", "OK");
+                        $("#challengeDetailModal").modal("hide");
                         //location.href = location.href;
                     }
                     else
@@ -2180,6 +2183,7 @@
                             if(data.Succeed) {
                                 $(el).hide(300);
                                 showMessage("Bạn đã từ chối kời mời thách đấu.", "success", "OK");
+                                $("#challengeDetailModal").modal("hide");
                             }
                             else
                             {
@@ -2197,7 +2201,7 @@
         //cancel request challenge
         function cancelChallenge(id) {
 
-            showConfirmDeleteItem("Bạn có chắc chắn muốn hủy?",
+            showConfirmMessage("Bạn có chắc chắn muốn hủy?",
             function (isConfirm) {
                 if (isConfirm) {
                     var status = parseInt('@((int)ChallengeStatus.NotAvailable)');
@@ -2286,6 +2290,11 @@
                         $("#RQCName").text(name);
                         $("#RQCDes").text(desc);
 
+                        var btn = '<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>'+
+                                    '<button type="button" class="btn btn-default" onclick="denyChallenge('+ data.AdditionalData.Id +')"><i class="fa fa-remove" aria-hidden="true"></i>Từ chối</button>'+
+                                    '<button type="button" class="btn btn-default" onclick="acceptChalenge(' + data.AdditionalData.Id + ')"><i class="fa fa-check" aria-hidden="true"></i>Chấp nhận</button>';
+                        $("#cdf").empty();
+                        $("#cdf").append(btn);
                         $("#challengeDetailModal").modal('show');
                     }
                     else

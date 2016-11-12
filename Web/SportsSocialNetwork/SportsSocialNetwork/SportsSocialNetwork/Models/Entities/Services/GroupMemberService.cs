@@ -105,6 +105,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
             {
                 member.Active = true;
                 member.Status = (int)GroupMemberStatus.Pending;
+                member.Admin = false;
                 this.Update(member);
                 this.Save();
                 return true;

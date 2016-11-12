@@ -451,11 +451,12 @@ namespace SportsSocialNetwork.Controllers
             if (gm != null)
             {
                 //save noti
+                string curUser = User.Identity.GetUserId();
                 string title = Utils.GetEnumDescription(NotificationType.Other);
                 int type = (int)NotificationType.GroupMemberAction;
                 string message = "Bạn đã được chấp nhận làm thành viên trong nhóm " + gm.Group.Name;
 
-                Notification noti = _notificationService.CreateNoti(userId, "", title, message, type, null, null, null, gm.Group.Id);
+                Notification noti = _notificationService.CreateNoti(userId, curUser, title, message, type, null, null, null, gm.Group.Id);
 
 
                 //////////////////////////////////////////////
@@ -552,7 +553,7 @@ namespace SportsSocialNetwork.Controllers
                 {
                     var _userService = this.Service<IAspNetUserService>();
                     var _groupService = this.Service<IGroupService>();
-                    var _groupMemverService = this.Service<IGroupMemberService>();
+                    var _groupMemberService = this.Service<IGroupMemberService>();
 
                     AspNetUser fromUser = _userService.FindUser(userId);
                     Group group = _groupService.FindGroupById(groupId);
@@ -562,14 +563,14 @@ namespace SportsSocialNetwork.Controllers
                         if (!item.Equals(""))
                         {
                             //add to group
-                            if (_groupMemverService.JoinGroup(groupId, item))
+                            if (_groupMemberService.JoinGroup(groupId, item))
                             {
                                 //save noti
                                 string title = Utils.GetEnumDescription(NotificationType.GroupInvitation);
                                 int type = (int)NotificationType.GroupInvitation;
                                 string message = fromUser.FullName + " đã mời bạn vào nhóm " + group.Name;
 
-                                Notification noti = _notificationService.CreateNoti(userId, "", title, message, type, null, null, null, group.Id);
+                                Notification noti = _notificationService.CreateNoti(item, userId, title, message, type, null, null, null, group.Id);
 
 
                                 //////////////////////////////////////////////
@@ -745,6 +746,7 @@ namespace SportsSocialNetwork.Controllers
             var _challengeService = this.Service<IChallengeService>();
             var result = new AjaxOperationResult();
             Challenge cha = _challengeService.CreateChallengeRequest(fromGroup, toGroup, description);
+            string curUser = User.Identity.GetUserId();
 
             if (cha != null)
             {
@@ -758,7 +760,7 @@ namespace SportsSocialNetwork.Controllers
                 int type = (int)NotificationType.GroupChallengeInvitation;
                 string message = fgm.Group.Name + " đã gửi một lời mời thách đấu cho nhóm " + gm.Group.Name + " của bạn";
 
-                Notification noti = _notificationService.CreateNoti(gm.UserId, null, title, message, type, null, null, null, gm.GroupId);
+                Notification noti = _notificationService.CreateNoti(gm.UserId, curUser, title, message, type, null, null, null, gm.GroupId);
 
                 //////////////////////////////////////////////
                 //signalR noti
@@ -797,6 +799,56 @@ namespace SportsSocialNetwork.Controllers
             var result = new AjaxOperationResult();
             if(_challengeService.UpdateChallenge(challengeId, status) == true)
             {
+                Challenge cha = _challengeService.FindById(challengeId);
+                ChallengeDetailViewModel chaVM = Mapper.Map<ChallengeDetailViewModel>(cha);
+                string curUser = User.Identity.GetUserId();
+                //save noti
+                var _notificationService = this.Service<INotificationService>();
+                var _groupMemberService = this.Service<IGroupMemberService>();
+                string title = "";
+                int type = -1;
+                string message = "";
+
+                switch (status)
+                {
+                    case (int)ChallengeStatus.NotOperate:
+                        GroupMember gm = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == cha.Group1.Id && g.Admin == true && status == (int)GroupMemberStatus.Approved);
+                        //save noti
+                        title = Utils.GetEnumDescription(NotificationType.GroupChallengeInvitation);
+                        type = (int)NotificationType.GroupChallengeInvitation;
+                        message = "Nhóm "+ chaVM.Group1.Name +" đã đồng ý lời thách đấu của từ nhóm" + cha.Group.Name + " của bạn";
+                        Notification noti = _notificationService.CreateNoti(gm.UserId, curUser, title, message, type, null, null, null, cha.Group1.Id);
+
+                        //////////////////////////////////////////////
+                        //signalR noti
+                        NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                        // Get the context for the Pusher hub
+                        IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                        // Notify clients in the group
+                        hubContext.Clients.User(notiModel.UserId).send(notiModel);
+                        break;
+
+                    case (int)ChallengeStatus.NotAvailable:
+                        GroupMember gm1 = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == cha.Group1.Id && g.Admin == true && status == (int)GroupMemberStatus.Approved);
+                        //save noti
+                        title = Utils.GetEnumDescription(NotificationType.GroupChallengeInvitation);
+                        type = (int)NotificationType.GroupChallengeInvitation;
+                        message = "Nhóm " + chaVM.Group1.Name + " đã từ chối lời thách đấu từ nhóm" + cha.Group.Name + " của bạn";
+                        Notification noti1 = _notificationService.CreateNoti(gm1.UserId, curUser, title, message, type, null, null, null, cha.Group1.Id);
+
+                        //////////////////////////////////////////////
+                        //signalR noti
+                        NotificationFullInfoViewModel notiModel1 = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti1));
+
+                        // Get the context for the Pusher hub
+                        IHubContext hubContext1 = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                        // Notify clients in the group
+                        hubContext1.Clients.User(notiModel1.UserId).send(notiModel1);
+                        break;
+                }
                 result.Succeed = true;
             }
             else
