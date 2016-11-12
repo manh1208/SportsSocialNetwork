@@ -497,7 +497,7 @@
                                     //check whether has friend in this group
                                     foreach (var item in GroupMember)
                                     {
-                                        if ((item.AspNetUser.Id != User.Identity.GetUserId()) && item.isFollowed == true)
+                                        if ((item.AspNetUser.Id != User.Identity.GetUserId()) && item.isFollowed == true && item.Admin == false)
                                         {
                                             hasFollowed = true;
                                         }
@@ -510,7 +510,7 @@
                                             @{
                                                 foreach (var item in GroupMember)
                                                 {
-                                                    if ((item.AspNetUser.Id != User.Identity.GetUserId()) && hasFollowed == true && item.isFollowed == true)
+                                                    if ((item.AspNetUser.Id != User.Identity.GetUserId()) && hasFollowed == true && item.isFollowed == true && item.Admin == false)
                                                     {
                                                         <div class="col-sm-6" style="margin-bottom:20px; padding: 10px 10px 0 10px;">
                                                             <div style="border: 1px solid #e9ebee; overflow:hidden;">
