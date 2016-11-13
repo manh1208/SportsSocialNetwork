@@ -1,9 +1,11 @@
 ﻿using HenchmenWeb.Models.Notifications;
+using Microsoft.AspNet.SignalR;
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Hubs;
 using SportsSocialNetwork.Models.Notifications;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
@@ -281,12 +283,20 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                             List<string> registrationIds = GetToken(member.UserId);
 
+                            NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+
                             if (registrationIds != null && registrationIds.Count != 0)
                             {
-                                NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
-
+                                
                                 Android.Notify(registrationIds, null, notiModel);
                             }
+
+                            //SignalR Noti
+                            // Get the context for the Pusher hub
+                            IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                            // Notify clients in the group
+                            hubContext.Clients.User(post.UserId).send(model);
                         }
                     }
                 }
@@ -364,12 +374,20 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                             List<string> registrationIds = GetToken(member.UserId);
 
+                            NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+
                             if (registrationIds != null && registrationIds.Count != 0)
                             {
-                                NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
-
                                 Android.Notify(registrationIds, null, notiModel);
                             }
+
+                            //SignalR Noti
+                            // Get the context for the Pusher hub
+                            IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                            // Notify clients in the group
+                            hubContext.Clients.User(post.UserId).send(model);
+
                         }
                     }
                 }
