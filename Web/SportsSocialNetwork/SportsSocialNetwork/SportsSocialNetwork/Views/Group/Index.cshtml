@@ -108,6 +108,8 @@
     .panel {
         margin-bottom: 10px;
         font-family: sans-serif;
+        border:groove 1px;
+        border-radius:0px;
     }
 
     /*=====================================================*/
@@ -329,11 +331,11 @@
 <div class="row">
     <!--Left side-bar-->
     <div class="col-sm-3">
-        <div class="widget widget-shadow text-center">
+        <div class="widget widget-shadow text-center" style="border-top-style: solid;border-left: 0.5px groove;border-right: 0.5px groove;border-bottom: 0.5px groove;">
             <div class="widget-header">
                 <div class="widget-header-content" id="userContent">
                     <a class="avatar avatar-lg" href="/Group/Index/@Model.Id">
-                        <img class="groupAvatar" src="@Model.Avatar" alt="...">
+                        <img class="groupAvatar" src="@Model.Avatar" alt="..." style="height:130px;width:130px">
                     </a>
                     @*@{
                         if (Model.IsAdmin)
@@ -346,7 +348,7 @@
                     @*<div style="position:absolute; right:20px;top:140px;display:none;" id="changeAvaBtn">
                         <button type="button" class="btn btn-pure btn-default icon wb-settings" onclick="changeAva()"></button>
                     </div>*@
-                    <div class="profile-user">@Model.Name</div>
+                    <div class="profile-user"><a href="/Group/Index/@Model.Id" style="color:#37474f;font-weight:bold">@Model.Name</a></div>
                     <div class="profile-job">@Model.Sport.Name</div>
                     <p>
                         @Model.Description
@@ -419,7 +421,7 @@
             </div>
 
             <!--list group take part-->
-            <div class="example-wrap margin-lg-0" style="text-align:left;">
+            @*<div class="example-wrap margin-lg-0" style="text-align:left;">
                 <h4 class="example-title" style="display:inline-block;float:left;">Các nhóm tham gia</h4>
                 <button type="button" style="display:inline-block; float:right;" class="btn btn-pure btn-dark btn-sm icon wb-plus" onclick="showCreateGroupModal()"> Tạo nhóm</button>
                 <div class="clearfix"></div>
@@ -450,8 +452,58 @@
                         }
                     }
                 </ul>
-            }
+            }*@
         </div>
+
+        <div class="panel">
+            <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                <h class="panel-title" style="font-family:sans-serif;color:#fff!important">Các nhóm tham gia</h>
+            </div>
+
+            <div class="panel-body" style="padding:0;padding-bottom:10px">
+                <div>
+                    <div class="col-sm-12">
+
+                        <a href="javascript:void(0)" style="text-decoration:none;border-bottom-style:groove" onclick="showCreateGroupModal()">
+                            <div class="text-center" style="padding:20px 20px 10px 20px;color:#76838f; font-size:medium;border-bottom: 1px groove #cbcbcb ">
+                                <i class="icon wb-plus"></i> Tạo nhóm
+                            </div>
+                        </a>
+
+
+                        @if (ViewBag.GroupList.Count > 0)
+                        {
+                            <div class="clearfix"></div>
+                            <ul class="list-group list-group-full">
+                                @{
+                                    foreach (var item in ViewBag.GroupList)
+                                    {
+                                        <li class="list-group-item" style="text-align:left;">
+                                            <div class="media">
+                                                <div class="media-left" style="padding-left:20px;">
+                                                    <a class="avatar" href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))">
+                                                        <img class="img-responsive" style="width:50px;height:50px;" src="@item.Avatar" alt="...">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body vertical-align">
+                                                    <a href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))" style="text-decoration:none;color:#37474f;">
+                                                        <h4 class="media-heading vertical-align-middle">@item.Name</h4>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+
+                                    }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
     </div>
     <!--END Left side-bar-->
 
@@ -1227,15 +1279,15 @@
         
         <!--invite to group-->
         <div class="panel">
-            <div class="panel-heading">
-                <h3 class="panel-title">Thêm thành viên mới</h3>
+            <div class="panel-heading" style="background-color:#ff6a00; border-radius:0px">
+                <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Thêm thành viên mới</h3>
             </div>
-            <div class="panel-body">
+            <div class="panel-body" style="padding:30px;">
                 <div class="form-group">
                     <form id="addFrdForm" method="post" autocomplete="off">
                         <div class="input-group">
                             <span class="input-group-btn">
-                                <button type="submit" class="btn btn-pure btn-primary icon wb-plus" style="margin-left:-15px;"></button>
+                                <button type="submit" class="btn btn-pure btn-primary icon wb-plus" style="margin-left:-25px;"></button>
                             </span>
                             <input type="text" name="AddFriendToGroupList" id="addFrd" placeholder="Tags">
                             <input type="hidden" name="groupId" value="@groupId" />
@@ -1248,10 +1300,10 @@
 
         <!--suggest group-->
         <div class="panel" id="fixpanel">
-            <div class="panel-heading">
-                <h3 class="panel-title">Nhóm đề nghị</h3>
+            <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Nhóm đề nghị</h3>
             </div>
-            <div class="panel-body" style="padding: 0 0 15px 0;">
+            <div class="panel-body" style="padding: 0;padding-bottom:10px">
                 @{
                     int count = 1;
                     GroupFullInfoViewModel last = suggestGroups.Last();
@@ -1272,10 +1324,10 @@
                                         <div class="row">
                                             <div class="clearfix"></div>
                                             <div class="col-sm-6 height-50 vertical-align">
-                                                <a href="/Group/Index/@item.Id" style="color:#808c97;"><span class="vertical-align-middle"><strong>@item.Name</strong></span></a>
+                                                <a href="/Group/Index/@item.Id" style="color:#37474f;"><span class="vertical-align-middle" style="font-weight:bold">@item.Name</span></a>
                                             </div>
                                             <div class="col-sm-6" style="margin-top:5px; text-align:right;">
-                                                <button type="button" class="btn btn-outline btn-default" title="Tham gia nhóm" onclick="joinSuggestGroup(@item.Id)"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
+                                                <button type="button" style="color:#000" class="btn btn-outline btn-default" title="Tham gia nhóm" onclick="joinSuggestGroup(@item.Id)"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1297,10 +1349,10 @@
                                         <div class="row">
                                             <div class="clearfix"></div>
                                             <div class="col-sm-6 height-50 vertical-align">
-                                                <a href="/Group/Index/@item.Id" style="color:#808c97;"><span class="vertical-align-middle"><strong>@item.Name</strong></span></a>
+                                                <a href="/Group/Index/@item.Id" style="color:#37474f;"><span class="vertical-align-middle" style="font-weight:bold">@item.Name</span></a>
                                             </div>
                                             <div class="col-sm-6" style="margin-top:5px; text-align:right;">
-                                                <button type="button" class="btn btn-outline btn-default" title="Tham gia nhóm" onclick="joinSuggestGroup(@item.Id)"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
+                                                <button type="button" style="color:#000" class="btn btn-outline btn-default" title="Tham gia nhóm" onclick="joinSuggestGroup(@item.Id)"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
                                             </div>
                                         </div>
                                     </div>
