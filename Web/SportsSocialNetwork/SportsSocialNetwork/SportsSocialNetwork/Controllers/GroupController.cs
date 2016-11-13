@@ -30,6 +30,7 @@ namespace SportsSocialNetwork.Controllers
             var _followService = this.Service<IFollowService>();
             var _userService = this.Service<IAspNetUserService>();
             var _challengeService = this.Service<IChallengeService>();
+            var _hobbyService = this.Service<IHobbyService>();
 
             GroupFullInfoViewModel model = Mapper.Map<GroupFullInfoViewModel>(_groupService.FirstOrDefaultActive(g => g.Id == id));
 
@@ -140,27 +141,49 @@ namespace SportsSocialNetwork.Controllers
                 }
             }
 
+            //get list group that this user joined
+            List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f =>
+            f.UserId == curUserId && f.Status == (int)GroupMemberStatus.Approved).ToList().Count > 0).ToList();
+            ViewBag.GroupList = groupList;
+
             //WWWWWWWWWWWWWWWWWWWWWWWWTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
             //get suggest group
-            List<GroupMember> listGroup = _groupMemberService.GetActive(g => g.UserId.Equals(curUserId) && g.Status == (int)GroupMemberStatus.Approved).ToList();
-            List<Group> suggestGroups = _groupService.GetSuggestGroup(id.Value);
-            List<GroupFullInfoViewModel> suggestGroupsVM = Mapper.Map<List<GroupFullInfoViewModel>>(suggestGroups);
-            foreach (var item in suggestGroupsVM)
+            List<Group> groupListSG = _groupService.GetActive(p => p.GroupMembers.Where(f =>
+            f.UserId == curUserId).ToList().Count > 0).ToList();
+            ViewBag.GroupList = groupList;
+            List<Group> AllGroups = _groupService.GetActive().ToList();
+            List<Group> TempGroups = AllGroups.Except(groupListSG).ToList();
+
+            List<Hobby> listHobbies = _hobbyService.GetActive(h => h.UserId.Equals(curUserId)).ToList();
+            List<Group> suggestGroups = new List<Group>();
+            foreach (var item in TempGroups)
             {
-                item.MemberCount = _groupMemberService.GetActive(g => g.GroupId == item.Id).ToList().Count();
-                foreach (var gm in listGroup)
+                foreach (var item1 in listHobbies)
                 {
-                    if(gm.GroupId == item.Id)
+                    if(item.SportId == item1.SportId)
                     {
-                        item.IsMember = true;
+                        suggestGroups.Add(item);
                     }
                 }
             }
+            List<GroupFullInfoViewModel> suggestGroupsVM = Mapper.Map<List<GroupFullInfoViewModel>>(suggestGroups);
 
-            //get list group that this user joined
-            List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f =>
-            f.UserId == curUserId).ToList().Count > 0).ToList();
-            ViewBag.GroupList = groupList;
+            //List<GroupMember> listGroup = _groupMemberService.GetActive(g => g.UserId.Equals(curUserId) && g.Status == (int)GroupMemberStatus.Approved).ToList();
+            //List<Group> suggestGroups = _groupService.GetSuggestGroup(id.Value);
+            //List<GroupFullInfoViewModel> suggestGroupsVM = Mapper.Map<List<GroupFullInfoViewModel>>(suggestGroups);
+            //foreach (var item in suggestGroupsVM)
+            //{
+            //    item.MemberCount = _groupMemberService.GetActive(g => g.GroupId == item.Id).ToList().Count();
+            //    foreach (var gm in listGroup)
+            //    {
+            //        if(gm.GroupId == item.Id)
+            //        {
+            //            item.IsMember = true;
+            //        }
+            //    }
+            //}
+
+            
 
             //get challenge request
             List<ChallengeDetailViewModel> challengeRequestList = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetAllChallengeRequest(id.Value).ToList());

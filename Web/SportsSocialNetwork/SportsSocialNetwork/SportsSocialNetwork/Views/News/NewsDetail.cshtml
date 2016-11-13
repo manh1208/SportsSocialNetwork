@@ -1,5 +1,6 @@
 ﻿@model SportsSocialNetwork.Models.ViewModels.NewsViewModel
 @using SportsSocialNetwork.Models.Entities;
+@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "NewsDetail";
     Layout = "~/Views/Shared/_SSNLayout.cshtml";
@@ -44,6 +45,77 @@
 
                     <div>
                         @Html.Raw(Model.NewsContent)
+                    </div>
+                    <div id="commentSection" style="margin-top:40px; border-top:1px solid #808080;">
+                        <h3>Nhận xét</h3>
+                        <div class="comment media">
+                            <div class="media-left">
+                                <a class="avatar avatar-lg" href="javascript:void(0)">
+                                    <img src="~/Content/assets/portraits/8.jpg" alt="...">
+                                </a>
+                            </div>
+                            <div class="comment-body media-body">
+                                <a class="comment-author" href="javascript:void(0)">Heather Harper</a>
+                                <div class="comment-meta">
+                                    <span class="date">5 days ago</span>
+                                </div>
+                                <div class="comment-content">
+                                    <p>
+                                        Lorem ipsum Ullamco fugiat esse culpa consequat velit veniam
+                                        incididunt incididunt nostrud labore nostrud sit dolore in
+                                        nulla sit non laborum.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment media">
+                            <div class="media-left">
+                                <a class="avatar avatar-lg" href="javascript:void(0)">
+                                    <img src="~/Content/assets/portraits/8.jpg" alt="...">
+                                </a>
+                            </div>
+                            <div class="comment-body media-body">
+                                <a class="comment-author" href="javascript:void(0)">Heather Harper</a>
+                                <div class="comment-meta">
+                                    <span class="date">5 days ago</span>
+                                </div>
+                                <div class="comment-content">
+                                    <p>
+                                        Lorem ipsum Ullamco fugiat esse culpa consequat velit veniam
+                                        incididunt incididunt nostrud labore nostrud sit dolore in
+                                        nulla sit non laborum.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment media">
+                            <div class="media-left">
+                                <a class="avatar avatar-lg" href="javascript:void(0)">
+                                    <img src="~/Content/assets/portraits/8.jpg" alt="...">
+                                </a>
+                            </div>
+                            <div class="comment-body media-body">
+                                <a class="comment-author" href="javascript:void(0)">Heather Harper</a>
+                                <div class="comment-meta">
+                                    <span class="date">5 days ago</span>
+                                </div>
+                                <div class="comment-content">
+                                    <p>
+                                        Lorem ipsum Ullamco fugiat esse culpa consequat velit veniam
+                                        incididunt incididunt nostrud labore nostrud sit dolore in
+                                        nulla sit non laborum.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <form>
+                                <input type="hidden" name="userId" id="userId" value="@User.Identity.GetUserId()" />
+                                <input type="hidden" name="newsId" id="newsId" value="@Model.Id" />
+                                <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
+                                <input type="submit" class="btn btn-default pull-right" value="Đăng" />
+                            </form>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-3">
