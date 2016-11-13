@@ -29,10 +29,9 @@
         }
 
         .suggest-group {
-            border: 1px solid lightgray;
+           
             overflow: hidden;
             padding-top: 15px;
-            margin: 10px;
         }
 
         .after-run .site-menubar-fold .page, .after-run .site-menubar-fold .site-footer {
@@ -59,6 +58,8 @@
         .panel {
             margin-bottom: 10px;
             font-family: sans-serif;
+            border:groove 1px;
+            border-radius:0px;
         }
 
             .panel.panel-cover {
@@ -144,7 +145,6 @@
             -o-transition: all 0.5s ease;
             transition: all 0.5s ease;
         }
-        
     </style>
 }
 
@@ -265,27 +265,27 @@
             @if (ViewBag.suggestUserList != null)
             {
                 <div class="panel" id="suggest-follow-panel">
-                    <div class="panel-heading text-center">
-                        <h class="panel-title" style="font-family:sans-serif">Gợi ý theo dõi</h>
+                    <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                        <h class="panel-title" style="font-family:sans-serif;color:#fff!important">Gợi ý theo dõi</h>
                     </div>
-                    <div class="panel-body">
-                        <div class="height-250 check" id="check" data-plugin="scrollable">
-                            <div data-role="container">
-                                <div data-role="content" id="container">
+                    <div class="panel-body" style="padding: 0px">
+                        <div class="height-250  check" id="check" data-plugin="scrollable" style="width:100%">
+                            <div data-role="container" style="padding:10px 10px 10px 10px; width:200px">
+                                <div data-role="content" id="container" style="width: 200px!important">
                                     @foreach (var item in ViewBag.suggestUserList)
                                     {
-                                        <div class='comment media suggestion' id="@item.Id">
-                                            <div class='media-left'>
-                                                <a class='avatar avatar-lg' href='javascript:void(0)'>
-                                                    <img style='height:50px;width:50px' src='@item.AvatarImage' alt='...'>
+                                        <div class='comment media suggestion' id="@item.Id" style="width:100%;padding-right:10px">
+                                            <div class='media-left' style="padding-right:0px">
+                                                <a class='avatar' href='javascript:void(0)'>
+                                                    <img style='height:30px;width:30px' src='@item.AvatarImage' alt='...'>
                                                 </a>
                                             </div>
                                             <div class='comment-body media-body' >
-                                                <a class='comment-author' href='/profile/index?userid=@item.Id'>@item.FullName</a>
-                                                <div class='comment-content'>
+                                                <a class='comment-author' href='/profile/index?userid=@item.Id' style="color:#000; font-weight:bold">@item.FullName</a>
+                                                <div class='comment-content' style="color:#76838f;margin-top:0px">
                                                     @if (item.sameSport != 0)
                                                     {<p>Có chung @item.sameSport sở thích</p>}
-                                                </div><button onclick="follow('@item.Id')" class='btn btn-xs btn-default'><i class='fa fa-user-plus' aria-hidden='true'></i> Theo dõi</button>
+                                                </div><button onclick="follow('@item.Id')" style="color:#000" class='btn btn-xs btn-default'><i class='fa fa-user-plus' aria-hidden='true'></i> Theo dõi</button>
                                             </div>
                                         </div>
                                     }
@@ -304,8 +304,8 @@
                 if (ViewBag.SuggestNews != null)
                 {
                     <div class="panel">
-                        <div class="panel-heading text-center">
-                            <h3 class="panel-title" style="font-family:sans-serif">Gợi ý tin tức nên xem</h3>
+                        <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                            <h3 class="panel-title" style="font-family:sans-serif;color:#fff">Gợi ý tin tức</h3>
                         </div>
                         <div class="panel-body" style="padding:0;padding-bottom:10px">
                             <div class="suggest-group">
@@ -320,13 +320,16 @@
                                         <div class="clearfix"></div>
                                         <div class="col-sm-12 height-60">
                                             <a href="/News/NewsDetail/@ViewBag.SuggestNews.Id" style="color:#37474f;"> <span class="vertical-align-middle" style="font-weight:bold">@ViewBag.SuggestNews.Title</span></a>
-                                            <span class="vertical-align-middle"><i class="fa fa-pencil" aria-hidden="true"></i> bởi @ViewBag.SuggestNews.AspNetUser.UserName</span>
+                                           
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="text-right"><em><a href="/News" style="color:#76838f;">Xem những tin khác</a></em></div>
+                        <div class="panel-footer">
+                            <div class="text-center" style="border-top-style: groove;padding-top:10px"><em><a href="/News" style="color:#76838f;font-weight:400">Xem những tin khác</a></em></div>
+                        </div>
+                        
 
                     </div>
                 }
