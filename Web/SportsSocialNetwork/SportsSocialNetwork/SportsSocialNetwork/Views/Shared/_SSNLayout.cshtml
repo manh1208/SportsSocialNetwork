@@ -78,7 +78,14 @@
         }
 
         .user-search:hover {
-            background-color: #62a8ea;
+            background-color: #f1f0f0;
+        }
+
+        .panel {
+            margin-bottom: 10px;
+            font-family: sans-serif;
+            border:groove 0.3px;
+            border-radius:0px;
         }
 
         .navbar-brand {
@@ -86,10 +93,13 @@
             padding:20px 20px;
         }
 
-        .active {
+        .active-menu {
             color: #ff6a00 !important;
             border-bottom-style: solid ;
             border-bottom-width:3px;
+        }
+        ul{
+            list-style-type: none;
         }
 
     </style>
@@ -133,7 +143,7 @@
                     @if (User != null && User.Identity.IsAuthenticated)
                     {
                         <li class="dropdown">
-                            <a href="@Url.Action("Index","SSN",new { area = "" })" class="active" aria-expanded="false" 
+                            <a href="@Url.Action("Index","SSN",new { area = "" })" class="active-menu" aria-expanded="false" 
                                style="color:#263238; font-weight:500;font-size:medium; margin-top:15px; margin-bottom:15px; padding-top:5px; padding-bottom:5px"
                                role="button"
                                id="menu-home">Trang chủ</a>
@@ -382,11 +392,11 @@
         function checkActive() {
             var title = "@ViewBag.Type";
             if (title=="news"){
-                $("#menu-home").removeClass("active");
-                $("#menu-news").addClass("active");
+                $("#menu-home").removeClass("active-menu");
+                $("#menu-news").addClass("active-menu");
             }else{
-                $("#menu-home").addClass("active");
-                $("#menu-news").removeClass("active");
+                $("#menu-home").addClass("active-menu");
+                $("#menu-news").removeClass("active-menu");
             }
         }
 
@@ -484,14 +494,14 @@
                     hobby = "<span class='comment-content'><p>Có chung " + this.sameSport
                         + " sở thích</p></span>";
                 }
-                var info = "<div tabindex='0' style='padding:0 0 0 10px' class='comment media user-search'><a href='/profile/index?userid=" + this.Id + "'>"
+                var info = "<div tabindex='0' style='padding:10px 0 0 10px' class='comment media user-search'><a href='/profile/index?userid=" + this.Id + "' style='text-decoration: none;'>"
                 + "<span class='media-left'>"
                 + "<span class='avatar avatar-lg'>"
                 + "<img style='height:50px;width:50px' src='" + this.AvatarImage + "'>"
                 + "</span></span>"
-                + "<span class='comment-body media-body'>"
-                + "<span class='comment-author'>" + this.FullName + "</span>"
-                + hobby + "</span></a></div>";
+                + "<div class='comment-body media-body'>"
+                + "<div class='comment-author' style='font-size: medium;font-weight:500;'>" + this.FullName + "</div>"
+                + "<div class='comment-content' style='color:#76838f;margin-top:0px;font-weight:400'>" + hobby + "</div></div></a></div>";
                 $("#showSearch").append(info);
 
             });
@@ -501,15 +511,15 @@
         function showSearchGroup(data) {
             $("#showSearch").append("<div style='background-color:#ffefdf;margin-bottom:5px' tabindex='0' class='padding-left-10'>Hội nhóm</div>");
             $(data.listGroup).each(function () {
-                var info = "<div tabindex='0' style='padding:0 0 0 10px' class='comment media user-search'><a href='/Group/Index/" + this.Id + "'>"
+                var info = "<div tabindex='0' style='padding:10px 0 0 10px' class='comment media user-search'><a href='/Group/Index/" + this.Id + "' style='text-decoration: none;'>"
                 + "<span class='media-left'>"
                 + "<span class='avatar avatar-lg'>"
                 + "<img style='height:50px;width:50px' src='" + this.Avatar + "'>"
                 + "</span></span>"
-                + "<span class='comment-body media-body'>"
-                + "<span class='comment-author'>" + this.Name + "</span>"
-                + "<span class='comment-content'><p>Nhóm " + this.sport.Name
-                        + " </p></span>" + "</span></a></div>";
+                + "<div class='comment-body media-body'>"
+                + "<div class='comment-author' style='font-size: medium;font-weight:400;'>" + this.Name + "</div>"
+                + "<div class='comment-content' style='color:#76838f;margin-top:0px;font-weight:400'>" + this.sport.Name
+                        + "</div></div></a></div>";
                 $("#showSearch").append(info);
 
             });
@@ -639,7 +649,7 @@
                         '</div>'+
                         '<div class="media-body">'+
                           
-                          '<div class="media-detail" style="color:#000!important; font-weight:400">' + data.Message + '</div>' +
+                          '<div class="media-detail" style="color:#000!important; font-weight:400;font-size:14px">' + data.Message + '</div>' +
                           '<div class="media-meta">' +
                             '<time datetime="">' + data.CreateDateString + '</time>' +
                           '</div>' +

@@ -118,16 +118,18 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                     }
                     var spanLike = "";
                     if (this.Liked) {
-                        spanLike = "<span><i style='color:#62a8ea' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + this.Id + "' style='margin-right:10px'> " + this.LikeCount + " lượt thích</span>";
+                        spanLike = "<a href='javascript:void(0)' style='text-decoration: none; color:#ff6a00; padding:10px;font-weight:500' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
+
                     } else {
-                        spanLike = "<span><i  id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + this.Id + "' style='margin-right:10px'> " + this.LikeCount + " lượt thích</span>";
+                        spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#000;padding:10px;font-weight:500' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
                     }
                     var reportDiv = "";
                     var spanLike = "";
                     if (this.Liked) {
-                        spanLike = "<span><i style='color:#62a8ea' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + this.Id + "' style='margin-right:10px'> " + this.LikeCount + " lượt thích</span>";
+                        spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#ff6a00; padding:10px;font-weight:500' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
+                       
                     } else {
-                        spanLike = "<span><i  id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + this.Id + "' style='margin-right:10px'> " + this.LikeCount + " lượt thích</span>";
+                        spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#000;padding:10px;font-weight:500' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
                     }
                     var reportDiv = "";
                     if (this.AspNetUser.Id == curUserId) {
@@ -144,26 +146,32 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                                    '</div>' +
                                    '</div>';
                     }
-                    var post = "<li class='list-group-item panel' style='margin-bottom:10px;padding:25px' role='tabpanel' id='post_" + this.Id + "'>"
+                    var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + this.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
-                                           + "<a class='avatar' href='javascript:void(0)'>"
+                                           + "<a class='avatar' href='javascript:void(0)' style='width:50px;'>"
                                                 + "<img style='height:50px' class='img-responsive' src='" + this.AspNetUser.AvatarImage + "' alt='...'>"
                                             + "</a>"
                                         + "</div>"
                                         + "<div class='media-body'>"
-                                            + "<p class='media-heading' style='margin-bottom:0'>"
-                                            + '<a style="font-weight:bold" class="comment-author" href="/profile/index?userid='+this.AspNetUser.Id+'">' + this.AspNetUser.FullName + '</a>'
-                                                + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
+                                            + "<p class='media-heading' style='margin-bottom:0;font-size: large;'>"
+                                            + '<a style="font-weight:bold;color:#ff6a00" class="comment-author" href="/profile/index?userid=' + this.AspNetUser.Id + '">' + this.AspNetUser.FullName + '</a>'
+                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; đã đăng một bài viết</span>"
                                             + "</p>"
-                                            + "<small>" + this.PostAge + "</small>"
-                                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px'>" + content + "</div>"
+                                            + "<small style='color:#76838f'>" + this.PostAge + "</small>"
+                                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px;font-size: large;font-weight: 500;'>" + content + "</div>"
                                             + "<div class='comment-actions'>"
-                                            + "<div style='font-size:13px' class='text-left'>"
-                                                + spanLike
-                                                + "<span><i class='text-like fa fa-lg fa-comments-o'></i></span><span style='margin-right:10px' id='commentOfPost_" + this.Id + "'> " + this.CommentCount + " lượt bình luận</span>"
+                                            + "<div style='font-size:13px;color: #76838f;' class='text-right'>"
+                                                + "<span style='margin-right:5px' id='likeOfPost_" + this.Id + "'> " + this.LikeCount + " lượt thích</span>"
+                                                + "<span style='margin-right:10px' id='commentOfPost_" + this.Id + "'> " + this.CommentCount + " bình luận</span>"
                                             + "</div>"
                                             + "</div>"
+
+                                            +"<div style='margin-top:10px;border-top-style:groove;border-top-width:0.3px;border-bottom-style:groove;border-bottom-width:0.3px;padding-top:10px;padding-bottom:10px'>"
+                                            +spanLike
+                                            + "<a href='#' style='text-decoration: none;padding:10px;color:#000;font-weight:500'><i class='text-like fa fa-lg fa-comments-o'></i>&nbsp;Bình Luận</a>"
+                                            +"</div>"
+
                                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
                                              + '<form id="comment-form_' + this.Id + '" class="comment-form" method="post" autocomplete="off"><input type="hidden" name="postId" value="' + this.Id + '"/>'
                                             + '<input name="content" id="contentDetail_' + this.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px" placeholder="Viết bình luận của bạn..."/>'
@@ -239,9 +247,10 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                     }
                     var spanLike = "";
                     if (this.Liked) {
-                        spanLike = "<span><i style='color:#62a8ea' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + this.Id + "' style='margin-right:10px'> " + this.LikeCount + " lượt thích</span>";
+                        spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#ff6a00; padding:10px;font-weight:500' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
+
                     } else {
-                        spanLike = "<span><i  id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + this.Id + "' style='margin-right:10px'> " + this.LikeCount + " lượt thích</span>";
+                        spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#000;padding:10px;font-weight:500' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
                     }
                     var reportDiv = "";
                     if (this.AspNetUser.Id == userId) {
@@ -258,26 +267,32 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                                    '</div>' +
                                    '</div>';
                     }
-                    var post = "<li class='list-group-item panel' style='margin-bottom:10px;padding:25px' role='tabpanel' id='post_" + this.Id + "'>"
+                    var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + this.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
-                                           + "<a class='avatar' href='javascript:void(0)'>"
+                                           + "<a class='avatar' href='javascript:void(0)' style='width:50px;'>"
                                                 + "<img style='height:50px' class='img-responsive' src='" + this.AspNetUser.AvatarImage + "' alt='...'>"
                                             + "</a>"
                                         + "</div>"
                                         + "<div class='media-body'>"
-                                            + "<p class='media-heading' style='margin-bottom:0'>"
-                                            + '<a style="font-weight:bold" class="comment-author" href="/profile/index?userid=' + this.AspNetUser.Id + '">' + this.AspNetUser.FullName + '</a>'
-                                                + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
+                                            + "<p class='media-heading' style='margin-bottom:0;font-size: large;'>"
+                                            + '<a style="font-weight:bold;color:#ff6a00" class="comment-author" href="/profile/index?userid=' + this.AspNetUser.Id + '">' + this.AspNetUser.FullName + '</a>'
+                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; đã đăng một bài viết</span>"
                                             + "</p>"
-                                            + "<small>" + this.PostAge + "</small>"
-                                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px'>" + content + "</div>"
+                                            + "<small style='color:#76838f'>" + this.PostAge + "</small>"
+                                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px;font-size: large;font-weight: 500;'>" + content + "</div>"
                                             + "<div class='comment-actions'>"
-                                            + "<div style='font-size:13px' class='text-left'>"
-                                                + spanLike
-                                                + "<span><i class='text-like fa fa-lg fa-comments-o'></i></span><span style='margin-right:10px' id='commentOfPost_" + this.Id + "'> " + this.CommentCount + " lượt bình luận</span>"
+                                            + "<div style='font-size:13px;color: #76838f;' class='text-right'>"
+                                              + "<span style='margin-right:5px' id='likeOfPost_" + this.Id + "'> " + this.LikeCount + " lượt thích</span>"
+                                                + "<span style='margin-right:10px' id='commentOfPost_" + this.Id + "'> " + this.CommentCount + " bình luận</span>"
                                             + "</div>"
                                             + "</div>"
+
+                                            + "<div style='margin-top:10px;border-top-style:groove;border-top-width:0.3px;border-bottom-style:groove;border-bottom-width:0.3px;padding-top:10px;padding-bottom:10px'>"
+                                            + spanLike
+                                            + "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500'><i class='text-like fa fa-lg fa-comments-o'></i>&nbsp;Bình Luận</a>"
+                                            + "</div>"
+                    
                                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
                                              + '<form id="comment-form_' + this.Id + '" class="comment-form" method="post" autocomplete="off"><input type="hidden" name="postId" value="' + this.Id + '"/>'
                                             + '<input name="content" id="contentDetail_' + this.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px" placeholder="Viết bình luận của bạn..."/>'
@@ -351,9 +366,10 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
                     }
                     var spanLike = "";
                     if (this.Liked) {
-                        spanLike = "<span><i style='color:#62a8ea' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + this.Id + "' style='margin-right:10px'> " + this.LikeCount + " lượt thích</span>";
+                        spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#ff6a00; padding:10px;font-weight:500' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
+
                     } else {
-                        spanLike = "<span><i  id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + this.Id + "' style='margin-right:10px'> " + this.LikeCount + " lượt thích</span>";
+                        spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#000;padding:10px;font-weight:500' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
                     }
                     var reportDiv = "";
                     if (this.AspNetUser.Id == userId) {
@@ -370,30 +386,36 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
                                    '</div>' +
                                    '</div>';
                     }
-                    var post = "<li class='list-group-item panel' style='margin-bottom:10px;padding:25px' role='tabpanel' id='post_" + this.Id + "'>"
+                    var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + this.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
-                                           + "<a class='avatar' href='javascript:void(0)'>"
+                                           + "<a class='avatar' href='javascript:void(0)' style='width:50px;'>"
                                                 + "<img style='height:50px' class='img-responsive' src='" + this.AspNetUser.AvatarImage + "' alt='...'>"
                                             + "</a>"
                                         + "</div>"
                                         + "<div class='media-body'>"
-                                            + "<p class='media-heading' style='margin-bottom:0'>"
-                                            + '<a style="font-weight:bold" class="comment-author" href="/profile/index?userid=' + this.AspNetUser.Id + '">' + this.AspNetUser.FullName + '</a>'
-                                                + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
+                                            + "<p class='media-heading' style='margin-bottom:0;font-size: large;'>"
+                                            + '<a style="font-weight:bold; color: #ff6a00;" class="comment-author" href="/profile/index?userid=' + this.AspNetUser.Id + '">' + this.AspNetUser.FullName + '</a>'
+                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; đã đăng một bài viết</span>"
                                             + "</p>"
-                                            + "<small>" + this.PostAge + "</small>"
-                                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px'>" + content + "</div>"
+                                            + "<small style='color:#76838f'>" + this.PostAge + "</small>"
+                                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px;font-size: large;font-weight: 500;'>" + content + "</div>"
                                             + "<div class='comment-actions'>"
-                                            + "<div style='font-size:13px' class='text-left'>"
-                                                + spanLike
-                                                + "<span><i class='text-like fa fa-lg fa-comments-o'></i></span><span style='margin-right:10px' id='commentOfPost_" + this.Id + "'> " + this.CommentCount + " lượt bình luận</span>"
+                                            + "<div style='font-size:13px;color: #76838f;' class='text-right'>"
+                                               + "<span style='margin-right:5px' id='likeOfPost_" + this.Id + "'> " + this.LikeCount + " lượt thích</span>"
+                                                + "<span style='margin-right:10px' id='commentOfPost_" + this.Id + "'> " + this.CommentCount + " bình luận</span>"
                                             + "</div>"
                                             + "</div>"
+
+                                            + "<div style='margin-top:10px;border-top-style:groove;border-top-width:0.3px;border-bottom-style:groove;border-bottom-width:0.3px;padding-top:10px;padding-bottom:10px'>"
+                                            + spanLike
+                                            + "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500'><i class='text-like fa fa-lg fa-comments-o'></i>&nbsp;Bình Luận</a>"
+                                            + "</div>"
+
                                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
                                              + '<form id="comment-form_' + this.Id + '" class="comment-form" method="post" autocomplete="off"><input type="hidden" name="postId" value="' + this.Id + '"/>'
                                             + '<input name="content" id="contentDetail_' + this.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px" placeholder="Viết bình luận của bạn..."/>'
-                                            + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style="position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2" onclick="addImageComment(' + this.Id + ')"></button>'
+                                            + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style=" color: #ff6a00;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2" onclick="addImageComment(' + this.Id + ')"></button>'
                                             + '<div style="height:0px;overflow:hidden">'
                                             + '<input type="file" id="selectImageComment_' + this.Id + '" name="image" /></div></div></form>'
                                             + '<div id="previewImageComment_' + this.Id + '" class="example margin-0" style="display:none"><div data-role="container">'
@@ -461,10 +483,11 @@ function loadSpecificPost(userId, postId, actionName, loadMoreCmtActionName, loa
                         moreCmtBtn = "<div id='moreCmt_" + dt.Id + "'><a href='javascript:void(0)' onclick='loadMoreComt(" + dt.Id + ")'>Xem thêm bình luận</a>";
                     }
                     var spanLike = "";
-                    if (dt.Liked) {
-                        spanLike = "<span><i style='color:#62a8ea' id='likeIcon_" + dt.Id + "' onclick='likeUnlikePost(" + dt.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + dt.Id + "' style='margin-right:10px'> " + dt.LikeCount + " lượt thích</span>";
+                    if (this.Liked) {
+                        spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#ff6a00; padding:10px;font-weight:500' id='likeIcon_" + dt.Id + "' onclick='likeUnlikePost(" + dt.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
+
                     } else {
-                        spanLike = "<span><i  id='likeIcon_" + dt.Id + "' onclick='likeUnlikePost(" + dt.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + dt.Id + "' style='margin-right:10px'> " + dt.LikeCount + " lượt thích</span>";
+                        spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#000;padding:10px;font-weight:500' id='likeIcon_" + dt.Id + "' onclick='likeUnlikePost(" + dt.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
                     }
                     var reportDiv = "";
                     if (dt.AspNetUser.Id == userId) {
@@ -481,30 +504,36 @@ function loadSpecificPost(userId, postId, actionName, loadMoreCmtActionName, loa
                                    '</div>' +
                                    '</div>';
                     }
-                    var post = "<li class='list-group-item panel' style='margin-bottom:10px;padding:25px' role='tabpanel' id='post_" + dt.Id + "'>"
+                    var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + dt.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
-                                           + "<a class='avatar' href='javascript:void(0)'>"
+                                           + "<a class='avatar' href='javascript:void(0)' style='width:50px;'>"
                                                 + "<img style='height:50px' class='img-responsive' src='" + dt.AspNetUser.AvatarImage + "' alt='...'>"
                                             + "</a>"
                                         + "</div>"
                                         + "<div class='media-body'>"
-                                            + "<p class='media-heading' style='margin-bottom:0'>"
-                                            + '<a style="font-weight:bold" class="comment-author" href="/profile/index?userid=' + dt.AspNetUser.Id + '">' + dt.AspNetUser.FullName + '</a>'
-                                                + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
+                                            + "<p class='media-heading' style='margin-bottom:0;font-size: large;'>"
+                                            + '<a style="font-weight:bold; color: #ff6a00;" class="comment-author" href="/profile/index?userid=' + dt.AspNetUser.Id + '">' + dt.AspNetUser.FullName + '</a>'
+                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; đã đăng một bài viết</span>"
                                             + "</p>"
                                             + "<small>" + dt.PostAge + "</small>"
-                                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px'>" + content + "</div>"
+                                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px;font-size: large;font-weight: 500;'>" + content + "</div>"
                                             + "<div class='comment-actions'>"
-                                            + "<div style='font-size:13px' class='text-left'>"
-                                                + spanLike
-                                                + "<span><i class='text-like fa fa-lg fa-comments-o'></i></span><span style='margin-right:10px' id='commentOfPost_" + dt.Id + "'> " + dt.CommentCount + " lượt bình luận</span>"
+                                            + "<div style='font-size:13px;color: #76838f;' class='text-right'>"
+                                               + "<span style='margin-right:5px' id='likeOfPost_" + this.Id + "'> " + this.LikeCount + " lượt thích</span>"
+                                                + "<span style='margin-right:10px' id='commentOfPost_" + dt.Id + "'> " + dt.CommentCount + " bình luận</span>"
                                             + "</div>"
                                             + "</div>"
+
+                                            + "<div style='margin-top:10px;border-top-style:groove;border-top-width:0.3px;border-bottom-style:groove;border-bottom-width:0.3px;padding-top:10px;padding-bottom:10px'>"
+                                            + spanLike
+                                            + "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500'><i class='text-like fa fa-lg fa-comments-o'></i>&nbsp;Bình Luận</a>"
+                                            + "</div>"
+
                                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
                                              + '<form id="comment-form_' + dt.Id + '" class="comment-form" method="post" autocomplete="off"><input type="hidden" name="postId" value="' + dt.Id + '"/>'
                                             + '<input name="content" id="contentDetail_' + dt.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px" placeholder="Viết bình luận của bạn..."/>'
-                                            + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style="position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2" onclick="addImageComment(' + dt.Id + ')"></button>'
+                                            + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style="color: #ff6a00;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2" onclick="addImageComment(' + dt.Id + ')"></button>'
                                             + '<div style="height:0px;overflow:hidden">'
                                             + '<input type="file" id="selectImageComment_' + dt.Id + '" name="image" /></div></div></form>'
                                             + '<div id="previewImageComment_' + dt.Id + '" class="example margin-0" style="display:none"><div data-role="container">'
@@ -655,9 +684,10 @@ function prependPost(data, userId) {
     }
     var spanLike = "";
     if (this.Liked) {
-        spanLike = "<span><i style='color:#62a8ea' id='likeIcon_" + data.Id + "' onclick='likeUnlikePost(" + data.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + data.Id + "' style='margin-right:10px'> " + data.LikeCount + " lượt thích</span>";
+        spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#ff6a00; padding:10px;font-weight:500' id='likeIcon_" + data.Id + "' onclick='likeUnlikePost(" + data.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
+
     } else {
-        spanLike = "<span><i  id='likeIcon_" + data.Id + "' onclick='likeUnlikePost(" + data.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + data.Id + "' style='margin-right:10px'> " + data.LikeCount + " lượt thích</span>";
+        spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#000;padding:10px;font-weight:500' id='likeIcon_" + data.Id + "' onclick='likeUnlikePost(" + data.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
     }
     var reportDiv = '<div style="position: absolute;right:5px;top:15px;width: 30px;">' +
           '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
@@ -671,30 +701,37 @@ function prependPost(data, userId) {
                    '</div>' +
                    '</div>' +
                    '</div>';
-    var post = "<li class='list-group-item panel' style='margin-bottom:10px;padding:25px' role='tabpanel' id='post_" + data.Id + "'>"
+    var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + data.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
-                                           + "<a class='avatar' href='javascript:void(0)'>"
+                                           + "<a class='avatar' href='javascript:void(0)' style='width:50px;'>"
                                                 + "<img style='height:50px' class='img-responsive' src='" + data.AspNetUser.AvatarImage + "' alt='...'>"
                                             + "</a>"
                                         + "</div>"
                                         + "<div class='media-body'>"
-                                            + "<p class='media-heading' style='margin-bottom:0'>"
-                                            + '<a style="font-weight:bold" class="comment-author" href="/profile/index?userid=' + data.AspNetUser.Id + '">' + data.AspNetUser.FullName + '</a>'
-                                                + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
+                                            + "<p class='media-heading' style='margin-bottom:0;font-size: large;'>"
+                                            + '<a style="font-weight:bold; color: #ff6a00;" class="comment-author" href="/profile/index?userid=' + data.AspNetUser.Id + '">' + data.AspNetUser.FullName + '</a>'
+                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; đã đăng một bài viết</span>"
                                             + "</p>"
                                             + "<small>" + data.PostAge + "</small>"
-                                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px'>" + content + "</div>"
+                                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px;font-size: large;font-weight: 500;'>" + content + "</div>"
                                             + "<div class='comment-actions'>"
-                                            + "<div style='font-size:13px' class='text-left'>"
-                                                + spanLike
-                                                + "<span><i class='text-like fa fa-lg fa-comments-o'></i></span><span style='margin-right:10px' id='commentOfPost_" + data.Id + "'> " + data.CommentCount + " lượt bình luận</span>"
+                                            + "<div style='font-size:13px;color: #76838f;' class='text-right'>"
+                                            + "<span style='margin-right:5px' id='likeOfPost_" + data.Id + "'> " + data.LikeCount + " lượt thích</span>"
+                                                + "<span style='margin-right:10px' id='commentOfPost_" + data.Id + "'> " + data.CommentCount + " bình luận</span>"
                                             + "</div>"
                                             + "</div>"
+
+                                                + "<div style='margin-top:10px;border-top-style:groove;border-top-width:0.3px;border-bottom-style:groove;border-bottom-width:0.3px;padding-top:10px;padding-bottom:10px'>"
+                                            + spanLike
+                                            + "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500'><i class='text-like fa fa-lg fa-comments-o'></i>&nbsp;Bình Luận</a>"
+                                            + "</div>"
+
+
                                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
                                              + '<form id="comment-form_' + data.Id + '" class="comment-form" method="post" autocomplete="off"><input type="hidden" name="postId" value="' + data.Id + '"/>'
                                             + '<input name="content" id="contentDetail_' + data.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px" placeholder="Viết bình luận của bạn..."/>'
-                                            + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style="position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2" onclick="addImageComment(' + data.Id + ')"></button>'
+                                            + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style=" color: #ff6a00;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2" onclick="addImageComment(' + data.Id + ')"></button>'
                                             + '<div style="height:0px;overflow:hidden">'
                                             + '<input type="file" id="selectImageComment_' + data.Id + '" name="image" /></div></div></form>'
                                             + '<div id="previewImageComment_' + data.Id + '" class="example margin-0" style="display:none"><div data-role="container">'
@@ -1279,10 +1316,11 @@ function refreshPost(data) {
         moreCmtBtn = "<div id='moreCmt_" + data.Id + "'><a href='javascript:void(0)' onclick='loadMoreComt(" + data.Id + ")'>Xem thêm bình luận</a>";
     }
     var spanLike = "";
-    if (data.Liked) {
-        spanLike = "<span><i style='color:#62a8ea' id='likeIcon_" + data.Id + "' onclick='likeUnlikePost(" + data.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + data.Id + "' style='margin-right:10px'> " + data.LikeCount + " lượt thích</span>";
+    if (this.Liked) {
+        spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#ff6a00; padding:10px;font-weight:500' id='likeIcon_" + data.Id + "' onclick='likeUnlikePost(" + data.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
+
     } else {
-        spanLike = "<span><i  id='likeIcon_" + data.Id + "' onclick='likeUnlikePost(" + data.Id + ")' class='text-like fa fa-lg fa-thumbs-o-up' href='javascript:void(0)' role='button'></i></span><span id='likeOfPost_" + data.Id + "' style='margin-right:10px'> " + data.LikeCount + " lượt thích</span>";
+        spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#000;padding:10px;font-weight:500' id='likeIcon_" + data.Id + "' onclick='likeUnlikePost(" + data.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
     }
     var reportDiv = "";
     if (data.AspNetUser.Id == _curUserId) {
@@ -1299,26 +1337,33 @@ function refreshPost(data) {
                    '</div>' +
                    '</div>';
     }
-    var post = "<li class='list-group-item panel' style='margin-bottom:10px;padding:25px' role='tabpanel' id='post_" + data.Id + "'>"
+    var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + data.Id + "'>"
                    + "<div class='media'>"
                        + "<div class='media-left'>"
-                           + "<a class='avatar' href='javascript:void(0)'>"
+                           + "<a class='avatar' href='javascript:void(0)' style='width:50px;'>"
                                 + "<img style='height:50px' class='img-responsive' src='" + data.AspNetUser.AvatarImage + "' alt='...'>"
                             + "</a>"
                         + "</div>"
                         + "<div class='media-body'>"
-                           + "<p class='media-heading' style='margin-bottom:0'>"
-                            + '<a style="font-weight:bold" class="comment-author" href="/profile/index?userid=' + data.AspNetUser.Id + '">' + data.AspNetUser.FullName + '</a>'
-                                + "<span style='text-shadow: none'>đã đăng một bài viết</span>"
+                           + "<p class='media-heading' style='margin-bottom:0;font-size: large;'>"
+                            + '<a style="font-weight:bold; color: #ff6a00;" class="comment-author" href="/profile/index?userid=' + data.AspNetUser.Id + '">' + data.AspNetUser.FullName + '</a>'
+                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; đã đăng một bài viết</span>"
                             + "</p>"
                             + "<small>" + data.PostAge + "</small>"
-                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px'>" + content + "</div>"
+                            + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px;font-size: large;font-weight: 500;'>" + content + "</div>"
                             + "<div class='comment-actions'>"
-                             + "<div style='font-size:13px' class='text-left'>"
-                                                + spanLike
-                                                + "<span><i class='text-like fa fa-lg fa-comments-o'></i></span><span style='margin-right:10px' id='commentOfPost_" + data.Id + "'> " + data.CommentCount + " lượt bình luận</span>"
+                             + "<div style='font-size:13px;color: #76838f;' class='text-right'>"
+                                               + "<span style='margin-right:5px' id='likeOfPost_" + data.Id + "'> " + data.LikeCount + " lượt thích</span>"
+                                                + "<span style='margin-right:10px' id='commentOfPost_" + data.Id + "'> " + data.CommentCount + " bình luận</span>"
                                             + "</div>"
                             + "</div>"
+
+                                + "<div style='margin-top:10px;border-top-style:groove;border-top-width:0.3px;border-bottom-style:groove;border-bottom-width:0.3px;padding-top:10px;padding-bottom:10px'>"
+                                            + spanLike
+                                            + "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500'><i class='text-like fa fa-lg fa-comments-o'></i>&nbsp;Bình Luận</a>"
+                                            + "</div>"
+
+
                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
                              + '<form id="comment-form_' + data.Id + '" class="comment-form" method="post" autocomplete="off"><input type="hidden" name="postId" value="' + data.Id + '"/>'
                             + '<input name="content" id="contentDetail_' + data.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px" placeholder="Viết bình luận của bạn..."/>'
@@ -1622,9 +1667,9 @@ function likeUnlikePost(id) {
         success: function (data) {
             if (data.Succeed) {
                 if (data.Message == "Đã thích") {
-                    $("#likeIcon_" + id).css("color", "#62a8ea");
+                    $("#likeIcon_" + id).css("color", "#ff6a00");
                 } else if (data.Message == "Đã bỏ thích") {
-                    $("#likeIcon_" + id).removeAttr("style");
+                    $("#likeIcon_" + id).css("color", "#000000");
                 }
                 refreshLikeAndCommentNumber(id);
             } else {
@@ -1648,7 +1693,7 @@ function refreshLikeAndCommentNumber(id) {
                 $("#likeOfPost_" + id).empty();
                 $("#likeOfPost_" + id).append(" " + result.AdditionalData.LikeCount + " lượt thích");
                 $("#commentOfPost_" + id).empty();
-                $("#commentOfPost_" + id).append(" " + result.AdditionalData.CommentCount + " lượt bình luận");
+                $("#commentOfPost_" + id).append(" " + result.AdditionalData.CommentCount + " bình luận");
             } else {
                 showErrors(result.Errors);
                 showMessage("Không thể cập nhật.", "error", "OK");
