@@ -98,6 +98,10 @@
                         {
                             <span class='label label-lg label-outline label-dark'>@Utils.GetEnumDescription(OrderStatus.Cancel).ToString()</span>
                         }
+                        else if (Model.Status == (int)OrderStatus.CheckedIn)
+                        {
+                            <span class='label label-lg label-outline label-primary'>@Utils.GetEnumDescription(OrderStatus.CheckedIn).ToString()</span>
+                        }
                         else
                         {
                             <span class='label label-lg label-outline label-dark'>Không xác định</span>;

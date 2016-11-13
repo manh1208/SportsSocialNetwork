@@ -31,5 +31,10 @@ namespace SportsSocialNetwork.Controllers
         {
             return View();
         }
+
+        public ActionResult SearchResultNotFound()
+        {
+            return View();
+        }
     }
 }

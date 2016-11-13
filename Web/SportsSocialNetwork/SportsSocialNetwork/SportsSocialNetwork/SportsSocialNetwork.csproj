@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
@@ -3223,9 +3223,45 @@
     <Content Include="Content\friendly-chat\profile_placeholder.png" />
     <Content Include="Content\images\cam-icon.png" />
     <Content Include="Content\images\flag-xxl.png" />
+    <Content Include="Content\images\hss-alert-icon.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\logo_new.png" />
     <Content Include="Content\images\no_image.jpg" />
+    <Content Include="Content\img\editor.png" />
+    <Content Include="Content\img\loading-dark-bootstrap-gradient-small.gif" />
+    <Content Include="Content\img\loading-dark-bootstrap-gradient.gif" />
+    <Content Include="Content\img\loading-dark-bootstrap-small.gif" />
+    <Content Include="Content\img\loading-dark-bootstrap.gif" />
+    <Content Include="Content\img\loading-dark-glow-gradient-small.gif" />
+    <Content Include="Content\img\loading-dark-glow-gradient.gif" />
+    <Content Include="Content\img\loading-dark-glow-small.gif" />
+    <Content Include="Content\img\loading-dark-glow.gif" />
+    <Content Include="Content\img\loading-dark-gradient-small.gif" />
+    <Content Include="Content\img\loading-dark-gradient.gif" />
+    <Content Include="Content\img\loading-dark-mint-gradient-small.gif" />
+    <Content Include="Content\img\loading-dark-mint-gradient.gif" />
+    <Content Include="Content\img\loading-dark-mint-small.gif" />
+    <Content Include="Content\img\loading-dark-mint.gif" />
+    <Content Include="Content\img\loading-dark-small.gif" />
+    <Content Include="Content\img\loading-dark.gif" />
+    <Content Include="Content\img\loading-light-bootstrap-gradient-small.gif" />
+    <Content Include="Content\img\loading-light-bootstrap-gradient.gif" />
+    <Content Include="Content\img\loading-light-bootstrap-small.gif" />
+    <Content Include="Content\img\loading-light-bootstrap.gif" />
+    <Content Include="Content\img\loading-light-glow-gradient-small.gif" />
+    <Content Include="Content\img\loading-light-glow-gradient.gif" />
+    <Content Include="Content\img\loading-light-glow-small.gif" />
+    <Content Include="Content\img\loading-light-glow.gif" />
+    <Content Include="Content\img\loading-light-gradient-small.gif" />
+    <Content Include="Content\img\loading-light-gradient.gif" />
+    <Content Include="Content\img\loading-light-mint-gradient-small.gif" />
+    <Content Include="Content\img\loading-light-mint-gradient.gif" />
+    <Content Include="Content\img\loading-light-mint-small.gif" />
+    <Content Include="Content\img\loading-light-mint.gif" />
+    <Content Include="Content\img\loading-light-small.gif" />
+    <Content Include="Content\img\loading-light.gif" />
+    <Content Include="Content\img\shieldui-sprite.png" />
+    <Content Include="Content\img\stars.png" />
     <Content Include="Content\js\custom-script.js" />
     <Content Include="Content\js\post-script.js" />
     <Content Include="Content\js\shieldui-all.min.js" />
@@ -4012,6 +4048,7 @@
     <Content Include="Views\News\Category.cshtml" />
     <Content Include="Views\Mobile\NewsDetail.cshtml" />
     <Content Include="Views\SSN\PostDetail.cshtml" />
+    <Content Include="Views\Errors\SearchResultNotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -4032,7 +4069,6 @@
     <Folder Include="Areas\Api\Views\Shared\" />
     <Folder Include="Areas\Api\Views\Sport\" />
     <Folder Include="Areas\Moderator\Models\" />
-    <Folder Include="Content\img\" />
     <Folder Include="Views\Comment\" />
     <Folder Include="Views\Like\" />
     <Folder Include="Views\PostComment\" />
