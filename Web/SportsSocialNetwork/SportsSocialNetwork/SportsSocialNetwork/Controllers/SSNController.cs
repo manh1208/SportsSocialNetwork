@@ -157,10 +157,14 @@ namespace SportsSocialNetwork.Controllers
                             }).OrderBy(s => s.Value);
             ViewBag.Sport = sports;
             var postService = this.Service<IPostService>();
+            var errorUrl = Url.Action("SearchResultNotFound", "Errors");
             var post = postService.FirstOrDefaultActive(p => p.Active && p.Id == postId);
             if (post != null)
             {
                 ViewBag.PostId = postId;
+            }else
+            {
+                return Redirect(errorUrl);
             }
             return View();
         }
