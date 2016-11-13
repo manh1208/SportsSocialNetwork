@@ -276,7 +276,7 @@
            @if (User != null && User.Identity.IsAuthenticated)
            {
             <!-- Site Navbar Seach -->
-            <div class="navbar-search-overlap col-md-6" style="padding:0; margin-top:15px;" id="site-navbar-search">
+            <div class="navbar-search-overlap col-md-6" style="padding:0; margin-top:15px;" id="site-navbar-search" tabindex="0,">
                 <form role="search" autocomplete="off">
                     <div class="form-group">
                         <div class="input-search" style="border:groove 1px;border-radius:5px;">
@@ -362,12 +362,16 @@
                 Site.run();
                 loadAvatar();
                 $("#showSearch").hide();
-                $("#search-input").blur(function () {
-                    $("#showSearch").hide();
-                })
-                .focus(function () {
-                    $("#showSearch").show();
-                })
+               
+
+                $("body").click(function (e) {
+                    if (e.target.id !== 'site-navbar-search') {
+                        $("#showSearch").hide();
+                    }
+                });
+                $("#search-input").focus(function () {
+                   $("#showSearch").show();
+               })
 
                 checkActive();
             });
