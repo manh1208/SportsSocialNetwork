@@ -112,7 +112,7 @@
             padding:20px 20px;
         }
 
-        .active {
+        .active-menu {
             color: #ff6a00 !important;
             border-bottom-style: solid ;
             border-bottom-width:3px;
@@ -410,12 +410,38 @@
     <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
     <script src="~/signalr/hubs"></script>
     <script>
-        
+        'use strict';
+
+        var Site = window.Site;
             $(document).ready(function () {
+                //Site.run();
                 loadAvatar();
+                $("#showSearch").hide();
+
+
+                $("body").click(function (e) {
+                    if (e.target.id !== 'site-navbar-search') {
+                        $("#showSearch").hide();
+                    }
+                });
+                $("#search-input").focus(function () {
+                    $("#showSearch").show();
+                })
+
+                checkActive();
             });
     </script>
     <script>
+        function checkActive() {
+            var title = "@ViewBag.Type";
+            if (title == "news") {
+                $("#menu-home").removeClass("active-menu");
+                $("#menu-news").addClass("active-menu");
+            } else {
+                $("#menu-home").addClass("active-menu");
+                $("#menu-news").removeClass("active-menu");
+            }
+        }
         function loadAvatar() {
             $.ajax({
                 type: 'POST',
@@ -655,21 +681,21 @@
             //            '</div>' +
             //        '</a>';
             var noti = '<a class="list-group-item" href="' + url + '" role="menuitem" style="' + styleUnread + '" onclick="markAsRead(' + data.Id + ')">' +
-                      '<div class="media">'+
-                        '<div class="media-left padding-right-10">'+
-                          '<span class="avatar avatar-sm avatar-online">'+
+                      '<div class="media">' +
+                        '<div class="media-left padding-right-10">' +
+                          '<span class="avatar avatar-sm avatar-online">' +
                             '<img src="' + image + '" alt="...">' +
 
-                          '</span>'+
-                        '</div>'+
-                        '<div class="media-body">'+
+                          '</span>' +
+                        '</div>' +
+                        '<div class="media-body">' +
 
-                          '<div class="media-detail" style="color:#000!important; font-weight:400">' + data.Message + '</div>' +
+                          '<div class="media-detail" style="color:#000!important; font-weight:400;font-size:14px">' + data.Message + '</div>' +
                           '<div class="media-meta">' +
                             '<time datetime="">' + data.CreateDateString + '</time>' +
                           '</div>' +
-                        '</div>'+
-                      '</div>'+
+                        '</div>' +
+                      '</div>' +
                       '</a>';
             return noti;
         }
@@ -750,7 +776,8 @@
             }
         });
     </script>
+    @RenderSection("Scripts", false)
 </body>
-@RenderSection("Scripts", false)
+
 
 </html>
