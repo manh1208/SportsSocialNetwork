@@ -1,10 +1,13 @@
 ﻿using HenchmenWeb.Models.Notifications;
+using Microsoft.AspNet.SignalR;
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Hubs;
 using SportsSocialNetwork.Models.Notifications;
+using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -281,12 +284,18 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                             List<string> registrationIds = GetToken(member.UserId);
 
+                            NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+
                             if (registrationIds != null && registrationIds.Count != 0)
                             {
-                                NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
-
                                 Android.Notify(registrationIds, null, notiModel);
                             }
+
+                            // Get the context for the Pusher hub
+                            IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                            // Notify clients in the group
+                            hubContext.Clients.User(notiModel.UserId).send(notiModel);
                         }
                     }
                 }
@@ -349,30 +358,55 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 post = service.CreatePost(post);
 
-                //Notify all group members
-                if (post.GroupId != null)
+                ////Notify all group members
+                //if (post.GroupId != null)
+                //{
+                //    List<GroupMember> memberList = GetMemberList(post.GroupId);
+
+                //    AspNetUser postedUser = aspNetUserService.FindUser(post.UserId);
+
+                //    foreach (var member in memberList)
+                //    {
+                //        if (!(member.UserId.Equals(post.UserId)))
+                //        {
+                //            Notification noti = notiService.SaveNoti(member.UserId, post.UserId, "Post", postedUser.FullName + " đã đăng một bài viết", (int)NotificationType.Post, post.Id, null, null);
+
+                //            List<string> registrationIds = GetToken(member.UserId);
+
+                //            if (registrationIds != null && registrationIds.Count != 0)
+                //            {
+                //                NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+
+                //                Android.Notify(registrationIds, null, notiModel);
+                //            }
+                //        }
+                //    }
+                //}
+
+                if (post.UserId != profileId)
                 {
-                    List<GroupMember> memberList = GetMemberList(post.GroupId);
+                    var _notificationService = this.Service<INotificationService>();
+                    var _userService = this.Service<IAspNetUserService>();
 
-                    AspNetUser postedUser = aspNetUserService.FindUser(post.UserId);
+                    AspNetUser sender = _userService.FindUser(post.UserId);
 
-                    foreach (var member in memberList)
-                    {
-                        if (!(member.UserId.Equals(post.UserId)))
-                        {
-                            Notification noti = notiService.SaveNoti(member.UserId, post.UserId, "Post", postedUser.FullName + " đã đăng một bài viết", (int)NotificationType.Post, post.Id, null, null);
+                    string title = Utils.GetEnumDescription(NotificationType.Post);
+                    int type = (int)NotificationType.Post;
+                    string message = sender.FullName + " đã đăng một bài viết lên tường nhà bạn";
 
-                            List<string> registrationIds = GetToken(member.UserId);
+                    Notification noti = _notificationService.CreateNoti(profileId, post.UserId, title, message, type, post.Id, null, null, null);
 
-                            if (registrationIds != null && registrationIds.Count != 0)
-                            {
-                                NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+                    //////////////////////////////////////////////
+                    //signalR noti
+                    NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
 
-                                Android.Notify(registrationIds, null, notiModel);
-                            }
-                        }
-                    }
+                    // Get the context for the Pusher hub
+                    IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                    // Notify clients in the group
+                    hubContext.Clients.User(notiModel.UserId).send(notiModel);
                 }
+
                 //Missing post sport
 
                 result = Mapper.Map<PostOveralViewModel>(post);

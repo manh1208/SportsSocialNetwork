@@ -25,7 +25,7 @@ namespace SportsSocialNetwork.Controllers
 
             foreach (var item in notiList)
             {
-                notiListVM.Add(this.PrepareNotificationViewModel(item));
+                notiListVM.Add(_notificationService.PrepareNoti(this.PrepareNotificationViewModel(item)));
             }
 
             return View();
@@ -46,7 +46,7 @@ namespace SportsSocialNetwork.Controllers
 
                 foreach (var noti in notiList)
                 {
-                    result.Add(PrepareNotificationViewModel(noti));
+                    result.Add(service.PrepareNoti(PrepareNotificationViewModel(noti)));
                 }
 
                 response = new ResponseModel<List<NotificationFullInfoViewModel>>(true, "Thông báo mới của bạn:", null, result);
@@ -163,6 +163,13 @@ namespace SportsSocialNetwork.Controllers
             string result = service.FirstOrDefaultActive(x => x.Id.Equals(id)).Id;
 
             return result;
+        }
+
+        public AspNetUserViewModel GetUser(string id)
+        {
+            var service = this.Service<IAspNetUserService>();
+
+            return Mapper.Map<AspNetUserViewModel> (service.FirstOrDefaultActive(x => x.Id.Equals(id)));
         }
     }
 }
