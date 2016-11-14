@@ -434,6 +434,8 @@ namespace SportsSocialNetwork.Controllers
             }
             var noti = new Notification();
             noti.UserId = field.Place.UserId;
+            noti.FromUserId = userId;
+            noti.CreateDate = DateTime.Now;
             noti.Message = User.Identity.Name + " đã đặt sân tại " + field.Name;
             noti.Title = "Đơn hàng mới";
             noti.Type = (int)NotificationType.Order;
