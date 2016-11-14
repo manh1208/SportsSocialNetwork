@@ -5,21 +5,35 @@
     Layout = "~/Views/Shared/_SSNLayout.cshtml";
 }
 
+@section Styles{
+<style>
+
+    a:hover{
+        color:#000!important;
+        text-decoration:underline!important;
+        
+    }
+    a:focus{
+        color:#000!important;
+    }
+    </style>
+}
+
 
 <div class="row">
     <div class="col-sm-6 col-sm-offset-3">
         <div class="panel">
-            <div class="panel-heading">
-                <h3 class="panel-title pull-left" style="padding: 20px 0 10px 20px;">Danh sách các thông báo của bạn</h3>
-                <a href="javascript:void(0)" class="panel-title pull-right" style="padding:20px 20px 10px 0; text-decoration:none;" onclick="markAllAsRead_page()"><i class="fa fa-check-circle-o"></i> Đánh dấu đã xem tất cả</a>
+            <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Danh sách các thông báo của bạn</h3>
             </div>
+            <a href="javascript:void(0)" class="panel-title text-center mark-all-read" style="padding:20px 20px 10px 0;font-size:medium; text-decoration:none;" onclick="markAllAsRead_page()"><i class="fa fa-check-circle-o"></i> Đánh dấu đã xem tất cả</a>
             <div class="clearfix"></div>
             <div class="panel-body">
                 <div class="list-group" id="listNotiPage">
                 </div>
             </div>
         </div>
-        
+
     </div>
 </div>
 
@@ -109,11 +123,11 @@
                         '<div class="row height-100">' +
                             '<div class="col-sm-2" style="padding-top:5px;">' +
                                 '<span class="avatar" style="width:90px;">' +
-                                    '<img class="img-responsive" src="' + image + '" style="width:90px;height:90px;" />' +
+                                    '<img class="img-responsive" src="' + image + '" style="width:50px;height:50px;margin:auto" />' +
                                 '</span>' +
                             '</div>' +
-                            '<div class="col-sm-9" style="padding-top:10px;margin-left:20px">' +
-                                '<h4 class="list-group-item-heading">' + data.Message + '</h4>' +
+                            '<div class="col-sm-9" style="padding-top:10px;margin-left:30px">' +
+                                '<h4 class="list-group-item-heading" style= "font-weight:400">' + data.Message + '</h4>' +
                                 '<p class="list-group-item-text">' + data.CreateDateString + '</p>' +
                             '</div>' +
                         '</div>' +

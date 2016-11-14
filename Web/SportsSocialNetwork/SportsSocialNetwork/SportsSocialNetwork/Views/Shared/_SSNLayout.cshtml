@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNet.Identity;
 @using SportsSocialNetwork.Models.Enumerable;
+@using SportsSocialNetwork.Models.Utilities;
 @{
     Layout = null;
 }
@@ -224,6 +225,16 @@
                                         </a>
                                     </form>
                                 </li>
+                                @if (User != null && User.IsInRole(Utils.GetEnumDescription(UserRole.PlaceOwner)))
+                                {
+                                    <li role="presentation">
+                                        <form action="@Url.Action("Index", "Place", new { area = "PlaceOwner" })" style="margin:10px" method="post" id="form-manage-place">
+                                            <a href="#" role="menuitem" onclick="managePlace()" style="color:#54616E;font-weight:500">
+                                                <span class="fa fa-map-marker"></span>&nbsp; Qua trang quản lý địa điểm
+                                            </a>
+                                        </form>
+                                    </li>
+                                }
                                 <li role="presentation">
                                     <form action="" style="margin:10px" method="post" id="form-">
                                         <a href="#" role="menuitem" onclick="" style="color:#54616E;font-weight:500">
@@ -266,6 +277,7 @@
                                         </a>
                                     </form>
                                 </li>
+                               
                                 <li role="presentation">
                                     <form action="@Url.Action("LogOff","Account", new { area = "" })" style="margin:10px" method="post" id="form-log-out">
                                         @Html.AntiForgeryToken()
@@ -451,6 +463,10 @@
         function homePage() {
             $("#form-home-page").submit();
         }
+
+        function managePlace() {
+            $("#form-manage-place").submit();
+        }
         var hasUser = false;
         var hasGroup = false;
         $("#search-input").on("keyup", function () {
@@ -498,7 +514,7 @@
             $("#showSearch").append("<div style='background-color:#ffefdf;margin-bottom:5px' tabindex='0' class='padding-left-10'>Cá nhân</div>");
             $(data.userList).each(function () {
                 var hobby = "";
-                if (this.sameSport != 0 && this.Id!= '@User.Identity.GetUserId()') {
+                if (this.sameSport != 0 && this.Id != '@User.Identity.GetUserId()') {
                     hobby = "<span class='comment-content'><p>Có chung " + this.sameSport
                         + " sở thích</p></span>";
                 }
