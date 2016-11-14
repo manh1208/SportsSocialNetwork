@@ -382,6 +382,31 @@
             });
         }
 
+        function shareEvent(id) {
+            showConfirmMessage("Bạn có chắc chắn muốn chia sẻ sự kiện này không?",
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("shareEvent")',
+                        data: { id: id },
+                        success: function (data) {
+                            if (data.Succeed) {
+                                showMessage("Chia sẻ sự kiện thành công", "success", "OK");
+                                RefreshTable();
+                            }
+                            else {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        },
+                        error: function (error) {
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        }
+                    });
+                }
+            });
+        }
+
         function RefreshTable() {
             count = 1;
             var oTable = $("#listEventTable").dataTable();
@@ -516,7 +541,8 @@
                             var viewDetailBtn = "<a href='javascript:void(0)' class='btn btn-success' data-target='#modalEventDetail' data-toggle='modal' onclick='showDetail(" + o[0] + ")'><i class='fa fa-eye' aria-hidden='true'></i></a>";
                             var updateBtn = "<a href='javascript:void(0)' class='btn btn-warning' id='updateBtn' data-target='#updateEventModal' data-toggle='modal' onclick='showUpdate(" + o[0] + ")'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>";
                             var deleteBtn = "<a href='javascript:void(0)' class='btn btn-danger' onclick='deleteEvent(" + o[0] + ")'><i class='fa fa-trash-o' aria-hidden='true'></i></a>";
-                            return viewDetailBtn + '&nbsp;' + updateBtn + '&nbsp;' + deleteBtn;;
+                            var shareBtn = "<a href='javascript:void(0)' class='btn btn-dark' onclick='shareEvent(" + o[0] + ")'><i class='fa fa-share-alt' aria-hidden='true'></i></a>";
+                            return viewDetailBtn + '&nbsp;' + updateBtn + '&nbsp;' + shareBtn + '&nbsp;' + deleteBtn;
                         }
                     }
 
