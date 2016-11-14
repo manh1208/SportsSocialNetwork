@@ -159,9 +159,11 @@ namespace SportsSocialNetwork.Controllers
 
         public string GetUserId(string id) {
             var service = this.Service<IAspNetUserService>();
-
-            string result = service.FirstOrDefaultActive(x => x.Id.Equals(id)).Id;
-
+            string result = "";
+            if(service.FirstOrDefaultActive(x => x.Id.Equals(id)) != null)
+            {
+                result = service.FirstOrDefaultActive(x => x.Id.Equals(id)).Id;
+            }
             return result;
         }
     }
