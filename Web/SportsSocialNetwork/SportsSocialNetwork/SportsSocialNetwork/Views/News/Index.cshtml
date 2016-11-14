@@ -42,8 +42,8 @@
 <div class="col-sm-12">
     <div class="row">
         <div class="panel">
-            <div class="panel-body" style="padding-top:0;">
-                <div class="col-sm-12">
+            <div class="panel-body" style="padding:0 0 20px 0;">
+                <div class="col-sm-12" style="padding:0;">
                     <div class="navbar navbar-default navbar-mega">
                         <div class="container-fluid" style="background-color:#ff6a00;">
                             <div class="navbar-header">
@@ -76,7 +76,7 @@
                     <div>
                         <div style="width:100%;height:500px;background-size:cover;background-repeat:no-repeat;background-image:url('@PopularNews.First().Image')"></div>
                         @*<img class="img-responsive" src="@PopularNews.First().Image" />*@
-                        <h1><a href="/News/NewsDetail/@PopularNews.First().Id" style="text-decoration:none; color:#76838f;">@PopularNews.First().Title</a></h1>
+                        <h1><a href="/News/NewsDetail/@PopularNews.First().Id" style="text-decoration:none; color:#76838f; font-weight:500;">@PopularNews.First().Title</a></h1>
                         <p id="hotnewsContent">
                             @*minifyString('@Html.Raw(PopularNews.First().NewsContent)')*@
                         </p>
@@ -101,7 +101,7 @@
                                                         <i class="fa fa-newspaper-o" aria-hidden="true"></i>
                                                     </div>
                                                     <div class="media-body">
-                                                        <h6 class="media-heading">@item.Title</h6>
+                                                        <h4 class="media-heading" style="font-weight:500;">@item.Title</h4>
                                                         @*<time class="media-meta" datetime="2015-06-11T18:29:20+08:00">2 days ago</time>*@
                                                     </div>
                                                 </div>
@@ -137,7 +137,7 @@
 
                                                         </div>
                                                         @*<img class="img-responsive" width="80" height="80" src="@i.Image" />*@
-                                                        <h5>@i.Title</h5>
+                                                        <h5 style="font-weight:500;">@i.Title</h5>
                                                     </a>
                                                 </div>
                                             }

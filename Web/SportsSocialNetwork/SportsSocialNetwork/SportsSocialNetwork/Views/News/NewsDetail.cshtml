@@ -12,8 +12,8 @@
 <div class="col-sm-12">
     <div class="row">
         <div class="panel">
-            <div class="panel-body" style="padding-top:0;">
-                <div class="col-sm-12">
+            <div class="panel-body" style="padding:0 0 20px 0;">
+                <div class="col-sm-12" style="padding:0;">
                     <div class="navbar navbar-default navbar-mega">
                         <div class="container-fluid" style="background-color:#ff6a00;">
                             <div class="navbar-header">
@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="col-sm-9">
-                    <h1>@Model.Title</h1>
+                    <h1 style="font-weight:500;">@Model.Title</h1>
 
                     <div>
                         @Html.Raw(Model.NewsContent)
@@ -91,7 +91,7 @@
                                                 <i class="fa fa-newspaper-o" aria-hidden="true"></i>
                                             </div>
                                             <div class="media-body">
-                                                <h6 class="media-heading">@item.Title</h6>
+                                                <h6 class="media-heading" style="color:#76838f; font-weight:500;">@item.Title</h6>
                                                 @*<time class="media-meta" datetime="2015-06-11T18:29:20+08:00">2 days ago</time>*@
                                             </div>
                                         </div>
