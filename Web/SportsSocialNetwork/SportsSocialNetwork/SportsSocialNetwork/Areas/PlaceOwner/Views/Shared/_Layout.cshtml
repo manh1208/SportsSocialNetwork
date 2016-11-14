@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity;
-
+@using SportsSocialNetwork.Models.Enumerable;
 <!DOCTYPE html>
 <html class="no-js before-run" lang="en">
 <head>
@@ -131,7 +131,88 @@
                 <!-- End Navbar Toolbar -->
                 <!-- Navbar Toolbar Right -->
                 <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
-                    <li class="dropdown">
+                    @{
+                        if (User != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" href="javascript:void(0)" title="Notifications" aria-expanded="false" style="color:#263238; font-weight:500;font-size:medium"
+                                   data-animation="slide-bottom" role="button">
+                                    <i class="icon wb-bell" aria-hidden="true" id="notibell"></i>
+                                    @*<span class="badge badge-danger up" id="notiCount"></span>*@
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media" role="menu" id="listNoti">
+                                    <li class="dropdown-menu-header" role="presentation" id="headNoti" style="padding: 10px 20px;background-color: #ffefdf;">
+                                        <h5 id="notiTitle" style="color: #000000!important;font-weight: 500;font-size: medium;">THÔNG BÁO</h5>
+                                        @*<span class="label label-round label-danger" id="notiLabelCount"></span>*@
+                                    </li>
+
+
+                                    <li class="list-group notiDiv" role="presentation" style="max-height:400px;">
+                                        <div data-role="container" style="height:400px;" class="notiDiv">
+                                            <div data-role="content" id="notiItems" class="notiDiv">
+                                                @*<a class="list-group-item" href="javascript:void(0)" role="menuitem">
+                                                        <div class="media">
+                                                            <div class="media-left padding-right-10">
+                                                                <i class="icon wb-order bg-red-600 white icon-circle" aria-hidden="true"></i>
+                                                            </div>
+                                                            <div class="media-body">
+                                                                <h6 class="media-heading">A new order has been placed</h6>
+                                                                <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">5 hours ago</time>
+                                                            </div>
+                                                        </div>
+                                                    </a>*@
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="dropdown-menu-footer" role="presentation" id="notiBottom">
+                                        <a class="dropdown-menu-footer-btn" href="javascript:void(0)" role="button" onclick="markAllAsRead()"
+                                           style="color:#000!important; font-weight:400">
+                                            <i class="icon wb-check-circle" aria-hidden="true"></i>Đánh dấu xem tất cả
+                                        </a>
+                                        <a href="@Url.Action("Index", "Notification")" role="menuitem"
+                                           style="color:#000!important; font-weight:400">
+                                            Xem tất cả thông báo
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="dropdown">
+                                <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
+                                   data-animation="slide-bottom" role="button">
+                                    <span id="ava" class="avatar avatar-online">
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu width-250" role="menu">
+                                    <li role="presentation">
+                                        <a href="@Url.Action("index", "Place", new { area = "PlaceOwner"})" role="menuitem">
+                                            <span class="fa fa-globe"></span> Trang chủ
+                                        </a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="javascript:void(0)" role="menuitem" onclick="showUpdateAccNLModal()">
+                                            <span class="fa fa-user"></span> Cập nhật thông tin thanh toán
+                                        </a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="@Url.Action("index", "SSN", new { area = ""})" role="menuitem">
+                                            <span class="fa fa-globe"></span> Quay lại mạng xã hội
+                                        </a>
+                                    </li>
+                                    <li role="presentation">
+                                        <form action="@Url.Action("LogOff","Account", new { area = "" })" method="post" id="form-log-out" hidden>
+                                            @Html.AntiForgeryToken()
+
+                                        </form>
+                                        <a href="#" role="menuitem" onclick="logout()">
+                                            <span class="icon wb-power"></span> Đăng xuất
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                    }
+                    @*<li class="dropdown">
                         <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
                            data-animation="slide-bottom" role="button">
                             <span class="avatar avatar-online">
@@ -265,7 +346,7 @@
                                 <a href="javascript:void(0)" role="menuitem">
                                     <span class="fa fa-list-alt"></span> Quản lý địa điểm B
                                 </a>
-                            </li>*@
+                            </li>
                             <li role="presentation">
                                 <form action="@Url.Action("LogOff","Account", new { area = "" })" method="post" id="form-log-out" hidden>
                                     @Html.AntiForgeryToken()
@@ -276,7 +357,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li>*@
                 </ul>
                 <!-- End Navbar Toolbar Right -->
             </div>
@@ -477,7 +558,246 @@
     <!--Custom Script-->
     <script src="~/Content/js/custom-script.js"></script>
     <script src="~/Content/ckeditor/ckeditor.js"></script>
+
+    <!--Signalr-->
+    <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+
+    <script src="~/Content/assets/vendor/select2/select2.full.js"></script>
+
     <script>
+
+        var totalUnreadCount = 0;
+        var _notiFirstSkip = 0;
+        var _notiFirstTake = 10;
+        var _notiSkip = 10;
+        var _notiTake = 5;
+
+        function loadAvatar() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetAvatarImage", "SSN", new { area = ""})',
+                async: false,
+                success: function (result) {
+                    if (result.Succeed) {
+                        $("#ava").empty();
+                        if (result.AdditionalData != null) {
+                            $("#ava").append('<img src="' + result.AdditionalData + '" style="height:30px;width:30px"><i></i>');
+                        }
+                    }
+                }
+            });
+        }
+
+        $(function signalr() {
+            // Declare a proxy to reference the hub.
+            var commenthub = $.connection.realTimeHub;
+            // Create a function that the hub can call to broadcast messages.
+            commenthub.client.send = function (c) {
+                //process
+
+                appendNoti(c);
+
+            };
+            // Start the connection.
+            $.connection.hub.start();
+        });
+
+        $(document).ready(function () {
+            loadAvatar();
+            //Load Noti Count
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetUnreadCount", "Notification", new { area = "" })',
+                data: { "userId": '@User.Identity.GetUserId()' },
+                success: function (result) {
+                    if (result != "") {
+                        totalUnreadCount = parseInt(result);
+                        if (totalUnreadCount != 0) {
+                            showPopNoti(totalUnreadCount);
+                        }
+                    }
+                }
+
+            });
+
+            //Load Noti List
+            @*$.ajax({
+                type: 'POST',
+                url: '@Url.Action("LoadNoti", "Notification")',
+                data: { "userId": '@User.Identity.GetUserId()', "skip": _notiFirstSkip , "take": _notiFirstTake },
+                success: function (result) {
+                    var data = result.Data;
+
+                    $(data).each(function () {
+                        var noti = renderNoti(this);
+                        $("#notiItems").append(noti);
+
+                    })
+                }
+
+            });*@
+            loadNoti(_notiFirstSkip, _notiFirstTake);
+        })
+
+        function appendNoti(data) {
+            var noti = renderNoti(data);
+            totalUnreadCount++;
+            $("#notiItems").prepend(noti);
+            if (totalUnreadCount != 0) {
+                showPopNoti(totalUnreadCount);
+            }
+        }
+
+        function renderNoti(data) {
+            var image = "";
+            var url = "";
+            var colorUnread = "";
+
+            if (data.MarkRead == false) {
+                styleUnread = "background-color:#f1f0f0;";
+            } else {
+                styleUnread = "";
+            }
+
+
+            if (data.Type == parseInt('@((int)NotificationType.Post)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/SSN/PostDetail?postId=" + data.PostId;
+            } else if (data.Type == parseInt('@((int)NotificationType.Order)')) {
+                image = "/Content/images/flag-xxl.png";
+                url = "/Order";
+            } else if (data.Type == parseInt('@((int)NotificationType.Invitation)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Invitation";
+            } else if (data.Type == parseInt('@((int)NotificationType.GroupInvitation)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.GroupChallengeInvitation)')) {
+                image = data.Group.Avatar;
+                url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.GroupMemberAction)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.GroupPost)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Group/Index/" + data.Group.Id;
+            } else {
+
+            }
+
+
+            //var noti = '<a class="list-group-item" href="' + url + '" role="menuitem" style="padding: 10px 15px;border-bottom-style: solid;border-bottom-color: #7c7b7b;' + styleUnread + '" onclick="markAsRead(' + data.Id + ')">' +
+            //           '<div class="row height-100">' +
+            //                '<div class="col-sm-2 vertical-align" style="padding-top:5px; padding-left:10px;">' +
+            //                    '<span class="avatar" style="width:30px;">' +
+            //                        '<img class="vertical-align-middle" src="' + image + '" width="60px" height="60px" />' +
+            //                    '</span>' +
+            //                '</div>' +
+            //                '<div class="col-sm-9 height-100" style="padding-top:10px;">' +
+            //                    '<h4 class="list-group-item-heading">' + data.Message + '</h4>' +
+            //                    '<p class="list-group-item-text">' + data.CreateDateString + '</p>' +
+            //                '</div>' +
+            //            '</div>' +
+            //        '</a>';
+            var noti = '<a class="list-group-item" href="' + url + '" role="menuitem" style="' + styleUnread + '" onclick="markAsRead(' + data.Id + ')">' +
+                      '<div class="media">'+
+                        '<div class="media-left padding-right-10" style="width:50px;">' +
+                          '<span class="avatar" style="width:50px;">'+
+                            '<img src="' + image + '" alt="..." style="width:50px; height:50px;">' +
+
+                          '</span>'+
+                        '</div>'+
+                        '<div class="media-body" style="width:258px;">'+
+
+                          '<div class="media-detail" style="color:#000!important; font-weight:400;font-size:14px">' + data.Message + '</div>' +
+                          '<div class="media-meta">' +
+                            '<time datetime="">' + data.CreateDateString + '</time>' +
+                          '</div>' +
+                        '</div>'+
+                      '</div>'+
+                      '</a>';
+            return noti;
+        }
+
+        function markAsRead(id) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("MarkAsRead", "Notification", new { area = "" })',
+                data: { "id": id },
+                success: function (result) {
+                    if (result.Succeed) {
+
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                }
+            })
+        };
+
+
+        function markAllAsRead(id) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("MarkAllAsRead", "Notification", new { area = "" })',
+                data: { "userId": '@User.Identity.GetUserId()' },
+                success: function (result) {
+                    if (result.Succeed) {
+                        $("#notiItems").find("a").css("background-color", "");
+                        $("#notiCount").remove();
+                        $("#notiLabelCount").remove();
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                }
+            })
+        };
+
+        function showPopNoti(count) {
+            if ($("#notiCount").length) {
+                $("#notiCount").text(count);
+            }
+            else {
+                var lable = '<span class="badge badge-danger up" id="notiCount">' + count + '</span>'
+                $(lable).insertAfter("#notibell");
+            }
+
+            if ($("#notiLabelCount").length) {
+                $("#notiLabelCount").text(count);
+            }
+            else {
+                var titleCount = '<span class="label label-round label-danger" id="notiLabelCount">' + count + '</span>';
+                $(titleCount).insertAfter("#notiTitle");
+            }
+        };
+
+        function loadNoti(skip, take) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("LoadNoti", "Notification", new { area = "" })',
+                data: { "userId": '@User.Identity.GetUserId()', "skip": skip, "take": take },
+                success: function (result) {
+                    var data = result.Data;
+
+                    $(data).each(function () {
+                        var noti = renderNoti(this);
+                        $("#notiItems").append(noti);
+
+                    })
+                }
+
+            });
+        };
+
+        $(".notiDiv").scroll(function () {
+            if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+                loadNoti(_notiSkip, _notiTake);
+                _notiSkip = _notiSkip + _notiTake;
+            }
+        });
+
+
+
         function logout() {
             $("#form-log-out").submit();
         };
@@ -518,79 +838,4 @@
 
     @RenderSection("Scripts", false)
 </body>
-
-    @*<!-- Core  -->
-    <script src="~/Content/assets/vendor/jquery/jquery.js"></script>
-    <script src="~/Content/assets/vendor/bootstrap/bootstrap.js"></script>
-    <script src="~/Content/assets/vendor/animsition/jquery.animsition.js"></script>
-    <script src="~/Content/assets/vendor/asscroll/jquery-asScroll.js"></script>
-    <script src="~/Content/assets/vendor/mousewheel/jquery.mousewheel.js"></script>
-    <script src="~/Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
-    <script src="~/Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
-
-    <!-- Plugins -->
-    <script src="~/Content/assets/vendor/switchery/switchery.min.js"></script>
-    <script src="~/Content/assets/vendor/intro-js/intro.js"></script>
-    <script src="~/Content/assets/vendor/screenfull/screenfull.js"></script>
-    <script src="~/Content/assets/vendor/slidepanel/jquery-slidePanel.js"></script>
-
-    <script src="~/Content/assets/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="~/Content/assets/vendor/datatables-fixedheader/dataTables.fixedHeader.js"></script>
-    <script src="~/Content/assets/vendor/datatables-bootstrap/dataTables.bootstrap.js"></script>
-    <script src="~/Content/assets/vendor/datatables-responsive/dataTables.responsive.js"></script>
-    <script src="~/Content/assets/vendor/datatables-tabletools/dataTables.tableTools.js"></script>
-
-    
-
-    <script src="~/Content/assets/vendor/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-
-    <!--Clockpicker-->
-    <script src="~/Content/assets/vendor/clockpicker/bootstrap-clockpicker.min.js"></script>
-    
-    <!--Upload-->
-    <script src="~/Content/assets/vendor/jquery-ui/jquery-ui.js"></script>
-    <script src="~/Content/assets/vendor/blueimp-tmpl/tmpl.js"></script>
-    <script src="~/Content/assets/vendor/blueimp-canvas-to-blob/canvas-to-blob.js"></script>
-    <script src="~/Content/assets/vendor/blueimp-load-image/load-image.all.min.js"></script>
-    <script src="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload.js"></script>
-    <script src="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload-process.js"></script>
-    <script src="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload-image.js"></script>
-    <script src="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload-audio.js"></script>
-    <script src="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload-video.js"></script>
-    <script src="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload-validate.js"></script>
-    <script src="~/Content/assets/vendor/blueimp-file-upload/jquery.fileupload-ui.js"></script>
-    
-
-
-
-    <!-- Scripts -->
-    <script src="~/Content/assets/js/core.js"></script>
-    <script src="~/Content/assets/js/site.js"></script>
-
-    <script src="~/Content/assets/js/sections/menu.js"></script>
-    <script src="~/Content/assets/js/sections/menubar.js"></script>
-    <script src="~/Content/assets/js/sections/sidebar.js"></script>
-
-    <script src="~/Content/assets/js/configs/config-colors.js"></script>
-    <script src="~/Content/assets/js/configs/config-tour.js"></script>
-
-    <script src="~/Content/assets/js/components/asscrollable.js"></script>
-    <script src="~/Content/assets/js/components/animsition.js"></script>
-    <script src="~/Content/assets/js/components/slidepanel.min.js"></script>
-    <script src="~/Content/assets/js/components/switchery.js"></script>
-    <script src="~/Content/assets/js/components/matchheight.js"></script>
-    <script src="~/Content/assets/js/components/jvectormap.min.js"></script>
-
-    <script src="~/Content/assets/js/components/datatables.js"></script>
-
-    <script src="~/Content/assets/js/components/clockpicker.js"></script>
-
-    <script src="~/Content/Bootbox/bootbox.min.js"></script>
-
-    <script src="~/Content/assets/js/components/material.min.js"></script>
-
-    <script src="~/Content/assets/js/components/bootstrap-datepicker.js"></script>*@
-
-
-
 </html>

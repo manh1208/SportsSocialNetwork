@@ -37,20 +37,20 @@
     </style>
 }
 
-<div class="col-sm-10 col-sm-offset-1">
+<div class="col-sm-12">
     <div class="row">
         <div class="panel">
-            <div class="panel-body">
-                <div class="col-sm-12">
+            <div class="panel-body" style="padding-top:0;">
+                <div class="col-sm-12" style="padding:0;">
                     <div class="navbar navbar-default navbar-mega">
-                        <div class="container-fluid">
+                        <div class="container-fluid" style="background-color:#ff6a00;">
                             <div class="navbar-header">
                                 <button type="button" class="navbar-toggle hamburger hamburger-close collapsed"
                                         data-toggle="collapse" data-target="#navbar-collapse-1">
                                     <span class="sr-only">Toggle navigation</span>
                                     <span class="hamburger-bar"></span>
                                 </button>
-                                <a class="navbar-brand" href="/News">Trang chủ tin tức</a>
+                                <a class="navbar-brand" href="/News" style="color:white;">Trang chủ tin tức</a>
                             </div>
                             <div class="navbar-collapse collapse" id="navbar-collapse-1">
                                 <ul class="nav navbar-nav">
@@ -58,7 +58,7 @@
                                         foreach (var item in categories)
                                         {
                                             <li>
-                                                <a href="/News/Category/@item.Id">@item.Name</a>
+                                                <a href="/News/Category/@item.Id" style="color:white;">@item.Name</a>
                                             </li>
                                         }
                                     }
@@ -77,36 +77,44 @@
                                     <span class="ribbon-inner">TIN NỔI BẬT</span>
                                 </div>
                                 <div>
-                                    <img class="img-responsive" src="@popularNewByCate.First().Image" />
-                                    <h1><a href="/News/NewsDetail/@popularNewByCate.First().Id">@popularNewByCate.First().Title</a></h1>
+                                    <div style="width:100%;height:500px;background-size:cover;background-repeat:no-repeat;background-image:url('@popularNewByCate.First().Image')"></div>
+                                    @*<img class="img-responsive" src="@popularNewByCate.First().Image" />*@
+                                    <h1><a href="/News/NewsDetail/@popularNewByCate.First().Id" style="text-decoration:none;">@popularNewByCate.First().Title</a></h1>
                                     <p id="hotnewsContent">
                                     </p>
                                 </div>
                             </div>
                             <div class="col-sm-4">
-                                <span class="label label-lg label-outline label-danger">CÁC TIN NỔI BẬT KHÁC</span>
-                                <div class="list-group height-500" data-plugin="scrollable" style="margin-top:20px;">
-                                    <div data-role="container">
-                                        <div data-role="content">
-                                            @{
-                                                foreach (var item in popularNewByCate.Skip(1))
-                                                {
-                                                    <a class="list-group-item" href="/News/NewsDetail/@item.Id" role="menuitem">
-                                                        <div class="media">
-                                                            <div class="media-left padding-right-10">
-                                                                <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                                <div class="panel">
+                                    <div class="panel-heading" style="background-color:#ff6a00; border-radius:0px">
+                                        <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Các tin nổi bật khác</h3>
+                                    </div>
+                                </div>
+                                <div class="panel-body" style="padding:0;">
+                                    <div class="list-group height-500" data-plugin="scrollable" style="margin-top:20px;">
+                                        <div data-role="container">
+                                            <div data-role="content">
+                                                @{
+                                                    foreach (var item in popularNewByCate.Skip(1))
+                                                    {
+                                                        <a class="list-group-item" href="/News/NewsDetail/@item.Id" role="menuitem">
+                                                            <div class="media">
+                                                                <div class="media-left padding-right-10">
+                                                                    <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                                                                </div>
+                                                                <div class="media-body">
+                                                                    <h6 class="media-heading">@item.Title</h6>
+                                                                    @*<time class="media-meta" datetime="2015-06-11T18:29:20+08:00">2 days ago</time>*@
+                                                                </div>
                                                             </div>
-                                                            <div class="media-body">
-                                                                <h6 class="media-heading">@item.Title</h6>
-                                                                @*<time class="media-meta" datetime="2015-06-11T18:29:20+08:00">2 days ago</time>*@
-                                                            </div>
-                                                        </div>
-                                                    </a>
+                                                        </a>
+                                                    }
                                                 }
-                                            }
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                
                             </div>
                         </div>
 
@@ -119,13 +127,9 @@
                                     <div class="col-sm-3">
                                         <div class="panel panel-bordered">
                                             <div class="panel-body">
-                                                <h4><a href="/News/NewsDetail/@item.Id">@item.Title</a></h4>
-                                                <img class="img-responsive" src="@item.Image" />
-                                                @*<p>
-                                                        Wrap buttons or secondary text in <code>.panel-footer</code>. Note
-                                                        that panel footers do not inherit colors and borders when using
-                                                        contextual variations as they are not meant to be in the foreground.
-                                                    </p>*@
+                                                <h4><a href="/News/NewsDetail/@item.Id" style="text-decoration:none;">@item.Title</a></h4>
+                                                <div style="width:100%; height:200px; background-size:cover;background-repeat:no-repeat;background-image:url('@item.Image')"></div>
+                                                @*<img class="img-responsive" src="@item.Image" />*@
                                             </div>
                                         </div>
                                     </div>
@@ -181,7 +185,7 @@
                         var content = '@Html.Raw(popularNewByCate.First().NewsContent)';
                         if (content.length < minimize_character_count) return;
                         var minimized_content = content.slice(0, minimize_character_count);
-                        var result = minimized_content.replace(/ (< ([^>] +) >) / ig, "");
+                        var result = minimized_content.replace(/(<([^>]+)>)/ig, "");
                     $("#hotnewsContent").text(result);
                     }
 

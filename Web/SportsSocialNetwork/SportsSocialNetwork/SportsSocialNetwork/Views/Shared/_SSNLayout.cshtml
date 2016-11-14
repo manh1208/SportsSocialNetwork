@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity;
 @using SportsSocialNetwork.Models.Enumerable;
 @{
     Layout = null;
@@ -648,15 +648,15 @@
             //            '</div>' +
             //        '</a>';
             var noti = '<a class="list-group-item" href="' + url + '" role="menuitem" style="' + styleUnread + '" onclick="markAsRead(' + data.Id + ')">' +
-                      '<div class="media">' +
-                        '<div class="media-left padding-right-10">' +
-                          '<span class="avatar avatar-sm avatar-online">' +
-                            '<img src="' + image + '" alt="...">' +
-
-                          '</span>' +
-                        '</div>' +
-                        '<div class="media-body">' +
-
+                      '<div class="media">'+
+                        '<div class="media-left padding-right-10">'+
+                          '<span class="avatar avatar-sm avatar-online">'+
+                            '<img src="' + image + '" alt="..." style="width:50px; height:50px;">' +
+                           
+                          '</span>'+
+                        '</div>'+
+                        '<div class="media-body">'+
+                          
                           '<div class="media-detail" style="color:#000!important; font-weight:400;font-size:14px">' + data.Message + '</div>' +
                           '<div class="media-meta">' +
                             '<time datetime="">' + data.CreateDateString + '</time>' +
