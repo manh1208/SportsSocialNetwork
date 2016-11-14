@@ -15,14 +15,14 @@
     }
     .table_image {
         float: left;
-        width: 210px;
+        width: 25%;
         height: 160px;
         text-align: center;
     }
 
     .table_text {
         float: left;
-        width: 450px;
+        width: 70%;
         margin-left: 10px;
     }
 
@@ -42,6 +42,36 @@
         font-weight:bold;
         color:black
     }
+    .pagination{
+        font-size:14px
+    }
+    .pagination>.active>a, .pagination>.active>a:focus, 
+    .pagination>.active>a:hover, .pagination>.active>span, 
+    .pagination>.active>span:focus, .pagination>.active>span:hover{
+        background-color:black;
+        border-color:black;
+        border-radius:5px
+    }
+    .pagination>li>a, .pagination>li>span{
+        background-color:#76838f;
+        border-color:#76838f;
+        color:black;
+        border-radius:5px
+    }
+    .pagination>li:last-child>a, .pagination>li:last-child>span{
+        background-color:white;
+        border-radius:5px
+    }
+    .pagination>li:first-child>a, .pagination>li:first-child>span{
+        background-color:white;
+        border-radius:5px
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+     color: transparent;
+     background-color: transparent;
+     background-image: unset;
+     border: none;
+    }
 </style>
 <div class="col-md-9">
     <div class="panel">
@@ -51,7 +81,7 @@
         <div class="panel-body">
             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
                 <div class="col-sm-12">
-                    <table class="table table-hover dataTable table-striped width-full dtr-inline" data-plugin="dataTable" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                    <table class="table table-hover dataTable width-full dtr-inline" data-plugin="dataTable" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
                         <thead>
                             <tr>
                                 <th></th>
@@ -165,16 +195,16 @@
             "oLanguage": {
                 "sSearch": "Tìm kiếm:",
                 "sZeroRecords": "Không có kết quả phù hợp",
-                "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
+                "sInfo": "Hiển thị _START_ - _END_ trong số _TOTAL_ dòng",
                 "sEmptyTable": "Không tìm thấy kết quả nào",
-                "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
+                "sInfoFiltered": "",
                 "sLengthMenu": "Hiển thị _MENU_ dòng",
                 "sProcessing": "Xin đợi trong giây lát...",
                 "oPaginate": {
                     "sFirst": "Về đầu",
                     "sLast": "Về cuối",
-                    "sNext": "Trang kế",
-                    "sPrevious": "Trang trước"
+                    "sNext": "Trang kế >",
+                    "sPrevious": "< Trang trước"
                 },
             },
             "aoColumnDefs": [
