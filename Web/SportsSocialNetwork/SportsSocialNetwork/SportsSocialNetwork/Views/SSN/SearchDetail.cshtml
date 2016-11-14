@@ -153,13 +153,14 @@
 <div class="row" style="font-family:sans-serif">
     <!--Left side-bar-->
     <div class="col-sm-3">
-        <div class="widget widget-shadow text-center">
+        <div class="widget widget-shadow text-center"
+             style="border-top-style: solid;border-left: 0.5px groove;border-right: 0.5px groove;border-bottom: 0.5px groove;">
             <div class="widget-header">
                 <div class="widget-header-content">
                     <a class="avatar avatar-lg" href="javascript:void(0)">
                         <img src="@ViewBag.User.AvatarImage" style="height:130px;width:130px">
                     </a>
-                    <div class="profile-user"><a style="color:#37474f" href="/profile/index?userid=@ViewBag.User.Id">@ViewBag.User.FullName</a></div>
+                    <div class="profile-user"><a style="color:#37474f;font-weight:bold" href="/profile/index?userid=@ViewBag.User.Id">@ViewBag.User.FullName</a></div>
                     <div class="profile-job">@ViewBag.User.Email</div>
                 </div>
             </div>
@@ -179,39 +180,57 @@
                     </div>
                 </div>
             </div>
-            @if (ViewBag.GroupList != null)
-            {
-                <div class="example-wrap margin-lg-0" style="text-align:left;">
-                    <h4 class="example-title" style="display:inline-block;float:left;">Các nhóm tham gia</h4>
-                    <button type="button" style="display:inline-block; float:right;" class="btn btn-pure btn-dark btn-sm icon wb-plus" onclick="showCreateGroupModal()"> Tạo nhóm</button>
-                    <div class="clearfix"></div>
-                    <ul class="list-group list-group-full">
-                        @{
-                            foreach (var item in ViewBag.GroupList)
-                            {
-                                <li class="list-group-item" style="text-align:left;">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <a class="avatar" href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))">
-                                                <img class="img-responsive" src="@item.Avatar" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body vertical-align">
-                                            <a href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))" style="text-decoration:none;color:#37474f;">
-                                                <h4 class="media-heading vertical-align-middle">@item.Name</h4>
-                                            </a>
-                                        </div>
-
-                                    </div>
-                                </li>
-                            }
-                        }
-                    </ul>
-                </div>
-                            }
-
         </div>
+        <div class="panel">
+            <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                <h class="panel-title" style="font-family:sans-serif;color:#fff!important">Các nhóm tham gia</h>
+            </div>
+
+            <div class="panel-body" style="padding:0;padding-bottom:10px">
+                <div>
+                    <div class="col-sm-12">
+
+                        <a href="#" style="text-decoration:none;border-bottom-style:groove" onclick="showCreateGroupModal()">
+                            <div class="text-center" style="padding:20px 20px 10px 20px;color:#76838f; font-size:medium;border-bottom: 1px groove #cbcbcb ">
+                                <i class="icon wb-plus"></i> Tạo nhóm
+                            </div>
+                        </a>
+
+
+                        @if (ViewBag.GroupList.Count > 0)
+                        {
+                            <div class="clearfix"></div>
+                                <ul class="list-group list-group-full">
+                                    @{
+                                        foreach (var item in ViewBag.GroupList)
+                                        {
+                                            <li class="list-group-item" style="text-align:left;">
+                                                <div class="media">
+                                                    <div class="media-left" style="padding-left:20px;">
+                                                        <a class="avatar" href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))">
+                                                            <img class="img-responsive" style="width:50px;height:50px;" src="@item.Avatar" alt="...">
+                                                        </a>
+                                                    </div>
+                                                    <div class="media-body vertical-align">
+                                                        <a href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))" style="text-decoration:none;color:#37474f;">
+                                                            <h4 class="media-heading vertical-align-middle" style="color:#000; font-weight:500">@item.Name</h4>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+
+                                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
+
     <!--END Left side-bar-->
     <!--Main-->
     <div class="col-sm-6">

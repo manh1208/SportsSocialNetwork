@@ -150,10 +150,10 @@
              style="border-top-style: solid;border-left: 0.5px groove;border-right: 0.5px groove;border-bottom: 0.5px groove;">
             <div class="widget-header">
                 <div class="widget-header-content">
-                    <a class="avatar avatar-lg" href="javascript:void(0)">
+                    <a class="avatar avatar-lg magnific" href="@ViewBag.User.AvatarImage">
                         <img src="@ViewBag.User.AvatarImage" style="height:130px;width:130px">
                     </a>
-                    <div class="profile-user"><a style="color:#37474f;font-weight:bold" href="/profile/index?userid=@ViewBag.User.Id">@ViewBag.User.FullName</a></div>
+                    <div class="profile-user"><a style="color:#37474f;font-weight:bold" href="@Url.Action("Index","Profile", new { userId = ViewBag.User.Id })">@ViewBag.User.FullName</a></div>
                     <div class="profile-job">@ViewBag.User.Email</div>
                 </div>
             </div>
@@ -288,7 +288,7 @@
                                                 </a>
                                             </div>
                                             <div class='comment-body media-body' >
-                                                <a class='comment-author' href='/profile/index?userid=@item.Id' style="color:#000; font-weight:bold">@item.FullName</a>
+                                                <a class='comment-author' href='@Url.Action("Index","Profile", new { userId = item.Id })' style="color:#000; font-weight:bold">@item.FullName</a>
                                                 <div class='comment-content' style="color:#76838f;margin-top:0px">
                                                     @if (item.sameSport != 0)
                                                     {<p>Có chung @item.sameSport sở thích</p>}
