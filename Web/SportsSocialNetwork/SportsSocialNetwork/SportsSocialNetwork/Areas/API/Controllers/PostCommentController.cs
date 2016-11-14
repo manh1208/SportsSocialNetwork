@@ -1,9 +1,11 @@
 ﻿using HenchmenWeb.Models.Notifications;
+using Microsoft.AspNet.SignalR;
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Hubs;
 using SportsSocialNetwork.Models.Notifications;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
@@ -57,6 +59,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             var aspNetUserService = this.Service<IAspNetUserService>();
 
+            var likeService = this.Service<ILikeService>();
+
             ResponseModel<PostCommentDetailViewModel> response = null;
 
             try {
@@ -76,23 +80,90 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 post.LatestInteractionTime = DateTime.Now;
 
-                AspNetUser user = postService.GetUserNameOfPost(post.Id);
+                AspNetUser user = aspNetUserService.FindUser(post.UserId);
 
-                if (!(user.Id == commentedUser.Id))
+                List<string> AllRelativeUserIdOfPost = new List<string>();
+
+                List<PostComment> listPostCmt = service.GetAllRelativeCmtDistinct(postId).ToList();
+
+                List<Like> listPostLike = likeService.GetAllRelativeLikeDistinct(postId).ToList();
+
+                foreach (var item in listPostCmt)
                 {
-                    Notification noti = notiService.SaveNoti(user.Id, commentedUser.Id, "Comment", commentedUser.FullName + " đã bình luận về bài viết của bạn", int.Parse(NotificationType.Post.ToString("d")), post.Id, null,null);
+                    AllRelativeUserIdOfPost.Add(item.UserId);
+                }
 
+                foreach (var item in listPostLike)
+                {
+                    AllRelativeUserIdOfPost.Add(item.UserId);
+                }
+
+                AllRelativeUserIdOfPost = AllRelativeUserIdOfPost.Distinct().ToList();
+
+                //Noti to post creator
+                if (!(post.UserId.Equals(commentedUser.Id)))
+                {
+                    string u = post.UserId;
+                    string u1 = commentedUser.Id;
+                    Notification notiForPostCreator = notiService.SaveNoti(u, u1, "Comment", commentedUser.FullName + " đã bình luận về bài viết của bạn", int.Parse(NotificationType.Post.ToString("d")), post.Id, null, null);
+
+                    //Fire base noti
                     List<string> registrationIds = GetToken(user.Id);
 
                     //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
 
+                    NotificationModel model = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(notiForPostCreator));
+
                     if (registrationIds != null && registrationIds.Count != 0)
                     {
-                        NotificationModel model = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
-
                         Android.Notify(registrationIds, null, model);
                     }
 
+
+                    //SignalR Noti
+                    NotificationFullInfoViewModel notiModelR = notiService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(notiForPostCreator));
+
+                    // Get the context for the Pusher hub
+                    IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                    // Notify clients in the group
+                    hubContext.Clients.User(notiModelR.UserId).send(notiModelR);
+                }
+
+                //noti to all user that relavtive in this post
+                foreach (var item in AllRelativeUserIdOfPost)
+                {
+                    if (!(item.Equals(commentedUser.Id)) && !(item.Equals(post.UserId)))
+                    {
+                        string i = item;
+                        string i1 = commentedUser.Id;
+                        Notification not = notiService.SaveNoti(item, commentedUser.Id, "Comment", commentedUser.FullName + " đã bình luận về bài viết mà bạn theo dõi", int.Parse(NotificationType.Post.ToString("d")), post.Id, null, null);
+
+                        Notification noti = notiService.FirstOrDefaultActive(n => n.Id == not.Id);
+
+                        //Fire base noti
+                        List<string> registrationIds = GetToken(user.Id);
+
+                        //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
+
+                        NotificationModel model = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+
+                        if (registrationIds != null && registrationIds.Count != 0)
+                        {
+                            Android.Notify(registrationIds, null, model);
+                        }
+
+
+                        //SignalR Noti
+                        NotificationFullInfoViewModel notiModelR = notiService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                        // Get the context for the Pusher hub
+                        IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                        // Notify clients in the group
+                        hubContext.Clients.User(notiModelR.UserId).send(notiModelR);
+
+                    }
                 }
 
                 PostCommentDetailViewModel result = PreparePostCommentDetailViewModel(comment);

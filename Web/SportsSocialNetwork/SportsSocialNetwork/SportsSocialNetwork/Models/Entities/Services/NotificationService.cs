@@ -1,4 +1,6 @@
-﻿using SportsSocialNetwork.Models.ViewModels;
+﻿
+using SportsSocialNetwork.Controllers;
+using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -101,6 +103,12 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         public NotificationFullInfoViewModel PrepareNoti(NotificationFullInfoViewModel model)
         {
+            NotificationController controller = new NotificationController();
+
+            model.AspNetUser = controller.GetUser(model.UserId);
+
+            model.AspNetUser1 = controller.GetUser(model.FromUserId);
+
             model.CreateDateString = model.CreateDate.Value.Day.ToString("00") + "/" + model.CreateDate.Value.Month.ToString("00") + "/" + model.CreateDate.Value.Year.ToString("0000")
                     + " lúc " + model.CreateDate.Value.Hour.ToString("00") + ":" + model.CreateDate.Value.Minute.ToString("00");
 

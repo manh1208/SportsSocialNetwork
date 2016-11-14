@@ -211,7 +211,7 @@ namespace SportsSocialNetwork.Controllers
 
                 string title = Utils.GetEnumDescription(NotificationType.Post);
                 int type = (int)NotificationType.Post;
-                string message = sender.FullName + "đã đăng một bài viết lên tường nhà bạn";
+                string message = sender.FullName + " đã đăng một bài viết lên tường nhà bạn";
 
                 Notification noti = _notificationService.CreateNoti(profileId, userId, title, message, type, post.Id, null, null, null);
 
@@ -309,22 +309,21 @@ namespace SportsSocialNetwork.Controllers
 
                         List<string> registrationIds = GetToken(member.UserId);
 
+                        NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationCustomViewModel(noti));
+
                         if (registrationIds != null && registrationIds.Count != 0)
                         {
-                            NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationCustomViewModel(noti));
-
                             Android.Notify(registrationIds, null, notiModel);
-
-
-                            //signalR noti
-                            NotificationFullInfoViewModel notiModelR = _notiService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
-
-                            // Get the context for the Pusher hub
-                            IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
-
-                            // Notify clients in the group
-                            hubContext.Clients.User(notiModel.UserId).send(notiModelR);
                         }
+
+                        //signalR noti
+                        NotificationFullInfoViewModel notiModelR = _notiService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                        // Get the context for the Pusher hub
+                        IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                        // Notify clients in the group
+                        hubContext.Clients.User(notiModel.UserId).send(notiModelR);
                     }
                 }
 
