@@ -77,7 +77,7 @@
                                     <span class="ribbon-inner">TIN NỔI BẬT</span>
                                 </div>
                                 <div>
-                                    <div style="width:100%;height:500px;background-size:cover;background-repeat:no-repeat;background-image:url('@popularNewByCate.First().Image')"></div>
+                                    <div style="width:100%;height:500px;background-size:cover;background-repeat:no-repeat;background-position:center center;background-image:url('@popularNewByCate.First().Image')"></div>
                                     @*<img class="img-responsive" src="@popularNewByCate.First().Image" />*@
                                     <h1><a href="/News/NewsDetail/@popularNewByCate.First().Id" style="text-decoration:none; color:#76838f; font-weight:500;">@popularNewByCate.First().Title</a></h1>
                                     <p id="hotnewsContent">
@@ -89,31 +89,32 @@
                                     <div class="panel-heading" style="background-color:#ff6a00; border-radius:0px">
                                         <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Các tin nổi bật khác</h3>
                                     </div>
-                                </div>
-                                <div class="panel-body" style="padding:0;">
-                                    <div class="list-group height-500" data-plugin="scrollable" style="margin-top:20px;">
-                                        <div data-role="container">
-                                            <div data-role="content">
-                                                @{
-                                                    foreach (var item in popularNewByCate.Skip(1))
-                                                    {
-                                                        <a class="list-group-item" href="/News/NewsDetail/@item.Id" role="menuitem">
-                                                            <div class="media">
-                                                                <div class="media-left padding-right-10">
-                                                                    <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                                    <div class="panel-body" style="padding:0;">
+                                        <div class="list-group height-500" data-plugin="scrollable" style="margin-top:20px;">
+                                            <div data-role="container">
+                                                <div data-role="content">
+                                                    @{
+                                                        foreach (var item in popularNewByCate.Skip(1))
+                                                        {
+                                                            <a class="list-group-item" href="/News/NewsDetail/@item.Id" role="menuitem">
+                                                                <div class="media">
+                                                                    <div class="media-left padding-right-10">
+                                                                        <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                                                                    </div>
+                                                                    <div class="media-body">
+                                                                        <h6 class="media-heading" style="font-weight:500;">@item.Title</h6>
+                                                                        @*<time class="media-meta" datetime="2015-06-11T18:29:20+08:00">2 days ago</time>*@
+                                                                    </div>
                                                                 </div>
-                                                                <div class="media-body">
-                                                                    <h6 class="media-heading" style="font-weight:500;">@item.Title</h6>
-                                                                    @*<time class="media-meta" datetime="2015-06-11T18:29:20+08:00">2 days ago</time>*@
-                                                                </div>
-                                                            </div>
-                                                        </a>
+                                                            </a>
+                                                        }
                                                     }
-                                                }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                
                                 
                             </div>
                         </div>
@@ -128,7 +129,7 @@
                                         <div class="panel panel-bordered">
                                             <div class="panel-body">
                                                 <h4><a href="/News/NewsDetail/@item.Id" style="text-decoration:none; color:#76838f; font-weight:500;">@item.Title</a></h4>
-                                                <div style="width:100%; height:200px; background-size:cover;background-repeat:no-repeat;background-image:url('@item.Image')"></div>
+                                                <div style="width:100%; height:200px; background-size:cover;background-repeat:no-repeat;background-position:center center;background-image:url('@item.Image')"></div>
                                                 @*<img class="img-responsive" src="@item.Image" />*@
                                             </div>
                                         </div>

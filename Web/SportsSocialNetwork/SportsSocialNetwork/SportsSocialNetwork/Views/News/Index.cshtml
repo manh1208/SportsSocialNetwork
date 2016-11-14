@@ -74,7 +74,7 @@
                         <span class="ribbon-inner">TRANG NHẤT</span>
                     </div>
                     <div>
-                        <div style="width:100%;height:500px;background-size:cover;background-repeat:no-repeat;background-image:url('@PopularNews.First().Image')"></div>
+                        <div style="width:100%;height:500px;background-size:cover;background-repeat:no-repeat;background-position:center center;background-image:url('@PopularNews.First().Image')"></div>
                         @*<img class="img-responsive" src="@PopularNews.First().Image" />*@
                         <h1><a href="/News/NewsDetail/@PopularNews.First().Id" style="text-decoration:none; color:#76838f; font-weight:500;">@PopularNews.First().Title</a></h1>
                         <p id="hotnewsContent">
@@ -87,32 +87,33 @@
                         <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
                             <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Tin nổi bật</h3>
                         </div>
-                    </div>
-                    <div class="panel-body" style="padding-top:0;">
-                        <div class="list-group height-500" data-plugin="scrollable" style="margin-top:20px;">
-                            <div data-role="container">
-                                <div data-role="content">
-                                    @{
-                                        foreach (var item in PopularNews.Skip(1))
-                                        {
-                                            <a class="list-group-item" href="/News/NewsDetail/@item.Id" role="menuitem">
-                                                <div class="media">
-                                                    <div class="media-left padding-right-10">
-                                                        <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                        <div class="panel-body" style="padding:0;">
+                            <div class="list-group height-500" data-plugin="scrollable" style="margin-top:20px;">
+                                <div data-role="container">
+                                    <div data-role="content">
+                                        @{
+                                            foreach (var item in PopularNews.Skip(1))
+                                            {
+                                                <a class="list-group-item" href="/News/NewsDetail/@item.Id" role="menuitem">
+                                                    <div class="media">
+                                                        <div class="media-left padding-right-10">
+                                                            <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <h4 class="media-heading" style="font-weight:500;">@item.Title</h4>
+                                                            @*<time class="media-meta" datetime="2015-06-11T18:29:20+08:00">2 days ago</time>*@
+                                                        </div>
                                                     </div>
-                                                    <div class="media-body">
-                                                        <h4 class="media-heading" style="font-weight:500;">@item.Title</h4>
-                                                        @*<time class="media-meta" datetime="2015-06-11T18:29:20+08:00">2 days ago</time>*@
-                                                    </div>
-                                                </div>
-                                            </a>
+                                                </a>
+                                            }
                                         }
-                                    }
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
                     
                 </div>
 
@@ -125,15 +126,15 @@
                         if (n != null && n.Count > 0)
                         {
                             <div class="col-sm-12" style="margin-top:20px;">
-                                <div class="example-wrap" style="margin-bottom:0;">
-                                    <span class="label label-lg" style="background-color:#ff6a00;">@c.Name</span>
+                                <div class="example-wrap" style="margin-bottom:0; border-top:2px solid #ff6a00;">
+                                    <span class="label label-lg" style="background-color:#ff6a00;border-radius:0px;">@c.Name</span>
                                     <div class="slider snews" id="carouselNews_@c.Id" style="margin-top:15px;">
                                         @{
                                             foreach (var i in n)
                                             {
                                                 <div style="padding:0 15px;">
                                                     <a href="/News/NewsDetail/@i.Id" style="padding:15px;">
-                                                        <div style="background-size:cover; background-repeat:no-repeat;width:100%;height:200px;background-image:url('@i.Image');">
+                                                        <div style="background-size:cover; background-repeat:no-repeat;width:100%;height:200px;background-position:center center;background-image:url('@i.Image');">
 
                                                         </div>
                                                         @*<img class="img-responsive" width="80" height="80" src="@i.Image" />*@
