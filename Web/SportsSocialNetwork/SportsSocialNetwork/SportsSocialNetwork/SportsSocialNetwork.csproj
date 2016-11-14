@@ -709,6 +709,7 @@
     <Compile Include="Models\Entities\Services\LikeServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entities\Services\NewsCommentService.cs" />
     <Compile Include="Models\Entities\Services\NewsCommentServiceGen.cs">
       <DependentUpon>Services.tt</DependentUpon>
     </Compile>
@@ -910,6 +911,7 @@
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\MemberOrderViewModel.cs" />
+    <Compile Include="Models\ViewModels\NewsCommentDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\NewsCommentViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
