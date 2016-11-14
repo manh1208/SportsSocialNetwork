@@ -183,15 +183,15 @@
                                 <i class="icon wb-bell" aria-hidden="true" id="notibell"></i>
                                 @*<span class="badge badge-danger up" id="notiCount"></span>*@
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media" role="menu" id="listNoti">
+                            <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media" role="menu" id="listNoti" >
                                 <li class="dropdown-menu-header" role="presentation" id="headNoti" style="padding: 10px 20px;background-color: #ffefdf;">
                                     <h5 id="notiTitle" style="color: #000000!important;font-weight: 500;font-size: medium;">THÔNG BÁO</h5>
                                     @*<span class="label label-round label-danger" id="notiLabelCount"></span>*@
                                 </li>
 
 
-                                <li class="list-group notiDiv" role="presentation" style="max-height:400px;">
-                                    <div data-role="container" style="height:400px;" class="notiDiv">
+                                <li class="list-group notiDiv" role="presentation" style="max-height:400px;" >
+                                    <div data-role="container" style="height:400px;overflow-y: scroll" class="notiDiv" id="notiContent">
                                         <div data-role="content" id="notiItems" class="notiDiv">
                                             @*<a class="list-group-item" href="javascript:void(0)" role="menuitem">
                                                     <div class="media">
@@ -409,12 +409,13 @@
     <!--Signalr-->
     <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
     <script src="~/signalr/hubs"></script>
+    <script src="~/Content/js/jquery.slimscroll.min.js"></script>
     <script>
         'use strict';
 
         var Site = window.Site;
             $(document).ready(function () {
-                //Site.run();
+               // Site.run();
                 loadAvatar();
                 $("#showSearch").hide();
 
@@ -429,9 +430,18 @@
                 })
 
                 checkActive();
+
+                notiSlim();
             });
     </script>
     <script>
+        function notiSlim() {
+            $("#notiContent").slimScroll({
+                height: '400px',
+                size: '4px',
+            });
+        }
+
         function checkActive() {
             var title = "@ViewBag.Type";
             if (title == "news") {
