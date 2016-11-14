@@ -107,7 +107,35 @@
                 </ul>
                 <!-- End Navbar Toolbar -->
                 <!-- Navbar Toolbar Right -->
+
                 <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
+                    @{
+                        if (User != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="dropdown">
+                                <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
+                                   data-animation="slide-bottom" role="button">
+                                    <span id="ava" class="avatar avatar-online">
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu width-250" role="menu">
+                                    <li role="presentation">
+                                        <form action="@Url.Action("LogOff","Account", new { area = "" })" method="post" id="form-log-out" hidden>
+                                            @Html.AntiForgeryToken()
+
+                                        </form>
+                                        <a href="#" role="menuitem" onclick="logout()">
+                                            <span class="icon wb-power"></span> Đăng xuất
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                    }
+                </ul>
+
+
+                @*<ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
                     <li class="dropdown">
                         <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
                            data-animation="slide-bottom" role="button">
@@ -177,7 +205,7 @@
                             </li>
                         </ul>
                     </li>
-                </ul>
+                </ul>*@
                 <!-- End Navbar Toolbar Right -->
             </div>
             <!-- End Navbar Collapse -->
@@ -320,6 +348,25 @@
     <script src="~/Content/assets/js/components/jt-timepicker.js"></script>
     <script src="~/Content/assets/js/components/datepair-js.js"></script>
     <script>
+        $(document).ready(function () {
+            loadAvatar();
+        })
+
+        function loadAvatar() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetAvatarImage", "SSN", new { area = ""})',
+                success: function (result) {
+                    if (result.Succeed) {
+                        $("#ava").empty();
+                        if (result.AdditionalData != null) {
+                            $("#ava").append('<img src="' + result.AdditionalData + '" style="height:30px;width:30px"><i></i>');
+                        }
+                    }
+                }
+            });
+        }
+
        function logout(){
            $("#form-log-out").submit();
         }
