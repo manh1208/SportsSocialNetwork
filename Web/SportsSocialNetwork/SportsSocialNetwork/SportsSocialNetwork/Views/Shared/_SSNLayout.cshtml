@@ -490,7 +490,7 @@
             $("#showSearch").append("<div style='background-color:#ffefdf;margin-bottom:5px' tabindex='0' class='padding-left-10'>Cá nhân</div>");
             $(data.userList).each(function () {
                 var hobby = "";
-                if (this.sameSport != 0) {
+                if (this.sameSport != 0 && this.Id!= '@User.Identity.GetUserId()') {
                     hobby = "<span class='comment-content'><p>Có chung " + this.sameSport
                         + " sở thích</p></span>";
                 }

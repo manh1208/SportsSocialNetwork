@@ -483,7 +483,7 @@ function loadSpecificPost(userId, postId, actionName, loadMoreCmtActionName, loa
                         moreCmtBtn = "<div id='moreCmt_" + dt.Id + "'><a href='javascript:void(0)' onclick='loadMoreComt(" + dt.Id + ")'>Xem thêm bình luận</a>";
                     }
                     var spanLike = "";
-                    if (this.Liked) {
+                    if (dt.Liked) {
                         spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#ff6a00; padding:10px;font-weight:500' id='likeIcon_" + dt.Id + "' onclick='likeUnlikePost(" + dt.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
 
                     } else {
@@ -520,7 +520,7 @@ function loadSpecificPost(userId, postId, actionName, loadMoreCmtActionName, loa
                                             + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px;font-size: large;font-weight: 500;'>" + content + "</div>"
                                             + "<div class='comment-actions'>"
                                             + "<div style='font-size:13px;color: #76838f;' class='text-right'>"
-                                               + "<span style='margin-right:5px' id='likeOfPost_" + this.Id + "'> " + this.LikeCount + " lượt thích</span>"
+                                               + "<span style='margin-right:5px' id='likeOfPost_" + dt.Id + "'> " + dt.LikeCount + " lượt thích</span>"
                                                 + "<span style='margin-right:10px' id='commentOfPost_" + dt.Id + "'> " + dt.CommentCount + " bình luận</span>"
                                             + "</div>"
                                             + "</div>"
