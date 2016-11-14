@@ -10,8 +10,10 @@
     <div class="col-sm-6 col-sm-offset-3">
         <div class="panel">
             <div class="panel-heading">
-                <h3 class="panel-title">Danh sách các thông báo của bạn</h3>
+                <h3 class="panel-title pull-left" style="padding: 20px 0 10px 20px;">Danh sách các thông báo của bạn</h3>
+                <a href="javascript:void(0)" class="panel-title pull-right" style="padding:20px 20px 10px 0; text-decoration:none;" onclick="markAllAsRead_page()"><i class="fa fa-check-circle-o"></i> Đánh dấu đã xem tất cả</a>
             </div>
+            <div class="clearfix"></div>
             <div class="panel-body">
                 <div class="list-group" id="listNotiPage">
                 </div>
@@ -80,7 +82,7 @@
 
             if (data.Type == parseInt('@((int)NotificationType.Post)')) {
                 image = data.AspNetUser1.AvatarImage;
-                url = "/Profile/Index?userId=" + data.AspNetUser.Id;
+                url = "/SSN/PostDetail?postId=" + data.PostId;
             } else if(data.Type == parseInt('@((int)NotificationType.Order)')) {
                 image = "/Content/images/flag-xxl.png";
                 url = "/Order";
@@ -103,14 +105,14 @@
 
             }
 
-            var noti = '<a class="list-group-item" href="' + url + '" style="height:100px; padding:0;'+ styleUnread +'">' +
+            var noti = '<a class="list-group-item" href="' + url + '" style="height:100px; padding:0;' + styleUnread + '" onclick="markAsRead_page(' + data.Id + ')">' +
                         '<div class="row height-100">' +
-                            '<div class="col-sm-2 height-100" style="padding-top:5px;">' +
+                            '<div class="col-sm-2" style="padding-top:5px;">' +
                                 '<span class="avatar" style="width:90px;">' +
                                     '<img class="img-responsive" src="' + image + '" style="width:90px;height:90px;" />' +
                                 '</span>' +
                             '</div>' +
-                            '<div class="col-sm-9 height-100" style="padding-top:10px;">' +
+                            '<div class="col-sm-9" style="padding-top:10px;margin-left:20px">' +
                                 '<h4 class="list-group-item-heading">' + data.Message + '</h4>' +
                                 '<p class="list-group-item-text">' + data.CreateDateString + '</p>' +
                             '</div>' +
@@ -118,6 +120,40 @@
                     '</a>';
             return noti;
         }
+
+        function markAsRead_page(id) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("MarkAsRead", "Notification")',
+                data: { "id": id },
+                success: function (result) {
+                    if (result.Succeed) {
+
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                }
+            })
+        };
+
+
+        function markAllAsRead_page(id) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("MarkAllAsRead", "Notification")',
+                data: { "userId": '@User.Identity.GetUserId()' },
+                success: function (result) {
+                    if (result.Succeed) {
+                        $("#listNotiPage").find("a").css("background-color", "");
+                        markAllAsRead();
+                        //$("#notiCount").remove();
+                        //$("#notiLabelCount").remove();
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                }
+            })
+        };
     </script>
 
     }

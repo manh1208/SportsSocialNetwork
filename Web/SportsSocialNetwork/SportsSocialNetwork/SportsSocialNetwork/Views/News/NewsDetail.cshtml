@@ -48,14 +48,27 @@
                     </div>
                     <div id="commentSection" style="margin-top:40px; border-top:1px solid #808080;">
                         <h3>Nhận xét</h3>
-                        <div>
-                            <form id="newsCommentForm" name="newsCommentForm" autocomplete="off">
-                                <input type="hidden" name="userId" id="userId" value="@User.Identity.GetUserId()" />
-                                <input type="hidden" name="newsId" id="newsId" value="@Model.Id" />
-                                <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
-                                <input type="submit" class="btn btn-default pull-right" value="Đăng" />
-                            </form>
-                        </div>
+                        @{
+                            if (User != null && User.Identity.IsAuthenticated)
+                            {
+                                <div>
+                                    <form id="newsCommentForm" name="newsCommentForm" autocomplete="off">
+                                        <input type="hidden" name="userId" id="userId" value="@User.Identity.GetUserId()" />
+                                        <input type="hidden" name="newsId" id="newsId" value="@Model.Id" />
+                                        <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
+                                        <input type="submit" class="btn btn-default pull-right" value="Đăng" />
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+                                <div>
+                                    <p><a href="/Account/Login">Đăng nhập để bình luận</a></p>
+                                    <p>Chưa có tài khoản. <a href="/Account/Register">Đăng kí ngay</a></p>
+                                </div>
+                            }
+                        }
+                        
                         <div id="cmtList">
                         </div>
                         <button class="btn btn-default" id="loadMoreBtn" style="width:100%;" type="button" onclick="loadMoreNewsCmt()">Xem thêm bình luận</button>
@@ -90,6 +103,8 @@
 </div>
 
 @section scripts{
+    
+    <script src="~/Content/js/custom-script.js"></script>
     <script>
         var _ncFirstSkip = 0;
         var _ncFirstTake = 5;
