@@ -12,6 +12,8 @@ using SportsSocialNetwork.Models.Utilities;
 using Microsoft.AspNet.Identity;
 using SportsSocialNetwork.Models.Identity;
 using System.Globalization;
+using System.Text.RegularExpressions;
+using SportsSocialNetwork.Models.Enumerable;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
@@ -136,6 +138,64 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 return "success";
             }
             return "false";
+        }
+
+        [HttpPost]
+        public ActionResult shareEvent(int id)
+        {
+            var _postService = this.Service<IPostService>();
+            var _eventService = this.Service<IEventService>();
+            var result = new AjaxOperationResult();
+            bool hasImage = false;
+
+            Event evt = _eventService.FirstOrDefaultActive(e => e.Id == id);
+
+            if(evt != null)
+            {
+                string pattern = "<.*?>";
+                string replacement = "";
+                Regex rgx = new Regex(pattern);
+                string rawContent = rgx.Replace(evt.Description, replacement);
+                string content = rawContent.Substring(0, Math.Min(rawContent.Length, 200));
+
+                Post post = new Post();
+                post.UserId = User.Identity.GetUserId();
+                post.PostContent = content;
+                post.ProfileId = User.Identity.GetUserId();
+                if(!String.IsNullOrEmpty(evt.Image))
+                {
+                    post.ContentType = (int)ContentPostType.TextAndImage;
+                    hasImage = true;
+                }
+                else
+                {
+                    post.ContentType = (int)ContentPostType.TextOnly;
+                }
+
+                if(_postService.CreatePost(post) != null)
+                {
+                    if(hasImage)
+                    {
+                        var _postImageService = this.Service<IPostImageService>();
+                        PostImage pi = new PostImage();
+                        pi.PostId = post.Id;
+                        pi.Image = evt.Image;
+                        _postImageService.Create(pi);
+                        _postImageService.Save();
+                    }
+                    result.Succeed = true;
+                }
+                else
+                {
+                    result.Succeed = false;
+                }
+
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+            return Json(result);
         }
 
         public ActionResult GetData(JQueryDataTableParamModel param)
