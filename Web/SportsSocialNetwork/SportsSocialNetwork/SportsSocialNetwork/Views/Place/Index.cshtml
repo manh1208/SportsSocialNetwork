@@ -34,18 +34,19 @@
 
     .table_text_des1 {
         height: 80px;
-        
     }
 
     .table_text_des2 {
         height: 20px;
         font-size: 14px;
+        font-weight:bold;
+        color:black
     }
 </style>
 <div class="col-md-9">
     <div class="panel">
         <header class="panel-heading">
-            <h3 class="panel-title">Danh sách địa điểm</h3>
+            <h3 class="panel-title"><i class="fa fa-bars" aria-hidden="true"></i> Danh sách địa điểm</h3>
         </header>
         <div class="panel-body">
             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
@@ -70,8 +71,8 @@
 </div>
 <div class="col-md-3">
     <div class="panel" style="text-align:center">
-        <header class="panel-heading">
-            <h3 class="panel-title">Tìm kiếm địa điểm</h3>
+        <header class="panel-heading" style="background-color:#ff6a00; border-radius:0px;margin-bottom:20px">
+            <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Tìm kiếm địa điểm</h3>
         </header>
         <div class="panel-body">
             <div class="form-group">
@@ -84,9 +85,10 @@
             <div class="form-group">
                 @Html.DropDownListFor(m => m.District, districtList, "--Chọn quận/huyện--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "district" })
             </div>
-            <p style="color:red">ーーHoặcーー</p>
+            <p style="color:gray;font-size:13px">——————hoặc——————</p>
             <div class="form-group">
-                <button type="button" class="btn btn-primary" id="findAround" style="width:90%">Tìm xung quanh bạn</button>
+                <button type="button" class="btn btn-dark" id="findAround" style="width:90%">
+                    <i class="fa fa-location-arrow" aria-hidden="true"></i> Tìm xung quanh bạn</button>
                 <input type="hidden" id="lat" />
                 <input type="hidden" id="lng" />
             </div>
@@ -188,9 +190,9 @@
                      "bSortable": false,
                      "mRender": function (data, type, o) {
                          return "<div class='table_image'><img src='" + o[1] + "' class='imgWH100'></div><div class='table_text'>" +
-                             "<div class='table_text_title'><a href='/Place/ViewDetail/" + o[0] + "'>" + o[2] +
-                             "</a></div><div class='table_text_des1'>" + o[3] + "</div><div class='table_text_des2'>Địa chỉ: "
-                             + o[4] + "</div><div class='table_text_des2'>Điện thoại: "+ o[5] +"</div></div>";
+                             "<div class='table_text_title'><a style='color:#ff6a00;text-decoration:none' href='/Place/ViewDetail/" + o[0] + "'>" + o[2] +
+                             "</a></div><div class='table_text_des1'>" + o[3] + "</div><div class='table_text_des2'><span style='text-decoration: underline'>Địa chỉ: </span>"
+                             + o[4] + "</div><div class='table_text_des2'><span style='text-decoration: underline'>Điện thoại: </span>" + o[5] + "</div></div>";
 
                      }
                  },
