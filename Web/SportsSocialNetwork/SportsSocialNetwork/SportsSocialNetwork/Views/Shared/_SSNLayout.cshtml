@@ -84,24 +84,32 @@
         .panel {
             margin-bottom: 10px;
             font-family: sans-serif;
-            border:groove 0.3px;
-            border-radius:0px;
+            border: groove 0.3px;
+            border-radius: 0px;
         }
 
         .navbar-brand {
             float: left;
-            padding:20px 20px;
+            padding: 20px 20px;
         }
 
         .active-menu {
             color: #ff6a00 !important;
-            border-bottom-style: solid ;
-            border-bottom-width:3px;
+            border-bottom-style: solid;
+            border-bottom-width: 3px;
         }
-        ul{
+
+        ul {
             list-style-type: none;
         }
 
+        input:focus {
+            border-color: #ff6a00!important;
+        }
+        input{
+            border-radius:0px!important;
+        }
+        
     </style>
     @RenderSection("styles", false)
 </head>
@@ -143,14 +151,14 @@
                     @if (User != null && User.Identity.IsAuthenticated)
                     {
                         <li class="dropdown">
-                            <a href="@Url.Action("Index","SSN",new { area = "" })" class="active-menu" aria-expanded="false" 
+                            <a href="@Url.Action("Index","SSN",new { area = "" })" class="active-menu" aria-expanded="false"
                                style="color:#263238; font-weight:500;font-size:medium; margin-top:15px; margin-bottom:15px; padding-top:5px; padding-bottom:5px"
                                role="button"
                                id="menu-home">Trang chủ</a>
                         </li>
                     }
                     <li class="dropdown">
-                        <a href="@Url.Action("Index","News",new { area = "" })" aria-expanded="false" 
+                        <a href="@Url.Action("Index","News",new { area = "" })" aria-expanded="false"
                            style="color:#263238; font-weight:500;font-size:medium ; margin-top:15px; margin-bottom:15px; padding-top:5px; padding-bottom:5px"
                            role="button"
                            id="menu-news">Tin tức</a>
@@ -261,7 +269,7 @@
                                 <li role="presentation">
                                     <form action="@Url.Action("LogOff","Account", new { area = "" })" style="margin:10px" method="post" id="form-log-out">
                                         @Html.AntiForgeryToken()
-                                        <a href="#" role="menuitem" onclick="logout()"  style="color:#54616E;font-weight:500">
+                                        <a href="#" role="menuitem" onclick="logout()" style="color:#54616E;font-weight:500">
                                             <span class="fa fa-sign-out"></span>&nbsp; Đăng xuất
                                         </a>
                                     </form>
@@ -273,9 +281,9 @@
                     {
                         <li class="dropdown">
                             <a href="@Url.Action("Login","Account",new { area = "" })" aria-expanded="false"
-                                style="color:#263238; font-weight:500;font-size:medium ; margin-top:15px; margin-bottom:15px; padding-top:5px; padding-bottom:5px"
+                               style="color:#263238; font-weight:500;font-size:medium ; margin-top:15px; margin-bottom:15px; padding-top:5px; padding-bottom:5px"
                                role="button">Vào mạng xã hội</a>
-                         
+
                         </li>
                     }
 
@@ -283,25 +291,25 @@
                 <!-- End Navbar Toolbar Right -->
             </div>
             <!-- End Navbar Collapse -->
-           @if (User != null && User.Identity.IsAuthenticated)
-           {
+            @if (User != null && User.Identity.IsAuthenticated)
+            {
             <!-- Site Navbar Seach -->
-            <div class="navbar-search-overlap col-md-6" style="padding:0; margin-top:15px;" id="site-navbar-search" tabindex="0,">
-                <form role="search" autocomplete="off">
-                    <div class="form-group">
-                        <div class="input-search" style="border:groove 1px;border-radius:5px;">
-                            <i class="input-search-icon wb-search" aria-hidden="true"></i>
-                            <input type="text" id="search-input" style="height:36px!important; border-radius:5px" class="form-control" name="site-search" placeholder="Tìm kiếm người hoặc nhóm...">
+                <div class="navbar-search-overlap col-md-6" style="padding:0; margin-top:15px;" id="site-navbar-search" tabindex="0,">
+                    <form role="search" autocomplete="off">
+                        <div class="form-group">
+                            <div class="input-search" style="border:groove 1px;border-radius:5px;">
+                                <i class="input-search-icon wb-search" aria-hidden="true"></i>
+                                <input type="text" id="search-input" style="height:36px!important; border-radius:5px" class="form-control" name="site-search" placeholder="Tìm kiếm người hoặc nhóm...">
+
+                            </div>
+                        </div>
+                        <div id="showSearch" style="width:100%;height:auto;display:none;border: 0.5px groove;">
 
                         </div>
-                    </div>
-                    <div id="showSearch" style="width:100%;height:auto;display:none;border: 0.5px groove;">
-
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
             <!-- End Site Navbar Seach -->
-           }
+            }
         </div>
     </nav>
     <!-- Page -->
@@ -372,7 +380,7 @@
                 Site.run();
                 loadAvatar();
                 $("#showSearch").hide();
-               
+
 
                 $("body").click(function (e) {
                     if (e.target.id !== 'site-navbar-search') {
@@ -380,8 +388,8 @@
                     }
                 });
                 $("#search-input").focus(function () {
-                   $("#showSearch").show();
-               })
+                    $("#showSearch").show();
+                })
 
                 checkActive();
             });
@@ -391,10 +399,10 @@
 
         function checkActive() {
             var title = "@ViewBag.Type";
-            if (title=="news"){
+            if (title == "news") {
                 $("#menu-home").removeClass("active-menu");
                 $("#menu-news").addClass("active-menu");
-            }else{
+            } else {
                 $("#menu-home").addClass("active-menu");
                 $("#menu-news").removeClass("active-menu");
             }
@@ -640,21 +648,21 @@
             //            '</div>' +
             //        '</a>';
             var noti = '<a class="list-group-item" href="' + url + '" role="menuitem" style="' + styleUnread + '" onclick="markAsRead(' + data.Id + ')">' +
-                      '<div class="media">'+
-                        '<div class="media-left padding-right-10">'+
-                          '<span class="avatar avatar-sm avatar-online">'+
+                      '<div class="media">' +
+                        '<div class="media-left padding-right-10">' +
+                          '<span class="avatar avatar-sm avatar-online">' +
                             '<img src="' + image + '" alt="...">' +
-                           
-                          '</span>'+
-                        '</div>'+
-                        '<div class="media-body">'+
-                          
+
+                          '</span>' +
+                        '</div>' +
+                        '<div class="media-body">' +
+
                           '<div class="media-detail" style="color:#000!important; font-weight:400;font-size:14px">' + data.Message + '</div>' +
                           '<div class="media-meta">' +
                             '<time datetime="">' + data.CreateDateString + '</time>' +
                           '</div>' +
-                        '</div>'+
-                      '</div>'+
+                        '</div>' +
+                      '</div>' +
                       '</a>';
             return noti;
         }
@@ -735,7 +743,7 @@
             }
         });
     </script>
-    
+
 
     @RenderSection("scripts", false)
 </body>

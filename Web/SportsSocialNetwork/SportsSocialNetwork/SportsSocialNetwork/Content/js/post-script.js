@@ -114,7 +114,7 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                     }
                     var moreCmtBtn = "";
                     if (this.CommentCount > 3) {
-                        moreCmtBtn = "<div id='moreCmt_" + this.Id + "'><a href='javascript:void(0)' onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
+                        moreCmtBtn = "<div id='moreCmt_" + this.Id + "'><a href='javascript:void(0)' style='color:#ff6a00!important'  onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
                     }
                     var spanLike = "";
                     if (this.Liked) {
@@ -174,8 +174,8 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
 
                                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
                                              + '<form id="comment-form_' + this.Id + '" class="comment-form" method="post" autocomplete="off"><input type="hidden" name="postId" value="' + this.Id + '"/>'
-                                            + '<input name="content" id="contentDetail_' + this.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px" placeholder="Viết bình luận của bạn..."/>'
-                                            + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style="position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2" onclick="addImageComment(' + this.Id + ')"></button>'
+                                            + '<input name="content" id="contentDetail_' + this.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px;color: #000;" placeholder="Viết bình luận của bạn..."/>'
+                                            + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style="position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2;color:#ff6a00!important" onclick="addImageComment(' + this.Id + ')"></button>'
                                             + '<div style="height:0px;overflow:hidden">'
                                             + '<input type="file" id="selectImageComment_' + this.Id + '" name="image" /></div></div></form>'
                                             + '<div id="previewImageComment_' + this.Id + '" class="example margin-0" style="display:none"><div data-role="container">'
@@ -243,7 +243,7 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                     }
                     var moreCmtBtn = "";
                     if (this.CommentCount > 3) {
-                        moreCmtBtn = "<div id='moreCmt_" + this.Id + "'><a href='javascript:void(0)' onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
+                        moreCmtBtn = "<div id='moreCmt_" + this.Id + "'><a href='javascript:void(0)' style='color:#ff6a00!important'  onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
                     }
                     var spanLike = "";
                     if (this.Liked) {
@@ -295,8 +295,8 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                     
                                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
                                              + '<form id="comment-form_' + this.Id + '" class="comment-form" method="post" autocomplete="off"><input type="hidden" name="postId" value="' + this.Id + '"/>'
-                                            + '<input name="content" id="contentDetail_' + this.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px" placeholder="Viết bình luận của bạn..."/>'
-                                            + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style="position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2" onclick="addImageComment(' + this.Id + ')"></button>'
+                                            + '<input name="content" id="contentDetail_' + this.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px;color: #000;" placeholder="Viết bình luận của bạn..."/>'
+                                            + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style="position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2;color:#ff6a00!important" onclick="addImageComment(' + this.Id + ')"></button>'
                                             + '<div style="height:0px;overflow:hidden">'
                                             + '<input type="file" id="selectImageComment_' + this.Id + '" name="image" /></div></div></form>'
                                             + '<div id="previewImageComment_' + this.Id + '" class="example margin-0" style="display:none"><div data-role="container">'
@@ -362,7 +362,7 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
                     }
                     var moreCmtBtn = "";
                     if (this.CommentCount > 3) {
-                        moreCmtBtn = "<div id='moreCmt_"+this.Id+"'><a href='javascript:void(0)' onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
+                        moreCmtBtn = "<div id='moreCmt_" + this.Id + "'><a href='javascript:void(0)' style='color:#ff6a00!important' onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
                     }
                     var spanLike = "";
                     if (this.Liked) {
@@ -414,7 +414,7 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
 
                                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
                                              + '<form id="comment-form_' + this.Id + '" class="comment-form" method="post" autocomplete="off"><input type="hidden" name="postId" value="' + this.Id + '"/>'
-                                            + '<input name="content" id="contentDetail_' + this.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px" placeholder="Viết bình luận của bạn..."/>'
+                                            + '<input name="content" id="contentDetail_' + this.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px;color: #000;" placeholder="Viết bình luận của bạn..."/>'
                                             + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style=" color: #ff6a00;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2" onclick="addImageComment(' + this.Id + ')"></button>'
                                             + '<div style="height:0px;overflow:hidden">'
                                             + '<input type="file" id="selectImageComment_' + this.Id + '" name="image" /></div></div></form>'
@@ -480,7 +480,7 @@ function loadSpecificPost(userId, postId, actionName, loadMoreCmtActionName, loa
                     }
                     var moreCmtBtn = "";
                     if (dt.CommentCount > 3) {
-                        moreCmtBtn = "<div id='moreCmt_" + dt.Id + "'><a href='javascript:void(0)' onclick='loadMoreComt(" + dt.Id + ")'>Xem thêm bình luận</a>";
+                        moreCmtBtn = "<div id='moreCmt_" + dt.Id + "'><a href='javascript:void(0)'  style='color:#ff6a00!important'  onclick='loadMoreComt(" + dt.Id + ")'>Xem thêm bình luận</a>";
                     }
                     var spanLike = "";
                     if (this.Liked) {
@@ -532,7 +532,7 @@ function loadSpecificPost(userId, postId, actionName, loadMoreCmtActionName, loa
 
                                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
                                              + '<form id="comment-form_' + dt.Id + '" class="comment-form" method="post" autocomplete="off"><input type="hidden" name="postId" value="' + dt.Id + '"/>'
-                                            + '<input name="content" id="contentDetail_' + dt.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px" placeholder="Viết bình luận của bạn..."/>'
+                                            + '<input name="content" id="contentDetail_' + dt.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px;color: #000;" placeholder="Viết bình luận của bạn..."/>'
                                             + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style="color: #ff6a00;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2" onclick="addImageComment(' + dt.Id + ')"></button>'
                                             + '<div style="height:0px;overflow:hidden">'
                                             + '<input type="file" id="selectImageComment_' + dt.Id + '" name="image" /></div></div></form>'
@@ -680,7 +680,7 @@ function prependPost(data, userId) {
     }
     var moreCmtBtn = "";
     if (this.CommentCount > 3) {
-        moreCmtBtn = "<div id='moreCmt_" + data.Id + "'><a href='javascript:void(0)' onclick='loadMoreComt(" + data.Id + ")'>Xem thêm bình luận</a>";
+        moreCmtBtn = "<div id='moreCmt_" + data.Id + "'><a href='javascript:void(0)' style='color:#ff6a00!important'  onclick='loadMoreComt(" + data.Id + ")'>Xem thêm bình luận</a>";
     }
     var spanLike = "";
     if (this.Liked) {
@@ -730,7 +730,7 @@ function prependPost(data, userId) {
 
                                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
                                              + '<form id="comment-form_' + data.Id + '" class="comment-form" method="post" autocomplete="off"><input type="hidden" name="postId" value="' + data.Id + '"/>'
-                                            + '<input name="content" id="contentDetail_' + data.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px" placeholder="Viết bình luận của bạn..."/>'
+                                            + '<input name="content" id="contentDetail_' + data.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px;color: #000;" placeholder="Viết bình luận của bạn..."/>'
                                             + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style=" color: #ff6a00;position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2" onclick="addImageComment(' + data.Id + ')"></button>'
                                             + '<div style="height:0px;overflow:hidden">'
                                             + '<input type="file" id="selectImageComment_' + data.Id + '" name="image" /></div></div></form>'
@@ -1313,7 +1313,7 @@ function refreshPost(data) {
     }
     var moreCmtBtn = "";
     if (this.CommentCount > 3) {
-        moreCmtBtn = "<div id='moreCmt_" + data.Id + "'><a href='javascript:void(0)' onclick='loadMoreComt(" + data.Id + ")'>Xem thêm bình luận</a>";
+        moreCmtBtn = "<div id='moreCmt_" + data.Id + "'><a href='javascript:void(0)' style='color:#ff6a00!important'  onclick='loadMoreComt(" + data.Id + ")'>Xem thêm bình luận</a>";
     }
     var spanLike = "";
     if (this.Liked) {
@@ -1366,8 +1366,8 @@ function refreshPost(data) {
 
                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
                              + '<form id="comment-form_' + data.Id + '" class="comment-form" method="post" autocomplete="off"><input type="hidden" name="postId" value="' + data.Id + '"/>'
-                            + '<input name="content" id="contentDetail_' + data.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px" placeholder="Viết bình luận của bạn..."/>'
-                            + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style="position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2" onclick="addImageComment(' + data.Id + ')"></button>'
+                            + '<input name="content" id="contentDetail_' + data.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px;color: #000;" placeholder="Viết bình luận của bạn..."/>'
+                            + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style="position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2;color:#ff6a00!important" onclick="addImageComment(' + data.Id + ')"></button>'
                             + '<div style="height:0px;overflow:hidden">'
                             + '<input type="file" id="selectImageComment_' + data.Id + '" name="image" /></div></div></form>'
                             + '<div id="previewImageComment_' + data.Id + '" class="example margin-0" style="display:none"><div data-role="container">'
@@ -1467,7 +1467,7 @@ function prepareEditCommentForm(data) {
         + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
         + '<form id="comment-formEdit_' + data.Id + '" class="comment-formEdit" method="post" autocomplete="off"><input type="hidden" name="postId" value="' + data.PostId + '"/>'
         + '<input name="content" id="contentDetailEdit_' + data.Id + '" type="text" class="form-control input-cmnt" style="padding-right: 35px" value="' + data.Comment + '"/>'
-        + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style="position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2" onclick="addImageCommentEdit(' + data.Id + ')"></button>'
+        + '<button type="button" class="btn btn-pure btn-primary fa fa-camera" style="position: absolute;top: 2px;right: 0px;transition: right 0.2s; z-index:2;color:#ff6a00!important" onclick="addImageCommentEdit(' + data.Id + ')"></button>'
         + '<div style="height:0px;overflow:hidden">'
         + '<input type="file" id="selectImageCommentEdit_' + data.Id + '" name="image" /></div></div></form>'
         + '<div id="previewImageCommentEdit_' + data.Id + '" class="example margin-0" style="display:none"><div data-role="container">'
