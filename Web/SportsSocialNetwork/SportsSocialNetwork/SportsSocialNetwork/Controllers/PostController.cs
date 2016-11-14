@@ -211,13 +211,15 @@ namespace SportsSocialNetwork.Controllers
 
                 string title = Utils.GetEnumDescription(NotificationType.Post);
                 int type = (int)NotificationType.Post;
-                string message = sender.FullName + "đã đăng một bài viết lên tường nhà bạn";
+                string message = sender.FullName + " đã đăng một bài viết lên tường nhà bạn";
 
                 Notification noti = _notificationService.CreateNoti(profileId, userId, title, message, type, post.Id, null, null, null);
 
                 //////////////////////////////////////////////
                 //signalR noti
                 NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+
 
                 // Get the context for the Pusher hub
                 IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();

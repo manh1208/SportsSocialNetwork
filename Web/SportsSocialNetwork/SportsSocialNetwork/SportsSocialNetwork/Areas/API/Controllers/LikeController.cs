@@ -31,6 +31,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             var postService = this.Service<IPostService>();
 
+            var postCommentService = this.Service<IPostCommentService>();
+
             ResponseModel<Like> response = null;
             try
             {
@@ -54,30 +56,95 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                     response = new ResponseModel<Like>(true, "Đã thích", null);
                     if (createNoti)
                     {
-                        Post post = postService.FirstOrDefaultActive(x=> x.Id == postId);
+                        //get all relative user of this post
+                        List<string> AllRelativeUserIdOfPost = new List<string>();
 
-                        post.LatestInteractionTime = DateTime.Now;
+                        List<PostComment> listPostCmt = postCommentService.GetAllRelativeCmtDistinct(postId).ToList();
 
-                        Notification noti = notiService.SaveNoti(GetPostUserId(postId),userId,"Like",user.FullName + " đã thích bài viết của bạn", (int)NotificationType.Post,postId,null,null);
+                        List<Like> listPostLike = likeService.GetAllRelativeLikeDistinct(postId).ToList();
 
-                        List<string> registrationIds = GetToken(GetPostUserId(postId));
-
-                        //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
-
-                        NotificationModel model = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
-
-                        if (registrationIds != null && registrationIds.Count != 0)
+                        foreach (var item in listPostCmt)
                         {
-                            
-                            Android.Notify(registrationIds, null, model);
+                            AllRelativeUserIdOfPost.Add(item.UserId);
                         }
 
-                        //SignalR Noti
-                        // Get the context for the Pusher hub
-                        IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+                        foreach (var item in listPostLike)
+                        {
+                            AllRelativeUserIdOfPost.Add(item.UserId);
+                        }
 
-                        // Notify clients in the group
-                        hubContext.Clients.User(post.UserId).send(model);
+                        AllRelativeUserIdOfPost = AllRelativeUserIdOfPost.Distinct().ToList();
+                        //end=================
+
+
+                        Post post = postService.FirstOrDefaultActive(x => x.Id == postId);
+                        //noti to post creator
+                        if (!(post.UserId.Equals(userId)))
+                        {
+                            Notification notiForPostCreator = notiService.SaveNoti(post.UserId, userId, "Like", user.FullName + " đã thích bài viết của bạn", (int)NotificationType.Post, post.Id, null, null);
+
+                            //Fire base noti
+                            List<string> registrationIds = GetToken(user.Id);
+
+                            //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
+
+                            NotificationModel model = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(notiForPostCreator));
+
+                            if (registrationIds != null && registrationIds.Count != 0)
+                            {
+                                Android.Notify(registrationIds, null, model);
+                            }
+
+
+                            //SignalR Noti
+                            NotificationFullInfoViewModel notiModelR = notiService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(notiForPostCreator));
+
+                            // Get the context for the Pusher hub
+                            IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                            // Notify clients in the group
+                            hubContext.Clients.User(notiModelR.UserId).send(notiModelR);
+                        }
+
+
+                        //noti to all user that relavtive in this post
+                        foreach (var item in AllRelativeUserIdOfPost)
+                        {
+                            if (!(item.Equals(userId)) && !(item.Equals(post.UserId)))
+                            {
+                                Notification not = notiService.SaveNoti(item, userId, "Like", user.FullName + " đã thích bài viết mà bạn theo dõi", (int)NotificationType.Post, post.Id, null, null);
+
+                                Notification noti = notiService.FirstOrDefaultActive(n => n.Id == not.Id);
+
+                                //Fire base noti
+                                List<string> registrationIds = GetToken(user.Id);
+
+                                //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
+
+                                NotificationModel model = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+
+                                if (registrationIds != null && registrationIds.Count != 0)
+                                {
+                                    Android.Notify(registrationIds, null, model);
+                                }
+
+
+                                //SignalR Noti
+                                NotificationFullInfoViewModel notiModelR = notiService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                                // Get the context for the Pusher hub
+                                IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                                // Notify clients in the group
+                                hubContext.Clients.User(notiModelR.UserId).send(notiModelR);
+
+                            }
+                        }
+
+                        post.LatestInteractionTime = DateTime.Now;
+                        postService.Update(post);
+                        postService.Save();
+                        
                     }
                 }
                 else {

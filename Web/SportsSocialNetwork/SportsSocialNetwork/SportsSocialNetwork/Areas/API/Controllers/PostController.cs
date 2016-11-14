@@ -7,6 +7,7 @@ using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.Hubs;
 using SportsSocialNetwork.Models.Notifications;
+using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -358,38 +359,34 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 }
 
                 post = service.CreatePost(post);
+                service.Save();
 
-                //Notify all group members
-                if (post.GroupId != null)
+                if (model.UserId != profileId)
                 {
-                    List<GroupMember> memberList = GetMemberList(post.GroupId);
+                    var _notificationService = this.Service<INotificationService>();
+                    var _userService = this.Service<IAspNetUserService>();
 
-                    AspNetUser postedUser = aspNetUserService.FindUser(post.UserId);
+                    AspNetUser sender = _userService.FindUser(model.UserId);
 
-                    foreach (var member in memberList)
-                    {
-                        if (!(member.UserId.Equals(post.UserId)))
-                        {
-                            Notification noti = notiService.SaveNoti(member.UserId, post.UserId, "Post", postedUser.FullName + " đã đăng một bài viết", (int)NotificationType.Post, post.Id, null, null);
+                    string title = Utils.GetEnumDescription(NotificationType.Post);
+                    int type = (int)NotificationType.Post;
+                    string message = sender.FullName + " đã đăng một bài viết lên tường nhà bạn";
 
-                            List<string> registrationIds = GetToken(member.UserId);
+                    Notification noti = _notificationService.CreateNoti(profileId, model.UserId, title, message, type, post.Id, null, null, null);
 
-                            NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+                    //////////////////////////////////////////////
+                    //signalR noti
+                    NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
 
-                            if (registrationIds != null && registrationIds.Count != 0)
-                            {
-                                Android.Notify(registrationIds, null, notiModel);
-                            }
+                    notiModel.AspNetUser = Mapper.Map<AspNetUserViewModel>(aspNetUserService.FirstOrDefaultActive(x=> x.Id.Equals(notiModel.UserId)));
 
-                            //SignalR Noti
-                            // Get the context for the Pusher hub
-                            IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+                    notiModel.AspNetUser1 = Mapper.Map<AspNetUserViewModel>(aspNetUserService.FirstOrDefaultActive(x => x.Id.Equals(notiModel.FromUserId)));
 
-                            // Notify clients in the group
-                            hubContext.Clients.User(post.UserId).send(model);
+                    // Get the context for the Pusher hub
+                    IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
 
-                        }
-                    }
+                    // Notify clients in the group
+                    hubContext.Clients.User(notiModel.UserId).send(notiModel);
                 }
                 //Missing post sport
 

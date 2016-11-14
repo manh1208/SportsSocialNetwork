@@ -101,6 +101,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         public NotificationFullInfoViewModel PrepareNoti(NotificationFullInfoViewModel model)
         {
+
+
             model.CreateDateString = model.CreateDate.Value.Day.ToString("00") + "/" + model.CreateDate.Value.Month.ToString("00") + "/" + model.CreateDate.Value.Year.ToString("0000")
                     + " lúc " + model.CreateDate.Value.Hour.ToString("00") + ":" + model.CreateDate.Value.Minute.ToString("00");
 
