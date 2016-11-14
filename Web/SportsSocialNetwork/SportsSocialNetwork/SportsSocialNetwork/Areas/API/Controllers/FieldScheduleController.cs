@@ -1,4 +1,5 @@
 ﻿using SkyWeb.DatVM.Mvc;
+using SportsSocialNetwork.Areas.Api.Models;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
@@ -48,8 +49,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                     FieldSchedule schedule = new FieldSchedule();
                     schedule.FieldId = model.FieldId;
                     schedule.Type = model.Type;
-                    schedule.StartTime = startTime;
-                    schedule.EndTime = endTime;
+                    //schedule.StartTime = startTime;
+                    //schedule.EndTime = endTime;
                     schedule.Description = model.Description;
                     scheduleService.Create(schedule);
                     scheduleService.Save();
@@ -129,15 +130,15 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 FieldSchedule schedule = service.Get(model.Id);
 
-                if (!(schedule.StartTime == startTime && schedule.EndTime == endTime && schedule.FieldId == model.FieldId)) {
-                    timeValid = service.checkTimeValidInFieldSchedule(model.FieldId, startTime.TimeOfDay, endTime.TimeOfDay, startTime, endTime);
-                }
+                //if (!(schedule.StartTime == startTime && schedule.EndTime == endTime && schedule.FieldId == model.FieldId)) {
+                //    timeValid = service.checkTimeValidInFieldSchedule(model.FieldId, startTime.TimeOfDay, endTime.TimeOfDay, startTime, endTime);
+                //}
 
                 if (timeValid)
                 {
                     schedule.FieldId = model.FieldId;
-                    schedule.StartTime = startTime;
-                    schedule.EndTime = endTime;
+                    //schedule.StartTime = startTime;
+                    //schedule.EndTime = endTime;
                     schedule.Type = model.Type;
                     schedule.Description = model.Description;
                     service.Update(schedule);
@@ -164,7 +165,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             var placeService = this.Service<IPlaceService>();
 
-            ResponseModel<List<FieldScheduleViewModel>> response = null;
+            ResponseModel<List<LoadFieldScheduleViewModel>> response = null;
 
             try {
                 Place place = placeService.FirstOrDefaultActive(x=> x.Id == placeId);
@@ -183,7 +184,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                     }
                 }
 
-                List<FieldScheduleViewModel> result = new List<FieldScheduleViewModel>();
+                List<LoadFieldScheduleViewModel> result = new List<LoadFieldScheduleViewModel>();
 
                 foreach(var s in scheduleList)
                 {
@@ -191,9 +192,9 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 }
 
-                response = new ResponseModel<List<FieldScheduleViewModel>>(true, "Tải lịch sân thành công", null, result);
+                response = new ResponseModel<List<LoadFieldScheduleViewModel>>(true, "Tải lịch sân thành công", null, result);
             } catch(Exception) {
-                response = ResponseModel<List<FieldScheduleViewModel>>.CreateErrorResponse("Tải lịch sân thất bại", systemError);
+                response = ResponseModel<List<LoadFieldScheduleViewModel>>.CreateErrorResponse("Tải lịch sân thất bại", systemError);
             }
             return Json(response);
         }
@@ -206,13 +207,55 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         //    schedule.TypeString = Utils.GetEnumDescription((FieldScheduleStatus)schedule.Type);
         //}
 
-        private FieldScheduleViewModel PrepareFieldScheduleViewModel(FieldSchedule schedule) {
-            FieldScheduleViewModel result = Mapper.Map<FieldScheduleViewModel>(schedule);
+        private LoadFieldScheduleViewModel PrepareFieldScheduleViewModel(FieldSchedule schedule) {
+            LoadFieldScheduleViewModel result = Mapper.Map<LoadFieldScheduleViewModel>(schedule);
 
-            result.EndTimeString = schedule.EndTime.ToString("dd/MM/yyyy HH:mm:ss");
+            result.StartDateStr = schedule.StartDate.ToString("dd/MM/yyyy");
 
-            result.StartTimeString = schedule.StartTime.ToString("dd/MM/yyyy HH:mm:ss");
+            result.EndDateStr = schedule.EndDate.ToString("dd/MM/yyyy");
+            result.StartTimeStr = schedule.StartTime.ToString();
+            result.EndTimeStr = schedule.EndTime.ToString();
+            int repeat = schedule.AvailableDay;
+            int i = 0;
+            string s = "";
+            while (repeat > 0)
+            {
 
+                if ((repeat & 1) == 1)
+                {
+                    switch (i)
+                    {
+                        case 1:
+                            s += "Chủ nhật - ";
+                            break;
+                        case 2:
+                            s += "Thứ hai - ";
+                            break;
+                        case 3:
+                            s += "Thứ ba - ";
+                            break;
+                        case 4:
+                            s += "Thứ tư - ";
+                            break;
+                        case 5:
+                            s += "Thứ năm - ";
+                            break;
+                        case 6:
+                            s += "Thứ sáu - ";
+                            break;
+                        case 7:
+                            s += "Thứ bảy - ";
+                            break;
+
+                    }
+
+                }
+
+                i++;
+                repeat >>= 1;
+            }
+            s = s.Substring(0, s.Length - 3);
+            result.Days = s;
             result.TypeString = Utils.GetEnumDescription((FieldScheduleStatus)schedule.Type);
 
             if (schedule.Field != null) {

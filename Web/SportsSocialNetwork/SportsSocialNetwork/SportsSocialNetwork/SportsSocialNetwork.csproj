@@ -289,6 +289,7 @@
     <Compile Include="Areas\Api\Controllers\PostController.cs" />
     <Compile Include="Areas\Api\Controllers\PostImageController.cs" />
     <Compile Include="Areas\Api\Controllers\SportController.cs" />
+    <Compile Include="Areas\Api\Models\LoadFieldScheduleViewModel.cs" />
     <Compile Include="Areas\Moderator\Controllers\ArticleController.cs" />
     <Compile Include="Areas\Moderator\ModeratorAreaRegistration.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\EventController.cs" />
@@ -297,6 +298,7 @@
     <Compile Include="Areas\PlaceOwner\Controllers\OrderController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\ParticipationController.cs" />
     <Compile Include="Areas\PlaceOwner\Controllers\PlaceController.cs" />
+    <Compile Include="Areas\PlaceOwner\Models\ViewModels\CreateFieldScheduleViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\FieldScheduleDetailViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDatatableViewModel.cs" />
     <Compile Include="Areas\PlaceOwner\Models\ViewModels\OrderDetailViewModel.cs" />
@@ -4055,7 +4057,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Api\Models\" />
     <Folder Include="Areas\Api\Views\AspNetUser\" />
     <Folder Include="Areas\Api\Views\Event\" />
     <Folder Include="Areas\Api\Views\FieldSchedule\" />

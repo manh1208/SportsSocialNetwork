@@ -52,8 +52,9 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 .Select(a => new IConvertible[] {
                         count++,
                         a.Field.Name,
-                        a.StartTime.ToString(),
-                        a.EndTime.ToString(),
+                        a.StartDate.ToString("dd/MM/yyyy"),
+                        a.EndDate.ToString("dd/MM/yyyy"),
+
                         a.Type,
                         a.Id,
                 }).ToArray();
@@ -72,7 +73,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         public ActionResult Detail(int id)
         {
             var model = new FieldScheduleDetailViewModel();
-           
+
             var service = this.Service<IFieldScheduleService>();
             var schedule = service.Get(id);
             if (schedule == null)
@@ -82,8 +83,49 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             else
             {
                 model = Mapper.Map<FieldScheduleDetailViewModel>(schedule);
+                int repeat = model.AvailableDay;
+                int i = 0;
+                string s = "";
+                while (repeat > 0)
+                {
+
+                    if ((repeat & 1) == 1)
+                    {
+                        switch (i)
+                        {
+                            case 1:
+                                s += "Chủ nhật - ";
+                                break;
+                            case 2:
+                                s += "Thứ hai - ";
+                                break;
+                            case 3:
+                                s += "Thứ ba - ";
+                                break;
+                            case 4:
+                                s += "Thứ tư - ";
+                                break;
+                            case 5:
+                                s += "Thứ năm - ";
+                                break;
+                            case 6:
+                                s += "Thứ sáu - ";
+                                break;
+                            case 7:
+                                s += "Thứ bảy - ";
+                                break;
+
+                        }
+
+                    }
+
+                    i++;
+                    repeat >>= 1;
+                }
+                s = s.Substring(0, s.Length - 3);
+                model.AvailableDayStr = s;
             }
-            
+
             return this.PartialView(model);
         }
 
@@ -99,11 +141,11 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             listPlace = _placeService.GetActive(p => p.UserId == userID).ToList();
             foreach (var item in listPlace)
             {
-                if(item.Id == placeId)
+                if (item.Id == placeId)
                 {
                     listField.AddRange(_fieldService.GetActive(x => x.PlaceId == item.Id).ToList());
                 }
-                
+
             }
             List<SelectListItem> selectListField = new List<SelectListItem>();
             foreach (var item in listField)
@@ -119,39 +161,60 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             ViewBag.scheduleType = scheduleType;
             ViewBag.selectListField = selectListField;
             ViewBag.placeId = placeId;
+
             return this.PartialView();
         }
 
-       
+
 
         [HttpPost]
-        public ActionResult Create(FieldSchedule schedule)
+        public ActionResult Create(CreateFieldScheduleViewModel schedule)
         {
-            int placeId = Int32.Parse(Request["placeId"]);
-            DateTime _startDay = DateTime.ParseExact(Request["StartDay"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            DateTime _endDay = DateTime.ParseExact(Request["EndDay"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            TimeSpan _startTime = TimeSpan.Parse(Request["StartTime"]);
-            TimeSpan _endTime = TimeSpan.Parse(Request["EndTime"]);
-
-            DateTime startTime = new DateTime(_startDay.Date.Year, _startDay.Date.Month, _startDay.Date.Day, _startTime.Hours, _startTime.Minutes, _startTime.Seconds);
-            DateTime endTime = new DateTime(_endDay.Date.Year, _endDay.Date.Month, _endDay.Date.Day, _endTime.Hours, _endTime.Minutes, _endTime.Seconds);
             var result = new AjaxOperationResult();
-                      
-                var typeService = this.Service<IFieldTypeService>();
-                var fieldService = this.Service<IFieldService>();
-                var scheduleService = this.Service<IFieldScheduleService>();                             
-                FieldSchedule fs = new FieldSchedule();
-                fs.FieldId = schedule.FieldId;
-                fs.Type = schedule.Type;
-                fs.StartTime = startTime;
-                fs.EndTime = endTime;
-                fs.Description = schedule.Description;
-                scheduleService.Create(fs);
-                scheduleService.Save();
-                result.Succeed = true;
-         
-            return RedirectToAction("List", new RouteValueDictionary(
-                new { controller = "FieldSchedule", action = "List", id = placeId }));
+
+            try
+            {
+
+                schedule.StartDate = DateTime.ParseExact(schedule.StartDateStr, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                schedule.EndDate = DateTime.ParseExact(schedule.EndDateStr, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                schedule.StartTime = TimeSpan.Parse(schedule.StartTimeStr);
+                schedule.EndTime = TimeSpan.Parse(schedule.EndTimeStr);
+
+                string[] days = schedule.Days.Split(',');
+                int repeatDay = 0;
+                for (int i = 0; i < days.Length; i++)
+                {
+                    if (days[i].Length > 0)
+                    {
+                        int mark = 1 << Int16.Parse(days[i]);
+                        repeatDay = repeatDay | mark;
+                    }
+                }
+                schedule.AvailableDay = repeatDay;
+                schedule.Active = true;
+                var entity = schedule.ToEntity();
+                if (checkValid(entity))
+                {
+                    var scheduleService = this.Service<IFieldScheduleService>();
+                    scheduleService.Create(entity);
+                    result.Succeed = true;
+                }
+                else{
+                    result.Succeed = false;
+                }
+            }
+            catch (Exception)
+            {
+                result.Succeed = false;
+            }
+            //DateTime startTime = new DateTime(_startDay.Date.Year, _startDay.Date.Month, _startDay.Date.Day, _startTime.Hours, _startTime.Minutes, _startTime.Seconds);
+            //DateTime endTime = new DateTime(_endDay.Date.Year, _endDay.Date.Month, _endDay.Date.Day, _endTime.Hours, _endTime.Minutes, _endTime.Seconds);
+            //var result = new AjaxOperationResult();
+
+
+
+
+            return Json(result);
         }
 
         [HttpPost]
@@ -184,7 +247,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             string userID = User.Identity.GetUserId();
             var scheduleService = this.Service<IFieldScheduleService>();
             FieldSchedule schedule = scheduleService.Get(id);
-            FieldScheduleViewModel updateSchedule;
+            CreateFieldScheduleViewModel updateSchedule;
 
             var _placeService = this.Service<IPlaceService>();
             var _fieldService = this.Service<IFieldService>();
@@ -212,76 +275,139 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             ViewBag.scheduleType = scheduleType;
             ViewBag.selectListField = selectListField;
 
-            DateTime startDay = new DateTime(schedule.StartTime.Year, schedule.StartTime.Month, schedule.StartTime.Day);
-            DateTime endDay = new DateTime(schedule.EndTime.Year, schedule.EndTime.Month, schedule.EndTime.Day);
-            TimeSpan startTime = new TimeSpan(schedule.StartTime.Hour, schedule.StartTime.Minute, schedule.StartTime.Second);
-            TimeSpan endTime = new TimeSpan(schedule.EndTime.Hour, schedule.EndTime.Minute, schedule.EndTime.Second);
-         
+            //DateTime startDay = new DateTime(schedule.StartTime.Year, schedule.StartTime.Month, schedule.StartTime.Day);
+            //DateTime endDay = new DateTime(schedule.EndTime.Year, schedule.EndTime.Month, schedule.EndTime.Day);
+            //TimeSpan startTime = new TimeSpan(schedule.StartTime.Hour, schedule.StartTime.Minute, schedule.StartTime.Second);
+            //TimeSpan endTime = new TimeSpan(schedule.EndTime.Hour, schedule.EndTime.Minute, schedule.EndTime.Second);
+
             if (schedule == null)
             {
                 return this.IdNotFound();
             }
             else
             {
-                updateSchedule = Mapper.Map<FieldScheduleViewModel>(schedule);
+                updateSchedule = Mapper.Map<CreateFieldScheduleViewModel>(schedule);
+                updateSchedule.StartDateStr = updateSchedule.StartDate.ToString("dd/MM/yyyy");
+                updateSchedule.EndDateStr = updateSchedule.EndDate.ToString("dd/MM/yyyy");
+                string start = updateSchedule.StartTime.ToString();
+                updateSchedule.StartTimeStr = start.Substring(0, start.Length - 3);
+                string end = updateSchedule.EndTime.ToString();
+                updateSchedule.EndTimeStr = end.Substring(0, end.Length - 3);
+                int repeat = updateSchedule.AvailableDay;
+                int i = 0;
+                string s = "";
+                while (repeat > 0)
+                {
+
+                    if ((repeat & 1) == 1)
+                    {
+                        s += "," + i;
+                    }
+
+                    i++;
+                    repeat >>= 1;
+                }
+                updateSchedule.Days = s;
+                updateSchedule.PlaceId = placeId;
             }
-            ViewBag.startDay = startDay;
-            ViewBag.endDay = endDay;
-            ViewBag.startTime = startTime;
-            ViewBag.endTime = endTime;
+            //ViewBag.startDay = startDay;
+            //ViewBag.endDay = endDay;
+            //ViewBag.startTime = startTime;
+            //ViewBag.endTime = endTime;
             return this.PartialView(updateSchedule);
         }
 
         [HttpPost]
-        public ActionResult Update(FieldScheduleViewModel model)
+        public ActionResult Update(CreateFieldScheduleViewModel schedule)
         {
-            DateTime _startDay = DateTime.ParseExact(Request["StartDay"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            DateTime _endDay = DateTime.ParseExact(Request["EndDay"], "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            TimeSpan _startTime = TimeSpan.Parse(Request["StartTime"]);
-            TimeSpan _endTime = TimeSpan.Parse(Request["EndTime"]);
-
-            DateTime startTime = new DateTime(_startDay.Date.Year, _startDay.Date.Month, _startDay.Date.Day, _startTime.Hours, _startTime.Minutes, _startTime.Seconds);
-            DateTime endTime = new DateTime(_endDay.Date.Year, _endDay.Date.Month, _endDay.Date.Day, _endTime.Hours, _endTime.Minutes, _endTime.Seconds);
-
             var result = new AjaxOperationResult();
+
             try
             {
+
+                schedule.StartDate = DateTime.ParseExact(schedule.StartDateStr, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                schedule.EndDate = DateTime.ParseExact(schedule.EndDateStr, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                schedule.StartTime = TimeSpan.Parse(schedule.StartTimeStr);
+                schedule.EndTime = TimeSpan.Parse(schedule.EndTimeStr);
+                string[] days = schedule.Days.Split(',');
+                int repeatDay = 0;
+                for (int i = 0; i < days.Length; i++)
+                {
+                    if (days[i].Length > 0)
+                    {
+                        int mark = 1 << Int16.Parse(days[i]);
+                        repeatDay = repeatDay | mark;
+                    }
+                }
+                schedule.AvailableDay = repeatDay;
+                schedule.Active = true;
                 var scheduleService = this.Service<IFieldScheduleService>();
-                FieldSchedule schedule = scheduleService.Get(model.Id);
-                schedule.FieldId = model.FieldId;
-                schedule.StartTime = startTime;
-                schedule.EndTime = endTime;
-                schedule.Type = model.Type;
-                schedule.Description = model.Description;
-                scheduleService.Update(schedule);
-                scheduleService.Save();
-                result.Succeed = true;
+                var entity = scheduleService.Get(schedule.Id);
+                schedule.CopyToEntity(entity);
+                if (checkValid(entity))
+                {
+                    scheduleService.Update(entity);
+                    result.Succeed = true;
+                }else
+                {
+                    result.Succeed = false;
+                }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 result.Succeed = false;
-                Console.WriteLine(e.ToString());
-            }           
+            }
+            //DateTime startTime = new DateTime(_startDay.Date.Year, _startDay.Date.Month, _startDay.Date.Day, _startTime.Hours, _startTime.Minutes, _startTime.Seconds);
+            //DateTime endTime = new DateTime(_endDay.Date.Year, _endDay.Date.Month, _endDay.Date.Day, _endTime.Hours, _endTime.Minutes, _endTime.Seconds);
+            //var result = new AjaxOperationResult();
+
+
+
+
             return Json(result);
+        }
+
+        public bool checkValid(FieldSchedule schedule)
+        {
+            var _fieldScheduleService = this.Service<IFieldScheduleService>();
+            string tit = Utils.GetEnumDescription((FieldScheduleStatus)schedule.Type);
+            DateTime start = schedule.StartDate;
+            DateTime end = schedule.EndDate;
+            while (start <= end)
+            {
+                int dayOfWeek = ((int)start.DayOfWeek) + 1;
+                int bitAtPosititon = (schedule.AvailableDay >> dayOfWeek) & 1;
+                if (bitAtPosititon == 1)
+                {
+                    var result = _fieldScheduleService.checkTimeValidInFieldSchedule(schedule.FieldId, schedule.StartTime, schedule.EndTime, start, start);
+                    if (!result)
+                    {
+                        return false;
+                    }
+                }
+                start = start.AddDays(1);
+            }
+            return true;
         }
 
         [HttpPost]
         public string checkDTValid(int fieldId, string startDay, string endDay, string startTime, string endTime)
         {
-            var _fieldScheduleService = this.Service<IFieldScheduleService>();
-            DateTime _startDay = DateTime.ParseExact(startDay, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            DateTime _endDay = DateTime.ParseExact(endDay, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            //var _fieldScheduleService = this.Service<IFieldScheduleService>();
+            //DateTime _startDay = DateTime.ParseExact(startDay, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            //DateTime _endDay = DateTime.ParseExact(endDay, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-            TimeSpan _startTime = TimeSpan.Parse(startTime);
-            TimeSpan _endTime = TimeSpan.Parse(endTime);
-            if (_fieldScheduleService.checkTimeValidInFieldSchedule(fieldId,_startTime,_endTime,_startDay,_endDay))
-            {
-                return "valid";
-            }
-            else
-            {
-                return "invalid";
-            }
+            //TimeSpan _startTime = TimeSpan.Parse(startTime);
+            //TimeSpan _endTime = TimeSpan.Parse(endTime);
+            //if (_fieldScheduleService.checkTimeValidInFieldSchedule(fieldId,_startTime,_endTime,_startDay,_endDay))
+            //{
+            //    return "valid";
+            //}
+            //else
+            //{
+            //    return "invalid";
+            //}
+            return "valid";
         }
     }
 }

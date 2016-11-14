@@ -74,7 +74,35 @@ namespace SportsSocialNetwork.Controllers
             var _fieldScheduleService = this.Service<IFieldScheduleService>();
             List<FieldSchedule> schedules = _fieldScheduleService.GetActive(p => p.FieldId == id).ToList();
             List<FieldScheduleViewModel> scheduleList = Mapper.Map<List<FieldScheduleViewModel>>(schedules);
-            return Json(scheduleList.Select(f => new { title = Utils.GetEnumDescription((FieldScheduleStatus)f.Type), start = f.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"), end = f.EndTime.ToString("yyyy-MM-ddTHH:mm:ss") }), JsonRequestBehavior.AllowGet);
+            var scheduleCalendar = new List<Calendar>();
+            foreach (var schedule in scheduleList)
+            {
+                string tit = Utils.GetEnumDescription((FieldScheduleStatus)schedule.Type);
+                DateTime start = schedule.StartDate;
+                DateTime end = schedule.EndDate;
+                while (start <= end)
+                {
+                    int dayOfWeek = ((int)start.DayOfWeek) + 1;
+                    int bitAtPosititon = (schedule.AvailableDay >> dayOfWeek) & 1;
+                    if (bitAtPosititon == 1)
+                    {
+                        DateTime startTime = new DateTime(start.Year, start.Month, start.Day, schedule.StartTime.Hours,
+                            schedule.StartTime.Minutes, schedule.StartTime.Seconds);
+                        DateTime endTime = new DateTime(start.Year, start.Month, start.Day, schedule.EndTime.Hours,
+                           schedule.EndTime.Minutes, schedule.EndTime.Seconds);
+                        scheduleCalendar.Add(new Calendar
+                        {
+                            title = tit,
+                            start = startTime.ToString("yyyy-MM-ddTHH:mm:ss"),
+                            end = endTime.ToString("yyyy-MM-ddTHH:mm:ss")
+                        }
+                            );
+                    }
+                    start = start.AddDays(1);
+                }
+            }
+
+            return Json(scheduleCalendar, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetTimeBlockPrice(int? id)
@@ -84,5 +112,13 @@ namespace SportsSocialNetwork.Controllers
             return Json(timeBlocks.Select(f => new { block = f.StartTime + " - " + f.EndTime, price = f.Price.ToString("n0") }).ToArray()
                 , JsonRequestBehavior.AllowGet);
         }
+
+    }
+
+    public class Calendar
+    {
+        public string title { get; set; }
+        public string start { get; set; }
+        public string end { get; set; }
     }
 }

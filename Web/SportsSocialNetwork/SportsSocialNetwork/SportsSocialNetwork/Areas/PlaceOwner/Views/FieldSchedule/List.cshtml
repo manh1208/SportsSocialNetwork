@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Quản lí lịch đặt sân";
     int placeID = ViewBag.placeID;
+    var days = ViewBag.Days as IEnumerable<SelectListItem>;
 }
 <style>
     .datepicker.datepicker-dropdown.dropdown-menu.datepicker-oritent-left.dataTable-orient-bottom {
@@ -48,6 +49,10 @@
         word-wrap: break-word;
     }
 
+    .select2-dropdown{
+        z-index:9999!important;
+    }
+
     /*p.alignCenter {
         text-align: center;
     }*/
@@ -77,8 +82,8 @@
                                 <tr>
                                     <th class="breakAll narrow">Số thứ tự</th>
                                     <th class="breakAll narrow">Tên sân</th>
-                                    <th class="breakAll narrow">Thời gian bắt đầu</th>
-                                    <th class="breakAll narrow">Thời gian kết thúc</th>
+                                    <th class="breakAll narrow">Ngày bắt đầu</th>
+                                    <th class="breakAll narrow">Ngày kết thúc</th>
                                     <th class="breakAll narrow">Loại</th>
                                     <th class="breakAll narrow">Thao tác</th>
                                 </tr>
@@ -135,6 +140,7 @@
                 $('#endDay').datepicker({
                     format: "dd/mm/yyyy"
                 })
+
             });
         })(document, window, jQuery);
 
@@ -283,8 +289,58 @@
                 var Site = window.Site;
                 $(document).ready(function () {
                     Site.run();
+
+
                 });
             })(document, window, jQuery);
+
+            var array =  [{"id":"1","text":"Chủ Nhật"},
+                           {"id":"2","text":"Thứ hai"},
+           {"id":"3","text":"Thứ ba"},
+           {"id":"4","text":"Thứ tư"},
+           {"id":"5","text":"Thứ năm"},
+           {"id":"6","text":"Thứ sáu"},
+           {"id":"7","text":"Thứ bảy"},];
+
+            $("#days").select2({
+                class: 'form-control',
+                width: '100%',
+                multiple: true,
+                maximumSelectionSize: 1,
+                placeholder: "",
+                data: array
+            });
+
+            $('#update-fieldschedule-form').submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData(document.getElementById('update-fieldschedule-form'));
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Update")',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            showMessage("Tạo thành công.", "success", "OK");
+                            $('#modalUpdate').modal('hide');
+                            $('#fieldschedule-table').reloadDataTable();
+                        } else {
+                            showErrors(result.Errors);
+                        }
+
+                    },
+                    error: function (result) {
+
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+
+
+            });
+
 
             $('#startDay').datepicker({
                 format: "dd/mm/yyyy"
@@ -294,32 +350,40 @@
             });
 
             $(document).on('change', "#startDay", function () {
-                $('#update-form').formValidation('revalidateField', 'StartDay');
+                $('#update-fieldschedule-form').formValidation('revalidateField', 'StartDateStr');
             });
             $(document).on('change', "#endDay", function () {
-                $('#update-form').formValidation('revalidateField', 'EndDay');
+                $('#update-fieldschedule-form').formValidation('revalidateField', 'EndDateStr');
             });
 
             $(document).on('change', "#startTime", function () {
-                $('#update-form').formValidation('revalidateField', 'StartTime');
+                $('#update-fieldschedule-form').formValidation('revalidateField', 'StartTimeStr');
             });
             $(document).on('change', "#endTime", function () {
-                $('#update-form').formValidation('revalidateField', 'EndTime');
+                $('#update-fieldschedule-form').formValidation('revalidateField', 'EndTimeStr');
             });
 
             $("#startTime").on("change", function () {
-                $('#update-form').formValidation('revalidateField', 'StartTime')
+                $('#update-fieldschedule-form').formValidation('revalidateField', 'StartTimeStr')
             });
 
             $("#endTime").on("change", function () {
-                $('#update-form').formValidation('revalidateField', 'EndTime')
+                $('#update-fieldschedule-form').formValidation('revalidateField', 'EndTimeStr')
+            });
+
+            $("#days").on("change", function () {
+                $('#create-fieldschedule-form').formValidation('revalidateField', 'Days')
             });
 
             var stD = $("#startDay").val();
+            //$("#days").focus(function () {
+            //    $("#csubmitBtn").removeAttr("disabled") 
+            //})
+           
 
             (function () {
                 var TIME_PATTERN = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-                $('#update-form').formValidation({
+                $('#update-fieldschedule-form').formValidation({
                     framework: "bootstrap",
                     button: {
                         selector: '#submitBtn',
@@ -327,7 +391,7 @@
                     },
                     icon: null,
                     fields: {
-                        StartDay: {
+                        StartDateStr: {
                             validators: {
                                 notEmpty: {
                                     message: 'Ngày bắt đầu không được trống'
@@ -336,11 +400,11 @@
                                     format: 'DD/MM/YYYY',
                                     message: 'Ngày không phù hợp',
                                     min: stD,
-                                    max: 'EndDay'
+                                    max: 'EndDateStr'
                                 }
                             }
                         },
-                        EndDay: {
+                        EndDateStr: {
                             validators: {
                                 notEmpty: {
                                     message: 'Ngày kết thúc không được trống'
@@ -348,11 +412,11 @@
                                 date: {
                                     format: 'DD/MM/YYYY',
                                     message: 'Ngày không phù hợp',
-                                    min: 'StartDay'
+                                    min: 'StartDateStr'
                                 }
                             }
                         },
-                        StartTime: {
+                        StartTimeStr: {
                             validators: {
                                 notEmpty: {
                                     message: 'Giờ bắt đầu không được trống'
@@ -363,7 +427,7 @@
                                 },
                             }
                         },
-                        EndTime: {
+                        EndTimeStr: {
                             validators: {
                                 notEmpty: {
                                     message: 'Giờ bắt đầu không được trống'
@@ -371,6 +435,34 @@
                                 regexp: {
                                     regexp: TIME_PATTERN,
                                     message: 'Giờ không đúng định dạng [HH:mm]'
+                                },
+                                callback: {
+                                    message: 'Giờ kết thúc phải sau giờ bắt đầu',
+                                    callback: function (value, validator, $field) {
+                                        var startTime = validator.getFieldElements('StartTimeStr').val();
+                                        if (startTime == '' || !TIME_PATTERN.test(startTime)) {
+                                            return true;
+                                        }
+                                        var startHour = parseInt(startTime.split(':')[0], 10),
+                                            startMinutes = parseInt(startTime.split(':')[1], 10),
+                                            endHour = parseInt(value.split(':')[0], 10),
+                                            endMinutes = parseInt(value.split(':')[1], 10);
+
+                                        if (endHour > startHour || (endHour == startHour && endMinutes > startMinutes)) {
+                                            // The start time is also valid
+                                            // So, we need to update its status
+                                            validator.updateStatus('StartTimeStr', validator.STATUS_VALID, 'callback');
+                                            return true;
+                                        }
+
+                                        return false;
+                                    }
+                                }
+                            }
+                        },Days:{
+                            validators: {
+                                notEmpty: {
+                                    message: 'Ngày lặp lại không được trống'
                                 },
                             }
                         },
@@ -385,35 +477,7 @@
                 });
             })();
 
-            //update sport function
-            $('#update-form').submit(function (e) {
-                e.preventDefault();
-                var formData = new FormData(document.getElementById('update-form'));
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("Update")',
-                    data: formData,
-                    async: false,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: function (result) {
-                        if (result.Succeed) {
-                            showMessage("Cập nhật thành công.", "success", "OK");
-                            $('#modalUpdate').modal('hide');
-                            $('#fieldschedule-table').reloadDataTable();
-                        } else {
-                            showErrors(result.Errors);
-                            showMessage("Không thể cập nhật.", "error", "OK");
-
-                        }
-                    },
-                    error: function (result) {
-                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                        $('#modalUpdate').modal('hide');
-                    },
-                });
-            });
+           
 
             $('body').on('focus', ".timepicker", function () {
                 $(this).clockpicker();
@@ -431,8 +495,57 @@
                 var Site = window.Site;
                 $(document).ready(function () {
                     Site.run();
+
+
                 });
             })(document, window, jQuery);
+
+            var array =  [{"id":"1","text":"Chủ Nhật"},
+                            {"id":"2","text":"Thứ hai"},
+            {"id":"3","text":"Thứ ba"},
+            {"id":"4","text":"Thứ tư"},
+            {"id":"5","text":"Thứ năm"},
+            {"id":"6","text":"Thứ sáu"},
+            {"id":"7","text":"Thứ bảy"},];
+
+            $("#cdays").select2({
+                class: 'form-control',
+                width: '100%',
+                multiple: true,
+                maximumSelectionSize: 1,
+                placeholder: "",
+                data: array
+            });
+
+            $('#create-fieldschedule-form').submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData(document.getElementById('create-fieldschedule-form'));
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Create")',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            showMessage("Tạo thành công.", "success", "OK");
+                            $('#modalCreate').modal('hide');
+                            $('#fieldschedule-table').reloadDataTable();
+                        } else {
+                            showErrors(result.Errors);
+                        }
+
+                    },
+                    error: function (result) {
+
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+
+
+            });
 
             $('#cstartDay').datepicker({
                 format: "dd/mm/yyyy"
@@ -442,31 +555,40 @@
             });
 
             $(document).on('change', "#cstartDay", function () {
-                $('#create-form').formValidation('revalidateField', 'StartDay');
+                $('#create-fieldschedule-form').formValidation('revalidateField', 'StartDateStr');
             });
             $(document).on('change', "#cendDay", function () {
-                $('#create-form').formValidation('revalidateField', 'EndDay');
+                $('#create-fieldschedule-form').formValidation('revalidateField', 'EndDateStr');
             });
 
             $(document).on('change', "#cstartTime", function () {
-                $('#create-form').formValidation('revalidateField', 'StartTime');
+                $('#create-fieldschedule-form').formValidation('revalidateField', 'StartTimeStr');
             });
             $(document).on('change', "#cendTime", function () {
-                $('#create-form').formValidation('revalidateField', 'EndTime');
+                $('#create-fieldschedule-form').formValidation('revalidateField', 'EndTimeStr');
             });
 
             $("#cstartTime").on("change", function () {
-                $('#create-form').formValidation('revalidateField', 'StartTime')
+                $('#create-fieldschedule-form').formValidation('revalidateField', 'StartTimeStr')
             });
 
             $("#cendTime").on("change", function () {
-                $('#create-form').formValidation('revalidateField', 'EndTime')
+                $('#create-fieldschedule-form').formValidation('revalidateField', 'EndTimeStr')
             });
+
+            $("#cdays").on("change", function () {
+                $('#create-fieldschedule-form').formValidation('revalidateField', 'Days')
+            });
+
+
+            //$("#cdays").focus(function () {
+            //    $("#csubmitBtn").removeAttr("disabled") 
+            //})
 
             //Validation
             (function () {
                 var TIME_PATTERN = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-                $('#create-form').formValidation({
+                $('#create-fieldschedule-form').formValidation({
                     framework: "bootstrap",
                     button: {
                         selector: '#csubmitBtn',
@@ -488,7 +610,7 @@
                                 }
                             }
                         },
-                        StartDay: {
+                        StartDateStr: {
                             validators: {
                                 notEmpty: {
                                     message: 'Ngày bắt đầu không được trống'
@@ -497,11 +619,11 @@
                                     format: 'DD/MM/YYYY',
                                     message: 'Ngày không phù hợp',
                                     min: '@DateTime.Now.ToString("dd/MM/yyyy")',
-                                    max: 'EndDay'
+                                    max: 'EndDateStr'
                                 }
                             }
                         },
-                        EndDay: {
+                        EndDateStr: {
                             validators: {
                                 notEmpty: {
                                     message: 'Ngày kết thúc không được trống'
@@ -509,11 +631,11 @@
                                 date: {
                                     format: 'DD/MM/YYYY',
                                     message: 'Ngày không phù hợp',
-                                    min: 'StartDay'
+                                    min: 'StartDateStr'
                                 }
                             }
                         },
-                        StartTime: {
+                        StartTimeStr: {
                             validators: {
                                 notEmpty: {
                                     message: 'Giờ bắt đầu không được trống'
@@ -524,7 +646,7 @@
                                 },
                             }
                         },
-                        EndTime: {
+                        EndTimeStr: {
                             validators: {
                                 notEmpty: {
                                     message: 'Giờ bắt đầu không được trống'
@@ -532,6 +654,35 @@
                                 regexp: {
                                     regexp: TIME_PATTERN,
                                     message: 'Giờ không đúng định dạng [HH:mm]'
+                                },
+                                callback: {
+                                    message: 'Giờ kết thúc phải sau giờ bắt đầu',
+                                    callback: function (value, validator, $field) {
+                                        var startTime = validator.getFieldElements('StartTimeStr').val();
+                                        if (startTime == '' || !TIME_PATTERN.test(startTime)) {
+                                            return true;
+                                        }
+                                        var startHour = parseInt(startTime.split(':')[0], 10),
+                                            startMinutes = parseInt(startTime.split(':')[1], 10),
+                                            endHour = parseInt(value.split(':')[0], 10),
+                                            endMinutes = parseInt(value.split(':')[1], 10);
+
+                                        if (endHour > startHour || (endHour == startHour && endMinutes > startMinutes)) {
+                                            // The start time is also valid
+                                            // So, we need to update its status
+                                            validator.updateStatus('StartTimeStr', validator.STATUS_VALID, 'callback');
+                                            return true;
+                                        }
+
+                                        return false;
+                                    }
+                                }
+                            }
+                        },
+                        Days:{
+                            validators: {
+                                notEmpty: {
+                                    message: 'Ngày lặp lại không được trống'
                                 },
                             }
                         },
@@ -617,7 +768,7 @@
                         isValid = true;
                     }
                     else {
-                        
+
                         isValid = false;
                     }
                 },
