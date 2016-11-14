@@ -3,7 +3,7 @@
 @using SportsSocialNetwork.Models.Entities;
 @using Microsoft.AspNet.Identity;
 @{
-    ViewBag.Title = Model.UserName;
+    ViewBag.Title = Model.FullName;
     Layout = "~/Views/Shared/_SSNLayout.cshtml";
 
     var sport = ViewBag.Sport as IEnumerable<SelectListItem>;
@@ -377,7 +377,7 @@
                                                     </div>
                                                     <div class="media-body vertical-align">
                                                         <a href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))" style="text-decoration:none;color:#37474f;">
-                                                            <h4 class="media-heading vertical-align-middle">@item.Name</h4>
+                                                            <h4 class="media-heading vertical-align-middle" style="color:#000; font-weight:500">@item.Name</h4>
                                                         </a>
                                                     </div>
                                                 </div>

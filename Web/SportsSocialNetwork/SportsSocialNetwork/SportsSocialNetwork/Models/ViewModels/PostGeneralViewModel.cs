@@ -19,5 +19,6 @@ namespace SportsSocialNetwork.Models.ViewModels
         public float PostRank { get; set; }
         public float PostWeight { get; set; }
         public float TimeDecay { get; set; }
+        public AspNetUserSimpleModel Profile { get; set; }
     }
 }

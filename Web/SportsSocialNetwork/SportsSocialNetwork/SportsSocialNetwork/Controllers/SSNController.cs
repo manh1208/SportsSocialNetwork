@@ -168,6 +168,8 @@ namespace SportsSocialNetwork.Controllers
             }
             return View();
         }
+
+        [AllowAnonymous]
         public ActionResult GetAvatarImage()
         {
             var result = new AjaxOperationResult<string>();
@@ -475,12 +477,16 @@ namespace SportsSocialNetwork.Controllers
                 post.TimeDecay = _postService.CalculateTimeDecay(post.LatestInteractionTime.Value);
                 //Cal PostRank
                 post.PostRank = (relaScore * (post.PostWeight + 1)) / post.TimeDecay;
-
+                if (post.ProfileId != null)
+                {
+                    var tmpUser = _userService.FirstOrDefaultActive(p => p.Id == post.ProfileId);
+                    post.Profile = Mapper.Map<AspNetUserSimpleModel>(tmpUser);
+                }
 
             }
 
             List<PostGeneralViewModel> listPost = listPostVM.OrderByDescending(p => p.PostRank).Skip(skip).Take(take).ToList();
-
+            
             result.AdditionalData = listPost;
             result.Succeed = true;
             return Json(result);

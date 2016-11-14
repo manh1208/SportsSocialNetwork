@@ -5,17 +5,51 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
 }
-
+<style>
+    .pagination{
+        font-size:14px
+    }
+    .pagination>.active>a, .pagination>.active>a:focus, 
+    .pagination>.active>a:hover, .pagination>.active>span, 
+    .pagination>.active>span:focus, .pagination>.active>span:hover{
+        background-color:black;
+        border-color:black;
+        border-radius:5px
+    }
+    .pagination>li>a, .pagination>li>span{
+        background-color:#76838f;
+        border-color:#76838f;
+        color:black;
+        border-radius:5px
+    }
+    .pagination>li:last-child>a, .pagination>li:last-child>span{
+        background-color:white;
+        border-radius:5px
+    }
+    .pagination>li:first-child>a, .pagination>li:first-child>span{
+        background-color:white;
+        border-radius:5px
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+     color: transparent;
+     background-color: transparent;
+     background-image: unset;
+     border: none;
+    }
+    #DataTables_Table_0>thead>tr>th{
+        font-weight:bold;
+    }
+</style>
 <div class="panel">
     <div class="panel-body">
-        <h1>Lịch sử đặt sân</h1>
+        <h2><i class="fa fa-bars" aria-hidden="true"></i> Lịch sử đặt sân</h2>
     </div>
 </div>
-<div class="panel">
+<div class="panel padding-top-20">
     <div class="panel-body">
         <table class="table table-striped table-bordered table-hover" id="DataTables_Table_0">
             <thead>
-                <tr>
+                <tr style="color:black">
                     <th>Mã đặt sân</th>
                     <th>Tên sân</th>
                     <th>Thời gian đặt</th>
@@ -27,7 +61,7 @@
                     <th>Chi tiết</th>
                 </tr>
             </thead>
-            <tbody></tbody>
+            <tbody style="color:black"></tbody>
         </table>
     </div>
 </div>
@@ -110,19 +144,20 @@
                 "bProcessing": true,
                 "aLengthMenu": [10, 20, 50],
                 "oLanguage": {
-                    "sSearch": "Tìm kiếm:",
-                    "sZeroRecords": "Không có dữ liệu phù hợp",
-                    "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
-                    "sEmptyTable": "Không có dữ liệu",
-                    "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
+                    "sSearch": "Tìm kiếm:",
+                    "sZeroRecords": "Không có kết quả phù hợp",
+                    "sInfo": "Hiển thị _START_ - _END_ trong số _TOTAL_ dòng",
+                    "sEmptyTable": "Không tìm thấy kết quả nào",
+                    "sInfoFiltered": "",
                     "sLengthMenu": "Hiển thị _MENU_ dòng",
-                    "sProcessing": "Đang xử lý...",
+                    "sProcessing": "Xin đợi trong giây lát...",
                     "oPaginate": {
-                        "sPrevious": "Trang trước",
-                        "sNext": "Trang kế"
-                    }
+                        "sFirst": "Về đầu",
+                        "sLast": "Về cuối",
+                        "sNext": "Trang kế >",
+                        "sPrevious": "< Trang trước"
+                    },
                 },
-
                 "aoColumnDefs": [
                     {
                         "aTargets": [0],

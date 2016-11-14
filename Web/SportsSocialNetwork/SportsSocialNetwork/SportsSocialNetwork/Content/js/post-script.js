@@ -386,6 +386,15 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
                                    '</div>' +
                                    '</div>';
                     }
+                    var whoIsWall = "";
+                    if (this.ProfileId != null && this.ProfileId!=this.UserId) {
+                        if (this.ProfileId == _curUserId) {
+                            whoIsWall = " trên tường của bạn";
+                        }else {
+                            whoIsWall = " trên tường của <a style='color: #76838f' href='profile/index?userid=" + this.ProfileId + "'>" + this.Profile.FullName + "</a>";
+                        }
+                    }
+                    
                     var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + this.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
@@ -396,7 +405,7 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
                                         + "<div class='media-body'>"
                                             + "<p class='media-heading' style='margin-bottom:0;font-size: large;'>"
                                             + '<a style="font-weight:bold; color: #ff6a00;" class="comment-author" href="/profile/index?userid=' + this.AspNetUser.Id + '">' + this.AspNetUser.FullName + '</a>'
-                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; đã đăng một bài viết</span>"
+                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; đã đăng một bài viết" + whoIsWall + "</span>"
                                             + "</p>"
                                             + "<small style='color:#76838f'>" + this.PostAge + "</small>"
                                             + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px;font-size: large;font-weight: 500;'>" + content + "</div>"
