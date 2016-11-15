@@ -69,10 +69,17 @@ public class InvitationReceiveFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Invitation invitation = adapter.getItem(position);
-                if (invitation.isAccepted(userId)) {
-                    Intent intent = new Intent(getActivity(), InvitationChatActivity.class);
-                    intent.putExtra("invitationId", invitation.getId());
-                    getActivity().startActivity(intent);
+
+                if (invitation.isAccepted(userId) == null) {
+                    Toast.makeText(getActivity(), "Bạn phải chấp nhận lời mời để vào nhóm chat", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (invitation.isAccepted(userId)) {
+                        Intent intent = new Intent(getActivity(), InvitationChatActivity.class);
+                        intent.putExtra("invitationId", invitation.getId());
+                        getActivity().startActivity(intent);
+                    } else {
+                        Toast.makeText(getActivity(), "Bạn đã từ chối lời mời. Bạn không có quyền vào nhóm chat này", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
