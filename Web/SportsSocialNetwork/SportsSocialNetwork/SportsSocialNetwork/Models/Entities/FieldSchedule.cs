@@ -16,6 +16,7 @@ namespace SportsSocialNetwork.Models.Entities
     {
         public int Id { get; set; }
         public int FieldId { get; set; }
+        public Nullable<int> UserId { get; set; }
         public System.DateTime StartDate { get; set; }
         public System.DateTime EndDate { get; set; }
         public System.TimeSpan StartTime { get; set; }

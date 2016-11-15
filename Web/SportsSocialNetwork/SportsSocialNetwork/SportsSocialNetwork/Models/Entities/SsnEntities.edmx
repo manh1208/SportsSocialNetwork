@@ -149,6 +149,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FieldId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" />
           <Property Name="StartDate" Type="date" Nullable="false" />
           <Property Name="EndDate" Type="date" Nullable="false" />
           <Property Name="StartTime" Type="time" Precision="7" Nullable="false" />
@@ -193,6 +194,10 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PlaceId" Type="int" />
+          <Property Name="StartTime" Type="time" Precision="7" />
+          <Property Name="EndTime" Type="time" Precision="7" />
+          <Property Name="AvailableDays" Type="int" />
           <Property Name="SportId" Type="int" Nullable="false" />
           <Property Name="CoverImage" Type="nvarchar(max)" />
           <Property Name="Avatar" Type="nvarchar(max)" />
@@ -356,6 +361,10 @@
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="PostContent" Type="nvarchar(max)" />
           <Property Name="ContentType" Type="int" />
+          <Property Name="PostId" Type="int" />
+          <Property Name="EventId" Type="int" />
+          <Property Name="NewsId" Type="int" />
+          <Property Name="OrderId" Type="int" />
           <Property Name="EditDate" Type="datetime" />
           <Property Name="LatestInteractionTime" Type="datetime" />
           <Property Name="Active" Type="bit" Nullable="false" />
@@ -1812,6 +1821,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FieldId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" />
           <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="StartTime" Type="Time" Nullable="false" Precision="7" />
@@ -1861,6 +1871,10 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PlaceId" Type="Int32" />
+          <Property Name="StartTime" Type="Time" Precision="7" />
+          <Property Name="EndTime" Type="Time" Precision="7" />
+          <Property Name="AvailableDays" Type="Int32" />
           <Property Name="SportId" Type="Int32" Nullable="false" />
           <Property Name="CoverImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Avatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -2061,6 +2075,10 @@
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="PostContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ContentType" Type="Int32" />
+          <Property Name="PostId" Type="Int32" />
+          <Property Name="EventId" Type="Int32" />
+          <Property Name="NewsId" Type="Int32" />
+          <Property Name="OrderId" Type="Int32" />
           <Property Name="EditDate" Type="DateTime" Precision="3" />
           <Property Name="LatestInteractionTime" Type="DateTime" Precision="3" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
@@ -2970,6 +2988,7 @@
                 <ScalarProperty Name="StartTime" ColumnName="StartTime" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="FieldId" ColumnName="FieldId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -3013,6 +3032,10 @@
                 <ScalarProperty Name="Avatar" ColumnName="Avatar" />
                 <ScalarProperty Name="CoverImage" ColumnName="CoverImage" />
                 <ScalarProperty Name="SportId" ColumnName="SportId" />
+                <ScalarProperty Name="AvailableDays" ColumnName="AvailableDays" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="PlaceId" ColumnName="PlaceId" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -3187,6 +3210,10 @@
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="LatestInteractionTime" ColumnName="LatestInteractionTime" />
                 <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="NewsId" ColumnName="NewsId" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
                 <ScalarProperty Name="ContentType" ColumnName="ContentType" />
                 <ScalarProperty Name="PostContent" ColumnName="PostContent" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />

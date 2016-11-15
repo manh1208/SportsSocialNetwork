@@ -18,6 +18,10 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual int Id { get; set; }
     			public virtual string Name { get; set; }
     			public virtual string Description { get; set; }
+    			public virtual Nullable<int> PlaceId { get; set; }
+    			public virtual Nullable<System.TimeSpan> StartTime { get; set; }
+    			public virtual Nullable<System.TimeSpan> EndTime { get; set; }
+    			public virtual Nullable<int> AvailableDays { get; set; }
     			public virtual int SportId { get; set; }
     			public virtual string CoverImage { get; set; }
     			public virtual string Avatar { get; set; }

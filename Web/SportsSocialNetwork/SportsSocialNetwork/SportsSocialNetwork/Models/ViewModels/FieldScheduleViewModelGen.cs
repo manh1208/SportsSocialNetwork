@@ -17,6 +17,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     	
     			public virtual int Id { get; set; }
     			public virtual int FieldId { get; set; }
+    			public virtual Nullable<int> UserId { get; set; }
     			public virtual System.DateTime StartDate { get; set; }
     			public virtual System.DateTime EndDate { get; set; }
     			public virtual System.TimeSpan StartTime { get; set; }
