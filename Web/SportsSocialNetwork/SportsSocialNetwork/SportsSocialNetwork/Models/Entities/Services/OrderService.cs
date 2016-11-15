@@ -83,6 +83,14 @@ namespace SportsSocialNetwork.Models.Entities.Services
             Order order = this.FirstOrDefault(x => x.Id == id);
             if (order != null)
             {
+                if(order.PaidType == (int)OrderPaidType.ChosePayByCash)
+                {
+                    order.PaidType = (int)OrderPaidType.PaidByCash;
+                }
+                else if(order.PaidType == (int)OrderPaidType.ChosePayOnline)
+                {
+                    order.PaidType = (int)OrderPaidType.PaidOnline;
+                }
                 order.Status = status;
                 this.Save();
                 return order;

@@ -262,6 +262,10 @@
                                 return "<span class='label label-lg label-outline label-info'>@Utils.GetEnumDescription(OrderPaidType.ChosePayOnline).ToString()</span>";
                             } else if (o[6] == parseInt('@((int)OrderPaidType.ChosePayByCash)')) {
                                 return "<span class='label label-lg label-outline label-success'>@Utils.GetEnumDescription(OrderPaidType.ChosePayByCash).ToString()</span>";
+                            } else if (o[6] == parseInt('@((int)OrderPaidType.PaidByCash)')) {
+                                return "<span class='label label-lg label-outline label-success'>@Utils.GetEnumDescription(OrderPaidType.PaidByCash).ToString()</span>";
+                            } else if (o[6] == parseInt('@((int)OrderPaidType.PaidOnline)')) {
+                                return "<span class='label label-lg label-outline label-success'>@Utils.GetEnumDescription(OrderPaidType.PaidOnline).ToString()</span>";
                             }
                         }
                     },
