@@ -3,13 +3,28 @@
 @using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Danh sách các sự kiện";
+    var sport = ViewBag.Sport as IEnumerable<SelectListItem>;
 }
 
-@*<style>
-    .datepicker {
-        z-index: 1151 !important;
+<style>
+    .select2-selection {
+        border-radius: 0px !important;
+        font-weight: 400;
     }
-</style>*@
+
+    .select2-selection__choice {
+        color: #fff !important;
+        background-color: #ff6a00 !important;
+        font-weight: 400;
+    }
+
+    .select2-selection__choice__remove {
+        color: #fff !important;
+    }
+    .select2-dropdown {
+        z-index: 99999;
+    }
+</style>
 
 <div class="panel">
     <div class="panel-body">
@@ -58,9 +73,20 @@
     </div>
 </div>
 
+<div id="shareEventModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="share-event-modal-container">
+
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts{
     <script src="~/Content/assets/js/components/asscrollable.js"></script>
+    <script src="~/Content/assets/vendor/select2/select2.full.js"></script>
+    <script src="~/Content/assets/js/components/material.js"></script>
     <script>
         var count = 1;
 
@@ -107,46 +133,6 @@
                     });
                 }
             });
-
-            //bootbox.dialog({
-            //    message: "Bạn có chắc muốn xóa sự kiện này?",
-            //    title: "Xác nhận xóa",
-            //    buttons: {
-            //        success: {
-            //            label: "Hủy",
-            //            className: "btn-default",
-            //            callback: function () {
-
-            //            }
-            //        },
-            //        danger: {
-            //            label: "Đồng ý",
-            //            className: "btn-danger",
-            //            callback: function () {
-            //                $.ajax({
-            //                    url: "/PlaceOwner/Event/deleteEvent",
-            //                    data: {
-            //                        format: 'json',
-            //                        id: id
-            //                    },
-            //                    error: function () {
-            //                        alert("Problem!")
-            //                    },
-            //                    success: function (data) {
-            //                        if (data === "success") {
-            //                            bootbox.alert("Đã xóa thành công", function () {
-            //                                $('#updateEventModal').modal('toggle');
-            //                                RefreshTable();
-            //                            });
-
-            //                        }
-            //                    },
-            //                    type: 'POST'
-            //                })
-            //            }
-            //        }
-            //    }
-            //});
         };
 
         function deleteEvent(id) {
@@ -172,45 +158,6 @@
                     });
                 }
             });
-
-            //bootbox.dialog({
-            //    message: "Bạn có chắc muốn xóa sự kiện này?",
-            //    title: "Xác nhận xóa",
-            //    buttons: {
-            //        success: {
-            //            label: "Hủy",
-            //            className: "btn-default",
-            //            callback: function () {
-
-            //            }
-            //        },
-            //        danger: {
-            //            label: "Đồng ý",
-            //            className: "btn-danger",
-            //            callback: function () {
-            //                $.ajax({
-            //                    url: "/PlaceOwner/Event/deleteEvent",
-            //                    data: {
-            //                        format: 'json',
-            //                        id: id
-            //                    },
-            //                    error: function () {
-            //                        alert("Problem!")
-            //                    },
-            //                    success: function (data) {
-            //                        if (data === "success") {
-            //                            bootbox.alert("Đã xóa thành công", function () {
-            //                                RefreshTable();
-            //                            });
-
-            //                        }
-            //                    },
-            //                    type: 'POST'
-            //                })
-            //            }
-            //        }
-            //    }
-            //});
         };
 
         function scriptForPartialView() {
@@ -364,7 +311,7 @@
                 }
             });
 
-        }
+        };
 
         function showUpdate(id) {
             $.ajax({
@@ -405,7 +352,77 @@
                     });
                 }
             });
-        }
+        };
+
+        function showShareEventModal(id) {
+            $.ajax({
+                url: '@Url.Action("ShareEventModal")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#share-event-modal-container').html(data);
+                    var array = @Html.Raw(Json.Encode(
+                          ((IEnumerable<SelectListItem>)sport).Select(m => new
+                          {
+                              id = m.Value,
+                              text = m.Text
+                          })
+                     ));
+                    $('#eventSport').select2({
+                        class: 'form-control',
+                        width: '100%',
+                        multiple: true,
+                        maximumSelectionSize: 5,
+                        placeholder: "Chọn môn thể thao cho sự kiện",
+                        data: array
+                    });
+                    $('#shareEventModal').modal('show');
+
+                    (function (document, window, $) {
+                        'use strict';
+
+                        var Site = window.Site;
+                        $(document).ready(function () {
+                            Site.run();
+                        });
+                    })(document, window, jQuery);
+
+                    $('#shareEventForm').submit(function (e) {
+                        e.preventDefault();
+                        var formData = new FormData(document.getElementById('shareEventForm'));
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("shareEvent")',
+                            data: formData,
+                            async: false,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: function (result) {
+                                if (result.Succeed) {
+                                    showMessage("Cập nhật thành công", "success", "OK");
+                                    $('#shareEventModal').modal('hide');
+
+                                } else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                }
+
+                            },
+                            error: function (result) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            },
+                        });
+
+
+                    });
+
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+
+        };
 
         function RefreshTable() {
             count = 1;
@@ -541,7 +558,7 @@
                             var viewDetailBtn = "<a href='javascript:void(0)' class='btn btn-success' data-target='#modalEventDetail' data-toggle='modal' onclick='showDetail(" + o[0] + ")'><i class='fa fa-eye' aria-hidden='true'></i></a>";
                             var updateBtn = "<a href='javascript:void(0)' class='btn btn-warning' id='updateBtn' data-target='#updateEventModal' data-toggle='modal' onclick='showUpdate(" + o[0] + ")'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>";
                             var deleteBtn = "<a href='javascript:void(0)' class='btn btn-danger' onclick='deleteEvent(" + o[0] + ")'><i class='fa fa-trash-o' aria-hidden='true'></i></a>";
-                            var shareBtn = "<a href='javascript:void(0)' class='btn btn-dark' onclick='shareEvent(" + o[0] + ")'><i class='fa fa-share-alt' aria-hidden='true'></i></a>";
+                            var shareBtn = "<a href='javascript:void(0)' class='btn btn-dark' onclick='showShareEventModal(" + o[0] + ")'><i class='fa fa-share-alt' aria-hidden='true'></i></a>";
                             return viewDetailBtn + '&nbsp;' + updateBtn + '&nbsp;' + shareBtn + '&nbsp;' + deleteBtn;
                         }
                     }

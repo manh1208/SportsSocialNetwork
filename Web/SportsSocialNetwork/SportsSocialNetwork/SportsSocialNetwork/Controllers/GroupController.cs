@@ -840,7 +840,7 @@ namespace SportsSocialNetwork.Controllers
                         //save noti
                         title = Utils.GetEnumDescription(NotificationType.GroupChallengeInvitation);
                         type = (int)NotificationType.GroupChallengeInvitation;
-                        message = "Nhóm "+ chaVM.Group1.Name +" đã đồng ý lời thách đấu của từ nhóm" + cha.Group.Name + " của bạn";
+                        message = "Nhóm "+ chaVM.Group1.Name +" đã đồng ý lời thách đấu từ nhóm " + cha.Group.Name + " của bạn";
                         Notification noti = _notificationService.CreateNoti(gm.UserId, curUser, title, message, type, null, null, null, cha.Group1.Id);
 
                         //////////////////////////////////////////////
@@ -859,7 +859,7 @@ namespace SportsSocialNetwork.Controllers
                         //save noti
                         title = Utils.GetEnumDescription(NotificationType.GroupChallengeInvitation);
                         type = (int)NotificationType.GroupChallengeInvitation;
-                        message = "Nhóm " + chaVM.Group1.Name + " đã từ chối lời thách đấu từ nhóm" + cha.Group.Name + " của bạn";
+                        message = "Nhóm " + chaVM.Group1.Name + " đã từ chối lời thách đấu từ nhóm " + cha.Group.Name + " của bạn";
                         Notification noti1 = _notificationService.CreateNoti(gm1.UserId, curUser, title, message, type, null, null, null, cha.Group1.Id);
 
                         //////////////////////////////////////////////

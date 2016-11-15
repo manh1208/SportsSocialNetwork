@@ -13,7 +13,6 @@ using Microsoft.AspNet.Identity;
 using SportsSocialNetwork.Models.Identity;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using SportsSocialNetwork.Models.Enumerable;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
@@ -23,6 +22,16 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         // GET: PlaceOwner/Event
         public ActionResult Index()
         {
+            var _sportService = this.Service<ISportService>();
+            //get sport list for post
+            var sports = _sportService.GetActive()
+                            .Select(s => new SelectListItem
+                            {
+                                Text = s.Name,
+                                Value = s.Id.ToString()
+                            }).OrderBy(s => s.Value);
+            ViewBag.Sport = sports;
+
             return View();
         }
 
@@ -43,7 +52,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             {
                 sPlaces.Add(new SelectListItem { Text = "Hiện chưa có địa điểm", Value = "" });
             }
-            
+
             ViewBag.places = sPlaces;
             return View();
         }
@@ -84,6 +93,24 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         {
             var _eventService = this.Service<IEventService>();
             Event evt = _eventService.FirstOrDefault(e => e.Id == id);
+
+            return this.PartialView(evt);
+        }
+
+        public ActionResult ShareEventModal(int id)
+        {
+            var _eventService = this.Service<IEventService>();
+            var _sportService = this.Service<ISportService>();
+            Event evt = _eventService.FirstOrDefault(e => e.Id == id);
+
+            //get sport list for post
+            var sports = _sportService.GetActive()
+                            .Select(s => new SelectListItem
+                            {
+                                Text = s.Name,
+                                Value = s.Id.ToString()
+                            }).OrderBy(s => s.Value);
+            ViewBag.Sport = sports;
 
             return this.PartialView(evt);
         }
@@ -141,39 +168,54 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         }
 
         [HttpPost]
-        public ActionResult shareEvent(int id)
+        public ActionResult shareEvent(int eventId, string postContent, string eventSport)
         {
             var _postService = this.Service<IPostService>();
             var _eventService = this.Service<IEventService>();
             var result = new AjaxOperationResult();
             bool hasImage = false;
+            bool hasText = false;
 
-            Event evt = _eventService.FirstOrDefaultActive(e => e.Id == id);
+            Event evt = _eventService.FirstOrDefaultActive(e => e.Id == eventId);
 
             if(evt != null)
             {
-                string pattern = "<.*?>";
-                string replacement = "";
-                Regex rgx = new Regex(pattern);
-                string rawContent = rgx.Replace(evt.Description, replacement);
-                string content = rawContent.Substring(0, Math.Min(rawContent.Length, 200));
-
-                Post post = new Post();
-                post.UserId = User.Identity.GetUserId();
-                post.PostContent = content;
-                post.ProfileId = User.Identity.GetUserId();
-                if(!String.IsNullOrEmpty(evt.Image))
+                //string pattern = "<.*?>";
+                //string replacement = "";
+                //Regex rgx = new Regex(pattern);
+                //string rawContent = rgx.Replace(evt.Description, replacement);
+                //string content = rawContent.Substring(0, Math.Min(rawContent.Length, 200));
+                if(!String.IsNullOrEmpty(postContent))
                 {
-                    post.ContentType = (int)ContentPostType.TextAndImage;
+                    hasText = true;
+                }
+                if (!String.IsNullOrEmpty(evt.Image))
+                {
                     hasImage = true;
                 }
-                else
+
+                Post post = new Post();
+                if (hasText == true && hasImage == true)
+                {
+                    post.ContentType = (int)ContentPostType.TextAndImage;
+                    post.PostContent = postContent;
+                }
+                else if(hasText == true && hasImage == false)
                 {
                     post.ContentType = (int)ContentPostType.TextOnly;
+                    post.PostContent = postContent;
                 }
+                else if(hasText == false && hasImage == true)
+                {
+                    post.ContentType = (int)ContentPostType.ImageOnly;
+                }
+
+                post.UserId = User.Identity.GetUserId();
+                post.ProfileId = User.Identity.GetUserId();
 
                 if(_postService.CreatePost(post) != null)
                 {
+                    //save images
                     if(hasImage)
                     {
                         var _postImageService = this.Service<IPostImageService>();
@@ -182,6 +224,28 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                         pi.Image = evt.Image;
                         _postImageService.Create(pi);
                         _postImageService.Save();
+                    }
+
+                    //save hastag
+                    if (!String.IsNullOrEmpty(eventSport))
+                    {
+                        string[] sportId = eventSport.Split(',');
+                        string[] tmp = sportId.Distinct().ToArray();
+                        if (sportId != null)
+                        {
+                            var _postSport = this.Service<IPostSportService>();
+                            var postSport = new PostSport();
+                            foreach (var item in tmp)
+                            {
+                                if (!item.Equals(""))
+                                {
+                                    postSport.PostId = post.Id;
+                                    postSport.SportId = Int32.Parse(item);
+                                    _postSport.Create(postSport);
+                                }
+                            }
+
+                        }
                     }
                     result.Succeed = true;
                 }

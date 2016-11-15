@@ -3821,6 +3821,7 @@
     <Content Include="Areas\Moderator\Views\Article\Preview.cshtml" />
     <Content Include="Areas\Moderator\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Moderator\Views\Article\Index.cshtml" />
+    <Content Include="Areas\PlaceOwner\Views\Event\ShareEventModal.cshtml" />
     <None Include="Properties\PublishProfiles\SSN_Publish.pubxml" />
     <Content Include="Areas\PlaceOwner\Views\Participation\Detail.cshtml" />
     <Content Include="Areas\PlaceOwner\Views\Participation\Index.cshtml" />
