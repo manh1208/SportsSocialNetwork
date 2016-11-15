@@ -201,11 +201,13 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 }
                 else{
                     result.Succeed = false;
+                    result.AddError("Update", "Thời gian đặt bị trùng lịch. Vui lòng chọn thời gian khác");
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 result.Succeed = false;
+                result.AddError("Update", "Vui lòng nhập đầy đủ thông tin");
             }
             //DateTime startTime = new DateTime(_startDay.Date.Year, _startDay.Date.Month, _startDay.Date.Day, _startTime.Hours, _startTime.Minutes, _startTime.Seconds);
             //DateTime endTime = new DateTime(_endDay.Date.Year, _endDay.Date.Month, _endDay.Date.Day, _endTime.Hours, _endTime.Minutes, _endTime.Seconds);
@@ -351,11 +353,13 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 }else
                 {
                     result.Succeed = false;
+                    result.AddError("Update", "Thời gian đặt bị trùng lịch. Vui lòng chọn thời gian khác");
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 result.Succeed = false;
+                result.AddError("Update", "Vui lòng nhập đầy đủ thông tin");
             }
             //DateTime startTime = new DateTime(_startDay.Date.Year, _startDay.Date.Month, _startDay.Date.Day, _startTime.Hours, _startTime.Minutes, _startTime.Seconds);
             //DateTime endTime = new DateTime(_endDay.Date.Year, _endDay.Date.Month, _endDay.Date.Day, _endTime.Hours, _endTime.Minutes, _endTime.Seconds);

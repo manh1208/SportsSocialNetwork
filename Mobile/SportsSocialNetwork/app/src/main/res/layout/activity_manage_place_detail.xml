@@ -70,16 +70,16 @@
 
     <include layout="@layout/content_place_detail" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_create_field_schedule"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_book"
-        app:backgroundTint="@color/colorPrimary"
-        app:borderWidth="0dp"
-        app:layout_anchorGravity="bottom|right|end" />
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fab_create_field_schedule"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:src="@drawable/ic_book"-->
+        <!--app:backgroundTint="@color/colorPrimary"-->
+        <!--app:borderWidth="0dp"-->
+        <!--app:layout_anchorGravity="bottom|right|end" />-->
 
 
 </android.support.design.widget.CoordinatorLayout>

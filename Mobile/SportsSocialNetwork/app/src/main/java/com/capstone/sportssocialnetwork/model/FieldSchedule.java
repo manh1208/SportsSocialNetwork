@@ -10,20 +10,22 @@ public class FieldSchedule {
 
     @SerializedName("TypeString")
     private String typeString;
-    @SerializedName("StartTimeString")
+    @SerializedName("StartDateStr")
+    private String startDateString;
+    @SerializedName("EndDateStr")
+    private String endDateString;
+    @SerializedName("StartTimeStr")
     private String startTimeString;
-    @SerializedName("EndTimeString")
+    @SerializedName("EndTimeStr")
     private String endTimeString;
+    @SerializedName("Days")
+    private String RepeatDay;
     @SerializedName("Id")
     private int id;
     @SerializedName("FieldId")
     private int fieldId;
     @SerializedName("FieldName")
     private String fieldName;
-    @SerializedName("StartTime")
-    private String startTime;
-    @SerializedName("EndTime")
-    private String endTime;
     @SerializedName("Type")
     private int Type;
     @SerializedName("Description")
@@ -72,22 +74,6 @@ public class FieldSchedule {
         this.fieldId = fieldId;
     }
 
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
     public int getType() {
         return Type;
     }
@@ -118,5 +104,29 @@ public class FieldSchedule {
 
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
+    }
+
+    public String getStartDateString() {
+        return startDateString;
+    }
+
+    public void setStartDateString(String startDateString) {
+        this.startDateString = startDateString;
+    }
+
+    public String getEndDateString() {
+        return endDateString;
+    }
+
+    public void setEndDateString(String endDateString) {
+        this.endDateString = endDateString;
+    }
+
+    public String getRepeatDay() {
+        return RepeatDay;
+    }
+
+    public void setRepeatDay(String repeatDay) {
+        RepeatDay = repeatDay;
     }
 }

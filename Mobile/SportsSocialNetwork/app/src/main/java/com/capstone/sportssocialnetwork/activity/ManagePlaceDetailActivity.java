@@ -66,14 +66,14 @@ public class ManagePlaceDetailActivity extends AppCompatActivity {
                 .error(R.drawable.placeholder)
                 .fit()
                 .into(ivCover);
-        fabFieldSchedule.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ManagePlaceDetailActivity.this,CreateFieldScheduleActivity.class);
-                intent.putExtra("placeId",placeId);
-                startActivity(intent);
-            }
-        });
+//        fabFieldSchedule.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(ManagePlaceDetailActivity.this,CreateFieldScheduleActivity.class);
+//                intent.putExtra("placeId",placeId);
+//                startActivity(intent);
+//            }
+//        });
 
     }
 

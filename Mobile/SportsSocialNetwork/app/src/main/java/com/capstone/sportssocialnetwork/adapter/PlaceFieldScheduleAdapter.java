@@ -59,8 +59,8 @@ public class PlaceFieldScheduleAdapter extends ArrayAdapter<FieldSchedule> {
 
         FieldSchedule fieldSchedule= getItem(position);
         viewHolder.txtFieldName.setText(fieldSchedule.getFieldName());
-        viewHolder.txtStartTime.setText(fieldSchedule.getStartTimeString());
-        viewHolder.txtEndTime.setText(fieldSchedule.getEndTimeString());
+        viewHolder.txtStartTime.setText(fieldSchedule.getStartDateString());
+        viewHolder.txtEndTime.setText(fieldSchedule.getEndDateString());
         viewHolder.txtType.setText(fieldSchedule.getTypeString());
 
         return convertView;

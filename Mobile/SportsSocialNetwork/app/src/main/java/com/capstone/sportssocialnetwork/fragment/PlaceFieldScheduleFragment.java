@@ -3,10 +3,13 @@ package com.capstone.sportssocialnetwork.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
@@ -40,7 +43,33 @@ public class PlaceFieldScheduleFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_place_field_schedule, container, false);
         viewHolder = new ViewHolder(v);
         init();
+        viewHolder.lvFieldSchedule.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FieldSchedule fieldSchedule = adapter.getItem(position);
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_field_schedule,null,false);
+                TextView txtFieldName = (TextView) v.findViewById(R.id.txt_field_schedule_field_name);
+                TextView txtStartDate = (TextView) v.findViewById(R.id.txt_field_schedule_start_date);
+                TextView txtEndDate = (TextView) v.findViewById(R.id.txt_field_schedule_end_date);
+                TextView txtStartTime = (TextView) v.findViewById(R.id.txt_field_schedule_start_time);
+                TextView txtEndTime = (TextView) v.findViewById(R.id.txt_field_schedule_end_time);
+                TextView txtRepeatDays = (TextView) v.findViewById(R.id.txt_field_schedule_repeat_days);
+                TextView txtType = (TextView) v.findViewById(R.id.txt_field_schedule_type);
+                txtFieldName.setText(fieldSchedule.getFieldName());
+                        txtStartDate.setText(fieldSchedule.getStartDateString());
+                                txtEndDate.setText(fieldSchedule.getEndDateString());
+                                        txtStartTime.setText(fieldSchedule.getStartTimeString());
+                                                txtEndTime.setText(fieldSchedule.getEndTimeString());
+                                                        txtRepeatDays.setText(fieldSchedule.getRepeatDay());
+                txtType.setText(fieldSchedule.getTypeString());
+                builder.setView(v)
+                        .setNegativeButton("Đóng",null)
+                        .create().show();
+
+            }
+        });
         return v;
     }
 
