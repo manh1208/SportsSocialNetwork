@@ -20,6 +20,7 @@
     List<ChallengeDetailViewModel> challengeRequestList = ViewBag.challengeRequestList;
     List<ChallengeDetailViewModel> notOperateChallengeList = ViewBag.notOperateChallengeList;
     List<ChallengeDetailViewModel> sentChallengeRequest = ViewBag.sentChallengeRequest;
+    List<Group> suggestGroupChallenge = ViewBag.suggestGroupChallenge;
 
     bool hasFollowed = false;
 }
@@ -219,7 +220,7 @@
                                     <select id="toGroup" name="toGroup" class="form-control input-lg">
                                         @{ 
                                             <option value="-1">Hãy chọn một nhóm để thách đấu</option>
-                                            foreach (var item in suggestGroups)
+                                            foreach (var item in suggestGroupChallenge)
                                             {
                                                 <option value="@item.Id">@item.Name</option>
                                             }
@@ -1160,7 +1161,7 @@
                                                                 </ul>
                                                             </div>
 
-                                                            <a href="/Group/Index/@item.Id"><h3>@item.Group1.Name</h3></a>
+                                                            <a href="/Group/Index/@item.Group1.Id"><h3>@item.Group1.Name</h3></a>
                                                             <button type="button" class="btn btn-default" onclick="cancelChallenge(@item.Id)"><i class="fa fa-close" aria-hidden="true"></i> Hủy bỏ lời mời</button><br />
                                                  
 
@@ -1245,8 +1246,8 @@
             if (Model.IsMember && challengeRequestList != null && challengeRequestList.Count > 0)
             {
                 <div class="panel">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Lời mời thách đấu</h3>
+                    <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                        <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Lời mời thách đấu</h3>
                     </div>
                     <div class="panel-body">
                         <div class="height-100" data-plugin="scrollable">

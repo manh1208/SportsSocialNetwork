@@ -183,7 +183,8 @@ namespace SportsSocialNetwork.Controllers
             //    }
             //}
 
-            
+            //get suggest group for challenge
+            List<Group> suggestGroupChallenge = _groupService.GetActive(g => g.SportId == model.SportId && g.Id != model.Id).ToList();
 
             //get challenge request
             List<ChallengeDetailViewModel> challengeRequestList = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetAllChallengeRequest(id.Value).ToList());
@@ -205,6 +206,7 @@ namespace SportsSocialNetwork.Controllers
             ViewBag.pendingMembers = ListPendingMemberVM;
             ViewBag.groupId = id.Value;
             ViewBag.suggestGroups = suggestGroupsVM;
+            ViewBag.suggestGroupChallenge = suggestGroupChallenge;
             return View(model);
         }
 
@@ -836,7 +838,7 @@ namespace SportsSocialNetwork.Controllers
                 switch (status)
                 {
                     case (int)ChallengeStatus.NotOperate:
-                        GroupMember gm = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == cha.Group1.Id && g.Admin == true && status == (int)GroupMemberStatus.Approved);
+                        GroupMember gm = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == cha.Group1.Id && g.Admin == true && g.Status == (int)GroupMemberStatus.Approved);
                         //save noti
                         title = Utils.GetEnumDescription(NotificationType.GroupChallengeInvitation);
                         type = (int)NotificationType.GroupChallengeInvitation;
@@ -855,7 +857,7 @@ namespace SportsSocialNetwork.Controllers
                         break;
 
                     case (int)ChallengeStatus.NotAvailable:
-                        GroupMember gm1 = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == cha.Group1.Id && g.Admin == true && status == (int)GroupMemberStatus.Approved);
+                        GroupMember gm1 = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == cha.Group1.Id && g.Admin == true && g.Status == (int)GroupMemberStatus.Approved);
                         //save noti
                         title = Utils.GetEnumDescription(NotificationType.GroupChallengeInvitation);
                         type = (int)NotificationType.GroupChallengeInvitation;
