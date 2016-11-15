@@ -67,7 +67,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-dark" onclick="shareEvent(@Model.Id)">Chia sẻ</button>
+    <button type="button" class="btn btn-dark" onclick="showShareEventModal(@Model.Id)">Chia sẻ</button>
     <a href="@Url.Action("index", "Participation", new {id = Model.Id })" class="btn btn-primary">Xem người tham gia</a>
     <button type="button" class="btn btn-success" onclick="switchToUpdate(@Model.Id)">Cập nhật</button>
     
