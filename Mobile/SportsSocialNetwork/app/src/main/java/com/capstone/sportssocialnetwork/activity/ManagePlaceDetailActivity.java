@@ -81,7 +81,7 @@ public class ManagePlaceDetailActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs_place_detail);
         viewPager = (ViewPager) findViewById(R.id.viewpager_place_detail);
         ivCover = (ImageView) findViewById(R.id.iv_detail_place_cover);
-        fabFieldSchedule = (FloatingActionButton) findViewById(R.id.fab_create_field_schedule);
+//        fabFieldSchedule = (FloatingActionButton) findViewById(R.id.fab_create_field_schedule);
 
     }
 
