@@ -538,6 +538,22 @@
         });
 
         function handleFullcalendar() {
+            var fieldId = $('#field').val();
+            var maxTime = "24:00";
+            var minTime = "00:00";
+            $.ajax({
+                url: "/Field/GetTimeBlockCalendar",
+                type: 'POST',
+                async: false,
+                data: {
+                    'id': fieldId,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    maxTime = data.maxTime;
+                    minTime = data.minTime;
+                }
+            });
 
             var today = new Date();
             var dd = today.getDate();
@@ -561,6 +577,7 @@
                     right: ''
                 },
                 defaultDate: today,
+                
                 eventSources: [
         {
             url: "@Url.Action("GetOrderCalendar", "Field")",
@@ -583,6 +600,8 @@
                 ],
                 lang: 'vi',
                 defaultView: 'agendaWeek',
+                minTime: minTime,
+                maxTime: maxTime,
                 allDaySlot: false
             };
 

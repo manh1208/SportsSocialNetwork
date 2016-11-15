@@ -135,13 +135,14 @@
 <div class="row" style="font-family:sans-serif">
     <!--Left side-bar-->
     <div class="col-sm-3">
-        <div class="widget widget-shadow text-center">
+        <div class="widget widget-shadow text-center"
+             style="border-top-style: solid;border-left: 0.5px groove;border-right: 0.5px groove;border-bottom: 0.5px groove;">
             <div class="widget-header">
                 <div class="widget-header-content">
                     <a class="avatar avatar-lg magnific" href="@ViewBag.User.AvatarImage">
                         <img src="@ViewBag.User.AvatarImage" style="height:130px;width:130px">
                     </a>
-                    <div class="profile-user"><a style="color:#37474f" href="/profile/index?userid=@ViewBag.User.Id">@ViewBag.User.FullName</a></div>
+                    <div class="profile-user"><a style="color:#37474f;font-weight:bold" href="@Url.Action("Index","Profile", new { userId = ViewBag.User.Id })">@ViewBag.User.FullName</a></div>
                     <div class="profile-job">@ViewBag.User.Email</div>
                 </div>
             </div>
@@ -161,39 +162,57 @@
                     </div>
                 </div>
             </div>
-            @if (ViewBag.GroupList.Count > 0)
-            {
-                <div class="example-wrap margin-lg-0" style="text-align:left;">
-                    <h4 class="example-title" style="display:inline-block;float:left;">Các nhóm tham gia</h4>
-                    <button type="button" style="display:inline-block; float:right;" class="btn btn-pure btn-dark btn-sm icon wb-plus" onclick="showCreateGroupModal()"> Tạo nhóm</button>
-                    <div class="clearfix"></div>
-                    <ul class="list-group list-group-full">
-                        @{
-                            foreach (var item in ViewBag.GroupList)
-                            {
-                                <li class="list-group-item" style="text-align:left;">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <a class="avatar" href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))">
-                                                <img class="img-responsive" src="@item.Avatar" alt="...">
-                                            </a>
-                                        </div>
-                                        <div class="media-body vertical-align">
-                                            <a href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))" style="text-decoration:none;color:#37474f;">
-                                                <h4 class="media-heading vertical-align-middle">@item.Name</h4>
-                                            </a>
-                                        </div>
-
-                                    </div>
-                                </li>
-                            }
-                        }
-                    </ul>
-                </div>
-            }
-
         </div>
+        <div class="panel">
+            <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                <h class="panel-title" style="font-family:sans-serif;color:#fff!important">Các nhóm tham gia</h>
+            </div>
+
+            <div class="panel-body" style="padding:0;padding-bottom:10px">
+                <div>
+                    <div class="col-sm-12">
+
+                        <a href="#" style="text-decoration:none;border-bottom-style:groove" onclick="showCreateGroupModal()">
+                            <div class="text-center" style="padding:20px 20px 10px 20px;color:#76838f; font-size:medium;border-bottom: 1px groove #cbcbcb ">
+                                <i class="icon wb-plus"></i> Tạo nhóm
+                            </div>
+                        </a>
+
+
+                        @if (ViewBag.GroupList.Count > 0)
+                        {
+                            <div class="clearfix"></div>
+                                <ul class="list-group list-group-full">
+                                    @{
+                                        foreach (var item in ViewBag.GroupList)
+                                        {
+                                            <li class="list-group-item" style="text-align:left;">
+                                                <div class="media">
+                                                    <div class="media-left" style="padding-left:20px;">
+                                                        <a class="avatar" href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))">
+                                                            <img class="img-responsive" style="width:50px;height:50px;" src="@item.Avatar" alt="...">
+                                                        </a>
+                                                    </div>
+                                                    <div class="media-body vertical-align">
+                                                        <a href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))" style="text-decoration:none;color:#37474f;">
+                                                            <h4 class="media-heading vertical-align-middle" style="color:#000; font-weight:500">@item.Name</h4>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+
+                                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
+
     <!--END Left side-bar-->
     <!--Main-->
     <div class="col-sm-6">
@@ -276,71 +295,74 @@
     <div class="col-sm-3">
         @if (ViewBag.suggestUserList != null)
             {
-        <div class="panel" id="suggest-follow-panel">
-            <div class="panel-heading text-center">
-                <h class="panel-title" style="font-family:sans-serif">Gợi ý theo dõi</h>
-            </div>
-            <div class="panel-body">
-                <div class="height-250 check" id="check" data-plugin="scrollable">
-                    <div data-role="container">
-                        <div data-role="content" id="container">
-                            @foreach (var item in ViewBag.suggestUserList)
-                                {
-                                <div class='comment media suggestion' id="@item.Id">
-                                    <div class='media-left'>
-                                        <a class='avatar avatar-lg' href='javascript:void(0)'>
-                                            <img style='height:50px;width:50px' src='@item.AvatarImage' alt='...'>
-                                        </a>
-                                    </div>
-                                    <div class='comment-body media-body'>
-                                        <a class='comment-author' href='/profile/index?userid=@item.Id'>@item.FullName</a>
-                                        <div class='comment-content'>
-                                            @if (item.sameSport != 0)
-                                                {<p>Có chung @item.sameSport sở thích</p>}
-                                        </div><button onclick="follow('@item.Id')" class='btn-xs btn-success'><i class='fa fa-rss' aria-hidden='true'></i> Theo dõi</button>
-                                    </div>
-                                </div>
-                                }
-
-                        </div>
-
-                    </div>
-
+            <div class="panel" id="suggest-follow-panel">
+                <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                    <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Gợi ý theo dõi</h3>
                 </div>
-            </div>
-        </div>
-
-        }
-@if (ViewBag.SuggestNews != null)
-{
-        <div class="panel">
-            <div class="panel-heading text-center">
-                <h3 class="panel-title" style="font-family:sans-serif">Gợi ý tin tức nên xem</h3>
-            </div>
-            <div class="panel-body" style="padding:0;padding-bottom:10px">
-                <div class="suggest-group">
-                    <div class="col-sm-12">
-                        <div class="overlay">
-                            <img src="@ViewBag.SuggestNews.Image" style="display:block; max-height:100%;max-width:100%;" />
-                            <figcaption class="overlay-bottom overlay-panel overlay-background">
-                                <h4><span class="fa fa-eye"> 255</span></h4>
-                            </figcaption>
-                        </div>
-                        <div class="row">
-                            <div class="clearfix"></div>
-                            <div class="col-sm-12 height-60">
-                                <span class="vertical-align-middle" style="font-weight:bold">@ViewBag.SuggestNews.Title</span>
-                                <span class="vertical-align-middle"><i class="fa fa-pencil" aria-hidden="true"></i> bởi @ViewBag.SuggestNews.AspNetUser.UserName</span>
+                <div class="panel-body" style="padding: 0px">
+                    <div class="height-250  check" id="check" data-plugin="scrollable" style="width:100%">
+                        <div data-role="container" style="padding:10px 10px 10px 10px; width:200px">
+                            <div data-role="content" id="container" style="width: 200px!important">
+                                @foreach (var item in ViewBag.suggestUserList)
+                                {
+                                    <div class='comment media suggestion' id="@item.Id" style="width:100%;padding-right:10px">
+                                        <div class='media-left' style="padding-right:0px">
+                                            <a class='avatar' href='javascript:void(0)'>
+                                                <img style='height:30px;width:30px' src='@item.AvatarImage' alt='...'>
+                                            </a>
+                                        </div>
+                                        <div class='comment-body media-body'>
+                                            <a class='comment-author' href='@Url.Action("Index","Profile", new { userId = item.Id })' style="color:#000; font-weight:bold">@item.FullName</a>
+                                            <div class='comment-content' style="color:#76838f;margin-top:0px">
+                                                @if (item.sameSport != 0)
+                                                {<p>Có chung @item.sameSport sở thích</p>}
+                                            </div><button onclick="follow('@item.Id')" style="color:#000" class='btn btn-xs btn-default'><i class='fa fa-user-plus' aria-hidden='true'></i> Theo dõi</button>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="text-right"><em>Xem những tin khác</em></div>
 
-        </div>
-}
+        }
+        @{
+            if (ViewBag.SuggestNews != null)
+            {
+                <div class="panel">
+                    <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                        <h3 class="panel-title" style="font-family:sans-serif;color:#fff">Gợi ý tin tức</h3>
+                    </div>
+                    <div class="panel-body" style="padding:0;padding-bottom:10px">
+                        <div class="suggest-group">
+                            <div class="col-sm-12">
+                                <div class="overlay">
+                                    <img src="@ViewBag.SuggestNews.Image" style="display:block; max-height:100%;max-width:100%;" />
+                                    <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                        <h4><span class="fa fa-eye"> @ViewBag.SuggestNews.NumOfRead</span></h4>
+                                    </figcaption>
+                                </div>
+                                <div class="row">
+                                    <div class="clearfix"></div>
+                                    <div class="col-sm-12 height-60">
+                                        <a href="/News/NewsDetail/@ViewBag.SuggestNews.Id" style="color:#37474f;"> <span class="vertical-align-middle" style="font-weight:bold">@ViewBag.SuggestNews.Title</span></a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="text-center" style="border-top-style: groove;padding-top:10px"><em><a href="/News" style="color:#76838f;font-weight:400">Xem những tin khác</a></em></div>
+                    </div>
+
+                </div>
+            }
+        }
+
     </div>
+
 </div>
 <!--END right side-bar-->
 <div class="modal fade" id="orderForm" aria-hidden="true" role="dialog" tabindex="-1">

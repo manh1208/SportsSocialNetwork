@@ -912,7 +912,7 @@ function loadMoreComt(postId) {
         data: { "postId": postId },
         success: function (result) {
             if (result.Succeed) {
-                if (result.AdditionalData.CommentCount < skip + take) {
+                if (result.AdditionalData.CommentCount <= skip + take) {
                     $("#moreCmt_" + postId).remove();
                 }
             }
