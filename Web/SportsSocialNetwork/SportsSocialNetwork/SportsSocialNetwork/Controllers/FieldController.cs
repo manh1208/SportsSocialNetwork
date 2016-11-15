@@ -105,7 +105,7 @@ namespace SportsSocialNetwork.Controllers
             return Json(scheduleCalendar, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetTimeBlockPrice(int? id)
+        public ActionResult GetTimeBlockPrice(int id)
         {
             var _timeBlockService = this.Service<ITimeBlockService>();
             List<TimeBlock> timeBlocks = _timeBlockService.GetActive(p => p.FieldId == id).ToList();
@@ -113,6 +113,26 @@ namespace SportsSocialNetwork.Controllers
                 , JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetTimeBlockCalendar(int id)
+        {
+            var _timeBlockService = this.Service<ITimeBlockService>();
+            var minTime = "00:00:00";
+            var maxTime = "24:00:00";
+            var timeblocks = _timeBlockService.GetActive(p => p.FieldId == id).OrderBy(p => p.StartTime).ToList();
+            if (timeblocks.Count> 0)
+            {
+                TimeSpan tmp = timeblocks.ElementAt(0).StartTime;
+                minTime = tmp.ToString();
+            }
+            timeblocks = _timeBlockService.GetActive(p => p.FieldId == id).OrderByDescending(p => p.StartTime).ToList();
+            if (timeblocks.Count > 0)
+            {
+                TimeSpan tmp = timeblocks.ElementAt(0).EndTime;
+                maxTime = tmp.ToString();
+            }
+            return Json(new { minTime = minTime, maxTime = maxTime }
+                , JsonRequestBehavior.AllowGet);
+        }
     }
 
     public class Calendar
