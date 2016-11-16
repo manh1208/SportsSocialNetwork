@@ -19,5 +19,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Models.ViewModels
         public string EndTimeStr { get; set; }
 
         public int PlaceId { get; set; }
+
+        public string UserName { get; set; }
     }
 }

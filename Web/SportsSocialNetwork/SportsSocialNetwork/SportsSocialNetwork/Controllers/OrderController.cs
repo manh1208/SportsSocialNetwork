@@ -184,7 +184,7 @@ namespace SportsSocialNetwork.Controllers
             var _fieldScheduleService = this.Service<IFieldScheduleService>();
 
             bool rs1 = _orderService.checkTimeValidInOrder(fieldId, startTime, endTime, PlayDate, PlayDate);
-            bool rs2 = _fieldScheduleService.checkTimeValidInFieldSchedule(fieldId, startTime, endTime, PlayDate, PlayDate);
+            bool rs2 = _fieldScheduleService.checkTimeValidInFieldSchedule(null,fieldId, startTime, endTime, PlayDate, PlayDate);
             if (!rs1 || !rs2)
             {
                 return RedirectToAction("PageNotFound", "Errors");
@@ -281,7 +281,7 @@ namespace SportsSocialNetwork.Controllers
             try
             {
                 bool rs1 = _orderService.checkTimeValidInOrder(fieldId, StartTime, EndTime, PlayDate, PlayDate);
-                bool rs2 = _fieldScheduleService.checkTimeValidInFieldSchedule(fieldId, StartTime, EndTime, PlayDate, PlayDate);
+                bool rs2 = _fieldScheduleService.checkTimeValidInFieldSchedule(null,fieldId, StartTime, EndTime, PlayDate, PlayDate);
                 if (rs1 && rs2)
                 {
                     result.Succeed = true;

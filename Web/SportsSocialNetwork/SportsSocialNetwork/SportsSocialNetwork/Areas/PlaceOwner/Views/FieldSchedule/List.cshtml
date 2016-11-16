@@ -167,13 +167,13 @@
                       "mRender": function (data, type, row) {
                           var label = '';
                           if (row[4] == parseInt('@((int)FieldScheduleStatus.Repair)')) {
-                              label = '<span class="label label-outline label-success label-lg">@Utils.GetEnumDescription(FieldScheduleStatus.Repair).ToString()</span>';
+                              label = '<span class="label label-outline label-danger label-lg">@Utils.GetEnumDescription(FieldScheduleStatus.Repair).ToString()</span>';
                           } else if (row[4] == parseInt('@((int)FieldScheduleStatus.Booked)')) {
-                              label = '<span class="label label-outline label-danger label-lg">@Utils.GetEnumDescription(FieldScheduleStatus.Booked)</span>';
+                              label = '<span class="label label-outline label-success label-lg">@Utils.GetEnumDescription(FieldScheduleStatus.Booked)</span>';
                           } else if (row[4] == parseInt('@((int)FieldScheduleStatus.Event)')) {
-                              label = '<span class="label label-outline label-warning label-lg">@Utils.GetEnumDescription(FieldScheduleStatus.Event)</span>';
+                              label = '<span class="label label-outline label-success label-lg">@Utils.GetEnumDescription(FieldScheduleStatus.Event)</span>';
                           } else if (row[4] == parseInt('@((int)FieldScheduleStatus.Other)')) {
-                              label = '<span class="label label-outline label-primary label-lg">@Utils.GetEnumDescription(FieldScheduleStatus.Other)</span>';
+                              label = '<span class="label label-outline label-warning label-lg">@Utils.GetEnumDescription(FieldScheduleStatus.Other)</span>';
                           } else {
                               label = '<span class="label label-outline label-default label-lg">Chưa có</span>';
                           }
@@ -311,6 +311,39 @@
                 data: array
             });
 
+            $("#type").on('change', function() {
+                if ($(this).val() == "2")
+                {
+                    $("#divUsername").show();
+                }else{
+                    $("#divUsername").hide();
+                }
+            });
+
+
+            $("#username").on('blur', function() {
+                var username = this.value;
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CheckUsername")',
+                    data: {username: username},
+                    success: function (result) {
+                        if (result.Succeed) {
+                            $("#formGroupUsername").removeClass("has-error");
+                            $("#formGroupUsername").addClass("has-success");
+                        } else {
+                            $("#formGroupUsername").removeClass("has-success");
+                            $("#formGroupUsername").addClass("has-error");
+                        }
+
+                    },
+                    error: function (result) {
+
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+            });
+
             $('#update-fieldschedule-form').submit(function (e) {
                 e.preventDefault();
                 var formData = new FormData(document.getElementById('update-fieldschedule-form'));
@@ -377,9 +410,9 @@
 
             var stD = $("#startDay").val();
             //$("#days").focus(function () {
-            //    $("#csubmitBtn").removeAttr("disabled") 
+            //    $("#csubmitBtn").removeAttr("disabled")
             //})
-           
+
 
             (function () {
                 var TIME_PATTERN = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
@@ -477,7 +510,7 @@
                 });
             })();
 
-           
+
 
             $('body').on('focus', ".timepicker", function () {
                 $(this).clockpicker();
@@ -516,6 +549,42 @@
                 placeholder: "",
                 data: array
             });
+
+            $("#cUsername").on('blur', function() {
+                var username = this.value;
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CheckUsername")',
+                    data: {username: username},
+                    success: function (result) {
+                        if (result.Succeed) {
+                            $("#cformGroupUsername").removeClass("has-error");
+                            $("#cformGroupUsername").addClass("has-success");
+                        } else {
+                            $("#cformGroupUsername").removeClass("has-success");
+                            $("#cformGroupUsername").addClass("has-error");
+                        }
+
+                    },
+                    error: function (result) {
+
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+            });
+
+
+
+            $("#cType").on('change', function() {
+                if ($(this).val() == "2")
+                {
+                    $("#cdivUsername").show();
+                }else{
+                    $("#cdivUsername").hide();
+                }
+            });
+
+
 
             $('#create-fieldschedule-form').submit(function (e) {
                 e.preventDefault();
@@ -582,7 +651,7 @@
 
 
             //$("#cdays").focus(function () {
-            //    $("#csubmitBtn").removeAttr("disabled") 
+            //    $("#csubmitBtn").removeAttr("disabled")
             //})
 
             //Validation
@@ -649,7 +718,7 @@
                         EndTimeStr: {
                             validators: {
                                 notEmpty: {
-                                    message: 'Giờ bắt đầu không được trống'
+                                    message: 'Giờ kết thúc không được trống'
                                 },
                                 regexp: {
                                     regexp: TIME_PATTERN,
@@ -675,6 +744,39 @@
                                         }
 
                                         return false;
+                                    }
+                                }
+                            }
+                        },
+                        UserName:{
+                            validators: {
+                           
+                                callback: {
+                                    message: 'Tên tài khoản không đúng',
+                                    callback: function (value, validator, $field) {
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: '@Url.Action("CheckUsername")',
+                                            data: {username: value},
+                                            async: true,
+                                            cache: false,
+                                            contentType: false,
+                                            processData: false,
+                                            success: function (result) {
+                                                if (result.Succeed) {
+                                                    return true;
+                                                } else {
+                                                    return false;
+                                                }
+
+                                            },
+                                            error: function (result) {
+
+                                                return false;
+                                            },
+                                        });
+
+                                        return true;
                                     }
                                 }
                             }

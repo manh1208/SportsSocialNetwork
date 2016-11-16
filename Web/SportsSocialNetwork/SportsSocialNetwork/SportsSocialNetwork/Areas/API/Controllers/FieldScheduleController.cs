@@ -45,7 +45,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             }
             try
             {
-                if (scheduleService.checkTimeValidInFieldSchedule(model.FieldId, startTime.TimeOfDay,endTime.TimeOfDay, startTime, endTime)) {
+                if (scheduleService.checkTimeValidInFieldSchedule(null,model.FieldId, startTime.TimeOfDay,endTime.TimeOfDay, startTime, endTime)) {
                     FieldSchedule schedule = new FieldSchedule();
                     schedule.FieldId = model.FieldId;
                     schedule.Type = model.Type;

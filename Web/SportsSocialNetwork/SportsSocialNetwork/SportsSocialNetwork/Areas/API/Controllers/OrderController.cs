@@ -491,7 +491,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             try
             {
                 bool rs1 = orderService.checkTimeValidInOrder(fieldId, startTime, endTime, startDate, endDate);
-                bool rs2 = fieldScheduleService.checkTimeValidInFieldSchedule(fieldId, startTime, endTime, startDate, endDate);
+                bool rs2 = fieldScheduleService.checkTimeValidInFieldSchedule(null,fieldId, startTime, endTime, startDate, endDate);
                 if (rs1 && rs2)
                 {
                     result = true;

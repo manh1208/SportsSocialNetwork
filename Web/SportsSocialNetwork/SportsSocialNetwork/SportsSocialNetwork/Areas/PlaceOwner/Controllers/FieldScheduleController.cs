@@ -166,6 +166,34 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         }
 
 
+        [HttpPost]
+
+        public ActionResult CheckUsername(string username)
+        {
+            var result = new AjaxOperationResult();
+            var service = this.Service<IAspNetUserService>();
+            if (username != null && username.Length > 0)
+            {
+                var user = service.GetActive(u => u.UserName.ToLower().Equals(username.ToLower())).FirstOrDefault();
+                if (user != null)
+                {
+                    result.Succeed = true;
+                }
+                else
+                {
+                    result.Succeed = false;
+                    result.AddError("username", "Tên tài khoản không có thật");
+                }
+            }
+            else
+            {
+                result.Succeed = true;
+            }
+
+            return Json(result);
+
+        }
+
 
         [HttpPost]
         public ActionResult Create(CreateFieldScheduleViewModel schedule)
@@ -191,15 +219,32 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                     }
                 }
                 schedule.AvailableDay = repeatDay;
-                schedule.Active = true;
-                var entity = schedule.ToEntity();
-                if (checkValid(entity))
+                var userService = this.Service<IAspNetUserService>();
+                if (schedule.UserName != null && schedule.UserName.Length > 0)
                 {
+                    var user = userService.GetActive(u => u.UserName.ToLower().Equals(schedule.UserName.ToLower())).FirstOrDefault();
+                    if (user != null)
+                    {
+                       
+                        schedule.UserId = user.Id;
+                    }else
+                    {
+                        result.Succeed = false;
+                        result.AddError("Update", "Tên tài khoản không đúng. Vui lòng thử lại");
+                        return Json(result);
+                    }
+                }
+                schedule.Active = true;
+                
+                if (checkValid(schedule))
+                {
+                    var entity = schedule.ToEntity();
                     var scheduleService = this.Service<IFieldScheduleService>();
                     scheduleService.Create(entity);
                     result.Succeed = true;
                 }
-                else{
+                else
+                {
                     result.Succeed = false;
                     result.AddError("Update", "Thời gian đặt bị trùng lịch. Vui lòng chọn thời gian khác");
                 }
@@ -311,6 +356,10 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 }
                 updateSchedule.Days = s;
                 updateSchedule.PlaceId = placeId;
+                if (schedule.UserId != null)
+                {
+                    updateSchedule.UserName = schedule.AspNetUser.UserName;
+                }
             }
             //ViewBag.startDay = startDay;
             //ViewBag.endDay = endDay;
@@ -342,15 +391,33 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                     }
                 }
                 schedule.AvailableDay = repeatDay;
+                var userService = this.Service<IAspNetUserService>();
+                if (schedule.UserName != null && schedule.UserName.Length > 0)
+                {
+                    var user = userService.GetActive(u => u.UserName.ToLower().Equals(schedule.UserName.ToLower())).FirstOrDefault();
+                    if (user != null)
+                    {
+
+                        schedule.UserId = user.Id;
+                    }
+                    else
+                    {
+                        result.Succeed = false;
+                        result.AddError("Update", "Tên tài khoản không đúng. Vui lòng thử lại");
+                        return Json(result);
+                    }
+                }
                 schedule.Active = true;
                 var scheduleService = this.Service<IFieldScheduleService>();
                 var entity = scheduleService.Get(schedule.Id);
-                schedule.CopyToEntity(entity);
-                if (checkValid(entity))
+               
+                if (checkValid(schedule))
                 {
+                    schedule.CopyToEntity(entity);
                     scheduleService.Update(entity);
                     result.Succeed = true;
-                }else
+                }
+                else
                 {
                     result.Succeed = false;
                     result.AddError("Update", "Thời gian đặt bị trùng lịch. Vui lòng chọn thời gian khác");
@@ -371,7 +438,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             return Json(result);
         }
 
-        public bool checkValid(FieldSchedule schedule)
+        public bool checkValid(CreateFieldScheduleViewModel schedule)
         {
             var _fieldScheduleService = this.Service<IFieldScheduleService>();
             string tit = Utils.GetEnumDescription((FieldScheduleStatus)schedule.Type);
@@ -383,7 +450,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 int bitAtPosititon = (schedule.AvailableDay >> dayOfWeek) & 1;
                 if (bitAtPosititon == 1)
                 {
-                    var result = _fieldScheduleService.checkTimeValidInFieldSchedule(schedule.FieldId, schedule.StartTime, schedule.EndTime, start, start);
+                    var result = _fieldScheduleService.checkTimeValidInFieldSchedule(schedule.Id,schedule.FieldId, schedule.StartTime, schedule.EndTime, start, start);
                     if (!result)
                     {
                         return false;

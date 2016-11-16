@@ -103,7 +103,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="control-label">Loại</label>
-                            @Html.DropDownListFor(m => m.Type, scheduleType, new { @class = "form-control input-lg" })
+                            @Html.DropDownListFor(m => m.Type, scheduleType, new { @class = "form-control input-lg" , id ="cType" })
                         </div>
                         <div class="form-group">
                             <label class="control-label">Đến ngày: </label>
@@ -125,6 +125,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-12" id="cdivUsername" style="display:none">
+                        <div class="form-group" id="cformGroupUsername">
+                            <label class="control-label">Tên tài khoản</label>
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control input-lg", id = "cUsername", style = "width:100%" })
+                        </div>
+                    </div>
                     <div class="col-sm-12">
                         <div class="form-group">
 
@@ -137,6 +143,7 @@
                             @Html.TextBoxFor(m => m.Days, new { @class = "form-control input-lg", id = "cdays", style = "width:100%" })
                         </div>
                     </div>
+
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="control-label">Mô tả</label>

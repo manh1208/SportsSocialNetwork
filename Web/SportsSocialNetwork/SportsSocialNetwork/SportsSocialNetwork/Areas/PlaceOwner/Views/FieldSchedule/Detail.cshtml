@@ -51,7 +51,20 @@
                         <dd>@Model.Field.Place.Name</dd>
                         <dt>Sân:</dt>
                         <dd>@Model.Field.Name</dd>
+                        @if (Model.Type == (int)FieldScheduleStatus.Booked)
+                        {
+                            <dt>Người đặt:</dt>
+                            if (Model.AspNetUser != null)
+                            {
+                                <dd>@Model.AspNetUser.FullName</dd>
+                            }
+                            else
+                            {
+                                <dd>Người lạ</dd>
+                            }
 
+                        }
+                        
                         <dt>Từ ngày:</dt>
                         <dd>@Model.StartDate.ToString("dd/MM/yyyy")</dd>
                         <dt>Đến ngày:</dt>

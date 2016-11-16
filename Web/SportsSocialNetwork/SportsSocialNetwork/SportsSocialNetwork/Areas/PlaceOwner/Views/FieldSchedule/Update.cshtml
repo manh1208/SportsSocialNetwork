@@ -1,4 +1,5 @@
 ﻿@model SportsSocialNetwork.Areas.PlaceOwner.Models.ViewModels.CreateFieldScheduleViewModel
+@using SportsSocialNetwork.Models.Enumerable
 @{
     ViewBag.Title = "Update";
     List<SelectListItem> scheduleType = ViewBag.scheduleType;
@@ -98,7 +99,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="control-label">Loại</label>
-                            @Html.DropDownListFor(m => m.Type, scheduleType, new { @class = "form-control input-lg" })
+                            @Html.DropDownListFor(m => m.Type, scheduleType, new { @class = "form-control input-lg" , id= "type" })
                         </div>
                         <div class="form-group">
                             <label class="control-label">Đến ngày: </label>
@@ -120,6 +121,24 @@
                             </div>
                         </div>
                     </div>
+                    @if (Model.Type == (int)FieldScheduleStatus.Booked)
+                    {
+                        <div class="col-sm-12" id="divUsername">
+                            <div class="form-group" id="formGroupUsername">
+                                <label class="control-label">Tên tài khoản</label>
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control input-lg", id = "username", style = "width:100%" })
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-sm-12" id="divUsername" style="display:none">
+                            <div class="form-group" id="formGroupUsername">
+                                <label class="control-label">Tên tài khoản</label>
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control input-lg", id = "username", style = "width:100%" })
+                            </div>
+                        </div>
+                    }
                     <div class="col-sm-12">
                         <div class="form-group">
 
@@ -132,6 +151,8 @@
                             @Html.TextBoxFor(m => m.Days, new { @class = "form-control input-lg", id = "days", style = "width:100%" })
                         </div>
                     </div>
+                  
+
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="control-label">Mô tả</label>
