@@ -1072,7 +1072,17 @@ function multiImageTextPost(data) {
     content = content + images + "</div>";
     return content;
 }
+//==========================================================================================================================================================
+function shareEventPost(data) {
+    var hashtag = getHashTagSport(data);
+    if (hashtag != null && hashtag != "") {
+        hashtag = "<br/>" + hashtag;
+    }
 
+    var content = data.
+}
+
+//===========================================================================================================================================================
 function getHashTagSport(data) {
     var hashtag = "";
     $(data.PostSports).each(function () {
