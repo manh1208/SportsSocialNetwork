@@ -284,7 +284,7 @@
                 });
         };
 
-     
+
         function scriptUpdatePartial() {
 
             var array =  [{"id":"1","text":"Chủ Nhật"},
@@ -296,7 +296,7 @@
            {"id":"7","text":"Thứ bảy"},];
 
 
-           
+
 
             $("#days").select2({
                 class: 'form-control',
@@ -309,7 +309,7 @@
 
             $("#type").on('change', function() {
 
-               
+
                 if ($(this).val() == "2")
                 {
                     $("#divUsername").show();
@@ -342,14 +342,40 @@
                 });
             });
 
-           
+
 
             $('#update-fieldschedule-form').submit(function (e) {
-                
+
 
 
             });
+            var flag = false;
 
+            function  changeDays(){
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetDays")',
+                    data: {startDate: $("#startDay").val(),
+                        endDate: $("#endDay").val()},
+
+                    success: function (result) {
+                        if (result.Succeed) {
+                            flag = true;
+                            var arr = result.AdditionalData;
+                            $('#days').select2().on('change', function() {
+                                $('#days').removeClass('select2-offscreen').select2({data:arr});
+                            }).trigger('change');
+                        } else {
+
+                        }
+
+                    },
+                    error: function (result) {
+
+                        return false;
+                    },
+                });
+            }
 
             $('#startDay').datepicker({
                 format: "dd/mm/yyyy"
@@ -360,9 +386,11 @@
 
             $(document).on('change', "#startDay", function () {
                 $('#update-fieldschedule-form').formValidation('revalidateField', 'StartDateStr');
+                changeDays();
             });
             $(document).on('change', "#endDay", function () {
                 $('#update-fieldschedule-form').formValidation('revalidateField', 'EndDateStr');
+                changeDays();
             });
 
             $(document).on('change', "#startTime", function () {
@@ -381,7 +409,10 @@
             });
 
             $("#days").on("change", function () {
-                $('#create-fieldschedule-form').formValidation('revalidateField', 'Days')
+                if (!flag)
+                    $('#update-fieldschedule-form').formValidation('revalidateField', 'Days')
+
+                flag  =false;
             });
 
             var stD = $("#startDay").val();
@@ -493,7 +524,7 @@
                         processData: false,
                         success: function (result) {
                             if (result.Succeed) {
-                                showMessage("Tạo thành công.", "success", "OK");
+                                showMessage("Thay đổi thành công.", "success", "OK");
                                 $('#modalUpdate').modal('hide');
                                 $('#fieldschedule-table').reloadDataTable();
                             } else {
@@ -579,7 +610,7 @@
             var flag = false;
 
             $("#cType").on('change', function() {
-               
+
 
                 if ($(this).val() == "2")
                 {
@@ -589,10 +620,10 @@
                 }
             });
 
-            
+
 
             $('#create-fieldschedule-form').submit(function (e) {
-               
+
 
 
             });
@@ -610,7 +641,7 @@
                     url: '@Url.Action("GetDays")',
                     data: {startDate: $("#cstartDay").val(),
                         endDate: $("#cendDay").val()},
-                    
+
                     success: function (result) {
                         if (result.Succeed) {
                             flag = true;
@@ -619,7 +650,7 @@
                                 $('#cdays').removeClass('select2-offscreen').select2({data:arr});
                             }).trigger('change');
                         } else {
-                            
+
                         }
 
                     },
@@ -634,7 +665,7 @@
                 $('#create-fieldschedule-form').formValidation('revalidateField', 'StartDateStr');
                 changeDays();
 
-                
+
             });
             $(document).on('change', "#cendDay", function () {
                 $('#create-fieldschedule-form').formValidation('revalidateField', 'EndDateStr');
@@ -764,7 +795,7 @@
                         },
                         UserName:{
                             validators: {
-                           
+
                                 callback: {
                                     message: 'Tên tài khoản không đúng',
                                     callback: function (value, validator, $field) {
@@ -819,7 +850,7 @@
                         type: 'POST',
                         url: '@Url.Action("Create")',
                         data: formData,
-                    
+
                         contentType: false,
                         processData: false,
                         success: function (result) {
