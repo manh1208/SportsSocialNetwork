@@ -483,5 +483,89 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             //}
             return "valid";
         }
+
+        [HttpPost]
+        public ActionResult GetDays(string startDate, string endDate)
+        {
+            
+            var result = new AjaxOperationResult<List<Select2>>();
+            try { 
+            DateTime start = DateTime.ParseExact(startDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            DateTime end = DateTime.ParseExact(endDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            int index = 0;
+            List<Select2> days = new List<Select2>();
+            while (start <= end && (index++)<7)
+            {
+                int dayOfWeek = ((int)start.DayOfWeek) + 1;
+                switch (dayOfWeek)
+                {
+                    case 1:
+                        days.Add(new Select2
+                        {
+                            id = dayOfWeek.ToString(),
+                           text= "Chủ nhật"
+                        });
+                        break;
+                    case 2:
+                        days.Add(new Select2
+                        {
+                            id = dayOfWeek.ToString(),
+                            text = "Thứ hai"
+                        });
+                        break;
+                    case 3:
+                        days.Add(new Select2
+                        {
+                            id = dayOfWeek.ToString(),
+                            text = "Thứ ba"
+                        });
+                        break;
+                    case 4:
+                        days.Add(new Select2
+                        {
+                            id = dayOfWeek.ToString(),
+                            text = "Thứ tư"
+                        });
+                        break;
+                    case 5:
+                        days.Add(new Select2
+                        {
+                            id = dayOfWeek.ToString(),
+                            text = "Thứ năm"
+                        });
+                        break;
+                    case 6:
+                        days.Add(new Select2
+                        {
+                            id = dayOfWeek.ToString(),
+                            text = "Thứ sáu"
+                        });
+                        break;
+                    case 7:
+                        days.Add(new Select2
+                        {
+                            id = dayOfWeek.ToString(),
+                            text = "Thứ bảy"
+                        });
+                        break;
+
+                }
+                start = start.AddDays(1);
+            }
+            days.OrderBy(u => u.id);
+            result.AdditionalData = days;
+            }
+            catch (Exception)
+            {
+                result.Succeed = false;
+            }
+            return Json(result);
+        }
+    }
+
+    public class Select2
+    {
+        public string id { get; set; }
+        public string text { get; set; }
     }
 }

@@ -295,6 +295,9 @@
            {"id":"6","text":"Thứ sáu"},
            {"id":"7","text":"Thứ bảy"},];
 
+
+           
+
             $("#days").select2({
                 class: 'form-control',
                 width: '100%',
@@ -305,6 +308,8 @@
             });
 
             $("#type").on('change', function() {
+
+               
                 if ($(this).val() == "2")
                 {
                     $("#divUsername").show();
@@ -534,6 +539,11 @@
             {"id":"6","text":"Thứ sáu"},
             {"id":"7","text":"Thứ bảy"},];
 
+            var array2 =  [{"id":"1","text":"ahihi"},
+                         {"id":"2","text":"dc k nhi"},
+            ];
+
+
             $("#cdays").select2({
                 class: 'form-control',
                 width: '100%',
@@ -566,9 +576,11 @@
                 });
             });
 
-
+            var flag = false;
 
             $("#cType").on('change', function() {
+               
+
                 if ($(this).val() == "2")
                 {
                     $("#cdivUsername").show();
@@ -592,12 +604,41 @@
                 format: "dd/mm/yyyy"
             });
 
+            function  changeDays(){
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetDays")',
+                    data: {startDate: $("#cstartDay").val(),
+                        endDate: $("#cendDay").val()},
+                    
+                    success: function (result) {
+                        if (result.Succeed) {
+                            flag = true;
+                            var arr = result.AdditionalData;
+                            $('#cdays').select2().on('change', function() {
+                                $('#cdays').removeClass('select2-offscreen').select2({data:arr});
+                            }).trigger('change');
+                        } else {
+                            
+                        }
+
+                    },
+                    error: function (result) {
+
+                        return false;
+                    },
+                });
+            }
+
             $(document).on('change', "#cstartDay", function () {
                 $('#create-fieldschedule-form').formValidation('revalidateField', 'StartDateStr');
+                changeDays();
+
+                
             });
             $(document).on('change', "#cendDay", function () {
                 $('#create-fieldschedule-form').formValidation('revalidateField', 'EndDateStr');
-
+                changeDays();
             });
 
             $(document).on('change', "#cstartTime", function () {
@@ -616,7 +657,10 @@
             });
 
             $("#cdays").on("change", function () {
-                $('#create-fieldschedule-form').formValidation('revalidateField', 'Days')
+                if (!flag)
+                    $('#create-fieldschedule-form').formValidation('revalidateField', 'Days')
+
+                flag  =false;
             });
 
 
