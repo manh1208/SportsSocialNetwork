@@ -242,17 +242,20 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                     var scheduleService = this.Service<IFieldScheduleService>();
                     scheduleService.Create(entity);
                     result.Succeed = true;
+                    return Json(result);
                 }
                 else
                 {
                     result.Succeed = false;
                     result.AddError("Update", "Thời gian đặt bị trùng lịch. Vui lòng chọn thời gian khác");
+                    return Json(result);
                 }
             }
             catch (Exception e)
             {
                 result.Succeed = false;
                 result.AddError("Update", "Vui lòng nhập đầy đủ thông tin");
+                return Json(result);
             }
             //DateTime startTime = new DateTime(_startDay.Date.Year, _startDay.Date.Month, _startDay.Date.Day, _startTime.Hours, _startTime.Minutes, _startTime.Seconds);
             //DateTime endTime = new DateTime(_endDay.Date.Year, _endDay.Date.Month, _endDay.Date.Day, _endTime.Hours, _endTime.Minutes, _endTime.Seconds);
@@ -261,7 +264,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
 
 
-            return Json(result);
+           
         }
 
         [HttpPost]
