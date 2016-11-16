@@ -273,7 +273,90 @@
         <!--END Posting status area-->
         <!--Post area-->
         <div id="activities" role="tabpanel">
-            <ul class="list-group" id="listPost"></ul>
+            <ul class="list-group" id="listPost">
+                <li class="panel" style="margin-bottom: 10px; padding: 15px;" role="tabpanel" id="post_35">
+                    <div class="media">
+                        <div class="media-left">
+                            <a class="avatar" href="javascript:void(0)" style="width:50px;">
+                                <img style="height:50px" class="img-responsive" src="/SSNImages/AvatarImages/20161102165307PM_f63b4d05-b58d-42a7-8401-e8e4035652d2.png" alt="...">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <p class="media-heading" style="margin-bottom:0;font-size: large;">
+                                <a style="font-weight:bold; color: #ff6a00;" class="comment-author" href="/profile/index?userid=0182b1ae-6e39-478a-99dc-e7ab55e30845">Huỳnh Thanh Quy</a>
+                                <span style="text-shadow: none;color: #76838f;">&nbsp; đã chia sẻ một sự kiện</span>
+                            </p>
+                            <small style="color:#76838f">23 giờ trước</small>
+                            <div class="profile-brief" style="white-space: pre-wrap;margin-bottom:20px;font-size: large;font-weight: 500;">nào mình cùng đi xe bus<br><a href="#2">#Bóng đá </a><a href="#3">#Bóng rổ </a>
+                                <div style="margin-top:-50px; margin-bottom:-195px;">
+                                    
+                                    <img style="width:100%;" src="/SSNImages/EventImages/20161018160801PM_0109a868-2c72-4a61-9d84-8756a17a4bef.png" alt="...">
+                                    <p>Dân Kiên Giang mình tấp vào đây hết nè, đúng hương vị quê hương luôn, nước dùng ngọt thanh, cá với tôm không hề bị tanh luôn,</p>
+                                 
+                                </div>
+                                @*<div class="" style="margin-top:20px;">
+                                    <a href="" style="text-decoration:none;color:black;overflow:hidden;">
+                                        <div style="width:100px;display:inline-block;float:left;">
+                                            <img style="width:100%;" src="/SSNImages/EventImages/20161018160801PM_0109a868-2c72-4a61-9d84-8756a17a4bef.png" alt="...">
+                                        </div>
+                                        <div style="width:240px;display:inline-block;float:left;">
+                                            <p>Dân Kiên Giang mình tấp vào đây hết nè, đúng hương vị quê hương luôn, nước dùng ngọt thanh, cá với tôm không hề bị tanh luôn,</p>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </a>
+                                    
+                                </div>*@
+                            </div>
+                            <div class="comment-actions">
+                                <div style="font-size:13px;color: #76838f;" class="text-right">
+                                    <span style="margin-right:5px" id="likeOfPost_35"> 0 lượt thích</span>
+                                    <span style="margin-right:10px" id="commentOfPost_35"> 0 bình luận</span>
+                                </div>
+                            </div>
+                            <div style="margin-top:10px;border-top-style:groove;border-top-width:0.3px;border-bottom-style:groove;border-bottom-width:0.3px;padding-top:10px;padding-bottom:10px">
+                                <a href="javascript:void(0)" style="text-decoration: none;color:#000;padding:10px;font-weight:500" id="likeIcon_35" onclick="likeUnlikePost(35)">
+                                    <i class="text-like fa fa-lg fa-thumbs-o-up"></i>&nbsp;Thích
+                                </a>
+                                <a href="javascript:void(0)" style="text-decoration: none;padding:10px;color:#000;font-weight:500">
+                                    <i class="text-like fa fa-lg fa-comments-o"></i>&nbsp;Bình Luận
+                                </a>
+                            </div>
+                            <div class="panel" style="margin-bottom:0px;margin-top:15px">
+                                <form id="comment-form_35" class="comment-form" method="post" autocomplete="off">
+                                    <input type="hidden" name="postId" value="35">
+                                    <input name="content" id="contentDetail_35" type="text" class="form-control input-cmnt" style="padding-right: 35px;color: #000;" placeholder="Viết bình luận của bạn...">
+                                    <button type="button" class="btn btn-pure btn-primary fa fa-camera" style=" color #ff6a00;position absolute;top 2px;right 0px;transition right 0.2s; z-index:2" onclick="addImageComment(35)"></button>
+                                    <div style="height:0px;overflow:hidden">
+                                        <input type="file" id="selectImageComment_35" name="image">
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="previewImageComment_35" class="example margin-0" style="display:none">
+                                <div data-role="container">
+                                    <div data-role="content">
+                                        <div class="Document">
+                                            <ul id="resultComment_35" class="list-inline"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="comments" style="margin-top:20px" id="postComments_35"></div>
+                        </div>
+                    </div>
+                    <div style="position: absolute;right:5px;top:15px;width: 30px;">
+                        <div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">
+                            <div class="dropdown">
+                                <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" style="color: black;"> <i class="fa fa-lg fa-angle-down"></i></a>
+                                <ul class="dropdown-menu" role="menu" style="min-width: 0px;min-height: 0px;padding: 0;">
+                                    <li><a href="javascript:void(0)" style="font-weight: bold;" onclick="deletePost(35)"><i style="color: #BF360C;" class="fa fa-fw fa-times"></i> Xóa</a></li>
+                                    <li><a href="javascript:void(0)" style="font-weight: bold;" onclick="editPost(35)"><i style="color: #004D40;" class="fa fa-fw fa-edit"></i> Chỉnh sửa</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
         </div>
         <!--END Post area-->
     </div>
