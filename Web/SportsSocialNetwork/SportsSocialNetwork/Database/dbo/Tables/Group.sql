@@ -11,8 +11,11 @@
     [Avatar]        NVARCHAR (MAX) NULL,
     [Active]        BIT            NOT NULL,
     CONSTRAINT [PK_Group] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Group_Sport] FOREIGN KEY ([SportId]) REFERENCES [dbo].[Sport] ([Id])
+    CONSTRAINT [FK_Group_Sport] FOREIGN KEY ([SportId]) REFERENCES [dbo].[Sport] ([Id]),
+    CONSTRAINT [FK_Place_Group] FOREIGN KEY ([PlaceId]) REFERENCES [dbo].[Place] ([Id])
 );
+
+
 
 
 

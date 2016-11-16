@@ -16,7 +16,7 @@ namespace SportsSocialNetwork.Models.Entities
     {
         public int Id { get; set; }
         public int FieldId { get; set; }
-        public Nullable<int> UserId { get; set; }
+        public string UserId { get; set; }
         public System.DateTime StartDate { get; set; }
         public System.DateTime EndDate { get; set; }
         public System.TimeSpan StartTime { get; set; }
@@ -26,6 +26,7 @@ namespace SportsSocialNetwork.Models.Entities
         public string Description { get; set; }
         public bool Active { get; set; }
     
+        public virtual AspNetUser AspNetUser { get; set; }
         public virtual Field Field { get; set; }
     }
 }

@@ -149,7 +149,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FieldId" Type="int" Nullable="false" />
-          <Property Name="UserId" Type="int" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" />
           <Property Name="StartDate" Type="date" Nullable="false" />
           <Property Name="EndDate" Type="date" Nullable="false" />
           <Property Name="StartTime" Type="time" Precision="7" Nullable="false" />
@@ -566,6 +566,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Event_Post">
+          <End Role="Event" Type="Self.Event" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Field_FieldType">
           <End Role="FieldType" Type="Self.FieldType" Multiplicity="1" />
           <End Role="Field" Type="Self.Field" Multiplicity="*" />
@@ -623,6 +635,18 @@
             </Principal>
             <Dependent Role="FieldPrice">
               <PropertyRef Name="TimeBlockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldSchedule_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="FieldSchedule" Type="Self.FieldSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldSchedule">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -794,6 +818,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_News_Post">
+          <End Role="News" Type="Self.News" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="News">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="NewsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_NewsComment_AspNetUsers">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="NewsComment" Type="Self.NewsComment" Multiplicity="*" />
@@ -914,6 +950,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Order_Post">
+          <End Role="Order" Type="Self.Order" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Participation_AspNetUsers">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="Participation" Type="Self.Participation" Multiplicity="*" />
@@ -947,6 +995,18 @@
             </Principal>
             <Dependent Role="Place">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Place_Group">
+          <End Role="Place" Type="Self.Place" Multiplicity="0..1" />
+          <End Role="Group" Type="Self.Group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Place">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Group">
+              <PropertyRef Name="PlaceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -995,6 +1055,18 @@
             </Principal>
             <Dependent Role="Post">
               <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_Post">
+          <End Role="Post" Type="Self.Post" Multiplicity="0..1" />
+          <End Role="Post1" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post1">
+              <PropertyRef Name="PostId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1195,6 +1267,10 @@
             <End Role="Place" EntitySet="Place" />
             <End Role="Event" EntitySet="Event" />
           </AssociationSet>
+          <AssociationSet Name="FK_Event_Post" Association="Self.FK_Event_Post">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
           <AssociationSet Name="FK_Field_FieldType" Association="Self.FK_Field_FieldType">
             <End Role="FieldType" EntitySet="FieldType" />
             <End Role="Field" EntitySet="Field" />
@@ -1214,6 +1290,10 @@
           <AssociationSet Name="FK_FieldPrice_TimeBlock" Association="Self.FK_FieldPrice_TimeBlock">
             <End Role="TimeBlock" EntitySet="TimeBlock" />
             <End Role="FieldPrice" EntitySet="FieldPrice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldSchedule_AspNetUsers" Association="Self.FK_FieldSchedule_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="FieldSchedule" EntitySet="FieldSchedule" />
           </AssociationSet>
           <AssociationSet Name="FK_FieldSchedule_Field" Association="Self.FK_FieldSchedule_Field">
             <End Role="Field" EntitySet="Field" />
@@ -1271,6 +1351,10 @@
             <End Role="Category" EntitySet="Category" />
             <End Role="News" EntitySet="News" />
           </AssociationSet>
+          <AssociationSet Name="FK_News_Post" Association="Self.FK_News_Post">
+            <End Role="News" EntitySet="News" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
           <AssociationSet Name="FK_NewsComment_AspNetUsers" Association="Self.FK_NewsComment_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="NewsComment" EntitySet="NewsComment" />
@@ -1311,6 +1395,10 @@
             <End Role="Field" EntitySet="Field" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
+          <AssociationSet Name="FK_Order_Post" Association="Self.FK_Order_Post">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
           <AssociationSet Name="FK_Participation_AspNetUsers" Association="Self.FK_Participation_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Participation" EntitySet="Participation" />
@@ -1322,6 +1410,10 @@
           <AssociationSet Name="FK_Place_AspNetUsers" Association="Self.FK_Place_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Place" EntitySet="Place" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Place_Group" Association="Self.FK_Place_Group">
+            <End Role="Place" EntitySet="Place" />
+            <End Role="Group" EntitySet="Group" />
           </AssociationSet>
           <AssociationSet Name="FK_PlaceImage_Place" Association="Self.FK_PlaceImage_Place">
             <End Role="Place" EntitySet="Place" />
@@ -1338,6 +1430,10 @@
           <AssociationSet Name="FK_Post_Group" Association="Self.FK_Post_Group">
             <End Role="Group" EntitySet="Group" />
             <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_Post" Association="Self.FK_Post_Post">
+            <End Role="Post" EntitySet="Post" />
+            <End Role="Post1" EntitySet="Post" />
           </AssociationSet>
           <AssociationSet Name="FK_PostComment_AspNetUsers" Association="Self.FK_PostComment_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -1431,6 +1527,10 @@
           <AssociationSet Name="FK_Event_AspNetUsers" Association="SSNModel.FK_Event_AspNetUsers">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="Event" EntitySet="Events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FieldSchedule_AspNetUsers" Association="SSNModel.FK_FieldSchedule_AspNetUsers">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="FieldSchedule" EntitySet="FieldSchedules" />
           </AssociationSet>
           <AssociationSet Name="FK_FirebaseToken_AspNetUsers" Association="SSNModel.FK_FirebaseToken_AspNetUsers">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
@@ -1528,6 +1628,10 @@
             <End Role="Place" EntitySet="Places" />
             <End Role="Event" EntitySet="Events" />
           </AssociationSet>
+          <AssociationSet Name="FK_Event_Post" Association="SSNModel.FK_Event_Post">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
           <AssociationSet Name="FK_Participation_Event" Association="SSNModel.FK_Participation_Event">
             <End Role="Event" EntitySet="Events" />
             <End Role="Participation" EntitySet="Participations" />
@@ -1580,6 +1684,10 @@
             <End Role="Group" EntitySet="Groups" />
             <End Role="Notification" EntitySet="Notifications" />
           </AssociationSet>
+          <AssociationSet Name="FK_Place_Group" Association="SSNModel.FK_Place_Group">
+            <End Role="Place" EntitySet="Places" />
+            <End Role="Group" EntitySet="Groups" />
+          </AssociationSet>
           <AssociationSet Name="FK_Post_Group" Association="SSNModel.FK_Post_Group">
             <End Role="Group" EntitySet="Groups" />
             <End Role="Post" EntitySet="Posts" />
@@ -1600,6 +1708,10 @@
             <End Role="Post" EntitySet="Posts" />
             <End Role="Like" EntitySet="Likes" />
           </AssociationSet>
+          <AssociationSet Name="FK_News_Post" Association="SSNModel.FK_News_Post">
+            <End Role="News" EntitySet="News" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
           <AssociationSet Name="FK_NewsComment_News" Association="SSNModel.FK_NewsComment_News">
             <End Role="News" EntitySet="News" />
             <End Role="NewsComment" EntitySet="NewsComments" />
@@ -1612,6 +1724,10 @@
             <End Role="Post" EntitySet="Posts" />
             <End Role="Notification" EntitySet="Notifications" />
           </AssociationSet>
+          <AssociationSet Name="FK_Order_Post" Association="SSNModel.FK_Order_Post">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
           <AssociationSet Name="FK_PlaceImage_Place" Association="SSNModel.FK_PlaceImage_Place">
             <End Role="Place" EntitySet="Places" />
             <End Role="PlaceImage" EntitySet="PlaceImages" />
@@ -1619,6 +1735,10 @@
           <AssociationSet Name="FK_Rating_Place" Association="SSNModel.FK_Rating_Place">
             <End Role="Place" EntitySet="Places" />
             <End Role="Rating" EntitySet="Ratings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_Post" Association="SSNModel.FK_Post_Post">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Post1" EntitySet="Posts" />
           </AssociationSet>
           <AssociationSet Name="FK_PostComment_Post1" Association="SSNModel.FK_PostComment_Post1">
             <End Role="Post" EntitySet="Posts" />
@@ -1704,6 +1824,7 @@
           <NavigationProperty Name="AspNetUserClaims" Relationship="SSNModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
           <NavigationProperty Name="AspNetUserLogins" Relationship="SSNModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
           <NavigationProperty Name="Events" Relationship="SSNModel.FK_Event_AspNetUsers" FromRole="AspNetUser" ToRole="Event" />
+          <NavigationProperty Name="FieldSchedules" Relationship="SSNModel.FK_FieldSchedule_AspNetUsers" FromRole="AspNetUser" ToRole="FieldSchedule" />
           <NavigationProperty Name="FirebaseTokens" Relationship="SSNModel.FK_FirebaseToken_AspNetUsers" FromRole="AspNetUser" ToRole="FirebaseToken" />
           <NavigationProperty Name="Follows" Relationship="SSNModel.FK_Follow_AspNetUsers" FromRole="AspNetUser" ToRole="Follow" />
           <NavigationProperty Name="GroupMembers" Relationship="SSNModel.FK_GroupMember_AspNetUsers" FromRole="AspNetUser" ToRole="GroupMember" />
@@ -1775,6 +1896,7 @@
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Event_AspNetUsers" FromRole="Event" ToRole="AspNetUser" />
           <NavigationProperty Name="Place" Relationship="SSNModel.FK_Event_Place" FromRole="Event" ToRole="Place" />
+          <NavigationProperty Name="Posts" Relationship="SSNModel.FK_Event_Post" FromRole="Event" ToRole="Post" />
           <NavigationProperty Name="Participations" Relationship="SSNModel.FK_Participation_Event" FromRole="Event" ToRole="Participation" />
         </EntityType>
         <EntityType Name="Field">
@@ -1821,7 +1943,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FieldId" Type="Int32" Nullable="false" />
-          <Property Name="UserId" Type="Int32" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="StartTime" Type="Time" Nullable="false" Precision="7" />
@@ -1830,6 +1952,7 @@
           <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_FieldSchedule_AspNetUsers" FromRole="FieldSchedule" ToRole="AspNetUser" />
           <NavigationProperty Name="Field" Relationship="SSNModel.FK_FieldSchedule_Field" FromRole="FieldSchedule" ToRole="Field" />
         </EntityType>
         <EntityType Name="FieldType">
@@ -1884,6 +2007,7 @@
           <NavigationProperty Name="Sport" Relationship="SSNModel.FK_Group_Sport" FromRole="Group" ToRole="Sport" />
           <NavigationProperty Name="GroupMembers" Relationship="SSNModel.FK_GroupMember_Group" FromRole="Group" ToRole="GroupMember" />
           <NavigationProperty Name="Notifications" Relationship="SSNModel.FK_Notification_Group" FromRole="Group" ToRole="Notification" />
+          <NavigationProperty Name="Place" Relationship="SSNModel.FK_Place_Group" FromRole="Group" ToRole="Place" />
           <NavigationProperty Name="Posts" Relationship="SSNModel.FK_Post_Group" FromRole="Group" ToRole="Post" />
         </EntityType>
         <EntityType Name="GroupMember">
@@ -1950,6 +2074,7 @@
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_News_AspNetUsers" FromRole="News" ToRole="AspNetUser" />
           <NavigationProperty Name="Category" Relationship="SSNModel.FK_News_Category" FromRole="News" ToRole="Category" />
+          <NavigationProperty Name="Posts" Relationship="SSNModel.FK_News_Post" FromRole="News" ToRole="Post" />
           <NavigationProperty Name="NewsComments" Relationship="SSNModel.FK_NewsComment_News" FromRole="News" ToRole="NewsComment" />
         </EntityType>
         <EntityType Name="NewsComment">
@@ -2013,6 +2138,7 @@
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Order_AspNetUsers" FromRole="Order" ToRole="AspNetUser" />
           <NavigationProperty Name="Field" Relationship="SSNModel.FK_Order_Field" FromRole="Order" ToRole="Field" />
           <NavigationProperty Name="Notifications" Relationship="SSNModel.FK_Notification_Order" FromRole="Order" ToRole="Notification" />
+          <NavigationProperty Name="Posts" Relationship="SSNModel.FK_Order_Post" FromRole="Order" ToRole="Post" />
         </EntityType>
         <EntityType Name="Participation">
           <Key>
@@ -2054,6 +2180,7 @@
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Place_AspNetUsers" FromRole="Place" ToRole="AspNetUser" />
           <NavigationProperty Name="Events" Relationship="SSNModel.FK_Event_Place" FromRole="Place" ToRole="Event" />
           <NavigationProperty Name="Fields" Relationship="SSNModel.FK_Field_Place" FromRole="Place" ToRole="Field" />
+          <NavigationProperty Name="Groups" Relationship="SSNModel.FK_Place_Group" FromRole="Place" ToRole="Group" />
           <NavigationProperty Name="PlaceImages" Relationship="SSNModel.FK_PlaceImage_Place" FromRole="Place" ToRole="PlaceImage" />
           <NavigationProperty Name="Ratings" Relationship="SSNModel.FK_Rating_Place" FromRole="Place" ToRole="Rating" />
         </EntityType>
@@ -2086,9 +2213,14 @@
           <Property Name="GroupId" Type="Int32" />
           <NavigationProperty Name="AspNetUser" Relationship="SSNModel.FK_Post_AspNetUsers" FromRole="Post" ToRole="AspNetUser" />
           <NavigationProperty Name="AspNetUser1" Relationship="SSNModel.FK_Post_AspNetUsers1" FromRole="Post" ToRole="AspNetUser" />
+          <NavigationProperty Name="Event" Relationship="SSNModel.FK_Event_Post" FromRole="Post" ToRole="Event" />
           <NavigationProperty Name="Group" Relationship="SSNModel.FK_Post_Group" FromRole="Post" ToRole="Group" />
           <NavigationProperty Name="Likes" Relationship="SSNModel.FK_Like_Post" FromRole="Post" ToRole="Like" />
+          <NavigationProperty Name="News" Relationship="SSNModel.FK_News_Post" FromRole="Post" ToRole="News" />
           <NavigationProperty Name="Notifications" Relationship="SSNModel.FK_Notification_Post" FromRole="Post" ToRole="Notification" />
+          <NavigationProperty Name="Order" Relationship="SSNModel.FK_Order_Post" FromRole="Post" ToRole="Order" />
+          <NavigationProperty Name="Post1" Relationship="SSNModel.FK_Post_Post" FromRole="Post" ToRole="Post1" />
+          <NavigationProperty Name="Post2" Relationship="SSNModel.FK_Post_Post" FromRole="Post1" ToRole="Post" />
           <NavigationProperty Name="PostComments" Relationship="SSNModel.FK_PostComment_Post1" FromRole="Post" ToRole="PostComment" />
           <NavigationProperty Name="PostImages" Relationship="SSNModel.FK_PostImages_Post" FromRole="Post" ToRole="PostImage" />
           <NavigationProperty Name="PostSports" Relationship="SSNModel.FK_PostSport_Post" FromRole="Post" ToRole="PostSport" />
@@ -2213,6 +2345,18 @@
             </Principal>
             <Dependent Role="Event">
               <PropertyRef Name="CreatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FieldSchedule_AspNetUsers">
+          <End Type="SSNModel.AspNetUser" Role="AspNetUser" Multiplicity="0..1" />
+          <End Type="SSNModel.FieldSchedule" Role="FieldSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FieldSchedule">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2504,6 +2648,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Event_Post">
+          <End Type="SSNModel.Event" Role="Event" Multiplicity="0..1" />
+          <End Type="SSNModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Participation_Event">
           <End Type="SSNModel.Event" Role="Event" Multiplicity="1" />
           <End Type="SSNModel.Participation" Role="Participation" Multiplicity="*" />
@@ -2660,6 +2816,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Place_Group">
+          <End Type="SSNModel.Place" Role="Place" Multiplicity="0..1" />
+          <End Type="SSNModel.Group" Role="Group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Place">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Group">
+              <PropertyRef Name="PlaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Post_Group">
           <End Type="SSNModel.Group" Role="Group" Multiplicity="0..1" />
           <End Type="SSNModel.Post" Role="Post" Multiplicity="*" />
@@ -2720,6 +2888,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_News_Post">
+          <End Type="SSNModel.News" Role="News" Multiplicity="0..1" />
+          <End Type="SSNModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="News">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="NewsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_NewsComment_News">
           <End Type="SSNModel.News" Role="News" Multiplicity="1" />
           <End Type="SSNModel.NewsComment" Role="NewsComment" Multiplicity="*" />
@@ -2756,6 +2936,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Order_Post">
+          <End Type="SSNModel.Order" Role="Order" Multiplicity="0..1" />
+          <End Type="SSNModel.Post" Role="Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PlaceImage_Place">
           <End Type="SSNModel.Place" Role="Place" Multiplicity="1" />
           <End Type="SSNModel.PlaceImage" Role="PlaceImage" Multiplicity="*" />
@@ -2777,6 +2969,18 @@
             </Principal>
             <Dependent Role="Rating">
               <PropertyRef Name="PlaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_Post">
+          <End Type="SSNModel.Post" Role="Post" Multiplicity="0..1" />
+          <End Type="SSNModel.Post" Role="Post1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Post1">
+              <PropertyRef Name="PostId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
