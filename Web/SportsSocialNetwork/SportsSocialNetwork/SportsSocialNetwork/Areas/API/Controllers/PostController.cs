@@ -280,7 +280,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                     {
                         if (!(member.UserId.Equals(post.UserId)))
                         {
-                            Notification noti = notiService.SaveNoti(member.UserId, post.UserId, "Post", postedUser.FullName + " đã đăng một bài viết", (int)NotificationType.Post, post.Id, null, null);
+                            Notification noti = notiService.SaveNoti(member.UserId, post.UserId, "Post", postedUser.FullName + " đã đăng một bài viết", (int)NotificationType.GroupPost, post.Id, null, null);
 
                             List<string> registrationIds = GetToken(member.UserId);
 
