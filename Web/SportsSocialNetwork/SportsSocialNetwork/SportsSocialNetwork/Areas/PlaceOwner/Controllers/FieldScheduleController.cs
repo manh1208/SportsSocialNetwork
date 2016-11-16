@@ -552,8 +552,10 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 }
                 start = start.AddDays(1);
             }
-            days.OrderBy(u => u.id);
-            result.AdditionalData = days;
+                var dayenum = days.AsEnumerable().OrderBy(u=>u.id);
+                
+           
+            result.AdditionalData = dayenum.ToList();
             }
             catch (Exception)
             {
