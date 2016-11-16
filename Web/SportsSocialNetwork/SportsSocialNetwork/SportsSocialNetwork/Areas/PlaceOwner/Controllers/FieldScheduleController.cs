@@ -319,6 +319,70 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             return this.PartialView(updateSchedule);
         }
 
+        public ActionResult GetData(JQueryDataTableParamModel param)
+        {
+            var _orderService = this.Service<IFieldScheduleService>();
+            var userId = User.Identity.GetUserId();
+            //var orderList = _orderService.GetActive(p => p.UserId == userId).OrderByDescending(p => p.CreateDate);
+            var orderList = _orderService.GetActive().OrderByDescending(p => p.Id);
+            IEnumerable <FieldSchedule> filteredListItems;
+            if (!string.IsNullOrEmpty(param.sSearch))
+            {
+                filteredListItems = orderList.Where(
+                    o => (o.Field.Name != null && o.Field.Name.ToLower().Contains(param.sSearch.ToLower()))
+                    );
+
+            }
+            else
+            {
+                //filteredListItems = blogPostList;
+                filteredListItems = orderList;
+            }
+            // Sort.
+            var sortColumnIndex = Convert.ToInt32(Request["iSortCol_0"]);
+            var sortDirection = Request["sSortDir_0"]; // asc or desc
+
+            switch (sortColumnIndex)
+            {
+
+                case 0:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.Field.Name)
+                        : filteredListItems.OrderByDescending(o => o.Field.Name);
+                    break;
+                case 2:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.StartTime)
+                        : filteredListItems.OrderByDescending(o => o.StartTime);
+                    break;
+                case 3:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.EndDate)
+                        : filteredListItems.OrderByDescending(o => o.EndDate);
+                    break;
+            }
+
+            var displayedList = filteredListItems.Skip(param.iDisplayStart).Take(param.iDisplayLength);
+            var result = displayedList.Select(o => new IConvertible[]{
+                o.Id,
+                o.Field.Name,
+                o.StartTime.Hours.ToString("00")+":"+o.StartTime.Minutes.ToString("00"),
+                o.StartDate.ToString("dd/MM/yyyy"),
+                o.EndTime.Hours.ToString("00")+":"+o.EndTime.Minutes.ToString("00"),
+                o.EndDate.ToString("dd/MM/yyyy"),
+                o.AvailableDay
+            }.ToArray());
+
+            return Json(new
+            {
+                param.sEcho,
+                iTotalRecords = result.Count(),
+                iTotalDisplayRecords = filteredListItems.Count(),
+                aaData = result
+            }, JsonRequestBehavior.AllowGet);
+
+        }
+
         [HttpPost]
         public ActionResult Update(CreateFieldScheduleViewModel schedule)
         {
