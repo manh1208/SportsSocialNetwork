@@ -16,6 +16,8 @@ using SportsSocialNetwork.Models.Identity;
 using System.Globalization;
 using SportsSocialNetwork.Models.Utilities;
 using QRCoder;
+using Microsoft.AspNet.SignalR;
+using SportsSocialNetwork.Models.Hubs;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -530,9 +532,22 @@ namespace SportsSocialNetwork.Controllers
             noti.Message = user.FullName + " đã đặt sân tại " + field.Name;
             noti.Title = "Đơn hàng mới";
             noti.Type = (int)NotificationType.Order;
+            noti.MarkRead = false;
             noti.Active = true;
             order.Notifications.Add(noti);
             _orderService.Create(order);
+
+
+            //SignalR Noti
+            var notiService = this.Service<INotificationService>();
+            NotificationFullInfoViewModel notiModelR = notiService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+            // Get the context for the Pusher hub
+            IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+            // Notify clients in the group
+            hubContext.Clients.User(notiModelR.UserId).send(notiModelR);
+
 
             string subject = "[SSN] - Thông tin đặt sân";
             string body = "Hi <strong>" + User.Identity.Name + "</strong>" +

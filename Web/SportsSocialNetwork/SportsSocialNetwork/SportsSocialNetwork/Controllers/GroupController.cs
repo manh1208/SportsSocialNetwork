@@ -15,9 +15,11 @@ using SportsSocialNetwork.Models.Enumerable;
 using Teek.Models;
 using Microsoft.AspNet.SignalR;
 using SportsSocialNetwork.Models.Hubs;
+using SportsSocialNetwork.Models.Identity;
 
 namespace SportsSocialNetwork.Controllers
 {
+    [MyAuthorize(Roles = IdentityMultipleRoles.SSN)]
     public class GroupController : BaseController
     {
         // GET: Group
@@ -33,237 +35,247 @@ namespace SportsSocialNetwork.Controllers
             var _hobbyService = this.Service<IHobbyService>();
             var _placeService = this.Service<IPlaceService>();
 
-            GroupFullInfoViewModel model = Mapper.Map<GroupFullInfoViewModel>(_groupService.FirstOrDefaultActive(g => g.Id == id));
-
-            //check current user role
-            string curUserId = User.Identity.GetUserId();
-
-            GroupMemberRole role = _groupMemberService.CheckRoleMember(curUserId, id.Value);
-
-            switch (role)
+            Group group = _groupService.FirstOrDefaultActive(g => g.Id == id);
+            if(group != null)
             {
-                case GroupMemberRole.Admin:
-                    model.IsAdmin = true;
-                    model.IsMember = true;
-                    model.isPendingMember = false;
-                    break;
+                GroupFullInfoViewModel model = Mapper.Map<GroupFullInfoViewModel>(group);
 
-                case GroupMemberRole.Member:
-                    model.IsAdmin = false;
-                    model.IsMember = true;
-                    model.isPendingMember = false;
-                    break;
+                //check current user role
+                string curUserId = User.Identity.GetUserId();
 
-                case GroupMemberRole.NotMember:
-                    model.IsAdmin = false;
-                    model.IsMember = false;
-                    model.isPendingMember = false;
-                    break;
+                GroupMemberRole role = _groupMemberService.CheckRoleMember(curUserId, id.Value);
 
-                case GroupMemberRole.PendingMember:
-                    model.IsAdmin = false;
-                    model.IsMember = false;
-                    model.isPendingMember = true;
-                    break;
-            }
-
-            //List<GroupMember> listGroup = _groupMemberService.GetActive(g => g.UserId.Equals(curUserId)).ToList();
-            //foreach (var item in listGroup)
-            //{
-            //    if(item.GroupId == model.Id)
-            //    {
-            //        model.IsMember = true;
-            //        if(item.Admin)
-            //        {
-            //            model.IsAdmin = true;
-            //        }
-            //    }
-            //}
-
-            //post count
-            model.PostCount = _postService.GetActive(p => p.GroupId == id).ToList().Count();
-
-            //member count
-            model.MemberCount = _groupMemberService.GetActive(g => g.GroupId == id).ToList().Count();
-            
-            if(model.PlaceId != null)
-            {
-                var place = _placeService.FirstOrDefaultActive(p => p.Id == model.PlaceId);
-                if (place != null)
+                switch (role)
                 {
-                    model.PlaceName = place.Name;
+                    case GroupMemberRole.Admin:
+                        model.IsAdmin = true;
+                        model.IsMember = true;
+                        model.isPendingMember = false;
+                        break;
+
+                    case GroupMemberRole.Member:
+                        model.IsAdmin = false;
+                        model.IsMember = true;
+                        model.isPendingMember = false;
+                        break;
+
+                    case GroupMemberRole.NotMember:
+                        model.IsAdmin = false;
+                        model.IsMember = false;
+                        model.isPendingMember = false;
+                        break;
+
+                    case GroupMemberRole.PendingMember:
+                        model.IsAdmin = false;
+                        model.IsMember = false;
+                        model.isPendingMember = true;
+                        break;
                 }
-            }
-            if (model.StartTime != null)
-            {
-                model.StartTimeString = model.StartTime.Value.Hours.ToString("00") + ":" + model.StartTime.Value.Minutes.ToString("00");
-            }
-            if (model.EndTime != null)
-            {
-                model.EndTimeString = model.EndTime.Value.Hours.ToString("00") +":"+ model.EndTime.Value.Minutes.ToString("00");
-            }
-            if(model.AvailableDays != null)
-            {
-                var bits = new bool[8];
-                for (var i = 7; i >= 0; i--)
-                {
-                    bits[i] = (model.AvailableDays & (1 << i)) != 0;
-                }
-                var dayOfWeek = "";
-                if (bits[1])
-                {
-                    dayOfWeek += "CN ";
-                }
-                if (bits[2])
-                {
-                    dayOfWeek += "T2 ";
-                }
-                if (bits[3])
-                {
-                    dayOfWeek += "T3 ";
-                }
-                if (bits[4])
-                {
-                    dayOfWeek += "T4 ";
-                }
-                if (bits[5])
-                {
-                    dayOfWeek += "T5 ";
-                }
-                if (bits[6])
-                {
-                    dayOfWeek += "T6 ";
-                }
-                if (bits[7])
-                {
-                    dayOfWeek += "T7 ";
-                }
-                model.Days = dayOfWeek;
-            }
-            
-            //get sport list for post
-            var sports = _sportService.GetActive()
-                            .Select(s => new SelectListItem
-                            {
-                                Text = s.Name,
-                                Value = s.Id.ToString()
-                            }).OrderBy(s => s.Value);
-            ViewBag.Sport = sports;
 
-            //get followed friend
-            var friends = _followService.GetActive(f => f.FollowerId == curUserId)
-                            .Select(s => new SelectListItem
-                            {
-                                Text = s.AspNetUser.FullName,
-                                Value = s.AspNetUser.Id
-                            }).OrderBy(s => s.Value);
-            ViewBag.friends = friends;
+                //List<GroupMember> listGroup = _groupMemberService.GetActive(g => g.UserId.Equals(curUserId)).ToList();
+                //foreach (var item in listGroup)
+                //{
+                //    if(item.GroupId == model.Id)
+                //    {
+                //        model.IsMember = true;
+                //        if(item.Admin)
+                //        {
+                //            model.IsAdmin = true;
+                //        }
+                //    }
+                //}
 
-            //member
-            List<GroupMember> ListGroupMember = _groupMemberService.GetActive(g => g.GroupId == id && g.Status == (int)GroupMemberStatus.Approved).ToList();
-            List<GroupMemberFullInfoModel> ListGroupMemberVM = Mapper.Map<List<GroupMemberFullInfoModel>>(ListGroupMember);
-            for(int i = 0; i < ListGroupMember.Count(); i++)
-            {
-                GroupMember gm = ListGroupMember.ElementAt(i);
-                AspNetUser user = _userService.FirstOrDefaultActive(u => u.Id == gm.UserId);
-                AspNetUserFullInfoViewModel userFull = Mapper.Map<AspNetUserFullInfoViewModel>(user);
-                ListGroupMemberVM[i].AspNetUser = userFull;
-            }
+                //post count
+                model.PostCount = _postService.GetActive(p => p.GroupId == id).ToList().Count();
 
-            //list pending member
-            List<GroupMember> ListPendingMember = _groupMemberService.GetActive(g => g.GroupId == id && g.Status == (int)GroupMemberStatus.Pending).ToList();
-            List<GroupMemberFullInfoModel> ListPendingMemberVM = Mapper.Map<List<GroupMemberFullInfoModel>>(ListPendingMember);
-            for (int i = 0; i < ListPendingMember.Count(); i++)
-            {
-                GroupMember gm = ListPendingMember.ElementAt(i);
-                AspNetUser user = _userService.FirstOrDefaultActive(u => u.Id == gm.UserId);
-                AspNetUserFullInfoViewModel userFull = Mapper.Map<AspNetUserFullInfoViewModel>(user);
-                ListPendingMemberVM[i].AspNetUser = userFull;
-            }
+                //member count
+                model.MemberCount = _groupMemberService.GetActive(g => g.GroupId == id && g.Status == (int)GroupMemberStatus.Approved).ToList().Count();
 
-            //get list user that cur user followed
-            List<Follow> listFollow = _followService.GetActive(f => f.FollowerId == curUserId).ToList();
-            if(listFollow != null && listFollow.Count > 0)
-            {
-                foreach (var followedUser in listFollow)
+                if (model.PlaceId != null)
                 {
-                    foreach (var groupMember in ListGroupMemberVM)
+                    var place = _placeService.FirstOrDefaultActive(p => p.Id == model.PlaceId);
+                    if (place != null)
                     {
-                        if (followedUser.UserId == groupMember.AspNetUser.Id)
+                        model.PlaceName = place.Name;
+                    }
+                }
+                if (model.StartTime != null)
+                {
+                    model.StartTimeString = model.StartTime.Value.Hours.ToString("00") + ":" + model.StartTime.Value.Minutes.ToString("00");
+                }
+                if (model.EndTime != null)
+                {
+                    model.EndTimeString = model.EndTime.Value.Hours.ToString("00") + ":" + model.EndTime.Value.Minutes.ToString("00");
+                }
+                if (model.AvailableDays != null)
+                {
+                    var bits = new bool[8];
+                    for (var i = 7; i >= 0; i--)
+                    {
+                        bits[i] = (model.AvailableDays & (1 << i)) != 0;
+                    }
+                    var dayOfWeek = "";
+                    if (bits[1])
+                    {
+                        dayOfWeek += "CN ";
+                    }
+                    if (bits[2])
+                    {
+                        dayOfWeek += "T2 ";
+                    }
+                    if (bits[3])
+                    {
+                        dayOfWeek += "T3 ";
+                    }
+                    if (bits[4])
+                    {
+                        dayOfWeek += "T4 ";
+                    }
+                    if (bits[5])
+                    {
+                        dayOfWeek += "T5 ";
+                    }
+                    if (bits[6])
+                    {
+                        dayOfWeek += "T6 ";
+                    }
+                    if (bits[7])
+                    {
+                        dayOfWeek += "T7 ";
+                    }
+                    model.Days = dayOfWeek;
+                }
+
+                //get sport list for post
+                var sports = _sportService.GetActive()
+                                .Select(s => new SelectListItem
+                                {
+                                    Text = s.Name,
+                                    Value = s.Id.ToString()
+                                }).OrderBy(s => s.Value);
+                ViewBag.Sport = sports;
+
+                //get followed friend
+                var friends = _followService.GetActive(f => f.FollowerId == curUserId)
+                                .Select(s => new SelectListItem
+                                {
+                                    Text = s.AspNetUser.FullName,
+                                    Value = s.AspNetUser.Id
+                                }).OrderBy(s => s.Value);
+                ViewBag.friends = friends;
+
+                //member
+                List<GroupMember> ListGroupMember = _groupMemberService.GetActive(g => g.GroupId == id && g.Status == (int)GroupMemberStatus.Approved).ToList();
+                List<GroupMemberFullInfoModel> ListGroupMemberVM = Mapper.Map<List<GroupMemberFullInfoModel>>(ListGroupMember);
+                for (int i = 0; i < ListGroupMember.Count(); i++)
+                {
+                    GroupMember gm = ListGroupMember.ElementAt(i);
+                    AspNetUser user = _userService.FirstOrDefaultActive(u => u.Id == gm.UserId);
+                    AspNetUserFullInfoViewModel userFull = Mapper.Map<AspNetUserFullInfoViewModel>(user);
+                    ListGroupMemberVM[i].AspNetUser = userFull;
+                }
+
+                //list pending member
+                List<GroupMember> ListPendingMember = _groupMemberService.GetActive(g => g.GroupId == id && g.Status == (int)GroupMemberStatus.Pending).ToList();
+                List<GroupMemberFullInfoModel> ListPendingMemberVM = Mapper.Map<List<GroupMemberFullInfoModel>>(ListPendingMember);
+                for (int i = 0; i < ListPendingMember.Count(); i++)
+                {
+                    GroupMember gm = ListPendingMember.ElementAt(i);
+                    AspNetUser user = _userService.FirstOrDefaultActive(u => u.Id == gm.UserId);
+                    AspNetUserFullInfoViewModel userFull = Mapper.Map<AspNetUserFullInfoViewModel>(user);
+                    ListPendingMemberVM[i].AspNetUser = userFull;
+                }
+
+                //get list user that cur user followed
+                List<Follow> listFollow = _followService.GetActive(f => f.FollowerId == curUserId).ToList();
+                if (listFollow != null && listFollow.Count > 0)
+                {
+                    foreach (var followedUser in listFollow)
+                    {
+                        foreach (var groupMember in ListGroupMemberVM)
                         {
-                            groupMember.isFollowed = true;
+                            if (followedUser.UserId == groupMember.AspNetUser.Id)
+                            {
+                                groupMember.isFollowed = true;
+                            }
                         }
                     }
                 }
-            }
 
-            //get list group that this user joined
-            List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f =>
-            f.UserId == curUserId && f.Status == (int)GroupMemberStatus.Approved).ToList().Count > 0).ToList();
-            ViewBag.GroupList = groupList;
+                //get list group that this user joined
+                List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f =>
+                f.UserId == curUserId && f.Status == (int)GroupMemberStatus.Approved).ToList().Count > 0).ToList();
+                ViewBag.GroupList = groupList;
 
-            //WWWWWWWWWWWWWWWWWWWWWWWWTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            //get suggest group
-            List<Group> groupListSG = _groupService.GetActive(p => p.GroupMembers.Where(f =>
-            f.UserId == curUserId).ToList().Count > 0).ToList();
-            ViewBag.GroupList = groupList;
-            List<Group> AllGroups = _groupService.GetActive().ToList();
-            List<Group> TempGroups = AllGroups.Except(groupListSG).ToList();
+                //WWWWWWWWWWWWWWWWWWWWWWWWTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                //get suggest group
+                List<Group> groupListSG = _groupService.GetActive(p => p.GroupMembers.Where(f =>
+                f.UserId == curUserId).ToList().Count > 0).ToList();
+                ViewBag.GroupList = groupList;
+                List<Group> AllGroups = _groupService.GetActive().ToList();
+                List<Group> TempGroups = AllGroups.Except(groupListSG).ToList();
 
-            List<Hobby> listHobbies = _hobbyService.GetActive(h => h.UserId.Equals(curUserId)).ToList();
-            List<Group> suggestGroups = new List<Group>();
-            foreach (var item in TempGroups)
-            {
-                foreach (var item1 in listHobbies)
+                List<Hobby> listHobbies = _hobbyService.GetActive(h => h.UserId.Equals(curUserId)).ToList();
+                List<Group> suggestGroups = new List<Group>();
+                foreach (var item in TempGroups)
                 {
-                    if(item.SportId == item1.SportId)
+                    foreach (var item1 in listHobbies)
                     {
-                        suggestGroups.Add(item);
+                        if (item.SportId == item1.SportId)
+                        {
+                            suggestGroups.Add(item);
+                        }
                     }
                 }
+                List<GroupFullInfoViewModel> suggestGroupsVM = Mapper.Map<List<GroupFullInfoViewModel>>(suggestGroups);
+
+                //List<GroupMember> listGroup = _groupMemberService.GetActive(g => g.UserId.Equals(curUserId) && g.Status == (int)GroupMemberStatus.Approved).ToList();
+                //List<Group> suggestGroups = _groupService.GetSuggestGroup(id.Value);
+                //List<GroupFullInfoViewModel> suggestGroupsVM = Mapper.Map<List<GroupFullInfoViewModel>>(suggestGroups);
+                //foreach (var item in suggestGroupsVM)
+                //{
+                //    item.MemberCount = _groupMemberService.GetActive(g => g.GroupId == item.Id).ToList().Count();
+                //    foreach (var gm in listGroup)
+                //    {
+                //        if(gm.GroupId == item.Id)
+                //        {
+                //            item.IsMember = true;
+                //        }
+                //    }
+                //}
+
+                //get suggest group for challenge
+                List<Group> suggestGroupChallenge = _groupService.GetActive(g => g.SportId == model.SportId && g.Id != model.Id).ToList();
+
+                //get challenge request
+                List<ChallengeDetailViewModel> challengeRequestList = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetAllChallengeRequest(id.Value).ToList());
+
+                //get list that this group was fighted
+                List<ChallengeDetailViewModel> challengedList = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetChallengedList(id.Value).ToList());
+
+                //get not operate challenge list
+                List<ChallengeDetailViewModel> notOperateChallengeList = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetNotOperateChallengeList(id.Value).ToList());
+
+                //get sent challenge request
+                List<ChallengeDetailViewModel> sentChallengeRequest = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetSentChallengeRequest(id.Value).ToList());
+
+                ViewBag.sentChallengeRequest = sentChallengeRequest;
+                ViewBag.notOperateChallengeList = notOperateChallengeList;
+                ViewBag.challengedList = challengedList;
+                ViewBag.challengeRequestList = challengeRequestList;
+                ViewBag.groupMember = ListGroupMemberVM;
+                ViewBag.pendingMembers = ListPendingMemberVM;
+                ViewBag.groupId = id.Value;
+                ViewBag.suggestGroups = suggestGroupsVM;
+                ViewBag.suggestGroupChallenge = suggestGroupChallenge;
+                return View(model);
             }
-            List<GroupFullInfoViewModel> suggestGroupsVM = Mapper.Map<List<GroupFullInfoViewModel>>(suggestGroups);
+            else
+            {
+                return RedirectToAction("PageNotFound", "Errors");
+            }
 
-            //List<GroupMember> listGroup = _groupMemberService.GetActive(g => g.UserId.Equals(curUserId) && g.Status == (int)GroupMemberStatus.Approved).ToList();
-            //List<Group> suggestGroups = _groupService.GetSuggestGroup(id.Value);
-            //List<GroupFullInfoViewModel> suggestGroupsVM = Mapper.Map<List<GroupFullInfoViewModel>>(suggestGroups);
-            //foreach (var item in suggestGroupsVM)
-            //{
-            //    item.MemberCount = _groupMemberService.GetActive(g => g.GroupId == item.Id).ToList().Count();
-            //    foreach (var gm in listGroup)
-            //    {
-            //        if(gm.GroupId == item.Id)
-            //        {
-            //            item.IsMember = true;
-            //        }
-            //    }
-            //}
 
-            //get suggest group for challenge
-            List<Group> suggestGroupChallenge = _groupService.GetActive(g => g.SportId == model.SportId && g.Id != model.Id).ToList();
-
-            //get challenge request
-            List<ChallengeDetailViewModel> challengeRequestList = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetAllChallengeRequest(id.Value).ToList());
-
-            //get list that this group was fighted
-            List<ChallengeDetailViewModel> challengedList = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetChallengedList(id.Value).ToList());
-
-            //get not operate challenge list
-            List<ChallengeDetailViewModel> notOperateChallengeList = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetNotOperateChallengeList(id.Value).ToList());
-
-            //get sent challenge request
-            List<ChallengeDetailViewModel> sentChallengeRequest = Mapper.Map<List<ChallengeDetailViewModel>>(_challengeService.GetSentChallengeRequest(id.Value).ToList());
-
-            ViewBag.sentChallengeRequest = sentChallengeRequest;
-            ViewBag.notOperateChallengeList = notOperateChallengeList;
-            ViewBag.challengedList = challengedList;
-            ViewBag.challengeRequestList = challengeRequestList;
-            ViewBag.groupMember = ListGroupMemberVM;
-            ViewBag.pendingMembers = ListPendingMemberVM;
-            ViewBag.groupId = id.Value;
-            ViewBag.suggestGroups = suggestGroupsVM;
-            ViewBag.suggestGroupChallenge = suggestGroupChallenge;
-            return View(model);
         }
 
         public ActionResult UpdateGroup(GroupDetailViewModel model)

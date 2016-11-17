@@ -1013,14 +1013,29 @@
                                                             }
                                                             <p>@hobbies</p>
                                                             @{
-                                                                if (item.isFollowed != true)
+                                                                if (Model.IsAdmin)
                                                                 {
-                                                                    <button type="button" class="btn btn-default" onclick="followUnfollowAD('@item.AspNetUser.Id')"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button><br />
+                                                                    if (item.isFollowed != true)
+                                                                    {
+                                                                        <button type="button" class="btn btn-default" onclick="followUnfollowAD('@item.AspNetUser.Id')"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button><br />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <button type="button" class="btn btn-default" onclick="followUnfollowAD('@item.AspNetUser.Id')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button><br />
+                                                                    }
                                                                 }
                                                                 else
                                                                 {
-                                                                    <button type="button" class="btn btn-default" onclick="followUnfollowAD('@item.AspNetUser.Id')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button><br />
+                                                                    if (item.isFollowed != true)
+                                                                    {
+                                                                        <button type="button" class="btn btn-default" onclick="followUnfollow('@item.AspNetUser.Id')"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button><br />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <button type="button" class="btn btn-default" onclick="followUnfollow('@item.AspNetUser.Id')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button><br />
+                                                                    }
                                                                 }
+
                                                             }
 
                                                         </div>
@@ -1899,7 +1914,10 @@
             $(e).parent().hide('slow', function(){ $(e).parent().remove(); });
         }
 
-        document.getElementById('selectImage').addEventListener('change', handleFileSelect, false);
+        if($("#selectImage").length) {
+            document.getElementById('selectImage').addEventListener('change', handleFileSelect, false);
+        }
+        
 
         $(document).on("submit", "#post-formEdit", function (e) {
             e.preventDefault();
@@ -2116,7 +2134,7 @@
                     if(data.Succeed && data.Message == "Đã bỏ theo dõi"){
                         var outerDiv = "#following_" + id;
                         var uid = "'" + id + "'";
-                        $(outerDiv).find("button").replaceWith('<button type="button" class="btn btn-default" onclick="followUnFollow(' + uid + ')"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button>')
+                        $(outerDiv).find("button").replaceWith('<button type="button" class="btn btn-default" onclick="followUnfollow(' + uid + ')"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button>')
                     } else if(data.Succeed && data.Message == "Đã theo dõi") {
                         var outerDiv = "#following_" + id;
                         var uid = "'" + id + "'";

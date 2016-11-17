@@ -229,11 +229,15 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                                     + reportDiv
                                 + "</li>";
                     $(post).hide().appendTo("#listPost").fadeIn("slow");
-                    document.getElementById('selectImageComment_' + this.Id).addEventListener('change', function () {
-                        var tmp = $(this).attr('id');
-                        var result = tmp.split("_");
-                        handleFileSelectComment(event, result[1]);
-                    }, false);
+                    var elt = "#selectImageComment_" + this.Id;
+                    if ($(elt).length) {
+                        document.getElementById('selectImageComment_' + this.Id).addEventListener('change', function () {
+                            var tmp = $(this).attr('id');
+                            var result = tmp.split("_");
+                            handleFileSelectComment(event, result[1]);
+                        }, false);
+                    }
+                    
                 })
             } else {
 

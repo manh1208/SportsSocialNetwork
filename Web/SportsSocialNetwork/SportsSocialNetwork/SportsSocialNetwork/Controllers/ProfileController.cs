@@ -16,9 +16,11 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using Teek.Models;
+using SportsSocialNetwork.Models.Identity;
 
 namespace SportsSocialNetwork.Controllers
 {
+    [MyAuthorize(Roles = IdentityMultipleRoles.SSN)]
     public class ProfileController : BaseController
     {
         // GET: Profile

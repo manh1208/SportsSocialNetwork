@@ -9,9 +9,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using SportsSocialNetwork.Models.Identity;
 
 namespace SportsSocialNetwork.Controllers
 {
+    [MyAuthorize(Roles = IdentityMultipleRoles.SSN)]
     public class NotificationController : BaseController
     {
         private String systemError = "Đã có lỗi xảy ra!";
