@@ -331,6 +331,14 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                                    '</div>' +
                                    '</div>';
                     }
+                    var whoIsWall = "";
+                    if (this.ProfileId != null && this.ProfileId != this.UserId) {
+                        if (this.ProfileId == _curUserId) {
+                            whoIsWall = " trên tường của bạn";
+                        } else {
+                            whoIsWall = " trên tường của <a style='color: #76838f' href='profile/index?userid=" + this.ProfileId + "'>" + this.Profile.FullName + "</a>";
+                        }
+                    }
                     var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + this.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
@@ -341,7 +349,7 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                                         + "<div class='media-body'>"
                                             + "<p class='media-heading' style='margin-bottom:0;font-size: large;'>"
                                             + '<a style="font-weight:bold;color:#ff6a00" class="comment-author" href="/profile/index?userid=' + this.AspNetUser.Id + '">' + this.AspNetUser.FullName + '</a>'
-                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; "+ title +"</span>"
+                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; "+ title + whoIsWall + "</span>"
                                             + "</p>"
                                             + "<small style='color:#76838f'>" + this.PostAge + "</small>"
                                             + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px;font-size: large;font-weight: 500;'>" + content + "</div>"
@@ -1176,7 +1184,7 @@ function shareEventPost(data) {
                             + '<a class="avatar" href="javascript:void(0)" style="width:50px;"><img style="height:30px;width:30px;" class="img-responsive" src="' + data.Event.AspNetUser.AvatarImage + '" alt="..."></a>'
                             + '<a href="/Profile/Index?UserId=' + data.Event.AspNetUser.Id + '"<span style="color:#ff6a00">' + data.Event.AspNetUser.FullName + '</span></a> đã tạo một sự kiện'
                         +'</p>'
-                        + "<a href='/Event/ViewDetail/" + data.Event.Id + "' style='text-decoration:none;color:black;'>"
+                        + "<a href='/Event/ViewDetail/" + data.Event.Id + "' target='_blank' style='text-decoration:none;color:black;'>"
                             + "<div>"
                               + '<div style="width:100%;height:200px;background-size:cover;background-repeat:no-repeat;background-position:center center;background-image:url(' + data.Event.Image + ')"></div>'
                               + "<h3>" + data.Event.Name + "</h3>"
@@ -1260,7 +1268,7 @@ function shareNewsPost(data) {
                         //    + '<a class="avatar" href="javascript:void(0)" style="width:50px;"><img style="height:30px;width:30px;" class="img-responsive" src="' + data.Event.AspNetUser.AvatarImage + '" alt="..."></a>'
                         //    + '<a href="/Profile/Index?UserId=' + data.Event.AspNetUser.Id + '"<span style="color:#ff6a00">' + data.Event.AspNetUser.FullName + '</span></a> đã tạo một sự kiện'
                         //+ '</p>'
-                        + "<a href='/News/NewsDetail/"+ data.News.Id +"' style='text-decoration:none;color:black;'>"
+                        + "<a href='/News/NewsDetail/"+ data.News.Id +"' target='_blank' style='text-decoration:none;color:black;'>"
                             + "<div>"
                               + '<div style="width:100%;height:200px;background-size:cover;background-repeat:no-repeat;background-position:center center;background-image:url(' + data.News.Image + ')"></div>'
                               + "<h3>" + data.News.Title + "</h3>"
