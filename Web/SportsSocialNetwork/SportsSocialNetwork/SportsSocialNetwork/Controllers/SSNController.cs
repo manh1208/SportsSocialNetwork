@@ -143,6 +143,17 @@ namespace SportsSocialNetwork.Controllers
             ViewBag.Following = _followService.GetActive(p => p.FollowerId == curUser.Id).Count();
             ViewBag.Follower = _followService.GetActive(p => p.UserId == curUser.Id).Count();
             ViewBag.PostCount = _postService.GetActive(p => p.UserId == curUser.Id).Count();
+
+            //get list of user that this user is following
+            List<Follow> followingList = _followService.GetActive(f => f.FollowerId == curUser.Id).ToList();
+            List<FollowDetailViewModel> followingListVM = Mapper.Map<List<FollowDetailViewModel>>(followingList);
+            foreach (var item in followingListVM)
+            {
+                AspNetUser user = _userService.FirstOrDefaultActive(u => u.Id.Equals(item.UserId));
+                AspNetUserViewModel userVM = Mapper.Map<AspNetUserViewModel>(user);
+                item.User = userVM;
+            }
+            ViewBag.followingList = followingListVM;
             return View();
         }
 

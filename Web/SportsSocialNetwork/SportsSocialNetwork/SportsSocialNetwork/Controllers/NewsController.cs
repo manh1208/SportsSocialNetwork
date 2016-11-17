@@ -8,6 +8,7 @@ using SportsSocialNetwork.Models.Entities;
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.ViewModels;
+using SportsSocialNetwork.Models.Enumerable;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -33,12 +34,46 @@ namespace SportsSocialNetwork.Controllers
         {
             var _newsService = this.Service<INewsService>();
             var _categoryService = this.Service<ICategoryService>();
+            var _followService = this.Service<IFollowService>();
+            var _userService = this.Service<IAspNetUserService>();
+            var _sportService = this.Service<ISportService>();
+
+            string curUserId = User.Identity.GetUserId();
 
             _newsService.UpdateNumOfRead(id.Value);
             List<Category> categories = _categoryService.GetActive().ToList();
             News news = _newsService.GetNewsById(id.Value);
             NewsViewModel newsVM = Mapper.Map<NewsViewModel>(news);
             List<News> relativeNews = _newsService.GetRelativeNews(id.Value);
+
+
+            var sports = _sportService.GetActive()
+                            .Select(s => new SelectListItem
+                            {
+                                Text = s.Name,
+                                Value = s.Id.ToString()
+                            }).OrderBy(s => s.Value);
+            ViewBag.Sport = sports;
+
+            //get list of user that this user is following
+            List<Follow> followingList = _followService.GetActive(f => f.FollowerId == curUserId).ToList();
+            List<FollowDetailViewModel> followingListVM = Mapper.Map<List<FollowDetailViewModel>>(followingList);
+            foreach (var item in followingListVM)
+            {
+                AspNetUser user = _userService.FirstOrDefaultActive(u => u.Id.Equals(item.UserId));
+                AspNetUserViewModel userVM = Mapper.Map<AspNetUserViewModel>(user);
+                item.User = userVM;
+            }
+            ViewBag.followingList = followingListVM;
+
+            //load group name
+            var _groupService = this.Service<IGroupService>();
+            List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f =>
+           f.UserId == curUserId && f.Status == (int)GroupMemberStatus.Approved).ToList().Count > 0).ToList();
+            if (groupList != null)
+            {
+                ViewBag.GroupList = groupList;
+            }
 
             ViewBag.categories = categories;
             ViewBag.relativeNews = relativeNews;

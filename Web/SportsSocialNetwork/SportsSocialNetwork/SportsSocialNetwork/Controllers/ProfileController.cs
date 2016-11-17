@@ -118,6 +118,18 @@ namespace SportsSocialNetwork.Controllers
                 ViewBag.GroupList = groupList;
             }
 
+            string curUserId = User.Identity.GetUserId();
+            //get list of user that this user is following
+            List<Follow> followingList = _followService.GetActive(f => f.FollowerId == curUserId).ToList();
+            List<FollowDetailViewModel> followingListVM = Mapper.Map<List<FollowDetailViewModel>>(followingList);
+            foreach (var item in followingListVM)
+            {
+                AspNetUser ur = _userService.FirstOrDefaultActive(u => u.Id.Equals(item.UserId));
+                AspNetUserViewModel userVM = Mapper.Map<AspNetUserViewModel>(ur);
+                item.User = userVM;
+            }
+            ViewBag.followingList = followingListVM;
+
 
             return View(model);
         }

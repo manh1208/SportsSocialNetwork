@@ -26,6 +26,38 @@ namespace SportsSocialNetwork.Controllers
         // GET: Order
         public ActionResult Index()
         {
+            var _followService = this.Service<IFollowService>();
+            var _userService = this.Service<IAspNetUserService>();
+            var _sportService = this.Service<ISportService>();
+            string curUserId = User.Identity.GetUserId();
+
+            var sports = _sportService.GetActive()
+                            .Select(s => new SelectListItem
+                            {
+                                Text = s.Name,
+                                Value = s.Id.ToString()
+                            }).OrderBy(s => s.Value);
+            ViewBag.Sport = sports;
+
+            //get list of user that this user is following
+            List<Follow> followingList = _followService.GetActive(f => f.FollowerId == curUserId).ToList();
+            List<FollowDetailViewModel> followingListVM = Mapper.Map<List<FollowDetailViewModel>>(followingList);
+            foreach (var item in followingListVM)
+            {
+                AspNetUser user = _userService.FirstOrDefaultActive(u => u.Id.Equals(item.UserId));
+                AspNetUserViewModel userVM = Mapper.Map<AspNetUserViewModel>(user);
+                item.User = userVM;
+            }
+            ViewBag.followingList = followingListVM;
+
+            //load group name
+            var _groupService = this.Service<IGroupService>();
+            List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f =>
+           f.UserId == curUserId && f.Status == (int)GroupMemberStatus.Approved).ToList().Count > 0).ToList();
+            if (groupList != null)
+            {
+                ViewBag.GroupList = groupList;
+            }
             return View();
         }
 

@@ -858,6 +858,7 @@
     <Compile Include="Models\ViewModels\DataTableViewModel.cs" />
     <Compile Include="Models\ViewModels\EventDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\EventOveralViewModel.cs" />
+    <Compile Include="Models\ViewModels\EventShareViewModel.cs" />
     <Compile Include="Models\ViewModels\EventViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
@@ -883,6 +884,7 @@
     <Compile Include="Models\ViewModels\FirebaseTokenViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\FollowDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\FollowSuggestViewModel.cs" />
     <Compile Include="Models\ViewModels\FollowViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
@@ -927,6 +929,7 @@
       <DependentUpon>ViewModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\OrderDetailViewModel.cs" />
+    <Compile Include="Models\ViewModels\OrderShareViewModel.cs" />
     <Compile Include="Models\ViewModels\OrderSimpleViewModel.cs" />
     <Compile Include="Models\ViewModels\OrderViewModelGen.cs">
       <DependentUpon>ViewModels.tt</DependentUpon>
