@@ -11,5 +11,11 @@ namespace SportsSocialNetwork.Models.ViewModels
         public String TypeString { get; set; }
         public String StartTimeString { get; set; }
         public String EndTimeString { get; set; }
+        public String StartDateString { get; set; }
+        public String EndDateString { get; set; }
+        public string PlaceName { get; set; }
+        public string availableDayOfWeek { get; set; }
+        public int PlaceId { get; set; }
+        public List<int> DayOfWeek { get; set; }
     }
 }

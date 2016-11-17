@@ -13,5 +13,7 @@ namespace SportsSocialNetwork.Models.ViewModels
         public bool IsMember { get; set; }
 
         public SportViewModel Sport { get; set; }
+
+        public string Days { get; set; }
     }
 }

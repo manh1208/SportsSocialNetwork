@@ -36,7 +36,7 @@
      background-image: unset;
      border: none;
     }
-    #DataTables_Table_0>thead>tr>th{
+    #DataTables_Table_0>thead>tr>th, #DataTables_Table_1>thead>tr>th{
         font-weight:bold;
     }
 </style>
@@ -45,7 +45,12 @@
         <h2><i class="fa fa-bars" aria-hidden="true"></i> Lịch sử đặt sân</h2>
     </div>
 </div>
-<div class="panel padding-top-20">
+<div class="panel padding-top-10">
+    <header class="panel-heading">
+        <h2 class="panel-title">
+            <i class="fa fa-bars" aria-hidden="true"></i> Đặt sân vãng lai
+        </h2>
+    </header>
     <div class="panel-body">
         <table class="table table-striped table-bordered table-hover" id="DataTables_Table_0">
             <thead>
@@ -66,11 +71,44 @@
     </div>
 </div>
 
+<div class="panel padding-top-10">
+    <header class="panel-heading">
+        <h2 class="panel-title">
+            <i class="fa fa-bars" aria-hidden="true"></i> Đặt sân cố định
+        </h2>
+    </header>
+    <div class="panel-body">
+        <table class="table table-striped table-bordered table-hover" id="DataTables_Table_1">
+            <thead>
+                <tr style="color:black">
+                    <th>Tên sân</th>
+                    <th>Giờ sử dụng</th>
+                    <th>Ngày trong tuần sử dụng</th>
+                    <th></th>
+                    <th></th>
+                    <th>Thời hạn</th>
+                    <th>Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody style="color:black"></tbody>
+        </table>
+    </div>
+</div>
+
 <div class="modal fade" id="orderDetail" aria-hidden="true"
      aria-labelledby="orderDetail" role="dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div id="order-detail-modal-container"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="orderDetail_1" aria-hidden="true"
+     aria-labelledby="orderDetail_1" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="order-detail-modal-container-1"></div>
         </div>
     </div>
 </div>
@@ -128,10 +166,123 @@
             });
         }
 
+        function showDetailModal_1(id) {
+            $.ajax({
+                url: '@Url.Action("FieldScheduleOrderDetail")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#order-detail-modal-container-1').html(data);
+                    $('#orderDetail_1').modal('show');
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
         function RefreshTable() {
             var oTable = $("#DataTables_Table_0").dataTable();
             oTable._fnPageChange(0);
             oTable._fnAjaxUpdate();
+        };
+
+        function RefreshTable_1() {
+            var oTable = $("#DataTables_Table_1").dataTable();
+            oTable._fnPageChange(0);
+            oTable._fnAjaxUpdate();
+        };
+
+        function InitDatatable_1() {
+            $("#DataTables_Table_1").DataTable({
+                "bRetrieve": true,
+                "bServerSide": true,
+                "bScrollCollapse": true,
+                "bSort": true,
+                "sAjaxSource": "/PlaceOwner/FieldSchedule/GetData",
+                "bProcessing": true,
+                "aLengthMenu": [10, 20, 50],
+                "oLanguage": {
+                    "sSearch": "Tìm kiếm:",
+                    "sZeroRecords": "Không có kết quả phù hợp",
+                    "sInfo": "Hiển thị _START_ - _END_ trong số _TOTAL_ dòng",
+                    "sEmptyTable": "Không tìm thấy kết quả nào",
+                    "sInfoFiltered": "",
+                    "sLengthMenu": "Hiển thị _MENU_ dòng",
+                    "sProcessing": "Xin đợi trong giây lát...",
+                    "oPaginate": {
+                        "sFirst": "Về đầu",
+                        "sLast": "Về cuối",
+                        "sNext": "Trang kế >",
+                        "sPrevious": "< Trang trước"
+                    },
+                },
+                "aoColumnDefs": [
+                    {
+                        "aTargets": [0],
+                        "mRender": function (data, type, o) {
+                            return o[1];
+                        }
+                    },
+                    {
+                        "aTargets": [1],
+                        "mRender": function (data, type, o) {
+                            return o[2]+" - "+o[4];
+                        }
+                    },
+                    {
+                        "aTargets": [2],
+                            "mRender": function (data, type, o) {
+                                var bits = [8];
+                                for (var i = 7; i >= 0; i--) {
+                                    bits[i] = (o[6] & (1 << i)) != 0;
+                                    console.log(bits[i]+", "+i)
+                                }
+                                var dayOfWeek = "";
+                                if (bits[1]) {
+                                    dayOfWeek += "CN ";
+                                }
+                                if (bits[2]) {
+                                    dayOfWeek += "T2 ";
+                                }
+                                if (bits[3]) {
+                                    dayOfWeek += "T3 ";
+                                }
+                                if (bits[4]) {
+                                    dayOfWeek += "T4 ";
+                                }
+                                if (bits[5]) {
+                                    dayOfWeek += "T5 ";
+                                }
+                                if (bits[6]) {
+                                    dayOfWeek += "T6 ";
+                                }
+                                if (bits[7]) {
+                                    dayOfWeek += "T7 ";
+                                }
+                                return dayOfWeek;
+                        }
+                    },
+                    {
+                        "aTargets": [5],
+                        "mRender": function (data, type, o) {
+                            return o[3] + " - " + o[5];
+                        }
+                    },
+                    {
+                        "aTargets": [6],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            return "<button class='btn btn-success' onclick='showDetailModal_1(" + o[0] + ")' data-target='#orderDetail_1' data-toggle='modal' type='button'><i class='fa fa-eye' aria-hidden='true'></i></button>";
+                        }
+                    },
+                    {
+                        "aTargets": [3, 4],
+                        "bVisible": false
+                    }
+                ],
+
+            });
         };
 
         function InitDatatable() {
@@ -236,6 +387,8 @@
         };
 
         $(document).ready(function () {
+            InitDatatable_1();
+            RefreshTable_1();
             InitDatatable();
             RefreshTable();
             //loadlist();

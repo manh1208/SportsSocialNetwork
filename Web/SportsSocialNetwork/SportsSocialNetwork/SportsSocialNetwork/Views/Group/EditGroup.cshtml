@@ -1,0 +1,148 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.GroupDetailViewModel
+@{
+    var sport = ViewBag.Sport as IEnumerable<SelectListItem>;
+    var place = ViewBag.Place as IEnumerable<SelectListItem>;
+}
+
+<div class="modal-header padding-bottom-0">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <h4 class="modal-title">Thông tin cơ bản</h4>
+</div>
+<form id="update-group-form" method="post" autocomplete="off">
+    <div class="modal-body">
+        @Html.HiddenFor(m => m.Id)
+        <div class="form-group form-material floating">
+            @Html.TextBoxFor(p => p.Name, new { @class = "form-control input-lg" })
+            <label class="floating-label">Tên nhóm</label>
+        </div>
+        <div class="form-group form-material floating">
+            @Html.TextAreaFor(p => p.Description, new { @class = "form-control input-lg", @rows = 2 })
+            <label class="floating-label">Mô tả</label>
+        </div>
+        <div class="form-group form-material floating">
+            @Html.DropDownListFor(p => p.SportId, sport, "", new { @class = "form-control input-lg"})
+            <label class="floating-label">Môn thể thao</label>
+        </div>
+        <div class="form-group form-material floating">
+            @Html.DropDownListFor(p => p.PlaceId, place, "", new { @class = "form-control input-lg" })
+            <label class="floating-label">Địa điểm thường hoạt động</label>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group form-material floating">
+                    @Html.TextBoxFor(e => e.StartTime, "{0:hh\\:mm}", new { @class = "form-control input-lg timepicker", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                    <label class="floating-label">Giờ bắt đầu</label>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group form-material floating">
+                    @Html.TextBoxFor(e => e.EndTime, "{0:hh\\:mm}", new { @class = "form-control input-lg timepicker", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                    <label class="floating-label">Giờ kết thúc</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group form-material floating">
+            <label class="control-label" style="color:#76838f">Các ngày hoạt động trong tuần:</label>
+            @Html.TextBoxFor(m => m.Days, new { @class = "form-control input-lg", id = "cdays", style = "width:100%" })
+        </div>
+        <p style="font-size:13px">※Hoặc nếu bạn đã đặt sân cố định (dài hạn) cho nhóm của bạn thì hãy chọn 
+        đơn đặt sân đó, hệ thống sẽ tự động lấy thông tin đặt sân dùng làm thông tin hoạt động của nhóm</p>
+        <div class="form-group form-material floating text-center">
+            <select class="form-control input-lg" id="selectOrder">
+                
+            </select>
+            <label class="floating-label">Chọn đơn đặt sân</label>
+            </div>
+        </div>
+    <div class="modal-footer text-center">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy bỏ</button>
+        <input type="submit" id="submitChange" class="btn btn-primary" value="Cập nhật" />
+    </div>
+</form>
+
+<script>
+
+    $('#chooseOrder').on('click', function () {
+        $('#orderForm').modal('show');
+    });
+
+    $("#SportId").on("change", function(){
+        $("#orderInfo").val("");
+        var sport = $("#SportId").val();
+        loadOrder(sport);
+    })
+
+    function loadOrder(id){
+        var ddl = $('#selectOrder');
+        var content = "";
+        ddl.empty();
+        $.ajax({
+            url: '@Url.Action("GetOrderBySport", "FieldSchedule")',
+            type: 'POST',
+            async: false,
+            data: {
+                'sportId': id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if(data.Succeed){
+                    $(data.AdditionalData).each(function () {
+                        $(document.createElement('option'))
+                            .attr('value', this.PlaceName)
+                            .text(this.PlaceName)
+                            .appendTo(ddl);
+                    });
+                }
+            }
+        });
+    }
+
+    console.log("a");
+    var array_day = [{ "id": "1", "text": "Chủ Nhật" },
+                            { "id": "2", "text": "Thứ hai" },
+            { "id": "3", "text": "Thứ ba" },
+            { "id": "4", "text": "Thứ tư" },
+            { "id": "5", "text": "Thứ năm" },
+            { "id": "6", "text": "Thứ sáu" },
+            { "id": "7", "text": "Thứ bảy" }, ];
+    var dayList = @Html.Raw(Json.Encode(ViewBag.availableDayOfWeek));
+    $("#cdays").select2({
+        class: 'form-control',
+        width: '100%',
+        multiple: true,
+        maximumSelectionSize: 1,
+        placeholder: "",
+        data: array_day
+    }).select2('val', dayList);
+    $('#update-group-form').submit(function (e) {
+        e.preventDefault();
+        var formData = new FormData(document.getElementById('update-group-form'));
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("UpdateGroup","Group")',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                if (result.Succeed) {
+                    $('#GroupDetail').modal('hide');
+                    showMessage("Cập nhật thành công.", "success", "OK");
+                } else {
+                    showErrors(result.Errors);
+                }
+
+            },
+            error: function (result) {
+                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+            },
+        });
+
+
+    });
+
+    
+
+    
+</script>

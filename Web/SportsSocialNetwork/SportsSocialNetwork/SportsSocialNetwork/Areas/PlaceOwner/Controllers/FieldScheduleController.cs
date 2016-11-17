@@ -267,6 +267,71 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
            
         }
 
+        public ActionResult GetOrderBySport(int sportId)
+        {
+            var result = new AjaxOperationResult<List<FieldScheduleViewModel>>();
+            var userId = User.Identity.GetUserId();
+            var fieldScheduleService = this.Service<IFieldScheduleService>();
+            DateTime today = DateTime.Now;
+            var orderList = fieldScheduleService.GetActive(p => p.Field.FieldType.SportId == sportId &&
+            p.EndDate >= today && p.UserId == userId && p.Type == (int)FieldScheduleStatus.Booked).ToList();
+            List<FieldScheduleViewModel> resultList = new List<FieldScheduleViewModel>();
+            foreach(var item in orderList)
+            {
+                FieldScheduleViewModel model = new FieldScheduleViewModel(item);
+                model.PlaceId = item.Field.PlaceId;
+                model.PlaceName = item.Field.Place.Name;
+                model.StartTimeString = model.StartTime.Hours.ToString("00") + ":" + model.StartTime.Minutes.ToString("00");
+                model.EndTimeString = model.EndTime.Hours.ToString("00") + ":" + model.EndTime.Minutes.ToString("00");
+                var bits = new bool[8];
+                for (var i = 7; i >= 0; i--)
+                {
+                    bits[i] = (model.AvailableDay & (1 << i)) != 0;
+                }
+                var dayOfWeek = "";
+                if (bits[1])
+                {
+                    model.DayOfWeek.Add(1);
+                    dayOfWeek += "CN ";
+                }
+                if (bits[2])
+                {
+                    model.DayOfWeek.Add(2);
+                    dayOfWeek += "T2 ";
+                }
+                if (bits[3])
+                {
+                    model.DayOfWeek.Add(3);
+                    dayOfWeek += "T3 ";
+                }
+                if (bits[4])
+                {
+                    model.DayOfWeek.Add(4);
+                    dayOfWeek += "T4 ";
+                }
+                if (bits[5])
+                {
+                    model.DayOfWeek.Add(5);
+                    dayOfWeek += "T5 ";
+                }
+                if (bits[6])
+                {
+                    model.DayOfWeek.Add(6);
+                    dayOfWeek += "T6 ";
+                }
+                if (bits[7])
+                {
+                    model.DayOfWeek.Add(7);
+                    dayOfWeek += "T7 ";
+                }
+                model.availableDayOfWeek = dayOfWeek;
+                resultList.Add(model);
+            }
+            result.Succeed = true;
+            result.AdditionalData = resultList;
+            return Json(result);
+        }
+
         [HttpPost]
         public ActionResult Deactive(int id)
         {
@@ -369,6 +434,69 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             //ViewBag.startTime = startTime;
             //ViewBag.endTime = endTime;
             return this.PartialView(updateSchedule);
+        }
+
+        public ActionResult GetData(JQueryDataTableParamModel param)
+        {
+            var _orderService = this.Service<IFieldScheduleService>();
+            var userId = User.Identity.GetUserId();
+            var orderList = _orderService.GetActive(p => p.UserId == userId).OrderByDescending(p => p.Id);
+            IEnumerable <FieldSchedule> filteredListItems;
+            if (!string.IsNullOrEmpty(param.sSearch))
+            {
+                filteredListItems = orderList.Where(
+                    o => (o.Field.Name != null && o.Field.Name.ToLower().Contains(param.sSearch.ToLower()))
+                    );
+
+            }
+            else
+            {
+                //filteredListItems = blogPostList;
+                filteredListItems = orderList;
+            }
+            // Sort.
+            var sortColumnIndex = Convert.ToInt32(Request["iSortCol_0"]);
+            var sortDirection = Request["sSortDir_0"]; // asc or desc
+
+            switch (sortColumnIndex)
+            {
+
+                case 0:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.Field.Name)
+                        : filteredListItems.OrderByDescending(o => o.Field.Name);
+                    break;
+                case 2:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.StartTime)
+                        : filteredListItems.OrderByDescending(o => o.StartTime);
+                    break;
+                case 3:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.EndDate)
+                        : filteredListItems.OrderByDescending(o => o.EndDate);
+                    break;
+            }
+
+            var displayedList = filteredListItems.Skip(param.iDisplayStart).Take(param.iDisplayLength);
+            var result = displayedList.Select(o => new IConvertible[]{
+                o.Id,
+                o.Field.Name,
+                o.StartTime.Hours.ToString("00")+":"+o.StartTime.Minutes.ToString("00"),
+                o.StartDate.ToString("dd/MM/yyyy"),
+                o.EndTime.Hours.ToString("00")+":"+o.EndTime.Minutes.ToString("00"),
+                o.EndDate.ToString("dd/MM/yyyy"),
+                o.AvailableDay
+            }.ToArray());
+
+            return Json(new
+            {
+                param.sEcho,
+                iTotalRecords = result.Count(),
+                iTotalDisplayRecords = filteredListItems.Count(),
+                aaData = result
+            }, JsonRequestBehavior.AllowGet);
+
         }
 
         [HttpPost]

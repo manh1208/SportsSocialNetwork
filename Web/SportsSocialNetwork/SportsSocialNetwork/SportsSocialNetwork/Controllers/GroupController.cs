@@ -210,6 +210,86 @@ namespace SportsSocialNetwork.Controllers
             return View(model);
         }
 
+        public ActionResult UpdateGroup(GroupDetailViewModel model)
+        {
+            var result = new AjaxOperationResult();
+            var groupSerive = this.Service<IGroupService>();
+            var groupId = model.Id;
+            var group = groupSerive.FirstOrDefaultActive(p => p.Id == groupId);
+            if (group != null)
+            {
+                group.StartTime = model.StartTime;
+                group.EndTime = model.EndTime;
+                group.PlaceId = model.PlaceId;
+                group.Name = model.Name;
+                group.Description = model.Description;
+                group.SportId = model.SportId;
+                if (model.Days != null)
+                {
+                    string[] days = model.Days.Split(',');
+                    int repeatDay = 0;
+                    for (int i = 0; i < days.Length; i++)
+                    {
+                        if (days[i].Length > 0)
+                        {
+                            int mark = 1 << Int16.Parse(days[i]);
+                            repeatDay = repeatDay | mark;
+                        }
+                    }
+                    group.AvailableDays = repeatDay;
+                }else
+                {
+                    group.AvailableDays = null;
+                }
+                groupSerive.Update(group);
+                groupSerive.Save();
+                result.Succeed = true;
+            }else
+            {
+                result.Succeed = false;
+            }
+            return Json(result);
+        }
+        public ActionResult EditGroup(int id)
+        {
+            var groupService = this.Service<IGroupService>();
+            var _sportService = this.Service<ISportService>();
+            var placeService = this.Service<IPlaceService>();
+            Group group = groupService.FirstOrDefaultActive(p => p.Id == id);
+            GroupDetailViewModel model = Mapper.Map<GroupDetailViewModel>(group);
+            var sports = _sportService.GetActive()
+                            .Select(s => new SelectListItem
+                            {
+                                Text = s.Name,
+                                Value = s.Id.ToString()
+                            }).OrderBy(s => s.Value);
+            ViewBag.Sport = sports;
+            var places = placeService.GetActive()
+                            .Select(s => new SelectListItem
+                            {
+                                Text = s.Name,
+                                Value = s.Id.ToString()
+                            }).OrderBy(s => s.Value);
+            ViewBag.Place = places;
+            var dayOfWeek = new List<int>();
+            if (model.AvailableDays != null)
+            {
+                var bits = new bool[8];
+                for (var i = 7; i >= 0; i--)
+                {
+                    bits[i] = (model.AvailableDays & (1 << i)) != 0;
+                }
+                for (var j = 1; j < bits.Length; j++)
+                {
+                    if (bits[j])
+                    {
+                        dayOfWeek.Add(j);
+                    }
+                }
+            }
+            ViewBag.availableDayOfWeek = dayOfWeek;
+            return this.PartialView(model);
+        }
         public ActionResult test()
         {
             return View();
