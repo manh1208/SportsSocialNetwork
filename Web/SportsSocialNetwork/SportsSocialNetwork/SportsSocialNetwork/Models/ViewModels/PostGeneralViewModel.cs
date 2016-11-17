@@ -20,5 +20,11 @@ namespace SportsSocialNetwork.Models.ViewModels
         public float PostWeight { get; set; }
         public float TimeDecay { get; set; }
         public AspNetUserSimpleModel Profile { get; set; }
+
+        //====================================
+        public EventShareViewModel Event { get; set; }
+        public OrderShareViewModel Order { get; set; }
+        public PostOveralViewModel Post2 { get; set; }
+        public NewsViewModel News { get; set; }
     }
 }

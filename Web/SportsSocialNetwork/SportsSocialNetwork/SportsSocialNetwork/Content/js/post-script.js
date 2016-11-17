@@ -6,6 +6,21 @@ var _deleteCommentActionName = "";
 var _likeUnlikePostActionName = "";
 var _curUserId = "";
 var _goNewFeedActionName = "";
+
+//==============================================================================================================
+
+var normalPostTitle = "đã đăng một bài viết";
+var shareEventPostTitle = "đã chia sẻ một sự kiện";
+var shareOrderPostTitle = "đã chia sẻ một đơn đặt sân";
+var sharePostPostTitle = "đã chia sẻ một bài viết";
+var shareNewsPostTitle = "đã chia sẻ một tin tức";
+
+var shareEventType = 6;
+var shareOrderType = 7;
+var sharePostType = 8;
+var shareNewsType = 9;
+//==============================================================================================================
+
 $('body').on('focus', ".magnific", function () {
     $(this).magnificPopup({
         type: 'image',
@@ -97,21 +112,45 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
             if (data.Succeed) {
                 $(data.AdditionalData).each(function () {
                     var content = "";
+                    var title = "";
                     if (this.ContentType == 1) {
                         content = textPost(this);
+                        title = normalPostTitle;
                     }
                     if (this.ContentType == 2) {
                         content = textImagePost(this);
+                        title = normalPostTitle;
                     }
                     if (this.ContentType == 3) {
                         content = imagePost(this);
+                        title = normalPostTitle;
                     }
                     if (this.ContentType == 4) {
                         content = multiImagePost(this);
+                        title = normalPostTitle;
                     }
                     if (this.ContentType == 5) {
                         content = multiImageTextPost(this);
+                        title = normalPostTitle;
                     }
+                    //===============================================
+                    if (this.ContentType == 6) {
+                        content = shareEventPost(this);
+                        title = shareEventPostTitle;
+                    }
+                    if (this.ContentType == 7) {
+                        content = shareOrderPost(this);
+                        title = shareOrderPostTitle;
+                    }
+                    if (this.ContentType == 8) {
+                        content = sharePostPost(this);
+                        title = sharePostPostTitle;
+                    }
+                    if (this.ContentType == 9) {
+                        content = shareNewsPost(this);
+                        title = shareNewsPostTitle;
+                    }
+                    //===============================================
                     var moreCmtBtn = "";
                     if (this.CommentCount > 3) {
                         moreCmtBtn = "<div id='moreCmt_" + this.Id + "'><a href='javascript:void(0)' style='color:#ff6a00!important'  onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
@@ -156,7 +195,7 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                                         + "<div class='media-body'>"
                                             + "<p class='media-heading' style='margin-bottom:0;font-size: large;'>"
                                             + '<a style="font-weight:bold;color:#ff6a00" class="comment-author" href="/profile/index?userid=' + this.AspNetUser.Id + '">' + this.AspNetUser.FullName + '</a>'
-                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; đã đăng một bài viết</span>"
+                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; " + title + "</span>"
                                             + "</p>"
                                             + "<small style='color:#76838f'>" + this.PostAge + "</small>"
                                             + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px;font-size: large;font-weight: 500;'>" + content + "</div>"
@@ -170,6 +209,7 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                                             +"<div style='margin-top:10px;border-top-style:groove;border-top-width:0.3px;border-bottom-style:groove;border-bottom-width:0.3px;padding-top:10px;padding-bottom:10px'>"
                                             +spanLike
                                             + "<a href='#' style='text-decoration: none;padding:10px;color:#000;font-weight:500'><i class='text-like fa fa-lg fa-comments-o'></i>&nbsp;Bình Luận</a>"
+                                            //+ "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500' onclick='showShareModal(" + this.Id + ","+ sharePostType +")'><i class='text-like fa fa-lg fa-share'></i>&nbsp;Chia sẻ</a>"
                                             +"</div>"
 
                                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
@@ -226,21 +266,45 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
             if (data.Succeed) {
                 $(data.AdditionalData).each(function () {
                     var content = "";
+                    var title = "";
                     if (this.ContentType == 1) {
                         content = textPost(this);
+                        title = normalPostTitle;
                     }
                     if (this.ContentType == 2) {
                         content = textImagePost(this);
+                        title = normalPostTitle;
                     }
                     if (this.ContentType == 3) {
                         content = imagePost(this);
+                        title = normalPostTitle;
                     }
                     if (this.ContentType == 4) {
                         content = multiImagePost(this);
+                        title = normalPostTitle;
                     }
                     if (this.ContentType == 5) {
                         content = multiImageTextPost(this);
+                        title = normalPostTitle;
                     }
+                    //===============================================
+                    if (this.ContentType == 6) {
+                        content = shareEventPost(this);
+                        title = shareEventPostTitle;
+                    }
+                    if (this.ContentType == 7) {
+                        content = shareOrderPost(this);
+                        title = shareOrderPostTitle;
+                    }
+                    if (this.ContentType == 8) {
+                        content = sharePostPost(this);
+                        title = sharePostPostTitle;
+                    }
+                    if (this.ContentType == 9) {
+                        content = shareNewsPost(this);
+                        title = shareNewsPostTitle;
+                    }
+                    //===============================================
                     var moreCmtBtn = "";
                     if (this.CommentCount > 3) {
                         moreCmtBtn = "<div id='moreCmt_" + this.Id + "'><a href='javascript:void(0)' style='color:#ff6a00!important'  onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
@@ -267,6 +331,14 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                                    '</div>' +
                                    '</div>';
                     }
+                    var whoIsWall = "";
+                    if (this.ProfileId != null && this.ProfileId != this.UserId) {
+                        if (this.ProfileId == _curUserId) {
+                            whoIsWall = " trên tường của bạn";
+                        } else {
+                            whoIsWall = " trên tường của <a style='color: #76838f' href='profile/index?userid=" + this.ProfileId + "'>" + this.Profile.FullName + "</a>";
+                        }
+                    }
                     var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + this.Id + "'>"
                                    + "<div class='media'>"
                                        + "<div class='media-left'>"
@@ -277,7 +349,7 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                                         + "<div class='media-body'>"
                                             + "<p class='media-heading' style='margin-bottom:0;font-size: large;'>"
                                             + '<a style="font-weight:bold;color:#ff6a00" class="comment-author" href="/profile/index?userid=' + this.AspNetUser.Id + '">' + this.AspNetUser.FullName + '</a>'
-                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; đã đăng một bài viết</span>"
+                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; "+ title + whoIsWall + "</span>"
                                             + "</p>"
                                             + "<small style='color:#76838f'>" + this.PostAge + "</small>"
                                             + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px;font-size: large;font-weight: 500;'>" + content + "</div>"
@@ -291,6 +363,7 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                                             + "<div style='margin-top:10px;border-top-style:groove;border-top-width:0.3px;border-bottom-style:groove;border-bottom-width:0.3px;padding-top:10px;padding-bottom:10px'>"
                                             + spanLike
                                             + "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500'><i class='text-like fa fa-lg fa-comments-o'></i>&nbsp;Bình Luận</a>"
+                                            + "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500' onclick='showShareModal(" + this.Id + "," + sharePostType + ")'><i class='text-like fa fa-lg fa-share'></i>&nbsp;Chia sẻ</a>"
                                             + "</div>"
                     
                                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
@@ -345,21 +418,45 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
             if (data.Succeed) {
                 $(data.AdditionalData).each(function () {
                     var content = "";
+                    var title = "";
                     if (this.ContentType == 1) {
                         content = textPost(this);
+                        title = normalPostTitle;
                     }
                     if (this.ContentType == 2) {
                         content = textImagePost(this);
+                        title = normalPostTitle;
                     }
                     if (this.ContentType == 3) {
                         content = imagePost(this);
+                        title = normalPostTitle;
                     }
                     if (this.ContentType == 4) {
                         content = multiImagePost(this);
+                        title = normalPostTitle;
                     }
                     if (this.ContentType == 5) {
                         content = multiImageTextPost(this);
+                        title = normalPostTitle;
                     }
+                    //===============================================
+                    if (this.ContentType == 6) {
+                        content = shareEventPost(this);
+                        title = shareEventPostTitle;
+                    }
+                    if (this.ContentType == 7) {
+                        content = shareOrderPost(this);
+                        title = shareOrderPostTitle;
+                    }
+                    if (this.ContentType == 8) {
+                        content = sharePostPost(this);
+                        title = sharePostPostTitle;
+                    }
+                    if (this.ContentType == 9) {
+                        content = shareNewsPost(this);
+                        title = shareNewsPostTitle;
+                    }
+                    //===============================================
                     var moreCmtBtn = "";
                     if (this.CommentCount > 3) {
                         moreCmtBtn = "<div id='moreCmt_" + this.Id + "'><a href='javascript:void(0)' style='color:#ff6a00!important' onclick='loadMoreComt(" + this.Id + ")'>Xem thêm bình luận</a>";
@@ -405,7 +502,7 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
                                         + "<div class='media-body'>"
                                             + "<p class='media-heading' style='margin-bottom:0;font-size: large;'>"
                                             + '<a style="font-weight:bold; color: #ff6a00;" class="comment-author" href="/profile/index?userid=' + this.AspNetUser.Id + '">' + this.AspNetUser.FullName + '</a>'
-                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; đã đăng một bài viết" + whoIsWall + "</span>"
+                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; " + title + whoIsWall + "</span>"
                                             + "</p>"
                                             + "<small style='color:#76838f'>" + this.PostAge + "</small>"
                                             + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px;font-size: large;font-weight: 500;'>" + content + "</div>"
@@ -419,6 +516,7 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
                                             + "<div style='margin-top:10px;border-top-style:groove;border-top-width:0.3px;border-bottom-style:groove;border-bottom-width:0.3px;padding-top:10px;padding-bottom:10px'>"
                                             + spanLike
                                             + "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500'><i class='text-like fa fa-lg fa-comments-o'></i>&nbsp;Bình Luận</a>"
+                                            + "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500' onclick='showShareModal(" + this.Id + ","+ sharePostType +")'><i class='text-like fa fa-lg fa-share'></i>&nbsp;Chia sẻ</a>"
                                             + "</div>"
 
                                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
@@ -537,6 +635,7 @@ function loadSpecificPost(userId, postId, actionName, loadMoreCmtActionName, loa
                                             + "<div style='margin-top:10px;border-top-style:groove;border-top-width:0.3px;border-bottom-style:groove;border-bottom-width:0.3px;padding-top:10px;padding-bottom:10px'>"
                                             + spanLike
                                             + "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500'><i class='text-like fa fa-lg fa-comments-o'></i>&nbsp;Bình Luận</a>"
+                                            + "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500' onclick='showShareModal(" + dt.Id + "," + sharePostType + ")'><i class='text-like fa fa-lg fa-share'></i>&nbsp;Chia sẻ</a>"
                                             + "</div>"
 
                                              + '<div class="panel" style="margin-bottom:0px;margin-top:15px">'
@@ -1072,7 +1171,186 @@ function multiImageTextPost(data) {
     content = content + images + "</div>";
     return content;
 }
+//==========================================================================================================================================================
+function shareEventPost(data) {
+    var hashtag = getHashTagSport(data);
+    if (hashtag != null && hashtag != "") {
+        hashtag = "<br/>" + hashtag;
+    }
+    var p_EDes = minimizedString(data.Event.Description);
+    var content = data.PostContent + hashtag
+                    + '<div style="max-width:500px; border:1px solid #ff6a00;margin-top:50px; padding: 5px;">'
+                        + '<p>'
+                            + '<a class="avatar" href="javascript:void(0)" style="width:50px;"><img style="height:30px;width:30px;" class="img-responsive" src="' + data.Event.AspNetUser.AvatarImage + '" alt="..."></a>'
+                            + '<a href="/Profile/Index?UserId=' + data.Event.AspNetUser.Id + '"<span style="color:#ff6a00">' + data.Event.AspNetUser.FullName + '</span></a> đã tạo một sự kiện'
+                        +'</p>'
+                        + "<a href='/Event/ViewDetail/" + data.Event.Id + "' target='_blank' style='text-decoration:none;color:black;'>"
+                            + "<div>"
+                              + '<div style="width:100%;height:200px;background-size:cover;background-repeat:no-repeat;background-position:center center;background-image:url(' + data.Event.Image + ')"></div>'
+                              + "<h3>" + data.Event.Name + "</h3>"
+                              + "<p>" + p_EDes + "</p>"
+                            + "</div>"
+                        + "</a>"
+                    + '</div>';
+    return content;
+}
 
+function shareOrderPost(data) {
+    var hashtag = getHashTagSport(data);
+    if (hashtag != null && hashtag != "") {
+        hashtag = "<br/>" + hashtag;
+    }
+    var fImage = "";
+    if (data.Order.Field.FieldImages[0] == null) {
+        fImage = "/Content/images/no_image.jpg";
+    }
+    else {
+        fImage = data.Order.Field.FieldImages[0].Image;
+    }
+    var content = data.PostContent + hashtag
+                    + '<div style="max-width:500px; border:1px solid #ff6a00;margin-top:50px; padding: 5px;">'
+                        + '<p>'
+                            + '<a class="avatar" href="javascript:void(0)" style="width:50px;"><img style="height:30px;width:30px;" class="img-responsive" src="' + data.Order.AspNetUser.AvatarImage + '" alt="..."></a>'
+                            + '<a href="/Profile/Index?UserId=' + data.Order.AspNetUser.Id + '"<span style="color:#ff6a00">' + data.Order.AspNetUser.FullName + '</span></a> đã đặt một sân'
+                        + '</p>'
+                        + "<a href='/Field/Index/" + data.Order.Field.Id + "' target='_blank' style='text-decoration:none;color:black;'>"
+                            + "<div>"
+                              + '<div style="width:100%;height:200px;background-size:cover;background-repeat:no-repeat;background-position:center center;background-image:url(' + fImage + ')"></div>'
+                              + "<h3>" + data.Order.Field.Name + "</h3>"
+                              + "<p>" + convertJsonDateTime(data.Order.StartTime) + " - " + convertJsonDateTime(data.Order.EndTime) + "</p>"
+                            + "</div>"
+                        + "</a>"
+                    + '</div>';
+    return content;
+}
+
+function sharePostPost(data) {
+    var hashtag = getHashTagSport(data);
+    if (hashtag != null && hashtag != "") {
+        hashtag = "<br/>" + hashtag;
+    }
+    var postContent = "";
+    if (data.Post2.ContentType == 1) {
+        postContent = textPost(data.Post2);
+    }
+    if (data.Post2.ContentType == 2) {
+        postContent = textImagePost(data.Post2);
+    }
+    if (data.Post2.ContentType == 3) {
+        postContent = imagePost(data.Post2);
+    }
+    if (data.Post2.ContentType == 4) {
+        postContent = multiImagePost(data.Post2);
+    }
+    if (data.Post2.ContentType == 5) {
+        postContent = multiImageTextPost(data.Post2);
+    }
+    var content = data.PostContent + hashtag
+                    + '<div style="max-width:500px; border:1px solid #ff6a00;margin-top:50px; padding: 5px; overflow:hidden;">'
+                        + '<p>'
+                            + '<a class="avatar" href="javascript:void(0)" style="width:50px;"><img style="height:30px;width:30px;" class="img-responsive" src="' + data.Post2.AspNetUser.AvatarImage + '" alt="..."></a>'
+                            + '<a href="/Profile/Index?UserId=' + data.Post2.AspNetUser.Id + '"<span style="color:#ff6a00">' + data.Post2.AspNetUser.FullName + '</span></a> đã đăng một bài viết'
+                        + '</p>'
+                        + postContent
+                    + '</div>';
+    return content;
+}
+
+function shareNewsPost(data) {
+    var hashtag = getHashTagSport(data);
+    if (hashtag != null && hashtag != "") {
+        hashtag = "<br/>" + hashtag;
+    }
+    var p_NDes = minimizedString(data.News.NewsContent);
+    var content = data.PostContent + hashtag
+                    + '<div style="max-width:500px; border:1px solid #ff6a00;margin-top:50px; padding: 5px;">'
+                        //+ '<p>'
+                        //    + '<a class="avatar" href="javascript:void(0)" style="width:50px;"><img style="height:30px;width:30px;" class="img-responsive" src="' + data.Event.AspNetUser.AvatarImage + '" alt="..."></a>'
+                        //    + '<a href="/Profile/Index?UserId=' + data.Event.AspNetUser.Id + '"<span style="color:#ff6a00">' + data.Event.AspNetUser.FullName + '</span></a> đã tạo một sự kiện'
+                        //+ '</p>'
+                        + "<a href='/News/NewsDetail/"+ data.News.Id +"' target='_blank' style='text-decoration:none;color:black;'>"
+                            + "<div>"
+                              + '<div style="width:100%;height:200px;background-size:cover;background-repeat:no-repeat;background-position:center center;background-image:url(' + data.News.Image + ')"></div>'
+                              + "<h3>" + data.News.Title + "</h3>"
+                              + "<p>" + p_NDes + "</p>"
+                            + "</div>"
+                        + "</a>"
+                    + '</div>';
+    return content;
+}
+
+function minimizedString(string) {
+    var minimize_character_count = 200;
+    var content = string;
+    var decode_content = content.replace(/(<([^>]+)>)/ig, "");
+    //if (decode_content.length < minimize_character_count) {
+
+    //};
+
+    var minimized_content = decode_content.split(/\s+/).slice(0, 50).join(" ");
+
+    var text = decodeURIComponent(minimized_content);
+    return text + "...";
+    //document.getElementById("hotnewsContent").innerHTML = text + "...";
+}
+
+function convertJsonDateTime(datetime) {
+    var d = new Date(parseInt((datetime).replace("/Date(", "").replace(")/", ""), 10));
+    var hour = d.getHours() < 10 ? "0" + d.getHours() : d.getHours();
+    var minute = d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes();
+    return d.getDate() + "\/" + (d.getMonth() + 1) + "\/" + d.getFullYear() + " lúc " + hour + ":" + minute;
+}
+
+function showShareModal(id, type) {
+    $("#shareType").val(type);
+    $("#dataId").val(id);
+
+    $("#shareContent").val("");
+    $("#sportSelectShare").val("");
+
+    $("#shareModal").modal('show');
+};
+
+$("input[name='receiver']").change(function (e) {
+    if ($(this).val() == 2) {
+        $('#frdSelectShare').prop('disabled', false);
+        $('#groupSelectShare').prop('disabled', 'disabled');
+    } else if ($(this).val() == 3) {
+        $('#frdSelectShare').prop('disabled', 'disabled');
+        $('#groupSelectShare').prop('disabled', false);
+    } else {
+        $('#frdSelectShare').prop('disabled', 'disabled');
+        $('#groupSelectShare').prop('disabled', 'disabled');
+    }
+});
+
+$("#shareForm").submit(function (e) {
+    e.preventDefault();
+    var formData = new FormData(document.getElementById('shareForm'));
+    $.ajax({
+        type: 'POST',
+        url: '/Post/CreateSharePost',
+        async: false,
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (result) {
+            if (result.Succeed) {
+                showMessage("Chia sẻ thành công.", "success", "OK");
+                $("#shareModal").modal('hide');
+            } else {
+                //showErrors(result.Errors);
+                showMessage("Không thể thực hiện chức năng. Vui lòng thử lại sau.", "error", "OK");
+            }
+        },
+        error: function (result) {
+            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+        },
+    });
+});
+
+//===========================================================================================================================================================
 function getHashTagSport(data) {
     var hashtag = "";
     $(data.PostSports).each(function () {
@@ -1213,8 +1491,11 @@ function removeFileEdit(e) {
 function addImageEdit() {
     $("#selectImageEdit").click();
 }
+if ($("#selectImageEdit").length)
+{
+    document.getElementById('selectImageEdit').addEventListener('change', handleFileEditSelect, false);
+}
 
-document.getElementById('selectImageEdit').addEventListener('change', handleFileEditSelect, false);
 
 function handleFileEditSelect(e) {
     var files = e.target.files;

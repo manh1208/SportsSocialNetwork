@@ -694,5 +694,110 @@ namespace SportsSocialNetwork.Controllers
 
             return registrationIds;
         }
+
+        [HttpPost]
+        public ActionResult CreateSharePost(string userId, int shareType, int dataId, int receiver, string frdSelectShare, Nullable<int> groupSelectShare, string shareContent, string sportSelectShare)
+        {
+            var result = new AjaxOperationResult();
+            var _postService = this.Service<IPostService>();
+            Post post = new Post();
+
+            post.UserId = userId;
+            post.PostContent = shareContent;
+
+            if (shareType != 0)
+            {
+                switch (shareType)
+                {
+                    case (int)ContentPostType.SharePostPost:
+                        Post oldPost = _postService.FirstOrDefaultActive(p => p.Id == dataId);
+                        if(oldPost != null)
+                        {
+                            if(oldPost.PostId != null || oldPost.OrderId != null || oldPost.EventId != null || oldPost.NewsId != null)
+                            {
+                                post = oldPost;
+                                post.UserId = userId;
+                                post.PostContent = shareContent;
+                            }
+                            else
+                            {
+                                post.ContentType = (int)ContentPostType.SharePostPost;
+                                post.PostId = dataId;
+                            }
+                        }
+
+                        break;
+                    case (int)ContentPostType.ShareEventPost:
+                        post.ContentType = (int)ContentPostType.ShareEventPost;
+                        post.EventId = dataId;
+
+                        break;
+                    case (int)ContentPostType.ShareOrderPost:
+                        post.ContentType = (int)ContentPostType.ShareOrderPost;
+                        post.OrderId = dataId;
+
+                        break;
+                    case (int)ContentPostType.ShareNewsPost:
+                        post.ContentType = (int)ContentPostType.ShareNewsPost;
+                        post.NewsId = dataId;
+
+                        break;
+                }
+
+                if (receiver != 0)
+                {
+                    switch (receiver)
+                    {
+                        case (int)SharedReceiver.SenderWall:
+                            post.ProfileId = userId;
+                            break;
+                        case (int)SharedReceiver.FriendWall:
+                            post.ProfileId = frdSelectShare;
+                            break;
+                        case (int)SharedReceiver.Group:
+                            post.GroupId = groupSelectShare;
+                            break;
+                    }
+
+                    if (_postService.CreatePost(post) != null)
+                    {
+                        if (!String.IsNullOrEmpty(sportSelectShare))
+                        {
+                            string[] sportId = sportSelectShare.Split(',');
+                            if (sportId != null)
+                            {
+                                var _postSport = this.Service<IPostSportService>();
+                                var postSport = new PostSport();
+                                foreach (var item in sportId)
+                                {
+                                    if (!item.Equals(""))
+                                    {
+                                        postSport.PostId = post.Id;
+                                        postSport.SportId = Int32.Parse(item);
+                                        _postSport.Create(postSport);
+                                    }
+                                }
+
+                            }
+                        }
+                        result.Succeed = true;
+                    }
+                    else
+                    {
+                        result.Succeed = false;
+                    }
+                }
+                else
+                {
+                    result.Succeed = false;
+                }
+            }
+            else
+            {
+                result.Succeed = false;
+            }
+
+            return Json(result);
+        }
     }
 }

@@ -24,5 +24,6 @@ namespace SportsSocialNetwork.Models
         public int LikeCount { get; set; }
         public int CommentCount { get; set; }
         public bool Liked { get; set; }
+        public List<PostSportDetailViewModel> PostSports { get; set; }
     }
 }

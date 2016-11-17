@@ -142,7 +142,15 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("")]
         MultiImages = 4,
         [Description("")]
-        TextAndMultiImages = 5
+        TextAndMultiImages = 5,
+        [Description("")]
+        ShareEventPost = 6,
+        [Description("")]
+        ShareOrderPost = 7,
+        [Description("")]
+        SharePostPost = 8,
+        [Description("")]
+        ShareNewsPost = 9,
     }
 
     public enum GroupMemberStatus
@@ -180,6 +188,13 @@ namespace SportsSocialNetwork.Models.Enumerable
         Pending = 3,
         [Description("Hủy")]
         NotAvailable = 4
+    }
+
+    public enum SharedReceiver
+    {
+        SenderWall = 1,
+        FriendWall = 2,
+        Group = 3
     }
 
 }
