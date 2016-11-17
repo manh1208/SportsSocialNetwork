@@ -242,7 +242,6 @@
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition, showError);
         } else {
-            NProgress.done();
             sweetAlert("Oops...", "Vị trí không hỗ trợ trên trình duyệt này.", "error")
 
         }
@@ -251,7 +250,6 @@
     function showError(error) {
         switch (error.code) {
             case error.PERMISSION_DENIED:
-                NProgress.done();
                 swal({
                     title: "Oops...",
                     text: "Bạn chưa mở GPS hả!",
@@ -263,7 +261,6 @@
 
                 break;
             case error.POSITION_UNAVAILABLE:
-                NProgress.done();
                 swal({
                     title: "Oops...",
                     text: "Thông tin vị trí không chính xác!",
@@ -275,7 +272,6 @@
 
                 break;
             case error.TIMEOUT:
-                NProgress.done();
                 swal({
                     title: "Oops...",
                     text: "Vượt quá thời gian. Xin thử tải lại trang!",
@@ -287,7 +283,6 @@
 
                 break;
             case error.UNKNOWN_ERROR:
-                NProgress.done();
                 swal({
                     title: "Oops...",
                     text: "Lỗi là gì nhỉ. Xin liên hệ BTC!",

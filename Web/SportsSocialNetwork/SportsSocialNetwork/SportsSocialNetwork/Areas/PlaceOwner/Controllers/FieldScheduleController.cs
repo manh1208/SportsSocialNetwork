@@ -280,6 +280,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             {
                 FieldScheduleViewModel model = new FieldScheduleViewModel(item);
                 model.PlaceId = item.Field.PlaceId;
+                model.FieldName = item.Field.Name;
                 model.PlaceName = item.Field.Place.Name;
                 model.StartTimeString = model.StartTime.Hours.ToString("00") + ":" + model.StartTime.Minutes.ToString("00");
                 model.EndTimeString = model.EndTime.Hours.ToString("00") + ":" + model.EndTime.Minutes.ToString("00");
@@ -289,42 +290,44 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                     bits[i] = (model.AvailableDay & (1 << i)) != 0;
                 }
                 var dayOfWeek = "";
+                List<int> days = new List<int>();
                 if (bits[1])
                 {
-                    model.DayOfWeek.Add(1);
                     dayOfWeek += "CN ";
+                    days.Add(1);
                 }
                 if (bits[2])
                 {
-                    model.DayOfWeek.Add(2);
                     dayOfWeek += "T2 ";
+                    days.Add(2);
                 }
                 if (bits[3])
                 {
-                    model.DayOfWeek.Add(3);
                     dayOfWeek += "T3 ";
+                    days.Add(3);
                 }
                 if (bits[4])
                 {
-                    model.DayOfWeek.Add(4);
                     dayOfWeek += "T4 ";
+                    days.Add(4);
                 }
                 if (bits[5])
                 {
-                    model.DayOfWeek.Add(5);
                     dayOfWeek += "T5 ";
+                    days.Add(5);
                 }
                 if (bits[6])
                 {
-                    model.DayOfWeek.Add(6);
                     dayOfWeek += "T6 ";
+                    days.Add(6);
                 }
                 if (bits[7])
                 {
-                    model.DayOfWeek.Add(7);
                     dayOfWeek += "T7 ";
+                    days.Add(7);
                 }
                 model.availableDayOfWeek = dayOfWeek;
+                model.DayOfWeek = days;
                 resultList.Add(model);
             }
             result.Succeed = true;

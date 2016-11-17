@@ -77,7 +77,7 @@
         var content = "";
         ddl.empty();
         $.ajax({
-            url: '@Url.Action("GetOrderBySport", "FieldSchedule")',
+            url: '@Url.Action("GetOrderBySport", "FieldSchedule", new { area = "PlaceOwner"})',
             type: 'POST',
             async: false,
             data: {
@@ -86,16 +86,54 @@
             dataType: 'json',
             success: function (data) {
                 if(data.Succeed){
-                    $(data.AdditionalData).each(function () {
+                    if(data.AdditionalData!=null){
                         $(document.createElement('option'))
-                            .attr('value', this.PlaceName)
-                            .text(this.PlaceName)
+                            .attr('value', '')
+                            .text('')
                             .appendTo(ddl);
-                    });
+                
+                        $(data.AdditionalData).each(function () {
+                            $(document.createElement('option'))
+                                .attr('value', this.Id)
+                                .attr('id', 'order_'+this.Id)
+                                .attr('class', 'order')
+                                .attr('data-starttime', this.StartTimeString)
+                                .attr('data-endtime', this.EndTimeString)
+                                .attr('data-placeid', this.PlaceId)
+                                .attr('data-days', this.DayOfWeek)
+                                .text("Địa điểm: "+this.PlaceName+", Sân: "+this.FieldName+" ,Thời gian: "
+                                +this.StartTimeString+" - "+this.EndTimeString+" các ngày "+this.availableDayOfWeek)
+                                .appendTo(ddl);
+                            
+                        });
+                    }
                 }
             }
         });
     }
+
+    $("#selectOrder").change( function () {
+        var tmp = $("#selectOrder").val();
+        var startTime = $('#order_'+tmp).attr('data-starttime');
+        var endTime = $('#order_'+tmp).attr('data-endtime');
+        var placeId = $('#order_'+tmp).attr('data-placeid');
+        var days = $('#order_'+tmp).attr('data-days');
+        $("#StartTime").val('');
+        $("#PlaceId").val(placeId);
+        $("#StartTime").val('');
+        $("#StartTime").val(startTime);
+        $("#EndTime").val('');
+        $("#EndTime").val(endTime);
+        $("#cdays").val('');
+        $("#cdays").select2({
+            class: 'form-control',
+            width: '100%',
+            multiple: true,
+            maximumSelectionSize: 1,
+            placeholder: "",
+            data: array_day
+        }).select2('val', days);
+    });
 
     console.log("a");
     var array_day = [{ "id": "1", "text": "Chủ Nhật" },
