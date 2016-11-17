@@ -24,7 +24,7 @@
 
     bool hasFollowed = false;
 }
-
+<link rel="stylesheet" href="~/Content/assets/vendor/clockpicker/clockpicker.css">
 <style>
     .media {
         overflow: visible;
@@ -131,6 +131,9 @@
         }
         .select2-selection__choice__remove{
             color:#fff!important;
+        }
+        .clockpicker-popover {
+        z-index: 999999 !important;
         }
     /*=====================================================*/
 
@@ -390,6 +393,7 @@
                                         {
                                             <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="changeCover()"><i class="fa fa-image" aria-hidden="true"></i> Thay ảnh bìa</a></li>
                                             <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="changeAva()"><i class="fa fa-user" aria-hidden="true"></i> Thay ảnh đại diện</a></li>
+                                            <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="updateGroup(@Model.Id)"><i class="fa fa-pencil" aria-hidden="true"></i> Cập nhật thông tin</a></li>
                                             <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="deleteGroup(@Model.Id)"><i class="fa fa-times-circle" aria-hidden="true"></i> Xóa nhóm</a></li>
                                         }
 
@@ -1454,6 +1458,14 @@
     </div>
 </div>
 
+<div class="modal fade" id="GroupDetail" aria-hidden="true"
+     aria-labelledby="GroupDetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="group-detail-modal-container"></div>
+        </div>
+    </div>
+</div>
 
 @section scripts {
     <script src="~/Content/assets/vendor/magnific-popup/jquery.magnific-popup.js"></script>
@@ -1463,7 +1475,8 @@
     <script src="~/Content/assets/vendor/select2/select2.full.js"></script>
     <script src="~/Content/assets/vendor/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
     <script src="~/Content/assets/js/components/material.js"></script>
-
+    <script src="~/Content/assets/vendor/clockpicker/bootstrap-clockpicker.min.js"></script>
+    <script src="~/Content/assets/js/components/clockpicker.js"></script>
     <script>
         var _userId = '@User.Identity.GetUserId()';
         var _firstSkip = 0;
@@ -1479,6 +1492,9 @@
         var _likeUnlikePostActionName = '@Url.Action("LikeUnlikePost", "Like")';
         var _groupId = @groupId;
         $(document).ready(function () {
+            $("body").on("focus", ".timepicker", function () {
+                $(this).clockpicker();
+            })
             loadGroupPost(_groupId, _userId, _firstSkip, _firstTake, _actionName, _loadMoreCmtActionName,_deletePostActionName, _loadAPostActionName,_deleteCommentActionName,_loadACommentActionName,_likeUnlikePostActionName);
         })
         $(window).scroll(function () {
@@ -1506,6 +1522,7 @@
             data: array
         });
 
+        
 
         var frdList = @Html.Raw(Json.Encode(
         ((IEnumerable<SelectListItem>)friends).Select(m => new
@@ -1563,6 +1580,8 @@
                 }
             })
         };
+
+        
 
         function leaveGroup(groupId) {
             var isOnlyOneAdmin = false;
@@ -1720,6 +1739,22 @@
                         })
                     }
                 })
+        }
+
+        function updateGroup(groupdId){
+            $.ajax({
+                url: '@Url.Action("EditGroup")',
+                type: 'Get',
+                data: { id: groupdId },
+                success: function (data) {
+                    $('#group-detail-modal-container').html(data);
+                    scriptForPartialView();
+                    $('#GroupDetail').modal('show');
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
         }
 
         function deleteGroup(groupId) {
@@ -2310,6 +2345,104 @@
                         }
                     });
                 }
+            });
+        }
+
+        function scriptForPartialView(){
+            (function () {
+                var TIME_PATTERN = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+                $('#update-group-form').formValidation({
+                    framework: "bootstrap",
+                    button: {
+                        selector: '#submitChange',
+                        disabled: 'disabled'
+                    },
+                    icon: null,
+                    fields: {
+                        Name: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Không được để trống'
+                                }
+                            }
+                        },
+                        StartTime: {
+                            validators: {
+                                regexp: {
+                                    regexp: TIME_PATTERN,
+                                    message: 'Giờ không đúng định dạng [HH:mm]'
+                                },
+                                callback: {
+                                    message: 'Giờ bắt đầu phải trước giờ kết thúc',
+                                    callback: function (value, validator, $field) {
+                                        var endTime = validator.getFieldElements('EndTime').val();
+                                        if (endTime === '' || !TIME_PATTERN.test(endTime)) {
+                                            return true;
+                                        }
+                                        var startHour = parseInt(value.split(':')[0], 10),
+                                            startMinutes = parseInt(value.split(':')[1], 10),
+                                            endHour = parseInt(endTime.split(':')[0], 10),
+                                            endMinutes = parseInt(endTime.split(':')[1], 10);
+
+                                        if (startHour < endHour || (startHour == endHour && startMinutes < endMinutes)) {
+                                            // The end time is also valid
+                                            // So, we need to update its status
+                                            validator.updateStatus('EndTime', validator.STATUS_VALID, 'callback');
+                                            return true;
+                                        }
+
+                                        return false;
+                                    }
+                                }
+                            }
+                        },
+                        EndTime: {
+                            validators: {
+                                regexp: {
+                                    regexp: TIME_PATTERN,
+                                    message: 'Giờ không đúng định dạng [HH:mm]'
+                                },
+                                callback: {
+                                    message: 'Giờ kết thúc phải sau giờ bắt đầu',
+                                    callback: function (value, validator, $field) {
+                                        var startTime = validator.getFieldElements('StartTime').val();
+                                        if (startTime == '' || !TIME_PATTERN.test(startTime)) {
+                                            return true;
+                                        }
+                                        var startHour = parseInt(startTime.split(':')[0], 10),
+                                            startMinutes = parseInt(startTime.split(':')[1], 10),
+                                            endHour = parseInt(value.split(':')[0], 10),
+                                            endMinutes = parseInt(value.split(':')[1], 10);
+
+                                        if (endHour > startHour || (endHour == startHour && endMinutes > startMinutes)) {
+                                            // The start time is also valid
+                                            // So, we need to update its status
+                                            validator.updateStatus('StartTime', validator.STATUS_VALID, 'callback');
+                                            return true;
+                                        }
+
+                                        return false;
+                                    }
+                                }
+                            }
+                        },
+                        SportId: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Không được để trống'
+                                }
+                            }
+                        }
+                    }
+                });
+            })();
+
+            $("#StartTime").on("change", function () {
+                $('#update-group-form').formValidation('revalidateField', 'StartTime');
+            });
+
+            $("#EndTime").on("change", function () {
+                $('#update-group-form').formValidation('revalidateField', 'EndTime');
             });
         }
 

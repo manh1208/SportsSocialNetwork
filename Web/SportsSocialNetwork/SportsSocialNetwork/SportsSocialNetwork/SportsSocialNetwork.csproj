@@ -4055,6 +4055,8 @@
     <Content Include="Views\Mobile\NewsDetail.cshtml" />
     <Content Include="Views\SSN\PostDetail.cshtml" />
     <Content Include="Views\Errors\SearchResultNotFound.cshtml" />
+    <Content Include="Views\Order\FieldScheduleOrderDetail.cshtml" />
+    <Content Include="Views\Group\EditGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

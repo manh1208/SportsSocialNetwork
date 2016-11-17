@@ -83,7 +83,7 @@
                 <tr style="color:black">
                     <th>Tên sân</th>
                     <th>Giờ sử dụng</th>
-                    <th>Ngày trong tuần</th>
+                    <th>Ngày trong tuần sử dụng</th>
                     <th></th>
                     <th></th>
                     <th>Thời hạn</th>
@@ -100,6 +100,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div id="order-detail-modal-container"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="orderDetail_1" aria-hidden="true"
+     aria-labelledby="orderDetail_1" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="order-detail-modal-container-1"></div>
         </div>
     </div>
 </div>
@@ -150,6 +159,21 @@
                 success: function (data) {
                     $('#order-detail-modal-container').html(data);
                     $('#orderDetail').modal('show');
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
+        function showDetailModal_1(id) {
+            $.ajax({
+                url: '@Url.Action("FieldScheduleOrderDetail")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#order-detail-modal-container-1').html(data);
+                    $('#orderDetail_1').modal('show');
                 },
                 error: function (error) {
                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
@@ -208,8 +232,35 @@
                     },
                     {
                         "aTargets": [2],
-                        "mRender": function (data, type, o) {
-                            return o[6];
+                            "mRender": function (data, type, o) {
+                                var bits = [8];
+                                for (var i = 7; i >= 0; i--) {
+                                    bits[i] = (o[6] & (1 << i)) != 0;
+                                    console.log(bits[i]+", "+i)
+                                }
+                                var dayOfWeek = "";
+                                if (bits[1]) {
+                                    dayOfWeek += "CN ";
+                                }
+                                if (bits[2]) {
+                                    dayOfWeek += "T2 ";
+                                }
+                                if (bits[3]) {
+                                    dayOfWeek += "T3 ";
+                                }
+                                if (bits[4]) {
+                                    dayOfWeek += "T4 ";
+                                }
+                                if (bits[5]) {
+                                    dayOfWeek += "T5 ";
+                                }
+                                if (bits[6]) {
+                                    dayOfWeek += "T6 ";
+                                }
+                                if (bits[7]) {
+                                    dayOfWeek += "T7 ";
+                                }
+                                return dayOfWeek;
                         }
                     },
                     {
@@ -222,7 +273,7 @@
                         "aTargets": [6],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
-                            return "<button class='btn btn-success' onclick='' data-target='#orderDetail' data-toggle='modal' type='button'><i class='fa fa-eye' aria-hidden='true'></i></button>";
+                            return "<button class='btn btn-success' onclick='showDetailModal_1(" + o[0] + ")' data-target='#orderDetail_1' data-toggle='modal' type='button'><i class='fa fa-eye' aria-hidden='true'></i></button>";
                         }
                     },
                     {

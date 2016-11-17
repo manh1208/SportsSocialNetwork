@@ -219,6 +219,71 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             return Json(result);
         }
 
+        public ActionResult GetOrderBySport(int sportId)
+        {
+            var result = new AjaxOperationResult<List<FieldScheduleViewModel>>();
+            var userId = User.Identity.GetUserId();
+            var fieldScheduleService = this.Service<IFieldScheduleService>();
+            DateTime today = DateTime.Now;
+            var orderList = fieldScheduleService.GetActive(p => p.Field.FieldType.SportId == sportId &&
+            p.EndDate >= today && p.UserId == userId && p.Type == (int)FieldScheduleStatus.Booked).ToList();
+            List<FieldScheduleViewModel> resultList = new List<FieldScheduleViewModel>();
+            foreach(var item in orderList)
+            {
+                FieldScheduleViewModel model = new FieldScheduleViewModel(item);
+                model.PlaceId = item.Field.PlaceId;
+                model.PlaceName = item.Field.Place.Name;
+                model.StartTimeString = model.StartTime.Hours.ToString("00") + ":" + model.StartTime.Minutes.ToString("00");
+                model.EndTimeString = model.EndTime.Hours.ToString("00") + ":" + model.EndTime.Minutes.ToString("00");
+                var bits = new bool[8];
+                for (var i = 7; i >= 0; i--)
+                {
+                    bits[i] = (model.AvailableDay & (1 << i)) != 0;
+                }
+                var dayOfWeek = "";
+                if (bits[1])
+                {
+                    model.DayOfWeek.Add(1);
+                    dayOfWeek += "CN ";
+                }
+                if (bits[2])
+                {
+                    model.DayOfWeek.Add(2);
+                    dayOfWeek += "T2 ";
+                }
+                if (bits[3])
+                {
+                    model.DayOfWeek.Add(3);
+                    dayOfWeek += "T3 ";
+                }
+                if (bits[4])
+                {
+                    model.DayOfWeek.Add(4);
+                    dayOfWeek += "T4 ";
+                }
+                if (bits[5])
+                {
+                    model.DayOfWeek.Add(5);
+                    dayOfWeek += "T5 ";
+                }
+                if (bits[6])
+                {
+                    model.DayOfWeek.Add(6);
+                    dayOfWeek += "T6 ";
+                }
+                if (bits[7])
+                {
+                    model.DayOfWeek.Add(7);
+                    dayOfWeek += "T7 ";
+                }
+                model.availableDayOfWeek = dayOfWeek;
+                resultList.Add(model);
+            }
+            result.Succeed = true;
+            result.AdditionalData = resultList;
+            return Json(result);
+        }
+
         [HttpPost]
         public ActionResult Deactive(int id)
         {
@@ -323,8 +388,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
         {
             var _orderService = this.Service<IFieldScheduleService>();
             var userId = User.Identity.GetUserId();
-            //var orderList = _orderService.GetActive(p => p.UserId == userId).OrderByDescending(p => p.CreateDate);
-            var orderList = _orderService.GetActive().OrderByDescending(p => p.Id);
+            var orderList = _orderService.GetActive(p => p.UserId == userId).OrderByDescending(p => p.Id);
             IEnumerable <FieldSchedule> filteredListItems;
             if (!string.IsNullOrEmpty(param.sSearch))
             {

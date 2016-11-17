@@ -65,6 +65,65 @@ namespace SportsSocialNetwork.Controllers
             return this.PartialView(model);
         }
 
+        public ActionResult FieldScheduleOrderDetail(int id)
+        {
+            var _placeService = this.Service<IPlaceService>();
+            var _fieldService = this.Service<IFieldService>();
+            var _fieldScheduleService = this.Service<IFieldScheduleService>();
+            FieldSchedule fs = _fieldScheduleService.FirstOrDefault(o => o.Id == id);
+            var fieldId = fs.FieldId;
+            var field = _fieldService.FirstOrDefaultActive(p => p.Id == fieldId);
+            Place place = new Place();
+            if (field != null)
+            {
+                place = _placeService.FirstOrDefaultActive(p => p.Id == field.PlaceId);
+                ViewBag.field = field;
+            }
+            if (place != null)
+            {
+                ViewBag.place = place;
+            }
+            FieldScheduleViewModel model = new FieldScheduleViewModel(fs);
+            model.StartTimeString = model.StartTime.Hours.ToString("00") + ":" + model.StartTime.Minutes.ToString("00");
+            model.EndTimeString = model.EndTime.Hours.ToString("00") + ":" + model.EndTime.Minutes.ToString("00");
+            var bits = new bool[8];
+            for (var i = 7; i >= 0; i--)
+            {
+                bits[i] = (model.AvailableDay & (1 << i)) != 0;
+            }
+            var dayOfWeek = "";
+            if (bits[1])
+            {
+                dayOfWeek += "CN ";
+            }
+            if (bits[2])
+            {
+                dayOfWeek += "T2 ";
+            }
+            if (bits[3])
+            {
+                dayOfWeek += "T3 ";
+            }
+            if (bits[4])
+            {
+                dayOfWeek += "T4 ";
+            }
+            if (bits[5])
+            {
+                dayOfWeek += "T5 ";
+            }
+            if (bits[6])
+            {
+                dayOfWeek += "T6 ";
+            }
+            if (bits[7])
+            {
+                dayOfWeek += "T7 ";
+            }
+            model.availableDayOfWeek = dayOfWeek;
+            return this.PartialView(model);
+        }
+
         public ActionResult GetData(JQueryDataTableParamModel param)
         {
             //var blogPostList = _blogPostService.GetBlogPostbyStoreId();
