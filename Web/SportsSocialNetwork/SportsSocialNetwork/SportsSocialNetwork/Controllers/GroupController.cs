@@ -31,6 +31,7 @@ namespace SportsSocialNetwork.Controllers
             var _userService = this.Service<IAspNetUserService>();
             var _challengeService = this.Service<IChallengeService>();
             var _hobbyService = this.Service<IHobbyService>();
+            var _placeService = this.Service<IPlaceService>();
 
             GroupFullInfoViewModel model = Mapper.Map<GroupFullInfoViewModel>(_groupService.FirstOrDefaultActive(g => g.Id == id));
 
@@ -84,6 +85,61 @@ namespace SportsSocialNetwork.Controllers
 
             //member count
             model.MemberCount = _groupMemberService.GetActive(g => g.GroupId == id).ToList().Count();
+            
+            if(model.PlaceId != null)
+            {
+                var place = _placeService.FirstOrDefaultActive(p => p.Id == model.PlaceId);
+                if (place != null)
+                {
+                    model.PlaceName = place.Name;
+                }
+            }
+            if (model.StartTime != null)
+            {
+                model.StartTimeString = model.StartTime.Value.Hours.ToString("00") + ":" + model.StartTime.Value.Minutes.ToString("00");
+            }
+            if (model.EndTime != null)
+            {
+                model.EndTimeString = model.EndTime.Value.Hours.ToString("00") +":"+ model.EndTime.Value.Minutes.ToString("00");
+            }
+            if(model.AvailableDays != null)
+            {
+                var bits = new bool[8];
+                for (var i = 7; i >= 0; i--)
+                {
+                    bits[i] = (model.AvailableDays & (1 << i)) != 0;
+                }
+                var dayOfWeek = "";
+                if (bits[1])
+                {
+                    dayOfWeek += "CN ";
+                }
+                if (bits[2])
+                {
+                    dayOfWeek += "T2 ";
+                }
+                if (bits[3])
+                {
+                    dayOfWeek += "T3 ";
+                }
+                if (bits[4])
+                {
+                    dayOfWeek += "T4 ";
+                }
+                if (bits[5])
+                {
+                    dayOfWeek += "T5 ";
+                }
+                if (bits[6])
+                {
+                    dayOfWeek += "T6 ";
+                }
+                if (bits[7])
+                {
+                    dayOfWeek += "T7 ";
+                }
+                model.Days = dayOfWeek;
+            }
             
             //get sport list for post
             var sports = _sportService.GetActive()
