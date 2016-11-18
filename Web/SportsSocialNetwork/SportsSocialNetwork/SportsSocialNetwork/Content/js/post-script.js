@@ -11,7 +11,7 @@ var _goNewFeedActionName = "";
 
 var normalPostTitle = "đã đăng một bài viết";
 var shareEventPostTitle = "đã chia sẻ một sự kiện";
-var shareOrderPostTitle = "đã chia sẻ một đơn đặt sân";
+var shareOrderPostTitle = "đã chia sẻ một lịch hoạt động";
 var sharePostPostTitle = "đã chia sẻ một bài viết";
 var shareNewsPostTitle = "đã chia sẻ một tin tức";
 
@@ -208,7 +208,7 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
 
                                             +"<div style='margin-top:10px;border-top-style:groove;border-top-width:0.3px;border-bottom-style:groove;border-bottom-width:0.3px;padding-top:10px;padding-bottom:10px'>"
                                             +spanLike
-                                            + "<a href='#' style='text-decoration: none;padding:10px;color:#000;font-weight:500'><i class='text-like fa fa-lg fa-comments-o'></i>&nbsp;Bình Luận</a>"
+                                            + "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500'><i class='text-like fa fa-lg fa-comments-o'></i>&nbsp;Bình Luận</a>"
                                             //+ "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500' onclick='showShareModal(" + this.Id + ","+ sharePostType +")'><i class='text-like fa fa-lg fa-share'></i>&nbsp;Chia sẻ</a>"
                                             +"</div>"
 
@@ -1358,7 +1358,7 @@ $("#shareForm").submit(function (e) {
 function getHashTagSport(data) {
     var hashtag = "";
     $(data.PostSports).each(function () {
-        hashtag += "<a href='#" + this.Sport.Id + "'>#" + this.Sport.Name + " </a>";
+        hashtag += "<a href='javascript:void(0)'>#" + this.Sport.Name + " </a>";
     })
     return hashtag;
 }

@@ -25,7 +25,7 @@
         @using (Html.BeginForm("createPlace", "Place", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "placeForm", @autocomplete = "off" }))
         {
             <input type="hidden" value="@User.Identity.GetUserId()" name="UserId" />
-            <div class="col-sm-6">
+            <div class="col-sm-7">
                 <div class="panel">
                     <div class="panel-heading">
                         <p class="panel-title" style="font-weight:bold;">Thông tin địa điểm</p>
@@ -108,7 +108,7 @@
 
                 
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-5">
                 <div class="panel">
                     <div class="panel-heading">
                         <p class="panel-title" style="font-weight:bold;">Hình ảnh về địa điểm</p>

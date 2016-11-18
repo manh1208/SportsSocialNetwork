@@ -8,7 +8,7 @@
 <div class="panel">
     <div class="panel-body">
         <div class="col-md-6">
-            <h3>Danh sách các sự kiện</h3>
+            <h3>Danh sách các tin tức</h3>
         </div>
         <div class="col-md-6 text-right">
             <a href="#" onclick="showCreateArticleModal()" class="btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> Tạo mới tin tức</a>
@@ -24,7 +24,7 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <table id="article-table" class="table table-hover dataTable table-bordered dt-responsive nowrap" cellspacing="0">
+                        <table id="article-table" class="table table-hover dataTable table-bordered dt-responsive table-responsive" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -69,6 +69,10 @@
                   {
                       "aTargets": [0, 1, 2],
                       "bSortable": false,
+                  },
+                  {
+                      "aTargets": [1],
+                      "width": "30%",
                   },
                   {
                       "aTargets": [3],

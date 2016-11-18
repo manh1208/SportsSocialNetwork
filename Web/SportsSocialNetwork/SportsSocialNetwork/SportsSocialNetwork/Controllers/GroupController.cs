@@ -155,13 +155,31 @@ namespace SportsSocialNetwork.Controllers
                                 }).OrderBy(s => s.Value);
                 ViewBag.Sport = sports;
 
+                var friends = new List<SelectListItem>();
+                List<GroupMember> gmList = _groupMemberService.GetActive(g => g.GroupId == id.Value).ToList();
                 //get followed friend
-                var friends = _followService.GetActive(f => f.FollowerId == curUserId)
+                friends = _followService.GetActive(f => f.FollowerId == curUserId)
                                 .Select(s => new SelectListItem
                                 {
                                     Text = s.AspNetUser.FullName,
                                     Value = s.AspNetUser.Id
-                                }).OrderBy(s => s.Value);
+                                }).OrderBy(s => s.Value).ToList();
+
+                int frCount = friends.Count();
+                var tmpFrs = new List<SelectListItem>();
+                tmpFrs.AddRange(friends);
+                for (int i = 0; i < frCount; i++)
+                {
+                    SelectListItem si = tmpFrs.ElementAt(i);
+                    foreach (var it in gmList)
+                    {
+                        if(si.Value.Equals(it.UserId) || tmpFrs.ElementAt(i).Equals(curUserId))
+                        {
+                            friends.Remove(tmpFrs.ElementAt(i));
+                        }
+                    }
+                }
+
                 ViewBag.friends = friends;
 
                 //member

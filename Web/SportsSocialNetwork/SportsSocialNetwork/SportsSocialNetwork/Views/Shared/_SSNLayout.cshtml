@@ -211,7 +211,7 @@
                         </li>
 
                         <li class="dropdown">
-                            <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
+                            <a class="navbar-avatar dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" aria-expanded="false"
                                data-animation="slide-bottom" role="button">
                                 <span id="ava" class="avatar avatar-online">
                                 </span>
@@ -219,7 +219,7 @@
                             <ul class="dropdown-menu width-250" role="menu">
                                 <li role="presentation">
                                     <form action="@Url.Action("Index","SSN", new { area = "" })" style="margin:10px" method="post" id="form-home-page">
-                                        <a href="#" role="menuitem" onclick="homePage()"
+                                        <a href="javascript:void(0)" role="menuitem" onclick="homePage()"
                                            style="color:#54616E;font-weight:500">
                                             <span class="fa fa-globe"></span>&nbsp; Trang chủ
                                         </a>
@@ -229,7 +229,7 @@
                                 {
                                     <li role="presentation">
                                         <form action="@Url.Action("Index", "Place", new { area = "PlaceOwner" })" style="margin:10px" method="post" id="form-manage-place">
-                                            <a href="#" role="menuitem" onclick="managePlace()" style="color:#54616E;font-weight:500">
+                                            <a href="javascript:void(0)" role="menuitem" onclick="managePlace()" style="color:#54616E;font-weight:500">
                                                 <span class="fa fa-map-marker"></span>&nbsp; Qua trang quản lý địa điểm
                                             </a>
                                         </form>
@@ -237,42 +237,42 @@
                                 }
                                 <li role="presentation">
                                     <form action="" style="margin:10px" method="post" id="form-">
-                                        <a href="#" role="menuitem" onclick="" style="color:#54616E;font-weight:500">
+                                        <a href="javascript:void(0)" role="menuitem" onclick="showChangePassModal()" style="color:#54616E;font-weight:500">
                                             <span class="fa fa-key"></span>&nbsp; Đổi mật khẩu
                                         </a>
                                     </form>
                                 </li>
                                 <li role="presentation">
                                     <form action="@Url.Action("Index","UserInvitation", new { area = "" })" style="margin:10px" method="post" id="form-invite-player">
-                                        <a href="#" role="menuitem" onclick="invitePlayer()" style="color:#54616E;font-weight:500">
+                                        <a href="javascript:void(0)" role="menuitem" onclick="invitePlayer()" style="color:#54616E;font-weight:500">
                                             <span class="fa fa-pencil-square-o"></span>&nbsp; Mời chơi thể thao
                                         </a>
                                     </form>
                                 </li>
                                 <li role="presentation">
                                     <form action="@Url.Action("Index","Invitation", new { area = "" })" style="margin:10px" method="post" id="form-invite-history">
-                                        <a href="#" role="menuitem" onclick="inviteHistory()" style="color:#54616E;font-weight:500">
+                                        <a href="javascript:void(0)" role="menuitem" onclick="inviteHistory()" style="color:#54616E;font-weight:500">
                                             <span class="fa fa-users"></span>&nbsp; Lịch sử mời chơi thể thao
                                         </a>
                                     </form>
                                 </li>
                                 <li role="presentation">
                                     <form action="@Url.Action("Index","Event", new { area = "" })" style="margin:10px" method="post" id="form-search-event">
-                                        <a href="#" role="menuitem" onclick="searchEvent()" style="color:#54616E;font-weight:500">
+                                        <a href="javascript:void(0)" role="menuitem" onclick="searchEvent()" style="color:#54616E;font-weight:500">
                                             <span class="fa fa-bullhorn"></span>&nbsp; Các sự kiện thể thao
                                         </a>
                                     </form>
                                 </li>
                                 <li role="presentation">
                                     <form action="@Url.Action("Index","Place", new { area = "" })" style="margin:10px" method="post" id="form-search-place">
-                                        <a href="#" role="menuitem" onclick="searchPlace()" style="color:#54616E;font-weight:500">
+                                        <a href="javascript:void(0)" role="menuitem" onclick="searchPlace()" style="color:#54616E;font-weight:500">
                                             <span class="fa fa-futbol-o"></span>&nbsp; Tìm nơi chơi thể thao
                                         </a>
                                     </form>
                                 </li>
                                 <li role="presentation">
                                     <form action="@Url.Action("Index","Order", new { area = "" })" style="margin:10px" method="post" id="form-order-history">
-                                        <a href="#" role="menuitem" onclick="orderHistory()" style="color:#54616E;font-weight:500">
+                                        <a href="javascript:void(0)" role="menuitem" onclick="orderHistory()" style="color:#54616E;font-weight:500">
                                             <span class="fa fa-history"></span>&nbsp; Lịch sử đặt sân
                                         </a>
                                     </form>
@@ -281,7 +281,7 @@
                                 <li role="presentation">
                                     <form action="@Url.Action("LogOff","Account", new { area = "" })" style="margin:10px" method="post" id="form-log-out">
                                         @Html.AntiForgeryToken()
-                                        <a href="#" role="menuitem" onclick="logout()" style="color:#54616E;font-weight:500">
+                                        <a href="javascript:void(0)" role="menuitem" onclick="logout()" style="color:#54616E;font-weight:500">
                                             <span class="fa fa-sign-out"></span>&nbsp; Đăng xuất
                                         </a>
                                     </form>
@@ -338,6 +338,40 @@
 
         </div>
     </footer>
+
+
+    <!--Change password modal-->
+    <div id="changePassModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <form id="changePass-form" class="form-horizontal" method="post" autocomplete="off">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Thay đổi mật khẩu</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group form-material floating">
+                            <input type="password" class="form-control input-lg" />
+                            <label class="floating-label">Nhập mật khẩu cũ</label>
+                        </div>
+                        <div class="form-group form-material floating">
+                            <input type="password" class="form-control input-lg" />
+                            <label class="floating-label">Nhập mật khẩu mới</label>
+                        </div>
+                        <div class="form-group form-material floating">
+                            <input type="password" class="form-control input-lg" />
+                            <label class="floating-label">Xác nhận mật khẩu mới</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                        <input type="submit" class="btn btn-success" value="Cập nhật" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
 
     <!-- Core  -->
@@ -565,6 +599,39 @@
             };
             // Start the connection.
             $.connection.hub.start();
+        });
+
+        function showChangePassModal() {
+            $("#changePassModal").modal("show");
+        };
+
+        $('#changePass-form').submit(function (e) {
+            e.preventDefault();
+            showMessage("Thay đổi mật khẩu thành công", "success", "OK");
+            $("#changePassModal").modal("hide");
+            @*var groupId = '@groupId';
+            var userId = '@User.Identity.GetUserId()';
+            var formData = new FormData(document.getElementById('addFrdForm'));
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddFriendGroup", "Group")',
+                async: false,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.Succeed) {
+                        $('#addFrd').val("");
+                        showMessage("Lời mời đã được gửi tới bạn của bạn", "success", "OK");
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function () {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            })*@
         });
 
         $(document).ready(function () {

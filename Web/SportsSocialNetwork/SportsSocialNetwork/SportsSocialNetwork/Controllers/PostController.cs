@@ -700,10 +700,16 @@ namespace SportsSocialNetwork.Controllers
         {
             var result = new AjaxOperationResult();
             var _postService = this.Service<IPostService>();
+            var _userService = this.Service<IAspNetUserService>();
+            var _groupMemberService = this.Service<IGroupMemberService>();
+            var _groupService = this.Service<IGroupService>();
+
             Post post = new Post();
 
             post.UserId = userId;
             post.PostContent = shareContent;
+
+            string notiMessType = "";
 
             if (shareType != 0)
             {
@@ -726,20 +732,27 @@ namespace SportsSocialNetwork.Controllers
                             }
                         }
 
+                        notiMessType = "bài viết";
                         break;
                     case (int)ContentPostType.ShareEventPost:
                         post.ContentType = (int)ContentPostType.ShareEventPost;
                         post.EventId = dataId;
+
+                        notiMessType = "sự kiện";
 
                         break;
                     case (int)ContentPostType.ShareOrderPost:
                         post.ContentType = (int)ContentPostType.ShareOrderPost;
                         post.OrderId = dataId;
 
+                        notiMessType = "lịch hoạt động";
+
                         break;
                     case (int)ContentPostType.ShareNewsPost:
                         post.ContentType = (int)ContentPostType.ShareNewsPost;
                         post.NewsId = dataId;
+
+                        notiMessType = "tin tức";
 
                         break;
                 }
@@ -750,12 +763,15 @@ namespace SportsSocialNetwork.Controllers
                     {
                         case (int)SharedReceiver.SenderWall:
                             post.ProfileId = userId;
+
                             break;
                         case (int)SharedReceiver.FriendWall:
                             post.ProfileId = frdSelectShare;
+
                             break;
                         case (int)SharedReceiver.Group:
                             post.GroupId = groupSelectShare;
+
                             break;
                     }
 
@@ -795,6 +811,63 @@ namespace SportsSocialNetwork.Controllers
             else
             {
                 result.Succeed = false;
+            }
+
+            //=============NOTI===================================================================================
+            //save noti
+            AspNetUser sender = _userService.FindUser(userId);
+            var _notificationService = this.Service<INotificationService>();
+
+            string title = Utils.GetEnumDescription(NotificationType.Post);
+            int type = (int)NotificationType.Post;
+            string message = "";
+            Notification noti;
+
+            // Get the context for the Pusher hub
+            IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+            NotificationFullInfoViewModel notiModel;
+
+            if (sender != null)
+            {
+                if (receiver != 0)
+                {
+                    switch (receiver)
+                    {
+                        case (int)SharedReceiver.FriendWall:
+
+                            //for noti
+                            AspNetUser noti_receiver = _userService.FindUser(frdSelectShare);
+                            message = sender.FullName + " đã chia sẻ một " + notiMessType + " lên tường nhà bạn";
+                            noti = _notificationService.CreateNoti(noti_receiver.Id, sender.Id, title, message, type, null, null, null, null);
+
+                            //signalR noti
+                            notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                            // Notify clients in the group
+                            hubContext.Clients.User(notiModel.UserId).send(notiModel);
+
+                            break;
+                        case (int)SharedReceiver.Group:
+
+                            //for noti
+                            Group noti_group = _groupService.FindGroupById(groupSelectShare.Value);
+                            List<GroupMember> noti_gm = _groupMemberService.GetActive(g => g.GroupId == groupSelectShare.Value && g.Status == (int)GroupMemberStatus.Approved && (!(g.UserId.Equals(userId)))).ToList();
+
+                            message = sender.FullName + " đã chia sẻ một " + notiMessType + " trong nhóm " + noti_group.Name;
+                            foreach (var item in noti_gm)
+                            {
+                                noti = _notificationService.CreateNoti(item.UserId, sender.Id, title, message, type, null, null, null, null);
+
+                                //signalR noti
+                                notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                                // Notify clients in the group
+                                hubContext.Clients.User(notiModel.UserId).send(notiModel);
+                            }
+
+                            break;
+                    }
+                }
             }
 
             return Json(result);
