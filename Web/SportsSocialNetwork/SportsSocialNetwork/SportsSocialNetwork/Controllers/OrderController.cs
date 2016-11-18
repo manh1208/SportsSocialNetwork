@@ -405,7 +405,7 @@ namespace SportsSocialNetwork.Controllers
                     String receiver = "m249bornbeast@gmail.com";//Tài khoản nhận tiền
                     String return_url = Url.Action("verifyOrder", "Order",
                                new { area = "", orderCode = order.OrderCode }, Request.Url.Scheme);
-                    String cancel_url = Url.Action("Index", "Order");
+                    String cancel_url = "http://ssn.techeco.net/Order";
                     //String price = model.Price.ToString();
                     String price = "2000";
                     NL_Checkout nl = new NL_Checkout();
@@ -431,7 +431,7 @@ namespace SportsSocialNetwork.Controllers
             String receiver = "m249bornbeast@gmail.com";//Tài khoản nhận tiền
             String return_url = Url.Action("verifyOrder", "Order",
                        new { area = "", orderCode = order_code }, Request.Url.Scheme);
-            String cancel_url = Url.Action("Index", "Order");
+            String cancel_url = "http://ssn.techeco.net/Order";
             //String price = model.Price.ToString();
             String price = "2000";
             NL_Checkout nl = new NL_Checkout();
