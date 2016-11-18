@@ -15,6 +15,9 @@
     List<PostImage> userPostImages = ViewBag.userPostImages;
     List<AspNetUser> followingUsers = ViewBag.followingUsers;
     List<Group> groupList = ViewBag.GroupList;
+    var provinceList = ViewBag.ProvinceList as IEnumerable<SelectListItem>;
+    var districtList = ViewBag.DistrictList as IEnumerable<SelectListItem>;
+    var wardList = ViewBag.WardList as IEnumerable<SelectListItem>;
 }
 
 <style>
@@ -487,17 +490,12 @@
                             </div>
                             <!--END Post area-->
                         </div>
-                        <div class="tab-pane" id="exampleTabsTwo" role="tabpanel" style="background-color:white; min-height:700px;">
+                        <div class="tab-pane" id="exampleTabsTwo" role="tabpanel" style="background-color:white; min-height:500px;">
                             <div class="panel">
                                 <div class="panel-body">
                                     @using (Html.BeginForm("saveProfile", "Profile", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "profileForm", @autocomplete = "off" }))
                                     {
                                         @Html.TextBoxFor(p => p.Id, new { @style = "display:none" })
-
-                                        <div class="form-group form-material floating">
-                                            @Html.TextBoxFor(p => p.UserName, new { @class = "form-control input-lg" })
-                                            <label class="floating-label">Tên đăng nhập</label>
-                                        </div>
                                         <div class="form-group form-material floating">
                                             @Html.TextBoxFor(p => p.FullName, new { @class = "form-control input-lg" })
                                             <label class="floating-label">Họ tên</label>
@@ -507,21 +505,35 @@
                                             <label class="floating-label">Email</label>
                                         </div>
                                         <div class="form-group form-material floating">
-                                            <input type="password" class="form-control input-lg" />
-                                            <label class="floating-label">Mật khẩu cũ</label>
+                                            @Html.TextBoxFor(p => p.Address, new { @class = "form-control input-lg" })
+                                            <label class="floating-label">Địa chỉ</label>
                                         </div>
-                                        <div class="form-group form-material floating">
-                                            <input type="password" class="form-control input-lg" />
-                                            <label class="floating-label">Mật khẩu mới</label>
+                                        <div class="row">
+                                            <div class="col-sm-5">
+                                                <div class="form-group form-material floating">
+                                                    @Html.DropDownListFor(m => m.City, provinceList, "--Tỉnh/thành phố--", new { @class = "bs-select-hidden form-control droplist", @id = "province" })
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group form-material floating">
+                                                    @Html.DropDownListFor(m => m.District, districtList, "--Quận/ Huyện--", new { @class = "bs-select-hidden form-control droplist", @id = "district" })
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group form-material floating">
+                                                    @Html.DropDownListFor(m => m.Ward, wardList, "--Phường--", new { @class = "bs-select-hidden form-control droplist", @id = "ward" })
+                                                    
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="form-group form-material floating">
-                                            <input type="password" class="form-control input-lg" />
-                                            <label class="floating-label">Xác nhận mật khẩu mới</label>
-                                        </div>
+
                                         <div class="form-group">
-                                            <input type="text" class="form-control" name="hobbies" id="hobbies"/>
+                                            <label class="control-label" style="color:#76838f">Sở thích:</label>
+                                            <input type="text" class="form-control" name="hobbies" id="hobbies" />
                                         </div>
-                                        <div class="col-sm-offset-8 col-sm-4">
+                                        <div class="col-sm-12 text-center">
                                             <button class="btn btn-default" type="button" onclick="refresh()">Hủy</button>
                                             <input type="submit" class="btn btn-success" value="Cập nhật" />
                                         </div>
@@ -775,6 +787,75 @@
             }
         });
 
+        $("#district").on("change", function () {
+            var provinceName = $('#province').val();
+            var districtName = $('#district').val();
+            var ddl = $('#ward');
+            ddl.empty();
+            ddl.val('');
+            $(document.createElement('option'))
+                    .attr('value', '')
+                    .text("--Phường--")
+                    .appendTo(ddl);
+            if (districtName != null) {
+                $.ajax({
+                    url: "/Profile/GetWard",
+                    type: 'POST',
+                    data: {
+                        'district': districtName,
+                        'provinceName':provinceName
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        $(data).each(function () {
+                            $(document.createElement('option'))
+                                .attr('value', this.Value)
+                                .text(this.Text)
+                                .appendTo(ddl);
+                        });
+                    }
+                });
+            }
+        });
+
+        $("#province").on("change", function () {
+            var provinceName = $('#province').val();
+            var ddl = $('#district');
+            var ddl_1 = $("#ward");
+            ddl_1.empty();
+            ddl.empty();
+            ddl_1.val();
+            ddl.val();
+            $(document.createElement('option'))
+                    .attr('value', '')
+                    .text("--Phường--")
+                    .appendTo(ddl_1);
+            $(document.createElement('option'))
+                    .attr('value', '')
+                    .text("--Quận/ Huyện--")
+                    .appendTo(ddl);
+            if (provinceName != null) {
+                $.ajax({
+                    url: "/Profile/GetDistrict",
+                    type: 'POST',
+                    data: {
+                        'provinceName': provinceName,
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        $(data).each(function () {
+                            $(document.createElement('option'))
+                                .attr('value', this.Value)
+                                .text(this.Text)
+                                .appendTo(ddl);
+                        });
+                    }
+                });
+            }
+        });
+
         $('#exampleZoomGallery').magnificPopup({
             delegate: 'a',
             type: 'image',
@@ -885,6 +966,11 @@
                 });
             }
         });
+
+        $("#changePasswordButton").click(function(){
+            $("#changePasswordButton").hide();
+            $("#changePassword").show();
+        })
 
         function addImage() {
             $("#selectImage").click();

@@ -5,6 +5,7 @@ using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
 using SportsSocialNetwork.Models.ViewModels;
+using SportsSocialNetwork.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -28,7 +29,14 @@ namespace SportsSocialNetwork.Controllers
             var _sportService = this.Service<ISportService>();
             var _followService = this.Service<IFollowService>();
             var _groupService = this.Service<IGroupService>();
-            
+            Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
+            var province = vietnam.VietNamese.ToList();
+            IEnumerable<SelectListItem> provinceList = province.Select(m => new SelectListItem
+            {
+                Text = m.Type + " " + m.Name,
+                Value = m.Type + " " + m.Name
+            }).OrderBy(s => s.Value).ToArray();
+            ViewBag.ProvinceList = provinceList;
 
             AspNetUser user = _userService.FindUser(userId);
             AspNetUserFullInfoViewModel model = Mapper.Map<AspNetUserFullInfoViewModel>(user);
@@ -117,11 +125,96 @@ namespace SportsSocialNetwork.Controllers
             {
                 ViewBag.GroupList = groupList;
             }
+            IEnumerable<SelectListItem> districtList = new List<SelectListItem>();
+            if (model.City != null && model.City != "")
+            {
+                province = vietnam.VietNamese.Where(p => model.City.Equals(p.Type+" "+p.Name)).ToList();
+                if (province != null && province.Count > 0)
+                {
+                    var district = province.First().Districts.ToList();
+                    districtList = district.Select(m => new SelectListItem
+                    {
+                        Text = m.Type + " " + m.Name,
+                        Value = m.Type + " " + m.Name
+                    }).OrderBy(s => s.Value).ToArray();
+                }
+            }
+            ViewBag.DistrictList = districtList;
 
+            IEnumerable<SelectListItem> wardList = new List<SelectListItem>();
+            if (model.District != null && model.District != "")
+            {
+                 province = vietnam.VietNamese.Where(p => model.City.Equals(p.Type + " " + p.Name) && p.Districts.Where(f =>
+            model.District.Equals(f.Type+" "+f.Name)).ToList().Count > 0).ToList();
+                if (province != null && province.Count > 0)
+                {
+                    var districts = province.First().Districts.Where(p => model.District.Equals(p.Type + " " + p.Name)).ToList();
+                    if (districts != null && districts.Count > 0)
+                    {
+                        var ward = districts.First().Wards.ToList();
+                        wardList = ward.Select(m => new SelectListItem
+                        {
+                            Text = m.Type + " " + m.Name,
+                            Value = m.Type + " " + m.Name
+                        }).OrderBy(s => s.Value).ToArray();
+                    }
 
+                }
+
+            }
+            ViewBag.WardList = wardList;
             return View(model);
         }
 
+        public ActionResult GetDistrict(string provinceName)
+        {
+            Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
+            IEnumerable<SelectListItem> districtList = new List<SelectListItem>();
+            if (provinceName != null && provinceName != "")
+            {
+                var province = vietnam.VietNamese.Where(p => provinceName.Equals(p.Type+" "+p.Name)).ToList();
+                if (province != null && province.Count > 0)
+                {
+                    var district = province.First().Districts.ToList();
+                    districtList = district.Select(m => new SelectListItem
+                    {
+                        Text = m.Type + " " + m.Name,
+                        Value = m.Type + " " + m.Name
+                    }).OrderBy(s => s.Value).ToArray();
+                }
+
+            }
+
+            return Json(districtList, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetWard(string district, string provinceName)
+        {
+            Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
+            IEnumerable<SelectListItem> wardList = new List<SelectListItem>();
+            if (district != null && district != "")
+            {
+                var provinceList = vietnam.VietNamese.Where(p => provinceName.Equals(p.Type + " " + p.Name) && 
+                p.Districts.Where(f => district.Equals(f.Type+" "+f.Name)).ToList().Count>0).ToList();
+                if (provinceList != null && provinceList.Count > 0)
+                {
+                    var districtList = provinceList.First().Districts.Where(p => district.Equals(p.Type + " " + p.Name)).ToList();
+                    if(districtList !=null && districtList.Count > 0)
+                    {
+                        var ward = districtList.First().Wards.ToList();
+                        wardList = ward.Select(m => new SelectListItem
+                        {
+                            Text = m.Type + " " + m.Name,
+                            Value = m.Type + " " + m.Name
+                        }).OrderBy(s => s.Value).ToArray();
+                    }
+                    
+                }
+
+            }
+
+            return Json(wardList, JsonRequestBehavior.AllowGet);
+        }
         public IEnumerable<PostImage> GetAllPostImageOfUser(string userId, int skip, int take)
         {
             var _postService = this.Service<IPostService>();
@@ -337,11 +430,25 @@ namespace SportsSocialNetwork.Controllers
             AspNetUser user = _userService.FindUser(model.Id);
             if(user != null)
             {
-                user.UserName = model.UserName;
                 user.FullName = model.FullName;
                 user.Email = model.Email;
+                user.City = model.City;
+                user.Address = model.Address;
+                user.District = model.District;
+                user.Ward = model.Ward;
+                if(user.Ward != null || user.District != null || user.City != null)
+                {
+                    StringBuilder localtion = new StringBuilder();
+                    localtion.Append(user.Address);
+                    localtion.Append(" " + user.Ward + " " + user.District + " " + user.City);
+                    DataTable coordinate = getLocation(localtion.ToString());
+                    double latitude = Double.Parse(coordinate.Rows[0]["Latitude"].ToString());
+                    double longtitude = Double.Parse(coordinate.Rows[0]["Longitude"].ToString());
+                    user.Latitude = latitude;
+                    user.Longitude = longtitude;
+                }
 
-                if(_userService.UpdateUser(user) != null)
+                if (_userService.UpdateUser(user) != null)
                 {
                     if (!String.IsNullOrEmpty(hobbies))
                     {
