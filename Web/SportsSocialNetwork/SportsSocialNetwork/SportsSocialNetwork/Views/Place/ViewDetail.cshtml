@@ -84,11 +84,11 @@
                         <div class="overlay-container" style="height:210px">
                             @if (Model.Avatar != null && Model.Avatar != "")
                             {
-                                <img title="Nhà thi đấu Phú Thọ" src="@Model.Avatar" class='imgW100'>
+                                <img src="@Model.Avatar" class='imgW100'>
                             }
                             else
                             {
-                                <img title="Nhà thi đấu Phú Thọ" src="~/Content/images/no_image.jpg" class='imgW100'>
+                                <img src="~/Content/images/no_image.jpg" class='imgW100'>
                             }
 
                         </div>
@@ -263,7 +263,7 @@
                         $('#rate2').empty();
                         $('#rate2').shieldRating({
                             max: 5,
-                            step: 6,
+                            step: 1,
                             value: data.AdditionalData.AverageRate,
                         });
                     } else {
@@ -350,6 +350,14 @@
             });
         })
 
+        $('#rate1').mouseover(function(){
+            $('#rate1').swidget().enabled(false);
+        })
+
+        $('#rate1').mouseout(function(){
+            $('#rate1').swidget().enabled(true);
+        })
+
         function getRateInfo(id) {
             $.ajax({
                 type: 'POST',
@@ -366,7 +374,6 @@
                         $('#rate1').empty();
                         $('#rate1').shieldRating({
                             max: 5,
-                            step: 1,
                             value: data.AdditionalData.AverageRate,
                             markPreset: false
                         });
