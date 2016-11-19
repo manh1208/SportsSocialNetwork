@@ -503,12 +503,12 @@ namespace SportsSocialNetwork.Controllers
             _orderService.Create(order);
 
             string subject = "[SSN] - Thông tin đặt sân";
-            string body = "Hi <strong>" + User.Identity.Name + "</strong>" +
+            string body = "Hi <strong>" + user.FullName + "</strong>" +
                 ",<br/><br/>Bạn đã đặt sân: "+field.Name+"<br/> Thời gian: "+order.StartTime.ToString("HH:mm")+" - "+
                 order.EndTime.ToString("HH:mm") +", ngày "+order.StartTime.ToString("dd/MM/yyyy")+
                 "<br/> Giá tiền : " + order.Price.ToString("n0") + " đồng" +
                 "<br/> <strong>Mã đặt sân của bạn : " + order.OrderCode + "</strong>"+
-                "<br/><img src='" +Utils.GetHostName()+order.QRCodeUrl + "'>"+
+                "<br/><img src='ssn.techeco.net/" + order.QRCodeUrl + "'>"+
                 "<br/> Cảm ơn bạn đã sử dụng dịch vụ của SSN. Chúc bạn có những giờ phút thoải mái chơi thể thao!";
             EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { model.PayerEmail }, null, null, subject, body, true);
 
@@ -542,7 +542,7 @@ namespace SportsSocialNetwork.Controllers
                         return RedirectToAction("PageNotFound", "Errors");
                     }
                     string subject = "[SSN] - Thông tin thanh toán";
-                    string body = "Hi <strong>" + User.Identity.Name + "</strong>" +
+                    string body = "Hi <strong>" + user.FullName + "</strong>" +
                         ",<br/><br/>Bạn đã thanh toán đơn đặt sân: "+ order.OrderCode +" thành công"+
                         "<br/><strong>Thông tin hóa đơn:</strong><ul> " +
                         "<li> Tên sân: "+order.Field.Name + "</li>"+
@@ -550,7 +550,7 @@ namespace SportsSocialNetwork.Controllers
                         order.EndTime.ToString("HH:mm") + ", ngày " + order.StartTime.ToString("dd/MM/yyyy") +"</li>"+
                         "<li> Giá tiền : " + order.Price.ToString("n0") + " đồng</li></ul>" +
                         "<br/> Cảm ơn bạn đã sử dụng dịch vụ của SSN. Chúc bạn có những giờ phút thoải mái chơi thể thao!";
-                    EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { user.Email }, null, null, subject, body, true);
+                    EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { order.PayerEmail }, null, null, subject, body, true);
                     var url = Url.Action("PaymentSuccessful", "Order",
                        new { area = "", orderCode = order_code }, Request.Url.Scheme);
                     return Redirect(url);
