@@ -97,7 +97,38 @@ namespace SportsSocialNetwork.Controllers
             }
             else
             {
-                placeList = _placeService.getPlace(sport, province, district).ToList();
+                var tmp = province;
+                Country vietnam = AddressUtil.GetINSTANCE().GetCountry(Server.MapPath(AddressUtil.PATH));
+                IEnumerable<SelectListItem> districtList = new List<SelectListItem>();
+                if (province != null || province != "")
+                {
+
+                    var provinceName = vietnam.VietNamese.Where(p => p.Name.Equals(province)).ToList();
+                    if (province != null && provinceName.Count > 0)
+                    {
+                        var p = provinceName.First().Type;
+                        province = p+" "+province;
+                    }
+
+                }
+
+                IEnumerable<SelectListItem> wardList = new List<SelectListItem>();
+                if (district != null || district != "")
+                {
+                    var provinceList = vietnam.VietNamese.Where(p => p.Name.Equals(tmp) && p.Districts.Where(f =>
+                    f.Name == district).ToList().Count > 0).ToList();
+                    if (provinceList != null && provinceList.Count > 0)
+                    {
+                        var districts = provinceList.First().Districts.Where(p => p.Name == district).ToList();
+                        if (districts != null && districts.Count > 0)
+                        {
+                            var d = districts.First().Type;
+                            district = d + " " + district;
+                        }
+
+                    }
+                }
+                    placeList = _placeService.getPlace(sport, province, district).ToList();
             }
             
             if(placeList!=null && placeList.Count > 0)
