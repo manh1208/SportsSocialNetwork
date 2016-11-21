@@ -229,6 +229,14 @@
                                         </a>
                                     </form>
                                 </li>
+                                <li role="presentation">
+                                    <form style="margin:10px" method="post" id="form-home-page">
+                                        <a href="/Profile/Index?UserId=@User.Identity.GetUserId()" role="menuitem" onclick="homePage()"
+                                           style="color:#54616E;font-weight:500">
+                                            <span class="fa fa-user"></span>&nbsp; Vào trang cá nhân
+                                        </a>
+                                    </form>
+                                </li>
                                 @if (User != null && User.IsInRole(Utils.GetEnumDescription(UserRole.PlaceOwner)))
                                 {
                                     <li role="presentation">
@@ -775,6 +783,12 @@
             } else if (data.Type == parseInt('@((int)NotificationType.GroupPost)')) {
                 image = data.AspNetUser1.AvatarImage;
                 url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.ApprovePlaceOwner)')) {
+                image = "/Content/images/flag-xxl.png";
+                url = "/PlaceOwner/Place";
+            } else if (data.Type == parseInt('@((int)NotificationType.UnApprovePlaceOwner)')) {
+                image = "/Content/images/flag-xxl.png";
+                url = "javascript:void(0)";
             } else {
 
             }

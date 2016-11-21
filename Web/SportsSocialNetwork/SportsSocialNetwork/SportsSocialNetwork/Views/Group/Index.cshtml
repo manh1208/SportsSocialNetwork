@@ -169,7 +169,7 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
                             <input type="submit" class="btn btn-success" value="Cập nhật" />
                         </div>
                     </div>
@@ -198,7 +198,7 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
                             <input type="submit" class="btn btn-success" value="Cập nhật" />
                         </div>
                     </div>
@@ -240,7 +240,7 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
                             <input type="submit" class="btn btn-success" value="Gửi" />
                         </div>
                     </div>
@@ -277,7 +277,7 @@
 
                 </div>
                 <div class="modal-footer" id="cdf">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Hủy</button>
                     <button type="button" class="btn btn-default pull-left" onclick="denyChallenge(id)">Từ chối</button>
                     <button type="button" class="btn btn-default pull-left" onclick="acceptChalenge(id)">Chấp nhận</button>
                 </div>
@@ -322,7 +322,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
                     <input type="submit" class="btn btn-success" value="Tạo nhóm" />
                 </div>
             </div>
@@ -1351,94 +1351,98 @@
         
 
         <!--suggest group-->
-        <div class="panel" id="fixpanel">
-            <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
-                <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Nhóm đề nghị</h3>
-            </div>
-            <div class="panel-body" style="padding: 0;padding-bottom:10px">
-                @{
-                    int count = 1;
-                    GroupFullInfoViewModel last = suggestGroups.Last();
-                    foreach (var item in suggestGroups)
-                    {
-                        if (item.Equals(last))
+        @if (suggestGroups != null && suggestGroups.Count > 0)
+        {
+            <div class="panel" id="fixpanel">
+                <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                    <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Nhóm đề nghị</h3>
+                </div>
+                <div class="panel-body" style="padding: 0;padding-bottom:10px">
+                    @{
+                        int count = 1;
+                        GroupFullInfoViewModel last = suggestGroups.Last();
+                        foreach (var item in suggestGroups)
                         {
-                            if (item.Id != groupId && item.IsMember != true && count <= 5)
+                            if (item.Equals(last))
                             {
-                                <div class="suggest-group lastSuggestGroup" id="suggestGroup_@item.Id">
-                                    <div class="col-sm-12">
-                                        <div class="overlay">
-                                            <img src="@item.Avatar" style="display:block; max-height:100%;max-width:100%;" />
-                                            <figcaption class="overlay-bottom overlay-panel overlay-background">
-                                                <h4><span class="icon wb-heart"> @item.MemberCount</span></h4>
-                                            </figcaption>
-                                        </div>
-                                        <div class="row">
-                                            <div class="clearfix"></div>
-                                            <div class="col-sm-6 height-50 vertical-align">
-                                                <a href="/Group/Index/@item.Id" style="color:#37474f;"><span class="vertical-align-middle" style="font-weight:bold">@item.Name</span></a>
+                                if (item.Id != groupId && item.IsMember != true && count <= 5)
+                                {
+                                    <div class="suggest-group lastSuggestGroup" id="suggestGroup_@item.Id">
+                                        <div class="col-sm-12">
+                                            <div class="overlay">
+                                                <img src="@item.Avatar" style="display:block; max-height:100%;max-width:100%;" />
+                                                <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                                    <h4><span class="icon wb-heart"> @item.MemberCount</span></h4>
+                                                </figcaption>
                                             </div>
-                                            <div class="col-sm-6" style="margin-top:5px; text-align:right;">
-                                                <button type="button" style="color:#000" class="btn btn-outline btn-default" title="Tham gia nhóm" onclick="joinSuggestGroup(@item.Id)"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
+                                            <div class="row">
+                                                <div class="clearfix"></div>
+                                                <div class="col-sm-6 height-50 vertical-align">
+                                                    <a href="/Group/Index/@item.Id" style="color:#37474f;"><span class="vertical-align-middle" style="font-weight:bold">@item.Name</span></a>
+                                                </div>
+                                                <div class="col-sm-6" style="margin-top:5px; text-align:right;">
+                                                    <button type="button" style="color:#000" class="btn btn-outline btn-default" title="Tham gia nhóm" onclick="joinSuggestGroup(@item.Id)"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
                             }
-                        }
-                        else
-                        {
-                            if (item.Id != groupId && item.IsMember != true && count <= 5)
+                            else
                             {
-                                <div class="suggest-group" id="suggestGroup_@item.Id">
-                                    <div class="col-sm-12">
-                                        <div class="overlay">
-                                            <img src="@item.Avatar" style="display:block; max-height:100%;max-width:100%;" />
-                                            <figcaption class="overlay-bottom overlay-panel overlay-background">
-                                                <h4><span class="icon wb-heart"> @item.MemberCount</span></h4>
-                                            </figcaption>
-                                        </div>
-                                        <div class="row">
-                                            <div class="clearfix"></div>
-                                            <div class="col-sm-6 height-50 vertical-align">
-                                                <a href="/Group/Index/@item.Id" style="color:#37474f;"><span class="vertical-align-middle" style="font-weight:bold">@item.Name</span></a>
+                                if (item.Id != groupId && item.IsMember != true && count <= 5)
+                                {
+                                    <div class="suggest-group" id="suggestGroup_@item.Id">
+                                        <div class="col-sm-12">
+                                            <div class="overlay">
+                                                <img src="@item.Avatar" style="display:block; max-height:100%;max-width:100%;" />
+                                                <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                                    <h4><span class="icon wb-heart"> @item.MemberCount</span></h4>
+                                                </figcaption>
                                             </div>
-                                            <div class="col-sm-6" style="margin-top:5px; text-align:right;">
-                                                <button type="button" style="color:#000" class="btn btn-outline btn-default" title="Tham gia nhóm" onclick="joinSuggestGroup(@item.Id)"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
+                                            <div class="row">
+                                                <div class="clearfix"></div>
+                                                <div class="col-sm-6 height-50 vertical-align">
+                                                    <a href="/Group/Index/@item.Id" style="color:#37474f;"><span class="vertical-align-middle" style="font-weight:bold">@item.Name</span></a>
+                                                </div>
+                                                <div class="col-sm-6" style="margin-top:5px; text-align:right;">
+                                                    <button type="button" style="color:#000" class="btn btn-outline btn-default" title="Tham gia nhóm" onclick="joinSuggestGroup(@item.Id)"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
                             }
+                            count++;
                         }
-                        count++;
                     }
-                }
-                @*<div class="suggest-group">
-                    <div class="col-sm-12">
-                        <div class="overlay">
-                            <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
-                            <figcaption class="overlay-bottom overlay-panel overlay-background">
-                                <h4><span class="icon wb-heart"> 255</span></h4>
-                            </figcaption>
-                        </div>
-                        <div class="row">
-                            <div class="clearfix"></div>
-                            <div class="col-sm-6 height-50 vertical-align">
-                                <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
+                    @*<div class="suggest-group">
+                            <div class="col-sm-12">
+                                <div class="overlay">
+                                    <img src="~/Content/assets/example-images/coming-soon.jpg" style="display:block; max-height:100%;max-width:100%;" />
+                                    <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                        <h4><span class="icon wb-heart"> 255</span></h4>
+                                    </figcaption>
+                                </div>
+                                <div class="row">
+                                    <div class="clearfix"></div>
+                                    <div class="col-sm-6 height-50 vertical-align">
+                                        <span class="vertical-align-middle"><strong>Hội mê bóng hơn bồ</strong></span>
+                                    </div>
+                                    <div class="col-sm-6" style="margin-top:5px;">
+                                        <button type="button" class="btn btn-outline btn-default" title="Tham gia nhóm"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-sm-6" style="margin-top:5px;">
-                                <button type="button" class="btn btn-outline btn-default" title="Tham gia nhóm"><i class="icon wb-plus" aria-hidden="true"></i> Tham gia</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>*@
-                
-                
-                
-                
+                        </div>*@
+
+
+
+
+                </div>
             </div>
-        </div>
+                        }
+        
     </div>
     <!--END right side-bar-->
 

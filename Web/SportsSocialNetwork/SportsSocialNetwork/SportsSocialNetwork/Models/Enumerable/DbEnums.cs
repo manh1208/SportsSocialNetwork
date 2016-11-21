@@ -129,6 +129,10 @@ namespace SportsSocialNetwork.Models.Enumerable
         GroupMemberAction = 7,
         [Description("GroupPost")]
         GroupPost = 8,
+        [Description("ApprovePlaceOwner")]
+        ApprovePlaceOwner = 9,
+        [Description("UnApprovePlaceOwner")]
+        UnApprovePlaceOwner = 10
     }
 
     public enum ContentPostType
