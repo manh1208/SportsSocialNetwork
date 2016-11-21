@@ -108,10 +108,16 @@ namespace SportsSocialNetwork.Models.Entities.Services
             model.AspNetUser = controller.GetUser(model.UserId);
 
             model.AspNetUser1 = controller.GetUser(model.FromUserId);
+            if (model.CreateDate.HasValue)
+            {
 
-            model.CreateDateString = model.CreateDate.Value.Day.ToString("00") + "/" + model.CreateDate.Value.Month.ToString("00") + "/" + model.CreateDate.Value.Year.ToString("0000")
-                    + " lúc " + model.CreateDate.Value.Hour.ToString("00") + ":" + model.CreateDate.Value.Minute.ToString("00");
+                model.CreateDateString = model.CreateDate.Value.Day.ToString("00") + "/" + model.CreateDate.Value.Month.ToString("00") + "/" + model.CreateDate.Value.Year.ToString("0000")
+                        + " lúc " + model.CreateDate.Value.Hour.ToString("00") + ":" + model.CreateDate.Value.Minute.ToString("00");
 
+            }else
+            {
+                model.CreateDateString = "11/11/2016 lúc 00:00";
+            }
             return model;
         }
 

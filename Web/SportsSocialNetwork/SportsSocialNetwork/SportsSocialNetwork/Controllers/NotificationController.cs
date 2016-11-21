@@ -53,7 +53,7 @@ namespace SportsSocialNetwork.Controllers
 
                 response = new ResponseModel<List<NotificationFullInfoViewModel>>(true, "Thông báo mới của bạn:", null, result);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 response = ResponseModel<List<NotificationFullInfoViewModel>>.CreateErrorResponse("Không thể tải thông báo", systemError);
             }
@@ -151,10 +151,17 @@ namespace SportsSocialNetwork.Controllers
         private NotificationFullInfoViewModel PrepareNotificationViewModel(Notification noti)
         {
             NotificationFullInfoViewModel result = Mapper.Map<NotificationFullInfoViewModel>(noti);
+            if (result.CreateDate.HasValue)
+            {
 
-            result.CreateDateString = result.CreateDate.Value.Day.ToString("00") + "/" + result.CreateDate.Value.Month.ToString("00") + "/" + result.CreateDate.Value.Year.ToString("0000")
-                    + " lúc " + result.CreateDate.Value.Hour.ToString("00") + ":" + result.CreateDate.Value.Minute.ToString("00");
+                result.CreateDateString = result.CreateDate.Value.Day.ToString("00") + "/" + result.CreateDate.Value.Month.ToString("00") + "/" + result.CreateDate.Value.Year.ToString("0000")
+                        + " lúc " + result.CreateDate.Value.Hour.ToString("00") + ":" + result.CreateDate.Value.Minute.ToString("00");
 
+            }
+            else
+            {
+                result.CreateDateString = "11/11/2016 lúc 00:00";
+            }
             return result;
 
         }
