@@ -239,7 +239,7 @@
                                 </li>
                                 <li role="presentation">
                                     <form action="" style="margin:10px" method="post" id="form-">
-                                        <a href="#" role="menuitem" onclick="" style="color:#54616E;font-weight:500">
+                                        <a href="#" role="menuitem" onclick="showChangePassModal()" style="color:#54616E;font-weight:500">
                                             <span class="fa fa-key"></span>&nbsp; Đổi mật khẩu
                                         </a>
                                     </form>
@@ -340,6 +340,41 @@
 
         </div>
     </footer>
+
+
+    <!--Change password modal-->
+    <div id="changePassModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <form id="changePass-form" class="form-horizontal" method="post" autocomplete="off">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Thay đổi mật khẩu</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group form-material floating">
+                            <input type="password" name="oldPass" class="form-control input-lg" />
+                            <label class="floating-label">Nhập mật khẩu cũ</label>
+                        </div>
+                        <div class="form-group form-material floating">
+                            <input type="password" name="newPass" class="form-control input-lg" />
+                            <label class="floating-label">Nhập mật khẩu mới</label>
+                        </div>
+                        <div class="form-group form-material floating">
+                            <input type="password" name="conNewPass" class="form-control input-lg" />
+                            <label class="floating-label">Xác nhận mật khẩu mới</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                        <input type="submit" id="cpSubmitBtn" class="btn btn-success" value="Cập nhật" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <script src="~/Content/assets/vendor/bootstrap/bootstrap.js"></script>
     <script src="~/Content/assets/vendor/animsition/jquery.animsition.js"></script>
@@ -789,6 +824,64 @@
                 loadNoti(_notiSkip, _notiTake);
                 _notiSkip = _notiSkip + _notiTake;
             }
+        });
+
+        function showChangePassModal() {
+            $("#changePassModal").modal("show");
+        };
+
+        $('#changePassModal').on('hidden.bs.modal', function () {
+            $('#changePass-form').formValidation('resetForm', true);
+        });
+
+        $(document).ready(function () {
+            //valid change pass
+            (function () {
+                $('#changePass-form').formValidation({
+                    framework: 'bootstrap',
+                    excluded: ':disabled',
+                    button: {
+                        selector: '#cpSubmitBtn',
+                        disabled: 'disabled'
+                    },
+                    icon: null,
+                    fields: {
+                        oldPass: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Vui lòng nhập mật khẫu cũ'
+                                }
+                            }
+                        },
+                        newPass: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Vui lòng nhập mật khẫu mới'
+                                },
+                                identical: {
+                                    field: 'conNewPass',
+                                    message: 'Mật khẩu và xác nhận mật khẩu không trùng khớp'
+                                }
+                            }
+                        },
+                        conNewPass: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Vui lòng xác nhận mật khẩu mới'
+                                },
+                                identical: {
+                                    field: 'newPass',
+                                    message: 'Mật khẩu và xác nhận mật khẩu không trùng khớp'
+                                }
+                            }
+                        }
+                    }
+                }).on('success.form.fv', function (e) {
+                    e.preventDefault();
+                    showMessage("Thay đổi mật khẩu thành công", "success", "OK");
+                    $("#changePassModal").modal("hide");
+                });
+            })();
         });
     </script>
     @RenderSection("Scripts", false)

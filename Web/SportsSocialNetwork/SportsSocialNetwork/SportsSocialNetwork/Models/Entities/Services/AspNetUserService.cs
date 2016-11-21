@@ -104,7 +104,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
             List<AspNetUser> users = new List<AspNetUser>();
             foreach (var item in list1)
             {
-                if (item.AspNetRoles.FirstOrDefault().Id.Equals(UserRole.PlaceOwner.ToString("d")))
+                if (item.AspNetRoles.FirstOrDefault().Id.Equals(UserRole.Member.ToString("d")) && item.Status == (int)UserStatus.Pending)
                 {
                     users.Add(item);
                 }

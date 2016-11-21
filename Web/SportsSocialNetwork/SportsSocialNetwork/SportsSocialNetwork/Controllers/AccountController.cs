@@ -212,7 +212,7 @@ namespace SportsSocialNetwork.Controllers
                     if (model.PlaceOwner != null)
                     {
                         userEntity.Status = (int)UserStatus.Pending;
-                        UserManager.AddToRole(userEntity.Id, Utils.GetEnumDescription(UserRole.PlaceOwner));
+                        UserManager.AddToRole(userEntity.Id, Utils.GetEnumDescription(UserRole.Member));
                     }
                     else
                     {

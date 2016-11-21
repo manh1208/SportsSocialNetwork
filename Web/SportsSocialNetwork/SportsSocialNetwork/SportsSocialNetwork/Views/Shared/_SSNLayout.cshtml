@@ -48,6 +48,10 @@
 
     <!--Sweet Alert-->
     <link rel="stylesheet" href="~/Content/js/sweetAlert/sweetalert.css" />
+
+    <!--Form Validation-->
+    <link rel="stylesheet" href="~/Content/assets/vendor/formvalidation/formValidation.css">
+
     <script>
         Breakpoints();
     </script>
@@ -225,6 +229,14 @@
                                         </a>
                                     </form>
                                 </li>
+                                <li role="presentation">
+                                    <form style="margin:10px" method="post" id="form-home-page">
+                                        <a href="/Profile/Index?UserId=@User.Identity.GetUserId()" role="menuitem" onclick="homePage()"
+                                           style="color:#54616E;font-weight:500">
+                                            <span class="fa fa-user"></span>&nbsp; Vào trang cá nhân
+                                        </a>
+                                    </form>
+                                </li>
                                 @if (User != null && User.IsInRole(Utils.GetEnumDescription(UserRole.PlaceOwner)))
                                 {
                                     <li role="presentation">
@@ -352,21 +364,21 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group form-material floating">
-                            <input type="password" class="form-control input-lg" />
+                            <input type="password" name="oldPass" class="form-control input-lg" />
                             <label class="floating-label">Nhập mật khẩu cũ</label>
                         </div>
                         <div class="form-group form-material floating">
-                            <input type="password" class="form-control input-lg" />
+                            <input type="password" name="newPass" class="form-control input-lg" />
                             <label class="floating-label">Nhập mật khẩu mới</label>
                         </div>
                         <div class="form-group form-material floating">
-                            <input type="password" class="form-control input-lg" />
+                            <input type="password" name="conNewPass" class="form-control input-lg" />
                             <label class="floating-label">Xác nhận mật khẩu mới</label>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                        <input type="submit" class="btn btn-success" value="Cập nhật" />
+                        <input type="submit" id="cpSubmitBtn" class="btn btn-success" value="Cập nhật" />
                     </div>
                 </div>
             </form>
@@ -416,6 +428,10 @@
     <!--Signalr-->
     <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
     <script src="~/signalr/hubs"></script>
+
+    <!--Form Validation-->
+    <script src="~/Content/assets/vendor/formvalidation/formValidation.js"></script>
+    <script src="~/Content/assets/vendor/formvalidation/framework/bootstrap.min.js"></script>
 
     <script>
         (function (document, window, $) {
@@ -605,11 +621,11 @@
             $("#changePassModal").modal("show");
         };
 
-        $('#changePass-form').submit(function (e) {
+        @*$('#changePass-form').submit(function (e) {
             e.preventDefault();
             showMessage("Thay đổi mật khẩu thành công", "success", "OK");
             $("#changePassModal").modal("hide");
-            @*var groupId = '@groupId';
+            var groupId = '@groupId';
             var userId = '@User.Identity.GetUserId()';
             var formData = new FormData(document.getElementById('addFrdForm'));
             $.ajax({
@@ -631,10 +647,65 @@
                 error: function () {
                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                 }
-            })*@
+            })
+        });*@
+
+        $('#changePassModal').on('hidden.bs.modal', function () {
+            $('#changePass-form').formValidation('resetForm', true);
         });
 
         $(document).ready(function () {
+            //valid change pass
+            (function () {
+                $('#changePass-form').formValidation({
+                    framework: 'bootstrap',
+                    excluded: ':disabled',
+                    button: {
+                        selector: '#cpSubmitBtn',
+                        disabled: 'disabled'
+                    },
+                    icon: null,
+                    fields: {
+                        oldPass: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Vui lòng nhập mật khẫu cũ'
+                                }
+                            }
+                        },
+                        newPass: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Vui lòng nhập mật khẫu mới'
+                                },
+                                identical: {
+                                    field: 'conNewPass',
+                                    message: 'Mật khẩu và xác nhận mật khẩu không trùng khớp'
+                                }
+                            }
+                        },
+                        conNewPass: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Vui lòng xác nhận mật khẩu mới'
+                                },
+                                identical: {
+                                    field: 'newPass',
+                                    message: 'Mật khẩu và xác nhận mật khẩu không trùng khớp'
+                                }
+                            }
+                        }
+                    }
+                }).on('success.form.fv', function (e) {
+                    e.preventDefault();
+                    showMessage("Thay đổi mật khẩu thành công", "success", "OK");
+                    $("#changePassModal").modal("hide");
+                });
+            })();
+
+
+
+
             //Load Noti Count
             $.ajax({
                 type: 'POST',
@@ -712,6 +783,12 @@
             } else if (data.Type == parseInt('@((int)NotificationType.GroupPost)')) {
                 image = data.AspNetUser1.AvatarImage;
                 url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.ApprovePlaceOwner)')) {
+                image = "/Content/images/flag-xxl.png";
+                url = "/PlaceOwner/Place";
+            } else if (data.Type == parseInt('@((int)NotificationType.UnApprovePlaceOwner)')) {
+                image = "/Content/images/flag-xxl.png";
+                url = "javascript:void(0)";
             } else {
 
             }

@@ -67,6 +67,16 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
                     noti.Message = "Đơn đặt sân " + order.Field.Name + "(" + order.StartTime.ToString() + " - " + order.EndTime.ToString() + ") đã bị từ chối";
                 }
+                if (status == (int)OrderStatus.Cancel)
+                {
+                    subject = "SSN - Đơn đặt sân đã bị hủy";
+                    body = "<p>Đơn đặt sân <strong>" + order.Field.Name + "</strong> từ <strong>" + order.StartTime.ToString() + "</trong> đến <strong>" + order.EndTime.ToString() + "</strong> đã bị chủ sân hủy</p>"
+                        + "<p>Lí do: " + reason + "</p>"
+                        + "<p>Chúng tôi xin lỗi vì sự bất tiện này.</p>"
+                        + "<p>Hẹn gặp lại quý khách lần sau!</p>";
+
+                    noti.Message = "Đơn đặt sân " + order.Field.Name + "(" + order.StartTime.ToString() + " - " + order.EndTime.ToString() + ") đã bị hủy";
+                }
                 EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { receiverEmail, "itspace.quy@gmail.com" }, null, null, subject, body, true);
                 _notificationService.Create(noti);
                 _notificationService.Save();

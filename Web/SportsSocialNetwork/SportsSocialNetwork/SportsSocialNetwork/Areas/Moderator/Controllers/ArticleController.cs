@@ -10,9 +10,11 @@ using System.Web.Mvc;
 using Teek.Models;
 using Microsoft.AspNet.Identity;
 using AutoMapper.QueryableExtensions;
+using SportsSocialNetwork.Models.Identity;
 
 namespace SportsSocialNetwork.Areas.Moderator.Controllers
 {
+    [MyAuthorize(Roles = IdentityMultipleRoles.Moderator)]
     public class ArticleController : BaseController
     {
         private String userImagePath = "Article";
@@ -137,6 +139,7 @@ namespace SportsSocialNetwork.Areas.Moderator.Controllers
             return Json(result);
         }
 
+        [MyAuthorize(Roles = IdentityMultipleRoles.NewsManagers)]
         [HttpPost]
         public JsonResult Delete(int id)
         {

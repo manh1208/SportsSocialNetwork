@@ -60,6 +60,27 @@
                 <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deniedOrder()">Không chấp nhận</button>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="modal fade" id="reasonCancelOrder" aria-hidden="true"
+     aria-labelledby="orderDetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Hủy đơn đặt sân</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group form-material floating">
+                    <textarea class="form-control" id="cancelreason"></textarea>
+                    <label class="floating-label">Lí do</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="cancelOrder()">Hủy đơn đặt sân</button>
+            </div>
         </div>
     </div>
 </div>
@@ -105,12 +126,45 @@
             });
         }
 
+        function cancelOrder() {
+            var rs = $("#cancelreason").val();
+            $.ajax({
+                url: '@Url.Action("updateStatusOrder")',
+                type: 'Get',
+                data: {
+                    id: curSelectOrder,
+                    status: cstatus,
+                    reason: rs
+                },
+                success: function (data) {
+                    if (data === "success") {
+                        $('#orderDetail').modal('hide');
+                        showMessage("Cập nhật thành công", "success", "OK");
+                        RefreshTable();
+                        $("#cancelreason").empty();
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
         function updateStatus(id, status)
         {
             if (status == parseInt('@((int)OrderStatus.Unapproved)')) {
                 $('#reasonDeniedOrder').modal('show');
                 $('#reasonDeniedOrder').on('shown', function () {
                     $("#reason").focus();
+                })
+                curSelectOrder = id;
+                cstatus = status;
+            } else if(status == parseInt('@((int)OrderStatus.Cancel)')) {
+                $('#reasonCancelOrder').modal('show');
+                $('#reasonCancelOrder').on('shown', function () {
+                    $("#cancelreason").focus();
                 })
                 curSelectOrder = id;
                 cstatus = status;
@@ -139,7 +193,7 @@
                     }
                 });
             }
-            
+
         }
 
         function showDetailModal(id) {
