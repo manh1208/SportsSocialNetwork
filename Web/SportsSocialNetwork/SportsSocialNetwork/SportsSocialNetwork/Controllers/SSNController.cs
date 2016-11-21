@@ -580,10 +580,12 @@ namespace SportsSocialNetwork.Controllers
             //    resultList = userService.FindUserByName(db, keyword, 0, 5).ToList();
             //}
             var followService = this.Service<IFollowService>();
-            var userCount = userService.GetActive(p => p.FullName.Contains(keyword) || p.UserName.Contains(keyword) ||
-            p.Email.Contains(keyword)).OrderBy(p => p.FullName).ToList().Count;
-            var resultList = userService.GetActive(p => p.FullName.Contains(keyword) || p.UserName.Contains(keyword) ||
-            p.Email.Contains(keyword)).OrderBy(p => p.FullName).Skip(skip).Take(take).ToList();
+            var userCount = userService.GetActive(p => p.AspNetRoles.Where(k =>
+            k.Name != "Quản trị viên" && k.Name != "Moderator").ToList().Count>0 && (p.FullName.Contains(keyword) || p.UserName.Contains(keyword) ||
+            p.Email.Contains(keyword))).OrderBy(p => p.FullName).ToList().Count;
+            var resultList = userService.GetActive(p => p.AspNetRoles.Where(k =>
+            k.Name != "Quản trị viên" && k.Name != "Moderator").ToList().Count > 0 && (p.FullName.Contains(keyword) || p.UserName.Contains(keyword) ||
+            p.Email.Contains(keyword))).OrderBy(p => p.FullName).Skip(skip).Take(take).ToList();
             var curUserId = User.Identity.GetUserId();
             var curUser = userService.FirstOrDefaultActive(p => p.Id == curUserId);
             List<FollowSuggestViewModel> searchResultList = new List<FollowSuggestViewModel>();
