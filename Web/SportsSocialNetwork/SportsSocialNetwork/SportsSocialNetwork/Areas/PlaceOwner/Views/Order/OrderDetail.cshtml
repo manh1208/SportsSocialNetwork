@@ -133,23 +133,56 @@
 </div>
 <div class="modal-footer">
     @{
-        if (Model.Status == (int)OrderStatus.Unapproved || Model.Status == (int)OrderStatus.Approved || Model.Status == (int)OrderStatus.Cancel)
+        switch (Model.Status)
         {
-            <div class="col-md-4">
-                <button class="btn btn-danger" id="deniedBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Unapproved))" disabled>Không chấp nhận</button>
-            </div>
-            <div class="col-md-4">
-                <button class="btn btn-success" id="acceptBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Approved))" disabled>Chấp nhận</button>
-            </div>
-        }
-        else
-        {
-            <div class="col-md-4">
-                <button class="btn btn-danger" id="deniedBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Unapproved))">Không chấp nhận</button>
-            </div>
-            <div class="col-md-4">
-                <button class="btn btn-success" id="acceptBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Approved))">Chấp nhận</button>
-            </div>
+            case (int)OrderStatus.Approved:
+                if (Model.Status == (int)OrderStatus.Cancel)
+                {
+                    <div class="col-md-4">
+                        <button class="btn btn-warning" id="cancelBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Cancel))" disabled>Hủy đơn đặt sân</button>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-4">
+                        <button class="btn btn-warning" id="cancelBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Cancel))">Hủy đơn đặt sân</button>
+                    </div>
+                }
+                <div class="col-md-4">
+                    <button class="btn btn-danger" id="deniedBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Unapproved))" disabled>Không chấp nhận</button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-success" id="acceptBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Approved))" disabled>Chấp nhận</button>
+                </div>
+
+                break;
+
+            case (int)OrderStatus.Unapproved:
+            case (int)OrderStatus.Cancel:
+
+                <div class="col-md-4">
+                    <button class="btn btn-warning" id="cancelBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Cancel))" disabled>Hủy đơn đặt sân</button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-danger" id="deniedBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Unapproved))" disabled>Không chấp nhận</button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-success" id="acceptBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Approved))" disabled>Chấp nhận</button>
+                </div>
+
+                break;
+            case (int)OrderStatus.Pending:
+                <div class="col-md-4">
+                    <button class="btn btn-warning" id="cancelBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Cancel))">Hủy đơn đặt sân</button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-danger" id="deniedBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Unapproved))">Không chấp nhận</button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-success" id="acceptBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Approved))">Chấp nhận</button>
+                </div>
+
+                break;
         }
     }
     
