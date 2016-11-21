@@ -51,7 +51,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
             foreach (var order in orders)
             {
                 if ((order.StartTime > sTime && order.StartTime >= eTime) || (order.EndTime <= sTime &&
-                    order.EndTime < sTime))
+                    order.EndTime < eTime))
                 {
                     isValid = true;
                 }
