@@ -219,7 +219,7 @@
 
         function minifyString() {
             var minimize_character_count = 200;
-            var content = "@Html.Raw(PopularNews.First().NewsContent)";
+            var content = '@Html.Raw(PopularNews.First().NewsContent)';
             var decode_content = content.replace(/(<([^>]+)>)/ig, "");
             if (decode_content.length < minimize_character_count) return;
 
