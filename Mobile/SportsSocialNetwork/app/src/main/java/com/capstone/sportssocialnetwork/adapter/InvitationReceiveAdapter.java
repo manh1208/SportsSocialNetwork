@@ -73,7 +73,7 @@ public class InvitationReceiveAdapter extends ArrayAdapter<Invitation> {
         }
 
         Invitation invitation = getItem(position);
-        viewholder.txtSender.setText(invitation.getName());
+        viewholder.txtSender.setText(invitation.getSubject());
         if (invitation.getContent().length() > 30) {
             viewholder.txtContent.setText(invitation.getContent().substring(0, 30) + "...");
         } else {

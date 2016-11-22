@@ -8,9 +8,14 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.capstone.sportssocialnetwork.R;
+import com.capstone.sportssocialnetwork.activity.InvitationActivity;
 import com.capstone.sportssocialnetwork.activity.MainBottomBarActivity;
+import com.capstone.sportssocialnetwork.activity.MyOrderActivity;
+import com.capstone.sportssocialnetwork.activity.PostDetailActivity;
+import com.capstone.sportssocialnetwork.enumerable.NotificationTypeEnum;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -59,8 +64,36 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setPriority(android.app.Notification.PRIORITY_HIGH);
+        String typeStr = data.get("Type");
+        int type = 0;
+        try {
+            type = Integer.parseInt(typeStr);
 
-        Intent intent = new Intent(this, MainBottomBarActivity.class);
+        } catch (Exception e) {
+
+        }
+        Intent intent;
+
+        if (NotificationTypeEnum.POST == NotificationTypeEnum.fromInteger(type)) {
+            String postIdStr = data.get("PostId");
+            int postId = 0;
+            try {
+                postId = Integer.parseInt(postIdStr);
+
+            } catch (Exception e) {
+
+            }
+            intent = new Intent(this, PostDetailActivity.class);
+            intent.putExtra("postId", postId);
+        } else if (NotificationTypeEnum.ORDER == NotificationTypeEnum.fromInteger(type)) {
+            intent = new Intent(this, MyOrderActivity.class);
+        } else if (NotificationTypeEnum.INVITATION == NotificationTypeEnum.fromInteger(type)) {
+            intent = new Intent(this, InvitationActivity.class);
+        } else {
+            intent = new Intent(this, MainBottomBarActivity.class);
+        }
+
+
 //            intent.putExtra("eventId", eventId);
 //            intent.putExtra("start",true);
 //                intent.putExtra("notiId", notificationId);

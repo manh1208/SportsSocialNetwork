@@ -13,6 +13,7 @@
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <ProjectView>ProjectFiles</ProjectView>
     <NameOfLastUsedPublishProfile>SSN_Publish</NameOfLastUsedPublishProfile>
+    <IISExpressSSLPort>44362</IISExpressSSLPort>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
