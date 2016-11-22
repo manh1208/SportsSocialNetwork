@@ -1,5 +1,7 @@
 package com.capstone.sportssocialnetwork.activity;
 
+import android.app.ActivityManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +14,8 @@ import android.view.View;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.adapter.FriendTabAdapter;
 import com.capstone.sportssocialnetwork.adapter.InvitationTabAdapter;
+
+import java.util.List;
 
 public class InvitationActivity extends AppCompatActivity {
 
@@ -52,4 +56,18 @@ public class InvitationActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        ActivityManager mngr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+        if (taskList.get(0).numActivities == 1 &&
+                taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
+            Intent intent = new Intent(InvitationActivity.this, MainBottomBarActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            super.onBackPressed();
+
+        }
+    }
 }

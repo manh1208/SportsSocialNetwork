@@ -1,5 +1,7 @@
 package com.capstone.sportssocialnetwork.activity;
 
+import android.app.ActivityManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -119,5 +121,20 @@ public class MyOrderActivity extends AppCompatActivity {
                 Toast.makeText(MyOrderActivity.this, "Loi ket noi voi server", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        ActivityManager mngr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+        if (taskList.get(0).numActivities == 1 &&
+                taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
+            Intent intent = new Intent(MyOrderActivity.this, MainBottomBarActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            super.onBackPressed();
+
+        }
     }
 }

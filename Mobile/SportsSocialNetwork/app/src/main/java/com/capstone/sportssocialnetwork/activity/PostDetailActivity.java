@@ -2,6 +2,7 @@ package com.capstone.sportssocialnetwork.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -545,4 +546,19 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        ActivityManager mngr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> taskList = mngr.getRunningTasks(10);
+        if (taskList.get(0).numActivities == 1 &&
+                taskList.get(0).topActivity.getClassName().equals(this.getClass().getName())) {
+            Intent intent = new Intent(PostDetailActivity.this, MainBottomBarActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            super.onBackPressed();
+
+        }
+    }
 }
