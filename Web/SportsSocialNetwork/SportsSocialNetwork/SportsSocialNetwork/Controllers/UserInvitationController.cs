@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using HenchmenWeb.Models.Notifications;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.SignalR;
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Hubs;
 using SportsSocialNetwork.Models.Identity;
+using SportsSocialNetwork.Models.Notifications;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -206,6 +210,29 @@ namespace SportsSocialNetwork.Controllers
                 noti.Title = "Invite";
                 noti.MarkRead = false;
                 notiService.Create(noti);
+
+                //Fire base noti
+                List<string> registrationIds = GetToken(id);
+
+                //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
+
+                NotificationModel amodel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+
+                if (registrationIds != null && registrationIds.Count != 0)
+                {
+                    Android.Notify(registrationIds, null, amodel);
+                }
+
+
+                //////////////////////////////////////////////
+                //signalR noti
+                NotificationFullInfoViewModel notiModel = notiService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                // Get the context for the Pusher hub
+                IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                // Notify clients in the group
+                hubContext.Clients.User(notiModel.UserId).send(notiModel);
             }
             InvitationViewModel model = Mapper.Map<InvitationViewModel>(invi);
             model.Host = curUser.FullName;
@@ -294,6 +321,36 @@ namespace SportsSocialNetwork.Controllers
             }
             
             return Json(result);
+        }
+
+        private List<string> GetToken(String userId)
+        {
+            var service = this.Service<IFirebaseTokenService>();
+
+            List<FirebaseToken> tokenList = service.Get(x => x.UserId.Equals(userId)).ToList();
+
+            List<string> registrationIds = new List<string>();
+            if (tokenList != null)
+            {
+                foreach (var token in tokenList)
+                {
+                    registrationIds.Add(token.Token);
+                }
+            }
+
+            return registrationIds;
+        }
+
+        private NotificationCustomViewModel PrepareNotificationViewModel(Notification noti)
+        {
+            NotificationCustomViewModel result = Mapper.Map<NotificationCustomViewModel>(noti);
+
+            result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+
+            result.Avatar = noti.AspNetUser1.AvatarImage;
+
+            return result;
+
         }
 
     }

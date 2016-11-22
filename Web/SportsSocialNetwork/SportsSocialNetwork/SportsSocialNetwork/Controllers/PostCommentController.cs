@@ -147,7 +147,7 @@ namespace SportsSocialNetwork.Controllers
                         Notification noti = notiService.FirstOrDefaultActive(n => n.Id == not.Id);
 
                         //Fire base noti
-                        List <string> registrationIds = GetToken(user.Id);
+                        List <string> registrationIds = GetToken(item);
 
                         //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
 
