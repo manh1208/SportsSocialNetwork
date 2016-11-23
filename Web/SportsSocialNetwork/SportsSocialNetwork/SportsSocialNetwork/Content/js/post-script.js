@@ -186,7 +186,7 @@ function loadGroupPost(groupId, curUserId, skip, take, actionName, loadMoreCmtAc
                                    '</div>';
                     }
                     var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + this.Id + "'>"
-                                   + "<div class='media'>"
+                                   + "<div class='media' style='padding-right:10px'>"
                                        + "<div class='media-left'>"
                                            + "<a class='avatar' href='javascript:void(0)' style='width:50px;'>"
                                                 + "<img style='height:50px' class='img-responsive' src='" + this.AspNetUser.AvatarImage + "' alt='...'>"
@@ -344,7 +344,7 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                         }
                     }
                     var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + this.Id + "'>"
-                                   + "<div class='media'>"
+                                   + "<div class='media' style='padding-right:10px'>"
                                        + "<div class='media-left'>"
                                            + "<a class='avatar' href='javascript:void(0)' style='width:50px;'>"
                                                 + "<img style='height:50px' class='img-responsive' src='" + this.AspNetUser.AvatarImage + "' alt='...'>"
@@ -497,7 +497,7 @@ function loadNewFeedPost(userId, skip, take, actionName, loadMoreCmtActionName, 
                     }
                     
                     var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + this.Id + "'>"
-                                   + "<div class='media'>"
+                                   + "<div class='media' style='padding-right:10px'>"
                                        + "<div class='media-left'>"
                                            + "<a class='avatar' href='javascript:void(0)' style='width:50px;'>"
                                                 + "<img style='height:50px' class='img-responsive' src='" + this.AspNetUser.AvatarImage + "' alt='...'>"
@@ -616,7 +616,7 @@ function loadSpecificPost(userId, postId, actionName, loadMoreCmtActionName, loa
                                    '</div>';
                     }
                     var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + dt.Id + "'>"
-                                   + "<div class='media'>"
+                                   + "<div class='media' style='padding-right:10px'>"
                                        + "<div class='media-left'>"
                                            + "<a class='avatar' href='javascript:void(0)' style='width:50px;'>"
                                                 + "<img style='height:50px' class='img-responsive' src='" + dt.AspNetUser.AvatarImage + "' alt='...'>"
@@ -814,7 +814,7 @@ function prependPost(data, userId) {
                    '</div>' +
                    '</div>';
     var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + data.Id + "'>"
-                                   + "<div class='media'>"
+                                   + "<div class='media' style='padding-right:10px'>"
                                        + "<div class='media-left'>"
                                            + "<a class='avatar' href='javascript:void(0)' style='width:50px;'>"
                                                 + "<img style='height:50px' class='img-responsive' src='" + data.AspNetUser.AvatarImage + "' alt='...'>"
@@ -1632,7 +1632,7 @@ function refreshPost(data) {
                    '</div>';
     }
     var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + data.Id + "'>"
-                   + "<div class='media'>"
+                   + "<div class='media' style='padding-right:10px'>"
                        + "<div class='media-left'>"
                            + "<a class='avatar' href='javascript:void(0)' style='width:50px;'>"
                                 + "<img style='height:50px' class='img-responsive' src='" + data.AspNetUser.AvatarImage + "' alt='...'>"
