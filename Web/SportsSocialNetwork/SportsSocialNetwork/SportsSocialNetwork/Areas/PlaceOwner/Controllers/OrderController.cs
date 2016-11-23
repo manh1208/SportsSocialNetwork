@@ -43,6 +43,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 noti.FromUserId = User.Identity.GetUserId();
                 noti.Title = Utils.GetEnumDescription(NotificationType.Order);
                 noti.Type = (int)NotificationType.Order;
+                noti.CreateDate = DateTime.Now;
                 //send mail
                 string receiverEmail = _userService.FirstOrDefaultActive(u => u.Id.Equals(order.UserId)).Email;
                 string subject = "";
