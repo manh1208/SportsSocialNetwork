@@ -84,7 +84,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                             Notification notiForPostCreator = notiService.SaveNoti(post.UserId, userId, "Like", user.FullName + " đã thích bài viết của bạn", (int)NotificationType.Post, post.Id, null, null);
 
                             //Fire base noti
-                            List<string> registrationIds = GetToken(user.Id);
+                            List<string> registrationIds = GetToken(post.UserId);
 
                             //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
 
