@@ -1,10 +1,14 @@
 ﻿
+using HenchmenWeb.Models.Notifications;
+using Microsoft.AspNet.SignalR;
 using QRCoder;
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Hubs;
+using SportsSocialNetwork.Models.Notifications;
 using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
@@ -294,6 +298,29 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
                 response = new ResponseModel<OrderSimpleViewModel>(true, "Đặt sân thành công", null, result);
 
+
+                //Fire base noti
+                List<string> registrationIds = GetToken(noti.UserId);
+
+                //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
+
+                NotificationModel Amodel = Mapper.Map<NotificationModel>(PrepareNotificationCustomViewModel(noti));
+
+                if (registrationIds != null && registrationIds.Count != 0)
+                {
+                    Android.Notify(registrationIds, null, Amodel);
+                }
+
+                //SignalR Noti
+                var notiService = this.Service<INotificationService>();
+                NotificationFullInfoViewModel notiModelR = notiService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                // Get the context for the Pusher hub
+                IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                // Notify clients in the group
+                hubContext.Clients.User(notiModelR.UserId).send(notiModelR);
+
             }
             catch (Exception)
             {
@@ -507,6 +534,37 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 result = false;
             }
             return result;
+        }
+
+
+        private NotificationCustomViewModel PrepareNotificationCustomViewModel(Notification noti)
+        {
+            NotificationCustomViewModel result = Mapper.Map<NotificationCustomViewModel>(noti);
+
+            result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+
+            result.Avatar = noti.AspNetUser1.AvatarImage;
+
+            return result;
+
+        }
+
+        private List<string> GetToken(String userId)
+        {
+            var service = this.Service<IFirebaseTokenService>();
+
+            List<FirebaseToken> tokenList = service.Get(x => x.UserId.Equals(userId)).ToList();
+
+            List<string> registrationIds = new List<string>();
+            if (tokenList != null)
+            {
+                foreach (var token in tokenList)
+                {
+                    registrationIds.Add(token.Token);
+                }
+            }
+
+            return registrationIds;
         }
 
     }

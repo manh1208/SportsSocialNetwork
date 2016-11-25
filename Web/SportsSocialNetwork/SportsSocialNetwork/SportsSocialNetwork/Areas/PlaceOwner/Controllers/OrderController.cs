@@ -15,6 +15,8 @@ using SportsSocialNetwork.Models.Enumerable;
 using Microsoft.AspNet.SignalR;
 using SportsSocialNetwork.Models.Hubs;
 using Microsoft.AspNet.Identity;
+using SportsSocialNetwork.Models.Notifications;
+using HenchmenWeb.Models.Notifications;
 
 namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 {
@@ -82,6 +84,18 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 _notificationService.Create(noti);
                 _notificationService.Save();
 
+
+                //Fire base noti
+                List<string> registrationIds = GetToken(noti.UserId);
+
+                //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
+
+                NotificationModel Amodel = Mapper.Map<NotificationModel>(PrepareNotificationCustomViewModel(noti));
+
+                if (registrationIds != null && registrationIds.Count != 0)
+                {
+                    Android.Notify(registrationIds, null, Amodel);
+                }
 
                 //////////////////////////////////////////////
                 //signalR noti
@@ -257,6 +271,36 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 aaData = result
             }, JsonRequestBehavior.AllowGet);
 
+        }
+
+        private NotificationCustomViewModel PrepareNotificationCustomViewModel(Notification noti)
+        {
+            NotificationCustomViewModel result = Mapper.Map<NotificationCustomViewModel>(noti);
+
+            result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+
+            result.Avatar = noti.AspNetUser1.AvatarImage;
+
+            return result;
+
+        }
+
+        private List<string> GetToken(String userId)
+        {
+            var service = this.Service<IFirebaseTokenService>();
+
+            List<FirebaseToken> tokenList = service.Get(x => x.UserId.Equals(userId)).ToList();
+
+            List<string> registrationIds = new List<string>();
+            if (tokenList != null)
+            {
+                foreach (var token in tokenList)
+                {
+                    registrationIds.Add(token.Token);
+                }
+            }
+
+            return registrationIds;
         }
     }
 }

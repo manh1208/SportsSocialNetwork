@@ -99,7 +99,7 @@
                 url = "/SSN/PostDetail?postId=" + data.PostId;
             } else if(data.Type == parseInt('@((int)NotificationType.Order)')) {
                 image = "/Content/images/flag-xxl.png";
-                url = "/Order";
+                url = "/PlaceOwner/Order";
             } else if(data.Type == parseInt('@((int)NotificationType.Invitation)')) {
                 image = data.AspNetUser1.AvatarImage;
                 url = "/Invitation";
