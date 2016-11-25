@@ -396,11 +396,11 @@
                     validators: {
                         integer: {
                             message: 'Giá trị nhập phải là số'
+                        },
+                        regexp: {
+                            regexp: /^[1-9][0-9]*$/,
+                            message: "Giá tiền không phù hợp"
                         }
-                    },
-                    regexp: {
-                        regexp: /^[1-9][0-9]*$/,
-                        message: "Giá tiền không phù hợp"
                     }
                 },
                 uploadImages: {
