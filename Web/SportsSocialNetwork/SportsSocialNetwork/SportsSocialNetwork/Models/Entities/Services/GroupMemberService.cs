@@ -131,7 +131,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
             }
         }
 
-        bool JoinGroupByAdmin(int groupId, string userId)
+        public bool JoinGroupByAdmin(int groupId, string userId)
         {
             GroupMember member = this.FirstOrDefault(x => x.GroupId == groupId && x.UserId == userId);
             if (member != null)
