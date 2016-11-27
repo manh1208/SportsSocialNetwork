@@ -1953,7 +1953,9 @@
             e.preventDefault();
             var groupId = '@groupId';
             var userId = '@User.Identity.GetUserId()';
+            var admin = '@Model.IsAdmin';
             var formData = new FormData(document.getElementById('addFrdForm'));
+            formData.append("admin", admin);
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("AddFriendGroup", "Group")',

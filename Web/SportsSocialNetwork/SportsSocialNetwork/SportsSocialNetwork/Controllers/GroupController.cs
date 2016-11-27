@@ -733,11 +733,11 @@ namespace SportsSocialNetwork.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddFriendGroup(string AddFriendToGroupList, string userId, int groupId)
+        public ActionResult AddFriendGroup(string AddFriendToGroupList, string userId, int groupId, string admin)
         {
             var result = new AjaxOperationResult();
             var _notificationService = this.Service<INotificationService>();
-
+            bool isAdmin = Convert.ToBoolean(admin);
             if (!String.IsNullOrEmpty(AddFriendToGroupList))
             {
                 string[] frd = AddFriendToGroupList.Split(',');
@@ -754,42 +754,85 @@ namespace SportsSocialNetwork.Controllers
                     {
                         if (!item.Equals(""))
                         {
-                            //add to group
-                            if (_groupMemberService.JoinGroup(groupId, item))
+                            if(isAdmin)
                             {
-                                //save noti
-                                string title = Utils.GetEnumDescription(NotificationType.GroupInvitation);
-                                int type = (int)NotificationType.GroupInvitation;
-                                string message = fromUser.FullName + " đã mời bạn vào nhóm " + group.Name;
+                                //add to group
+                                if (_groupMemberService.JoinGroupByAdmin(groupId, item))
+                                {
+                                    //save noti
+                                    string title = Utils.GetEnumDescription(NotificationType.GroupInvitation);
+                                    int type = (int)NotificationType.GroupInvitation;
+                                    string message = fromUser.FullName + " đã mời bạn vào nhóm " + group.Name;
 
-                                Notification noti = _notificationService.CreateNoti(item, userId, title, message, type, null, null, null, group.Id);
+                                    Notification noti = _notificationService.CreateNoti(item, userId, title, message, type, null, null, null, group.Id);
 
 
-                                //////////////////////////////////////////////
-                                //signalR noti
-                                NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+                                    //////////////////////////////////////////////
+                                    //signalR noti
+                                    NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
 
-                                // Get the context for the Pusher hub
-                                IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+                                    // Get the context for the Pusher hub
+                                    IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
 
-                                // Notify clients in the group
-                                hubContext.Clients.User(notiModel.UserId).send(notiModel);
+                                    // Notify clients in the group
+                                    hubContext.Clients.User(notiModel.UserId).send(notiModel);
 
-                                //Notification noti = new Notification();
-                                //noti.UserId = item;
-                                //noti.FromUserId = userId;
-                                //noti.Title = Utils.GetEnumDescription(NotificationType.Invitation);
-                                //noti.Type = (int)NotificationType.Invitation;
-                                //noti.Message = fromUser.FullName + " đã mời bạn vào nhóm " + group.Name;
-                                //noti.GroupId = group.Id;
-                                //noti.CreateDate = DateTime.Now;
-                                //noti.MarkRead = false;
-                                //_notificationService.Create(noti);
-                                result.Succeed = true;
+                                    //Notification noti = new Notification();
+                                    //noti.UserId = item;
+                                    //noti.FromUserId = userId;
+                                    //noti.Title = Utils.GetEnumDescription(NotificationType.Invitation);
+                                    //noti.Type = (int)NotificationType.Invitation;
+                                    //noti.Message = fromUser.FullName + " đã mời bạn vào nhóm " + group.Name;
+                                    //noti.GroupId = group.Id;
+                                    //noti.CreateDate = DateTime.Now;
+                                    //noti.MarkRead = false;
+                                    //_notificationService.Create(noti);
+                                    result.Succeed = true;
+                                }
+                                else
+                                {
+                                    result.Succeed = false;
+                                }
                             }
                             else
                             {
-                                result.Succeed = false;
+                                //add to group
+                                if (_groupMemberService.JoinGroup(groupId, item))
+                                {
+                                    //save noti
+                                    string title = Utils.GetEnumDescription(NotificationType.GroupInvitation);
+                                    int type = (int)NotificationType.GroupInvitation;
+                                    string message = fromUser.FullName + " đã mời bạn vào nhóm " + group.Name;
+
+                                    Notification noti = _notificationService.CreateNoti(item, userId, title, message, type, null, null, null, group.Id);
+
+
+                                    //////////////////////////////////////////////
+                                    //signalR noti
+                                    NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                                    // Get the context for the Pusher hub
+                                    IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                                    // Notify clients in the group
+                                    hubContext.Clients.User(notiModel.UserId).send(notiModel);
+
+                                    //Notification noti = new Notification();
+                                    //noti.UserId = item;
+                                    //noti.FromUserId = userId;
+                                    //noti.Title = Utils.GetEnumDescription(NotificationType.Invitation);
+                                    //noti.Type = (int)NotificationType.Invitation;
+                                    //noti.Message = fromUser.FullName + " đã mời bạn vào nhóm " + group.Name;
+                                    //noti.GroupId = group.Id;
+                                    //noti.CreateDate = DateTime.Now;
+                                    //noti.MarkRead = false;
+                                    //_notificationService.Create(noti);
+                                    result.Succeed = true;
+                                }
+                                else
+                                {
+                                    result.Succeed = false;
+                                }
                             }
                         }
                         else
@@ -797,8 +840,6 @@ namespace SportsSocialNetwork.Controllers
                             result.Succeed = false;
                         }
                     }
-                    
-
                 }
                 else
                 {

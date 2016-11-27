@@ -36,6 +36,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         GroupMemberRole CheckRoleMember(string userId, int groupId);
 
         GroupMember ApproveMember(string userId);
+
+        bool JoinGroupByAdmin(int groupId, string userId);
         #endregion
 
 
@@ -118,6 +120,37 @@ namespace SportsSocialNetwork.Models.Entities.Services
                 member.UserId = userId;
                 member.Admin = false;
                 member.Status = (int)GroupMemberStatus.Pending;
+                member.Active = true;
+                this.Create(member);
+                this.Save();
+                if (this.FirstOrDefaultActive(x => x.Id == member.Id) != null)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        bool JoinGroupByAdmin(int groupId, string userId)
+        {
+            GroupMember member = this.FirstOrDefault(x => x.GroupId == groupId && x.UserId == userId);
+            if (member != null)
+            {
+                member.Active = true;
+                member.Status = (int)GroupMemberStatus.Approved;
+                member.Admin = false;
+                this.Update(member);
+                this.Save();
+                return true;
+            }
+            else
+            {
+                member = new GroupMember();
+
+                member.GroupId = groupId;
+                member.UserId = userId;
+                member.Admin = false;
+                member.Status = (int)GroupMemberStatus.Approved;
                 member.Active = true;
                 this.Create(member);
                 this.Save();
