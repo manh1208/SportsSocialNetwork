@@ -218,18 +218,20 @@
         var _getUserActionName = '@Url.Action("GetUserListInGroupChat", "Invitation")';
         window.onload = function () {
             loadGroupChat();
-            var _invitationId = focusGroup;
-            $("#chat_" + focusGroup).css("background-color", "#FDB286");
-            //$(".mediaCapture").attr("id", "mediaCapture_" + _invitationId);
-            //$(".submitImage").attr("id", "submitImage_" + _invitationId);
-            var senderId = $("#group_"+focusGroup).attr("data-creator");
-            if (senderId != '@User.Identity.GetUserId()') {
-                $("#btnLeave").show();
-            } else {
-                $("#btnLeave").hide();
+            if(focusGroup!=-1){
+                var _invitationId = focusGroup;
+                $("#chat_" + focusGroup).css("background-color", "#FDB286");
+                //$(".mediaCapture").attr("id", "mediaCapture_" + _invitationId);
+                //$(".submitImage").attr("id", "submitImage_" + _invitationId);
+                var senderId = $("#group_"+focusGroup).attr("data-creator");
+                if (senderId != '@User.Identity.GetUserId()') {
+                    $("#btnLeave").show();
+                } else {
+                    $("#btnLeave").hide();
+                }
+                validConfirmYet();
+                window.friendlyChat = new FriendlyChat(_userId, _invitationId, _getUserActionName);
             }
-            validConfirmYet();
-            window.friendlyChat = new FriendlyChat(_userId, _invitationId, _getUserActionName);
         };
 
 
@@ -270,7 +272,9 @@
                 success: function (data) {
                     if (data.Succeed) {
                         var tmp = data.AdditionalData
-                        focusGroup = tmp[0].Id;
+                        if (tmp.length > 0) {
+                            focusGroup = tmp[0].Id;
+                        }
                         appendGroupChat(data.AdditionalData);
                     } else {
                         showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
@@ -283,38 +287,42 @@
         }
 
         function appendGroupChat(data) {
-            $(data).each(function () {
-                $("#chatGroupContainer").append(
-                    '<div id="chat_' + this.Id + '" class="chatGroup" style="border: 1px solid #e9ebee; overflow:hidden;">'
-                     + '<a href="javascript:void(0)"><span data-creator="' + this.SenderId + '" style="float:left; display:inline-block; margin-left:15px;" id="group_' + this.Id + '">'
-                     + '<h4>' + this.Subject + '</h4>'
-                     + '<p style="color:#37474f">Người tạo: ' + this.Host + '</p>'
-                     + '<p style="color:#37474f">Số người: ' + this.numOfUser + '</p>'
-                     + '</span></a>'
-                     + '</div>');
+            if (data.length == 0) {
+                $("#chatGroupContainer").append("<p style='color:#a3afb7;font-style: italic;font-size:17px;text-align:center'>Hiện tại bạn chưa có nhóm tán gẫu nào</p>");
+            } else {
+                $(data).each(function () {
+                    $("#chatGroupContainer").append(
+                        '<div id="chat_' + this.Id + '" class="chatGroup" style="border: 1px solid #e9ebee; overflow:hidden;">'
+                         + '<a href="javascript:void(0)"><span data-creator="' + this.SenderId + '" style="float:left; display:inline-block; margin-left:15px;" id="group_' + this.Id + '">'
+                         + '<h4>' + this.Subject + '</h4>'
+                         + '<p style="color:#37474f">Người tạo: ' + this.Host + '</p>'
+                         + '<p style="color:#37474f">Số người: ' + this.numOfUser + '</p>'
+                         + '</span></a>'
+                         + '</div>');
 
-                document.getElementById('group_' + this.Id).addEventListener('click', function () {
-                    //$("#sign-out").click();
-                    var tmp = $(this).attr("id");
-                    var senderId = $(this).attr("data-creator");
-                    var result = tmp.split("_");
-                    $(".chatGroup").css("background-color", "white");
-                    $("#chat_" + result[1]).css("background-color", "#FDB286");
-                    $(".chatGroup:hover").css("background-color", "#FDB286");
-                    focusGroup = result[1];
-                    $("#messages").empty();
-                    if (senderId != '@User.Identity.GetUserId()') {
-                        $("#btnLeave").show();
-                    } else {
-                        $("#btnLeave").hide();
-                    }
-                    //$(".mediaCapture").attr("id", "mediaCapture_" + focusGroup);
-                    //$(".submitImage").attr("id", "submitImage_" + focusGroup);
-                    validConfirmYet();
-                    $("#btnChangeBranch").click();
-                }, false);
+                    document.getElementById('group_' + this.Id).addEventListener('click', function () {
+                        //$("#sign-out").click();
+                        var tmp = $(this).attr("id");
+                        var senderId = $(this).attr("data-creator");
+                        var result = tmp.split("_");
+                        $(".chatGroup").css("background-color", "white");
+                        $("#chat_" + result[1]).css("background-color", "#FDB286");
+                        $(".chatGroup:hover").css("background-color", "#FDB286");
+                        focusGroup = result[1];
+                        $("#messages").empty();
+                        if (senderId != '@User.Identity.GetUserId()') {
+                            $("#btnLeave").show();
+                        } else {
+                            $("#btnLeave").hide();
+                        }
+                        //$(".mediaCapture").attr("id", "mediaCapture_" + focusGroup);
+                        //$(".submitImage").attr("id", "submitImage_" + focusGroup);
+                        validConfirmYet();
+                        $("#btnChangeBranch").click();
+                    }, false);
 
-            })
+                })
+            }
         }
 
         function leaveGroupChat() {

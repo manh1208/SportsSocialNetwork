@@ -457,11 +457,12 @@
             e.preventDefault();
             var content = $("#inviteContent").val();
             var formData = new FormData(document.getElementById('invite-form'));
+            var sportSelect = $("#sportSelect").val();
             var checkedValue = [];
             $('.user:checked').each(function() {
                 checkedValue.push($(this).attr('value'));
             });
-            if(checkedValue.length > 0 && content ){
+            if(checkedValue.length > 0 && content && sportSelect){
                 for(var i = 0; i< checkedValue.length; i++){
                     formData.append('userId', checkedValue[i]);
                 }
