@@ -21,6 +21,7 @@ namespace SportsSocialNetwork.Models.Entities
         public int Status { get; set; }
         public bool Active { get; set; }
     
+        public virtual AspNetUser AspNetUser { get; set; }
         public virtual Group Group { get; set; }
     }
 }

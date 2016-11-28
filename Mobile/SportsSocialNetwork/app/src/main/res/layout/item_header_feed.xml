@@ -1,37 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="10sp"
-        android:background="#d2d2d2"></RelativeLayout>
-    <Button
+        android:background="@color/separator"></RelativeLayout>
+
+    <LinearLayout
         android:id="@+id/btn_feed_post"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:text="Bạn muốn trao đổi gì?"
-        android:textColor="#b3b1b1"
-        android:textAllCaps="false"
-        android:gravity="start|center_vertical"
-        android:drawableLeft="@drawable/img_avatar_small"
-        android:paddingLeft="20sp"
-        android:drawablePadding="10sp"
-        android:paddingTop="20sp"
-        android:paddingBottom="20sp"
-        />
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_post_avatar"
+            android:layout_marginLeft="10sp"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/img_default_avatar" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:drawablePadding="10sp"
+            android:gravity="start|center_vertical"
+            android:paddingBottom="20sp"
+            android:paddingLeft="20sp"
+            android:paddingTop="20sp"
+            android:text="Bạn muốn trao đổi gì?"
+            android:textAllCaps="false"
+            android:textColor="#b3b1b1" />
+    </LinearLayout>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:text="ảnh"
-        android:textColor="#000"
-        android:textAllCaps="false"
-        android:gravity="start|center_vertical"
         android:drawableLeft="@drawable/ic_menu_camera"
-        android:paddingLeft="170sp"
         android:drawablePadding="10sp"
-        />
+        android:gravity="start|center_vertical"
+        android:paddingLeft="170sp"
+        android:text="ảnh"
+        android:textAllCaps="false"
+        android:textColor="#000" />
 </LinearLayout>

@@ -7,6 +7,8 @@ namespace SportsSocialNetwork.Models.ViewModels
 {
     public class PostUploadViewModel : PostViewModel
     {
-        public HttpPostedFileBase UploadImage { get; set; }
+        public List<HttpPostedFileBase> UploadImage { get; set; }
+
+        public List<int> DeleteImage { get; set; }
     }
 }

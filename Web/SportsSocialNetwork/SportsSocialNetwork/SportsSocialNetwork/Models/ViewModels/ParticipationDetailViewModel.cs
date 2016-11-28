@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SportsSocialNetwork.Models.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,5 +10,6 @@ namespace SportsSocialNetwork.Models.ViewModels
     {
         public AspNetUserSimpleModel AspNetUser { get; set; }
         public int ParticipantCount { get; set; }
+        public Event Event { get; set; }
     }
 }

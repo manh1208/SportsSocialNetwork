@@ -16,6 +16,8 @@
     [City]                 NVARCHAR (255) NULL,
     [District]             NVARCHAR (255) NULL,
     [Ward]                 NVARCHAR (255) NULL,
+    [Latitude]             FLOAT (53)     NULL,
+    [Longitude]            FLOAT (53)     NULL,
     [AvatarImage]          NVARCHAR (255) NULL,
     [CoverImage]           NVARCHAR (255) NULL,
     [Birthday]             DATE           NULL,
@@ -26,6 +28,10 @@
     [Active]               BIT            NULL,
     CONSTRAINT [PK_dbo.AspNetUsers] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
+
+
 
 
 

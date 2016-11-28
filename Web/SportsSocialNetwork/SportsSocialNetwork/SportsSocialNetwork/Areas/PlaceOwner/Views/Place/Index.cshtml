@@ -34,7 +34,7 @@
 
 <div class="modal fade" id="modalPlaceDetail" aria-hidden="true"
      aria-labelledby="modalPlaceDetail" role="dialog" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div id="place-detail-modal-container"></div>
         </div>
@@ -206,14 +206,14 @@
                 },
                 {
                     "aTargets": [1],
-                    "bSortable": false,
+                    "width": "50%",
                     "mRender": function (data, type, o) {
                         return o[3] + ", " + o[4] + ", " + o[5] + ", " + o[6];
                     }
                 },
                 {
                     "aTargets": [2],
-                    "bSortable": false,
+                    //"bSortable": false,
                     "mRender": function (data, type, o) {
                         var label = '';
                         if (o[2] == parseInt('@((int)PlaceStatus.Active)')) {
@@ -233,12 +233,13 @@
                 {
                     "aTargets": [3],
                     "bSortable": false,
+                    "width": "22%",
                     "mRender": function (data, type, o) {
                         var viewDetailBtn = "<a href='javascript:void(0)' class='btn btn-success' data-target='#modalPlaceDetail' data-toggle='modal' onclick='showDetail("+ o[0] +")'><i class='fa fa-eye' aria-hidden='true'></i></a>";
                         var updateBtn = "<a href='/PlaceOwner/Place/PlaceDetail/" + o[0] + "' class='btn btn-warning'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>";
                         var deleteBtn = "<a href='javascript:void(0)' class='btn btn-danger' onclick='deletePlace(" + o[0] + ")'><i class='fa fa-trash-o ' aria-hidden='true'></i></a>";
                         var viewFieldBtn = "<a href='/PlaceOwner/Field/FieldList/" + o[0] + "' class='btn btn-info'><i class='icon wb-map' aria-hidden='true'></i></a>";
-                        return viewDetailBtn + '&nbsp;' + updateBtn + '&nbsp;' + deleteBtn + '&nbsp' + viewFieldBtn;
+                        return viewDetailBtn + '&nbsp;' + updateBtn + '&nbsp' + viewFieldBtn;
                     }
                 }
 

@@ -18,6 +18,7 @@ namespace SportsSocialNetwork.Models.Entities
         public Order()
         {
             this.Notifications = new HashSet<Notification>();
+            this.Posts = new HashSet<Post>();
         }
     
         public int Id { get; set; }
@@ -29,6 +30,7 @@ namespace SportsSocialNetwork.Models.Entities
         public string Note { get; set; }
         public double Price { get; set; }
         public int Status { get; set; }
+        public string Reason { get; set; }
         public Nullable<int> PaidType { get; set; }
         public string OrderCode { get; set; }
         public Nullable<System.DateTime> TransactionTime { get; set; }
@@ -41,5 +43,7 @@ namespace SportsSocialNetwork.Models.Entities
         public virtual Field Field { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Notification> Notifications { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Post> Posts { get; set; }
     }
 }

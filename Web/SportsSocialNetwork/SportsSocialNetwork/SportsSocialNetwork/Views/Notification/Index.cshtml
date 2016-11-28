@@ -1,0 +1,173 @@
+﻿@using Microsoft.AspNet.Identity;
+@using SportsSocialNetwork.Models.Enumerable;
+@{
+    ViewBag.Title = "Thông báo";
+    Layout = "~/Views/Shared/_SSNLayout.cshtml";
+}
+
+@section Styles{
+<style>
+
+    a:hover{
+        color:#000!important;
+        text-decoration:underline!important;
+        
+    }
+    a:focus{
+        color:#000!important;
+    }
+    </style>
+}
+
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+        <div class="panel">
+            <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Danh sách các thông báo của bạn</h3>
+            </div>
+            <a href="javascript:void(0)" class="panel-title text-center mark-all-read" style="padding:20px 20px 10px 0;font-size:medium; text-decoration:none;" onclick="markAllAsRead_page()"><i class="fa fa-check-circle-o"></i> Đánh dấu đã xem tất cả</a>
+            <div class="clearfix"></div>
+            <div class="panel-body">
+                <div class="list-group" id="listNotiPage">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section scripts {
+
+    <script>
+        var firstSkip = 0;
+        var firstTake = 10;
+        var _skip = 10;
+        var _take = 10;
+        $(document).ready(function () {
+            loadNotiPage(firstSkip, firstTake);
+        });
+
+        $(window).scroll(function () {
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                loadNotiPage(_skip, _take);
+                _skip = _skip + _take;
+            }
+        });
+
+        function loadNotiPage(skip, take) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("LoadNoti", "Notification")',
+                data: {
+                    userId: '@User.Identity.GetUserId()',
+                    skip: skip,
+                    take: take,
+                },
+                success: function (result) {
+                    if (result.Succeed) {
+                        var data = result.Data;
+                        $(data).each(function () {
+                            var noti = renderNoti_page(this);
+
+                            $("#listNotiPage").append(noti);
+                        })
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function () {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            })
+        };
+
+        function renderNoti_page(data) {
+            var image = "";
+            var url = "";
+            var styleUnread = "";
+
+            if (data.MarkRead == false) {
+                styleUnread = "background-color:#f1f0f0;";
+            } else {
+                styleUnread = "";
+            }
+
+            if (data.Type == parseInt('@((int)NotificationType.Post)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/SSN/PostDetail?postId=" + data.PostId;
+            } else if(data.Type == parseInt('@((int)NotificationType.Order)')) {
+                image = "/Content/images/flag-xxl.png";
+                url = "/PlaceOwner/Order";
+            } else if(data.Type == parseInt('@((int)NotificationType.Invitation)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Invitation";
+            } else if(data.Type == parseInt('@((int)NotificationType.GroupInvitation)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.GroupChallengeInvitation)')) {
+                image = data.Group.Avatar;
+                url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.GroupMemberAction)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.GroupPost)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Group/Index/" + data.Group.Id;
+            } else {
+
+            }
+
+            var noti = '<a class="list-group-item" href="' + url + '" style="height:100px; padding:0;' + styleUnread + '" onclick="markAsRead_page(' + data.Id + ')">' +
+                        '<div class="row height-100">' +
+                            '<div class="col-sm-2" style="padding-top:5px;">' +
+                                '<span class="avatar" style="width:90px;">' +
+                                    '<img class="img-responsive" src="' + image + '" style="width:50px;height:50px;margin:auto" />' +
+                                '</span>' +
+                            '</div>' +
+                            '<div class="col-sm-9" style="padding-top:10px;margin-left:30px">' +
+                                '<h4 class="list-group-item-heading" style= "font-weight:400">' + data.Message + '</h4>' +
+                                '<p class="list-group-item-text">' + data.CreateDateString + '</p>' +
+                            '</div>' +
+                        '</div>' +
+                    '</a>';
+            return noti;
+        }
+
+        function markAsRead_page(id) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("MarkAsRead", "Notification")',
+                data: { "id": id },
+                success: function (result) {
+                    if (result.Succeed) {
+
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                }
+            })
+        };
+
+
+        function markAllAsRead_page(id) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("MarkAllAsRead", "Notification")',
+                data: { "userId": '@User.Identity.GetUserId()' },
+                success: function (result) {
+                    if (result.Succeed) {
+                        $("#listNotiPage").find("a").css("background-color", "");
+                        markAllAsRead();
+                        //$("#notiCount").remove();
+                        //$("#notiLabelCount").remove();
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                }
+            })
+        };
+    </script>
+
+    }

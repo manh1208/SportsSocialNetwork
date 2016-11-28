@@ -1,7 +1,13 @@
-﻿using SkyWeb.DatVM.Mvc;
+﻿using HenchmenWeb.Models.Notifications;
+using Microsoft.AspNet.SignalR;
+using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Hubs;
+using SportsSocialNetwork.Models.Notifications;
+using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -25,15 +31,97 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         {
             var postService = this.Service<IPostService>();
 
+            var sportService = this.Service<ISportService>();
+
+            var userService = this.Service<IAspNetUserService>();
+
+            var likeService = this.Service<ILikeService>();
+
+            var commentService = this.Service<IPostCommentService>();
+
             List<Post> postList = null;
 
             ResponseModel<List<PostOveralViewModel>> response = null;
 
             try
             {
-                postList = postService.GetAll(skip, take).ToList<Post>();
+                //postList = postService.GetActive(p => p.UserId == currentUserId ||
+                //p.AspNetUser.Follows.Where(f => f.FollowerId == currentUserId && f.Active).ToList().Count > 0 ||
+                //p.Group.GroupMembers.Where(g => g.UserId == currentUserId && g.Active).ToList().Count > 0).ToList();
+                postList = postService.GetActive(p => (p.UserId == currentUserId || p.ProfileId == currentUserId ||
+                p.AspNetUser.Follows.Where(f => f.FollowerId == currentUserId && f.Active && (p.ProfileId == f.UserId || p.ProfileId == null)).ToList().Count > 0)
+                && p.GroupId == null).ToList();
 
-                List<PostOveralViewModel> result = Mapper.Map<List<PostOveralViewModel>>(postList);
+
+                //Calculate rank 
+
+                List<AspNetUser> users = userService.GetActive(p => p.Follows.Where(f => (f.UserId == currentUserId ||
+                f.FollowerId == currentUserId) && f.Active).ToList().Count > 0).ToList();
+                List<AspNetUserRelationViewModel> listUser = Mapper.Map<List<AspNetUserRelationViewModel>>(users);
+                foreach (var user in listUser)
+                {
+                    var totalOfLikeFromUser = likeService.GetActive(p => p.UserId == currentUserId && p.Post.UserId == user.Id).ToList().Count;
+                    var totalOfCommentFromUser = commentService.GetActive(p => p.UserId == currentUserId && p.Post.UserId == user.Id).ToList().Count;
+                    user.relationScore = totalOfCommentFromUser + totalOfLikeFromUser + 1;
+                }
+
+
+                List<PostGeneralViewModel> listPostVM = Mapper.Map<List<PostGeneralViewModel>>(postList);
+
+                foreach (var item in listPostVM)
+                {
+                    PrepareDetailPostData(item, currentUserId);
+                }
+
+                foreach (var post in listPostVM)
+                {
+
+                    //Cal Relation Score
+                    float relaScore = 0;
+                    if (post.UserId == currentUserId)
+                    {
+                        relaScore = 1;
+                    }
+                    foreach (var user in listUser)
+                    {
+                        if (user.Id == post.UserId)
+                        {
+                            relaScore = user.relationScore;
+                            break;
+                        }
+                    }
+
+                    //Cal PostWeight
+                    int postWeight = 0;
+                    List<Sport> sportList = sportService.GetActive(p => p.Hobbies.Where(f =>
+                     f.UserId == currentUserId).ToList().Count > 0).ToList();
+                    if (sportList != null)
+                    {
+                        foreach (var item in post.PostSports)
+                        {
+                            foreach (var sport in sportList)
+                            {
+                                if (item.SportId == sport.Id)
+                                {
+                                    postWeight++;
+                                }
+                            }
+                        }
+
+                    }
+                    post.PostWeight = postWeight;
+
+                    //Cal TimeDecay
+                    post.TimeDecay = postService.CalculateTimeDecay(post.LatestInteractionTime.Value);
+                    //Cal PostRank
+                    post.PostRank = (relaScore * (post.PostWeight + 1)) / post.TimeDecay;
+
+
+                }
+
+                List<PostGeneralViewModel> orderedList = listPostVM.OrderByDescending(p => p.PostRank).Skip(skip).Take(take).ToList();
+
+                List<PostOveralViewModel> result = Mapper.Map<List<PostOveralViewModel>>(orderedList);
 
                 foreach (var p in result)
                 {
@@ -81,6 +169,36 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         }
 
         [HttpPost]
+        public ActionResult ShowAllUserPost(String userId, String currentUserId, int skip, int take)
+        {
+            var postService = this.Service<IPostService>();
+
+            List<Post> postList = null;
+
+            ResponseModel<List<PostOveralViewModel>> response = null;
+
+            try
+            {
+                postList = postService.GetAllProfilePost(userId, skip, take).ToList<Post>();
+
+                List<PostOveralViewModel> result = Mapper.Map<List<PostOveralViewModel>>(postList);
+
+                foreach (var p in result)
+                {
+                    PreparePostOveralData(p, currentUserId);
+                }
+
+                response = new ResponseModel<List<PostOveralViewModel>>(true, "Tải bài viết thành công!", null, result);
+            }
+            catch (Exception)
+            {
+                response = ResponseModel<List<PostOveralViewModel>>.CreateErrorResponse("Tải bài viết thất bại!", systemError);
+            }
+
+            return Json(response);
+        }
+
+        [HttpPost]
         public ActionResult ShowPostDetail(int postId, String currentUserId, int skip, int take)
         {
             var postService = this.Service<IPostService>();
@@ -97,7 +215,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 PreparePostOveralData(overal, currentUserId);
 
-                PostDetailViewModel result = PreparePostDetailData(overal,skip,take);
+                PostDetailViewModel result = PreparePostDetailData(overal, skip, take);
 
                 response = new ResponseModel<PostDetailViewModel>(true, "Chi tiết bài viết:", null, result);
 
@@ -117,24 +235,71 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             var aspNetUserService = this.Service<IAspNetUserService>();
 
+            var notiService = this.Service<INotificationService>();
+
+            var memberService = this.Service<IGroupMemberService>();
+
             PostOveralViewModel result = null;
 
             ResponseModel<PostOveralViewModel> response = null;
 
             try
             {
-
-
                 Post post = Mapper.Map<Post>(model);
+                post.ProfileId = post.UserId;
+                if (model.PostContent == null)
+                {
+                    post.PostContent = "";
+                }
+                post.ContentType = GetPostType(model);
 
-                if (model.UploadImage != null)
+                if (post.ContentType != int.Parse(ContentPostType.TextOnly.ToString("d")))
                 {
                     FileUploader uploader = new FileUploader();
 
-                    post.Image = uploader.UploadImage(model.UploadImage, "UserImage");
+                    foreach (var img in model.UploadImage)
+                    {
+                        PostImage image = new PostImage();
+
+                        image.Image = uploader.UploadImage(img, userImagePath);
+
+                        post.PostImages.Add(image);
+                    }
                 }
 
                 post = service.CreatePost(post);
+
+                //Notify all group members
+                if (post.GroupId != null)
+                {
+                    List<GroupMember> memberList = GetMemberList(post.GroupId);
+
+                    AspNetUser postedUser = aspNetUserService.FindUser(post.UserId);
+
+                    foreach (var member in memberList)
+                    {
+                        if (!(member.UserId.Equals(post.UserId)))
+                        {
+                            Notification noti = notiService.SaveNoti(member.UserId, post.UserId, "Post", postedUser.FullName + " đã đăng một bài viết", (int)NotificationType.GroupPost, post.Id, null, null);
+
+                            List<string> registrationIds = GetToken(member.UserId);
+
+                            NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+
+                            if (registrationIds != null && registrationIds.Count != 0)
+                            {
+                                Android.Notify(registrationIds, null, notiModel);
+                            }
+
+                            // Get the context for the Pusher hub
+                            IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                            // Notify clients in the group
+                            hubContext.Clients.User(notiModel.UserId).send(notiModel);
+                        }
+                    }
+                }
+                //Missing post sport
 
                 result = Mapper.Map<PostOveralViewModel>(post);
 
@@ -153,31 +318,147 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditPost(PostUploadViewModel model, bool imageChanged)
+        public ActionResult PostOnTimeLine(PostUploadViewModel model, string profileId)
         {
             var service = this.Service<IPostService>();
+
+            var aspNetUserService = this.Service<IAspNetUserService>();
+
+            var notiService = this.Service<INotificationService>();
+
+            var memberService = this.Service<IGroupMemberService>();
+
+            PostOveralViewModel result = null;
 
             ResponseModel<PostOveralViewModel> response = null;
 
             try
             {
                 Post post = Mapper.Map<Post>(model);
-
-                if (imageChanged)
+                post.ProfileId = profileId;
+                if (model.PostContent == null)
                 {
-                    if (model.UploadImage != null)
-                    {
-                        FileUploader uploader = new FileUploader();
+                    post.PostContent = "";
+                }
+                post.ContentType = GetPostType(model);
 
-                        post.Image = uploader.UploadImage(model.UploadImage, userImagePath);
-                    }
-                    else
+                if (post.ContentType != int.Parse(ContentPostType.TextOnly.ToString("d")))
+                {
+                    FileUploader uploader = new FileUploader();
+
+                    foreach (var img in model.UploadImage)
                     {
-                        post.Image = null;
+                        PostImage image = new PostImage();
+
+                        image.Image = uploader.UploadImage(img, userImagePath);
+
+                        post.PostImages.Add(image);
                     }
                 }
 
-                post = service.EditPost(post, imageChanged);
+                post = service.CreatePost(post);
+
+                ////Notify all group members
+                //if (post.GroupId != null)
+                //{
+                //    List<GroupMember> memberList = GetMemberList(post.GroupId);
+
+                //    AspNetUser postedUser = aspNetUserService.FindUser(post.UserId);
+
+                //    foreach (var member in memberList)
+                //    {
+                //        if (!(member.UserId.Equals(post.UserId)))
+                //        {
+                //            Notification noti = notiService.SaveNoti(member.UserId, post.UserId, "Post", postedUser.FullName + " đã đăng một bài viết", (int)NotificationType.Post, post.Id, null, null);
+
+                //            List<string> registrationIds = GetToken(member.UserId);
+
+                //            if (registrationIds != null && registrationIds.Count != 0)
+                //            {
+                //                NotificationModel notiModel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+
+                //                Android.Notify(registrationIds, null, notiModel);
+                //            }
+                //        }
+                //    }
+                //}
+
+                if (post.UserId != profileId)
+                {
+                    var _notificationService = this.Service<INotificationService>();
+                    var _userService = this.Service<IAspNetUserService>();
+
+                    AspNetUser sender = _userService.FindUser(post.UserId);
+
+                    string title = Utils.GetEnumDescription(NotificationType.Post);
+                    int type = (int)NotificationType.Post;
+                    string message = sender.FullName + " đã đăng một bài viết lên tường nhà bạn";
+
+                    Notification noti = _notificationService.CreateNoti(profileId, post.UserId, title, message, type, post.Id, null, null, null);
+
+                    //////////////////////////////////////////////
+                    //signalR noti
+                    NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                    // Get the context for the Pusher hub
+                    IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                    // Notify clients in the group
+                    hubContext.Clients.User(notiModel.UserId).send(notiModel);
+                }
+
+                //Missing post sport
+
+                result = Mapper.Map<PostOveralViewModel>(post);
+
+                result.AspNetUser = Mapper.Map<AspNetUserSimpleModel>(aspNetUserService.FindUser(result.UserId));
+
+                PreparePostOveralData(result, post.UserId);
+
+                response = new ResponseModel<PostOveralViewModel>(true, "Đăng bài thành công!", null, result);
+            }
+            catch (Exception)
+            {
+                response = ResponseModel<PostOveralViewModel>.CreateErrorResponse("Đăng bài thất bại!", systemError);
+            }
+
+            return Json(response);
+        }
+
+        [HttpPost]
+        public ActionResult EditPost(PostUploadViewModel model)
+        {
+            var postService = this.Service<IPostService>();
+
+            var postImageService = this.Service<IPostImageService>();
+
+            ResponseModel<PostOveralViewModel> response = null;
+
+            try
+            {
+                Post post = postService.FirstOrDefaultActive(x => x.Id == model.Id);
+
+                post.ContentType = GetPostType(model);
+
+                if (model.UploadImage != null)
+                {
+                    postImageService.saveImage(post.Id, model.UploadImage);
+                }
+
+                if (model.DeleteImage != null && model.DeleteImage.Count > 0)
+                {
+                    foreach (var delete in model.DeleteImage)
+                    {
+                        PostImage img = postImageService.FirstOrDefaultActive(x => x.Id == delete);
+                        postImageService.Delete(img);
+                    }
+                }
+
+                post.PostContent = model.PostContent;
+
+                post.EditDate = DateTime.Now;
+
+                postService.Update(post);
 
                 PostOveralViewModel result = Mapper.Map<PostOveralViewModel>(post);
 
@@ -215,11 +496,15 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             p.CommentCount = commentService.GetCommentListByPostId(p.Id).Count();
 
+            p.CreateDateString = p.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
 
-
+            if (!p.EditDate.ToString().Equals("01/01/0001 12:00:00 SA"))
+            {
+                p.EditDateString = p.EditDate.ToString("dd/MM/yyyy HH:mm:ss");
+            }
         }
 
-        public PostDetailViewModel PreparePostDetailData(PostOveralViewModel post,int skip, int take)
+        public PostDetailViewModel PreparePostDetailData(PostOveralViewModel post, int skip, int take)
         {
 
             var likeService = this.Service<ILikeService>();
@@ -230,10 +515,200 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             result.Post = post;
 
-            List<PostComment> commentList = commentService.GetCommentListByPostId(post.Id,skip,take).ToList<PostComment>();
-            List<PostCommentDetailViewModel> commentListResult = Mapper.Map<List<PostCommentDetailViewModel>>(commentList);
+            List<PostComment> commentList = commentService.GetCommentListByPostId(post.Id, skip, take).ToList<PostComment>();
+            List<PostCommentDetailViewModel> commentListResult = new List<PostCommentDetailViewModel>();
+            foreach (var comment in commentList)
+            {
+                commentListResult.Add(PreparePostCommentDetailViewModel(comment));
+            }
             result.CommentList = commentListResult;
             return result;
         }
+
+        [HttpPost]
+        public ActionResult DeletePost(int id)
+        {
+            var postService = this.Service<IPostService>();
+
+            var imageService = this.Service<IPostImageService>();
+
+            ResponseModel<bool> response = null;
+
+            try
+            {
+                Post post = postService.FirstOrDefaultActive(x => x.Id == id);
+
+                List<PostImage> imageList = post.PostImages.ToList();
+
+                if (imageList != null)
+                {
+                    foreach (var img in imageList)
+                    {
+                        imageService.Delete(img);
+                    }
+
+                }
+
+                postService.Deactivate(post);
+
+                response = new ResponseModel<bool>(true, "Xóa bài thành công", null);
+
+            }
+            catch (Exception)
+            {
+                response = ResponseModel<bool>.CreateErrorResponse("Xóa bài thất bại", systemError);
+
+            }
+            return Json(response);
+        }
+
+
+        private int GetPostType(PostUploadViewModel model)
+        {
+            var service = this.Service<IPostService>();
+
+            int contentType = 0;
+
+            bool hasText = false;
+
+            int numberOfImages = 0;
+
+            if (model.PostContent == null)
+            {
+                hasText = false;
+            }
+            else
+            {
+                hasText = true;
+            }
+
+            Post post = service.FirstOrDefaultActive(x => x.Id == model.Id);
+            if (post != null)
+            {
+                if (post.PostImages != null)
+                {
+                    numberOfImages = post.PostImages.Count();
+                }
+
+            }
+
+            if (model.UploadImage != null && model.UploadImage.Count() > 0)
+            {
+                numberOfImages = numberOfImages + model.UploadImage.Count();
+            }
+            if (model.DeleteImage != null && model.DeleteImage.Count() > 0)
+            {
+                numberOfImages = numberOfImages - model.DeleteImage.Count();
+            }
+
+            if (numberOfImages == 0 && hasText)
+            {
+                contentType = int.Parse(ContentPostType.TextOnly.ToString("d"));
+            }
+            else if (numberOfImages == 1 && hasText)
+            {
+                contentType = int.Parse(ContentPostType.TextAndImage.ToString("d"));
+            }
+            else if (numberOfImages > 1 && hasText)
+            {
+                contentType = int.Parse(ContentPostType.TextAndMultiImages.ToString("d"));
+            }
+            else if (numberOfImages > 1 && !hasText)
+            {
+                contentType = int.Parse(ContentPostType.MultiImages.ToString("d"));
+            }
+            else if (numberOfImages == 1 && !hasText)
+            {
+                contentType = int.Parse(ContentPostType.ImageOnly.ToString("d"));
+            }
+
+            return contentType;
+        }
+
+        private PostCommentDetailViewModel PreparePostCommentDetailViewModel(PostComment comment)
+        {
+            PostCommentDetailViewModel result = Mapper.Map<PostCommentDetailViewModel>(comment);
+
+            result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+
+            return result;
+        }
+
+        private NotificationCustomViewModel PrepareNotificationViewModel(Notification noti)
+        {
+            NotificationCustomViewModel result = Mapper.Map<NotificationCustomViewModel>(noti);
+
+            result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+
+            result.Avatar = noti.AspNetUser1.AvatarImage;
+
+            return result;
+
+        }
+
+        private List<string> GetToken(String userId)
+        {
+            var service = this.Service<IFirebaseTokenService>();
+
+            List<FirebaseToken> tokenList = service.Get(x => x.UserId.Equals(userId)).ToList();
+
+            List<string> registrationIds = new List<string>();
+            if (tokenList != null)
+            {
+                foreach (var token in tokenList)
+                {
+                    registrationIds.Add(token.Token);
+                }
+            }
+
+            return registrationIds;
+        }
+
+        public void PrepareDetailPostData(PostGeneralViewModel p, string curUserId)
+        {
+            var _postService = this.Service<IPostService>();
+            var _likeService = this.Service<ILikeService>();
+            var _postCommentService = this.Service<IPostCommentService>();
+            var _postSportService = this.Service<IPostSportService>();
+
+            //like
+            List<Like> likeList = _likeService.GetLikeListByPostId(p.Id).ToList();
+            p.LikeCount = likeList.Count();
+            foreach (var item in likeList)
+            {
+                if (item.UserId == curUserId)
+                {
+                    p.Liked = true;
+                }
+                else
+                {
+                    p.Liked = false;
+                }
+            }
+
+            //comment
+            List<PostComment> postCmtList = _postCommentService.GetCommentListByPostId(p.Id, 0, 3).ToList();
+            //p.PostAge = _postService.CalculatePostAge(p.EditDate == null ? p.CreateDate : p.EditDate.Value);
+            p.PostAge = _postService.CalculatePostAge(p.CreateDate);
+            p.PostComments = Mapper.Map<List<PostCommentDetailViewModel>>(postCmtList);
+            p.CommentCount = _postCommentService.GetActive(c => c.PostId == p.Id).ToList().Count();
+            foreach (var item in p.PostComments)
+            {
+                //DateTime dt = DateTime.ParseExact(item.CreateDateString, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                item.CommentAge = _postCommentService.CalculateCommentAge(item.CreateDate);
+            }
+
+            //sport
+            List<PostSport> postSportList = _postSportService.GetActive(s => s.PostId == p.Id).ToList();
+            p.PostSports = Mapper.Map<List<PostSportDetailViewModel>>(postSportList);
+        }
+
+        private List<GroupMember> GetMemberList(int? groupId)
+        {
+            var service = this.Service<IGroupMemberService>();
+
+            return service.GetActive(x => x.GroupId == groupId).ToList();
+        }
+
     }
 }

@@ -9,11 +9,11 @@ public class CheckIn {
 
     @SerializedName("Id")
     private int    id;
-    @SerializedName("CreateDate")
+    @SerializedName("CreateDateString")
     private String createDate;
-    @SerializedName("StartTime")
+    @SerializedName("StartTimeString")
     private String startTime;
-    @SerializedName("EndTime")
+    @SerializedName("EndTimeString")
     private String endTime;
     @SerializedName("FullName")
     private String fullName;
@@ -22,9 +22,9 @@ public class CheckIn {
     @SerializedName("PlaceName")
     private String placeName;
     @SerializedName("Status")
-    private String status;
+    private int status;
     @SerializedName("PaidType")
-    private String paidType;
+    private int paidType;
 
     public int getId() {
         return id;
@@ -82,19 +82,19 @@ public class CheckIn {
         this.placeName = placeName;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
-    public String getPaidType() {
+    public int getPaidType() {
         return paidType;
     }
 
-    public void setPaidType(String paidType) {
+    public void setPaidType(int paidType) {
         this.paidType = paidType;
     }
 }

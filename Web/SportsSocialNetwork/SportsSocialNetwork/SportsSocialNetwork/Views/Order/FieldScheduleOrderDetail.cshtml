@@ -1,0 +1,40 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.FieldScheduleViewModel
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="modal-title">Chi tiết đặt sân cố định (dài hạn)</h4>
+</div>
+<div class="modal-body  padding-top-0">
+    <div class="panel panel-bordered">
+        <div class="panel-body container-fluid padding-0">
+            <address>
+                Địa điểm:
+                <br>
+                <span class="font-size-20">@ViewBag.place.Name</span>
+                <br>
+                <span class="font-size-12">(@ViewBag.place.Address, @ViewBag.place.District, @ViewBag.place.City)</span>
+            </address>
+                <div class="form-group col-md-12">
+                    <div class="col-md-5">Tên sân:</div>
+                    <div class="col-md-7">@ViewBag.field.Name</div>
+                </div>
+            <div class="form-group col-md-12">
+                <div class="col-md-5">Giờ sử dụng:</div>
+                <div class="col-md-7">@Model.StartTimeString - @Model.EndTimeString</div>
+            </div>
+            <div class="form-group col-md-12">
+                <div class="col-md-5">Các ngày trong tuần:</div>
+                <div class="col-md-7">@Model.availableDayOfWeek</div>
+            </div>
+            <div class="form-group col-md-12">
+                <div class="col-md-5">Mô tả:</div>
+                <div class="col-md-7">@Model.Description</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer text-right">
+    <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+</div>

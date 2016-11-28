@@ -13,6 +13,14 @@ using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.Enumerable;
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.ViewModels;
+using System.Collections.Generic;
+using System.Text;
+using System.Data;
+using System.Net;
+using System.IO;
+using System.Device.Location;
+using SportsSocialNetwork.Models.Entities;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -85,22 +93,29 @@ namespace SportsSocialNetwork.Controllers
                 case SignInStatus.Success:
                     var service = this.Service<IAspNetUserService>();
                     var user = service.FindUserByUserName(model.Username);
-                    if (user.AspNetRoles.FirstOrDefault().Id.Equals( UserRole.Admin.ToString("d")))
+                    if (user.AspNetRoles.FirstOrDefault().Id.Equals(UserRole.Admin.ToString("d")))
                     {
                         return RedirectToAction("Index", "Account", new { area = "Admin" });
-                    }else if (user.AspNetRoles.FirstOrDefault().Id.Equals(UserRole.PlaceOwner.ToString("d")))
+                    }
+                    else if (user.AspNetRoles.FirstOrDefault().Id.Equals(UserRole.PlaceOwner.ToString("d")))
                     {
                         if (user.Status.Value == (int)UserStatus.Active)
                         {
                             return RedirectToAction("Index", "Place", new { area = "PlaceOwner" });
-                        }else
-                        {
-                            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-                            ModelState.AddModelError("LoginError", "Tài khoản của bạn đang chờ duyệt");
-                            return View(model);
                         }
-                    }else { 
-                    return RedirectToAction("Index", "SSN");
+                        else
+                        {
+                            return RedirectToAction("Index", "SSN");
+                            //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                            //ModelState.AddModelError("LoginError", "Tài khoản của bạn đang chờ duyệt");
+                            //return View(model);
+                        }
+                    }
+                    else if (user.AspNetRoles.FirstOrDefault().Id.Equals(UserRole.Moderator.ToString("d"))) {
+                        return RedirectToAction("Index", "Article", new { area = "Moderator" });
+
+                    } else { 
+                    return RedirectToAction("Index", "SSN", new { area = "" });
                     }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -191,11 +206,13 @@ namespace SportsSocialNetwork.Controllers
                     var userEntity = userService.FindUserByUserName(user.UserName);
                     userEntity.FullName = model.FullName;
                     userEntity.Active = true;
+                    userEntity.AvatarImage = "/SSNImages/UserImages/img_default_avatar.png";
+                    userEntity.CoverImage = "/SSNImages/UserImages/img_default_cover.png";
                     var action = "Login";
                     if (model.PlaceOwner != null)
                     {
                         userEntity.Status = (int)UserStatus.Pending;
-                        UserManager.AddToRole(userEntity.Id, Utils.GetEnumDescription(UserRole.PlaceOwner));
+                        UserManager.AddToRole(userEntity.Id, Utils.GetEnumDescription(UserRole.Member));
                     }
                     else
                     {
@@ -477,6 +494,7 @@ namespace SportsSocialNetwork.Controllers
 
             base.Dispose(disposing);
         }
+        
 
         #region Helpers
         // Used for XSRF protection when adding external logins

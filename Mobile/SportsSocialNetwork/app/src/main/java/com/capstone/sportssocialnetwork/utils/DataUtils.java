@@ -7,10 +7,17 @@ import android.content.SharedPreferences;
  * Created by ManhNV on 10/9/16.
  */
 public class DataUtils {
-//    public static String URL = "http://192.168.43.200:26011";
-//    public static String URL = "http://192.168.150.149:26011";
-    public static String URL = "http://192.168.1.108:26011";
-//    public static String URL = "http://192.168.43.214:26011";
+    public static String URL = "http://ssn.techeco.net";
+//    public static String URL = "http://192.168.150.155:26011";
+//    public static String URL = "http://192.168.1.115:26011";
+//    public static String URL = "http://192.168.43.213:26011";
+//        public static String URL = "http://192.168.150.149:26011";
+
+
+    public static String FORMAT_DATE_TIME = "dd/MM/yyyy HH:mm:ss";
+    public static String FORMAT_DATE = "dd/MM/yyyy";
+    public static String FORMAT_TIME = "HH:mm";
+    public static int MAX_SIZE_IMAGE = 1000;
 
 
     private static DataUtils INSTANCE = null;
@@ -34,4 +41,6 @@ public class DataUtils {
     public SharedPreferences getPreferences() {
         return mPreferences;
     }
+
+
 }

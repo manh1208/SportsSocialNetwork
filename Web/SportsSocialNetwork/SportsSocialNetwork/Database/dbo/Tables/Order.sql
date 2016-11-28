@@ -8,6 +8,7 @@
     [Note]            NVARCHAR (MAX) NULL,
     [Price]           FLOAT (53)     NOT NULL,
     [Status]          INT            NOT NULL,
+    [Reason]          NVARCHAR (MAX) NULL,
     [PaidType]        INT            NULL,
     [OrderCode]       NVARCHAR (MAX) NULL,
     [TransactionTime] DATETIME       NULL,
@@ -19,6 +20,8 @@
     CONSTRAINT [FK_Order_AspNetUsers] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id]),
     CONSTRAINT [FK_Order_Field] FOREIGN KEY ([FieldId]) REFERENCES [dbo].[Field] ([Id])
 );
+
+
 
 
 

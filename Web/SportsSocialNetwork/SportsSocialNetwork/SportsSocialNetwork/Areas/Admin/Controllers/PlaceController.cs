@@ -132,7 +132,7 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                     string subject = "[SSN] - Chấp nhận Sân";
                     string body = "Hi <strong>" + place.AspNetUser.FullName + "</strong>" +
                         "<br/><br>/Sân " + place.Name + " của bạn đã được chấp nhận" +
-                        " Vui lòng vào <a href=\"" + Url.Action("Login", "Account", new { areas = "" }) + "\">link</a> để đăng nhập" +
+                        " Vui lòng vào <a href=\"" + Url.Action("Login", "Account", new { area = "" }) + "\">link</a> để đăng nhập" +
                         "<br/> Tên sân : <strong>" + place.Name + "</strong>" +
                          "<br/> số điện thoại : <strong>" + place.PhoneNumber + "</strong>" +
                           "<br/> Địa chỉ : <strong>" + place.Address + " - " + place.Ward + " - " + place.District + " - " + place.City + "</strong>" +

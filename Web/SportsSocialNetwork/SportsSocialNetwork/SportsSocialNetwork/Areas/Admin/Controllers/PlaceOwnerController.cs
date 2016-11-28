@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.SignalR;
 using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
 using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Hubs;
 using SportsSocialNetwork.Models.Identity;
 using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
@@ -108,6 +110,25 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                         ",<br/><br/>Tài khoản của bạn đã bị từ chối vì một số thông tin không hợp lệ." +
                         "<br/> <strong>Tên tài khoản : " + user.UserName + "</strong>";
                     EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { user.Email }, null, null, subject, body, true);
+
+                    //save noti
+                    string title = Utils.GetEnumDescription(NotificationType.UnApprovePlaceOwner);
+                    int type = (int)NotificationType.UnApprovePlaceOwner;
+                    string message = "Quản trị viên đã từ chối yêu cầu là chủ sân của bạn";
+
+                    var _notificationService = this.Service<INotificationService>();
+                    Notification noti = _notificationService.CreateNoti(id, null, title, message, type, null, null, null, null);
+
+                    //////////////////////////////////////////////
+                    //signalR noti
+                    NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                    // Get the context for the Pusher hub
+                    IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                    // Notify clients in the group
+                    hubContext.Clients.User(notiModel.UserId).send(notiModel);
+
                     result.Succeed = true;
                    
 
@@ -136,14 +157,34 @@ namespace SportsSocialNetwork.Areas.Admin.Controllers
                 {
 
                     user.Status = (int)UserStatus.Active;
+                    UserManager.AddToRole(id, Utils.GetEnumDescription(UserRole.PlaceOwner));
                     service.Update(user);
                     string subject = "[SSN] - Chấp nhận tài khoản";
                     string body = "Hi <strong>" + user.FullName + "</strong>"+
                         "<br/><br>/Tài khoản của bạn đã được chấp nhận" +
-                        " Vui lòng vào <a href=\"" + Url.Action("Login", "Account", new { areas = "" }) + "\">link</a> để đăng nhập" +
+                        " Vui lòng vào <a href=\"" + Url.Action("Login", "Account", new { area = "" }) + "\">link</a> để đăng nhập" +
                         "<br/> <strong>Tên tài khoản : " + user.UserName + "</strong>" +
                         "<br/> Password : Your password" + "</strong>";
                     EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { user.Email }, null, null, subject, body, true);
+
+                    //save noti
+                    string title = Utils.GetEnumDescription(NotificationType.ApprovePlaceOwner);
+                    int type = (int)NotificationType.ApprovePlaceOwner;
+                    string message = "Quản trị viên đã chấp nhận yêu cầu là chủ sân của bạn";
+
+                    var _notificationService = this.Service<INotificationService>();
+                    Notification noti = _notificationService.CreateNoti(id, null, title, message, type, null, null, null, null);
+
+                    //////////////////////////////////////////////
+                    //signalR noti
+                    NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                    // Get the context for the Pusher hub
+                    IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                    // Notify clients in the group
+                    hubContext.Clients.User(notiModel.UserId).send(notiModel);
+
                     result.Succeed = true;
                    
                 }

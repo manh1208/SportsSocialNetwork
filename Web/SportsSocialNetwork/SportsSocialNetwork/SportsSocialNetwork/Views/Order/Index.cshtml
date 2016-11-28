@@ -1,21 +1,82 @@
 ﻿@model SportsSocialNetwork.Models.ViewModels.OrderViewModel
 @using SportsSocialNetwork.Models.Enumerable
 @using SportsSocialNetwork.Models.Utilities
+@using SportsSocialNetwork.Models.ViewModels;
+@using Microsoft.AspNet.Identity;
+@using SportsSocialNetwork.Models.Entities;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
-}
 
+    var sport = ViewBag.Sport as IEnumerable<SelectListItem>;
+}
+<style>
+    .pagination{
+        font-size:14px
+    }
+    .pagination>.active>a, .pagination>.active>a:focus, 
+    .pagination>.active>a:hover, .pagination>.active>span, 
+    .pagination>.active>span:focus, .pagination>.active>span:hover{
+        background-color:black;
+        border-color:black;
+        border-radius:5px
+    }
+    .pagination>li>a, .pagination>li>span{
+        background-color:#76838f;
+        border-color:#76838f;
+        color:black;
+        border-radius:5px
+    }
+    .pagination>li:last-child>a, .pagination>li:last-child>span{
+        background-color:white;
+        border-radius:5px
+    }
+    .pagination>li:first-child>a, .pagination>li:first-child>span{
+        background-color:white;
+        border-radius:5px
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+     color: transparent;
+     background-color: transparent;
+     background-image: unset;
+     border: none;
+    }
+    #DataTables_Table_0>thead>tr>th, #DataTables_Table_1>thead>tr>th{
+        font-weight:bold;
+    }
+
+    .select2-dropdown {
+        z-index: 99999;
+    }
+
+    .select2-selection {
+        border-radius: 0px !important;
+    }
+
+    .select2-selection__choice {
+        color: #fff !important;
+        background-color: #ff6a00 !important;
+    }
+
+    .select2-selection__choice__remove {
+        color: #fff !important;
+    }
+</style>
 <div class="panel">
     <div class="panel-body">
-        <h1>Lịch sử đặt sân</h1>
+        <h2><i class="fa fa-bars" aria-hidden="true"></i> Lịch sử đặt sân</h2>
     </div>
 </div>
-<div class="panel">
+<div class="panel padding-top-10">
+    <header class="panel-heading">
+        <h2 class="panel-title">
+            <i class="fa fa-bars" aria-hidden="true"></i> Đặt sân vãng lai
+        </h2>
+    </header>
     <div class="panel-body">
         <table class="table table-striped table-bordered table-hover" id="DataTables_Table_0">
             <thead>
-                <tr>
+                <tr style="color:black">
                     <th>Mã đặt sân</th>
                     <th>Tên sân</th>
                     <th>Thời gian đặt</th>
@@ -24,10 +85,34 @@
                     <th></th>
                     <th>Hình thức thanh toán</th>
                     <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody style="color:black"></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="panel padding-top-10">
+    <header class="panel-heading">
+        <h2 class="panel-title">
+            <i class="fa fa-bars" aria-hidden="true"></i> Đặt sân cố định
+        </h2>
+    </header>
+    <div class="panel-body">
+        <table class="table table-striped table-bordered table-hover" id="DataTables_Table_1">
+            <thead>
+                <tr style="color:black">
+                    <th>Tên sân</th>
+                    <th>Giờ sử dụng</th>
+                    <th>Ngày trong tuần sử dụng</th>
+                    <th></th>
+                    <th></th>
+                    <th>Thời hạn</th>
                     <th>Chi tiết</th>
                 </tr>
             </thead>
-            <tbody></tbody>
+            <tbody style="color:black"></tbody>
         </table>
     </div>
 </div>
@@ -41,11 +126,82 @@
     </div>
 </div>
 
+<div class="modal fade" id="orderDetail_1" aria-hidden="true"
+     aria-labelledby="orderDetail_1" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="order-detail-modal-container-1"></div>
+        </div>
+    </div>
+</div>
+
+
+<!--Share modal-->
+<div id="shareModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form id="shareForm" method="post" class="form-horizontal" autocomplete="off">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Chia sẻ bài viết</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>Chia sẻ bài viết này lên: </h3>
+                    <input type="hidden" name="userId" value="@User.Identity.GetUserId()" />
+                    <input type="hidden" name="shareType" id="shareType" value="" />
+                    <input type="hidden" name="dataId" id="dataId" value="" />
+                    <input type="radio" name="receiver" id="senderWall" value="@((int)SharedReceiver.SenderWall)" checked> Tường nhà bạn<br>
+                    <input type="radio" name="receiver" id="frdWall" value="@((int)SharedReceiver.FriendWall)"> Tường nhà của người mà bạn theo dõi
+                    <select id="frdSelectShare" name="frdSelectShare" class="form-control" disabled>
+                        <option value="-1">Chọn một bạn</option>
+                        @{
+                            if (ViewBag.followingList != null && ViewBag.followingList.Count > 0)
+                            {
+                                foreach (var item in ViewBag.followingList as List<FollowDetailViewModel>)
+                                {
+                                    <option value="@item.UserId">@item.User.FullName</option>
+                                }
+                            }
+
+                        }
+                    </select>
+                    <br>
+                    <input type="radio" name="receiver" id="groupWall" value="@((int)SharedReceiver.Group)"> Nhóm
+                    <select id="groupSelectShare" name="groupSelectShare" class="form-control" disabled>
+                        <option value="-1">Chọn một nhóm</option>
+                        @{
+                            if (ViewBag.GroupList != null && ViewBag.GroupList.Count > 0)
+                            {
+                                foreach (var item in ViewBag.GroupList as List<Group>)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+
+                        }
+                    </select>
+                    <br />
+                    <h3>Nội dung bài viết</h3>
+                    <textarea name="shareContent" id="shareContent" class="form-control" placeholder="Viết gì đó cho chia sẻ này"></textarea>
+                    <input id="sportSelectShare" type="text" name="sportSelectShare"
+                           placeholder="Tags" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    <input type="submit" class="btn btn-default" value="Chia sẻ" />
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
 
 
 
 @section Scripts{
-
+    <script src="~/Content/js/post-script.js"></script>
     <script>
         (function (document, window, $) {
             'use strict';
@@ -55,6 +211,25 @@
                 Site.run();
             });
         })(document, window, jQuery);
+
+
+        var array = @Html.Raw(Json.Encode(
+         ((IEnumerable<SelectListItem>)sport).Select(m => new
+         {
+             id = m.Value,
+             text = m.Text
+         })
+        ));
+
+        $('#sportSelectShare').select2({
+            class: 'form-control',
+            width: '100%',
+            multiple: true,
+            maximumSelectionSize: 1,
+            placeholder: "Chọn môn thể thao của bài viết",
+            data: array
+        });
+
 
         function CancelOrder(id)
         {
@@ -94,10 +269,123 @@
             });
         }
 
+        function showDetailModal_1(id) {
+            $.ajax({
+                url: '@Url.Action("FieldScheduleOrderDetail")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#order-detail-modal-container-1').html(data);
+                    $('#orderDetail_1').modal('show');
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
         function RefreshTable() {
             var oTable = $("#DataTables_Table_0").dataTable();
             oTable._fnPageChange(0);
             oTable._fnAjaxUpdate();
+        };
+
+        function RefreshTable_1() {
+            var oTable = $("#DataTables_Table_1").dataTable();
+            oTable._fnPageChange(0);
+            oTable._fnAjaxUpdate();
+        };
+
+        function InitDatatable_1() {
+            $("#DataTables_Table_1").DataTable({
+                "bRetrieve": true,
+                "bServerSide": true,
+                "bScrollCollapse": true,
+                "bSort": true,
+                "sAjaxSource": "/PlaceOwner/FieldSchedule/GetData",
+                "bProcessing": true,
+                "aLengthMenu": [10, 20, 50],
+                "oLanguage": {
+                    "sSearch": "Tìm kiếm:",
+                    "sZeroRecords": "Không có kết quả phù hợp",
+                    "sInfo": "Hiển thị _START_ - _END_ trong số _TOTAL_ dòng",
+                    "sEmptyTable": "Không tìm thấy kết quả nào",
+                    "sInfoFiltered": "",
+                    "sLengthMenu": "Hiển thị _MENU_ dòng",
+                    "sProcessing": "Xin đợi trong giây lát...",
+                    "oPaginate": {
+                        "sFirst": "Về đầu",
+                        "sLast": "Về cuối",
+                        "sNext": "Trang kế >",
+                        "sPrevious": "< Trang trước"
+                    },
+                },
+                "aoColumnDefs": [
+                    {
+                        "aTargets": [0],
+                        "mRender": function (data, type, o) {
+                            return o[1];
+                        }
+                    },
+                    {
+                        "aTargets": [1],
+                        "mRender": function (data, type, o) {
+                            return o[2]+" - "+o[4];
+                        }
+                    },
+                    {
+                        "aTargets": [2],
+                            "mRender": function (data, type, o) {
+                                var bits = [8];
+                                for (var i = 7; i >= 0; i--) {
+                                    bits[i] = (o[6] & (1 << i)) != 0;
+                                    console.log(bits[i]+", "+i)
+                                }
+                                var dayOfWeek = "";
+                                if (bits[1]) {
+                                    dayOfWeek += "CN ";
+                                }
+                                if (bits[2]) {
+                                    dayOfWeek += "T2 ";
+                                }
+                                if (bits[3]) {
+                                    dayOfWeek += "T3 ";
+                                }
+                                if (bits[4]) {
+                                    dayOfWeek += "T4 ";
+                                }
+                                if (bits[5]) {
+                                    dayOfWeek += "T5 ";
+                                }
+                                if (bits[6]) {
+                                    dayOfWeek += "T6 ";
+                                }
+                                if (bits[7]) {
+                                    dayOfWeek += "T7 ";
+                                }
+                                return dayOfWeek;
+                        }
+                    },
+                    {
+                        "aTargets": [5],
+                        "mRender": function (data, type, o) {
+                            return o[3] + " - " + o[5];
+                        }
+                    },
+                    {
+                        "aTargets": [6],
+                        "bSortable": false,
+                        "mRender": function (data, type, o) {
+                            return "<button class='btn btn-success' onclick='showDetailModal_1(" + o[0] + ")' data-target='#orderDetail_1' data-toggle='modal' type='button'><i class='fa fa-eye' aria-hidden='true'></i></button>";
+                        }
+                    },
+                    {
+                        "aTargets": [3, 4],
+                        "bVisible": false
+                    }
+                ],
+
+            });
         };
 
         function InitDatatable() {
@@ -110,19 +398,20 @@
                 "bProcessing": true,
                 "aLengthMenu": [10, 20, 50],
                 "oLanguage": {
-                    "sSearch": "Tìm kiếm:",
-                    "sZeroRecords": "Không có dữ liệu phù hợp",
-                    "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
-                    "sEmptyTable": "Không có dữ liệu",
-                    "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
+                    "sSearch": "Tìm kiếm:",
+                    "sZeroRecords": "Không có kết quả phù hợp",
+                    "sInfo": "Hiển thị _START_ - _END_ trong số _TOTAL_ dòng",
+                    "sEmptyTable": "Không tìm thấy kết quả nào",
+                    "sInfoFiltered": "",
                     "sLengthMenu": "Hiển thị _MENU_ dòng",
-                    "sProcessing": "Đang xử lý...",
+                    "sProcessing": "Xin đợi trong giây lát...",
                     "oPaginate": {
-                        "sPrevious": "Trang trước",
-                        "sNext": "Trang kế"
-                    }
+                        "sFirst": "Về đầu",
+                        "sLast": "Về cuối",
+                        "sNext": "Trang kế >",
+                        "sPrevious": "< Trang trước"
+                    },
                 },
-
                 "aoColumnDefs": [
                     {
                         "aTargets": [0],
@@ -132,33 +421,28 @@
                     },
                     {
                         "aTargets": [1],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             return o[2];
                         }
                     },
                     {
                         "aTargets": [2],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             return o[3];
                         }
                     },
                     {
                         "aTargets": [3],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             return o[4] +' - '+ o[6]+', Ngày '+ o[5];
                         }
                     },
                     {
                         "aTargets": [4, 5],
-                        "bSortable": false,
                         "bVisible": false
                     },
                     {
                         "aTargets": [6],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             if (o[7] == parseInt('@((int)OrderPaidType.ChosePayOnline)')) {
                                 return "<span class='label label-lg label-outline label-dark'>@Utils.GetEnumDescription(OrderPaidType.ChosePayOnline).ToString()</span>";
@@ -175,7 +459,6 @@
                     },
                     {
                         "aTargets": [7],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             if (o[8] == parseInt('@((int)OrderStatus.Pending)')) {
                                 return "<span class='label label-lg label-outline label-warning'>@Utils.GetEnumDescription(OrderStatus.Pending).ToString()</span>";
@@ -197,7 +480,9 @@
                         "aTargets": [8],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
-                            return "<button class='btn btn-primary' onclick='showDetailModal(" + o[0] + ")' data-target='#orderDetail' data-toggle='modal' type='button'><i class='icon wb-pencil' aria-hidden='true'></i></button>";
+                            var detailBtn = "<button class='btn btn-success' onclick='showDetailModal(" + o[0] + ")' data-target='#orderDetail' data-toggle='modal' type='button'><i class='fa fa-eye' aria-hidden='true'></i></button>";
+                            var shareBtn = "<button class='btn btn-dark' onclick='showShareModal(" + o[0] + ",7)' type='button'><i class='fa fa-share' aria-hidden='true'></i></button>";
+                            return detailBtn + '&nbsp;' + shareBtn;
                         }
                     }
 
@@ -207,6 +492,8 @@
         };
 
         $(document).ready(function () {
+            InitDatatable_1();
+            RefreshTable_1();
             InitDatatable();
             RefreshTable();
             //loadlist();

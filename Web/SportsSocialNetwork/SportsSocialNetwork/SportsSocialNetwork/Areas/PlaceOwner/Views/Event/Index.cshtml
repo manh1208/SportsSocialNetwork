@@ -1,15 +1,32 @@
 ﻿@using SportsSocialNetwork.Models.Enumerable;
 @using SportsSocialNetwork.Models.Utilities;
 @using Microsoft.AspNet.Identity;
+@using SportsSocialNetwork.Models.ViewModels;
+@using SportsSocialNetwork.Models.Entities;
 @{
     ViewBag.Title = "Danh sách các sự kiện";
+    var sport = ViewBag.Sport as IEnumerable<SelectListItem>;
 }
 
-@*<style>
-    .datepicker {
-        z-index: 1151 !important;
+<style>
+    .select2-selection {
+        border-radius: 0px !important;
+        font-weight: 400;
     }
-</style>*@
+
+    .select2-selection__choice {
+        color: #fff !important;
+        background-color: #ff6a00 !important;
+        font-weight: 400;
+    }
+
+    .select2-selection__choice__remove {
+        color: #fff !important;
+    }
+    .select2-dropdown {
+        z-index: 99999;
+    }
+</style>
 
 <div class="panel">
     <div class="panel-body">
@@ -26,7 +43,7 @@
         <table class="table table-striped table-bordered table-hover" id="listEventTable">
             <thead>
                 <tr>
-                    <th>Số thứ tự</th>
+                    @*<th>Số thứ tự</th>*@
                     <th>Tên sự kiện</th>
                     <th>Hình ảnh</th>
                     <th>Ngày bắt đầu</th>
@@ -58,9 +75,83 @@
     </div>
 </div>
 
+<div id="shareEventModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="share-event-modal-container">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Share modal-->
+<div id="shareModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form id="shareForm" method="post" class="form-horizontal" autocomplete="off">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Chia sẻ bài viết</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>Chia sẻ bài viết này lên: </h3>
+                    <input type="hidden" name="userId" value="@User.Identity.GetUserId()" />
+                    <input type="hidden" name="shareType" id="shareType" value="" />
+                    <input type="hidden" name="dataId" id="dataId" value="" />
+                    <input type="radio" name="receiver" id="senderWall" value="@((int)SharedReceiver.SenderWall)" checked> Tường nhà bạn<br>
+                    <input type="radio" name="receiver" id="frdWall" value="@((int)SharedReceiver.FriendWall)"> Tường nhà của người mà bạn theo dõi
+                    <select id="frdSelectShare" name="frdSelectShare" class="form-control" disabled>
+                        <option value="-1">Chọn một bạn</option>
+                        @{
+                            if (ViewBag.followingList != null && ViewBag.followingList.Count > 0)
+                            {
+                                foreach (var item in ViewBag.followingList as List<FollowDetailViewModel>)
+                                {
+                                    <option value="@item.UserId">@item.User.FullName</option>
+                                }
+                            }
+
+                        }
+                    </select>
+                    <br>
+                    <input type="radio" name="receiver" id="groupWall" value="@((int)SharedReceiver.Group)"> Nhóm
+                    <select id="groupSelectShare" name="groupSelectShare" class="form-control" disabled>
+                        <option value="-1">Chọn một nhóm</option>
+                        @{
+                            if (ViewBag.GroupList != null && ViewBag.GroupList.Count > 0)
+                            {
+                                foreach (var item in ViewBag.GroupList as List<Group>)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+
+                        }
+                    </select>
+                    <br />
+                    <h3>Nội dung bài viết</h3>
+                    <textarea name="shareContent" id="shareContent" class="form-control" placeholder="Viết gì đó cho chia sẻ này"></textarea>
+                    <input id="sportSelectShare" type="text" name="sportSelectShare"
+                           placeholder="Tags" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    <input type="submit" class="btn btn-default" value="Chia sẻ" />
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
 
 @section Scripts{
-
+    <script src="~/Content/assets/js/components/asscrollable.js"></script>
+    <script src="~/Content/assets/vendor/select2/select2.full.js"></script>
+    <script src="~/Content/assets/js/components/material.js"></script>
+    <script src="~/Content/js/post-script.js"></script>
     <script>
         var count = 1;
 
@@ -74,9 +165,28 @@
         })(document, window, jQuery);
 
 
+        var array = @Html.Raw(Json.Encode(
+                 ((IEnumerable<SelectListItem>)sport).Select(m => new
+                 {
+                     id = m.Value,
+                     text = m.Text
+                 })
+                ));
+        $('#sportSelectShare').select2({
+            class: 'form-control',
+            width: '100%',
+            multiple: true,
+            maximumSelectionSize: 1,
+            placeholder: "Chọn môn thể thao của bài viết",
+            data: array
+        });
 
         $('body').on('focus', ".datepicker", function () {
             $(this).datepicker();
+        })
+
+        $('body').on('focus', ".asscrollable", function () {
+            $(this).asScrollable();
         })
 
         function deleteEventModal(id) {
@@ -103,46 +213,6 @@
                     });
                 }
             });
-
-            //bootbox.dialog({
-            //    message: "Bạn có chắc muốn xóa sự kiện này?",
-            //    title: "Xác nhận xóa",
-            //    buttons: {
-            //        success: {
-            //            label: "Hủy",
-            //            className: "btn-default",
-            //            callback: function () {
-
-            //            }
-            //        },
-            //        danger: {
-            //            label: "Đồng ý",
-            //            className: "btn-danger",
-            //            callback: function () {
-            //                $.ajax({
-            //                    url: "/PlaceOwner/Event/deleteEvent",
-            //                    data: {
-            //                        format: 'json',
-            //                        id: id
-            //                    },
-            //                    error: function () {
-            //                        alert("Problem!")
-            //                    },
-            //                    success: function (data) {
-            //                        if (data === "success") {
-            //                            bootbox.alert("Đã xóa thành công", function () {
-            //                                $('#updateEventModal').modal('toggle');
-            //                                RefreshTable();
-            //                            });
-
-            //                        }
-            //                    },
-            //                    type: 'POST'
-            //                })
-            //            }
-            //        }
-            //    }
-            //});
         };
 
         function deleteEvent(id) {
@@ -168,45 +238,6 @@
                     });
                 }
             });
-
-            //bootbox.dialog({
-            //    message: "Bạn có chắc muốn xóa sự kiện này?",
-            //    title: "Xác nhận xóa",
-            //    buttons: {
-            //        success: {
-            //            label: "Hủy",
-            //            className: "btn-default",
-            //            callback: function () {
-
-            //            }
-            //        },
-            //        danger: {
-            //            label: "Đồng ý",
-            //            className: "btn-danger",
-            //            callback: function () {
-            //                $.ajax({
-            //                    url: "/PlaceOwner/Event/deleteEvent",
-            //                    data: {
-            //                        format: 'json',
-            //                        id: id
-            //                    },
-            //                    error: function () {
-            //                        alert("Problem!")
-            //                    },
-            //                    success: function (data) {
-            //                        if (data === "success") {
-            //                            bootbox.alert("Đã xóa thành công", function () {
-            //                                RefreshTable();
-            //                            });
-
-            //                        }
-            //                    },
-            //                    type: 'POST'
-            //                })
-            //            }
-            //        }
-            //    }
-            //});
         };
 
         function scriptForPartialView() {
@@ -360,7 +391,7 @@
                 }
             });
 
-        }
+        };
 
         function showUpdate(id) {
             $.ajax({
@@ -378,12 +409,113 @@
             });
         }
 
+        function shareEvent(id) {
+            showConfirmMessage("Bạn có chắc chắn muốn chia sẻ sự kiện này không?",
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("shareEvent")',
+                        data: { id: id },
+                        success: function (data) {
+                            if (data.Succeed) {
+                                showMessage("Chia sẻ sự kiện thành công", "success", "OK");
+                                RefreshTable();
+                            }
+                            else {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        },
+                        error: function (error) {
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        }
+                    });
+                }
+            });
+        };
+
+        function showShareEventModal(id) {
+            $.ajax({
+                url: '@Url.Action("ShareEventModal")',
+                type: 'Get',
+                data: { id: id },
+                success: function (data) {
+                    $('#share-event-modal-container').html(data);
+                    var array = @Html.Raw(Json.Encode(
+                          ((IEnumerable<SelectListItem>)sport).Select(m => new
+                          {
+                              id = m.Value,
+                              text = m.Text
+                          })
+                     ));
+                    $('#eventSport').select2({
+                        class: 'form-control',
+                        width: '100%',
+                        multiple: true,
+                        maximumSelectionSize: 5,
+                        placeholder: "Chọn môn thể thao cho sự kiện",
+                        data: array
+                    });
+                    $('#shareEventModal').modal('show');
+
+                    (function (document, window, $) {
+                        'use strict';
+
+                        var Site = window.Site;
+                        $(document).ready(function () {
+                            Site.run();
+                        });
+                    })(document, window, jQuery);
+
+                    $('#shareEventForm').submit(function (e) {
+                        e.preventDefault();
+                        var formData = new FormData(document.getElementById('shareEventForm'));
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("shareEvent")',
+                            data: formData,
+                            async: false,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: function (result) {
+                                if (result.Succeed) {
+                                    showMessage("Cập nhật thành công", "success", "OK");
+                                    $('#shareEventModal').modal('hide');
+
+                                } else {
+                                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                }
+
+                            },
+                            error: function (result) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            },
+                        });
+
+
+                    });
+
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+
+        };
+
         function RefreshTable() {
             count = 1;
             var oTable = $("#listEventTable").dataTable();
             oTable._fnPageChange(0);
             oTable._fnAjaxUpdate();
         };
+
+        function switchToUpdate(id)
+        {
+            $('#modalEventDetail').modal('toggle');
+            showUpdate(id)
+        }
 
         function InitDatatable() {
 
@@ -444,21 +576,20 @@
                     });
                 },*@
                 "aoColumnDefs": [
+                    //{
+                    //    "aTargets": [0],
+                    //    "mRender": function (data, type, o) {
+                    //        return count++;
+                    //    }
+                    //},
                     {
                         "aTargets": [0],
-                        "mRender": function (data, type, o) {
-                            return count++;
-                        }
-                    },
-                    {
-                        "aTargets": [1],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             return o[1];
                         }
                     },
                     {
-                        "aTargets": [2],
+                        "aTargets": [1],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
                             if (o[5] === '' || o[5] == "" || o[5] == null)
@@ -469,8 +600,7 @@
                         }
                     },
                     {
-                        "aTargets": [3],
-                        "bSortable": false,
+                        "aTargets": [2],
                         "mRender": function (data, type, o) {
                             var date = new Date(parseInt(o[3].substr(6)));
                             var month = parseInt(date.getMonth()) + 1;
@@ -479,8 +609,7 @@
                         }
                     },
                     {
-                        "aTargets": [4],
-                        "bSortable": false,
+                        "aTargets": [3],
                         "mRender": function (data, type, o) {
                             var date = new Date(parseInt(o[4].substr(6)));
                             var month = parseInt(date.getMonth()) + 1;
@@ -489,8 +618,7 @@
                         }
                     },
                     {
-                        "aTargets": [5],
-                        "bSortable": false,
+                        "aTargets": [4],
                         "mRender": function (data, type, o) {
                             var label = '';
                             if (o[6] == parseInt('@((int)EventStatus.Operating)')) {
@@ -504,13 +632,14 @@
                         }
                     },
                     {
-                        "aTargets": [6],
+                        "aTargets": [5],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
                             var viewDetailBtn = "<a href='javascript:void(0)' class='btn btn-success' data-target='#modalEventDetail' data-toggle='modal' onclick='showDetail(" + o[0] + ")'><i class='fa fa-eye' aria-hidden='true'></i></a>";
-                            var updateBtn = "<a href='javascript:void(0)' class='btn btn-warning' data-target='#updateEventModal' data-toggle='modal' onclick='showUpdate(" + o[0] + ")'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>";
+                            var updateBtn = "<a href='javascript:void(0)' class='btn btn-warning' id='updateBtn' data-target='#updateEventModal' data-toggle='modal' onclick='showUpdate(" + o[0] + ")'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>";
                             var deleteBtn = "<a href='javascript:void(0)' class='btn btn-danger' onclick='deleteEvent(" + o[0] + ")'><i class='fa fa-trash-o' aria-hidden='true'></i></a>";
-                            return viewDetailBtn + '&nbsp;' + updateBtn + '&nbsp;' + deleteBtn;;
+                            var shareBtn = "<a href='javascript:void(0)' class='btn btn-dark' onclick='showShareModal(" + o[0] + ",6)'><i class='fa fa-share-alt' aria-hidden='true'></i></a>";
+                            return viewDetailBtn + '&nbsp;' + updateBtn + '&nbsp;' + shareBtn + '&nbsp;' + deleteBtn;
                         }
                     }
 

@@ -27,41 +27,49 @@
                     <span class="detail">Đến: @Model.EndDate</span>
                 </p>
                 @*<p>
-                    <span class="title">Địa điểm: </span>
-                    <span class="detail">@Model.p</span>
-                </p>*@
+                        <span class="title">Địa điểm: </span>
+                        <span class="detail">@Model.p</span>
+                    </p>*@
             </div>
-            
+
             @*<div class="panel ">
-                <div class="panel-heading">
-                    <center><h2>@Model.Name</h2></center>
-                </div>
-                <div class="panel-body">
-                    <div>
-                        <p>
-                            <span class="title">Chủ sân: </span>
-                            <span class="detail">@Model.AspNetUser.FullName</span>
-                        </p>
-                        <p>
-                            <span class="title">Thời gian: </span><br />
-                            <span class="detail">@Model.StartDate - @Model.EndDate</span>
-                        </p>
-                        <p>
-                            <span class="title">Mô tả:</span>
-                            <span class="detail">@Model.Description</span>
-                        </p>
+                    <div class="panel-heading">
+                        <center><h2>@Model.Name</h2></center>
                     </div>
-                </div>
-            </div>*@
+                    <div class="panel-body">
+                        <div>
+                            <p>
+                                <span class="title">Chủ sân: </span>
+                                <span class="detail">@Model.AspNetUser.FullName</span>
+                            </p>
+                            <p>
+                                <span class="title">Thời gian: </span><br />
+                                <span class="detail">@Model.StartDate - @Model.EndDate</span>
+                            </p>
+                            <p>
+                                <span class="title">Mô tả:</span>
+                                <span class="detail">@Model.Description</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>*@
         </div>
         <div class="col-sm-12">
             <label>Mô tả</label>
-            @Html.Raw(Model.Description)
+            
+            <div class="height-200 asscrollable" style="overflow-y:auto;">
+                @Html.Raw(Model.Description)
+            </div>
+            
         </div>
     </div>
     
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Hủy</button>
+    <button type="button" class="btn btn-dark" onclick="showShareModal(@Model.Id, 6)">Chia sẻ</button>
+    @*<a href="@Url.Action("index", "Participation", new {id = Model.Id })" class="btn btn-primary">Xem người tham gia</a>*@
+    <button type="button" class="btn btn-success" onclick="switchToUpdate(@Model.Id)">Cập nhật</button>
+    
 </div>
 

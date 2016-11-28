@@ -120,8 +120,85 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("Invitation")]
         Invitation = 3,
         [Description("Other")]
-        Other = 4
+        Other = 4,
+        [Description("GroupIvitation")]
+        GroupInvitation = 5,
+        [Description("GroupChallengeInvitation")]
+        GroupChallengeInvitation = 6,
+        [Description("GroupMemberAction")]
+        GroupMemberAction = 7,
+        [Description("GroupPost")]
+        GroupPost = 8,
+        [Description("ApprovePlaceOwner")]
+        ApprovePlaceOwner = 9,
+        [Description("UnApprovePlaceOwner")]
+        UnApprovePlaceOwner = 10
     }
 
+    public enum ContentPostType
+    {
+        [Description("")]
+        TextOnly = 1,
+        [Description("")]
+        TextAndImage = 2,
+        [Description("")]
+        ImageOnly = 3,
+        [Description("")]
+        MultiImages = 4,
+        [Description("")]
+        TextAndMultiImages = 5,
+        [Description("")]
+        ShareEventPost = 6,
+        [Description("")]
+        ShareOrderPost = 7,
+        [Description("")]
+        SharePostPost = 8,
+        [Description("")]
+        ShareNewsPost = 9,
+    }
+
+    public enum GroupMemberStatus
+    {
+        [Description("Đã duyệt")]
+        Approved = 1,
+        [Description("Đang chờ duyệt")]
+        Pending = 2
+    }
+
+    public enum JoinLeaveGroupResult
+    {
+        Leaved = 1,
+        RequestSent = 2,
+        ReJoined = 3,
+        CancelRequest = 4,
+        CannotLeave = 5
+    }
+
+    public enum GroupMemberRole
+    {
+        NotMember = 1,
+        Member = 2,
+        Admin = 3,
+        PendingMember = 4
+    }
+
+    public enum ChallengeStatus
+    {
+        [Description("Chưa diễn ra")]
+        NotOperate = 1,
+        [Description("Đã đấu xong")]
+        Done = 2,
+        [Description("Đang chờ chấp nhận")]
+        Pending = 3,
+        [Description("Hủy")]
+        NotAvailable = 4
+    }
+
+    public enum SharedReceiver
+    {
+        SenderWall = 1,
+        FriendWall = 2,
+        Group = 3
+    }
 
 }

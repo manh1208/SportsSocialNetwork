@@ -4,7 +4,6 @@
 @{
     ViewBag.Title = "Detail";
 }
-
 <style>
     dt, dd {
         font-size: 1.1em;
@@ -16,15 +15,26 @@
     }
 
     .title {
-        font-weight: bold;
+        font-weight: 400;
         text-align: left;
     }
 
     .detail {
         margin-left: 2px;
+        font-weight: 500;
+    }
+
+    dt {
+        text-align: left !important;
+        
+        margin-bottom:10px!important;
+    }
+    dd{
+        
+        margin-top:10px!important;
+        margin-bottom:10px!important;
     }
 </style>
-
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">×</span>
@@ -32,59 +42,68 @@
     <h4 class="modal-title">Chi tiết</h4>
 </div>
 <div class="modal-body" id="modalBody">
-    <div class="row">       
+    <div class="row">
         <div>
-            <div class="panel">                
+            <div class="panel">
                 <div class="panel-body">
-                    <div>
-                        <p>
-                            <span class="title">Địa điểm: </span>
-                            <span class="detail">@Model.Field.Place.Name</span>
-                        </p>
-                        <p>
-                            <span class="title">Sân: </span>
-                            <span class="detail">@Model.Field.Name</span>
-                        </p>
-                        <p>
-                            <span class="title">Loại:</span>
+                    <dl class="dl-horizontal">
+                        <dt>Địa điểm:</dt>
+                        <dd>@Model.Field.Place.Name</dd>
+                        <dt>Sân:</dt>
+                        <dd>@Model.Field.Name</dd>
+                        @if (Model.Type == (int)FieldScheduleStatus.Booked)
+                        {
+                            <dt>Người đặt:</dt>
+                            if (Model.AspNetUser != null)
+                            {
+                                <dd>@Model.AspNetUser.FullName</dd>
+                            }
+                            else
+                            {
+                                <dd>Người lạ</dd>
+                            }
+
+                        }
+                        
+                        <dt>Từ ngày:</dt>
+                        <dd>@Model.StartDate.ToString("dd/MM/yyyy")</dd>
+                        <dt>Đến ngày:</dt>
+                        <dd>@Model.EndDate.ToString("dd/MM/yyyy")</dd>
+                        <dt>Thời gian:</dt>
+                        <dd>@(Model.StartTime.ToString() + " - " + Model.EndTime.ToString())</dd>
+                        <dt>Lặp lại: </dt>
+                        <dd>@Model.AvailableDayStr</dd>
+                        <dt>Loại:</dt>
+                        <dd>
                             @{
                                 if (Model.Type == (int)FieldScheduleStatus.Booked)
                                 {
-                                    <span class="detail">@Utils.GetEnumDescription(FieldScheduleStatus.Booked)</span>
+                                    <span class="label label-outline label-success">@Utils.GetEnumDescription(FieldScheduleStatus.Booked)</span>
                                 }
                                 else if (Model.Type == (int)FieldScheduleStatus.Event)
                                 {
-                                    <span class="detail">@Utils.GetEnumDescription(FieldScheduleStatus.Event)</span>
+                                    <span class="label label-outline label-success">@Utils.GetEnumDescription(FieldScheduleStatus.Event)</span>
                                 }
                                 else if (Model.Type == (int)FieldScheduleStatus.Repair)
                                 {
-                                    <span class="detail">@Utils.GetEnumDescription(FieldScheduleStatus.Repair)</span>
+                                    <span class="label label-outline label-danger">@Utils.GetEnumDescription(FieldScheduleStatus.Repair)</span>
                                 }
                                 else if (Model.Type == (int)FieldScheduleStatus.Other)
                                 {
-                                    <span class="detail">@Utils.GetEnumDescription(FieldScheduleStatus.Other)</span>
+                                    <span class="label label-outline label-warning">@Utils.GetEnumDescription(FieldScheduleStatus.Other)</span>
                                 }
                             }
-                        </p>                        
-                        <p>
-                            <span class="title">Thời gian: </span> <br />
-                            <span class="title">Từ: </span>
-                            <span class="detail">@Model.StartTime.ToString()</span>
-                            <span class="title">  Đến: </span>
-                            <span class="detail">@Model.EndTime.ToString()</span>
-                        </p>
-                        <p>
-                            <span class="title">Mô tả:</span>
-                            <span class="detail">@Model.Description</span>
-                        </p>
-                    </div>
+                        </dd>
+                        <dt>Mô tả: </dt>
+                        <dd>@Model.Description</dd>
+                    </dl>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-
+    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+    <button type="button" class="btn btn-success" onclick="switchToUpdate(@Model.Id)">Cập nhật</button>
 </div>
-

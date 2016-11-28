@@ -19,5 +19,6 @@ namespace SportsSocialNetwork.Models.Identity
         public const string Moderator = "Moderator";
         public const string SSN = "Thành viên,Chủ sân";
         public const string Member = "Thành viên";
+        public const string NewsManagers = "Moderator,Quản trị viên";
     }
 }

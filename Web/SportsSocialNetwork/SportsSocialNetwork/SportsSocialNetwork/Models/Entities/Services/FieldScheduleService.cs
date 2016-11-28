@@ -11,7 +11,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         #region Code from here
         IQueryable<FieldSchedule> GetFieldSchedule(JQueryDataTableParamModel request, out int totalRecord, int placeId);
 
-        bool checkTimeValidInFieldSchedule(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate);
+        bool checkTimeValidInFieldSchedule(int? scheduleId, int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate);
         #endregion
 
         void test();
@@ -20,34 +20,57 @@ namespace SportsSocialNetwork.Models.Entities.Services
     {
         #region Code from here
 
-        public bool checkTimeValidInFieldSchedule(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate)
+        public bool checkTimeValidInFieldSchedule(int? scheduleId, int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate)
         {
-            IEnumerable<FieldSchedule> schedules = this.GetActive(p => p.FieldId == fieldId).OrderBy(p => p.StartTime).ToList();
-            bool isValid = true;
-            DateTime sTime = new DateTime(startDate.Year, startDate.Month, startDate.Day, startTime.Hours,
-                startTime.Minutes, startTime.Seconds);
-            DateTime eTime = new DateTime(endDate.Year, endDate.Month, endDate.Day, endTime.Hours,
-                endTime.Minutes, endTime.Seconds);
+            IEnumerable<FieldSchedule> schedules = this.GetActive(p => p.FieldId == fieldId).ToList();
+            
             foreach (var schedule in schedules)
             {
-                if ((schedule.StartTime > sTime && schedule.StartTime >= eTime) || (schedule.EndTime <= sTime &&
-                    schedule.EndTime < eTime))
+                if (scheduleId.HasValue && scheduleId.Value== schedule.Id)
                 {
-                    isValid = true;
-                }else
+                    continue;
+                }
+                if(!((schedule.StartDate > startDate && schedule.StartDate > endDate) || 
+                    (schedule.EndDate < startDate && schedule.EndDate < endDate)))
                 {
-                    isValid = false;
-                    break;
+                    int dayOfWeek = ((int)startDate.DayOfWeek) +1;
+                    int bitAtPosititon = (schedule.AvailableDay >> dayOfWeek) & 1;
+                    if (bitAtPosititon == 1)
+                    {
+                        if (!((schedule.StartTime > startTime && schedule.StartTime >= endTime) ||
+                            (schedule.EndTime<=startTime && schedule.EndTime<endTime))){
+                            return false;
+                        }
+                    }
                 }
             }
-            if (isValid)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+
+            //DateTime sTime = new DateTime(startDate.Year, startDate.Month, startDate.Day, startTime.Hours,
+            //    startTime.Minutes, startTime.Seconds);
+            //DateTime eTime = new DateTime(endDate.Year, endDate.Month, endDate.Day, endTime.Hours,
+            //    endTime.Minutes, endTime.Seconds);
+            //foreach (var schedule in schedules)
+            //{
+            //    if ((schedule.StartTime > sTime && schedule.StartTime >= eTime) || (schedule.EndTime <= sTime &&
+            //        schedule.EndTime < eTime))
+            //    {
+            //        isValid = true;
+            //    }
+            //    else
+            //    {
+            //        isValid = false;
+            //        break;
+            //    }
+            //}
+            //if (isValid)
+            //{
+            //    return true;
+            //}
+            //else
+            //{
+            //    return false;
+            //}
+            return true;
         }
 
 

@@ -18,6 +18,14 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         String ChangeCoverImage(int id,String image);
 
+
+        bool DeleteGroup(int id);
+
+        List<Group> GetSuggestGroup(int groupId);
+
+        String ChangeAvatarImage(int id, String image);
+
+
         #endregion
 
         void test();
@@ -63,11 +71,42 @@ namespace SportsSocialNetwork.Models.Entities.Services
             Save();
             return group.CoverImage;
         }
+
+        public bool DeleteGroup(int id)
+        {
+            Group group = this.FindGroupById(id);
+            if(group != null)
+            {
+                this.Deactivate(group);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public String ChangeAvatarImage(int id, String image)
+        {
+            Group group = this.FindGroupById(id);
+            group.Avatar = image;
+            Save();
+            return group.Avatar;
+        }
+
+
         #endregion
 
         public void test()
         {
 
+        }
+
+        public List<Group> GetSuggestGroup(int groupId)
+        {
+            Group curGroup = this.FindGroupById(groupId);
+
+            List<Group> suggestGroupList = this.GetActive(g => g.SportId == curGroup.SportId).ToList();
+            return suggestGroupList;
         }
     }
 }

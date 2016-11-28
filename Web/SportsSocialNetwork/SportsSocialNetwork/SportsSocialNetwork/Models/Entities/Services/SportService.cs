@@ -10,6 +10,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
     {
         IEnumerable<Sport> getAllSport();
         IQueryable<Sport> GetSport(JQueryDataTableParamModel request, out int totalRecord);
+        String GetSportName(int id);
     }
 
     public partial class SportService : ISportService
@@ -27,7 +28,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
             var list = list1.Where(
                 u => filter == null ||
                 u.Name.ToLower().Contains(filter.ToLower()) ||
-                u.Name.ToLower().Contains(filter.ToLower())                
+                u.Name.ToLower().Contains(filter.ToLower())
                 );
 
             //list = list.Where(u => u.AspNetRoles.Where(r => r.Id.Equals(UserRole.Member.ToString())).Count()>0);
@@ -37,6 +38,12 @@ namespace SportsSocialNetwork.Models.Entities.Services
                              .Take(request.iDisplayLength);
 
             return result;
+        }
+
+        public String GetSportName(int id)
+        {
+            Sport sport = this.FirstOrDefaultActive(x => x.Id == id);
+            return sport.Name;
         }
     }
 }

@@ -1,0 +1,259 @@
+﻿@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "PostDetail";
+    Layout = "~/Views/Shared/_SSNLayout.cshtml";
+    var sport = ViewBag.Sport as IEnumerable<SelectListItem>;
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/Content/assets/vendor/asscrollable/asScrollable.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/magnific-popup/magnific-popup.css">
+    <link rel="stylesheet" href="~/Content/js/sweetAlert/sweetalert.css" />
+    <style>
+        .media {
+            overflow: visible;
+        }
+
+        .media-body {
+            overflow: visible;
+        }
+
+        .select2-dropdown {
+            z-index: 99999;
+        }
+
+        .panel-cover {
+            margin: 0 0 10px 0;
+        }
+
+        .panel-status {
+            margin-bottom: 15px;
+        }
+
+        .suggest-group {
+            border: 1px solid lightgray;
+            overflow: hidden;
+            padding-top: 15px;
+            margin: 10px;
+        }
+
+        .after-run .site-menubar-fold .page, .after-run .site-menubar-fold .site-footer {
+            margin-left: 0;
+        }
+
+        .after-run .site-menubar-unfold .page, .after-run .site-menubar-unfold .site-footer {
+            margin-left: 0;
+        }
+
+        .page-aside-inner {
+            max-width: 600px;
+        }
+
+        .page-main .panel-body {
+            padding-top: 0;
+        }
+
+        .page-main .page-content {
+            padding: 10px;
+            padding-right: 0px;
+        }
+
+        .panel {
+            margin-bottom: 10px;
+            font-family: sans-serif;
+        }
+
+            .panel.panel-cover {
+                margin: 0px;
+            }
+
+        .page-aside {
+            top: 10px;
+        }
+
+            .page-aside .widget-header {
+                padding-top: 0px;
+            }
+
+        .panel-cover img {
+            height: 150px;
+        }
+
+        .status-panel {
+            padding-top: 5px;
+        }
+
+            .status-panel textarea {
+                border: none;
+                border-bottom: 1px whitesmoke solid;
+                resize: none;
+            }
+
+        @@media(max-width: 768px) {
+            .page-aside-inner {
+                position: unset;
+            }
+
+            .page-main .page-content {
+                padding: 10px;
+            }
+        }
+
+        .list-group-item {
+            font-size: 16px;
+        }
+
+        .loadImage {
+            height: 90%;
+            width: 90%;
+        }
+
+        .load {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .DocumentList {
+            overflow-x: scroll;
+            overflow-y: hidden;
+            height: 120px;
+            width: 100%;
+            padding: 0 15px;
+        }
+
+        .Document {
+            border: solid 1px;
+            border-color: #bdc7d8;
+            height: 110px;
+            width: 100%;
+            padding: 0 15px;
+        }
+
+        .list-inline li {
+            margin: 5px;
+            padding: 0;
+            height: 100px;
+            width: 100px;
+        }
+
+        .list-inline {
+            white-space: nowrap;
+        }
+
+        #check {
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+        }
+    </style>
+}
+
+<div class="row" style="font-family:sans-serif">
+    <div class="col-sm-offset-3 col-sm-6">
+        <div id="activities" role="tabpanel">
+            <ul class="list-group" id="listPost"></ul>
+        </div>
+        </div>
+    </div>
+
+<div class="modal fade" id="editPostForm" aria-hidden="true" role="dialog">
+    <div class="modal-dialog">
+        <form id="post-formEdit" method="post" autocomplete="off">
+            <input type="hidden" id="postEditId" name="postEditId" value="-1" />
+            <div class="panel status-panel">
+                <div class="modal-header" style="border-bottom: solid 1px #efefef; padding:5px 10px 5px 15px;">
+                    <button type="button" class="close" aria-hidden="true" data-dismiss="modal">×</button>
+                    <h4 class="modal-title">Chỉnh sửa bài viết</h4>
+                </div>
+                <div class="panel-heading" style="border-bottom: solid 1px #efefef; padding:5px 0 5px 15px;">
+                    <a href='javascript:void(0)' class="post-heading" onclick="addImageEdit()" style="color:#76838f">
+                        <i class="fa fa-camera post-heading-icon"></i> Thêm hình ảnh
+                    </a>
+                </div>
+                <div style="height:0px;overflow:hidden">
+                    <input type="file" id="selectImageEdit" name="files" multiple />
+                </div>
+                <textarea rows="3" class="form-control input-lg" placeholder="Bạn đang nghĩ gì?" name="PostContentEdit" id="PostContentEdit"></textarea>
+                <div id="previewImageEdit" class="example margin-0" style="display:none">
+                    <div style="height:120px">
+                        <div data-role="container">
+                            <div data-role="content">
+                                <div class="DocumentList">
+                                    <ul id="resultEdit" class="list-inline"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row text-right" style="margin: 0">
+                    <div class="col-xs-11 select-sportEdit" style="width: calc(100% - 80px); padding: 0" id="select-sportEdit">
+                        <input id="sportSelectEdit" type="text" name="sportSelectEdit"
+                               placeholder="Tags" />
+                    </div>
+                    <div class="col-xs-2" style="max-width: 80px; padding: 0">
+                        <input type="submit" style="width: 80px;height:36px" class="btn btn-sm btn-primary" value="Đăng">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/assets/js/plugins/jquery.sticky-kit.min.js"></script>
+    <script src="~/Content/assets/vendor/magnific-popup/jquery.magnific-popup.js"></script>
+    <script src="~/Content/assets/js/components/magnific-popup.js"></script>
+    <script src="~/Content/js/post-script.js"></script>
+    <script src="~/Content/js/custom-script.js"></script>
+    <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
+    <script>
+        $(document).on("submit", "#post-formEdit", function (e) {
+            e.preventDefault();
+            var _updatePostActionName = '@Url.Action("UpdatePost", "Post")';
+            var _loadSavedPostActionName = '@Url.Action("LoadSavedPost", "Post")';
+            var _userId = '@User.Identity.GetUserId()';
+            var _postId = $("#postEditId").val();
+            UpdatePost(_updatePostActionName, _loadSavedPostActionName, _userId, _postId);
+        });
+
+        $(document).on("submit", ".comment-form", function (e) {
+            e.preventDefault();
+            var _id = $(this).attr('id');
+            var _commentActionName = '@Url.Action("Comment","PostComment")';
+            var _loadSavedCommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
+            var _userId = '@User.Identity.GetUserId()';
+            createComment(_commentActionName, _loadSavedCommentActionName, _userId, _id);
+        });
+
+        $(document).on("submit", ".comment-formEdit", function (e) {
+            e.preventDefault();
+            var _id = $(this).attr('id');
+            var _updateCommentActionName = '@Url.Action("UpdateComment", "PostComment")';
+            var _loadSavedCommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
+            updateComment(_updateCommentActionName, _loadSavedCommentActionName, _id);
+        });
+
+        var array = @Html.Raw(Json.Encode(
+ ((IEnumerable<SelectListItem>)sport).Select(m => new
+ {
+     id = m.Value,
+     text = m.Text
+ })
+));
+
+        var _userId = '@User.Identity.GetUserId()';
+        var _postId = '@ViewBag.PostId';
+        var _actionName = '@Url.Action("LoadSavedPost", "Post")';
+        var _loadMoreCmtActionName = '@Url.Action("getMoreCmtByPostId")';
+        var _loadAPostActionName = '@Url.Action("LoadSavedPost", "Post")';
+        var _deletePostActionName = '@Url.Action("DeletePost","Post")';
+        var _deleteCommentActionName = '@Url.Action("DeleteComment", "PostComment")';
+        var _loadACommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
+        var _likeUnlikePostActionName = '@Url.Action("LikeUnlikePost","Like")';
+        var _goNewFeedActionName = '@Url.Action("Index","SSN")';
+        $(document).ready(function () {
+            loadSpecificPost(_userId, _postId, _actionName, _loadMoreCmtActionName, _loadMoreCmtActionName, _deletePostActionName, _deleteCommentActionName, _loadACommentActionName, _likeUnlikePostActionName, _goNewFeedActionName);
+        })
+    </script>
+}

@@ -80,7 +80,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
                 List<AspNetUserOveralViewModel> result = new List<AspNetUserOveralViewModel>();
 
-                foreach (var user in userList) {
+                foreach (var user in userList)
+                {
                     result.Add(PrepareAspNetUserOveralViewModel(user));
                 }
 
@@ -98,6 +99,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         public ActionResult ShowProfile(String userId, String currentUserId)
         {
             var service = this.Service<IAspNetUserService>();
+
+            var followService = this.Service<IFollowService>();
 
             ResponseModel<AspNetUserOveralViewModel> response = null;
 
@@ -120,9 +123,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                         result.Followed = false;
                     }
 
-                    result.FollowCount = user.Follows.Where(x => x.FollowerId == user.Id).Count();
+                    result.FollowCount = followService.GetActive(x => x.FollowerId == user.Id).Count();
 
-                    result.NewsCount = user.News.Count();
+                    result.FollowedCount= user.Follows.Where(x => x.UserId == user.Id).Count();
+
+                    result.PostCount = user.Posts.Count();
 
                     response = new ResponseModel<AspNetUserOveralViewModel>(true, "Thông tin tài khoản!", null, result);
                 }
@@ -196,7 +201,11 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             try
             {
-                String path = uploader.UploadImage(image, userImagePath);
+                String path = null;
+
+                if (image != null) {
+                    path = uploader.UploadImage(image, userImagePath);
+                }
 
                 String result = service.ChangeAvatar(userId, path);
 
@@ -222,7 +231,14 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             try
             {
-                String path = uploader.UploadImage(image, userImagePath);
+                String path = null;
+
+                if (image != null)
+                {
+
+                    path = uploader.UploadImage(image, userImagePath);
+                }
+
 
                 String result = service.ChangeCover(userId, path);
 
@@ -259,7 +275,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                             MobileAuthorized = false;
                             response = ResponseModel<UserLoginViewModel>.CreateErrorResponse("Đăng nhập thất bại!", Utils.GetEnumDescription(UserRole.Admin) + " không thể đăng nhập trên thiết bị điện thoại");
                         }
-                        else if (role.Id.Equals(ModeratorRoleId)) {
+                        else if (role.Id.Equals(ModeratorRoleId))
+                        {
                             MobileAuthorized = false;
                             response = ResponseModel<UserLoginViewModel>.CreateErrorResponse("Đăng nhập thất bại!", Utils.GetEnumDescription(UserRole.Moderator) + " không thể đăng nhập trên thiết bị điện thoại");
                         }
@@ -347,6 +364,46 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult SaveToken(String userId, String token)
+        {
+            var tokenService = this.Service<IFirebaseTokenService>();
+
+            var userService = this.Service<IAspNetUserService>();
+
+            ResponseModel<bool> response = null;
+
+            try {
+                FirebaseToken firebaseToken = tokenService.FirstOrDefault(x => x.Token.Equals(token));
+
+                AspNetUser user = userService.FirstOrDefaultActive(x=> x.Id.Equals(userId));
+
+                if (firebaseToken == null)
+                {
+                    firebaseToken = new FirebaseToken();
+                    firebaseToken.UserId = userId;
+                    firebaseToken.Token = token;
+                    tokenService.Create(firebaseToken);
+                    tokenService.Save();
+
+                }
+                else
+                {
+                    if (user != null) {
+                        firebaseToken.UserId = user.Id;
+                        tokenService.Update(firebaseToken);
+                        tokenService.Save();
+                    }
+                }
+
+                response = new ResponseModel<bool>(true, "Token đã được tạo", null);
+
+            } catch (Exception) {
+                response = ResponseModel<bool>.CreateErrorResponse("Tạo token thất bại",systemError);
+            }
+            return Json(response);
+        }
+
         private bool ValidateUserInfo(List<String> errorList, AspNetUser userInfo)
         {
             bool result = true;
@@ -378,11 +435,21 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
         private bool ValidateRegisterInfo(List<String> errorList, AspNetUserRegisterViewModel model)
         {
+            var service = this.Service<IAspNetUserService>();
+
+            AspNetUser user = service.FirstOrDefaultActive(x=> x.UserName == model.UserName);
+
             bool result = true;
 
             String emailRegex = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
 
             String phoneNumberRegex = @"^([0-9]{10,12})$";
+
+            if (user != null)
+            {
+                errorList.Add("Tên tài khoản đã tồn tại!");
+                result = false;
+            }
 
             if (!Regex.IsMatch(model.Email, emailRegex))
             {
@@ -408,7 +475,8 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 result = false;
             }
 
-            if (model.UserName.Length < 6) {
+            if (model.UserName.Length < 6)
+            {
                 errorList.Add("Tên tài khoản phải có ít nhất 6 ký tự.");
                 result = false;
             }
@@ -445,10 +513,29 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             return userList;
         }
 
-        private AspNetUserOveralViewModel PrepareAspNetUserOveralViewModel(AspNetUser user) {
+        private AspNetUserOveralViewModel PrepareAspNetUserOveralViewModel(AspNetUser user)
+        {
             AspNetUserOveralViewModel result = Mapper.Map<AspNetUserOveralViewModel>(user);
 
-            result.Gender = Utils.GetEnumDescription((Gender)user.Gender);
+            if (result.Hobbies != null)
+            {
+                var service = this.Service<ISportService>();
+                foreach (var hobby in result.Hobbies)
+                {
+
+                    hobby.SportName = service.GetSportName(hobby.SportId);
+                }
+            }
+
+            if (user.Gender != null)
+            {
+                result.Gender = Utils.GetEnumDescription((Gender)user.Gender);
+            }
+
+            if (user.Birthday != null)
+            {
+                result.BirthdayString = result.Birthday.ToString("dd/MM/yyyy");
+            }
 
             return result;
         }

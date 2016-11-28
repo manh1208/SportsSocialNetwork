@@ -1,0 +1,555 @@
+﻿@using Microsoft.AspNet.Identity;
+@using SportsSocialNetwork.Models.Enumerable;
+@{
+    ViewBag.Title = "SearchDetail";
+    Layout = "~/Views/Shared/_SSNLayout.cshtml";
+    var sport = ViewBag.Sport as IEnumerable<SelectListItem>;
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/Content/assets/vendor/asscrollable/asScrollable.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/magnific-popup/magnific-popup.css">
+    <link rel="stylesheet" href="~/Content/js/sweetAlert/sweetalert.css" />
+    <style>
+        .media {
+            overflow: visible;
+        }
+
+        .media-body {
+            overflow: visible;
+        }
+
+        .select2-dropdown {
+            z-index: 99999;
+        }
+
+        .panel-cover {
+            margin: 0 0 10px 0;
+        }
+
+        .panel-status {
+            margin-bottom: 15px;
+        }
+
+        .suggest-group {
+            border: 1px solid lightgray;
+            overflow: hidden;
+            padding-top: 15px;
+            margin: 10px;
+        }
+
+        .after-run .site-menubar-fold .page, .after-run .site-menubar-fold .site-footer {
+            margin-left: 0;
+        }
+
+        .after-run .site-menubar-unfold .page, .after-run .site-menubar-unfold .site-footer {
+            margin-left: 0;
+        }
+
+        .page-aside-inner {
+            max-width: 600px;
+        }
+
+        .page-main .panel-body {
+            padding-top: 0;
+        }
+
+        .page-main .page-content {
+            padding: 10px;
+            padding-right: 0px;
+        }
+
+        .panel {
+            margin-bottom: 10px;
+            font-family: sans-serif;
+        }
+
+            .panel.panel-cover {
+                margin: 0px;
+            }
+
+        .page-aside {
+            top: 10px;
+        }
+
+            .page-aside .widget-header {
+                padding-top: 0px;
+            }
+
+        .panel-cover img {
+            height: 150px;
+        }
+
+        .status-panel {
+            padding-top: 5px;
+        }
+
+            .status-panel textarea {
+                border: none;
+                border-bottom: 1px whitesmoke solid;
+                resize: none;
+            }
+
+        @@media(max-width: 768px) {
+            .page-aside-inner {
+                position: unset;
+            }
+
+            .page-main .page-content {
+                padding: 10px;
+            }
+        }
+
+        .list-group-item {
+            font-size: 16px;
+        }
+
+        .loadImage {
+            height: 90%;
+            width: 90%;
+        }
+
+        .load {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .DocumentList {
+            overflow-x: scroll;
+            overflow-y: hidden;
+            height: 120px;
+            width: 100%;
+            padding: 0 15px;
+        }
+
+        .Document {
+            border: solid 1px;
+            border-color: #bdc7d8;
+            height: 110px;
+            width: 100%;
+            padding: 0 15px;
+        }
+
+        .list-inline li {
+            margin: 5px;
+            padding: 0;
+            height: 100px;
+            width: 100px;
+        }
+
+        .list-inline {
+            white-space: nowrap;
+        }
+
+        #check {
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+        }
+    </style>
+}
+
+<div class="row" style="font-family:sans-serif">
+    <!--Left side-bar-->
+    <div class="col-sm-3">
+        <div class="widget widget-shadow text-center"
+             style="border-top-style: solid;border-left: 0.5px groove;border-right: 0.5px groove;border-bottom: 0.5px groove;">
+            <div class="widget-header">
+                <div class="widget-header-content">
+                    <a class="avatar avatar-lg" href="javascript:void(0)">
+                        <img src="@ViewBag.User.AvatarImage" style="height:130px;width:130px">
+                    </a>
+                    <div class="profile-user"><a style="color:#37474f;font-weight:bold" href="/profile/index?userid=@ViewBag.User.Id">@ViewBag.User.FullName</a></div>
+                    <div class="profile-job">@ViewBag.User.Email</div>
+                </div>
+            </div>
+            <div class="widget-footer">
+                <div class="row no-space">
+                    <div class="col-xs-4">
+                        <strong class="profile-stat-count">@ViewBag.Follower</strong>
+                        <span>Người theo dõi</span>
+                    </div>
+                    <div class="col-xs-4">
+                        <strong class="profile-stat-count">@ViewBag.Following</strong>
+                        <span>Đang theo dõi</span>
+                    </div>
+                    <div class="col-xs-4">
+                        <strong class="profile-stat-count">@ViewBag.PostCount</strong>
+                        <span>Bài viết</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                <h class="panel-title" style="font-family:sans-serif;color:#fff!important">Các nhóm tham gia</h>
+            </div>
+
+            <div class="panel-body" style="padding:0;padding-bottom:10px">
+                <div>
+                    <div class="col-sm-12">
+
+                        <a href="#" style="text-decoration:none;border-bottom-style:groove" onclick="showCreateGroupModal()">
+                            <div class="text-center" style="padding:20px 20px 10px 20px;color:#76838f; font-size:medium;border-bottom: 1px groove #cbcbcb ">
+                                <i class="icon wb-plus"></i> Tạo nhóm
+                            </div>
+                        </a>
+
+
+                        @if (ViewBag.GroupList.Count > 0)
+                        {
+                            <div class="clearfix"></div>
+                                <ul class="list-group list-group-full">
+                                    @{
+                                        foreach (var item in ViewBag.GroupList)
+                                        {
+                                            <li class="list-group-item" style="text-align:left;">
+                                                <div class="media">
+                                                    <div class="media-left" style="padding-left:20px;">
+                                                        <a class="avatar" href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))">
+                                                            <img class="img-responsive" style="width:50px;height:50px;" src="@item.Avatar" alt="...">
+                                                        </a>
+                                                    </div>
+                                                    <div class="media-body vertical-align">
+                                                        <a href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))" style="text-decoration:none;color:#37474f;">
+                                                            <h4 class="media-heading vertical-align-middle" style="color:#000; font-weight:500">@item.Name</h4>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+
+                                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!--END Left side-bar-->
+    <!--Main-->
+    <div class="col-sm-6">
+        <!--Post area-->
+        <div class="panel" id="activities_user" style="padding:10px 30px 10px 30px;display:none" role="tabpanel">
+            <h4 class="title" style="padding:0 0 10px">Cá nhân</h4>
+            <ul class="list-group" id="listSearchUser">
+            </ul>
+            <a class="btn btn-block btn-default profile-readMore" onclick="loadMoreUser()" id="loadMoreUser" href="javascript:void(0)" role="button">Tải thêm</a>
+        </div>
+        <div class="panel" id="activities_group" style="padding:10px 30px 10px 30px;display:none" role="tabpanel">
+            <h4 class="title" style="padding:0 0 10px">Hội nhóm</h4>
+            <ul class="list-group" id="listSearchGroup"></ul>
+            <a class="btn btn-block btn-default profile-readMore" onclick="loadMoreGroup()" id="loadMoreGroup" href="javascript:void(0)" role="button">Tải thêm</a>
+        </div>
+        <!--END Post area-->
+    </div>
+    <!--END Main-->
+    <!--Right side-bar-->
+
+    <div class="col-sm-3">
+@if (ViewBag.SuggestNews != null)
+{
+        <div class="panel">
+            <div class="panel-heading text-center">
+                <h3 class="panel-title" style="font-family:sans-serif">Gợi ý tin tức nên xem</h3>
+            </div>
+            <div class="panel-body" style="padding:0;padding-bottom:10px">
+                <div class="suggest-group">
+                    <div class="col-sm-12">
+                        <div class="overlay">
+                            <img src="@ViewBag.SuggestNews.Image" style="display:block; max-height:100%;max-width:100%;" />
+                            <figcaption class="overlay-bottom overlay-panel overlay-background">
+                                <h4><span class="fa fa-eye"> @ViewBag.SuggestNews.NumOfRead</span></h4>
+                            </figcaption>
+                        </div>
+                        <div class="row">
+                            <div class="clearfix"></div>
+                            <div class="col-sm-12 height-60">
+                                <span class="vertical-align-middle" style="font-weight:bold">@ViewBag.SuggestNews.Title</span>
+                                <span class="vertical-align-middle"><i class="fa fa-pencil" aria-hidden="true"></i> bởi @ViewBag.SuggestNews.AspNetUser.FullName</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right"><em>Xem những tin khác</em></div>
+
+        </div>
+}
+    </div>
+</div>
+<!--END right side-bar-->
+<div id="createGroupModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <form id="createGroup-form" method="post" autocomplete="off">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Tạo nhóm mới</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="GroupCreator" id="GroupCreator" value="@User.Identity.GetUserId()" />
+                    <div class="form-group form-material floating">
+                        <input class="form-control input-lg" type="text" name="GroupName" id="GroupName" />
+                        <label class="floating-label">Tên nhóm</label>
+                    </div>
+                    <div class="form-group form-material floating">
+                        <textarea class="form-control input-lg" rows="2" name="GroupDescription" id="GroupDescription"></textarea>
+                        <label class="floating-label">Mô tả</label>
+                    </div>
+                    <div class="form-group form-material floating">
+                        <select name="GroupSport" id="GroupSport" class="form-control input-lg">
+                            @{
+                                foreach (var item in sport)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                        </select>
+                        <label class="floating-label">Môn thể thao</label>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    <input type="submit" class="btn btn-success" value="Tạo nhóm" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Content/assets/js/plugins/jquery.sticky-kit.min.js"></script>
+    <script src="~/Content/assets/vendor/magnific-popup/jquery.magnific-popup.js"></script>
+    <script src="~/Content/assets/js/components/magnific-popup.js"></script>
+    <script src="~/Content/js/custom-script.js"></script>
+    <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            loadSearchUserResult();
+            loadSearchGroupResult();
+        });
+
+        var skipUser = 0;
+        var takeUser = 5;
+        var skipGroup = 0;
+        var takeGroup = 5;
+
+        function loadSearchUserResult() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetSearchUserResult", "SSN")',
+                async: false,
+                data: { "keyword": '@ViewBag.Keyword', "skip": skipUser, "take": takeUser },
+                success: function (result) {
+                    if (result.Succeed) {
+                        if (result.AdditionalData != null) {
+                            loadSearchUser(result.AdditionalData);
+                            $("#activities_user").show();
+                            if (result.AdditionalData.userCount < skipUser + takeUser) {
+                                $("#loadMoreUser").remove();
+                            }
+                        }
+                    }
+                }
+            });
+            skipUser = skipUser + takeUser;
+        }
+        function loadSearchGroupResult() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetSearchGroupList", "SSN")',
+                async: false,
+                data: { "keyword": '@ViewBag.Keyword', "skip": skipGroup, "take": takeGroup },
+                success: function (result) {
+                    if (result.Succeed) {
+                        if (result.AdditionalData != null) {
+                            loadSearchGroup(result.AdditionalData);
+                            $("#activities_group").show();
+                            if (result.AdditionalData.groupCount < skipGroup + takeGroup) {
+                                $("#loadMoreGroup").remove();
+                            }
+                        }
+                    }
+                }
+            });
+            skipGroup = skipGroup + takeGroup;
+        }
+
+        function loadMoreUser() {
+            loadSearchUserResult();
+        }
+        function loadMoreGroup(){
+            loadSearchGroupResult();
+        }
+
+        function loadSearchGroup(data) {
+
+            $(data.listGroup).each(function () {
+                if (!this.isAdmin) {
+                    var button = "";
+                    if (this.isFollowed) {
+                        button = '<button type="button" class="btn btn-default join" id="' + this.Id + '"><i class="fa fa-minus-circle" aria-hidden="true"></i> Rời nhóm</button>';
+                    } else {
+                        button = '<button type="button" class="btn btn-default join" id="' + this.Id + '"><i class="fa fa-plus-circle" aria-hidden="true"></i> Tham gia nhóm</button>';
+                    }
+                    var info = '<li class="row" style="overflow:hidden;list-style: none">'
+                        + '<div class="avatar avatar-lg col-sm-3" style="margin-left:10px;padding-left:0;padding-right:0;float:left; display:block;width:90px;height:90px;">'
+                        + '<img style="width:80px; height:80px;" src="' + this.Avatar + '">'
+                        + '</div>'
+                        + '<div class="col-sm-4" style="float:left; display:inline-block" id="following_' + this.Id + '">'
+                        + '<a href="/group/index/' + this.Id + '"><h4>' + this.Name + '</h4></a>'
+                        + '<span class="comment-content"><p>Nhóm ' + this.sport.Name + '</p></span>'
+                        + '</div>'
+                        + '<div class="col-sm-5 text-right">'
+                        + button
+                        + '</div>'
+                        + '</li>'
+                    $("#listSearchGroup").append(info);
+                    document.getElementById(this.Id).addEventListener('click', function () {
+                        var id = $(this).attr('id');
+                        JoinOutGroup(id);
+                    })
+                }
+            });
+        }
+
+        function loadSearchUser(data) {
+            $(data.userList).each(function () {
+                if (this.Id != '@User.Identity.GetUserId()') {
+                    var hobby = "";
+                    if (this.sameSport != 0) {
+                        hobby = "<span class='comment-content'><p>Có chung " + this.sameSport
+                            + " sở thích</p></span>";
+                    }
+                    var button = "";
+                    if (this.isFollowed) {
+                        button = '<button id="'+this.Id+'" type="button" class="btn btn-default follow"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button>';
+                    } else {
+                        button = '<button id="'+this.Id+'" type="button" class="btn btn-default follow"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button>';
+                    }
+                    var info = '<li class="row" style="overflow:hidden;list-style: none">'
+                        + '<div class="avatar avatar-lg col-sm-3" style="margin-left:10px;padding-left:0;padding-right:0;float:left; display:block;width:90px;height:90px;">'
+                        + '<img style="width:80px; height:80px;" src="' + this.AvatarImage + '">'
+                        + '</div>'
+                        + '<div class="col-sm-4" style="float:left; display:inline-block;" id="following_' + this.Id + '">'
+                        + '<a href="/profile/index?userid='+this.Id+'"><h4>' + this.FullName + '</h4></a>'
+                        + hobby
+                        + '</div>'
+                        + '<div class="col-sm-5 text-right">'
+                        + button
+                        + '</div></li>'
+                    $("#listSearchUser").append(info);
+                    document.getElementById(this.Id).addEventListener('click', function () {
+                        var id = $(this).attr('id');
+                        FollowUnfollow(id);
+                    })
+                }
+
+            });
+        }
+
+        function JoinOutGroup(id) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("JoinLeaveGroup", "Group")',
+                data: { "groupId": id, "userId": '@User.Identity.GetUserId()' },
+                async: false,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.Leaved)') {
+                        location.href = location.href;
+                    } else if (data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.RequestSent)') {
+                        $("#" + id).empty();
+                        $("#" + id).append('<i class="fa fa-times-circle" aria-hidden="true"></i> Hủy yêu cầu tham gia nhóm')
+                        
+                    } else if (data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.CancelRequest)') {
+                        $("#" + id).empty();
+                        $("#" + id).append('<i class="fa fa-plus-circle" aria-hidden="true"></i> Tham gia nhóm')
+                        
+                    } else if (data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.CannotLeave)') {
+                        showMessage("Bạn đang là quản trị duy nhất của trang. Vui lòng chọn một thành viên khác để thay thế trước khi rời nhóm", "error", "OK");
+                    } else if (data.Succeed && data.Message == '@((int)JoinLeaveGroupResult.ReJoined)') {
+                        $("#" + id).empty();
+                        $("#" + id).append('<i class="fa fa-times-circle" aria-hidden="true"></i> Hủy yêu cầu tham gia nhóm')
+                    }
+                    else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+                
+            });
+        }
+
+        function FollowUnfollow(id) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("FollowUnfollowUser", "Follow")',
+                data: { "userId": id, "followerId": '@User.Identity.GetUserId()' },
+                async: false,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Succeed && data.Message == "Đã bỏ theo dõi") {
+                        $("#" + id).empty();
+                        $("#"+id).append('<i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi')
+                    } else if (data.Succeed && data.Message == "Đã theo dõi") {
+                        $("#" + id).empty();
+                        $("#"+ id).append('<i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi')
+                    }
+                    else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
+        //create group
+        function showCreateGroupModal() {
+            $("#createGroupModal").modal('show');
+        }
+
+        $("#createGroup-form").submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(document.getElementById('createGroup-form'));
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateGroup", "Group")',
+                async: false,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result.Succeed) {
+                        location.href = '/Group/Index/' + result.AdditionalData.Id;
+                    } else {
+                        //showErrors(result.Errors);
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        });
+
+    </script>
+}
+
+
+
+

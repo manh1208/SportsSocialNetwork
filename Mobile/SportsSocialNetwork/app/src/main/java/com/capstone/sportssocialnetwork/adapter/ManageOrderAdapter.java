@@ -5,14 +5,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
+import com.capstone.sportssocialnetwork.enumerable.OrderStatusEnum;
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.model.Order;
+import com.capstone.sportssocialnetwork.service.RestService;
+import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.capstone.sportssocialnetwork.utils.Utilities;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,11 +25,15 @@ import java.util.List;
 public class ManageOrderAdapter extends ArrayAdapter<Order> {
     private Context mContext;
     private List<Order> orders;
+    private RestService service;
+    private final Object mLock = new Object();
+    private ArrayList<Order> mOriginalItems;
 
     public ManageOrderAdapter(Context context, int resource, List<Order> objects) {
         super(context, resource, objects);
         mContext = context;
         orders = objects;
+        service = new RestService();
     }
 
     @Override
@@ -41,6 +48,7 @@ public class ManageOrderAdapter extends ArrayAdapter<Order> {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+        mOriginalItems = null;
         notifyDataSetChanged();
     }
 
@@ -60,32 +68,62 @@ public class ManageOrderAdapter extends ArrayAdapter<Order> {
         viewHolder.txtFullName.setText(order.getFullName());
 
         try {
-            Date date  = Utilities.getDateTime(order.getStartTime(),"MM/dd/yyyy hh:mm:ss a");
-            String useDate = Utilities.getDateTimeString(date,"dd/MM/yyyy");
-            String startTime = Utilities.getDateTimeString(date,"hh:mm a");
-            date = Utilities.getDateTime(order.getEndTime(),"MM/dd/yyyy hh:mm:ss a");
-            String endTime = Utilities.getDateTimeString(date,"hh:mm a");
+            Date date  = Utilities.getDateTime(order.getStartTime(),DataUtils.FORMAT_DATE_TIME);
+            String useDate = Utilities.getDateTimeString(date,DataUtils.FORMAT_DATE);
+            String startTime = Utilities.getDateTimeString(date,DataUtils.FORMAT_TIME);
+            date = Utilities.getDateTime(order.getEndTime(),DataUtils.FORMAT_DATE_TIME);
+            String endTime = Utilities.getDateTimeString(date,DataUtils.FORMAT_TIME);
             viewHolder.txtTime.setText(useDate +" : " +startTime +" - " +endTime);
         } catch (ParseException e) {
             viewHolder.txtTime.setText(order.getStartTime()+" - " + order.getEndTime());
             e.printStackTrace();
         }
 
-        viewHolder.txtStatus.setText("Trạng thái: " + order.getStatus());
+        viewHolder.txtStatus.setText("" + OrderStatusEnum.fromInteger(order.getStatus()).toString());
+        if (order.getStatus()==OrderStatusEnum.Pending.getValue()){
+            viewHolder.txtStatus.setBackgroundResource(R.drawable.order_status_waiting);
+        }else if (order.getStatus()==OrderStatusEnum.Cancel.getValue() || order.getStatus() == OrderStatusEnum.Unapproved.getValue()){
+            viewHolder.txtStatus.setBackgroundResource(R.drawable.order_status_cancel);
+        }else{
+            viewHolder.txtStatus.setBackgroundResource(R.drawable.order_status_approve);
+        }
 
         return convertView;
     }
+
 
     private final class ViewHolder{
         TextView txtFullName;
         TextView txtTime;
         TextView txtStatus;
-        Button btnDetail;
         ViewHolder(View v){
             txtFullName = (TextView) v.findViewById(R.id.txt_manage_order_fullname);
             txtTime = (TextView) v.findViewById(R.id.txt_manage_order_time);
             txtStatus = (TextView) v.findViewById(R.id.txt_manage_order_status);
-            btnDetail = (Button) v.findViewById(R.id.btn_manage_order_detail);
         }
     }
+
+    public void filter(int orderStatus) {
+       if (mOriginalItems==null){
+           mOriginalItems = new ArrayList<>(orders);
+       }
+
+       if (orderStatus<=0){
+           orders = mOriginalItems;
+           notifyDataSetChanged();
+       }else{
+           List<Order> newlist = new ArrayList<>();
+           for (int i = 0; i < mOriginalItems.size(); i++) {
+               Order value = mOriginalItems.get(i);
+               if (value.getStatus()==orderStatus){
+                   newlist.add(value);
+               }
+           }
+           orders = newlist;
+           notifyDataSetChanged();
+       }
+
+    }
+
+
 }

@@ -1,0 +1,233 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Moderator/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="panel">
+    <div class="panel-body">
+        <div class="col-md-6">
+            <h3>Danh sách các tin tức</h3>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="#" onclick="showCreateArticleModal()" class="btn btn-success"><i class="fa fa-plus" aria-hidden="true"></i> Tạo mới tin tức</a>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-body">
+        <div class="box">
+            <div class="box-header">
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="article-table" class="table table-hover dataTable table-bordered dt-responsive table-responsive" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tên tin tức</th>
+                                    <th>Ngày đăng</th>
+                                    <th>Ảnh đại diện</th>
+                                    <th>Số người xem</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+        </div>
+    </div>
+</div>
+
+<div id="create-modal-container"></div>
+<div id="edit-modal-container"></div>
+<div id="preview-modal-container"></div>
+
+@section scripts{
+    <script src="~/Content/ckeditor/ckeditor.js"></script>
+    <script>
+        (function (document, window, $) {
+            'use strict';
+
+            var Site = window.Site;
+            $(document).ready(function () {
+                Site.run();
+            });
+        })(document, window, jQuery);
+
+        $(document).ready(function () {
+            initArtcleTable();
+        })
+
+        function initArtcleTable() {
+            var colDefs = [
+                  {
+                      "aTargets": [0, 1, 2],
+                      "bSortable": false,
+                  },
+                  {
+                      "aTargets": [1],
+                      "width": "30%",
+                  },
+                  {
+                      "aTargets": [3],
+                      "mRender": function (data, type, row) {
+                          return '<img src="' + data + '" width=60 />';
+                      },
+                      "bSortable": false,
+                  },
+                    {
+                        "aTargets": [4],
+                        "mRender": function (data, type, row) {
+                            return data;
+                        },
+                        "bSortable": false,
+                    },
+                  {
+                      "aTargets": [5],
+                      "mRender": function (data, type, row) {
+                          var previewBtn = '<a class="btn btn-success" onclick="showPreviewArticle(\'' + data + '\')" data-toggle="modal" href="#"><i class="fa fa-eye"></i></a>';
+                          var updateBtn = '<a class="btn btn-warning"data-toggle="modal" onclick="showEditArticleModal(\'' + data + '\')" href="#"><i class="fa fa-pencil-square-o"></i></a>';
+                          var deleteBtn = '<a class="btn btn-danger ladda-button" data-style="zoom-in" data-plugin="ladda" onclick="showConfirmDeleteArticle(\'' + data + '\')"  href="#"> <span class="ladda-label"><i class="fa fa-trash-o "></i></span></a>';
+                          return previewBtn + '&nbsp;' + updateBtn + '&nbsp;' + deleteBtn;
+                      },
+                      "bSortable": false
+                  }
+            ];
+            var param = {
+                colDefs: colDefs,
+                url: '@Url.Action("IndexList")',
+                data: []
+            };
+            $('#article-table').customDataTable(param);
+        }
+
+
+        function showCreateArticleModal() {
+            $.ajax({
+                url: '@Url.Action("Create")',
+                type: 'GET',
+                success: function (result) {
+                    $('#create-modal-container').html(result);
+                    $('#create-modal').modal('show');
+
+                    CKEDITOR.replace('Content');
+                    prepareCreateArtical();
+                },
+            })
+        }
+
+        function prepareCreateArtical() {
+            //validate here
+
+            $('#create-form').submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData(document.getElementById('create-form'));
+                formData.append("NewsContent", CKEDITOR.instances.Content.getData().replace(/\r?\n|\r/g, " "));
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Create")',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        showMessage("Tạo mới thành công.", "success", "OK");
+                        $('#create-modal').modal('hide');
+                        $('#article-table').reloadDataTable();
+                    },
+                    error: function (error) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                });
+            });
+        }
+
+
+        function showEditArticleModal(id) {
+            $.ajax({
+                url: '@Url.Action("Edit")',
+                type: 'GET',
+                data: { id: id },
+                success: function (result) {
+                    $('#edit-modal-container').html(result);
+                    $('#edit-modal').modal('show');
+                    prepareEditArtical();
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            })
+        }
+
+        function prepareEditArtical() {
+            //validate here
+
+            $('#edit-form').submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData(document.getElementById('edit-form'));
+                formData.append("NewsContent", CKEDITOR.instances.ContentEdit.getData().replace(/\r?\n|\r/g, " "));
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Edit")',
+                    data: formData,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        showMessage("Thay đổi thành công.", "success", "OK");
+                        $('#article-table').reloadDataTable();
+                    },
+                    error: function (error) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                });
+            });
+        }
+
+        function showConfirmDeleteArticle(id) {
+            showConfirmDeleteItem("Bạn có chắc chắn muốn xóa tin tức này không",
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("Delete")',
+                            data: { id: id },
+                            success: function (data) {
+                                $("#article-table").reloadDataTable();
+                                showMessage("Xóa thành công.", "success", "OK");
+                            },
+                            error: function (error) {
+                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                            }
+                        });
+                    }
+                });
+        }
+
+        function showPreviewArticle(id) {
+            $.ajax({
+                url: '@Url.Action("Preview")',
+                type: 'GET',
+                data: { id: id },
+                success: function (result) {
+                    $('#preview-modal-container').html(result);
+                    $('#preview-modal').modal('show');
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            })
+        }
+
+    </script>
+}
+
+

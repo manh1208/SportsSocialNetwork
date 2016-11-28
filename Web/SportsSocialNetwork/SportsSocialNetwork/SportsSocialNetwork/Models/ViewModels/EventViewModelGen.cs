@@ -23,6 +23,7 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual int PlaceId { get; set; }
     			public virtual string Description { get; set; }
     			public virtual string Image { get; set; }
+    			public virtual Nullable<int> ParticipationType { get; set; }
     			public virtual int Status { get; set; }
     			public virtual bool Active { get; set; }
     	

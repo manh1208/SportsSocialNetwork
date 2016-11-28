@@ -12,5 +12,8 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Models.ViewModels
         public Place Place { get; set; }
         public Field Field { get; set; }
         //public FieldType FieldType { get; set; }
+
+        public string AvailableDayStr { get; set; }
+        public AspNetUserViewModel AspNetUser { get; set; }
     }
 }

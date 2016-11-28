@@ -20,7 +20,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
 
         bool checkTimeValidInOrder(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate);
 
-        Order CreateOrder(String userId, int fieldId, DateTime startTime, DateTime endTime, String note, double price, int? paidType);
+        Order CreateOrder(Order order);
         
         //Order CheckInOrder(String orderCode);
         
@@ -51,7 +51,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
             foreach (var order in orders)
             {
                 if ((order.StartTime > sTime && order.StartTime >= eTime) || (order.EndTime <= sTime &&
-                    order.EndTime < sTime))
+                    order.EndTime < eTime))
                 {
                     isValid = true;
                 }
@@ -83,6 +83,14 @@ namespace SportsSocialNetwork.Models.Entities.Services
             Order order = this.FirstOrDefault(x => x.Id == id);
             if (order != null)
             {
+                if(order.PaidType == (int)OrderPaidType.ChosePayByCash)
+                {
+                    order.PaidType = (int)OrderPaidType.PaidByCash;
+                }
+                else if(order.PaidType == (int)OrderPaidType.ChosePayOnline)
+                {
+                    order.PaidType = (int)OrderPaidType.PaidOnline;
+                }
                 order.Status = status;
                 this.Save();
                 return order;
@@ -90,21 +98,11 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return null;
         }
 
-        public Order CreateOrder(String userId, int fieldId, DateTime startTime, DateTime endTime, String note, double price, int? paidType)
+        public Order CreateOrder(Order o)
         {
-            Order order = new Order();
-            order.UserId = userId;
-            order.FieldId = fieldId;
-            order.CreateDate = DateTime.Now;
-            order.StartTime = startTime;
-            order.EndTime = endTime;
-            order.Note = note;
-            order.Price = price;
-            order.Status = 0;
-            order.PaidType = paidType;
-            this.Create(order);
+            this.Create(o);
             this.Save();
-            return order;
+            return o;
 
         }
 

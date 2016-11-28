@@ -26,7 +26,12 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
             {
                 List<Event> eventList = service.GetAllPlaceOwnerEvent(ownerId);
 
-                List<EventOveralViewModel> result = Mapper.Map<List<EventOveralViewModel>>(eventList);
+                List<EventOveralViewModel> result = new List<EventOveralViewModel>();
+
+                foreach (var e in eventList)
+                {
+                    result.Add(PrepareEventOveralViewModel(e));
+                }
 
                 response = new ResponseModel<List<EventOveralViewModel>>(true, "Danh sách cách sự kiện của bạn:", null, result);
             }
@@ -36,6 +41,82 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             }
             return Json(response);
+        }
+
+        [HttpPost]
+        public ActionResult GetAllEvent(string currentUserId, int skip, int take)
+        {
+            var service = this.Service<IEventService>();
+
+            ResponseModel<List<EventOveralViewModel>> response = null;
+
+            try
+            {
+                List<Event> eventList = service.GetAllEvent(skip,take);
+
+                List<EventOveralViewModel> result = new List<EventOveralViewModel>();
+
+                foreach (var e in eventList)
+                {
+                    result.Add(PrepareEventForMember(e,currentUserId));
+
+                    List<Participation> list = e.Participations.ToList();
+
+                    foreach (var l in list)
+                    {
+                        if (l.UserId.Equals(currentUserId)) {
+
+                        }
+                    }
+                }
+
+                response = new ResponseModel<List<EventOveralViewModel>>(true, "Danh sách cách sự kiện của bạn:", null, result);
+            }
+            catch (Exception)
+            {
+                response = ResponseModel<List<EventOveralViewModel>>.CreateErrorResponse("Tải danh sách thất bại", systemError);
+
+            }
+            return Json(response);
+        }
+
+        private EventOveralViewModel PrepareEventOveralViewModel(Event e)
+        {
+
+            EventOveralViewModel result = Mapper.Map<EventOveralViewModel>(e);
+            result.StartDateString = result.StartDate.ToString("dd/MM/yyyy");
+
+            result.EndDateString = result.EndDate.ToString("dd/MM/yyyy");
+
+            result.PlaceName = e.Place.Name;
+
+            return result;
+        }
+
+        private EventOveralViewModel PrepareEventForMember(Event e, string currentUserId)
+        {
+
+            EventOveralViewModel result = Mapper.Map<EventOveralViewModel>(e);
+            result.StartDateString = result.StartDate.ToString("dd/MM/yyyy");
+
+            result.EndDateString = result.EndDate.ToString("dd/MM/yyyy");
+
+            result.PlaceName = e.Place.Name;
+
+            result.Joined = false;
+
+            List<Participation> list = e.Participations.ToList();
+
+            foreach (var l in list)
+            {
+                if (l.UserId.Equals(currentUserId))
+                {
+                    result.Joined = true;
+                }
+                
+            }
+
+            return result;
         }
     }
 }

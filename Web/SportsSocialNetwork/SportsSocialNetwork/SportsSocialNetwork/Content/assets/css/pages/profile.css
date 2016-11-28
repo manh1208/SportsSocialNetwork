@@ -36,10 +36,10 @@
 .page-profile .profile-stat-count + span {
   color: #a3afb7;
 }
-.page-profile .list-group-item {
+/*.page-profile .list-group-item {
   padding: 25px 15px;
   border-top-color: #e4eaec;
-}
+}*/
 .page-profile .list-group-item:first-child {
   border-top: transparent;
 }

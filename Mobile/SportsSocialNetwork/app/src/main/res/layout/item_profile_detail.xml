@@ -24,6 +24,7 @@
                 android:src="@drawable/ic_email" />
 
             <TextView
+                android:id="@+id/txt_profile_email"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -46,6 +47,7 @@
                 android:src="@drawable/ic_address" />
 
             <TextView
+                android:id="@+id/txt_profile_address"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -68,6 +70,7 @@
                 android:src="@drawable/ic_phonenumber" />
 
             <TextView
+                android:id="@+id/txt_profile_phone_number"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -89,6 +92,7 @@
                 android:src="@drawable/ic_football" />
 
             <TextView
+                android:id="@+id/txt_profile_sport"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -98,11 +102,12 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_profile_detail"
+            android:textColor="#fff"
+            android:id="@+id/btn_profile_follow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:text="Chỉnh sửa"
+            android:text="Theo dõi"
             android:textSize="15sp" />
 
     </LinearLayout>
@@ -129,6 +134,7 @@
                 android:textSize="15sp"
                 />
             <TextView
+                android:id="@+id/txt_profile_following"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -157,6 +163,7 @@
                 android:textSize="15sp"
                 />
             <TextView
+                android:id="@+id/txt_profile_followed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -185,6 +192,7 @@
                 android:textSize="15sp"
                 />
             <TextView
+                android:id="@+id/txt_profile_post_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

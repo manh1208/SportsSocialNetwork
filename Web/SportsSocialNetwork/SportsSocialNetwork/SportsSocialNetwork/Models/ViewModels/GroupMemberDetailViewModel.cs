@@ -13,6 +13,6 @@ namespace SportsSocialNetwork.Models.ViewModels
         public bool Admin { get; set; }
         public int Status { get; set; }
         public bool Active { get; set; }
-
+        public bool isFollowed { get; set; }
     }
 }

@@ -17,8 +17,8 @@ namespace SportsSocialNetwork.Models.ViewModels
     	
     			public virtual int Id { get; set; }
     			public virtual int InvitationId { get; set; }
-    			public virtual string ReciverId { get; set; }
-    			public virtual bool Accepted { get; set; }
+    			public virtual string ReceiverId { get; set; }
+    			public virtual Nullable<bool> Accepted { get; set; }
     			public virtual bool Active { get; set; }
     	
     	public UserInvitationViewModel() : base() { }

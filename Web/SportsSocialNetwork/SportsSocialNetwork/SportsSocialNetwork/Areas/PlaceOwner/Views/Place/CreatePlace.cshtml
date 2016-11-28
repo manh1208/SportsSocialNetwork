@@ -25,10 +25,10 @@
         @using (Html.BeginForm("createPlace", "Place", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "placeForm", @autocomplete = "off" }))
         {
             <input type="hidden" value="@User.Identity.GetUserId()" name="UserId" />
-            <div class="col-sm-6">
+            <div class="col-sm-7">
                 <div class="panel">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Thông tin địa điểm</h3>
+                        <p class="panel-title" style="font-weight:bold;">Thông tin địa điểm</p>
                     </div>
                     <div class="panel-body">
                         <div class="form-group form-material floating">
@@ -65,7 +65,20 @@
                                 <label class="floating-label">Số điện thoại</label>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group form-material">
+                            <div style="display:block;float:left; margin-right:20px;">
+                                <label class="control-label">Giờ hoạt động</label>
+                            </div>
+                            <div style="display:block;float:left; margin-right:10px;"><label class="control-label">Từ</label></div>
+                            <div style="display:block;float:left; width:80px; margin:0 10px;">
+                                @Html.TextBoxFor(p => p.StartTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "startTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                            </div>
+                            <div style="display:block;float:left; margin-right:10px;"><label class="control-label">Đến</label></div>
+                            <div style="display:block;float:left; width:80px;">
+                                @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "endTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
+                            </div>
+                        </div>
+                        @*<div class="form-group">
                             <div class="col-sm-3">
                                 <label class="control-label">Giờ hoạt động</label>
                             </div>
@@ -85,7 +98,7 @@
                                     @Html.TextBoxFor(p => p.EndTime, "{0:hh\\:mm}", new { @class = "timepicker form-control input-lg", @id = "endTime", @data_plugin = "clockpicker", @data_autoclose = "true" })
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
                         <div class="form-group form-material floating">
                             @Html.TextAreaFor(p => p.Description, new { rows = "3", @class = "form-control input-lg" })
                             <label class="floating-label">Mô tả</label>
@@ -95,10 +108,10 @@
 
                 
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-5">
                 <div class="panel">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Hình ảnh về địa điểm</h3>
+                        <p class="panel-title" style="font-weight:bold;">Hình ảnh về địa điểm</p>
                     </div>
                     <div class="panel-body">
                         <div class="form-group form-material floating">

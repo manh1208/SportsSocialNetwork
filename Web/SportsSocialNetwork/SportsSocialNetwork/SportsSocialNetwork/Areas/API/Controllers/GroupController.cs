@@ -48,7 +48,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
 
         [HttpPost]
-        public ActionResult ShowGroupDetail(int id,String currentUser)
+        public ActionResult ShowGroupDetail(int id,string currentUser)
         {
             var groupService = this.Service<IGroupService>();
 
@@ -90,7 +90,7 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 if (model.UploadImage != null) {
                     FileUploader uploader = new FileUploader();
 
-                    group.CoverImage = uploader.UploadImage(model.UploadImage, userImagePath);
+                    group.Avatar = uploader.UploadImage(model.UploadImage, userImagePath);
                 }
 
                 group = groupService.CreateGroup(group);
@@ -128,6 +128,26 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
         }
 
         [HttpPost]
+        public ActionResult DeleteGroup(int id)
+        {
+            var service = this.Service<IGroupService>();
+
+            ResponseModel<bool> response = null;
+
+            try {
+                Group group = service.FirstOrDefaultActive(x => x.Id == id);
+
+                service.Deactivate(group);
+
+                response = new ResponseModel<bool>(true, "Xóa nhóm thành công", null);
+
+            } catch (Exception) {
+                response = ResponseModel<bool>.CreateErrorResponse("Xóa nhóm thất bại", systemError);
+            }
+            return Json(response);
+        }
+
+        [HttpPost]
         public ActionResult ChangeCoverImage(int groupId, HttpPostedFileBase image) {
             var service = this.Service<IGroupService>();
 
@@ -137,7 +157,13 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             try
             {
-                String path = uploader.UploadImage(image, userImagePath);
+                String path = null;
+
+                if (image != null)
+                {
+                    path = uploader.UploadImage(image, userImagePath);
+
+                }
 
                 String result = service.ChangeCoverImage(groupId, path);
 
@@ -150,6 +176,64 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
 
             return Json(response);
 
+        }
+
+        [HttpPost]
+        public ActionResult ChangeGroupAvatar(int groupId, HttpPostedFileBase image) {
+            var service = this.Service<IGroupService>();
+
+            ResponseModel<String> response = null;
+
+            FileUploader uploader = new FileUploader();
+
+            try
+            {
+                String path = null;
+
+                if (image != null)
+                {
+                    path = uploader.UploadImage(image, userImagePath);
+
+                }
+
+                String result = service.ChangeAvatarImage(groupId, path);
+
+                response = new ResponseModel<String>(true, "Ảnh nhóm đã được cập nhật!", null, result);
+            }
+            catch (Exception)
+            {
+                response = ResponseModel<String>.CreateErrorResponse("Ảnh nhóm chưa được cập nhật!", systemError);
+            }
+
+            return Json(response);
+        }
+
+        [HttpPost]
+        public ActionResult ShowAllJoinedGroup(String userId) {
+            var groupService = this.Service<IGroupService>();
+
+            var groupMemberService = this.Service<IGroupMemberService>();
+
+            ResponseModel<List<GroupViewModel>> response = null;
+
+            try {
+                List<GroupMember> joinedList = groupMemberService.GetJoinedList(userId).ToList();
+
+                List<Group> groupList = new List<Group>();
+
+                foreach (var j in joinedList) {
+                    groupList.Add(groupService.FindGroupById(j.GroupId));
+                }
+
+                List<GroupViewModel> result = Mapper.Map<List<GroupViewModel>>(groupList);
+
+                response = new ResponseModel<List<GroupViewModel>>(true, "Danh sách nhóm:", null, result);
+
+            } catch (Exception) {
+                response = ResponseModel<List<GroupViewModel>>.CreateErrorResponse("Không thể tải danh sách nhóm",systemError);
+            }
+
+            return Json(response);
         }
 
     }

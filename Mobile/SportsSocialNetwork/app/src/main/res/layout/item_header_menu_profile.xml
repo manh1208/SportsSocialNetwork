@@ -15,11 +15,11 @@
         android:paddingTop="10sp">
 
         <com.capstone.sportssocialnetwork.custom.RoundedImageView
-            android:id="@+id/iv_avatar"
+            android:id="@+id/iv_user_menu_avatar"
             android:layout_width="80sp"
             android:layout_height="80sp"
             android:padding="10sp"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             android:src="@drawable/img_default_avatar" />
 
         <LinearLayout
@@ -27,10 +27,11 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20sp"
-            android:layout_toRightOf="@+id/iv_avatar"
+            android:layout_toRightOf="@+id/iv_user_menu_avatar"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/txt_user_menu_fullname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nguyễn Văn Mạnh"
@@ -53,6 +54,120 @@
         android:layout_width="match_parent"
         android:layout_height="5sp"
         android:background="@color/separator" />
+
+    <RelativeLayout
+        android:id="@+id/layout_menu_news"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="20sp"
+        android:paddingLeft="20sp"
+        android:paddingRight="20sp"
+        android:paddingTop="20sp">
+
+        <com.capstone.sportssocialnetwork.custom.RoundedImageView
+            android:id="@+id/iv_menu_image_news"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_news"
+
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20sp"
+            android:layout_toRightOf="@+id/iv_menu_image_news"
+            android:orientation="vertical">
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đọc tin tức"
+                android:textColor="#000"
+                android:textSize="18sp"
+                android:textStyle="normal" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_menu_my_friend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="20sp"
+        android:paddingLeft="20sp"
+        android:paddingRight="20sp"
+        android:paddingTop="20sp">
+
+        <com.capstone.sportssocialnetwork.custom.RoundedImageView
+            android:id="@+id/iv_menu_image_friend"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_member"
+
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20sp"
+            android:layout_toRightOf="@+id/iv_menu_image_friend"
+            android:orientation="vertical">
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bạn bè"
+                android:textColor="#000"
+                android:textSize="18sp"
+                android:textStyle="normal" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_menu_invitation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="20sp"
+        android:paddingLeft="20sp"
+        android:paddingRight="20sp"
+        android:paddingTop="20sp">
+
+        <com.capstone.sportssocialnetwork.custom.RoundedImageView
+            android:id="@+id/iv_menu_image_invitation"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_invitation"
+
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20sp"
+            android:layout_toRightOf="@+id/iv_menu_image_invitation"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thư mời"
+                android:textColor="#000"
+                android:textSize="18sp"
+                android:textStyle="normal" />
+        </LinearLayout>
+    </RelativeLayout>
+
 
     <RelativeLayout
         android:id="@+id/layout_menu_my_order"
@@ -87,8 +202,47 @@
                 android:layout_height="wrap_content"
                 android:text="Đơn đặt sân của tôi"
                 android:textColor="#000"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="18sp"
+                android:textStyle="normal" />
         </LinearLayout>
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_menu_manage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="20sp"
+        android:paddingLeft="20sp"
+        android:paddingRight="20sp"
+        android:paddingTop="20sp">
+
+        <com.capstone.sportssocialnetwork.custom.RoundedImageView
+            android:id="@+id/iv_menu_image_manage"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_manage"
+
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20sp"
+            android:layout_toRightOf="@+id/iv_menu_image_manage"
+            android:orientation="vertical">
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Về trang quản lý"
+                android:textColor="#000"
+                android:textSize="18sp"
+                android:textStyle="normal" />
+        </LinearLayout>
+    </RelativeLayout>
+
 </LinearLayout>

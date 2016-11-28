@@ -19,7 +19,7 @@
                 <br>
                 <span class="font-size-20">@ViewBag.place.Name</span>
                 <br>
-                <span class="font-size-12">(@ViewBag.place.Address, Quận @ViewBag.place.District, @ViewBag.place.City)</span>
+                <span class="font-size-12">(@ViewBag.place.Address, @ViewBag.place.District, @ViewBag.place.City)</span>
             </address>
             <div class="page-invoice-table table-responsive">
                 <table class="table table-hover text-right">
@@ -39,7 +39,7 @@
                                 @Model.StartTime.ToString("dd-MM-yyyy"), @Model.StartTime.ToString("HH:mm") - @Model.EndTime.ToString("HH:mm")
                             </td>
                             <td>
-                                @Model.Price
+                                @Model.Price.ToString("n0")
                             </td>
                         </tr>
                     </tbody>
@@ -98,6 +98,10 @@
                         {
                             <span class='label label-lg label-outline label-dark'>@Utils.GetEnumDescription(OrderStatus.Cancel).ToString()</span>
                         }
+                        else if (Model.Status == (int)OrderStatus.CheckedIn)
+                        {
+                            <span class='label label-lg label-outline label-primary'>@Utils.GetEnumDescription(OrderStatus.CheckedIn).ToString()</span>
+                        }
                         else
                         {
                             <span class='label label-lg label-outline label-dark'>Không xác định</span>;
@@ -109,7 +113,9 @@
     </div>
 </div>
 <div class="modal-footer text-right">
-    @if ((Model.PaidType == 1 || Model.PaidType == 2) && Model.Status != 4)
+    @if ((Model.PaidType == (int)OrderPaidType.ChosePayOnline || Model.PaidType == (int)OrderPaidType.ChosePayByCash) &&
+        Model.Status != (int)OrderStatus.Cancel && Model.Status != (int)OrderStatus.Unapproved && 
+        Model.Status != (int)OrderStatus.CheckedIn)
     {
         <form id="onlineform" action="@Url.Action("PayOnlineNow", "Order")" class="form-horizontal padding-bottom-10" method="get">
 

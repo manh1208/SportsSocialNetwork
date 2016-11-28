@@ -1,6 +1,7 @@
 package com.capstone.sportssocialnetwork.model.response;
 
 import com.capstone.sportssocialnetwork.model.Place;
+import com.capstone.sportssocialnetwork.model.PlaceImage;
 import com.capstone.sportssocialnetwork.model.Sport;
 import com.google.gson.annotations.SerializedName;
 
@@ -12,6 +13,8 @@ import java.util.List;
 public class PlaceResponseModel extends Place {
     @SerializedName("SportList")
     private List<Sport> sports;
+    @SerializedName("PlaceImages")
+    private List<PlaceImage> placeImages;
 
     public List<Sport> getSports() {
         return sports;
@@ -19,5 +22,13 @@ public class PlaceResponseModel extends Place {
 
     public void setSports(List<Sport> sports) {
         this.sports = sports;
+    }
+
+    public List<PlaceImage> getPlaceImages() {
+        return placeImages;
+    }
+
+    public void setPlaceImages(List<PlaceImage> placeImages) {
+        this.placeImages = placeImages;
     }
 }

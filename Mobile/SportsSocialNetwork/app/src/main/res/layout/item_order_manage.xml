@@ -15,7 +15,7 @@
             android:paddingLeft="20sp"
             android:paddingBottom="20sp"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/btn_manage_order_detail">
+            >
 
             <TextView
                 android:id="@+id/txt_manage_order_fullname"
@@ -34,6 +34,7 @@
                 android:textColor="#000"
                 />
             <TextView
+                android:padding="5sp"
                 android:id="@+id/txt_manage_order_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,19 +43,6 @@
                 android:textColor="#000"
                 />
         </LinearLayout>
-        <Button
-            android:id="@+id/btn_manage_order_detail"
-            android:layout_width="50sp"
-            android:layout_height="50sp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:padding="3sp"
-            android:text="Chi tiết"
-            android:layout_marginLeft="20sp"
-            android:layout_marginRight="20sp"
-            android:textAllCaps="false"
-            android:background="@drawable/button_booking"
-            />
 
     </RelativeLayout>
 </LinearLayout>

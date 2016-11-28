@@ -3,6 +3,8 @@ using SkyWeb.DatVM.Mvc;
 using SportsSocialNetwork.Models;
 using SportsSocialNetwork.Models.Entities;
 using SportsSocialNetwork.Models.Entities.Services;
+using SportsSocialNetwork.Models.Enumerable;
+using SportsSocialNetwork.Models.Utilities;
 using SportsSocialNetwork.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -42,6 +44,8 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                         if (r.Id == place.Id)
                         {
                             r.SportList = GetAllSportOfPlace(place);
+
+                            PreparePlaceOveralViewModel(r);
                         }
 
                     }
@@ -70,6 +74,10 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
                 result = Mapper.Map<List<PlaceOveralViewModel>>(placeList);
 
+                foreach (var r in result) {
+                    PreparePlaceOveralViewModel(r);
+                }
+
                 response = new ResponseModel<List<PlaceOveralViewModel>>(true, "Danh sách địa điểm của bạn:",null,result);
             }
             catch (Exception) {
@@ -91,6 +99,8 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 if (place != null)
                 {
                     PlaceDetailViewModel result = Mapper.Map<PlaceDetailViewModel>(place);
+
+                    result.StatusString = Utils.GetEnumDescription((PlaceStatus)result.Status);
 
                     response = new ResponseModel<PlaceDetailViewModel>(true, "Thông tin địa điểm đã tải thành công", null, result);
                 }
@@ -118,6 +128,9 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 if (place != null)
                 {
                     PlaceOveralViewModel result = Mapper.Map<PlaceOveralViewModel>(place);
+
+                    PreparePlaceOveralViewModel(result);
+
                     response = new ResponseModel<PlaceOveralViewModel>(true, "Trạng thái đã được cập nhật!", null, result);
                 }
                 else
@@ -154,7 +167,7 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                     {
                         var placeCoord = new GeoCoordinate(place.Latitude.Value, place.Longitude.Value);
                         var dis = Coord.GetDistanceTo(placeCoord);
-                        if (Coord.GetDistanceTo(placeCoord) < 5000)
+                        if (Coord.GetDistanceTo(placeCoord) < 5000 && place.Status!= int.Parse(PlaceStatus.Unapproved.ToString("d")))
                         {
                             placeList.Add(place);
                         }
@@ -167,6 +180,10 @@ namespace SportsSocialNetwork.Areas.API.Controllers
                 }
 
                 List<PlaceOveralViewModel> result = Mapper.Map<List<PlaceOveralViewModel>>(placeList);
+
+                foreach (var r in result) {
+                    PreparePlaceOveralViewModel(r);
+                }
 
                 response = new ResponseModel<List<PlaceOveralViewModel>>(true, "Những địa điểm gần bạn:", null, result);
             }
@@ -204,6 +221,10 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             }
 
             return sportList;
+        }
+
+        private void PreparePlaceOveralViewModel(PlaceOveralViewModel p) {
+            p.StatusString = Utils.GetEnumDescription((PlaceStatus)p.Status);
         }
     }
 }

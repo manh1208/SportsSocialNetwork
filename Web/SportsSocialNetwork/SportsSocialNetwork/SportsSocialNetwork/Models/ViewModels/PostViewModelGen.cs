@@ -19,9 +19,15 @@ namespace SportsSocialNetwork.Models.ViewModels
     			public virtual string UserId { get; set; }
     			public virtual System.DateTime CreateDate { get; set; }
     			public virtual string PostContent { get; set; }
+    			public virtual Nullable<int> ContentType { get; set; }
+    			public virtual Nullable<int> PostId { get; set; }
+    			public virtual Nullable<int> EventId { get; set; }
+    			public virtual Nullable<int> NewsId { get; set; }
+    			public virtual Nullable<int> OrderId { get; set; }
     			public virtual Nullable<System.DateTime> EditDate { get; set; }
-    			public virtual string Image { get; set; }
+    			public virtual Nullable<System.DateTime> LatestInteractionTime { get; set; }
     			public virtual bool Active { get; set; }
+    			public virtual string ProfileId { get; set; }
     			public virtual Nullable<int> GroupId { get; set; }
     	
     	public PostViewModel() : base() { }

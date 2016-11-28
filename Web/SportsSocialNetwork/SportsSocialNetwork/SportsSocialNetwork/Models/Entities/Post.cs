@@ -19,7 +19,9 @@ namespace SportsSocialNetwork.Models.Entities
         {
             this.Likes = new HashSet<Like>();
             this.Notifications = new HashSet<Notification>();
+            this.Post1 = new HashSet<Post>();
             this.PostComments = new HashSet<PostComment>();
+            this.PostImages = new HashSet<PostImage>();
             this.PostSports = new HashSet<PostSport>();
         }
     
@@ -27,19 +29,34 @@ namespace SportsSocialNetwork.Models.Entities
         public string UserId { get; set; }
         public System.DateTime CreateDate { get; set; }
         public string PostContent { get; set; }
+        public Nullable<int> ContentType { get; set; }
+        public Nullable<int> PostId { get; set; }
+        public Nullable<int> EventId { get; set; }
+        public Nullable<int> NewsId { get; set; }
+        public Nullable<int> OrderId { get; set; }
         public Nullable<System.DateTime> EditDate { get; set; }
-        public string Image { get; set; }
+        public Nullable<System.DateTime> LatestInteractionTime { get; set; }
         public bool Active { get; set; }
+        public string ProfileId { get; set; }
         public Nullable<int> GroupId { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
+        public virtual AspNetUser AspNetUser1 { get; set; }
+        public virtual Event Event { get; set; }
         public virtual Group Group { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Like> Likes { get; set; }
+        public virtual News News { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Notification> Notifications { get; set; }
+        public virtual Order Order { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Post> Post1 { get; set; }
+        public virtual Post Post2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PostComment> PostComments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PostImage> PostImages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PostSport> PostSports { get; set; }
     }

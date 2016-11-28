@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_BookingFieldLayout.cshtml";
     var fieldSportList = ViewBag.fieldSport as List<FieldSportViewModel>;
 }
+@section Styles{
 <style>
     .imgWH100 {
         width: 100%;
@@ -16,7 +17,7 @@
         width: 100%;
         vertical-align: middle;
         min-height: 200px;
-        max-height: 250px;
+        max-height: 210px;
     }
 
     .example {
@@ -71,23 +72,32 @@
             height: 150px;
         }
 </style>
+}
+
 
 <div class="col-md-9" style="float:left">
     <div class="panel col-md-12">
         <div class="panel-body" style="padding-top:50px">
             <div class="row padding15">
                 <div class="col-md-12">
-                    <div class="col-md-6 height-250" style="float:left">
-                        <div class="overlay-container">
+                    <div class="col-md-6" style="float:left">
+                        <div class="overlay-container" style="height:210px">
                             @if (Model.Avatar != null && Model.Avatar != "")
                             {
-                                <img title="Nhà thi đấu Phú Thọ" src="@Model.Avatar" class='imgW100'>
+                                <img src="@Model.Avatar" class='imgW100'>
                             }
                             else
                             {
-                                <img title="Nhà thi đấu Phú Thọ" src="~/Content/images/no_image.jpg" class='imgW100'>
+                                <img src="~/Content/images/no_image.jpg" class='imgW100'>
                             }
 
+                        </div>
+                        <div class="overlay-container padding-top-10px">
+                            <div id="averagePoint" style="font-size:50px;display:block;float:left;height:70px"></div>
+                            <div style="display:block;float:left;padding-left:10px;height:70px">
+                            <div style="font-size:14px;padding-top:18px;height:20px" id="rate1"></div>
+                            <div id="numOfRate" style="font-size:14px;height:20px"></div></div>
+                            <div style="display:block;float:left;padding-left:10px;height:70px;padding-top:18px"><button id="requestRate" class="btn btn-sm btn-default"><i class="fa fa-star" aria-hidden="true"></i> Đánh giá</button></div>
                         </div>
                     </div>
                     <div class="col-md-6" style="float:left">
@@ -133,15 +143,17 @@
         </div>
     </div>
 
-    <div class="panel col-md-12">
-        <h4 class="panel-title">Hình ảnh</h4>
+    <div class="panel col-md-12 padding-left-0 padding-right-0">
+        <header class="panel-heading" style="background-color:#ff6a00; border-radius:0px">
+            <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Hình ảnh</h3>
+        </header>
         <section class="regular slider">
             @if (ViewBag.placeImages.Count > 0 && ViewBag.placeImages != null)
             {
                 foreach (var item in ViewBag.placeImages)
                 {
                     <div>
-                        <a class="inline-block" href="@item.Image" title="@Model.Name"><img src="@item.Image" class='imgWH100 img-rounded'></a>
+                        <a class="inline-block magnific" href="@item.Image" title="@Model.Name"><img src="@item.Image" class='imgWH100 img-rounded'></a>
                     </div>
 
                 }
@@ -157,10 +169,10 @@
 
 </div>
 <div class="col-md-3" style="float:left">
-    <div class="panel">
-        <div class="panel-body" style="padding:20px 5px 10px 5px">
-            <h3 style="text-align:center"><span class="label label-primary">Các sân tại địa điểm</span></h3>
-            <div class="example-wrap">
+    <div class="panel" style="text-align:center">
+        <header class="panel-heading" style="background-color:#ff6a00; border-radius:0px">
+            <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Các sân tại địa điểm</h3>
+        </header>
                 <div class="example">
                     <div class="height-150" data-plugin="scrollable">
                         <div data-role="container">
@@ -182,20 +194,20 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
     </div>
 
     @if (ViewBag.lastestEvent != null)
             {
         <div class="masonry-item">
             <!-- Widget -->
+            <header class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Sự kiện gần đây nhất</h3>
+            </header>
             <div class="widget widget-article widget-shadow">
                 <div class="widget-header cover overlay overlay-hover">
                     <img class="cover-image overlay-scale" src="@ViewBag.lastestEvent.Image" style="max-height:175px">
                 </div>
                 <div class="widget-body" style="text-align:center">
-                    <p>Sự kiện gần đây nhất</p>
                     <h3 class="widget-title">@ViewBag.lastestEvent.Name</h3>
                     <div class="widget-body-footer padding-bottom-15 margin-top-0">
                         <a class="btn btn-primary" href="@Url.Action("ViewDetail", "Event", new { id = @ViewBag.lastestEvent.Id })">Xem chi tiết</a>
@@ -211,9 +223,59 @@
 
     }
 </div>
+<div id="ratingForm" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-hidden="true" data-dismiss="modal">×</button>
+                <h4 class="modal-title text-center">Đánh giá địa điểm này</h4>
+            </div>
+            <div class="modal-body text-center" id="rating">
+                <div id="rate2"></div>
+            </div>
+            <div class="modal-footer text-center">
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="submitRating" type="button">Đánh giá</button>
+                    <button class="btn btn-default" data-dismiss="modal" type="button">Hủy bỏ</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 @section Scripts{
     <script>
-        
+
+        $("#requestRate").click(function(){
+            $('#ratingForm').modal('show');
+        });
+
+        function loadMyRate(){
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("LoadRating", "Place")',
+                async: false,
+                data: { placeId: @Model.Id },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Succeed) {
+                        $('#rate2').empty();
+                        $('#rate2').shieldRating({
+                            max: 5,
+                            step: 1,
+                            value: data.AdditionalData.AverageRate,
+                        });
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
+
         function checkAvailableTime() {
             var dt = new Date();
             var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
@@ -236,14 +298,14 @@
         $(document).ready(function () {
 
             checkAvailableTime();
-
+            loadMyRate();
             $(".regular").slick({
                 dots: true,
                 infinite: true,
                 slidesToShow: 3,
                 slidesToScroll: 3
             });
-            
+
             $('#exampleGallery').magnificPopup({
                 delegate: 'a',
                 type: 'image',
@@ -262,7 +324,67 @@
                     }
                 }
             });
+
+            getRateInfo(@Model.Id);
         });
 
+        $("#submitRating").click(function () {
+            var score = $("#rate2").swidget().value();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Rating", "Place")',
+                data: { placeId: @Model.Id, score: score },
+                success: function (data) {
+                    if (data.Succeed) {
+                        getRateInfo(@Model.Id);
+                        loadMyRate();
+                        $('#ratingForm').modal('toggle');
+                        showMessage("Đánh giá thành công", "success", "OK");
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        })
+
+        $('#rate1').mouseover(function(){
+            $('#rate1').swidget().enabled(false);
+        })
+
+        $('#rate1').mouseout(function(){
+            $('#rate1').swidget().enabled(true);
+        })
+
+        function getRateInfo(id) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetRateInfo", "Place")',
+                async: false,
+                data: { id: id },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Succeed) {
+                        $("#averagePoint").empty();
+                        $("#averagePoint").append(data.AdditionalData.AverageRate);
+                        $("#numOfRate").empty();
+                        $("#numOfRate").append("<i class='fa fa-user'></i> "+data.AdditionalData.NumberOfRate);
+                        $('#rate1').empty();
+                        $('#rate1').shieldRating({
+                            max: 5,
+                            value: data.AdditionalData.AverageRate,
+                            markPreset: false
+                        });
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
     </script>
 }

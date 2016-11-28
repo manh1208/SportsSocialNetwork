@@ -17,12 +17,16 @@ namespace SportsSocialNetwork.Models.ViewModels
     	
     			public virtual int Id { get; set; }
     			public virtual string UserId { get; set; }
+    			public virtual string FromUserId { get; set; }
     			public virtual string Title { get; set; }
     			public virtual string Message { get; set; }
     			public virtual int Type { get; set; }
     			public virtual Nullable<int> PostId { get; set; }
     			public virtual Nullable<int> InvitationId { get; set; }
     			public virtual Nullable<int> OrderId { get; set; }
+    			public virtual Nullable<int> GroupId { get; set; }
+    			public virtual Nullable<System.DateTime> CreateDate { get; set; }
+    			public virtual Nullable<bool> MarkRead { get; set; }
     			public virtual bool Active { get; set; }
     	
     	public NotificationViewModel() : base() { }

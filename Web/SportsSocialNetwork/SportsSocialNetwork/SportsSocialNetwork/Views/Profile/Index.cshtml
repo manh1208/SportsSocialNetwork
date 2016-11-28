@@ -1,0 +1,1391 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.AspNetUserFullInfoViewModel
+@using SportsSocialNetwork.Models.ViewModels;
+@using SportsSocialNetwork.Models.Entities;
+@using Microsoft.AspNet.Identity;
+@using SportsSocialNetwork.Models.Enumerable;
+@{
+    ViewBag.Title = Model.FullName;
+    Layout = "~/Views/Shared/_SSNLayout.cshtml";
+
+    var sport = ViewBag.Sport as IEnumerable<SelectListItem>;
+    List<int> hobbiesInt = new List<int>();
+    foreach (var item in Model.Hobbies)
+    {
+        hobbiesInt.Add(item.SportId);
+    }
+    List<PostImage> userPostImages = ViewBag.userPostImages;
+    List<AspNetUser> followingUsers = ViewBag.followingUsers;
+    List<Group> groupList = ViewBag.GroupList;
+    var provinceList = ViewBag.ProvinceList as IEnumerable<SelectListItem>;
+    var districtList = ViewBag.DistrictList as IEnumerable<SelectListItem>;
+    var wardList = ViewBag.WardList as IEnumerable<SelectListItem>;
+}
+
+<style>
+    .media {
+        overflow: visible;
+    }
+
+    .media-body {
+        overflow: visible;
+    }
+
+    .loadImage {
+        height: 90%;
+        width: 90%;
+    }
+
+    .load {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .DocumentList {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        height: 120px;
+        width: 100%;
+        padding: 0 15px;
+    }
+
+    .Document {
+        border: solid 1px;
+        border-color: #bdc7d8;
+        height: 110px;
+        width: 100%;
+        padding: 0 15px;
+    }
+
+    .list-inline li {
+        margin: 5px;
+        padding: 0;
+        height: 100px;
+        width: 100px;
+    }
+
+    .list-inline {
+        white-space: nowrap;
+    }
+
+    #check {
+        -webkit-transition: all 0.5s ease;
+        -moz-transition: all 0.5s ease;
+        -o-transition: all 0.5s ease;
+        transition: all 0.5s ease;
+    }
+
+    .select2-dropdown {
+        z-index: 99999;
+    }
+
+    .panel-cover {
+        margin: 0 0 10px 0;
+    }
+
+    .panel-status {
+        margin-bottom: 15px;
+    }
+
+    .suggest-group {
+        border: 1px solid lightgray;
+        overflow: hidden;
+        padding-top: 15px;
+        margin: 10px;
+    }
+
+    .status-panel {
+        padding-top: 5px;
+    }
+
+        .status-panel textarea {
+            border: none;
+            border-bottom: 1px whitesmoke solid;
+            resize: none;
+        }
+
+    .panel {
+        margin-bottom: 10px;
+        font-family: sans-serif;
+        border:groove 1px;
+        border-radius:0px;
+    }
+
+    .nav-tabs-line>li.active>a, .nav-tabs-line>li.active>a:focus, .nav-tabs-line>li.active>a:hover{
+            color: #ff6a00;
+            background-color: transparent;
+            border-bottom: 2px solid #ff6a00;
+    }
+
+        .select2-selection{
+            border-radius:0px!important;
+            font-weight:400;
+        }
+
+        .select2-selection__choice{
+            color: #fff!important;
+            background-color: #ff6a00!important;
+             font-weight:400;
+        }
+        .select2-selection__choice__remove{
+            color:#fff!important;
+        }
+
+    /*=====================================================*/
+</style>
+
+@section styles {
+    <link rel="stylesheet" href="~/Content/assets/vendor/magnific-popup/magnific-popup.css">
+    <link rel="stylesheet" href="~/Content/css/custom-css.css" />
+    <link href="~/Content/assets/vendor/select2/select2.css" rel="stylesheet" />
+}
+
+<div id="shareModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form id="shareForm" method="post" class="form-horizontal" autocomplete="off">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Chia sẻ bài viết</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>Chia sẻ bài viết này lên: </h3>
+                    <input type="hidden" name="userId" value="@User.Identity.GetUserId()" />
+                    <input type="hidden" name="shareType" id="shareType" value="" />
+                    <input type="hidden" name="dataId" id="dataId" value="" />
+                    <input type="radio" name="receiver" id="senderWall" value="@((int)SharedReceiver.SenderWall)" checked> Tường nhà bạn<br>
+                    <input type="radio" name="receiver" id="frdWall" value="@((int)SharedReceiver.FriendWall)"> Tường nhà của người mà bạn theo dõi
+                    <select id="frdSelectShare" name="frdSelectShare" class="form-control" disabled>
+                        <option value="-1">Chọn một bạn</option>
+                        @{
+                            if (ViewBag.followingList != null && ViewBag.followingList.Count > 0)
+                            {
+                                foreach (var item in ViewBag.followingList as List<FollowDetailViewModel>)
+                                {
+                                    <option value="@item.UserId">@item.User.FullName</option>
+                                }
+                            }
+
+                        }
+                    </select>
+                    <br>
+                    <input type="radio" name="receiver" id="groupWall" value="@((int)SharedReceiver.Group)"> Nhóm
+                    <select id="groupSelectShare" name="groupSelectShare" class="form-control" disabled>
+                        <option value="-1">Chọn một nhóm</option>
+                        @{
+                            if (ViewBag.GroupList != null && ViewBag.GroupList.Count > 0)
+                            {
+                                foreach (var item in ViewBag.GroupList as List<Group>)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+
+                        }
+                    </select>
+                    <br />
+                    <h3>Nội dung bài viết</h3>
+                    <textarea name="shareContent" id="shareContent" class="form-control" placeholder="Viết gì đó cho chia sẻ này"></textarea>
+                    <input id="sportSelectShare" type="text" name="sportSelectShare"
+                           placeholder="Tags" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    <input type="submit" class="btn btn-default" value="Chia sẻ" />
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@{
+    if (Model.isOwner)
+    {
+        <!--Change cover modal-->
+        <div id="coverModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <form id="changeCover-form" method="post" autocomplete="off">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Chọn ảnh bìa</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group form-material floating">
+                                <input type="text" class="form-control input-lg" readonly="" />
+                                <input type="file" id="inputCover" name="inputCover" />
+                                <label class="floating-label">Ảnh bìa</label>
+                            </div><br />
+                            <img id="previewCover" src="#" alt="previewCover" width="200" style="display:none;" />
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                            <input type="submit" class="btn btn-success" value="Cập nhật" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!--Change avatar modal-->
+        <div id="avatarModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <form id="changeAva-form" method="post" autocomplete="off">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Chọn hình đại diện</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group form-material floating">
+                                <input type="text" class="form-control input-lg" readonly="" />
+                                <input type="file" id="inputAvatar" name="inputAvatar" />
+                                <label class="floating-label">Hình đại diện</label>
+                            </div><br />
+                            <img id="previewAva" src="#" alt="previewAva" width="200" style="display:none;" />
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                            <input type="submit" class="btn btn-success" value="Cập nhật" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+}
+
+
+<!--Create group modal-->
+<div id="createGroupModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <form id="createGroup-form" method="post" autocomplete="off">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Tạo nhóm mới</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="GroupCreator" id="GroupCreator" value="@User.Identity.GetUserId()" />
+                    <div class="form-group form-material floating">
+                        <input class="form-control input-lg" type="text" name="GroupName" id="GroupName" />
+                        <label class="floating-label">Tên nhóm</label>
+                    </div>
+                    <div class="form-group form-material floating">
+                        <textarea class="form-control input-lg" rows="2" name="GroupDescription" id="GroupDescription"></textarea>
+                        <label class="floating-label">Mô tả</label>
+                    </div>
+                    <div class="form-group form-material floating">
+                        <select name="GroupSport" id="GroupSport" class="form-control input-lg">
+                            @{ 
+                                foreach (var item in sport)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                        </select>
+                        <label class="floating-label">Môn thể thao</label>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    <input type="submit" class="btn btn-success" value="Tạo nhóm" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--Cover area-->
+<div class="row">
+    <div class="col-md-12" id="coverImg">
+        @{
+            if (Model.isOwner)
+            {
+                <div id="changeCoverBtn" style="position:absolute; overflow:hidden; right:15px; bottom:10px; z-index:50; opacity:0.7; display:none;">
+                    <a href="javascript:void(0)" onclick="changeCover()" class="btn btn-dark">
+                        <i class="fa fa-image" aria-hidden="true"></i> Thay ảnh bìa
+                    </a>
+                </div>
+            }
+        }
+       
+        <div style="width:100%;height:500px;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@Model.CoverImage')"></div>
+    </div>
+</div>
+<!--END Cover area-->
+
+<div class="row">
+    <!--Left side-bar-->
+    <div class="col-sm-3">
+        <div class="widget widget-shadow text-center" style="border-top-style: solid;border-left: 0.5px groove;border-right: 0.5px groove;border-bottom: 0.5px groove;">
+            <div class="widget-header">
+                <div class="widget-header-content" id="userContent">
+                    <a class="avatar avatar-lg" href="javascript:void(0)">
+                        <img class="groupAvatar" src="@Model.AvatarImage" alt="..." style="height:130px;width:130px">
+                    </a>
+
+                    <div style="position:absolute; right:20px;top:140px; display:none;" id="changeAvaBtn">
+                        <button type="button" class="btn btn-pure btn-default icon wb-pencil" title="Đổi ảnh đại diện" onclick="changeAva()"></button>
+                    </div>
+                    <div class="profile-user"><a style="color:#37474f;font-weight:bold;" href="/profile/index?userid=@Model.Id"> @Model.FullName</a></div>
+                    <div class="profile-job">@Model.Email</div>
+                    @{
+                        if (Model.isOwner)
+                        {
+                            <p></p>
+                        }
+                        else if (Model.Followed)
+                        {
+                            <button type="button" class="btn btn-default" id="unfollowBtn" onclick="followUnFollowLeft('@Model.Id')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-default" id="followBtn" onclick="followUnFollowLeft('@Model.Id')"><i class="fa fa-user-plus" aria-hidden="true"></i>Theo dõi</button>
+                        }
+
+
+                    }
+
+                </div>
+            </div>
+            <div class="widget-footer">
+                <div class="row no-space">
+                    <div class="col-xs-4">
+                        <strong class="profile-stat-count">@Model.FollowedCount</strong>
+                        <span>Người theo dõi</span>
+                    </div>
+                    <div class="col-xs-4">
+                        <strong class="profile-stat-count">@Model.FollowCount</strong>
+                        <span>Đang theo dõi</span>
+                    </div>
+                    <div class="col-xs-4">
+                        <strong class="profile-stat-count">@Model.PostCount</strong>
+                        <span>Bài viết</span>
+                    </div>
+                </div>
+            </div>
+            @*<div class="example-wrap margin-lg-0" style="text-align:left;">
+                <h4 class="example-title" style="display:inline-block;float:left;">Các nhóm tham gia</h4>
+                <button type="button" style="display:inline-block; float:right;" class="btn btn-pure btn-dark btn-sm icon wb-plus" onclick="showCreateGroupModal()"> Tạo nhóm</button>
+                @if (groupList.Count > 0)
+                {
+
+                    <div class="clearfix"></div>
+                    <ul class="list-group list-group-full">
+                        @{
+                            foreach (var item in groupList)
+                            {
+                                <li class="list-group-item" style="text-align:left;">
+                                    <div class="media">
+                                        <div class="media-left" style="padding-left:20px;">
+                                            <a class="avatar" href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))">
+                                                <img class="img-responsive" src="@item.Avatar" alt="...">
+                                            </a>
+                                        </div>
+                                        <div class="media-body vertical-align">
+                                            <a href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))" style="text-decoration:none;color:#37474f;">
+                                                <h4 class="media-heading vertical-align-middle">@item.Name</h4>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                }
+            </div>*@
+
+        </div>
+
+        <div class="panel">
+            <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                <h class="panel-title" style="font-family:sans-serif;color:#fff!important">Các nhóm tham gia</h>
+            </div>
+
+            <div class="panel-body" style="padding:0;padding-bottom:10px">
+                <div>
+                    <div class="col-sm-12">
+
+                        <a href="javascript:void(0)" style="text-decoration:none;border-bottom-style:groove" onclick="showCreateGroupModal()">
+                            <div class="text-center" style="padding:20px 20px 10px 20px;color:#76838f; font-size:medium;border-bottom: 1px groove #cbcbcb ">
+                                <i class="icon wb-plus"></i> Tạo nhóm
+                            </div>
+                        </a>
+
+
+                        @if (ViewBag.GroupList.Count > 0)
+                        {
+                            <div class="clearfix"></div>
+                                <ul class="list-group list-group-full">
+                                    @{
+                                        foreach (var item in ViewBag.GroupList)
+                                        {
+                                            <li class="list-group-item" style="text-align:left;">
+                                                <div class="media">
+                                                    <div class="media-left" style="padding-left:20px;">
+                                                        <a class="avatar" href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))">
+                                                            <img class="img-responsive" style="width:50px;height:50px;" src="@item.Avatar" alt="...">
+                                                        </a>
+                                                    </div>
+                                                    <div class="media-body vertical-align">
+                                                        <a href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = item.Id }))" style="text-decoration:none;color:#37474f;">
+                                                            <h4 class="media-heading vertical-align-middle" style="color:#000; font-weight:500">@item.Name</h4>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+
+                            }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--END Left side-bar-->
+    <!--Main-->
+    <div class="col-sm-6" style="padding: 0;">
+
+        <div class="nav-tabs-horizontal">
+            <ul class="nav nav-tabs nav-tabs-line" data-plugin="nav-tabs" role="tablist" style="background-color:white;">
+                @{
+                    if (Model.isOwner)
+                    {
+                        <li class="active" role="presentation" id="post">
+                            <a data-toggle="tab" href="#exampleTabsOne" aria-controls="exampleTabsOne"
+                               role="tab">Bài viết</a>
+                        </li>
+                        <li role="presentation" id="userInfo">
+                            <a data-toggle="tab" href="#exampleTabsTwo" aria-controls="exampleTabsTwo"
+                               role="tab">Thông tin cá nhân</a>
+                        </li>
+                        <li role="presentation" id="followed">
+                            <a data-toggle="tab" href="#exampleTabsThree" aria-controls="exampleTabsThree"
+                               role="tab">Danh sách theo dõi</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="active" role="presentation" id="post">
+                            <a data-toggle="tab" href="#exampleTabsOne" aria-controls="exampleTabsOne"
+                               role="tab">Tường nhà</a>
+                        </li>
+                    }
+                }
+                
+                <li role="presentation" id="images">
+                    <a data-toggle="tab" href="#exampleTabsFour" aria-controls="exampleTabsFour"
+                       role="tab">Hình ảnh</a>
+                </li>
+                
+            </ul>
+            <div class="tab-content">
+                @{
+                    if (Model.isOwner)
+                    {
+                        <div class="tab-pane active" id="exampleTabsOne" role="tabpanel">
+                            <!--Posting status area-->
+                            <form id="post-form" method="post" autocomplete="off">
+                                <div class="panel status-panel">
+                                    <div class="panel-heading" style="border-bottom: solid 1px #efefef; padding:5px 0 5px 15px;">
+                                        <a href="javascript:void(0)" class="post-heading" onclick="addImage()" style="color:#76838f">
+                                            <i class="fa fa-camera post-heading-icon"></i> Thêm hình ảnh
+                                        </a>
+                                    </div>
+                                    <div style="height:0px;overflow:hidden">
+                                        <input type="file" id="selectImage" name="files" multiple />
+                                    </div>
+                                    @*@Html.TextAreaFor(p => p.PostContent, new { rows = "3", @class = "form-control input-lg", placeholder = "Bạn đang nghĩ gì?" })*@
+                                    @{
+                                        if (Model.isOwner)
+                                        {
+                                            <textarea class="form-control input-lg" style="color:#000;" placeholder="Bạn đang nghĩ gì..." rows="3" id="PostContent"></textarea>
+                                        }
+                                        else
+                                        {
+                                            <textarea class="form-control input-lg" style="color:#000;" placeholder="Viết gì đó cho người này" rows="3" id="PostContent"></textarea>
+                                        }
+                                    }
+                                    @*<textarea class="form-control input-lg" placeholder="Viết gì đó cho nhóm của bạn" rows="3" id="PostContent"></textarea>*@
+                                    <div id="previewImage" class="example margin-0" style="display:none">
+                                        <div style="height:120px">
+                                            <div data-role="container">
+                                                <div data-role="content">
+                                                    <div class="DocumentList">
+                                                        <ul id="result" class="list-inline"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row text-right" style="margin: 0">
+                                        <div class="col-xs-11" style="width: calc(100% - 80px); padding: 0" id="select-sport">
+                                            <input id="sportSelect" type="text" name="sportSelect"
+                                                   placeholder="Tags" />
+                                        </div>
+                                        <div class="col-xs-2" style="max-width: 80px; padding: 0">
+                                            <input type="submit" style="width: 80px;height:36px;background-color: #ff6a00!important;border-color:transparent" class="btn btn-primary" value="Đăng">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!--END Posting status area-->
+                            <!--Post area-->
+                            <div id="activities" role="tabpanel">
+                                <ul class="list-group" id="listPost"></ul>
+                            </div>
+                            <!--END Post area-->
+                        </div>
+                        <div class="tab-pane" id="exampleTabsTwo" role="tabpanel" style="background-color:white; min-height:500px;">
+                            <div class="panel">
+                                <div class="panel-body">
+                                    @using (Html.BeginForm("saveProfile", "Profile", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", @id = "profileForm", @autocomplete = "off" }))
+                                    {
+                                        @Html.TextBoxFor(p => p.Id, new { @style = "display:none" })
+                                        <div class="form-group form-material floating">
+                                            @Html.TextBoxFor(p => p.FullName, new { @class = "form-control input-lg" })
+                                            <label class="floating-label">Họ tên</label>
+                                        </div>
+                                        <div class="form-group form-material floating">
+                                            @Html.TextBoxFor(p => p.Email, new { @class = "form-control input-lg" })
+                                            <label class="floating-label">Email</label>
+                                        </div>
+                                        <div class="form-group form-material floating">
+                                            @Html.TextBoxFor(p => p.Address, new { @class = "form-control input-lg" })
+                                            <label class="floating-label">Địa chỉ</label>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-5">
+                                                <div class="form-group form-material floating">
+                                                    @Html.DropDownListFor(m => m.City, provinceList, "--Tỉnh/thành phố--", new { @class = "bs-select-hidden form-control droplist", @id = "province" })
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="form-group form-material floating">
+                                                    @Html.DropDownListFor(m => m.District, districtList, "--Quận/ Huyện--", new { @class = "bs-select-hidden form-control droplist", @id = "district" })
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group form-material floating">
+                                                    @Html.DropDownListFor(m => m.Ward, wardList, "--Phường--", new { @class = "bs-select-hidden form-control droplist", @id = "ward" })
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label" style="color:#76838f">Sở thích:</label>
+                                            <input type="text" class="form-control" name="hobbies" id="hobbies" />
+                                        </div>
+                                        <div class="col-sm-12 text-center">
+                                            <button class="btn btn-default" type="button" onclick="refresh()">Hủy</button>
+                                            <input type="submit" class="btn btn-success" value="Cập nhật" />
+                                        </div>
+                                        
+                                    }
+                                </div>
+                            </div>
+                           
+                        </div>
+                        <div class="tab-pane" id="exampleTabsThree" role="tabpanel" style="background-color:white;min-height:700px;">
+                            <div style="overflow:hidden; width:100%;">
+                                @{ 
+                                    foreach (var item in followingUsers)
+                                    {
+                                        <div class="col-sm-6" style="padding:10px 20px 10px 25px;">
+                                            <div style="border: 1px solid #e9ebee; overflow:hidden;">
+                                                <div style="float:left; display:block; width:150px; height:150px;">
+                                                    @*<a class="avatar avatar-lg" href="javascript:void(0)">
+                                                        <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
+                                                    </a>*@
+                                                    <img style="max-width:100%;" src="@item.AvatarImage" />
+                                                </div>
+                                                <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.Id">
+
+
+                                                    <a href="/profile/index?userid=@item.Id"><h3>@item.FullName</h3></a>
+                                                    @{
+                                                    string hobbies = "";
+                                                    for (int i = 0; i < item.Hobbies.Count(); i++)
+                                                    {
+                                                        if (i == item.Hobbies.Count() - 1)
+                                                        {
+                                                            hobbies += item.Hobbies.ToList()[i].Sport.Name;
+                                                        }
+                                                        else
+                                                        {
+                                                            hobbies += item.Hobbies.ToList()[i].Sport.Name + ", ";
+                                                        }
+
+                                                    }
+                                                    }
+                                                    <p>@hobbies</p>
+                                                    <button type="button" class="btn btn-default" onclick="followUnFollow('@item.Id')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="tab-pane active" id="exampleTabsOne" role="tabpanel">
+                            <!--Posting status area-->
+                            <form id="post-form" method="post" autocomplete="off">
+                                <div class="panel status-panel">
+                                    <div class="panel-heading" style="border-bottom: solid 1px #efefef; padding:5px 0 5px 15px;">
+                                        <a href="javascript:void(0)" class="post-heading" onclick="addImage()" style="color:#76838f">
+                                            <i class="fa fa-camera post-heading-icon"></i> Thêm hình ảnh
+                                        </a>
+                                    </div>
+                                    <div style="height:0px;overflow:hidden">
+                                        <input type="file" id="selectImage" name="files" multiple />
+                                    </div>
+                                    @*@Html.TextAreaFor(p => p.PostContent, new { rows = "3", @class = "form-control input-lg", placeholder = "Bạn đang nghĩ gì?" })*@
+                                    @{
+                                        if (Model.isOwner)
+                                        {
+                                            <textarea class="form-control input-lg" placeholder="Bạn đang nghĩ gì..." rows="3" id="PostContent"></textarea>
+                                        }
+                                        else
+                                        {
+                                            <textarea class="form-control input-lg" placeholder="Viết gì đó cho người này" rows="3" id="PostContent"></textarea>
+                                        }
+                                    }
+                                    @*<textarea class="form-control input-lg" placeholder="Viết gì đó cho nhóm của bạn" rows="3" id="PostContent"></textarea>*@
+                                    <div id="previewImage" class="example margin-0" style="display:none">
+                                        <div style="height:120px">
+                                            <div data-role="container">
+                                                <div data-role="content">
+                                                    <div class="DocumentList">
+                                                        <ul id="result" class="list-inline"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row text-right" style="margin: 0">
+                                        <div class="col-xs-11" style="width: calc(100% - 80px); padding: 0" id="select-sport">
+                                            <input id="sportSelect" type="text" name="sportSelect"
+                                                   placeholder="Tags" />
+                                        </div>
+                                        <div class="col-xs-2" style="max-width: 80px; padding: 0">
+                                            <input type="submit" style="width: 80px;height:36px" class="btn btn-sm btn-primary" value="Đăng">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!--END Posting status area-->
+                            <!--Post area-->
+                            <div id="activities" role="tabpanel">
+                                <ul class="list-group" id="listPost"></ul>
+                            </div>
+                            <!--END Post area-->
+                        </div>
+                    }
+                }
+                
+                <div class="tab-pane" id="exampleTabsFour" role="tabpanel" style="background-color:white; min-height:700px;">
+                    <div class="row" style="padding: 0 20px;">
+                        <div class="example" id="exampleZoomGallery" style="margin:auto; padding-top:20px;">
+                            @{
+                                foreach (var item in userPostImages)
+                                {
+                                    <a class="inline-block" href="@item.Image" title="view-7"
+                                       data-source="@item.Image">
+                                        <img class="img-responsive" src="@item.Image" alt="..."
+                                             width="220" />
+                                    </a>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                        </div>
+        </div>
+
+
+    </div>
+    <!--END Main-->
+    <!--Right side-bar-->
+    <div class="col-sm-3">
+        @if (ViewBag.suggestUserList != null)
+            {
+            <div class="panel" id="suggest-follow-panel">
+                <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                    <h class="panel-title" style="font-family:sans-serif;color:#fff!important;">Gợi ý theo dõi</h>
+                </div>
+                <div class="panel-body" style="padding: 0px">
+                    <div class="height-250 check" id="check" data-plugin="scrollable" style="width:100%">
+                        <div data-role="container" style="padding:10px 10px 10px 10px; width:200px">
+                            <div data-role="content" id="container" style="width: 200px!important">
+                                @foreach (var item in ViewBag.suggestUserList)
+                                {
+                                    <div class='comment media suggestion' id="@item.Id" style="width:100%;padding-right:10px">
+                                        <div class='media-left' style="padding-right:0px">
+                                            <a class='avatar avatar-lg' href='javascript:void(0)'>
+                                                <img style='height:30px;width:30px' src='@item.AvatarImage' alt='...'>
+                                            </a>
+                                        </div>
+                                        <div class='comment-body media-body'>
+                                            <a class='comment-author' href='/profile/index?userid=@item.Id' style="color:#000; font-weight:bold">@item.FullName</a>
+                                            <div class='comment-content' style="color:#76838f;margin-top:0px">
+                                                @if (@item.sameSport != 0)
+                                                {<p>Có chung @item.sameSport sở thích</p>}
+                                            </div><button onclick="followSG('@item.Id')" style="color:#000" class='btn btn-xs btn-default'><i class='fa fa-user-plus' aria-hidden='true'></i> Theo dõi</button>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        }
+        
+    </div>
+    <!--END right side-bar-->
+    <div class="modal fade" id="editPostForm" aria-hidden="true" role="dialog">
+        <div class="modal-dialog">
+            <form id="post-formEdit" method="post" autocomplete="off">
+                <input type="hidden" id="postEditId" name="postEditId" value="-1" />
+                <div class="panel status-panel">
+                    <div class="modal-header" style="border-bottom: solid 1px #efefef; padding:5px 10px 5px 15px;">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">×</button>
+                        <h4 class="modal-title">Chỉnh sửa bài viết</h4>
+                    </div>
+                    <div class="panel-heading" style="border-bottom: solid 1px #efefef; padding:5px 0 5px 15px;">
+                        <a href='javascript:void(0)' class="post-heading" onclick="addImageEdit()" style="color:#76838f">
+                            <i class="fa fa-camera post-heading-icon"></i> Thêm hình ảnh
+                        </a>
+                    </div>
+                    <div style="height:0px;overflow:hidden">
+                        <input type="file" id="selectImageEdit" name="files" multiple />
+                    </div>
+                    <textarea rows="3" class="form-control input-lg" placeholder="Bạn đang nghĩ gì?" name="PostContentEdit" id="PostContentEdit"></textarea>
+                    <div id="previewImageEdit" class="example margin-0" style="display:none">
+                        <div style="height:120px">
+                            <div data-role="container">
+                                <div data-role="content">
+                                    <div class="DocumentList">
+                                        <ul id="resultEdit" class="list-inline"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row text-right" style="margin: 0">
+                        <div class="col-xs-11 select-sportEdit" style="width: calc(100% - 80px); padding: 0" id="select-sportEdit">
+                            <input id="sportSelectEdit" type="text" name="sportSelectEdit"
+                                   placeholder="Tags" />
+                        </div>
+                        <div class="col-xs-2" style="max-width: 80px; padding: 0">
+                            <input type="submit" style="width: 80px;height:36px" class="btn btn-sm btn-primary" value="Đăng">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <script src="~/Content/assets/vendor/magnific-popup/jquery.magnific-popup.js"></script>
+    <script src="~/Content/assets/js/components/magnific-popup.js"></script>
+    <script src="~/Content/js/post-script.js"></script>
+    <script src="~/Content/js/custom-script.js"></script>
+    <script src="~/Content/assets/vendor/select2/select2.full.js"></script>
+    <script src="~/Content/assets/vendor/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
+    <script src="~/Content/assets/js/components/material.js"></script>
+
+    <script>
+        var _userId = '@Model.Id';
+        var _curUserId = '@User.Identity.GetUserId()';
+        var _firstSkip = 0;
+        var _skip = 10;
+        var _firstTake = 10;
+        var _take = 5;
+        var _actionName = '@Url.Action("getProfilePost", "Profile")';
+        var _loadMoreCmtActionName = '@Url.Action("getMoreCmtByPostId")';
+        var _deletePostActionName = '@Url.Action("DeletePost","Post")';
+        var _loadAPostActionName = '@Url.Action("LoadSavedPost", "Post")';
+        var _deleteCommentActionName = '@Url.Action("DeleteComment", "PostComment")';
+        var _loadACommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
+        var _likeUnlikePostActionName = '@Url.Action("LikeUnlikePost","Like")';
+
+        $(document).ready(function () {
+            loadProfilePost(_userId, _curUserId, _firstSkip, _firstTake, _actionName, _loadMoreCmtActionName,_deletePostActionName, _loadAPostActionName,_deleteCommentActionName,_loadACommentActionName,_likeUnlikePostActionName);
+        })
+        $(window).scroll(function () {
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                loadProfilePost(_userId, _curUserId, _skip, _take, _actionName, _loadMoreCmtActionName,_deletePostActionName, _loadAPostActionName,_deleteCommentActionName,_loadACommentActionName,_likeUnlikePostActionName);
+                _skip = _skip + _take;
+            }
+        });
+
+        $("#district").on("change", function () {
+            var provinceName = $('#province').val();
+            var districtName = $('#district').val();
+            var ddl = $('#ward');
+            ddl.empty();
+            ddl.val('');
+            $(document.createElement('option'))
+                    .attr('value', '')
+                    .text("--Phường--")
+                    .appendTo(ddl);
+            if (districtName != null) {
+                $.ajax({
+                    url: "/Profile/GetWard",
+                    type: 'POST',
+                    data: {
+                        'district': districtName,
+                        'provinceName':provinceName
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        $(data).each(function () {
+                            $(document.createElement('option'))
+                                .attr('value', this.Value)
+                                .text(this.Text)
+                                .appendTo(ddl);
+                        });
+                    }
+                });
+            }
+        });
+
+        $("#province").on("change", function () {
+            var provinceName = $('#province').val();
+            var ddl = $('#district');
+            var ddl_1 = $("#ward");
+            ddl_1.empty();
+            ddl.empty();
+            ddl_1.val();
+            ddl.val();
+            $(document.createElement('option'))
+                    .attr('value', '')
+                    .text("--Phường--")
+                    .appendTo(ddl_1);
+            $(document.createElement('option'))
+                    .attr('value', '')
+                    .text("--Quận/ Huyện--")
+                    .appendTo(ddl);
+            if (provinceName != null) {
+                $.ajax({
+                    url: "/Profile/GetDistrict",
+                    type: 'POST',
+                    data: {
+                        'provinceName': provinceName,
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+
+                        $(data).each(function () {
+                            $(document.createElement('option'))
+                                .attr('value', this.Value)
+                                .text(this.Text)
+                                .appendTo(ddl);
+                        });
+                    }
+                });
+            }
+        });
+
+        $('#exampleZoomGallery').magnificPopup({
+            delegate: 'a',
+            type: 'image',
+            closeOnContentClick: false,
+            closeBtnInside: false,
+            mainClass: 'mfp-with-zoom mfp-img-mobile',
+            image: {
+                verticalFit: true,
+                titleSrc: function(item) {
+                    return item.el.attr('title') +
+                      ' &middot; <a class="image-source-link" href="' + item.el
+                      .attr('data-source') +
+                      '" target="_blank">image source</a>';
+                }
+            },
+            gallery: {
+                enabled: true
+            },
+            zoom: {
+                enabled: true,
+                duration: 300, // don't foget to change the duration also in CSS
+                opener: function(element) {
+                    return element.find('img');
+                }
+            }
+        });
+
+        var array = @Html.Raw(Json.Encode(
+                         ((IEnumerable<SelectListItem>)sport).Select(m => new
+                         {
+                             id = m.Value,
+                             text = m.Text
+                         })
+                    ));
+        $('#sportSelect').select2({
+            language: "vi",
+            class: 'form-control',
+            width: '100%',
+            multiple: true,
+            maximumSelectionSize: 5,
+            placeholder: "Chọn môn thể thao của bạn",
+            data: array
+        });
+
+        $('#sportSelectShare').select2({
+            language: "vi",
+            class: 'form-control',
+            width: '100%',
+            multiple: true,
+            maximumSelectionSize: 1,
+            placeholder: "Chọn môn thể thao của bài viết",
+            data: array
+        });
+
+        $('#post-form').submit(function (e) {
+            e.preventDefault();
+            var postId = "-1";
+            var postContent = $("#PostContent").val().trim();
+            var curUserId = '@User.Identity.GetUserId()';
+            var profileId = '@Model.Id';
+            if(storedFiles.length!=0 || postContent){
+                var formData = new FormData(document.getElementById('post-form'));
+                formData.append("content",postContent);
+                formData.append("userId", curUserId);
+                formData.append("profileId", profileId);
+                for(var i=0, len=storedFiles.length; i<len; i++) {
+                    formData.append('uploadImages', storedFiles[i]);
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CreateProfilePost", "Post")',
+                    async: false,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            $("#PostContent").val("");
+                            $('#select-sport').empty();
+                            $('#select-sport').append("<input id='sportSelect' type='text' name='sportSelect' placeholder='Tags' />");
+                            $('#sportSelect').select2({
+                                width: '100%',
+                                multiple: true,
+                                maximumSelectionSize: 5,
+                                placeholder: "Chọn môn thể thao của bạn",
+                                data: array
+                            });
+                            storedFiles = [];
+                            $("#result").empty();
+                            $("#previewImage").hide();
+                            postId = result.AdditionalData.Id;
+                        } else {
+                            showErrors(result.Errors);
+                            showMessage("Không thể cập nhật.", "error", "OK");
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("LoadSavedPost", "Post")',
+                    async: false,
+                    data: {"postId" : postId},
+                    success: function (result) {
+                        if (result.Succeed) {
+                            prependPost(result.AdditionalData);
+                        } else {
+                            showErrors(result.Errors);
+                            showMessage("Không thể cập nhật.", "error", "OK");
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+            }
+        });
+
+        $("#changePasswordButton").click(function(){
+            $("#changePasswordButton").hide();
+            $("#changePassword").show();
+        })
+
+        function addImage() {
+            $("#selectImage").click();
+        }
+        var storedFiles = [];
+        function handleFileSelect(e) {
+            var files = e.target.files;
+            if(files.length>0){
+                $("#previewImage").show();
+            }else{
+                $("#previewImage").hide();
+            }
+            var filesArr = Array.prototype.slice.call(files);
+            var output = document.getElementById("result");
+            filesArr.forEach(function(f) {
+                if(!f.type.match("image.*")) {
+                    return;
+                }
+                storedFiles.push(f);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var li = document.createElement("li");
+                    li.innerHTML = "<img class='loadImage' src='" + e.target.result + "'" +
+                                "title='" + f.name + "'/> <a href='javascript:void(0)' data-file='"+f.name+"' onclick='removeFile(this)' class='fa fa-times' style='position:absolute'></a>";
+                    output.insertBefore(li,null);
+                }
+                reader.readAsDataURL(f);
+            });
+        }
+        function removeFile(e){
+            var file = $(e).data("file");
+            for(var i=0;i<storedFiles.length;i++) {
+                if(storedFiles[i].name === file) {
+                    storedFiles.splice(i,1);
+                    break;
+                }
+            }
+            if(storedFiles.length>0){
+                $("#previewImage").show("slow");
+            }else{
+                $("#previewImage").hide("slow");
+            }
+            $(e).parent().hide('slow', function(){ $(e).parent().remove(); });
+        }
+
+        document.getElementById('selectImage').addEventListener('change', handleFileSelect, false);
+
+        $(document).on("submit", "#post-formEdit", function (e) {
+            e.preventDefault();
+            var _updatePostActionName = '@Url.Action("UpdatePost", "Post")';
+            var _loadSavedPostActionName = '@Url.Action("LoadSavedPost", "Post")';
+            var _userId = '@User.Identity.GetUserId()';
+            var _postId = $("#postEditId").val();
+            UpdatePost(_updatePostActionName, _loadSavedPostActionName, _userId, _postId);
+        });
+        $(document).on("submit", ".comment-form", function (e) {
+            e.preventDefault();
+            var _id = $(this).attr('id');
+            var _commentActionName = '@Url.Action("Comment","PostComment")';
+            var _loadSavedCommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
+            var _userId = '@User.Identity.GetUserId()';
+            createComment(_commentActionName, _loadSavedCommentActionName, _userId, _id);
+        });
+        $(document).on("submit", ".comment-formEdit", function (e) {
+            e.preventDefault();
+            var _id = $(this).attr('id');
+            var _updateCommentActionName = '@Url.Action("UpdateComment", "PostComment")';
+            var _loadSavedCommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
+            updateComment(_updateCommentActionName, _loadSavedCommentActionName, _id);
+        });
+
+
+        function followSG(id){
+            var update = false;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("FollowUnfollowUser", "Follow")',
+                data:{"userId":id,"followerId":'@User.Identity.GetUserId()'},
+                dataType: 'json',
+                success: function (data) {
+                    if(data.Succeed && data.Message == "Đã theo dõi"){
+                        update = true;
+                        $('#'+id).hide('slow', function(){ $('#'+id).remove(); });
+                        $(".check").resize();
+                        var $item = $(".suggestion");
+                        if($item.length == 2){
+                            $("#check").removeClass("height-250").addClass("height-150");
+                        }
+                        if($item.length == 1){
+                            $('#suggest-follow-panel').hide('slow', function(){ $('#suggest-follow-panel').remove(); });
+                        }
+                    }else{
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
+
+        function followUnFollowLeft(id){
+            var update = false;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("FollowUnfollowUser", "Follow", new { Area = "Api" })',
+                data:{"userId":id,"followerId":'@User.Identity.GetUserId()'},
+                dataType: 'json',
+                success: function (data) {
+                    if(data.Succeed && data.Message == "Đã bỏ theo dõi"){
+                        var outerDiv = "#following_" + id;
+                        var uid = "'" + id + "'";
+                        $("#unfollowBtn").replaceWith('<button type="button" class="btn btn-default" id="followBtn" onclick="followUnFollowLeft(' + uid + ')"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button>')
+                    } else if(data.Succeed && data.Message == "Đã theo dõi") {
+                        var outerDiv = "#following_" + id;
+                        var uid = "'" + id + "'";
+                        $("#followBtn").replaceWith('<button type="button" class="btn btn-default" id="unfollowBtn" onclick="followUnFollowLeft(' + uid + ')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button>')
+                    }
+                    else{
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
+
+        function followUnFollow(id){
+            var update = false;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("FollowUnfollowUser", "Follow", new { Area = "Api" })',
+                data:{"userId":id,"followerId":'@User.Identity.GetUserId()'},
+                dataType: 'json',
+                success: function (data) {
+                    if(data.Succeed && data.Message == "Đã bỏ theo dõi"){
+                        var outerDiv = "#following_" + id;
+                        var uid = "'" + id + "'";
+                        $(outerDiv).find("button").replaceWith('<button type="button" class="btn btn-default" onclick="followUnFollow(' + uid + ')"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button>')
+                    } else if(data.Succeed && data.Message == "Đã theo dõi") {
+                        var outerDiv = "#following_" + id;
+                        var uid = "'" + id + "'";
+                        $(outerDiv).find("button").replaceWith('<button type="button" class="btn btn-default" onclick="followUnFollow(' + uid + ')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button>')
+                    }
+                    else{
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
+
+        // cover
+        $("#coverImg").hover(function(){
+            $("#changeCoverBtn").show(300);
+        },function(){
+            $("#changeCoverBtn").hide(300);
+        });
+
+        function changeCover() {
+            $("#coverModal").modal('show');
+        };
+
+        $("#inputCover").change(function(){
+            readURL(this);
+            $("#previewCover").show();
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#previewCover').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+
+        $("#changeCover-form").submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(document.getElementById('changeCover-form'));
+            var userId = '@Model.Id';
+            formData.append("userId",userId);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ChangeCoverImage", "Profile")',
+                async: false,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result.Succeed) {
+                        location.href = location.href;
+                    } else {
+                        //showErrors(result.Errors);
+                        showMessage("Không thể cập nhật.", "error", "OK");
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        });
+
+        //change avatar
+        $("#userContent").hover(function(){
+            $("#changeAvaBtn").show(300);
+        },function(){
+            $("#changeAvaBtn").hide(300);
+        });
+
+        function changeAva() {
+            $("#avatarModal").modal('show');
+        };
+
+        $("#inputAvatar").change(function(){
+            readURLAva(this);
+            $("#previewAva").show();
+        });
+
+        function readURLAva(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#previewAva').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+
+        $("#changeAva-form").submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(document.getElementById('changeAva-form'));
+            var userId = '@Model.Id';
+            formData.append("userId",userId);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ChangeAvatarImage", "Profile")',
+                async: false,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result.Succeed) {
+                        location.href = location.href;
+                    } else {
+                        //showErrors(result.Errors);
+                        showMessage("Không thể cập nhật.", "error", "OK");
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        });
+
+        //create group
+        function showCreateGroupModal()
+        {
+            $("#createGroupModal").modal('show');
+        }
+
+        $("#createGroup-form").submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(document.getElementById('createGroup-form'));
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateGroup", "Group")',
+                async: false,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result.Succeed) {
+                        location.href = '/Group/Index/' + result.AdditionalData.Id;
+                    } else {
+                        //showErrors(result.Errors);
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        });
+
+        //update profile
+        function refresh()
+        {
+            location.href = location.href;
+        }
+
+        $("#profileForm").submit(function(e){
+            e.preventDefault();
+            var form = $(this);
+            var post_url = form.attr('action');
+            var formData = new FormData(document.getElementById('profileForm'));
+            $.ajax({
+                type: 'POST',
+                url: post_url,
+                async: false,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(result) {
+                    if(result.Succeed) {
+                        location.href = location.href;
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            })
+        });
+
+
+        $(document).ready(function(){
+            var u = '@Model.Id';
+            var f = '@User.Identity.GetUserId()';
+            if(u === f) {
+                var selctedHobbies = @Html.Raw(Json.Encode((List<int>)hobbiesInt));
+                $('#hobbies').select2({
+                    class: 'form-control',
+                    width: '100%',
+                    multiple: true,
+                    maximumSelectionSize: 5,
+                    placeholder: "Sở thích",
+                    data: array
+                }).select2('val',selctedHobbies)
+            }
+        })
+    </script>
+}

@@ -26,7 +26,7 @@
                 android:layout_height="match_parent"
                 android:background="#000"/>
             <ImageView
-                android:id="@+id/iv_detail_event_cover"
+                android:id="@+id/iv_detail_place_cover"
                 android:layout_width="match_parent"
                 android:layout_height="200sp"
                 android:src="@drawable/placeholder"
@@ -59,7 +59,7 @@
                 android:background="@color/colorPrimary"
                 app:layout_collapseMode="pin"
                 app:tabGravity="fill"
-                app:tabIndicatorColor="#e45f56"
+                app:tabIndicatorColor="#ffffff"
                 app:tabIndicatorHeight="3sp"
                 app:tabMode="fixed"
                 app:tabSelectedTextColor="#fff"

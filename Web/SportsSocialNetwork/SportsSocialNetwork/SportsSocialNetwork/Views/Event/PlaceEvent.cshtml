@@ -33,13 +33,47 @@
 
     .table_text_des3 {
         height: 30px;
+        font-size: 14px;
+        font-weight:bold;
+        color:black
+    }
+    
+    .pagination{
+        font-size:14px
+    }
+    .pagination>.active>a, .pagination>.active>a:focus, 
+    .pagination>.active>a:hover, .pagination>.active>span, 
+    .pagination>.active>span:focus, .pagination>.active>span:hover{
+        background-color:black;
+        border-color:black;
+        border-radius:5px
+    }
+    .pagination>li>a, .pagination>li>span{
+        background-color:#76838f;
+        border-color:#76838f;
+        color:black;
+        border-radius:5px
+    }
+    .pagination>li:last-child>a, .pagination>li:last-child>span{
+        background-color:white;
+        border-radius:5px
+    }
+    .pagination>li:first-child>a, .pagination>li:first-child>span{
+        background-color:white;
+        border-radius:5px
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+     color: transparent;
+     background-color: transparent;
+     background-image: unset;
+     border: none;
     }
 </style>
 <div class="col-md-offset-1 col-md-10">
     <div class="panel">
         <header class="panel-heading">
-            <h3 class="panel-title">Danh sách sự kiện tại @ViewBag.placeName
-            <a class="btn btn-primary" href="@Url.Action("Index", "Event", new { id = Model.Id })">XEM TOÀN BỘ CÁC SỰ KIỆN</a>
+            <h3 class="panel-title"><i class="fa fa-bars" aria-hidden="true"></i> Danh sách sự kiện tại @ViewBag.placeName
+            @*<a class="btn-sm btn-primary" style="color:white;margin-left:20px" href="@Url.Action("Index", "Event", new { id = Model.Id })">XEM TOÀN BỘ CÁC SỰ KIỆN</a>*@
             </h3>
         </header>
         <div class="panel-body">
@@ -88,18 +122,18 @@
             },
             "aLengthMenu": [10, 20, 100],
             "oLanguage": {
-                "sSearch": "Tìm kiếm bằng tên sự kiện/tên sân:",
-                "sZeroRecords": "Không có dữ liệu phù hợp",
-                "sInfo": "Hiển thị từ _START_ đến _END_ trên tổng số _TOTAL_ dòng",
-                "sEmptyTable": "Không có dữ liệu",
-                "sInfoFiltered": " - lọc ra từ _MAX_ dòng",
+                "sSearch": "Tìm kiếm:",
+                "sZeroRecords": "Không có kết quả phù hợp",
+                "sInfo": "Hiển thị _START_ - _END_ trong số _TOTAL_ dòng",
+                "sEmptyTable": "Không tìm thấy kết quả nào",
+                "sInfoFiltered": "",
                 "sLengthMenu": "Hiển thị _MENU_ dòng",
                 "sProcessing": "Xin đợi trong giây lát...",
                 "oPaginate": {
                     "sFirst": "Về đầu",
                     "sLast": "Về cuối",
-                    "sNext": "Trang kế",
-                    "sPrevious": "Trang trước"
+                    "sNext": "Trang kế >",
+                    "sPrevious": "< Trang trước"
                 },
             },
             "aoColumnDefs": [
@@ -115,9 +149,10 @@
                      "bSortable": false,
                      "mRender": function (data, type, o) {
                          return "<div class='table_image'><img src='" + o[1] + "' class='imgWH100'></div><div class='table_text'>" +
-                             "<div class='table_text_title'><a href='/Event/ViewDetail/" + o[0] + "'>" + o[2] +
-                             "</a></div><div class='table_text_des3'>Thời gian: " + o[3] + "</div><div class='table_text_des3'>Địa điểm: <a href='/Place/ViewDetail/" + o[4] + "'>" + o[5] +
-                             "</a></div><div class='table_text_des3'>Trạng thái: "
+                             "<div class='table_text_title'><a style='color:#ff6a00;text-decoration:none' href='/Event/ViewDetail/" + o[0] + "'>" + o[2] +
+                             "</a></div><div class='table_text_des3'><span style='text-decoration: underline'>Thời gian:</span> " + o[3] + 
+                             "</div><div class='table_text_des3'><span style='text-decoration: underline'>Địa điểm:</span> <a style='color:#ff6a00;text-decoration:none' href='/Place/ViewDetail/" + o[4] + "'>" + o[5] +
+                             "</a></div><div class='table_text_des3'><span style='text-decoration: underline'>Trạng thái:</span> "
                              + o[6] + "</div></div>";
 
                      }

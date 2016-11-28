@@ -1,0 +1,396 @@
+﻿@model SportsSocialNetwork.Models.ViewModels.NewsViewModel
+@using SportsSocialNetwork.Models.Entities;
+@using Microsoft.AspNet.Identity;
+@using SportsSocialNetwork.Models.Enumerable;
+@using SportsSocialNetwork.Models.ViewModels;
+@{
+    ViewBag.Title = "NewsDetail";
+    Layout = "~/Views/Shared/_SSNLayout.cshtml";
+
+    List<Category> categories = ViewBag.categories;
+    List<News> relativeNews = ViewBag.relativeNews;
+    var sport = ViewBag.Sport as IEnumerable<SelectListItem>;
+}
+
+@section Styles{
+    
+    <style>
+        .select2-dropdown{
+            z-index:99999;
+        }
+        .select2-selection{
+            border-radius:0px!important;
+        }
+
+        .select2-selection__choice{
+            color: #fff!important;
+            background-color: #ff6a00!important;
+        }
+        .select2-selection__choice__remove{
+            color:#fff!important;
+        }
+    </style>
+    }
+
+<!--Share modal-->
+<div id="shareModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form id="shareForm" method="post" class="form-horizontal" autocomplete="off">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Chia sẻ bài viết</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>Chia sẻ bài viết này lên: </h3>
+                    <input type="hidden" name="userId" value="@User.Identity.GetUserId()" />
+                    <input type="hidden" name="shareType" id="shareType" value="" />
+                    <input type="hidden" name="dataId" id="dataId" value="" />
+                    <input type="radio" name="receiver" id="senderWall" value="@((int)SharedReceiver.SenderWall)" checked> Tường nhà bạn<br>
+                    <input type="radio" name="receiver" id="frdWall" value="@((int)SharedReceiver.FriendWall)"> Tường nhà của người mà bạn theo dõi
+                    <select id="frdSelectShare" name="frdSelectShare" class="form-control" disabled>
+                        <option value="-1">Chọn một bạn</option>
+                        @{
+                            if (ViewBag.followingList != null && ViewBag.followingList.Count > 0)
+                            {
+                                foreach (var item in ViewBag.followingList as List<FollowDetailViewModel>)
+                                {
+                                    <option value="@item.UserId">@item.User.FullName</option>
+                                }
+                            }
+
+                        }
+                    </select>
+                    <br>
+                    <input type="radio" name="receiver" id="groupWall" value="@((int)SharedReceiver.Group)"> Nhóm
+                    <select id="groupSelectShare" name="groupSelectShare" class="form-control" disabled>
+                        <option value="-1">Chọn một nhóm</option>
+                        @{
+                            if (ViewBag.GroupList != null && ViewBag.GroupList.Count > 0)
+                            {
+                                foreach (var item in ViewBag.GroupList as List<Group>)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+
+                        }
+                    </select>
+                    <br />
+                    <h3>Nội dung bài viết</h3>
+                    <textarea name="shareContent" id="shareContent" class="form-control" placeholder="Viết gì đó cho chia sẻ này"></textarea>
+                    <input id="sportSelectShare" type="text" name="sportSelectShare"
+                           placeholder="Tags" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    <input type="submit" class="btn btn-default" value="Chia sẻ" />
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<div class="col-sm-12">
+    <div class="row">
+        <div class="panel">
+            <div class="panel-body" style="padding:0 0 20px 0;">
+                <div class="col-sm-12" style="padding:0;">
+                    <div class="navbar navbar-default navbar-mega">
+                        <div class="container-fluid" style="background-color:#ff6a00;">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle hamburger hamburger-close collapsed"
+                                        data-toggle="collapse" data-target="#navbar-collapse-1">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="hamburger-bar"></span>
+                                </button>
+                                <a class="navbar-brand" href="/News" style="color:white;">Trang chủ tin tức</a>
+                            </div>
+                            <div class="navbar-collapse collapse" id="navbar-collapse-1">
+                                <ul class="nav navbar-nav">
+                                    @{
+                                        foreach (var item in categories)
+                                        {
+                                            <li>
+                                                <a href="/News/Category/@item.Id" style="color:white;">@item.Name</a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-9">
+                    <h1 style="font-weight:500;">@Model.Title</h1>
+                    
+
+                    <div>
+                        @Html.Raw(Model.NewsContent)
+                    </div>
+                    @{
+                        if (User != null && User.Identity.IsAuthenticated)
+                        {
+                            <a href='javascript:void(0)' class="btn btn-default" style='text-decoration: none;padding:10px;color:#000;font-weight:500' onclick='showShareModal(@Model.Id,9)'><i class='text-like fa fa-lg fa-share'></i>&nbsp;Chia sẻ</a>
+                        }
+                    }
+                    <div id="commentSection" style="margin-top:40px; border-top:1px solid #808080;">
+                        <h3>Nhận xét</h3>
+                        @{
+                            if (User != null && User.Identity.IsAuthenticated)
+                            {
+                                <div>
+                                    <form id="newsCommentForm" name="newsCommentForm" autocomplete="off">
+                                        <input type="hidden" name="userId" id="userId" value="@User.Identity.GetUserId()" />
+                                        <input type="hidden" name="newsId" id="newsId" value="@Model.Id" />
+                                        <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
+                                        <input type="submit" class="btn btn-default pull-right" value="Đăng" />
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+                                <div>
+                                    <p><a href="/Account/Login">Đăng nhập để bình luận</a></p>
+                                    <p>Chưa có tài khoản. <a href="/Account/Register">Đăng kí ngay</a></p>
+                                </div>
+                            }
+                        }
+                        
+                        <div id="cmtList">
+                        </div>
+                        <button class="btn btn-default" id="loadMoreBtn" style="width:100%;" type="button" onclick="loadMoreNewsCmt()">Xem thêm bình luận</button>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="panel">
+                        <div class="panel-heading text-center" style="background-color:#ff6a00; border-radius:0px">
+                            <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Các bài viết liên quan</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="padding:0;">
+                        <div class="list-group height-500" style="margin-top:20px;">
+                            @{
+                                foreach (var item in relativeNews)
+                                {
+                                    <a class="list-group-item" href="/News/NewsDetail/@item.Id" role="menuitem">
+                                        <div class="media">
+                                            <div class="media-left padding-right-10">
+                                                <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="media-body">
+                                                <h6 class="media-heading" style="color:#76838f; font-weight:500;">@item.Title</h6>
+                                                @*<time class="media-meta" datetime="2015-06-11T18:29:20+08:00">2 days ago</time>*@
+                                            </div>
+                                        </div>
+                                    </a>
+                                }
+                            }
+
+                        </div>
+                    </div>
+                    
+                </div>       
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts{
+    
+    <script src="~/Content/js/custom-script.js"></script>
+    <script src="~/Content/js/post-script.js"></script>
+    <script>
+        var _ncFirstSkip = 0;
+        var _ncFirstTake = 5;
+        var _ncSkip = 5;
+        var _ncTake = 5;
+        var _allNewsCmtCount;
+        var curCommentShowed = 0;
+        var showLoadMoreButton = false;
+
+        var array = @Html.Raw(Json.Encode(
+         ((IEnumerable<SelectListItem>)sport).Select(m => new
+         {
+             id = m.Value,
+             text = m.Text
+         })
+        ));
+
+        $('#sportSelectShare').select2({
+            class: 'form-control',
+            width: '100%',
+            multiple: true,
+            maximumSelectionSize: 1,
+            placeholder: "Chọn môn thể thao của bài viết",
+            data: array
+        });
+
+        $(document).ready(function() {
+            //loadNewsComt(_ncFirstSkip, _ncFirstTake, function(){
+            //    loadAllNewsCmtCount(function(){
+            //        if(curCommentShowed == _allNewsCmtCount) {
+            //            $("#loadMoreBtn").remove();
+            //        }
+            //    });
+            //});
+
+            loadAllNewsCmtCount(function(){
+                loadNewsComt(_ncFirstSkip, _ncFirstTake, function() {
+                    if(curCommentShowed == _allNewsCmtCount) {
+                        $("#loadMoreBtn").remove();
+                    }
+                })
+            })
+
+            //_allNewsCmtCount = loadAllNewsCmtCount();
+            ////curCommentShowed = $("#cmtList > div").length;
+            //if(curCommentShowed == _allNewsCmtCount) {
+            //    $("#loadMoreBtn").remove();
+            //}
+        });
+
+        function loadAllNewsCmtCount(callback) {
+            var count = 0;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetAllNewsCmtCount", "News")',
+                data: {
+                    id: @Model.Id,
+                },
+                success: function (result) {
+                    if (result === "0") {
+                        //count = 0;
+                        _allNewsCmtCount = 0;
+                    } else {
+                        //count = parseInt(result);
+                        _allNewsCmtCount = parseInt(result);
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+
+            callback();
+        };
+
+        function loadNewsComt(skip, take, callback) {
+            return $.ajax({
+                type: 'POST',
+                url: '@Url.Action("LoadNewsComments", "News")',
+                data: {
+                    id: @Model.Id,
+                    skip: skip,
+                    take: take
+                },
+                success: function (result) {
+                    if (result.Succeed) {
+                        var data = result.AdditionalData;
+                        $(data).each(function() {
+                            var cmt = renderNewsCmt(this);
+                            $("#cmtList").append(cmt);
+                            curCommentShowed++;
+                        })
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            }).then(function () {
+                callback();
+            });
+        };
+
+        function loadMoreNewsCmt() {
+            loadNewsComt(_ncSkip, _ncTake, function(){
+                _ncSkip = _ncSkip + _ncTake;
+                if(curCommentShowed == _allNewsCmtCount) {
+                    $("#loadMoreBtn").remove();
+                }
+            });
+            if(curCommentShowed == _allNewsCmtCount) {
+                $("#loadMoreBtn").remove();
+            }
+            //curCommentShowed = $("#cmtList > div").length;
+            //if(curCommentShowed == _allNewsCmtCount) {
+            //    $("#loadMoreBtn").remove();
+            //}
+            //_ncSkip = _ncSkip + _ncTake;
+
+        }
+
+        $("#newsCommentForm").submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(document.getElementById('newsCommentForm'));
+            var returnNewsCommentId;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateNewsComment", "News")',
+                async: false,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result.Succeed) {
+                        returnNewsCommentId = result.AdditionalData.Id;
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetNewsComtById", "News")',
+                data: {
+                    id: returnNewsCommentId,
+                },
+                success: function (result) {
+                    if (result.Succeed) {
+                        var cmt = renderNewsCmt(result.AdditionalData);
+                        $("#cmtList").prepend(cmt);
+                        $("#comment").val("");
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        });
+
+        function renderNewsCmt(data) {
+            var cmt = '<div class="comment media">' +
+                            '<div class="media-left">' +
+                                '<a class="avatar avatar-lg" style="width:50px;height:50px;" href="/Profile/Index?userId=' + data.AspNetUser.Id + '">' +
+                                    '<img src="' + data.AspNetUser.AvatarImage + '" alt="...">' +
+                                '</a>' +
+                            '</div>' +
+                            '<div class="comment-body media-body">' +
+                                '<a class="comment-author" href="/Profile/Index?userId=' + data.AspNetUser.Id + '">' + data.AspNetUser.FullName + '</a>' +
+                                '<div class="comment-meta">' +
+                                    '<span class="date">' + data.CommentAge + '</span>' +
+                                '</div>' +
+                                '<div class="comment-content">' +
+                                    '<p>' + data.Comment + '</p>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>';
+            return cmt;
+        }
+    </script>
+
+    }

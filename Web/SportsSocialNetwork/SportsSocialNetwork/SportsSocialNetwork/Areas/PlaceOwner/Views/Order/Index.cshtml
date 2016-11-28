@@ -41,12 +41,56 @@
     </div>
 </div>
 
+<div class="modal fade" id="reasonDeniedOrder" aria-hidden="true"
+     aria-labelledby="orderDetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Không chấp nhận đơn đặt sân</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group form-material floating">
+                    <textarea class="form-control" id="reason"></textarea>
+                    <label class="floating-label">Lí do</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deniedOrder()">Không chấp nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="modal fade" id="reasonCancelOrder" aria-hidden="true"
+     aria-labelledby="orderDetail" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Hủy đơn đặt sân</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group form-material floating">
+                    <textarea class="form-control" id="cancelreason"></textarea>
+                    <label class="floating-label">Lí do</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="cancelOrder()">Hủy đơn đặt sân</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @section Scripts{
 
     <script>
+        var curSelectOrder;
+        var cstatus;
         (function (document, window, $) {
             'use strict';
 
@@ -56,19 +100,22 @@
             });
         })(document, window, jQuery);
 
-        function updateStatus(id, status)
-        {
+        function deniedOrder() {
+            var rs = $("#reason").val();
             $.ajax({
                 url: '@Url.Action("updateStatusOrder")',
                 type: 'Get',
                 data: {
-                    id: id,
-                    status: status
+                    id: curSelectOrder,
+                    status: cstatus,
+                    reason: rs
                 },
                 success: function (data) {
                     if (data === "success") {
+                        $('#orderDetail').modal('hide');
                         showMessage("Cập nhật thành công", "success", "OK");
                         RefreshTable();
+                        $("#reason").empty();
                     } else {
                         showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                     }
@@ -77,6 +124,76 @@
                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                 }
             });
+        }
+
+        function cancelOrder() {
+            var rs = $("#cancelreason").val();
+            $.ajax({
+                url: '@Url.Action("updateStatusOrder")',
+                type: 'Get',
+                data: {
+                    id: curSelectOrder,
+                    status: cstatus,
+                    reason: rs
+                },
+                success: function (data) {
+                    if (data === "success") {
+                        $('#orderDetail').modal('hide');
+                        showMessage("Cập nhật thành công", "success", "OK");
+                        RefreshTable();
+                        $("#cancelreason").empty();
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (error) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
+        function updateStatus(id, status)
+        {
+            if (status == parseInt('@((int)OrderStatus.Unapproved)')) {
+                $('#reasonDeniedOrder').modal('show');
+                $('#reasonDeniedOrder').on('shown', function () {
+                    $("#reason").focus();
+                })
+                curSelectOrder = id;
+                cstatus = status;
+            } else if(status == parseInt('@((int)OrderStatus.Cancel)')) {
+                $('#reasonCancelOrder').modal('show');
+                $('#reasonCancelOrder').on('shown', function () {
+                    $("#cancelreason").focus();
+                })
+                curSelectOrder = id;
+                cstatus = status;
+            }
+            else
+            {
+                $.ajax({
+                    url: '@Url.Action("updateStatusOrder")',
+                    type: 'Get',
+                    data: {
+                        id: id,
+                        status: status,
+                        reason: ""
+                    },
+                    success: function (data) {
+                        if (data === "success") {
+                            $('#orderDetail').modal('hide');
+                            showMessage("Cập nhật thành công", "success", "OK");
+                            RefreshTable();
+                        } else {
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        }
+                    },
+                    error: function (error) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                });
+            }
+
         }
 
         function showDetailModal(id) {
@@ -166,14 +283,12 @@
                     },
                     {
                         "aTargets": [1],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             return o[2];
                         }
                     },
                     {
                         "aTargets": [2],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             //var date = new Date(parseInt(o[3].substr(6)));
                             //var month = parseInt(date.getMonth()) + 1;
@@ -184,32 +299,32 @@
                     },
                     {
                         "aTargets": [3],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             return o[4];
                         }
                     },
                     {
                         "aTargets": [4],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             return o[5];
                         }
                     },
                     {
                         "aTargets": [5],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             if (o[6] == parseInt('@((int)OrderPaidType.ChosePayOnline)')) {
-                                return "<span class='label label-lg label-outline label-info'>Online</span>";
+                                return "<span class='label label-lg label-outline label-info'>@Utils.GetEnumDescription(OrderPaidType.ChosePayOnline).ToString()</span>";
                             } else if (o[6] == parseInt('@((int)OrderPaidType.ChosePayByCash)')) {
-                                return "<span class='label label-lg label-outline label-success'>Tiền mặt</span>";
+                                return "<span class='label label-lg label-outline label-success'>@Utils.GetEnumDescription(OrderPaidType.ChosePayByCash).ToString()</span>";
+                            } else if (o[6] == parseInt('@((int)OrderPaidType.PaidByCash)')) {
+                                return "<span class='label label-lg label-outline label-success'>@Utils.GetEnumDescription(OrderPaidType.PaidByCash).ToString()</span>";
+                            } else if (o[6] == parseInt('@((int)OrderPaidType.PaidOnline)')) {
+                                return "<span class='label label-lg label-outline label-success'>@Utils.GetEnumDescription(OrderPaidType.PaidOnline).ToString()</span>";
                             }
                         }
                     },
                     {
                         "aTargets": [6],
-                        "bSortable": false,
                         "mRender": function (data, type, o) {
                             if (o[7] == parseInt('@((int)OrderStatus.Pending)')) {
                                 return "<span class='label label-lg label-outline label-warning'>@Utils.GetEnumDescription(OrderStatus.Pending).ToString()</span>";
@@ -228,7 +343,7 @@
                         "aTargets": [7],
                         "bSortable": false,
                         "mRender": function (data, type, o) {
-                            return "<button class='btn btn-primary' onclick='showDetailModal(" + o[0] + ")' data-target='#orderDetail' data-toggle='modal' type='button'><i class='icon wb-pencil' aria-hidden='true'></i></button>";
+                            return "<button class='btn btn-success' onclick='showDetailModal(" + o[0] + ")' data-target='#orderDetail' data-toggle='modal' type='button'><i class='fa fa-eye' aria-hidden='true'></i></button>";
                         }
                     }
 

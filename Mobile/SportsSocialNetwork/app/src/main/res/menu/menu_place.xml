@@ -11,7 +11,7 @@
     <item
         android:id="@+id/menu_filter"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_filter"
+        android:icon="@drawable/ic_current"
         android:title="Filter"
         app:showAsAction="always" />
 </menu>

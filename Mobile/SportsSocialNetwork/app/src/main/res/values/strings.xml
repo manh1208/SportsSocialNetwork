@@ -16,4 +16,19 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_check_in">CheckInActivity</string>
     <string name="title_activity_my_order">MyOrderActivity</string>
+    <string name="failure">Lỗi kết nối với server. Vui lòng thử lại sau!</string>
+    <string name="parse_exception">Dữ liệu ngày tháng bị lỗi. Vui lòng thử lại sau.</string>
+    <string name="title_activity_group">GroupActivity</string>
+    <string name="title_activity_friend">FriendActivity</string>
+    <string name="title_activity_group_member">GroupMemberActivity</string>
+    <string name="title_activity_group_information">GroupInformationActivity</string>
+    <string name="title_activity_add_member">AddMemberActivity</string>
+    <string name="title_activity_create_group">CreateGroupActivity</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_create_field_schedule">CreateFieldScheduleActivity</string>
+    <string name="title_activity_invitation">InvitationActivity</string>
+    <string name="title_activity_news">NewsActivity</string>
+    <string name="title_activity_news_detail">NewsDetailActivity</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_invitation_chat">InvitationChatActivity</string>
 </resources>

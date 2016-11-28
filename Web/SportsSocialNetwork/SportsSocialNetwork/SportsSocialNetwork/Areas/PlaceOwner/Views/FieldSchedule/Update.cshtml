@@ -1,13 +1,9 @@
-﻿@model SportsSocialNetwork.Models.ViewModels.FieldScheduleViewModel
+﻿@model SportsSocialNetwork.Areas.PlaceOwner.Models.ViewModels.CreateFieldScheduleViewModel
+@using SportsSocialNetwork.Models.Enumerable
 @{
     ViewBag.Title = "Update";
     List<SelectListItem> scheduleType = ViewBag.scheduleType;
     List<SelectListItem> selectListField = ViewBag.selectListField;
-
-    DateTime startDay = ViewBag.startDay;
-    DateTime endDay = ViewBag.endDay;
-    TimeSpan startTime = ViewBag.startTime;
-    TimeSpan endTime =  ViewBag.endTime;
 }
 <style>
     .clockpicker-popover {
@@ -60,22 +56,24 @@
 </style>
 
 
-<form id="update-form" method="post" autocomplete="off">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-        </button>
-        <h4 class="modal-title">Cập nhật</h4>
-    </div>
+  
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h4 class="modal-title">Cập nhật</h4>
+</div>
+<form id="update-fieldschedule-form">
+    @Html.HiddenFor(m => m.PlaceId);
+    @Html.HiddenFor(m => m.Id);
     <div class="modal-body" style="padding-bottom:0;" id="modalBody">
         <div class="row">
             <div class="panel " style="margin-bottom:0;">
                 <div class="panel-body">
-                    @Html.TextBoxFor(m => m.Id, new { @style = "display:none;" })
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Chọn sân</label>
-                            @Html.DropDownListFor(m => m.FieldId, selectListField, new { @class = "form-control input-lg" })
+                            @Html.DropDownListFor(m => m.FieldId, selectListField, new { @class = "form-control input-lg", @id = "fieldId" })
                         </div>
                         <label class="control-label">Từ ngày: </label>
                         <div class="form-group">
@@ -83,8 +81,25 @@
                                 <span class="input-group-addon">
                                     <i class="icon wb-calendar" aria-hidden="true"></i>
                                 </span>
-                                <input type="text" class="datepicker form-control" id="startDay" name="StartDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" value="@startDay.ToString("dd/MM/yyyy")" />
+                                @Html.TextBoxFor(m => m.StartDateStr, new { @class = "datepicker form-control input-lg", id = "startDay", name = "StartDay", style = "width:100%", data_placement = "right", data_align = "top", data_plugin = "datepicker", data_autoclose = "true" })
+                                @*<input type="text" class="datepicker form-control" id="cstartDay" name="StartDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" />*@
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Từ:</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="icon wb-time" aria-hidden="true"></i>
+                                </span>
+                                @Html.TextBoxFor(m => m.StartTimeStr, new { @class = "timepicker form-control input-lg", id = "startTime", name = "StartTime", style = "width:100%", data_placement = "right", data_align = "top", data_plugin = "clockpicker", data_autoclose = "true" })
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label">Loại</label>
+                            @Html.DropDownListFor(m => m.Type, scheduleType, new { @class = "form-control input-lg" , id= "type" })
                         </div>
                         <div class="form-group">
                             <label class="control-label">Đến ngày: </label>
@@ -92,42 +107,62 @@
                                 <span class="input-group-addon">
                                     <i class="icon wb-calendar" aria-hidden="true"></i>
                                 </span>
-                                <input type="text" class="datepicker form-control" id="endDay" name="EndDay" data-placement="right" data-align="top" data-plugin="datepicker" data-autoclose="true" value="@endDay.ToString("dd/MM/yyyy")" />
+                                @Html.TextBoxFor(m => m.EndDateStr, new { @class = "datepicker form-control input-lg", id = "endDay", name = "EndDay", style = "width:100%", data_placement = "right", data_align = "top", data_plugin = "datepicker", data_autoclose = "true" })
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6">
+
                         <div class="form-group">
-                            <label class="control-label">Loại</label>
-                            @Html.DropDownListFor(m => m.Type, scheduleType, new { @class = "form-control input-lg" })
-                        </div>
-                        <div class="form-group">
-                                <label class="control-label">Giờ:</label>
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="icon wb-time" aria-hidden="true"></i>
-                                </span>
-                                <input type="text" name="StartTime" id="startTime" class="timepicker form-control" data-placement="right" data-align="top" data-plugin="clockpicker" data-autoclose="true" value="@startTime.ToString(@"hh\:mm")" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                                <label class="control-label">Giờ:</label>
+                            <label class="control-label">Đến:</label>
                             <div class="input-group clockpicker-wrap">
                                 <span class="input-group-addon">
                                     <i class="icon wb-time" aria-hidden="true"></i>
                                 </span>
-                                <input type="text" name="EndTime" id="endTime" class="timepicker form-control" data-placement="right" data-align="top" data-plugin="clockpicker" data-autoclose="true" value="@endTime.ToString(@"hh\:mm")" />
+                                @Html.TextBoxFor(m => m.EndTimeStr, new { @class = "timepicker form-control input-lg", id = "endTime", name = "EndTime", style = "width:100%", data_placement = "right", data_align = "top", data_plugin = "clockpicker", data_autoclose = "true" })
                             </div>
                         </div>
-                 
                     </div>
-                    <div class="col-sm-12">  
+                    @if (Model.Type == (int)FieldScheduleStatus.Booked)
+                    {
+                        <div class="col-sm-12" id="divUsername">
+                            <div class="form-group" id="formGroupUsername">
+                                <label class="control-label">Tên tài khoản</label>
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control input-lg", id = "username", style = "width:100%" })
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-sm-12" id="divUsername" style="display:none">
+                            <div class="form-group" id="formGroupUsername">
+                                <label class="control-label">Tên tài khoản</label>
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control input-lg", id = "username", style = "width:100%" })
+                            </div>
+                        </div>
+                    }
+                    <div class="col-sm-12">
+                        <div class="form-group">
+
+                            @*<div class="select2-primary">
+                                    @Html.ListBoxFor(m => m.Days, days, new { @class = "form-control input-lg", multiple = "multiple", data_plugin = "select2", data_placeholder = "Chọn môn thể thao yêu thích" })
+                                </div>
+
+                                @Html.ValidationMessageFor(m => m.Days, "", new { @class = "help-block text-danger" })*@
+                            <label class="control-label">Lặp lại các ngày:</label>
+                            @Html.TextBoxFor(m => m.Days, new { @class = "form-control input-lg", id = "days", style = "width:100%" })
+                        </div>
+                    </div>
+                  
+
+                    <div class="col-sm-12">
                         <div class="form-group">
                             <label class="control-label">Mô tả</label>
                             <div>
                                 @Html.TextAreaFor(m => m.Description, new { @style = "width:100%" })
                             </div>
-                        </div>                     
+                        </div>
+                    </div>
+                    <div class="col-sm-12" id="noti">
+
                     </div>
                 </div>
             </div>
@@ -135,21 +170,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-        <button type="submit" class="btn btn-success" id="submitBtn">Cập nhật lịch</button>
+        <button type="submit" class="btn btn-success" id="submitBtn">Cập nhật</button>
     </div>
 </form>
-@section Scripts{
-
-    <script>
-        (function (document, window, $) {
-            'use strict';
-
-            var Site = window.Site;
-            $(document).ready(function () {
-                Site.run();
-            });
-        })(document, window, jQuery);
-
-    </script>
-}
 

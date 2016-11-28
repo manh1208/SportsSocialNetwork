@@ -31,12 +31,14 @@ namespace SportsSocialNetwork.Models.Entities
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<CategorySport> CategorySports { get; set; }
+        public virtual DbSet<Challenge> Challenges { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<Field> Fields { get; set; }
         public virtual DbSet<FieldImage> FieldImages { get; set; }
         public virtual DbSet<FieldPrice> FieldPrices { get; set; }
         public virtual DbSet<FieldSchedule> FieldSchedules { get; set; }
         public virtual DbSet<FieldType> FieldTypes { get; set; }
+        public virtual DbSet<FirebaseToken> FirebaseTokens { get; set; }
         public virtual DbSet<Follow> Follows { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<GroupMember> GroupMembers { get; set; }
@@ -52,6 +54,7 @@ namespace SportsSocialNetwork.Models.Entities
         public virtual DbSet<PlaceImage> PlaceImages { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<PostComment> PostComments { get; set; }
+        public virtual DbSet<PostImage> PostImages { get; set; }
         public virtual DbSet<PostSport> PostSports { get; set; }
         public virtual DbSet<Rating> Ratings { get; set; }
         public virtual DbSet<Sport> Sports { get; set; }

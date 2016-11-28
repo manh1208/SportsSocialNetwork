@@ -1,0 +1,406 @@
+﻿@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_SSNLayout.cshtml";
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/Content/assets/vendor/asscrollable/asScrollable.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/magnific-popup/magnific-popup.css">
+    <link rel="stylesheet" href="~/Content/js/sweetAlert/sweetalert.css" />
+    <link href="~/Content/friendly-chat/main.css" rel="stylesheet" />
+    <style>
+        .chatGroup:hover {
+            cursor: pointer;
+            background-color: #FDB286;
+        }
+
+        .media {
+            overflow: visible;
+        }
+
+        .media-body {
+            overflow: visible;
+        }
+
+        .select2-dropdown {
+            z-index: 99999;
+        }
+
+        .panel-cover {
+            margin: 0 0 10px 0;
+        }
+
+        .panel-status {
+            margin-bottom: 15px;
+        }
+
+        .suggest-group {
+            border: 1px solid lightgray;
+            overflow: hidden;
+            padding-top: 15px;
+            margin: 10px;
+        }
+
+        .after-run .site-menubar-fold .page, .after-run .site-menubar-fold .site-footer {
+            margin-left: 0;
+        }
+
+        .after-run .site-menubar-unfold .page, .after-run .site-menubar-unfold .site-footer {
+            margin-left: 0;
+        }
+
+        .page-aside-inner {
+            max-width: 600px;
+        }
+
+        .page-main .panel-body {
+            padding-top: 0;
+        }
+
+        .page-main .page-content {
+            padding: 10px;
+            padding-right: 0px;
+        }
+
+        .panel {
+            margin-bottom: 10px;
+            font-family: sans-serif;
+        }
+
+            .panel.panel-cover {
+                margin: 0px;
+            }
+
+        .page-aside {
+            top: 10px;
+        }
+
+            .page-aside .widget-header {
+                padding-top: 0px;
+            }
+
+        .panel-cover img {
+            height: 150px;
+        }
+
+        .status-panel {
+            padding-top: 5px;
+        }
+
+            .status-panel textarea {
+                border: none;
+                border-bottom: 1px whitesmoke solid;
+                resize: none;
+            }
+
+        @@media(max-width: 768px) {
+            .page-aside-inner {
+                position: unset;
+            }
+
+            .page-main .page-content {
+                padding: 10px;
+            }
+        }
+
+        .list-group-item {
+            font-size: 16px;
+        }
+
+        .load {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .list-inline li {
+            margin: 5px;
+            padding: 0;
+            height: 100px;
+            width: 100px;
+        }
+
+        .list-inline {
+            white-space: nowrap;
+        }
+
+        #check {
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+        }
+    </style>
+}
+
+<div class="row" style="font-family:sans-serif">
+    <!--Left side-bar-->
+    <div class="col-sm-3 panel">
+        <h4 class="text-center padding-bottom-10">Các nhóm tán gẫu</h4>
+        <div style="height:550px" class="check" id="check" data-plugin="scrollable">
+            <div data-role="container">
+                <div data-role="content" id="chatGroupContainer">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--END Left side-bar-->
+    <!--Main-->
+    <div class="col-sm-9">
+            <div id="chatRoom" style="display:none" class="panel">
+                <div class="text-right padding-10">
+                    <button id="btnLeave" style="display:none" class="btn btn-sm btn-danger" onclick="leaveGroupChat()">Rời nhóm tán gẫu</button>
+                    <button id="btnLeaveGroupChat" style="display:none"></button>
+                </div>
+                <div style="height:550px;width:100%;margin-top:0" id="messages-card" class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--6-col-tablet mdl-cell--6-col-desktop">
+                    <div class="mdl-card__supporting-text">
+                        <div id="messages" class="padding-15">
+                        </div>
+                        <form id="message-form" style="width:100%" action="#">
+                            <div style="padding-right:0" class="form-group col-sm-12">
+                                <div class="col-sm-10 padding-0">
+                                    <input class="form-control input-cmnt" autocomplete="off" type="text" id="message" placeholder="Nhập nội dung tin nhắn...">
+                                </div>
+                                <div class="col-sm-2">
+                                    <button style="margin:0" id="submit" disabled type="submit" class="btn btn-primary">Gửi</button>
+                                </div>
+                                
+                            </div>
+                            
+                        </form>
+                        @*<form id="image-form" action="#">
+                            <input class="mediaCapture" id="mediaCapture" type="file" accept="image/*,capture=camera">
+                            <button style="margin:0;padding:6px" id="submitImage" title="Add an image" class="submitImage btn btn-lg btn-default">
+                                <i class="fa fa-camera post-heading-icon"></i>
+                            </button>
+                        </form>*@
+                    </div>
+                </div>
+            </div>
+        <div id="confirm" class="panel text-center padding-50" style="height:600px;display:none">
+                <p id="msg-content1"></p>
+                <p id="msg-content2"></p>
+                <p>Bạn có đồng ý tham gia thảo luận?</p>
+                <button onclick="acceptInvitation()" class="btn btn-primary">Đồng ý</button>
+                <button onclick="denyInvitation()" class="btn btn-default">Từ chối</button>
+                <button id="btnDenyGroupChat" style="display:none"></button>
+                <button id="btnAcceptGroupChat" style="display:none"></button>
+        </div>
+        </div>
+    <button hidden id="sign-out"></button>
+    <button hidden id="btnChangeBranch"></button>
+    </div>
+@section scripts{
+
+
+    <script src="~/Content/assets/js/plugins/jquery.sticky-kit.min.js"></script>
+    <script src="~/Content/assets/vendor/magnific-popup/jquery.magnific-popup.js"></script>
+    <script src="~/Content/assets/js/components/magnific-popup.js"></script>
+    <script src="~/Content/js/custom-script.js"></script>
+    <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyC2khUE8T27qj0vWXQzxWo2g1YRY6NP7Vk",
+            authDomain: "sportsocialnetwork-1ff07.firebaseapp.com",
+            databaseURL: "https://sportsocialnetwork-1ff07.firebaseio.com",
+            storageBucket: "sportsocialnetwork-1ff07.appspot.com",
+            messagingSenderId: "727248131277"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <script src="~/Content/friendly-chat/main.js"></script>
+    <script>
+        var focusGroup = -1;
+        var _userId = '@User.Identity.GetUserId()';
+        var _getUserActionName = '@Url.Action("GetUserListInGroupChat", "Invitation")';
+        window.onload = function () {
+            loadGroupChat();
+            if(focusGroup!=-1){
+                var _invitationId = focusGroup;
+                $("#chat_" + focusGroup).css("background-color", "#FDB286");
+                //$(".mediaCapture").attr("id", "mediaCapture_" + _invitationId);
+                //$(".submitImage").attr("id", "submitImage_" + _invitationId);
+                var senderId = $("#group_"+focusGroup).attr("data-creator");
+                if (senderId != '@User.Identity.GetUserId()') {
+                    $("#btnLeave").show();
+                } else {
+                    $("#btnLeave").hide();
+                }
+                validConfirmYet();
+                window.friendlyChat = new FriendlyChat(_userId, _invitationId, _getUserActionName);
+            }
+        };
+
+
+        function validConfirmYet() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CheckConfirm", "UserInvitation")',
+                async: false,
+                data: { id: focusGroup },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Succeed) {
+                        $("#chatRoom").show();
+                        $("#confirm").hide();
+                    } else {
+                        var dt = data.AdditionalData;
+                        $("#msg-content1").empty();
+                        $("#msg-content2").empty();
+                        $("#msg-content1").append(dt.Host+ " đã mời bạn cùng tham gia chơi thể thao với lời nhắn: ");
+                        $("#msg-content2").append(dt.InvitationContent);
+                        $("#chatRoom").hide();
+                        $("#confirm").show();
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
+
+
+        function loadGroupChat() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("LoadGroupChat", "Invitation")',
+                async: false,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.Succeed) {
+                        var tmp = data.AdditionalData
+                        if (tmp.length > 0) {
+                            focusGroup = tmp[0].Id;
+                        }
+                        appendGroupChat(data.AdditionalData);
+                    } else {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    }
+                },
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        }
+
+        function appendGroupChat(data) {
+            if (data.length == 0) {
+                $("#chatGroupContainer").append("<p style='color:#a3afb7;font-style: italic;font-size:17px;text-align:center'>Hiện tại bạn chưa có nhóm tán gẫu nào</p>");
+            } else {
+                $(data).each(function () {
+                    $("#chatGroupContainer").append(
+                        '<div id="chat_' + this.Id + '" class="chatGroup" style="border: 1px solid #e9ebee; overflow:hidden;">'
+                         + '<a href="javascript:void(0)"><span data-creator="' + this.SenderId + '" style="float:left; display:inline-block; margin-left:15px;" id="group_' + this.Id + '">'
+                         + '<h4>' + this.Subject + '</h4>'
+                         + '<p style="color:#37474f">Người tạo: ' + this.Host + '</p>'
+                         + '<p style="color:#37474f">Số người: ' + this.numOfUser + '</p>'
+                         + '</span></a>'
+                         + '</div>');
+
+                    document.getElementById('group_' + this.Id).addEventListener('click', function () {
+                        //$("#sign-out").click();
+                        var tmp = $(this).attr("id");
+                        var senderId = $(this).attr("data-creator");
+                        var result = tmp.split("_");
+                        $(".chatGroup").css("background-color", "white");
+                        $("#chat_" + result[1]).css("background-color", "#FDB286");
+                        $(".chatGroup:hover").css("background-color", "#FDB286");
+                        focusGroup = result[1];
+                        $("#messages").empty();
+                        if (senderId != '@User.Identity.GetUserId()') {
+                            $("#btnLeave").show();
+                        } else {
+                            $("#btnLeave").hide();
+                        }
+                        //$(".mediaCapture").attr("id", "mediaCapture_" + focusGroup);
+                        //$(".submitImage").attr("id", "submitImage_" + focusGroup);
+                        validConfirmYet();
+                        $("#btnChangeBranch").click();
+                    }, false);
+
+                })
+            }
+        }
+
+        function leaveGroupChat() {
+            showConfirmMessage("Bạn có chắc chắn muốn rời nhóm tán gẫu?",
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    url: '@Url.Action("DenyInvitation", "UserInvitation")',
+                                    async: false,
+                                    type: 'POST',
+                                    data: {
+                                        id: focusGroup
+                                    },
+                                    success: function (data) {
+                                        if (data.Succeed) {
+                                            $("#btnLeaveGroupChat").click();
+                                            location.href = location.href
+                                        }
+                                    },
+                                    error: function () {
+                                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                    }
+                                });
+                            }
+                        }
+                        )
+        }
+
+        function acceptInvitation() {
+            $.ajax({
+                url: '@Url.Action("AcceptInvitation", "UserInvitation")',
+                async: false,
+                type: 'POST',
+                data: {
+                    id: focusGroup
+                },
+                success: function (data) {
+                    if (data.Succeed) {
+                        $("#btnAcceptGroupChat").click();
+                        $("#chatRoom").show();
+                        $("#confirm").hide();
+                    }
+                },
+                error: function () {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                }
+            });
+        }
+
+        function denyInvitation() {
+            showConfirmMessage("Bạn có chắc chắn?",
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                $.ajax({
+                                    url: '@Url.Action("DenyInvitation", "UserInvitation")',
+                                    async: false,
+                                    type: 'POST',
+                                    data: {
+                                        id: focusGroup
+                                    },
+                                    success: function (data) {
+                                        if (data.Succeed) {
+                                            $("#btnDenyGroupChat").click();
+                                            location.href = location.href
+                                        }
+                                    },
+                                    error: function () {
+                                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                                    }
+                                });
+                            }
+                        }
+                        )
+        }
+
+    </script>
+}
+
+
+
+

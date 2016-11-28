@@ -7,36 +7,48 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.capstone.sportssocialnetwork.R;
 import com.capstone.sportssocialnetwork.activity.ImageViewerActivity;
 import com.capstone.sportssocialnetwork.activity.MainActivity;
+import com.capstone.sportssocialnetwork.model.PostImage;
+import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 //import com.stfalcon.frescoimageviewer.ImageViewer;
 
 /**
  * Created by ManhNV on 9/11/16.
  */
-public class ImageAdapter extends BaseAdapter {
+public class ImageAdapter extends ArrayAdapter<PostImage> {
     private Context mContext;
+    private List<PostImage> images;
 
+    public ImageAdapter(Context context, int resource, List<PostImage> objects) {
+        super(context, resource, objects);
+        mContext = context;
+        images = objects;
+    }
 
-    public ImageAdapter(Context c) {
-        mContext = c;
+    public void setImages(List<PostImage> images) {
+        this.images = images;
+        notifyDataSetChanged();
     }
 
     public int getCount() {
-        return mThumbIds.length;
+        return images.size();
     }
 
-    public Object getItem(int position) {
-        return null;
+    public PostImage getItem(int position) {
+        return images.get(position);
     }
 
     public long getItemId(int position) {
-        return 0;
+        return images.get(position).getId();
     }
 
     // create a new ImageView for each item referenced by the Adapter
@@ -44,27 +56,34 @@ public class ImageAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_place_image,parent,false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_place_image, parent, false);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-//        viewHolder.imageView.setImageResource(mThumbIds[position]);
-
-        Picasso.with(mContext).load(Uri.parse(mThumbIds[position]))
+//        viewHolder.imageView.setImageResour   ce(mThumbIds[position]);
+        PostImage image = getItem(position);
+        Picasso.with(mContext).load(Uri.parse(DataUtils.URL + image.getImage()))
                 .placeholder(R.drawable.img_default_avatar)
                 .error(R.drawable.placeholder)
+                .fit()
                 .into(viewHolder.imageView);
         viewHolder.imageView.setTag(position);
         viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String[] imageArray = new String[images.size()];
+                int i = 0;
+                for (PostImage image : images
+                        ) {
+                    imageArray[i++] = image.getImage();
+                }
                 int position = (int) view.getTag();
-                Intent intent =  new Intent(mContext, ImageViewerActivity.class);
-                intent.putExtra("position",position);
-                intent.putExtra("listImage",mThumbIds);
+                Intent intent = new Intent(mContext, ImageViewerActivity.class);
+                intent.putExtra("position", position);
+                intent.putExtra("listImage", imageArray);
                 mContext.startActivity(intent);
 //                Intent intent = new Intent(Intent.ACTION_VIEW);
 //                Uri uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
@@ -84,31 +103,32 @@ public class ImageAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         ImageView imageView;
-        ViewHolder (View view){
+
+        ViewHolder(View view) {
             imageView = (ImageView) view.findViewById(R.id.iv_place_image);
         }
     }
 
 
-    // references to our images
-    private String[] mThumbIds = {
-            "http://talksport.com/sites/default/files/styles/large/public/field/image/201506/468580396.jpg",
-            "http://www.101greatgoals.com/wp-content/uploads/2015/06/alexis-sanchez-thumbs-up.jpg",
-            "http://cdn.unilad.co.uk/wp-content/uploads/2016/02/Sanchez-2.jpg",
-            "http://aaj.tv/wp-content/uploads/2016/01/ramsey-ozil_2754407b.jpg",
-            "http://www4.pictures.zimbio.com/gi/Alexis+Sanchez+Arsenal+v+Everton+Premier+League+VwmzJaR49HFl.jpg"
-//            R.drawable.placeholder, R.drawable.placeholder,
-//            R.drawable.placeholder, R.drawable.placeholder,
-//            R.drawable.placeholder, R.drawable.placeholder,
-//            R.drawable.placeholder, R.drawable.placeholder,
-//            R.drawable.placeholder, R.drawable.placeholder,
-//            R.drawable.placeholder, R.drawable.placeholder,
-//            R.drawable.placeholder, R.drawable.placeholder,
-//            R.drawable.placeholder, R.drawable.placeholder,
-//            R.drawable.placeholder, R.drawable.placeholder,
-//            R.drawable.placeholder, R.drawable.placeholder,
-//            R.drawable.placeholder, R.drawable.placeholder
-    };
+//    // references to our images
+//    private String[] mThumbIds = {
+//            "http://talksport.com/sites/default/files/styles/large/public/field/image/201506/468580396.jpg",
+//            "http://www.101greatgoals.com/wp-content/uploads/2015/06/alexis-sanchez-thumbs-up.jpg",
+//            "http://cdn.unilad.co.uk/wp-content/uploads/2016/02/Sanchez-2.jpg",
+//            "http://aaj.tv/wp-content/uploads/2016/01/ramsey-ozil_2754407b.jpg",
+//            "http://www4.pictures.zimbio.com/gi/Alexis+Sanchez+Arsenal+v+Everton+Premier+League+VwmzJaR49HFl.jpg"
+////            R.drawable.placeholder, R.drawable.placeholder,
+////            R.drawable.placeholder, R.drawable.placeholder,
+////            R.drawable.placeholder, R.drawable.placeholder,
+////            R.drawable.placeholder, R.drawable.placeholder,
+////            R.drawable.placeholder, R.drawable.placeholder,
+////            R.drawable.placeholder, R.drawable.placeholder,
+////            R.drawable.placeholder, R.drawable.placeholder,
+////            R.drawable.placeholder, R.drawable.placeholder,
+////            R.drawable.placeholder, R.drawable.placeholder,
+////            R.drawable.placeholder, R.drawable.placeholder,
+////            R.drawable.placeholder, R.drawable.placeholder
+//    };
 }

@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Quản lí lịch đặt sân";
     int placeID = ViewBag.placeID;
+    var days = ViewBag.Days as IEnumerable<SelectListItem>;
 }
 <style>
     .datepicker.datepicker-dropdown.dropdown-menu.datepicker-oritent-left.dataTable-orient-bottom {
@@ -133,8 +134,10 @@
                     format: "dd/mm/yyyy"
                 })
                 $('#endDay').datepicker({
-                    format: "dd/mm/yyyy"
+                    format: "dd/mm/yyy"
                 })
+
+               
             });
         })(document, window, jQuery);
 
@@ -406,6 +409,11 @@
                     },
                 });
             });
+        }
+
+        function switchToUpdate(id) {
+            $('#modelDetail').modal('toggle');
+            showUpdateModal(id);
         }
 
         $('body').on('focus', ".timepicker", function () {

@@ -16,6 +16,10 @@ using SportsSocialNetwork.Models.Identity;
 using System.Globalization;
 using SportsSocialNetwork.Models.Utilities;
 using QRCoder;
+using Microsoft.AspNet.SignalR;
+using SportsSocialNetwork.Models.Hubs;
+using SportsSocialNetwork.Models.Notifications;
+using HenchmenWeb.Models.Notifications;
 
 namespace SportsSocialNetwork.Controllers
 {
@@ -26,6 +30,38 @@ namespace SportsSocialNetwork.Controllers
         // GET: Order
         public ActionResult Index()
         {
+            var _followService = this.Service<IFollowService>();
+            var _userService = this.Service<IAspNetUserService>();
+            var _sportService = this.Service<ISportService>();
+            string curUserId = User.Identity.GetUserId();
+
+            var sports = _sportService.GetActive()
+                            .Select(s => new SelectListItem
+                            {
+                                Text = s.Name,
+                                Value = s.Id.ToString()
+                            }).OrderBy(s => s.Value);
+            ViewBag.Sport = sports;
+
+            //get list of user that this user is following
+            List<Follow> followingList = _followService.GetActive(f => f.FollowerId == curUserId).ToList();
+            List<FollowDetailViewModel> followingListVM = Mapper.Map<List<FollowDetailViewModel>>(followingList);
+            foreach (var item in followingListVM)
+            {
+                AspNetUser user = _userService.FirstOrDefaultActive(u => u.Id.Equals(item.UserId));
+                AspNetUserViewModel userVM = Mapper.Map<AspNetUserViewModel>(user);
+                item.User = userVM;
+            }
+            ViewBag.followingList = followingListVM;
+
+            //load group name
+            var _groupService = this.Service<IGroupService>();
+            List<Group> groupList = _groupService.GetActive(p => p.GroupMembers.Where(f =>
+           f.UserId == curUserId && f.Status == (int)GroupMemberStatus.Approved).ToList().Count > 0).ToList();
+            if (groupList != null)
+            {
+                ViewBag.GroupList = groupList;
+            }
             return View();
         }
 
@@ -65,6 +101,65 @@ namespace SportsSocialNetwork.Controllers
             return this.PartialView(model);
         }
 
+        public ActionResult FieldScheduleOrderDetail(int id)
+        {
+            var _placeService = this.Service<IPlaceService>();
+            var _fieldService = this.Service<IFieldService>();
+            var _fieldScheduleService = this.Service<IFieldScheduleService>();
+            FieldSchedule fs = _fieldScheduleService.FirstOrDefault(o => o.Id == id);
+            var fieldId = fs.FieldId;
+            var field = _fieldService.FirstOrDefaultActive(p => p.Id == fieldId);
+            Place place = new Place();
+            if (field != null)
+            {
+                place = _placeService.FirstOrDefaultActive(p => p.Id == field.PlaceId);
+                ViewBag.field = field;
+            }
+            if (place != null)
+            {
+                ViewBag.place = place;
+            }
+            FieldScheduleViewModel model = new FieldScheduleViewModel(fs);
+            model.StartTimeString = model.StartTime.Hours.ToString("00") + ":" + model.StartTime.Minutes.ToString("00");
+            model.EndTimeString = model.EndTime.Hours.ToString("00") + ":" + model.EndTime.Minutes.ToString("00");
+            var bits = new bool[8];
+            for (var i = 7; i >= 0; i--)
+            {
+                bits[i] = (model.AvailableDay & (1 << i)) != 0;
+            }
+            var dayOfWeek = "";
+            if (bits[1])
+            {
+                dayOfWeek += "CN ";
+            }
+            if (bits[2])
+            {
+                dayOfWeek += "T2 ";
+            }
+            if (bits[3])
+            {
+                dayOfWeek += "T3 ";
+            }
+            if (bits[4])
+            {
+                dayOfWeek += "T4 ";
+            }
+            if (bits[5])
+            {
+                dayOfWeek += "T5 ";
+            }
+            if (bits[6])
+            {
+                dayOfWeek += "T6 ";
+            }
+            if (bits[7])
+            {
+                dayOfWeek += "T7 ";
+            }
+            model.availableDayOfWeek = dayOfWeek;
+            return this.PartialView(model);
+        }
+
         public ActionResult GetData(JQueryDataTableParamModel param)
         {
             //var blogPostList = _blogPostService.GetBlogPostbyStoreId();
@@ -92,10 +187,36 @@ namespace SportsSocialNetwork.Controllers
 
             switch (sortColumnIndex)
             {
-                case 2:
+                
+                case 0:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.OrderCode)
+                        : filteredListItems.OrderByDescending(o => o.OrderCode);
+                    break;
+                case 1:
                     filteredListItems = sortDirection == "asc"
                         ? filteredListItems.OrderBy(o => o.Field.Name)
                         : filteredListItems.OrderByDescending(o => o.Field.Name);
+                    break;
+                case 2:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.CreateDate)
+                        : filteredListItems.OrderByDescending(o => o.CreateDate);
+                    break;
+                case 3:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.EndTime)
+                        : filteredListItems.OrderByDescending(o => o.EndTime);
+                    break;
+                case 6:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.PaidType)
+                        : filteredListItems.OrderByDescending(o => o.PaidType);
+                    break;
+                case 7:
+                    filteredListItems = sortDirection == "asc"
+                        ? filteredListItems.OrderBy(o => o.Status)
+                        : filteredListItems.OrderByDescending(o => o.Status);
                     break;
             }
 
@@ -158,7 +279,7 @@ namespace SportsSocialNetwork.Controllers
             var _fieldScheduleService = this.Service<IFieldScheduleService>();
 
             bool rs1 = _orderService.checkTimeValidInOrder(fieldId, startTime, endTime, PlayDate, PlayDate);
-            bool rs2 = _fieldScheduleService.checkTimeValidInFieldSchedule(fieldId, startTime, endTime, PlayDate, PlayDate);
+            bool rs2 = _fieldScheduleService.checkTimeValidInFieldSchedule(null,fieldId, startTime, endTime, PlayDate, PlayDate);
             if (!rs1 || !rs2)
             {
                 return RedirectToAction("PageNotFound", "Errors");
@@ -210,7 +331,7 @@ namespace SportsSocialNetwork.Controllers
             }
             return Json(new
             {
-                price = price
+                price = price.ToString("n0")
             }, JsonRequestBehavior.AllowGet);
 
         }
@@ -255,7 +376,7 @@ namespace SportsSocialNetwork.Controllers
             try
             {
                 bool rs1 = _orderService.checkTimeValidInOrder(fieldId, StartTime, EndTime, PlayDate, PlayDate);
-                bool rs2 = _fieldScheduleService.checkTimeValidInFieldSchedule(fieldId, StartTime, EndTime, PlayDate, PlayDate);
+                bool rs2 = _fieldScheduleService.checkTimeValidInFieldSchedule(null,fieldId, StartTime, EndTime, PlayDate, PlayDate);
                 if (rs1 && rs2)
                 {
                     result.Succeed = true;
@@ -320,7 +441,7 @@ namespace SportsSocialNetwork.Controllers
                     String receiver = "m249bornbeast@gmail.com";//Tài khoản nhận tiền
                     String return_url = Url.Action("verifyOrder", "Order",
                                new { area = "", orderCode = order.OrderCode }, Request.Url.Scheme);
-                    String cancel_url = Url.Action("Index", "Order");
+                    String cancel_url = "http://ssn.techeco.net/Order";
                     //String price = model.Price.ToString();
                     String price = "2000";
                     NL_Checkout nl = new NL_Checkout();
@@ -346,7 +467,7 @@ namespace SportsSocialNetwork.Controllers
             String receiver = "m249bornbeast@gmail.com";//Tài khoản nhận tiền
             String return_url = Url.Action("verifyOrder", "Order",
                        new { area = "", orderCode = order_code }, Request.Url.Scheme);
-            String cancel_url = Url.Action("Index", "Order");
+            String cancel_url = "http://ssn.techeco.net/Order";
             //String price = model.Price.ToString();
             String price = "2000";
             NL_Checkout nl = new NL_Checkout();
@@ -408,22 +529,49 @@ namespace SportsSocialNetwork.Controllers
             }
             var noti = new Notification();
             noti.UserId = field.Place.UserId;
-            noti.Message = User.Identity.Name + " đã đặt sân tại " + field.Name;
+            noti.FromUserId = userId;
+            noti.CreateDate = DateTime.Now;
+            noti.Message = user.FullName + " đã đặt sân tại " + field.Name;
             noti.Title = "Đơn hàng mới";
             noti.Type = (int)NotificationType.Order;
+            noti.MarkRead = false;
             noti.Active = true;
             order.Notifications.Add(noti);
             _orderService.Create(order);
 
+
+            //Fire base noti
+            List<string> registrationIds = GetToken(noti.UserId);
+
+            //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
+
+            NotificationModel Amodel = Mapper.Map<NotificationModel>(PrepareNotificationCustomViewModel(noti));
+
+            if (registrationIds != null && registrationIds.Count != 0)
+            {
+                Android.Notify(registrationIds, null, Amodel);
+            }
+
+            //SignalR Noti
+            var notiService = this.Service<INotificationService>();
+            NotificationFullInfoViewModel notiModelR = notiService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+            // Get the context for the Pusher hub
+            IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+            // Notify clients in the group
+            hubContext.Clients.User(notiModelR.UserId).send(notiModelR);
+
+
             string subject = "[SSN] - Thông tin đặt sân";
-            string body = "Hi <strong>" + User.Identity.Name + "</strong>" +
+            string body = "Hi <strong>" + user.FullName + "</strong>" +
                 ",<br/><br/>Bạn đã đặt sân: "+field.Name+"<br/> Thời gian: "+order.StartTime.ToString("HH:mm")+" - "+
                 order.EndTime.ToString("HH:mm") +", ngày "+order.StartTime.ToString("dd/MM/yyyy")+
-                "<br/> Giá tiền : " + order.Price + " đồng" +
+                "<br/> Giá tiền : " + order.Price.ToString("n0") + " đồng" +
                 "<br/> <strong>Mã đặt sân của bạn : " + order.OrderCode + "</strong>"+
-                "<br/><img src='" +Utils.GetHostName()+order.QRCodeUrl + "'>"+
+                "<br/><img src='ssn.techeco.net/" + order.QRCodeUrl + "'>"+
                 "<br/> Cảm ơn bạn đã sử dụng dịch vụ của SSN. Chúc bạn có những giờ phút thoải mái chơi thể thao!";
-            EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { user.Email }, null, null, subject, body, true);
+            EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { model.PayerEmail }, null, null, subject, body, true);
 
             return Redirect(url);
         }
@@ -455,15 +603,15 @@ namespace SportsSocialNetwork.Controllers
                         return RedirectToAction("PageNotFound", "Errors");
                     }
                     string subject = "[SSN] - Thông tin thanh toán";
-                    string body = "Hi <strong>" + User.Identity.Name + "</strong>" +
+                    string body = "Hi <strong>" + user.FullName + "</strong>" +
                         ",<br/><br/>Bạn đã thanh toán đơn đặt sân: "+ order.OrderCode +" thành công"+
                         "<br/><strong>Thông tin hóa đơn:</strong><ul> " +
                         "<li> Tên sân: "+order.Field.Name + "</li>"+
                         "<li> Thời gian: " + order.StartTime.ToString("HH:mm") + " - " +
                         order.EndTime.ToString("HH:mm") + ", ngày " + order.StartTime.ToString("dd/MM/yyyy") +"</li>"+
-                        "<li> Giá tiền : " + order.Price + " đồng</li></ul>" +
+                        "<li> Giá tiền : " + order.Price.ToString("n0") + " đồng</li></ul>" +
                         "<br/> Cảm ơn bạn đã sử dụng dịch vụ của SSN. Chúc bạn có những giờ phút thoải mái chơi thể thao!";
-                    EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { user.Email }, null, null, subject, body, true);
+                    EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { order.PayerEmail }, null, null, subject, body, true);
                     var url = Url.Action("PaymentSuccessful", "Order",
                        new { area = "", orderCode = order_code }, Request.Url.Scheme);
                     return Redirect(url);
@@ -516,6 +664,7 @@ namespace SportsSocialNetwork.Controllers
         public ActionResult BookFieldNow(int? id)
         {
             var _fieldService = this.Service<IFieldService>();
+            var _placeService = this.Service<IPlaceService>();
             var fieldList = _fieldService.GetActive(p => p.PlaceId == id && p.Status != (int)FieldStatus.Deactive);
             if (fieldList == null || fieldList.ToList().Count == 0)
             {
@@ -533,7 +682,9 @@ namespace SportsSocialNetwork.Controllers
             {
                 ViewBag.user = user;
             }
-            
+            var place = _placeService.FirstOrDefaultActive(p => p.Id == id);
+            var placeOwner = _userService.FirstOrDefaultActive(p => p.Id == place.UserId);
+            ViewBag.PlaceOwnerNganLuong = placeOwner.NganLuongAccount;
             IEnumerable<SelectListItem> selectList = fieldList.Select(s => new SelectListItem
             {
                 Text = s.Name,
@@ -542,6 +693,36 @@ namespace SportsSocialNetwork.Controllers
             ViewBag.FieldList = selectList;
             var model = new OrderViewModel();
             return View(model);
+        }
+
+        private NotificationCustomViewModel PrepareNotificationCustomViewModel(Notification noti)
+        {
+            NotificationCustomViewModel result = Mapper.Map<NotificationCustomViewModel>(noti);
+
+            result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
+
+            result.Avatar = noti.AspNetUser1.AvatarImage;
+
+            return result;
+
+        }
+
+        private List<string> GetToken(String userId)
+        {
+            var service = this.Service<IFirebaseTokenService>();
+
+            List<FirebaseToken> tokenList = service.Get(x => x.UserId.Equals(userId)).ToList();
+
+            List<string> registrationIds = new List<string>();
+            if (tokenList != null)
+            {
+                foreach (var token in tokenList)
+                {
+                    registrationIds.Add(token.Token);
+                }
+            }
+
+            return registrationIds;
         }
     }
 }
