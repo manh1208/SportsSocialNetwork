@@ -340,7 +340,7 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                         if (this.ProfileId == _curUserId) {
                             whoIsWall = " trên tường của bạn";
                         } else {
-                            whoIsWall = " trên tường của <a style='color: #76838f' href='profile/index?userid=" + this.ProfileId + "'>" + this.Profile.FullName + "</a>";
+                            whoIsWall = " trên tường của <a style='color: #76838f' href='/profile/index?userid=" + this.ProfileId + "'>" + this.Profile.FullName + "</a>";
                         }
                     }
                     var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + this.Id + "'>"
