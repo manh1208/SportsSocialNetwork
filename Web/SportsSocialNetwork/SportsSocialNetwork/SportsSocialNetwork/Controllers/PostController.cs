@@ -305,7 +305,7 @@ namespace SportsSocialNetwork.Controllers
                     if (!(member.UserId.Equals(post.UserId)))
                     {
                         Group g = _groupService.FindGroupById(groupId);
-                        Notification noti = _notiService.CreateNoti(member.UserId, post.UserId, Utils.GetEnumDescription(NotificationType.GroupPost), postedUser.FullName + "đã đăng một bài viết trong nhóm " +  g.Name, (int)NotificationType.GroupPost, post.Id, null, null, groupId);
+                        Notification noti = _notiService.CreateNoti(member.UserId, post.UserId, Utils.GetEnumDescription(NotificationType.GroupPost), postedUser.FullName + " đã đăng một bài viết trong nhóm " +  g.Name, (int)NotificationType.GroupPost, post.Id, null, null, groupId);
 
                         List<string> registrationIds = GetToken(member.UserId);
 
