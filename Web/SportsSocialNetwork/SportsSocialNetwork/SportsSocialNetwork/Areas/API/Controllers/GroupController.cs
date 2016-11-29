@@ -222,7 +222,10 @@ namespace SportsSocialNetwork.Areas.Api.Controllers
                 List<Group> groupList = new List<Group>();
 
                 foreach (var j in joinedList) {
-                    groupList.Add(groupService.FindGroupById(j.GroupId));
+                    Group group = groupService.FindGroupById(j.GroupId);
+                    if (group != null) {
+                        groupList.Add(group);
+                    }
                 }
 
                 List<GroupViewModel> result = Mapper.Map<List<GroupViewModel>>(groupList);
