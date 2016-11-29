@@ -166,7 +166,9 @@ namespace SportsSocialNetwork.Models.Entities.Services
             GroupMember member = this.FirstOrDefaultActive(x => x.GroupId == groupId && x.UserId == userId);
             if (member != null)
             {
+                member.Admin = false;
                 member.Active = false;
+                member.Status = (int)GroupMemberStatus.Pending;
                 this.Update(member);
                 return true;
             }

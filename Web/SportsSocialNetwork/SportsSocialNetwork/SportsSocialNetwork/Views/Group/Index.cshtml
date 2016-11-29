@@ -628,7 +628,8 @@
                                                                     @*<a class="avatar avatar-lg" href="javascript:void(0)">
                                                                             <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
                                                                         </a>*@
-                                                                    <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                                    @*<img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />*@
+                                                                    <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@item.AspNetUser.AvatarImage')"></div>
                                                                 </div>
                                                                 <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
 
@@ -711,7 +712,7 @@
                                                                 @*<a class="avatar avatar-lg" href="javascript:void(0)">
                                                                         <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
                                                                     </a>*@
-                                                                <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                                <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@item.AspNetUser.AvatarImage')"></div>
                                                             </div>
                                                             <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
 
@@ -795,7 +796,7 @@
                                                                     @*<a class="avatar avatar-lg" href="javascript:void(0)">
                                                                             <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
                                                                         </a>*@
-                                                                    <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                                    <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@item.AspNetUser.AvatarImage')"></div>
                                                                 </div>
                                                                 <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
 
@@ -911,7 +912,7 @@
                                                                 @*<a class="avatar avatar-lg" href="javascript:void(0)">
                                                                         <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
                                                                     </a>*@
-                                                                <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                                <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@item.AspNetUser.AvatarImage')"></div>
                                                             </div>
                                                             <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
                                                              
@@ -964,7 +965,7 @@
                                                             @*<a class="avatar avatar-lg" href="javascript:void(0)">
                                                                 <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
                                                             </a>*@
-                                                            <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                            <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@item.AspNetUser.AvatarImage')"></div>
                                                         </div>
                                                         <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
                                                             @{
@@ -1095,7 +1096,8 @@
                                                             @*<a class="avatar avatar-lg" href="javascript:void(0)">
                                                                 <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
                                                             </a>*@
-                                                            <img style="max-width:100%;" src="@avatar" />
+                                                            @*<img style="max-width:100%;" src="@avatar" />*@
+                                                            <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@avatar')"></div>
                                                         </div>
                                                         <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.Id">
 
@@ -1170,7 +1172,8 @@
                                                             @*<a class="avatar avatar-lg" href="javascript:void(0)">
                                                                     <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
                                                                 </a>*@
-                                                            <img style="max-width:100%;" src="@item.Group1.Avatar" />
+                                                            @*<img style="max-width:100%;" src="@item.Group1.Avatar" />*@
+                                                            <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@item.Group1.Avatar')"></div>
                                                         </div>
                                                         <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.Group1.Id">
                                                             
@@ -1232,7 +1235,8 @@
                                                         <div class="media">
                                                             <div class="media-left">
                                                                 <a class="avatar" href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = id }))">
-                                                                    <img class="img-responsive" src="@avatar" alt="...">
+                                                                    @*<img class="img-responsive" src="@avatar" alt="...">*@
+                                                                    <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@avatar')"></div>
                                                                 </a>
                                                             </div>
                                                             <div class="media-body vertical-align">

@@ -719,9 +719,20 @@ namespace SportsSocialNetwork.Controllers
         {
             var result = new AjaxOperationResult();
             var _groupService = this.Service<IGroupService>();
+            var _groupMemberService = this.Service<IGroupMemberService>();
 
             if (_groupService.DeleteGroup(groupId))
             {
+                List<GroupMember> gmL = _groupMemberService.GetActive(g => g.GroupId == groupId).ToList();
+
+                foreach (var item in gmL)
+                {
+                    if(_groupMemberService.LeaveGroup(groupId,item.UserId))
+                    {
+                        result.Succeed = true;
+                    }
+
+                }
                 result.Succeed = true;
             }
             else
