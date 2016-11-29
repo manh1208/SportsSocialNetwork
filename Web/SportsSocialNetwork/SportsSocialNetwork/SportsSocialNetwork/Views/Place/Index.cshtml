@@ -166,7 +166,7 @@
         })
 
         $("#findAround").click(function () {
-            getCurrentLocation();
+            checkLocation();
         });
 
     function RefreshTable() {
@@ -238,88 +238,93 @@
         RefreshTable();
     });
 
-    function getCurrentLocation() {
-        jQuery.post("https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBeCBfOI5D627T8ZN6GMvHIJrX4G0eMz3E", function (result) {
-            position = {
-                lat: result.location.lat,
-                lng: result.location.lng
-            };
-            var lat = result.location.lat;
-            var lng = result.location.lng;
-            $("#lat").val(lat);
-            $("#lng").val(lng);
-            InitDatatable();
-            RefreshTable();
-        })
-      .fail(function (err) {
-          //alert("API Geolocation error! \n\n" + err);
-      });
-    };
+    //function getCurrentLocation() {
+    //    jQuery.post("https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBeCBfOI5D627T8ZN6GMvHIJrX4G0eMz3E", function (result) {
+    //        position = {
+    //            lat: result.location.lat,
+    //            lng: result.location.lng
+    //        };
+    //        var lat = result.location.lat;
+    //        var lng = result.location.lng;
+    //        $("#lat").val(lat);
+    //        $("#lng").val(lng);
+    //        InitDatatable();
+    //        RefreshTable();
+    //    })
+    //  .fail(function (err) {
+    //      //alert("API Geolocation error! \n\n" + err);
+    //  });
+    //};
 
-    //function checkLocation() {
-    //    if (navigator.geolocation) {
-    //        navigator.geolocation.getCurrentPosition(showPosition, showError);
-    //    } else {
-    //        sweetAlert("Oops...", "Vị trí không hỗ trợ trên trình duyệt này.", "error")
+    function checkLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            sweetAlert("Oops...", "Vị trí không hỗ trợ trên trình duyệt này.", "error")
 
-    //    }
-    //}
+        }
+    }
 
-    //function showError(error) {
-    //    switch (error.code) {
-    //        case error.PERMISSION_DENIED:
-    //            swal({
-    //                title: "Oops...",
-    //                text: "Bạn chưa mở GPS hả!",
-    //                type: "error",
-    //                confirmButtonText: "Ờ"
-    //            }, function () {
-    //                location.reload();
-    //            });
+    function showError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                //swal({
+                //    title: "Oops...",
+                //    text: "Bạn chưa mở GPS hả!",
+                //    type: "error",
+                //    confirmButtonText: "Ờ"
+                //}, function () {
+                //    location.reload();
+                //});
+                var lat = 10.853016799999999;
+                var lng = 106.6295761;
+                $("#lat").val(lat);
+                $("#lng").val(lng);
+                InitDatatable();
+                RefreshTable();
+                break;
+            case error.POSITION_UNAVAILABLE:
+                swal({
+                    title: "Oops...",
+                    text: "Thông tin vị trí không chính xác!",
+                    type: "error",
+                    confirmButtonText: "Ờ"
+                }, function () {
+                    location.reload();
+                });
 
-    //            break;
-    //        case error.POSITION_UNAVAILABLE:
-    //            swal({
-    //                title: "Oops...",
-    //                text: "Thông tin vị trí không chính xác!",
-    //                type: "error",
-    //                confirmButtonText: "Ờ"
-    //            }, function () {
-    //                location.reload();
-    //            });
+                break;
+            case error.TIMEOUT:
+                swal({
+                    title: "Oops...",
+                    text: "Vượt quá thời gian. Xin thử tải lại trang!",
+                    type: "error",
+                    confirmButtonText: "Ờ"
+                }, function () {
+                    location.reload();
+                });
 
-    //            break;
-    //        case error.TIMEOUT:
-    //            swal({
-    //                title: "Oops...",
-    //                text: "Vượt quá thời gian. Xin thử tải lại trang!",
-    //                type: "error",
-    //                confirmButtonText: "Ờ"
-    //            }, function () {
-    //                location.reload();
-    //            });
-
-    //            break;
-    //        case error.UNKNOWN_ERROR:
-    //            swal({
-    //                title: "Oops...",
-    //                text: "Lỗi là gì nhỉ. Xin liên hệ BTC!",
-    //                type: "error",
-    //                confirmButtonText: "Ờ"
-    //            }, function () {
-    //                location.reload();
-    //            });
-    //            break;
-    //    }
-    //}
-    //function showPosition(position) {
-    //    var lat = position.coords.latitude;
-    //    var lng = position.coords.longitude;
-    //    $("#lat").val(lat);
-    //    $("#lng").val(lng);
-    //    InitDatatable();
-    //    RefreshTable();
-    //}
+                break;
+            case error.UNKNOWN_ERROR:
+                swal({
+                    title: "Oops...",
+                    text: "Lỗi là gì nhỉ. Xin liên hệ BTC!",
+                    type: "error",
+                    confirmButtonText: "Ờ"
+                }, function () {
+                    location.reload();
+                });
+                break;
+        }
+    }
+    function showPosition(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        $("#lat").val(lat);
+        $("#lng").val(lng);
+        InitDatatable();
+        RefreshTable();
+    }
 
 
     </script>
