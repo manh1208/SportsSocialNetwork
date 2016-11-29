@@ -129,6 +129,7 @@
             -o-transition: all 0.5s ease;
             transition: all 0.5s ease;
         }
+        
     </style>
 }
 
@@ -515,6 +516,12 @@
         function changeSize1(){
             var x = $("#containerFollowingUser").width();
             var y = $("#contentFollowingUser").width();
+            var x1 = $("#containerNearByUser").width();
+            var y1 = $("#contentNearByUser").width();
+            if(x1 > x){
+                x = x1;
+                y = y1;
+            }
             $("#containerNearByUser").width(x);
             $("#contentNearByUser").width(y);
         }
@@ -522,6 +529,12 @@
         function changeSize2(){
             var x = $("#containerNearByUser").width();
             var y = $("#contentNearByUser").width();
+            var x1 = $("#containerFollowingUser").width();
+            var y1 = $("#contentFollowingUser").width();
+            if(x1 > x){
+                x = x1;
+                y = y1;
+            }
             $("#containerFollowingUser").width(x);
             $("#contentFollowingUser").width(y);
         }
