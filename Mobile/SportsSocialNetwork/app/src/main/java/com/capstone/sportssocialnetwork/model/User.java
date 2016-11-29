@@ -222,7 +222,9 @@ public class User {
                 s += hobby.getSportName() + ", ";
 
             }
-            s = s.substring(0, s.length() - 2);
+            if (s.length()>0) {
+                s = s.substring(0, s.length() - 2);
+            }
         }
         return s;
     }

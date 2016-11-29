@@ -60,12 +60,14 @@ public class MenuProfileAdapter extends ArrayAdapter<Group> {
             viewHolder.image.setVisibility(View.VISIBLE);
             viewHolder.groupName.setVisibility(View.VISIBLE);
             Group group = getItem(position-1);
-            viewHolder.groupName.setText(group.getName());
-            Picasso.with(mContext).load(Uri.parse(DataUtils.URL+group.getAvatar()))
-                    .placeholder(R.drawable.img_default_avatar)
-                    .error(R.drawable.img_default_avatar_error)
-                    .fit()
-                    .into(viewHolder.image);
+            if (group!=null) {
+                viewHolder.groupName.setText(group.getName());
+                Picasso.with(mContext).load(Uri.parse(DataUtils.URL + group.getAvatar()))
+                        .placeholder(R.drawable.img_default_avatar)
+                        .error(R.drawable.img_default_avatar_error)
+                        .fit()
+                        .into(viewHolder.image);
+            }
         }
 
         return convertView;
