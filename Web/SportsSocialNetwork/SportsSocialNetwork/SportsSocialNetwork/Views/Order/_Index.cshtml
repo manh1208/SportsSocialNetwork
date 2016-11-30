@@ -14,6 +14,9 @@
             <li style="display: none" id="error3">
                 <span style="color:red; font-size:12px">Thời gian này sân kín</span>
             </li>
+            <li style="display: none" id="error4">
+                <span style="color:red; font-size:12px">Bạn không thể đặt sân vào thời điểm này</span>
+            </li>
         </ul>
 </div>
     <div class="form-group">
@@ -52,11 +55,40 @@
         var startTime = $("#startTime").val();
         var endTime = $("#endTime").val();
         var playDate = $("#playDate").val();
+
+        //check if playDate is today or not
+        var currentdate = new Date();
+        var currentdateD = currentdate.getDate();
+        var currentdateM = currentdate.getMonth() + 1;
+        var currentdateY = currentdate.getFullYear();
+        var currentH = parseInt(currentdate.getHours());
+        var currentMi = parseInt(currentdate.getMinutes());
+        var d = playDate.toString("dd/MM/yyyy");
+        var tmp = d.split("/");
+        var playD = tmp[0];
+        var playM = tmp[1];
+        var playY = tmp[2];
+            
+        var isTodayValid = false;
+        if (currentdateD == playD && currentdateM == playM && currentdateY == playY) {
+            var startTimeTmp = startTime.split(":");
+            var startTimeH = (startTimeTmp[0].indexOf("0") == 0) ? parseInt(startTimeTmp[0].substring(1, 2)) : parseInt(startTimeTmp[0]);
+            var startTimeMi = (startTimeTmp[1].indexOf("0") == 0) ? parseInt(startTimeTmp[1].substring(1, 2)) : parseInt(startTimeTmp[1]);
+            var endTimeTmp = endTime.split(":");
+            var endTimeH = (endTimeTmp[0].indexOf("0") == 0) ? parseInt(endTimeTmp[0].substring(1, 2)) : parseInt(endTimeTmp[0]);
+            var endTimeMi = (endTimeTmp[1].indexOf("0") == 0) ? parseInt(endTimeTmp[1].substring(1, 2)) : parseInt(endTimeTmp[1]);
+            if (startTimeH < currentH || (startTimeH == currentH && startTimeMi < currentMi) ||
+                endTimeH < currentH || (endTimeH == currentH && endTimeMi < currentMi)) {
+                isTodayValid = true;
+            }
+        }
+
         var error = false;
         $("#error").hide();
         $("#error1").hide();
         $("#error2").hide();
         $("#error3").hide();
+        $("#error4").hide();
         var hasErrorContent = false;
         if (startTime >= endTime || startTime == null || startTime == "" || endTime == null || endTime == ""
                 || playDate == "" || playDate == null) {
@@ -64,6 +96,13 @@
             hasErrorContent = true;
             $("#error1").show();
         }else{
+
+            if (isTodayValid) {
+                error = true;
+                hasErrorContent = true;
+                $("#error4").show();
+            }
+
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("CheckTimeValidInTimeBlock")',
