@@ -565,7 +565,8 @@ namespace SportsSocialNetwork.Controllers
 
             string subject = "[SSN] - Thông tin đặt sân";
             string body = "Hi <strong>" + user.FullName + "</strong>" +
-                ",<br/><br/>Bạn đã đặt sân: "+field.Name+"<br/> Thời gian: "+order.StartTime.ToString("HH:mm")+" - "+
+                ",<br/><br/>Bạn đã đặt sân: "+field.Name+"<br/> Tại địa điểm: "+field.Place.Name+
+                "<br/> Thời gian: "+order.StartTime.ToString("HH:mm")+" - "+
                 order.EndTime.ToString("HH:mm") +", ngày "+order.StartTime.ToString("dd/MM/yyyy")+
                 "<br/> Giá tiền : " + order.Price.ToString("n0") + " đồng" +
                 "<br/> <strong>Mã đặt sân của bạn : " + order.OrderCode + "</strong>"+
@@ -606,7 +607,8 @@ namespace SportsSocialNetwork.Controllers
                     string body = "Hi <strong>" + user.FullName + "</strong>" +
                         ",<br/><br/>Bạn đã thanh toán đơn đặt sân: "+ order.OrderCode +" thành công"+
                         "<br/><strong>Thông tin hóa đơn:</strong><ul> " +
-                        "<li> Tên sân: "+order.Field.Name + "</li>"+
+                        "<li> Tên sân: "+order.Field.Name + "</li>" + 
+                        "<li> Tại địa điểm: " + order.Field.Place.Name + "</li>" +
                         "<li> Thời gian: " + order.StartTime.ToString("HH:mm") + " - " +
                         order.EndTime.ToString("HH:mm") + ", ngày " + order.StartTime.ToString("dd/MM/yyyy") +"</li>"+
                         "<li> Giá tiền : " + order.Price.ToString("n0") + " đồng</li></ul>" +
