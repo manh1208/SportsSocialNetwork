@@ -543,7 +543,16 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
 
-            result.Avatar = noti.AspNetUser1.AvatarImage;
+            var _userService = this.Service<IAspNetUserService>();
+            AspNetUser us = _userService.FirstOrDefaultActive(u => u.Id.Equals(noti.FromUserId));
+            if (us != null)
+            {
+                result.Avatar = us.AvatarImage;
+            }
+            else
+            {
+                result.Avatar = "";
+            }
 
             return result;
 
