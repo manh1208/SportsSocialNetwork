@@ -36,7 +36,9 @@ namespace SportsSocialNetwork.Models.Entities.Services
         #region Code from here
         public IEnumerable<Order> GetAllOrderOfUser(String ownerId)
         {
-            return this.GetActive(x => x.UserId.Equals(ownerId));
+            List<Order> orderList = this.GetActive(x => x.UserId.Equals(ownerId)).ToList();
+            AutoCancelOrder(orderList);
+            return orderList;
         }
 
         public bool checkTimeValidInOrder(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate)
@@ -139,7 +141,9 @@ namespace SportsSocialNetwork.Models.Entities.Services
         //}
         public IEnumerable<Order> GetAllOrderByFieldId(int fieldId)
         {
-            return this.GetActive(x => x.FieldId == fieldId);
+            List<Order> orderList = this.GetActive(x=> x.FieldId == fieldId).ToList();
+            AutoCancelOrder(orderList);
+            return orderList;
         }
 
         public Order FindOrderByCode(String orderCode) {
@@ -148,10 +152,20 @@ namespace SportsSocialNetwork.Models.Entities.Services
             return order;
         }
 
-        //private float CalculatePrice(Order order)
-        //{
-        //    float price = order.EndTime.Hour - order.StartTime.Hour;
-        //}
+
+        public void AutoCancelOrder(List<Order> orderList)
+        {
+            foreach (var o in orderList)
+            {
+                if (o.StartTime < DateTime.Now && o.Status == (int)OrderStatus.Pending)
+                {
+                    o.Status = (int)OrderStatus.Cancel;
+                    this.Update(o);
+                    this.Save();
+                }
+            }
+        }
+
         #endregion
 
         public void test()
