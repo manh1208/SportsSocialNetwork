@@ -79,7 +79,7 @@ namespace SportsSocialNetwork.Controllers
                 if (sport != null && sport != "")
                 {
                     int sportID = Int32.Parse(sport);
-                    places = _placeService.GetActive(p => (p.Status == (int)PlaceStatus.Active || p.Status == (int)PlaceStatus.Repairing) && 
+                    places = _placeService.GetActive(p => p.Approve && (p.Status == (int)PlaceStatus.Active || p.Status == (int)PlaceStatus.Repairing) && 
                     p.Fields.Where(f => f.FieldType.SportId == sportID).ToList().Count > 0);
                 }
                 var latitude = float.Parse(lat);
