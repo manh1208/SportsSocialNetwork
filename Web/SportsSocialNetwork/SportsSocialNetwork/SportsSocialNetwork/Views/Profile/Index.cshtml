@@ -341,6 +341,21 @@
                     <div class="profile-user"><a style="color:#37474f;font-weight:bold;" href="/profile/index?userid=@Model.Id"> @Model.FullName</a></div>
                     <div class="profile-job">@Model.Email</div>
                     @{
+                        string hbs = "";
+                        for (int i = 0; i < Model.Hobbies.Count; i++)
+                        {
+                            if (i == (Model.Hobbies.Count - 1))
+                            {
+                                hbs += Model.Hobbies[i].SportName;
+                            }
+                            else
+                            {
+                                hbs += Model.Hobbies[i].SportName + ", ";
+                            }
+                        }
+                        <p>@hbs</p>
+                    }
+                    @{
                         if (Model.isOwner)
                         {
                             <p></p>
