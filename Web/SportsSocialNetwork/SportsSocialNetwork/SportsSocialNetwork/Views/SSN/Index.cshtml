@@ -7,6 +7,7 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_SSNLayout.cshtml";
     var sport = ViewBag.Sport as IEnumerable<SelectListItem>;
+    AspNetUserFullInfoViewModel cu = ViewBag.User;
 }
 @section Styles{
     <link rel="stylesheet" href="~/Content/assets/vendor/asscrollable/asScrollable.css">
@@ -232,6 +233,21 @@
                     </a>
                     <div class="profile-user"><a style="color:#37474f;font-weight:bold" href="@Url.Action("Index","Profile", new { userId = ViewBag.User.Id })">@ViewBag.User.FullName</a></div>
                     <div class="profile-job">@ViewBag.User.Email</div>
+                    @{
+                        string hbs = "";
+                        for (int i = 0; i < cu.Hobbies.Count; i++)
+                        {
+                            if (i == (cu.Hobbies.Count - 1))
+                            {
+                                hbs += cu.Hobbies[i].SportName;
+                            }
+                            else
+                            {
+                                hbs += cu.Hobbies[i].SportName + ", ";
+                            }
+                        }
+                        <p>@hbs</p>
+                    }
                 </div>
             </div>
             <div class="widget-footer">

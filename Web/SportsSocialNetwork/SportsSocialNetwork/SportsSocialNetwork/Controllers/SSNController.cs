@@ -45,12 +45,17 @@ namespace SportsSocialNetwork.Controllers
             ViewBag.Sport = sports;
             var _userService = this.Service<IAspNetUserService>();
             var userId = User.Identity.GetUserId();
-            var curUser = _userService.FirstOrDefaultActive(p => p.Id == userId);
+            AspNetUser curUser = _userService.FirstOrDefaultActive(p => p.Id == userId);
             if (curUser == null)
             {
                 return RedirectToAction("PageNotFound", "Errors");
             }
-            ViewBag.User = curUser;
+            else
+            {
+                AspNetUserFullInfoViewModel cu = Mapper.Map<AspNetUserFullInfoViewModel>(curUser);
+                this.PrepareUserInfo(cu);
+                ViewBag.User = cu;
+            }
 
             //suggest news
             var _newsService = this.Service<INewsService>();
@@ -155,6 +160,30 @@ namespace SportsSocialNetwork.Controllers
             }
             ViewBag.followingList = followingListVM;
             return View();
+        }
+
+        public void PrepareUserInfo(AspNetUserFullInfoViewModel p)
+        {
+            var _followService = this.Service<IFollowService>();
+            var _postService = this.Service<IPostService>();
+
+            //number that this person following
+            p.FollowCount = _followService.GetFollowingCount(p.Id);
+            //number of people that follow this person
+            p.FollowedCount = _followService.GetFollowerCount(p.Id);
+
+            p.Followed = _followService.CheckFollowOrNot(p.Id, User.Identity.GetUserId());
+
+            if (User.Identity.GetUserId().Equals(p.Id))
+            {
+                p.isOwner = true;
+            }
+            else
+            {
+                p.isOwner = false;
+            }
+
+            p.PostCount = _postService.GetPostCountOfUser(p.Id);
         }
 
         public ActionResult PostDetail(int postId)
