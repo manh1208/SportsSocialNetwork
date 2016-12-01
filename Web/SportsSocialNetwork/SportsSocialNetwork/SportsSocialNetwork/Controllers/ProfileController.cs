@@ -40,7 +40,11 @@ namespace SportsSocialNetwork.Controllers
             }).OrderBy(s => s.Value).ToArray();
             ViewBag.ProvinceList = provinceList;
 
-            AspNetUser user = _userService.FindUser(userId);
+            AspNetUser user = _userService.FirstOrDefaultActive(u => u.Id.Equals(userId));
+            if (user == null)
+            {
+                return RedirectToAction("PageNotFound", "Errors");
+            }
             AspNetUserFullInfoViewModel model = Mapper.Map<AspNetUserFullInfoViewModel>(user);
             this.PrepareUserInfo(model);
 
