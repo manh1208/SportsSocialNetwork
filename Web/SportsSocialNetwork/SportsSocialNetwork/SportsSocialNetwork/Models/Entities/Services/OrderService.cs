@@ -13,6 +13,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         IEnumerable<Order> GetAllOrderOfUser(String ownerId);
 
         Order GetOrderById(int id);
+        void AutoCancelOrder(List<Order> orderList);
 
         IEnumerable<Order> GetAllOrderByFieldId(int fieldId);
 
@@ -157,7 +158,7 @@ namespace SportsSocialNetwork.Models.Entities.Services
         {
             foreach (var o in orderList)
             {
-                if (o.StartTime < DateTime.Now && o.Status == (int)OrderStatus.Pending)
+                if (o.StartTime < DateTime.Now && (o.Status == (int)OrderStatus.Pending || o.Status == (int)OrderStatus.Approved))
                 {
                     o.Status = (int)OrderStatus.Cancel;
                     this.Update(o);

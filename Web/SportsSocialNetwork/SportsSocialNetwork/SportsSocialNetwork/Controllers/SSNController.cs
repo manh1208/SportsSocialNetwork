@@ -248,6 +248,7 @@ namespace SportsSocialNetwork.Controllers
             DateTime today = DateTime.Now;
             var orderList = orderService.GetActive(p => p.Field.FieldType.SportId == sportId && p.UserId == userId &&
             p.Status != (int)OrderStatus.Cancel && p.Status != (int)OrderStatus.Unapproved && p.StartTime > today).OrderByDescending(p => p.CreateDate).ToList();
+            orderService.AutoCancelOrder(orderList);
             List<OrderSimpleViewModel> resultList = Mapper.Map<List<OrderSimpleViewModel>>(orderList);
             foreach(var item in resultList)
             {

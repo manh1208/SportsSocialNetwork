@@ -166,6 +166,10 @@ namespace SportsSocialNetwork.Controllers
             var _orderService = this.Service<IOrderService>();
             var userId = User.Identity.GetUserId();
             var orderList = _orderService.GetActive(p => p.UserId == userId).OrderByDescending(p => p.CreateDate);
+            if(orderList != null)
+            {
+                _orderService.AutoCancelOrder(orderList.ToList());
+            }
             //IEnumerable<BlogPost> filteredListItems;
             IEnumerable<Order> filteredListItems;
             if (!string.IsNullOrEmpty(param.sSearch))
