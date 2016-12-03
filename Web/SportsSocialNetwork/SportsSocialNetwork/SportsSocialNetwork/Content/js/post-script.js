@@ -321,7 +321,7 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                         spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#000;padding:10px;font-weight:500' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
                     }
                     var reportDiv = "";
-                    if (this.AspNetUser.Id == userId) {
+                    if (this.AspNetUser.Id == curUserId) {
                         reportDiv = '<div style="position: absolute;right:5px;top:15px;width: 30px;">' +
                           '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
                           '<div class="dropdown">' +
