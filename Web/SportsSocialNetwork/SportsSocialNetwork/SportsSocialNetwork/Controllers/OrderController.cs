@@ -165,7 +165,7 @@ namespace SportsSocialNetwork.Controllers
             //var blogPostList = _blogPostService.GetBlogPostbyStoreId();
             var _orderService = this.Service<IOrderService>();
             var userId = User.Identity.GetUserId();
-            var orderList = _orderService.GetActive(p => p.UserId == userId).OrderByDescending(p => p.CreateDate);
+            var orderList = _orderService.GetActive(p => p.UserId == userId).OrderByDescending(p => p.Id);
             if(orderList != null)
             {
                 _orderService.AutoCancelOrder(orderList.ToList());
@@ -192,16 +192,16 @@ namespace SportsSocialNetwork.Controllers
             switch (sortColumnIndex)
             {
                 
-                case 0:
-                    filteredListItems = sortDirection == "asc"
-                        ? filteredListItems.OrderBy(o => o.OrderCode)
-                        : filteredListItems.OrderByDescending(o => o.OrderCode);
-                    break;
-                case 1:
-                    filteredListItems = sortDirection == "asc"
-                        ? filteredListItems.OrderBy(o => o.Field.Name)
-                        : filteredListItems.OrderByDescending(o => o.Field.Name);
-                    break;
+                //case 0:
+                //    filteredListItems = sortDirection == "asc"
+                //        ? filteredListItems.OrderBy(o => o.OrderCode)
+                //        : filteredListItems.OrderByDescending(o => o.OrderCode);
+                //    break;
+                //case 1:
+                //    filteredListItems = sortDirection == "asc"
+                //        ? filteredListItems.OrderBy(o => o.Field.Name)
+                //        : filteredListItems.OrderByDescending(o => o.Field.Name);
+                //    break;
                 case 2:
                     filteredListItems = sortDirection == "asc"
                         ? filteredListItems.OrderBy(o => o.CreateDate)

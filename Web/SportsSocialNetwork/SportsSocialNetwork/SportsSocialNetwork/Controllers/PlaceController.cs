@@ -182,8 +182,8 @@ namespace SportsSocialNetwork.Controllers
                 (c.Avatar == null || c.Avatar.Equals(""))?"/Content/images/no_image.jpg":c.Avatar,
                 c.Name,
                 c.Description.Length > 140? c.Description.Substring(0,140)+"...": c.Description,
-                (c.Address +", "+c.District+", "+c.City).Length < 60? (c.Address +", "+c.District+", "+c.City):
-                (c.Address +", "+c.District+", "+c.City).Substring(0, 60)+"...",
+                (c.Address +", "+c.District+", "+c.City).Length < 40? (c.Address +", "+c.District+", "+c.City):
+                (c.Address +", "+c.District+", "+c.City).Substring(0, 40)+"...",
                 c.PhoneNumber
             }.ToArray());
 
@@ -237,19 +237,22 @@ namespace SportsSocialNetwork.Controllers
         {
             fieldID = f.Id,
             fieldName = f.Name,
-            sportId = ft.SportId
+            sportId = ft.SportId,
+            fieldType = f.FieldType.Name
         }).Join(_sportService.GetActive(),
                 a => a.sportId, p => p.Id,
                 (a, p) => new
                 {
                     fieldID = a.fieldID,
                     fieldName = a.fieldName,
-                    sport = p.Name
+                    sport = p.Name,
+                    fieldType = a.fieldType
                 }).Select(p => new FieldSportViewModel
                 {
                     FieldId = p.fieldID,
                     FieldName = p.fieldName,
-                    Sport = p.sport
+                    Sport = p.sport,
+                    FieldType = p.fieldType
                 }).ToList();
             ViewBag.fieldSport = list;
             return View(place);
