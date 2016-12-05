@@ -2326,7 +2326,7 @@
         //deny challenge request
         function denyChallenge(id) {
 
-            showConfirmDeleteItem("Bạn có chắc chắn muốn từ chối lời đề nghị này không?",
+            showConfirmMessage("Bạn có chắc chắn muốn từ chối lời đề nghị này không?",
             function (isConfirm) {
                 if (isConfirm) {
                     var status = parseInt('@((int)ChallengeStatus.NotAvailable)');

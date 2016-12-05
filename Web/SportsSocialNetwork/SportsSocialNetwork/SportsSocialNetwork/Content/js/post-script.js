@@ -321,7 +321,7 @@ function loadProfilePost(userId, curUserId, skip, take, actionName, loadMoreCmtA
                         spanLike = "<a href='javascript:void(0)' style='text-decoration: none;color:#000;padding:10px;font-weight:500' id='likeIcon_" + this.Id + "' onclick='likeUnlikePost(" + this.Id + ")' ><i class='text-like fa fa-lg fa-thumbs-o-up'></i>&nbsp;Thích</a>";
                     }
                     var reportDiv = "";
-                    if (this.AspNetUser.Id == userId) {
+                    if (this.AspNetUser.Id == curUserId) {
                         reportDiv = '<div style="position: absolute;right:5px;top:15px;width: 30px;">' +
                           '<div style="position: relative;width: 100%;text-align: center;margin-top: 5px;">' +
                           '<div class="dropdown">' +
@@ -573,22 +573,47 @@ function loadSpecificPost(userId, postId, actionName, loadMoreCmtActionName, loa
         success: function (data) {
             if (data.Succeed) {
                 var dt = data.AdditionalData;
-                    var content = "";
+                var content = "";
+                var title = "";
                     if (dt.ContentType == 1) {
                         content = textPost(dt);
+                        title = normalPostTitle;
                     }
                     if (dt.ContentType == 2) {
                         content = textImagePost(dt);
+                        title = normalPostTitle;
                     }
                     if (dt.ContentType == 3) {
                         content = imagePost(dt);
+                        title = normalPostTitle;
                     }
                     if (dt.ContentType == 4) {
                         content = multiImagePost(dt);
+                        title = normalPostTitle;
                     }
                     if (dt.ContentType == 5) {
                         content = multiImageTextPost(dt);
+                        title = normalPostTitle;
                     }
+                //===============================================
+                    if (dt.ContentType == 6) {
+                        content = shareEventPost(dt);
+                        title = shareEventPostTitle;
+                    }
+                    if (dt.ContentType == 7) {
+                        content = shareOrderPost(dt);
+                        title = shareOrderPostTitle;
+                    }
+                    if (dt.ContentType == 8) {
+                        content = sharePostPost(dt);
+                        title = sharePostPostTitle;
+                    }
+                    if (dt.ContentType == 9) {
+                        content = shareNewsPost(dt);
+                        title = shareNewsPostTitle;
+                    }
+                //===============================================    
+
                     var moreCmtBtn = "";
                     if (dt.CommentCount > 3) {
                         moreCmtBtn = "<div id='moreCmt_" + dt.Id + "'><a href='javascript:void(0)'  style='color:#ff6a00!important'  onclick='loadMoreComt(" + dt.Id + ")'>Xem thêm bình luận</a>";
@@ -615,6 +640,17 @@ function loadSpecificPost(userId, postId, actionName, loadMoreCmtActionName, loa
                                    '</div>' +
                                    '</div>';
                     }
+
+                    var whoIsWall = "";
+                    if (dt.ProfileId != null && dt.ProfileId != dt.UserId) {
+                        if (dt.ProfileId == _curUserId) {
+                            whoIsWall = " trên tường của bạn";
+                        } else {
+                            whoIsWall = " trên tường của <a style='color: #76838f' href='profile/index?userid=" + dt.ProfileId + "'>" + dt.Profile.FullName + "</a>";
+                        }
+                    }
+
+
                     var post = "<li class='panel' style='margin-bottom:10px;padding:15px' role='tabpanel' id='post_" + dt.Id + "'>"
                                    + "<div class='media' style='padding-right:10px'>"
                                        + "<div class='media-left'>"
@@ -625,7 +661,7 @@ function loadSpecificPost(userId, postId, actionName, loadMoreCmtActionName, loa
                                         + "<div class='media-body'>"
                                             + "<p class='media-heading' style='margin-bottom:0;font-size: large;'>"
                                             + '<a style="font-weight:bold; color: #ff6a00;" class="comment-author" href="/profile/index?userid=' + dt.AspNetUser.Id + '">' + dt.AspNetUser.FullName + '</a>'
-                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; đã đăng một bài viết</span>"
+                                                + "<span style='text-shadow: none;color: #76838f;'>&nbsp; " + title + whoIsWall + "</span>"
                                             + "</p>"
                                             + "<small>" + dt.PostAge + "</small>"
                                             + "<div class='profile-brief' style='white-space: pre-wrap;margin-bottom:20px;font-size: large;font-weight: 500;'>" + content + "</div>"

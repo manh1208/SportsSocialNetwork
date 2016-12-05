@@ -132,7 +132,11 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("ApprovePlaceOwner")]
         ApprovePlaceOwner = 9,
         [Description("UnApprovePlaceOwner")]
-        UnApprovePlaceOwner = 10
+        UnApprovePlaceOwner = 10,
+        [Description("ShareFriendWall")]
+        ShareFrdWall = 11,
+        [Description("ShareToGroup")]
+        ShareGroup = 12
     }
 
     public enum ContentPostType
