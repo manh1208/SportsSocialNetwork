@@ -91,7 +91,7 @@ public class InvitationReceiveAdapter extends ArrayAdapter<Invitation> {
                 viewholder.txtStatus.setBackgroundResource(R.drawable.button_invitation_approve);
             } else {
                 viewholder.txtStatus.setText("Không chấp nhận");
-                viewholder.txtStatus.setBackgroundResource(R.drawable.button_invitation_approve);
+                viewholder.txtStatus.setBackgroundResource(R.drawable.button_invitation_unapprove);
             }
             viewholder.ivDropdown.setVisibility(View.INVISIBLE);
         }
