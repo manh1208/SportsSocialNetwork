@@ -73,6 +73,7 @@
         </div>
         <div class="panel-body">
             <div class="row">
+                <input type="hidden" value="@Model.OrderCode" />
                 <div class="col-md-6">
                     <p><strong>Người đặt: </strong>@Model.AspNetUser.FullName</p>
                 </div>
@@ -93,11 +94,19 @@
                     @{
                         if (Model.PaidType == (int)OrderPaidType.ChosePayOnline)
                         {
-                            <strong>Phương thức thanh toán: </strong><span class="label label-lg label-outline label-info">@Utils.GetEnumDescription(OrderPaidType.ChosePayOnline).ToString()</span>
+                            <strong>Phương thức thanh toán: </strong><span class="label label-lg label-outline label-warning">@Utils.GetEnumDescription(OrderPaidType.ChosePayOnline).ToString()</span>
                         }
                         else if(Model.PaidType == (int)OrderPaidType.ChosePayByCash)
                         {
-                            <strong>Phương thức thanh toán: </strong><span class="label label-lg label-outline label-success">@Utils.GetEnumDescription(OrderPaidType.ChosePayByCash).ToString()</span>
+                            <strong>Phương thức thanh toán: </strong><span class="label label-lg label-outline label-warning">@Utils.GetEnumDescription(OrderPaidType.ChosePayByCash).ToString()</span>
+                        }
+                        else if (Model.PaidType == (int)OrderPaidType.PaidByCash)
+                        {
+                            <strong>Phương thức thanh toán: </strong><span class="label label-lg label-outline label-success">@Utils.GetEnumDescription(OrderPaidType.PaidByCash).ToString()</span>
+                        }
+                        else if (Model.PaidType == (int)OrderPaidType.PaidOnline)
+                        {
+                            <strong>Phương thức thanh toán: </strong><span class="label label-lg label-outline label-success">@Utils.GetEnumDescription(OrderPaidType.PaidOnline).ToString()</span>
                         }
                     }
 
@@ -136,7 +145,13 @@
         switch (Model.Status)
         {
             case (int)OrderStatus.Approved:
-                if (Model.Status == (int)OrderStatus.Cancel)
+                <div class="col-md-6">
+                    <button class="btn btn-warning pull-left" id="cancelBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Cancel))">Hủy đơn đặt sân</button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-primary" id="checkinBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.CheckedIn))">Đã nhận sân</button>
+                </div>
+                @*if (Model.Status == (int)OrderStatus.Cancel)
                 {
                     <div class="col-md-4">
                         <button class="btn btn-warning" id="cancelBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Cancel))" disabled>Hủy đơn đặt sân</button>
@@ -153,14 +168,23 @@
                 </div>
                 <div class="col-md-4">
                     <button class="btn btn-success" id="acceptBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Approved))" disabled>Chấp nhận</button>
-                </div>
+                </div>*@
 
                 break;
-
+            
+            case (int)OrderStatus.CheckedIn:
+                if (Model.PaidType == (int)OrderPaidType.ChosePayByCash && Model.PaidType != (int)OrderPaidType.PaidByCash)
+                {
+                    <div class="col-md-offset-8 col-md-4">
+                        <button class="btn btn-success" id="paidBtn" onclick="paidOrder(@Model.Id)">Đã thanh toán</button>
+                    </div>
+                }
+                break;
+            
             case (int)OrderStatus.Unapproved:
             case (int)OrderStatus.Cancel:
 
-                <div class="col-md-4">
+                @*<div class="col-md-4">
                     <button class="btn btn-warning" id="cancelBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Cancel))" disabled>Hủy đơn đặt sân</button>
                 </div>
                 <div class="col-md-4">
@@ -168,17 +192,17 @@
                 </div>
                 <div class="col-md-4">
                     <button class="btn btn-success" id="acceptBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Approved))" disabled>Chấp nhận</button>
-                </div>
+                </div>*@
 
                 break;
             case (int)OrderStatus.Pending:
-                <div class="col-md-4">
+                @*<div class="col-md-4">
                     <button class="btn btn-warning" id="cancelBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Cancel))">Hủy đơn đặt sân</button>
+                </div>*@
+                <div class="col-md-6">
+                    <button class="btn btn-danger pull-left" id="deniedBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Unapproved))">Không chấp nhận</button>
                 </div>
-                <div class="col-md-4">
-                    <button class="btn btn-danger" id="deniedBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Unapproved))">Không chấp nhận</button>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <button class="btn btn-success" id="acceptBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Approved))">Chấp nhận</button>
                 </div>
 
