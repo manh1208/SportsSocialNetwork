@@ -693,7 +693,7 @@ namespace SportsSocialNetwork.Controllers
             ViewBag.PlaceOwnerNganLuong = placeOwner.NganLuongAccount;
             IEnumerable<SelectListItem> selectList = fieldList.Select(s => new SelectListItem
             {
-                Text = s.Name,
+                Text = s.Name + " - " + s.FieldType.Name + " (" +s.FieldType.Sport.Name + " )",
                 Value = s.Id.ToString()
             }).ToArray();
             ViewBag.FieldList = selectList;
