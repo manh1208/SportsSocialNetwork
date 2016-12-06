@@ -292,6 +292,10 @@ public class MainActivity extends AppCompatActivity
         } catch (ParseException e) {
             Toast.makeText(MainActivity.this, R.string.parse_exception, Toast.LENGTH_SHORT).show();
         }
+
+        TextView price = (TextView) v.findViewById(R.id.txt_order_detail_price);
+        price.setText(order.getPrice().longValue()+"");
+
         TextView payment = (TextView) v.findViewById(R.id.txt_order_detail_payment);
         payment.setText(PaidTypeEnum.fromInteger(order.getPaidType()).toString());
         TextView status = (TextView) v.findViewById(R.id.txt_order_detail_order_status);
