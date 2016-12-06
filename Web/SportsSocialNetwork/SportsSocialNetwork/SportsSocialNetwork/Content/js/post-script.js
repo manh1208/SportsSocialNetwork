@@ -873,6 +873,7 @@ function prependPost(data, userId) {
                                                 + "<div style='margin-top:10px;border-top-style:groove;border-top-width:0.3px;border-bottom-style:groove;border-bottom-width:0.3px;padding-top:10px;padding-bottom:10px'>"
                                             + spanLike
                                             + "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500'><i class='text-like fa fa-lg fa-comments-o'></i>&nbsp;Bình Luận</a>"
+                                            + "<a href='javascript:void(0)' style='text-decoration: none;padding:10px;color:#000;font-weight:500' onclick='showShareModal(" + data.Id + "," + sharePostType + ")'><i class='text-like fa fa-lg fa-share'></i>&nbsp;Chia sẻ</a>"
                                             + "</div>"
 
 
