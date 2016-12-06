@@ -102,23 +102,23 @@
 <div class="col-md-3">
     <div class="panel" style="text-align:center">
         <header class="panel-heading" style="background-color:#ff6a00; border-radius:0px;margin-bottom:20px">
-            <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Tìm kiếm địa điểm</h3>
+            <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important;padding:20px 0px">Tìm kiếm địa điểm</h3>
         </header>
         <div class="panel-body">
             <div class="form-group">
-                @Html.DropDownListFor(m => m.SportId, selectList, "--Chọn loại thể thao--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "sport" })
+                @Html.DropDownListFor(m => m.SportId, selectList, "--Loại thể thao--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "sport" })
 
             </div>
             <div class="form-group">
-                @Html.DropDownListFor(m => m.Province, provinceList, "--Chọn tỉnh/thành phố--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "province" })
+                @Html.DropDownListFor(m => m.Province, provinceList, "--Tỉnh/Thành phố--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "province" })
             </div>
             <div class="form-group">
-                @Html.DropDownListFor(m => m.District, districtList, "--Chọn quận/huyện--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "district" })
+                @Html.DropDownListFor(m => m.District, districtList, "--Quận/Huyện--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "district" })
             </div>
-            <p style="color:gray;font-size:13px">——————hoặc——————</p>
+            <p style="color:gray;font-size:13px;text-align:center">———hoặc———</p>
             <div class="form-group">
-                <button type="button" class="btn btn-dark" id="findAround" style="width:90%">
-                    <i class="fa fa-location-arrow" aria-hidden="true"></i> Tìm xung quanh bạn</button>
+                <button type="button" class="btn btn-dark" id="findAround" style="width:90%;font-size:13px">
+                    @*<i class="fa fa-location-arrow" aria-hidden="true"></i>*@Tìm xung quanh</button>
                 <input type="hidden" id="lat" />
                 <input type="hidden" id="lng" />
             </div>

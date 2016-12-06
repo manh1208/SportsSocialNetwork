@@ -182,7 +182,8 @@
                                     {
                                         foreach (var item in fieldSportList)
                                         {
-                                            <li class="list-group-item"><a style="display:block" href='/Field/Index/@item.FieldId'><p style="text-align:center;padding:0px;margin:0px"> @item.FieldName</p><p style="text-align:center;font-size:15px;padding:0px;margin:0px">(@item.Sport)</p></a></li>
+                                            <li class="list-group-item"><a style="display:block" href='/Field/Index/@item.FieldId'>
+                                                <p style="text-align:center;padding:0px;margin:0px"> @item.FieldName - @item.FieldType (@item.Sport)</p></a></li>
 
                                         }
                                     }else
