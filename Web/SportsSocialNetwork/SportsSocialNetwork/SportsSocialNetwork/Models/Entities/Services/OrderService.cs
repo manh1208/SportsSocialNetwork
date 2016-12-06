@@ -22,6 +22,8 @@ namespace SportsSocialNetwork.Models.Entities.Services
         bool checkTimeValidInOrder(int fieldId, TimeSpan startTime, TimeSpan endTime, DateTime startDate, DateTime endDate);
 
         Order CreateOrder(Order order);
+
+        Order ConfirmPayment(int id);
         
         //Order CheckInOrder(String orderCode);
         
@@ -86,19 +88,33 @@ namespace SportsSocialNetwork.Models.Entities.Services
             Order order = this.FirstOrDefault(x => x.Id == id);
             if (order != null)
             {
-                if(order.PaidType == (int)OrderPaidType.ChosePayByCash)
-                {
-                    order.PaidType = (int)OrderPaidType.PaidByCash;
-                }
-                else if(order.PaidType == (int)OrderPaidType.ChosePayOnline)
-                {
-                    order.PaidType = (int)OrderPaidType.PaidOnline;
-                }
+                //if (order.PaidType == (int)OrderPaidType.ChosePayByCash)
+                //{
+                //    order.PaidType = (int)OrderPaidType.PaidByCash;
+                //}
+                //else
+                //if (order.PaidType == (int)OrderPaidType.ChosePayOnline)
+                //{
+                //    order.PaidType = (int)OrderPaidType.PaidOnline;
+                //}
                 order.Status = status;
                 this.Save();
                 return order;
             }
             return null;
+        }
+
+        public Order ConfirmPayment(int id)
+        {
+            Order order = this.FirstOrDefaultActive(x => x.Id == id);
+
+            order.PaidType = (int)OrderPaidType.PaidByCash;
+
+            this.Update(order);
+
+            this.Save();
+
+            return order;
         }
 
         public Order CreateOrder(Order o)
