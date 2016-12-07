@@ -83,7 +83,7 @@ namespace SportsSocialNetwork.Models.Enumerable
     {
         [Description("Sửa chữa")]
         Repair = 1,
-        [Description("Đã được đặt")]
+        [Description("Thuê sân")]
         Booked = 2,
         [Description("Sự kiện")]
         Event = 3,
