@@ -145,12 +145,18 @@
         switch (Model.Status)
         {
             case (int)OrderStatus.Approved:
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <button class="btn btn-warning pull-left" id="cancelBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.Cancel))">Hủy đơn đặt sân</button>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <button class="btn btn-primary" id="checkinBtn" onclick="updateStatus(@Model.Id, @((int)OrderStatus.CheckedIn))">Đã nhận sân</button>
                 </div>
+                if (Model.PaidType == (int)OrderPaidType.ChosePayByCash || Model.PaidType == (int)OrderPaidType.ChosePayOnline)
+                {
+                    <div class="col-md-4">
+                        <button class="btn btn-success" id="paidBtn" onclick="paidOrder(@Model.Id)">Đã thanh toán</button>
+                    </div>
+                }
                 @*if (Model.Status == (int)OrderStatus.Cancel)
                 {
                     <div class="col-md-4">
@@ -173,7 +179,7 @@
                 break;
             
             case (int)OrderStatus.CheckedIn:
-                if (Model.PaidType == (int)OrderPaidType.ChosePayByCash && Model.PaidType != (int)OrderPaidType.PaidByCash)
+                if (Model.PaidType == (int)OrderPaidType.ChosePayByCash || Model.PaidType == (int)OrderPaidType.ChosePayOnline)
                 {
                     <div class="col-md-offset-8 col-md-4">
                         <button class="btn btn-success" id="paidBtn" onclick="paidOrder(@Model.Id)">Đã thanh toán</button>

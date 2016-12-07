@@ -214,9 +214,9 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 Order order = _orderService.FirstOrDefaultActive(o => o.Id == id);
                 if (order != null)
                 {
-                    if (order.PaidType == (int)OrderPaidType.ChosePayByCash)
+                    if (order.PaidType != (int)OrderPaidType.PaidByCash || order.PaidType != (int)OrderPaidType.PaidOnline)
                     {
-                        order.PaidType = (int)OrderPaidType.PaidByCash;
+                        order.PaidType = order.PaidType == (int)OrderPaidType.ChosePayByCash ? (int)OrderPaidType.PaidByCash : (int)OrderPaidType.PaidOnline;
                         _orderService.Update(order);
                         _orderService.Save();
                         result.Succeed = true;
