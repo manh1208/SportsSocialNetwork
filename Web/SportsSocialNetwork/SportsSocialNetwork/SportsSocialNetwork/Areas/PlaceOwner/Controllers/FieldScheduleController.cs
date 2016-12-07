@@ -174,7 +174,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             var service = this.Service<IAspNetUserService>();
             if (username != null && username.Length > 0)
             {
-                var user = service.GetActive(u => u.UserName.ToLower().Equals(username.ToLower())).FirstOrDefault();
+                var user = service.GetActive(u => u.Email.ToLower().Equals(username.ToLower())).FirstOrDefault();
                 if (user != null)
                 {
                     result.Succeed = true;
@@ -182,7 +182,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 else
                 {
                     result.Succeed = false;
-                    result.AddError("username", "Tên tài khoản không có thật");
+                    result.AddError("username", "Email không tồn tại trong hệ thống");
                 }
             }
             else
@@ -222,7 +222,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 var userService = this.Service<IAspNetUserService>();
                 if (schedule.UserName != null && schedule.UserName.Length > 0)
                 {
-                    var user = userService.GetActive(u => u.UserName.ToLower().Equals(schedule.UserName.ToLower())).FirstOrDefault();
+                    var user = userService.GetActive(u => u.Email.ToLower().Equals(schedule.UserName.ToLower())).FirstOrDefault();
                     if (user != null)
                     {
                        
@@ -230,7 +230,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                     }else
                     {
                         result.Succeed = false;
-                        result.AddError("Update", "Tên tài khoản không đúng. Vui lòng thử lại");
+                        result.AddError("Update", "Email không tồn tại trong hệ thống. Vui lòng thử lại");
                         return Json(result);
                     }
                 }
@@ -429,7 +429,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 updateSchedule.PlaceId = placeId;
                 if (schedule.UserId != null)
                 {
-                    updateSchedule.UserName = schedule.AspNetUser.UserName;
+                    updateSchedule.UserName = schedule.AspNetUser.Email;
                 }
             }
             //ViewBag.startDay = startDay;
@@ -528,7 +528,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 var userService = this.Service<IAspNetUserService>();
                 if (schedule.UserName != null && schedule.UserName.Length > 0)
                 {
-                    var user = userService.GetActive(u => u.UserName.ToLower().Equals(schedule.UserName.ToLower())).FirstOrDefault();
+                    var user = userService.GetActive(u => u.Email.ToLower().Equals(schedule.UserName.ToLower())).FirstOrDefault();
                     if (user != null)
                     {
 
@@ -537,7 +537,7 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                     else
                     {
                         result.Succeed = false;
-                        result.AddError("Update", "Tên tài khoản không đúng. Vui lòng thử lại");
+                        result.AddError("Update", "Email không tồn tại trong hệ thống. Vui lòng thử lại");
                         return Json(result);
                     }
                 }
