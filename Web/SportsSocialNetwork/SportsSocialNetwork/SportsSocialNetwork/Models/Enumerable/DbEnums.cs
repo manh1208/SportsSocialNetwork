@@ -136,7 +136,9 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("ShareFriendWall")]
         ShareFrdWall = 11,
         [Description("ShareToGroup")]
-        ShareGroup = 12
+        ShareGroup = 12,
+        [Description("OrderAction")]
+        OrderAction = 13,
     }
 
     public enum ContentPostType
