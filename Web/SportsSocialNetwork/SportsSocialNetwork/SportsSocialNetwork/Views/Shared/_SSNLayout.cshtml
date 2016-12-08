@@ -769,7 +769,7 @@
                 image = data.AspNetUser1.AvatarImage;
                 url = "/SSN/PostDetail?postId=" + data.PostId;
             } else if (data.Type == parseInt('@((int)NotificationType.Order)')) {
-                image = "/Content/images/flag-xxl.png";
+                image = data.AspNetUser1.AvatarImage;
                 url = "/PlaceOwner/Order";
             } else if (data.Type == parseInt('@((int)NotificationType.Invitation)')) {
                 image = data.AspNetUser1.AvatarImage;
@@ -798,6 +798,9 @@
             } else if (data.Type == parseInt('@((int)NotificationType.ShareGroup)')) {
                 image = data.AspNetUser1.AvatarImage;
                 url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.OrderAction)')) {
+                image = "/Content/images/flag-xxl.png";
+                url = "/Order";
             } else {
 
             }
