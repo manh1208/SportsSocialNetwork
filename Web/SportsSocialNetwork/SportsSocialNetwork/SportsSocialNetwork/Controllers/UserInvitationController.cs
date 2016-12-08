@@ -192,47 +192,59 @@ namespace SportsSocialNetwork.Controllers
             }
             invi.Subject = groupChatName;
             invitationService.Create(invi);
-            foreach (var id in userId)
+            for(int i = 0; i < userId.Length; i++)
             {
-                UserInvitation UIn = new UserInvitation();
-                Notification noti = new Notification();
-                UIn.InvitationId = invi.Id;
-                UIn.ReceiverId = id;
-                UIn.Active = true;
-                userInvitationService.Create(UIn);
-                noti.InvitationId = UIn.InvitationId;
-                noti.UserId = id;
-                noti.FromUserId = curUserId;
-                noti.CreateDate = DateTime.Now;
-                noti.Active = true;
-                noti.Type = (int)NotificationType.Invitation;
-                noti.Message = curUser.FullName + " đã gửi lời mời bạn cùng chơi thể thao";
-                noti.Title = "Invite";
-                noti.MarkRead = false;
-                notiService.Create(noti);
-
-                //Fire base noti
-                List<string> registrationIds = GetToken(id);
-
-                //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
-
-                NotificationModel amodel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
-
-                if (registrationIds != null && registrationIds.Count != 0)
+                var isDup = false;
+                for(int count = 0; count< i; count++)
                 {
-                    Android.Notify(registrationIds, null, amodel);
+                    if(userId[i] == userId[count])
+                    {
+                        isDup = true;
+                        break;
+                    }
                 }
+                if (!isDup)
+                {
+                    UserInvitation UIn = new UserInvitation();
+                    Notification noti = new Notification();
+                    UIn.InvitationId = invi.Id;
+                    UIn.ReceiverId = userId[i];
+                    UIn.Active = true;
+                    userInvitationService.Create(UIn);
+                    noti.InvitationId = UIn.InvitationId;
+                    noti.UserId = userId[i];
+                    noti.FromUserId = curUserId;
+                    noti.CreateDate = DateTime.Now;
+                    noti.Active = true;
+                    noti.Type = (int)NotificationType.Invitation;
+                    noti.Message = curUser.FullName + " đã gửi lời mời bạn cùng chơi thể thao";
+                    noti.Title = "Invite";
+                    noti.MarkRead = false;
+                    notiService.Create(noti);
+
+                    //Fire base noti
+                    List<string> registrationIds = GetToken(userId[i]);
+
+                    //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
+
+                    NotificationModel amodel = Mapper.Map<NotificationModel>(PrepareNotificationViewModel(noti));
+
+                    if (registrationIds != null && registrationIds.Count != 0)
+                    {
+                        Android.Notify(registrationIds, null, amodel);
+                    }
 
 
-                //////////////////////////////////////////////
-                //signalR noti
-                NotificationFullInfoViewModel notiModel = notiService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+                    //////////////////////////////////////////////
+                    //signalR noti
+                    NotificationFullInfoViewModel notiModel = notiService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
 
-                // Get the context for the Pusher hub
-                IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+                    // Get the context for the Pusher hub
+                    IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
 
-                // Notify clients in the group
-                hubContext.Clients.User(notiModel.UserId).send(notiModel);
+                    // Notify clients in the group
+                    hubContext.Clients.User(notiModel.UserId).send(notiModel);
+                }
             }
             InvitationViewModel model = Mapper.Map<InvitationViewModel>(invi);
             model.Host = curUser.FullName;
