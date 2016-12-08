@@ -192,6 +192,7 @@ public class ManageOrderFragment extends Fragment {
         status.setText(OrderStatusEnum.fromInteger(order.getStatus()).toString());
         Button btnApprove = (Button) view.findViewById(R.id.btn_maange_order_approve);
         Button btnUnapprove = (Button) view.findViewById(R.id.btn_manage_order_unapprove);
+        Button btnPayment = (Button) view.findViewById(R.id.btn_manage_order_payment);
         if (order.getStatus()==OrderStatusEnum.Pending.getValue()){
             btnApprove.setVisibility(View.VISIBLE);
             btnUnapprove.setVisibility(View.VISIBLE);
@@ -206,6 +207,17 @@ public class ManageOrderFragment extends Fragment {
         if (order.getStatus()==OrderStatusEnum.Unapproved.getValue()){
             btnUnapprove.setVisibility(View.GONE);
             btnApprove.setVisibility(View.VISIBLE);
+        }
+
+        if (order.getStatus()!=OrderStatusEnum.Cancel.getValue() && order.getStatus()!=OrderStatusEnum.Unapproved.getValue()){
+            if (order.getPaidType()== PaidTypeEnum.ChosePayByCash.getValue()
+                    || order.getPaidType() == PaidTypeEnum.ChosePayOnline.getValue()){
+                btnPayment.setVisibility((View.VISIBLE));
+            }else{
+                btnPayment.setVisibility(View.GONE);
+            }
+        }else{
+            btnPayment.setVisibility(View.GONE);
         }
         btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,6 +259,33 @@ public class ManageOrderFragment extends Fragment {
                         if (response.isSuccessful()){
                             if (response.body().isSucceed()){
                                 Toast.makeText(mContext, "UnApproved", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(mContext, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseModel<Order>> call, Throwable t) {
+                        Toast.makeText(mContext, R.string.failure, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        btnPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<ResponseModel<Order>> call = service.getOrderService().confirmPayment(order.getId());
+                call.enqueue(new Callback<ResponseModel<Order>>() {
+                    @Override
+                    public void onResponse(Call<ResponseModel<Order>> call, Response<ResponseModel<Order>> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()){
+                            if (response.body().isSucceed()){
+                                Toast.makeText(mContext, "Đã thanh toán.", Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(mContext, response.body().getErrorsString(), Toast.LENGTH_SHORT).show();
                             }

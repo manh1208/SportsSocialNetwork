@@ -37,4 +37,7 @@ public interface IOrderService {
 
     @POST("/api/order/createorder")
     Call<ResponseModel<Order>> createOrder(@Body OrderRequestModel model);
+
+    @POST("/api/order/confirmPayment")
+    Call<ResponseModel<Order>> confirmPayment(@Query("id")int id);
 }
