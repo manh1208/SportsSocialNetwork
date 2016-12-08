@@ -181,7 +181,7 @@ namespace SportsSocialNetwork.Controllers
                 c.Id,
                 (c.Avatar == null || c.Avatar.Equals(""))?"/Content/images/no_image.jpg":c.Avatar,
                 c.Name,
-                c.Description.Length > 140? c.Description.Substring(0,140)+"...": c.Description,
+                c.Description.Length > 130? c.Description.Substring(0,130)+"...": c.Description,
                 (c.Address +", "+c.District+", "+c.City).Length < 40? (c.Address +", "+c.District+", "+c.City):
                 (c.Address +", "+c.District+", "+c.City).Substring(0, 40)+"...",
                 c.PhoneNumber

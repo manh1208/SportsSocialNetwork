@@ -280,7 +280,6 @@ namespace SportsSocialNetwork.Controllers
 
             var users = userService.GetActive(p => p.Id != userId && p.AspNetRoles.Where(k =>
             k.Name != "Quản trị viên" && k.Name != "Moderator").ToList().Count > 0 &&
-            p.Follows.Where(f => f.Active == true && (f.FollowerId == userId)).ToList().Count == 0 &&
             p.Hobbies.Where(m => m.SportId == sportId).ToList().Count > 0).ToList();
             foreach (var user in users)
             {
