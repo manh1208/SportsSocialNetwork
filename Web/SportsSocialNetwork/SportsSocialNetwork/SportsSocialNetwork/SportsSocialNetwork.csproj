@@ -3270,6 +3270,7 @@
     <Content Include="Content\img\shieldui-sprite.png" />
     <Content Include="Content\img\stars.png" />
     <Content Include="Content\js\custom-script.js" />
+    <Content Include="Content\js\jquery.inputmask.bundle.js" />
     <Content Include="Content\js\jquery.slimscroll.min.js" />
     <Content Include="Content\js\post-script.js" />
     <Content Include="Content\js\shieldui-all.min.js" />
