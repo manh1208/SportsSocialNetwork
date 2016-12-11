@@ -43,7 +43,7 @@ import retrofit2.Response;
  */
 public class ManageOrderFragment extends Fragment {
     private ViewHolder viewHolder;
-    private RestService service;
+    private RestService service; 
     private ManageOrderAdapter adapter;
     private String userId;
     private boolean isLoading;
