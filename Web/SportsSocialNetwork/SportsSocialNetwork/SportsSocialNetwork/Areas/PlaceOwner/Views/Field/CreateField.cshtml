@@ -151,6 +151,7 @@
 
 @section Scripts{
     
+<script src="~/Content/js/jquery.inputmask.bundle.js"></script>
 <script>
     var searchValue = "";
 
@@ -299,8 +300,8 @@
         console.log("11");
         var startTime = $("#stTime").val();
         var endTime = $("#enTime").val();
-        var price = $("#tsPrice").val();
-        if (price == null || price == "") {
+        var price = $("#tsPrice").val().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+        if (price == null || price == "" || price == "- ") {
             var noti = "<p class='alert alert-danger'>Giá tiền không được trống</p>";
             $("#notiTB").empty();
             $("#notiTB").append(noti);
@@ -336,7 +337,7 @@
                                             + "<input type='text' class='form-control input-lg' id='stsPrice' disabled='disabled' value='" + price + "'/>"
                                         + "</div>"
                                     + "</div>"
-                                    + "<div class='col-xs-1'>"
+                                    + "<div class='col-xs-1' style='padding:0;'>"
                                         + "<button type='button' class='btn btn-pure btn-primary icon wb-pencil editbtn' onclick='' style='display: none;'></button>"
                                         + "<button type='button' class='btn btn-pure btn-danger icon wb-close removebtn' onclick=''></button>"
                                     + "</div>"
@@ -392,17 +393,17 @@
                         }
                     }
                 },
-                oPrice: {
-                    validators: {
-                        integer: {
-                            message: 'Giá trị nhập phải là số'
-                        },
-                        regexp: {
-                            regexp: /^[1-9][0-9]*$/,
-                            message: "Giá tiền không phù hợp"
-                        }
-                    }
-                },
+                //oPrice: {
+                //    validators: {
+                //        integer: {
+                //            message: 'Giá trị nhập phải là số'
+                //        },
+                //        regexp: {
+                //            regexp: /^[1-9][0-9]*$/,
+                //            message: "Giá tiền không phù hợp"
+                //        }
+                //    }
+                //},
                 uploadImages: {
                     validators: {
                         file: {
@@ -504,6 +505,16 @@
             }
         });
     })();
+
+    $('#tsPrice').inputmask("numeric", {
+        radixPoint: ".",
+        groupSeparator: ",",
+        digits: 2,
+        autoGroup: true,
+        prefix: ' ', //No Space, this will truncate the first character
+        rightAlign: false,
+        oncleared: function () { self.Value(''); }
+    });
 </script>
 
 
