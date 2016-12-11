@@ -301,7 +301,7 @@
         var startTime = $("#stTime").val();
         var endTime = $("#enTime").val();
         var price = $("#tsPrice").val().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-        if (price == null || price == "") {
+        if (price == null || price == "" || price == "- ") {
             var noti = "<p class='alert alert-danger'>Giá tiền không được trống</p>";
             $("#notiTB").empty();
             $("#notiTB").append(noti);

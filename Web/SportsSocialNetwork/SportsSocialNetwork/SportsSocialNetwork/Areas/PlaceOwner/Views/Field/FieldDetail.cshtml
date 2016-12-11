@@ -393,7 +393,7 @@
             var startTime = $("#stTime").val();
             var endTime = $("#enTime").val();
             var price = $("#tsPrice").val().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-            if (price == null || price == "")
+            if (price == null || price == "" || price == "- ")
             {
                 var noti = "<p class='alert alert-danger'>Giá tiền không được trống</p>";
                 $("#notiTB").empty();
@@ -430,7 +430,7 @@
                                                 + "<input type='text' class='form-control input-lg' id='stsPrice' disabled='disabled' value='" + price + "'/>"
                                             + "</div>"
                                         + "</div>"
-                                        + "<div class='col-xs-1'>"
+                                        + "<div class='col-xs-1' style='padding:0;'>"
                                             + "<button type='button' class='btn btn-pure btn-primary icon wb-pencil editbtn' onclick='' style='display: none;'></button>"
                                             + "<button type='button' class='btn btn-pure btn-danger icon wb-close removebtn' onclick=''></button>"
                                         + "</div>"
