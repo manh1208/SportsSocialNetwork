@@ -233,7 +233,10 @@
     <script src="~/Content/js/jquery.inputmask.bundle.js"></script>
     <script>
         var searchValue = "";
-
+        $("#tsPrice").on('keyup', function () {
+            var valueR = $('#tsPrice').val();
+            $('#tsPrice').val(valueR.replace("-", ""));
+        });
 
         (function (document, window, $) {
             'use strict';
@@ -241,7 +244,10 @@
             var Site = window.Site;
             $(document).ready(function () {
                 Site.run();
-
+                $("#tsPrice").change(function (event) {
+                    var valueR = $('#tsPrice').val();
+                    $('#tsPrice').val(valueR.replace("-", ""));
+                });
             });
         })(document, window, jQuery);
 
@@ -420,7 +426,7 @@
                                         + "</div>"
                                         + "<div class='col-xs-3' style='padding:0;'>"
                                             + "<div class='input-group'>"
-                                                + "<span class='input-group-addon'>Đến</span>"
+                                                + "<span style='padding:6px 0;' class='input-group-addon'>Đến</span>"
                                                 + "<input type='text' class='timepicker form-control input-lg' data-plugin='clockpicker' data-autoclose='true' id='senTime' disabled='disabled' value='" + endTime + "'/>"
                                             + "</div>"
                                         + "</div>"
@@ -696,9 +702,9 @@
             groupSeparator: ",",
             digits: 2,
             autoGroup: true,
-            prefix: ' ', //No Space, this will truncate the first character
+            prefix: '', //No Space, this will truncate the first character
             rightAlign: false,
-            oncleared: function () { self.Value(''); }
+            //oncleared: function () { self.Value(''); }
         });
 
 </script>
