@@ -40,7 +40,11 @@ namespace SportsSocialNetwork.Controllers
             }).OrderBy(s => s.Value).ToArray();
             ViewBag.ProvinceList = provinceList;
 
-            AspNetUser user = _userService.FindUser(userId);
+            AspNetUser user = _userService.FirstOrDefaultActive(u => u.Id.Equals(userId));
+            if (user == null)
+            {
+                return RedirectToAction("PageNotFound", "Errors");
+            }
             AspNetUserFullInfoViewModel model = Mapper.Map<AspNetUserFullInfoViewModel>(user);
             this.PrepareUserInfo(model);
 
@@ -327,6 +331,7 @@ namespace SportsSocialNetwork.Controllers
             var _likeService = this.Service<ILikeService>();
             var _postCommentService = this.Service<IPostCommentService>();
             var _postSportService = this.Service<IPostSportService>();
+            var _userService = this.Service<IAspNetUserService>();
 
             //like
             List<Like> likeList = _likeService.GetLikeListByPostId(p.Id).ToList();
@@ -357,6 +362,13 @@ namespace SportsSocialNetwork.Controllers
             //sport
             List<PostSport> postSportList = _postSportService.GetActive(s => s.PostId == p.Id).ToList();
             p.PostSports = Mapper.Map<List<PostSportDetailViewModel>>(postSportList);
+
+            //profile
+            if (p.ProfileId != null)
+            {
+                var tmpUser = _userService.FirstOrDefaultActive(o => o.Id == p.ProfileId);
+                p.Profile = Mapper.Map<AspNetUserSimpleModel>(tmpUser);
+            }
         }
 
         [HttpPost]

@@ -305,7 +305,7 @@ namespace SportsSocialNetwork.Controllers
                     if (!(member.UserId.Equals(post.UserId)))
                     {
                         Group g = _groupService.FindGroupById(groupId);
-                        Notification noti = _notiService.CreateNoti(member.UserId, post.UserId, Utils.GetEnumDescription(NotificationType.GroupPost), postedUser.FullName + "đã đăng một bài viết trong nhóm " +  g.Name, (int)NotificationType.GroupPost, post.Id, null, null, groupId);
+                        Notification noti = _notiService.CreateNoti(member.UserId, post.UserId, Utils.GetEnumDescription(NotificationType.GroupPost), postedUser.FullName + " đã đăng một bài viết trong nhóm " +  g.Name, (int)NotificationType.GroupPost, post.Id, null, null, groupId);
 
                         List<string> registrationIds = GetToken(member.UserId);
 
@@ -671,7 +671,16 @@ namespace SportsSocialNetwork.Controllers
 
             result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
 
-            result.Avatar = noti.AspNetUser1.AvatarImage;
+            var _userService = this.Service<IAspNetUserService>();
+            AspNetUser us = _userService.FirstOrDefaultActive(u => u.Id.Equals(noti.FromUserId));
+            if (us != null)
+            {
+                result.Avatar = us.AvatarImage;
+            }
+            else
+            {
+                result.Avatar = "";
+            }
 
             return result;
 
@@ -703,6 +712,8 @@ namespace SportsSocialNetwork.Controllers
             var _userService = this.Service<IAspNetUserService>();
             var _groupMemberService = this.Service<IGroupMemberService>();
             var _groupService = this.Service<IGroupService>();
+
+            int notiType = -1;
 
             Post post = new Post();
 
@@ -767,10 +778,12 @@ namespace SportsSocialNetwork.Controllers
                             break;
                         case (int)SharedReceiver.FriendWall:
                             post.ProfileId = frdSelectShare;
+                            notiType = (int)NotificationType.ShareFrdWall;
 
                             break;
                         case (int)SharedReceiver.Group:
                             post.GroupId = groupSelectShare;
+                            notiType = (int)NotificationType.ShareGroup;
 
                             break;
                     }
@@ -838,7 +851,7 @@ namespace SportsSocialNetwork.Controllers
                             //for noti
                             AspNetUser noti_receiver = _userService.FindUser(frdSelectShare);
                             message = sender.FullName + " đã chia sẻ một " + notiMessType + " lên tường nhà bạn";
-                            noti = _notificationService.CreateNoti(noti_receiver.Id, sender.Id, title, message, type, null, null, null, null);
+                            noti = _notificationService.CreateNoti(noti_receiver.Id, sender.Id, title, message, notiType, null, null, null, null);
 
                             //signalR noti
                             notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
@@ -856,7 +869,7 @@ namespace SportsSocialNetwork.Controllers
                             message = sender.FullName + " đã chia sẻ một " + notiMessType + " trong nhóm " + noti_group.Name;
                             foreach (var item in noti_gm)
                             {
-                                noti = _notificationService.CreateNoti(item.UserId, sender.Id, title, message, type, null, null, null, null);
+                                noti = _notificationService.CreateNoti(item.UserId, sender.Id, title, message, notiType, null, null, null, noti_group.Id);
 
                                 //signalR noti
                                 notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));

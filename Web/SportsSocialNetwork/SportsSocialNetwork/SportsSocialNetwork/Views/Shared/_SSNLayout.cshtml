@@ -51,7 +51,8 @@
 
     <!--Form Validation-->
     <link rel="stylesheet" href="~/Content/assets/vendor/formvalidation/formValidation.css">
-
+    <script src="~/Content/assets/vendor/modernizr/modernizr.js"></script>
+    <script src="~/Content/assets/vendor/breakpoints/breakpoints.js"></script>
     <script>
         Breakpoints();
     </script>
@@ -70,7 +71,7 @@
     </style>
     <style>
         body {
-            background-color: #f5f5f5;
+            background-color: #e2dad6;
             color: #000000;
         }
 
@@ -337,7 +338,7 @@
         </div>
     </nav>
     <!-- Page -->
-    <div class="page animsition" style="width:90%;margin-left:5%">
+    <div class="page animsition" style="width:90%;margin-left:5%;background-color:#e2dad6!important">
         <div class="page-content container-fluid">
             @RenderBody()
         </div>
@@ -395,6 +396,7 @@
     <script src="~/Content/assets/vendor/asscrollable/jquery.asScrollable.all.js"></script>
     <script src="~/Content/assets/vendor/ashoverscroll/jquery-asHoverScroll.js"></script>
 
+    <script src="~/Content/assets/vendor/jquery-ui/jquery-ui.js"></script>
     <!-- Plugins -->
     <script src="~/Content/assets/vendor/switchery/switchery.min.js"></script>
     <script src="~/Content/assets/vendor/intro-js/intro.js"></script>
@@ -418,6 +420,7 @@
     <script src="~/Content/assets/vendor/formvalidation/formValidation.min.js"></script>
     <script src="~/Content/assets/vendor/formvalidation/framework/bootstrap.min.js"></script>
     <script src="~/Content/assets/js/components/switchery.js"></script>
+    <script src="~/Content/assets/js/components/jquery-placeholder.js"></script>
     <!--Sweet Alert-->
     <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
 
@@ -766,7 +769,7 @@
                 image = data.AspNetUser1.AvatarImage;
                 url = "/SSN/PostDetail?postId=" + data.PostId;
             } else if (data.Type == parseInt('@((int)NotificationType.Order)')) {
-                image = "/Content/images/flag-xxl.png";
+                image = data.AspNetUser1.AvatarImage;
                 url = "/PlaceOwner/Order";
             } else if (data.Type == parseInt('@((int)NotificationType.Invitation)')) {
                 image = data.AspNetUser1.AvatarImage;
@@ -789,6 +792,15 @@
             } else if (data.Type == parseInt('@((int)NotificationType.UnApprovePlaceOwner)')) {
                 image = "/Content/images/flag-xxl.png";
                 url = "javascript:void(0)";
+            } else if (data.Type == parseInt('@((int)NotificationType.ShareFrdWall)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Profile/Index?UserId=" + data.AspNetUser.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.ShareGroup)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.OrderAction)')) {
+                image = "/Content/images/flag-xxl.png";
+                url = "/Order";
             } else {
 
             }
@@ -811,7 +823,7 @@
                                             '<div class="media">' +
                         '<div class="media-left padding-right-10">' +
                           '<span class="avatar avatar-sm avatar-online">' +
-                            '<img src="' + image + '" alt="...">' +
+                            '<img src="' + image + '" alt="..." style="width:50px;height:50px;">' +
 
                           '</span>' +
                         '</div>' +

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by ManhNV on 10/16/16.
  */
-public class CheckIn {
+public class CheckIn{
 
     @SerializedName("Id")
     private int    id;
@@ -25,6 +25,8 @@ public class CheckIn {
     private int status;
     @SerializedName("PaidType")
     private int paidType;
+    @SerializedName("Price")
+     private double price;
 
     public int getId() {
         return id;
@@ -96,5 +98,13 @@ public class CheckIn {
 
     public void setPaidType(int paidType) {
         this.paidType = paidType;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

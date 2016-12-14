@@ -196,7 +196,7 @@
         }
 
         function showConfirmDeleteAccount(id) {
-            showConfirmDeleteItem("Bạn có chắc chắn muốn xóa tài khoản này không?",
+            showConfirmDeleteItem("Bạn có chắc chắn muốn xóa địa điểm này không?",
                 function (isConfirm) {
                     if (isConfirm) {
                         $.ajax({
@@ -206,7 +206,7 @@
                             success: function (data) {
                                 $("#account-table").reloadDataTable();
                                 if (data.Succeed) {
-                                    showMessage("Xóa thành viên thành công", "success", "OK");
+                                    showMessage("Xóa địa điểm thành công", "success", "OK");
                                 } else {
                                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                                 }
@@ -220,7 +220,7 @@
         }
 
         function rejectPlace(id) {
-            showConfirmMessage("Từ chối sân này?",
+            showConfirmMessage("Từ chối địa điểm này?",
                 function (isConfirm) {
                     if (isConfirm) {
                         $.ajax({
@@ -230,7 +230,7 @@
                             success: function (data) {
                                 $("#account-table").reloadDataTable();
                                 if (data.Succeed) {
-                                    showMessage("Từ chối sân thành công!", "success", "OK");
+                                    showMessage("Từ chối địa điểm thành công!", "success", "OK");
                                 } else {
                                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                                 }
@@ -254,7 +254,7 @@
                             success: function (data) {
                                 $("#account-table").reloadDataTable();
                                 if (data.Succeed) {
-                                    showMessage("Chấp nhận sân thành công!", "success", "OK");
+                                    showMessage("Chấp nhận địa điểm thành công!", "success", "OK");
                                 } else {
                                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                                 }

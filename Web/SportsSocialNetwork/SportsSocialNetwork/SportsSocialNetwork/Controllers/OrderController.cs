@@ -165,7 +165,11 @@ namespace SportsSocialNetwork.Controllers
             //var blogPostList = _blogPostService.GetBlogPostbyStoreId();
             var _orderService = this.Service<IOrderService>();
             var userId = User.Identity.GetUserId();
-            var orderList = _orderService.GetActive(p => p.UserId == userId).OrderByDescending(p => p.CreateDate);
+            var orderList = _orderService.GetActive(p => p.UserId == userId).OrderByDescending(p => p.Id);
+            if(orderList != null)
+            {
+                _orderService.AutoCancelOrder(orderList.ToList());
+            }
             //IEnumerable<BlogPost> filteredListItems;
             IEnumerable<Order> filteredListItems;
             if (!string.IsNullOrEmpty(param.sSearch))
@@ -188,16 +192,16 @@ namespace SportsSocialNetwork.Controllers
             switch (sortColumnIndex)
             {
                 
-                case 0:
-                    filteredListItems = sortDirection == "asc"
-                        ? filteredListItems.OrderBy(o => o.OrderCode)
-                        : filteredListItems.OrderByDescending(o => o.OrderCode);
-                    break;
-                case 1:
-                    filteredListItems = sortDirection == "asc"
-                        ? filteredListItems.OrderBy(o => o.Field.Name)
-                        : filteredListItems.OrderByDescending(o => o.Field.Name);
-                    break;
+                //case 0:
+                //    filteredListItems = sortDirection == "asc"
+                //        ? filteredListItems.OrderBy(o => o.OrderCode)
+                //        : filteredListItems.OrderByDescending(o => o.OrderCode);
+                //    break;
+                //case 1:
+                //    filteredListItems = sortDirection == "asc"
+                //        ? filteredListItems.OrderBy(o => o.Field.Name)
+                //        : filteredListItems.OrderByDescending(o => o.Field.Name);
+                //    break;
                 case 2:
                     filteredListItems = sortDirection == "asc"
                         ? filteredListItems.OrderBy(o => o.CreateDate)
@@ -565,7 +569,8 @@ namespace SportsSocialNetwork.Controllers
 
             string subject = "[SSN] - Thông tin đặt sân";
             string body = "Hi <strong>" + user.FullName + "</strong>" +
-                ",<br/><br/>Bạn đã đặt sân: "+field.Name+"<br/> Thời gian: "+order.StartTime.ToString("HH:mm")+" - "+
+                ",<br/><br/>Bạn đã đặt sân: "+field.Name+"<br/> Tại địa điểm: "+field.Place.Name+
+                "<br/> Thời gian: "+order.StartTime.ToString("HH:mm")+" - "+
                 order.EndTime.ToString("HH:mm") +", ngày "+order.StartTime.ToString("dd/MM/yyyy")+
                 "<br/> Giá tiền : " + order.Price.ToString("n0") + " đồng" +
                 "<br/> <strong>Mã đặt sân của bạn : " + order.OrderCode + "</strong>"+
@@ -606,7 +611,8 @@ namespace SportsSocialNetwork.Controllers
                     string body = "Hi <strong>" + user.FullName + "</strong>" +
                         ",<br/><br/>Bạn đã thanh toán đơn đặt sân: "+ order.OrderCode +" thành công"+
                         "<br/><strong>Thông tin hóa đơn:</strong><ul> " +
-                        "<li> Tên sân: "+order.Field.Name + "</li>"+
+                        "<li> Tên sân: "+order.Field.Name + "</li>" + 
+                        "<li> Tại địa điểm: " + order.Field.Place.Name + "</li>" +
                         "<li> Thời gian: " + order.StartTime.ToString("HH:mm") + " - " +
                         order.EndTime.ToString("HH:mm") + ", ngày " + order.StartTime.ToString("dd/MM/yyyy") +"</li>"+
                         "<li> Giá tiền : " + order.Price.ToString("n0") + " đồng</li></ul>" +
@@ -687,7 +693,7 @@ namespace SportsSocialNetwork.Controllers
             ViewBag.PlaceOwnerNganLuong = placeOwner.NganLuongAccount;
             IEnumerable<SelectListItem> selectList = fieldList.Select(s => new SelectListItem
             {
-                Text = s.Name,
+                Text = s.Name + " - " + s.FieldType.Name + " (" +s.FieldType.Sport.Name + " )",
                 Value = s.Id.ToString()
             }).ToArray();
             ViewBag.FieldList = selectList;
@@ -701,7 +707,16 @@ namespace SportsSocialNetwork.Controllers
 
             result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
 
-            result.Avatar = noti.AspNetUser1.AvatarImage;
+            var _userService = this.Service<IAspNetUserService>();
+            AspNetUser us = _userService.FirstOrDefaultActive(u => u.Id.Equals(noti.FromUserId));
+            if (us != null)
+            {
+                result.Avatar = us.AvatarImage;
+            }
+            else
+            {
+                result.Avatar = "";
+            }
 
             return result;
 

@@ -221,8 +221,8 @@
                             <div class="row">
                                 <div class="form-group form-material floating">
                                     <select id="toGroup" name="toGroup" class="form-control input-lg">
-                                        @{ 
-                                            <option value="-1">Hãy chọn một nhóm để thách đấu</option>
+                                        @{
+                                            <option>&nbsp;</option>
                                             foreach (var item in suggestGroupChallenge)
                                             {
                                                 <option value="@item.Id">@item.Name</option>
@@ -241,7 +241,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                            <input type="submit" class="btn btn-success" value="Gửi" />
+                            <input type="submit" id="SRCSubmitBtn" class="btn btn-success" value="Gửi" />
                         </div>
                     </div>
                 </form>
@@ -310,6 +310,7 @@
                     </div>
                     <div class="form-group form-material floating">
                         <select name="GroupSport" id="GroupSport" class="form-control input-lg">
+                            <option>&nbsp;</option>
                             @{
                                 foreach (var item in sport)
                                 {
@@ -323,7 +324,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                    <input type="submit" class="btn btn-success" value="Tạo nhóm" />
+                    <input type="submit" id="CGSubmitBtn" class="btn btn-success" value="Tạo nhóm" />
                 </div>
             </div>
         </form>
@@ -628,7 +629,8 @@
                                                                     @*<a class="avatar avatar-lg" href="javascript:void(0)">
                                                                             <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
                                                                         </a>*@
-                                                                    <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                                    @*<img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />*@
+                                                                    <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@item.AspNetUser.AvatarImage')"></div>
                                                                 </div>
                                                                 <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
 
@@ -711,7 +713,7 @@
                                                                 @*<a class="avatar avatar-lg" href="javascript:void(0)">
                                                                         <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
                                                                     </a>*@
-                                                                <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                                <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@item.AspNetUser.AvatarImage')"></div>
                                                             </div>
                                                             <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
 
@@ -795,7 +797,7 @@
                                                                     @*<a class="avatar avatar-lg" href="javascript:void(0)">
                                                                             <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
                                                                         </a>*@
-                                                                    <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                                    <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@item.AspNetUser.AvatarImage')"></div>
                                                                 </div>
                                                                 <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
 
@@ -895,6 +897,89 @@
                     <!--END Post area-->
                 </div>
                         <div class="tab-pane" id="exampleTabsTwo" role="tabpanel" style="background-color:white;">
+                            <div class="row" style="padding: 20px 20px">
+                                @{
+                                    //show admin
+                                    <h3>Nhóm trưởng</h3>
+                                    foreach (var item in GroupMember)
+                                    {
+                                        if (item.Admin)
+                                        {
+                                            <div class="col-sm-6" style="margin-bottom:20px; padding: 10px 10px 0 10px;">
+                                                <div style="border: 1px solid #e9ebee; overflow:hidden;">
+                                                    @{
+                                                        if (Model.IsAdmin && item.AspNetUser.Id != User.Identity.GetUserId())
+                                                        {
+                                                            <div class="btn-group" style="position:absolute; right:10px; top:10px;">
+                                                                <button type="button" class="btn btn-default dropdown-toggle btn-outline" id="@item.AspNetUser.Id"
+                                                                        data-toggle="dropdown" aria-expanded="false">
+                                                                    <span class="caret"></span>
+                                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="@item.AspNetUser.Id" role="menu">
+                                                                    @{
+                                                                        if (item.Admin)
+                                                                        {
+                                                                            <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="removeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Bỏ quyền quản trị</a></li>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <li role="presentation"><a href="javascript:void(0)" role="menuitem" onclick="makeAsAdmin('@item.AspNetUser.Id')"><i class="icon wb-user-circle" aria-hidden="true"></i> Chọn làm quản trị viên</a></li>
+                                                                        }
+
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                                        }
+                                                    }
+                                                    <div style="float:left; display:block; width:150px; height:150px;">
+                                                        @*<a class="avatar avatar-lg" href="javascript:void(0)">
+                                        <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
+                                    </a>*@
+                                                        <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@item.AspNetUser.AvatarImage')"></div>
+                                                    </div>
+                                                    <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
+
+                                                        <a href="@item.AspNetUser.Id"><h3>@item.AspNetUser.FullName</h3></a>
+                                                        @{
+                                                            string hobbies = "";
+                                                            for (int i = 0; i < item.AspNetUser.Hobbies.Count(); i++)
+                                                            {
+                                                                if (i == item.AspNetUser.Hobbies.Count() - 1)
+                                                                {
+                                                                    hobbies += item.AspNetUser.Hobbies[i].Sport.Name;
+                                                                }
+                                                                else
+                                                                {
+                                                                    hobbies += item.AspNetUser.Hobbies[i].Sport.Name + ", ";
+                                                                }
+
+                                                            }
+                                                        }
+                                                        <p>@hobbies</p>
+                                                        @{
+                                                            if (item.AspNetUser.Id != User.Identity.GetUserId())
+                                                            {
+                                                                
+                                                                if (item.isFollowed != true)
+                                                                {
+                                                                    <button type="button" class="btn btn-default" onclick="followUnfollow('@item.AspNetUser.Id')"><i class="fa fa-user-plus" aria-hidden="true"></i> Theo dõi</button><br />
+                                                                }
+                                                                else
+                                                                {
+                                                                    <button type="button" class="btn btn-default" onclick="followUnfollow('@item.AspNetUser.Id')"><i class="fa fa-user-times" aria-hidden="true"></i> Bỏ theo dõi</button><br />
+                                                                }
+                                                            }
+
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                                }
+                                                            }
+                                }
+                            </div>
+
                             @{
                                 if (PendingMembers != null && PendingMembers.Count > 0 && Model.IsAdmin)
                                 {
@@ -911,7 +996,7 @@
                                                                 @*<a class="avatar avatar-lg" href="javascript:void(0)">
                                                                         <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
                                                                     </a>*@
-                                                                <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                                <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@item.AspNetUser.AvatarImage')"></div>
                                                             </div>
                                                             <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
                                                              
@@ -964,7 +1049,7 @@
                                                             @*<a class="avatar avatar-lg" href="javascript:void(0)">
                                                                 <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
                                                             </a>*@
-                                                            <img style="max-width:100%;" src="@item.AspNetUser.AvatarImage" />
+                                                            <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@item.AspNetUser.AvatarImage')"></div>
                                                         </div>
                                                         <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.AspNetUser.Id">
                                                             @{
@@ -1095,7 +1180,8 @@
                                                             @*<a class="avatar avatar-lg" href="javascript:void(0)">
                                                                 <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
                                                             </a>*@
-                                                            <img style="max-width:100%;" src="@avatar" />
+                                                            @*<img style="max-width:100%;" src="@avatar" />*@
+                                                            <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@avatar')"></div>
                                                         </div>
                                                         <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.Id">
 
@@ -1170,7 +1256,8 @@
                                                             @*<a class="avatar avatar-lg" href="javascript:void(0)">
                                                                     <img class="groupAvatar" src="@item.AspNetUser.AvatarImage" alt="...">
                                                                 </a>*@
-                                                            <img style="max-width:100%;" src="@item.Group1.Avatar" />
+                                                            @*<img style="max-width:100%;" src="@item.Group1.Avatar" />*@
+                                                            <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@item.Group1.Avatar')"></div>
                                                         </div>
                                                         <div style="float:left; display:inline-block; margin-left:15px;" id="following_@item.Group1.Id">
                                                             
@@ -1232,7 +1319,8 @@
                                                         <div class="media">
                                                             <div class="media-left">
                                                                 <a class="avatar" href="@Url.Action("Index", "Group", new RouteValueDictionary(new { id = id }))">
-                                                                    <img class="img-responsive" src="@avatar" alt="...">
+                                                                    @*<img class="img-responsive" src="@avatar" alt="...">*@
+                                                                    <div style="width:100%;height:100%;background-size:cover;background-repeat:no-repeat;margin-bottom:10px;background-position:center center;background-image:url('@avatar')"></div>
                                                                 </a>
                                                             </div>
                                                             <div class="media-body vertical-align">
@@ -1536,7 +1624,11 @@
             }
         });
 
-
+        (function (document, window, $) {
+            $(document).ready(function ($) {
+                Site.run();
+            });
+        })(document, window, jQuery);
 
         var array = @Html.Raw(Json.Encode(
           ((IEnumerable<SelectListItem>)sport).Select(m => new
@@ -1555,7 +1647,7 @@
             data: array
         });
 
-        
+
 
         var frdList = @Html.Raw(Json.Encode(
         ((IEnumerable<SelectListItem>)friends).Select(m => new
@@ -1615,7 +1707,7 @@
             })
         };
 
-        
+
 
         function leaveGroup(groupId) {
             var isOnlyOneAdmin = false;
@@ -1923,7 +2015,7 @@
         if($("#selectImage").length) {
             document.getElementById('selectImage').addEventListener('change', handleFileSelect, false);
         }
-        
+
 
         $(document).on("submit", "#post-formEdit", function (e) {
             e.preventDefault();
@@ -1968,6 +2060,7 @@
                     if(data.Succeed) {
                         $('#addFrd').val("");
                         showMessage("Lời mời đã được gửi tới bạn của bạn", "success", "OK");
+                        location.href = location.href;
                     } else {
                         showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                     }
@@ -2103,9 +2196,70 @@
         function showCreateGroupModal()
         {
             $("#createGroupModal").modal('show');
-        }
+        };
 
-        $("#createGroup-form").submit(function(e) {
+
+        (function () {
+            $('#createGroup-form').formValidation({
+                framework: "bootstrap",
+                button: {
+                    selector: '#CGSubmitBtn',
+                    disabled: 'disabled'
+                },
+                icon: null,
+                fields: {
+                    GroupName: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Vui lòng nhập tên nhóm'
+                            }
+                        }
+                    },
+                    GroupDescription: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Vui lòng nhập mô tả nhóm'
+                            }
+                        }
+                    },
+                    GroupSport: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Vui lòng chọn môn thể thao'
+                            },
+                        }
+                    }
+
+                }
+            }).on('success.form.fv', function (e) {
+                e.preventDefault();
+                var formData = new FormData(document.getElementById('createGroup-form'));
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CreateGroup", "Group")',
+                    async: false,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            location.href = '/Group/Index/' + result.AdditionalData.Id;
+                        } else {
+                            //showErrors(result.Errors);
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+            });
+        })();
+
+
+
+        @*$("#createGroup-form").submit(function(e) {
             e.preventDefault();
             var formData = new FormData(document.getElementById('createGroup-form'));
             $.ajax({
@@ -2128,7 +2282,7 @@
                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                 },
             });
-        });
+        });*@
 
         //follow unfollow
         function followUnfollow(id){
@@ -2262,7 +2416,60 @@
             $("#challengeModal").modal('show');
         };
 
-        $("#challenge-form").submit(function(e) {
+        (function () {
+            $('#challenge-form').formValidation({
+                framework: "bootstrap",
+                button: {
+                    selector: '#SRCSubmitBtn',
+                    disabled: 'disabled'
+                },
+                icon: null,
+                fields: {
+                    toGroup: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Vui lòng nhập tên nhóm'
+                            }
+                        }
+                    },
+                    description: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Vui lòng nhập mô tả nhóm'
+                            }
+                        }
+                    }
+
+                }
+            }).on('success.form.fv', function (e) {
+                e.preventDefault();
+                var formData = new FormData(document.getElementById('challenge-form'));
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("SendChallengeRequest", "Group")',
+                    async: false,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            showMessage("Gửi lời mời thách đấu thành công!", "success", "OK");
+                            $("#challengeModal").modal('toggle');
+                            location.href = location.href;
+                        } else {
+                            //showErrors(result.Errors);
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+            });
+        })();
+
+        @*$("#challenge-form").submit(function(e) {
             e.preventDefault();
             var formData = new FormData(document.getElementById('challenge-form'));
             $.ajax({
@@ -2287,7 +2494,7 @@
                     showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                 },
             });
-        });
+        });*@
 
         //accept challenge request
         function acceptChalenge(id) {
@@ -2322,7 +2529,7 @@
         //deny challenge request
         function denyChallenge(id) {
 
-            showConfirmDeleteItem("Bạn có chắc chắn muốn từ chối lời đề nghị này không?",
+            showConfirmMessage("Bạn có chắc chắn muốn từ chối lời đề nghị này không?",
             function (isConfirm) {
                 if (isConfirm) {
                     var status = parseInt('@((int)ChallengeStatus.NotAvailable)');

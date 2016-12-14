@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -35,6 +36,7 @@ import com.capstone.sportssocialnetwork.service.RestService;
 import com.capstone.sportssocialnetwork.utils.DataUtils;
 import com.capstone.sportssocialnetwork.utils.SharePreferentName;
 import com.capstone.sportssocialnetwork.utils.Utilities;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,6 +62,8 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
     private String userId;
     private MultipartBody.Part body;
     private String groupId;
+    private String fullName;
+    private String image;
 
 
     @Override
@@ -106,7 +110,19 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         btnCamera.setOnClickListener(this);
         service = new RestService();
         userId = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_ID,"");
+        fullName = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_FULLNAME,"");
+        image = DataUtils.getINSTANCE(this).getPreferences().getString(SharePreferentName.SHARE_USER_AVATAR,"");
         groupId = getIntent().getStringExtra("groupId");
+        loadProfile();
+    }
+
+    private void loadProfile() {
+        txtName.setText(fullName);
+        Picasso.with(this).load(Uri.parse(DataUtils.URL + image))
+                .placeholder(R.drawable.img_default_avatar)
+                .error(R.drawable.img_default_avatar_error)
+                .fit()
+                .into(ivAvatar);
     }
 
 

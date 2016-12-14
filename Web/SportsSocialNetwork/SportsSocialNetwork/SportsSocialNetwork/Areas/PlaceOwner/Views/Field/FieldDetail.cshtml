@@ -82,26 +82,26 @@
                                     foreach (var item in timeBlocks)
                                     {
                                         <div class="row">
-                                            <div class="col-xs-3" style="padding:0 0 0 15px;">
+                                            <div class="col-xs-4" style="padding:0 0 0 15px;">
                                                 <div class="input-group">
-                                                    <span class="input-group-addon">Từ</span>
+                                                    <span style="padding:6px 5px;" class="input-group-addon">Từ</span>
                                                     <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" id="sstTime" name="" disabled="disabled" value="@item.StartTime.ToString(@"hh\:mm")" />
                                                 </div>
                                             </div>
                                             <div class="col-xs-3" style="padding:0;">
                                                 <div class="input-group">
-                                                    <span class="input-group-addon">Đến</span>
+                                                    <span style="padding:6px 0;" class="input-group-addon">Đến</span>
                                                     <input type="text" class="form-control input-lg" data-plugin="clockpicker" data-autoclose="true" id="senTime" disabled="disabled" value="@item.EndTime.ToString(@"hh\:mm")" />
                                                 </div>
                                             </div>
-                                            <div class="col-xs-3" style="padding:0;">
+                                            <div class="col-xs-4" style="padding:0;">
                                                 <div class="input-group">
-                                                    <span class="input-group-addon">Giá</span>
-                                                    <input type="text" class="form-control input-lg" id="stsPrice" name="Price" disabled="disabled" value="@item.Price" />
+                                                    <span style="padding:6px 0;" class="input-group-addon">Giá</span>
+                                                    <input type="text" class="form-control input-lg" id="stsPrice" name="Price" disabled="disabled" value="@item.Price.ToString("N0")" />
                                                 </div>
                                             </div>
                                             <input type="hidden" value="@item.Id" />
-                                            <div class="col-xs-3">
+                                            <div class="col-xs-1" style="padding:0;">
                                                 <button type="button" class="btn btn-pure btn-primary icon wb-pencil editbtn" onclick="" style="display: none;"></button>
                                                 <button type="button" class="btn btn-pure btn-danger icon wb-close removebtn" onclick=""></button>
                                             </div>
@@ -230,10 +230,13 @@
 
 
 @section Scripts{
-
+    <script src="~/Content/js/jquery.inputmask.bundle.js"></script>
     <script>
         var searchValue = "";
-
+        $("#tsPrice").on('keyup', function () {
+            var valueR = $('#tsPrice').val();
+            $('#tsPrice').val(valueR.replace("-", ""));
+        });
 
         (function (document, window, $) {
             'use strict';
@@ -241,7 +244,10 @@
             var Site = window.Site;
             $(document).ready(function () {
                 Site.run();
-
+                $("#tsPrice").change(function (event) {
+                    var valueR = $('#tsPrice').val();
+                    $('#tsPrice').val(valueR.replace("-", ""));
+                });
             });
         })(document, window, jQuery);
 
@@ -392,8 +398,8 @@
             console.log("11");
             var startTime = $("#stTime").val();
             var endTime = $("#enTime").val();
-            var price = $("#tsPrice").val();
-            if (price == null || price == "")
+            var price = $("#tsPrice").val().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+            if (price == null || price == "" || price == "- ")
             {
                 var noti = "<p class='alert alert-danger'>Giá tiền không được trống</p>";
                 $("#notiTB").empty();
@@ -420,7 +426,7 @@
                                         + "</div>"
                                         + "<div class='col-xs-3' style='padding:0;'>"
                                             + "<div class='input-group'>"
-                                                + "<span class='input-group-addon'>Đến</span>"
+                                                + "<span style='padding:6px 0;' class='input-group-addon'>Đến</span>"
                                                 + "<input type='text' class='timepicker form-control input-lg' data-plugin='clockpicker' data-autoclose='true' id='senTime' disabled='disabled' value='" + endTime + "'/>"
                                             + "</div>"
                                         + "</div>"
@@ -430,7 +436,7 @@
                                                 + "<input type='text' class='form-control input-lg' id='stsPrice' disabled='disabled' value='" + price + "'/>"
                                             + "</div>"
                                         + "</div>"
-                                        + "<div class='col-xs-1'>"
+                                        + "<div class='col-xs-1' style='padding:0;'>"
                                             + "<button type='button' class='btn btn-pure btn-primary icon wb-pencil editbtn' onclick='' style='display: none;'></button>"
                                             + "<button type='button' class='btn btn-pure btn-danger icon wb-close removebtn' onclick=''></button>"
                                         + "</div>"
@@ -580,17 +586,17 @@
                             }
                         }
                     },
-                    oPrice: {
-                        validators: {
-                            integer: {
-                                message: 'Giá trị nhập phải là số'
-                            },
-                            regexp: {
-                                regexp: /^[1-9][0-9]*$/,
-                                message: "Giá tiền không phù hợp"
-                            }
-                        }
-                    },
+                    //oPrice: {
+                    //    validators: {
+                    //        integer: {
+                    //            message: 'Giá trị nhập phải là số'
+                    //        },
+                    //        regexp: {
+                    //            regexp: /^[1-9][0-9]*$/,
+                    //            message: "Giá tiền không phù hợp"
+                    //        }
+                    //    }
+                    //},
                     Description: {
                         validators: {
                             notEmpty: {
@@ -691,7 +697,15 @@
             });
         })();
 
-
+        $('#tsPrice').inputmask("numeric", {
+            radixPoint: ".",
+            groupSeparator: ",",
+            digits: 2,
+            autoGroup: true,
+            prefix: '', //No Space, this will truncate the first character
+            rightAlign: false,
+            //oncleared: function () { self.Value(''); }
+        });
 
 </script>
 

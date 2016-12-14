@@ -12,5 +12,6 @@ namespace SportsSocialNetwork.Models.ViewModels
         public string FieldName { get; set; }
 
         public string Sport { get; set; }
+        public string FieldType { get; set; }
     }
 }

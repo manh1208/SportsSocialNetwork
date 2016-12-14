@@ -94,7 +94,7 @@
     </style>
     <style>
         body {
-            background-color: #f5f5f5;
+            background-color: #e2dad6;
             color: #000000;
         }
 
@@ -327,7 +327,7 @@
     </nav>
 
     <!-- Page -->
-    <div style="padding-left:3%; padding-right:3%; background-color:whitesmoke; min-height:100%; font-size:1.2em">
+    <div style="padding-left:3%; padding-right:3%; background-color:#e2dad6; min-height:100%; font-size:1.2em">
         <div class="page-content padding-30 container-fluid">
             @RenderBody()
         </div>
@@ -695,8 +695,8 @@
                 image = data.AspNetUser1.AvatarImage;
                 url = "/SSN/PostDetail?postId=" + data.PostId;
             } else if (data.Type == parseInt('@((int)NotificationType.Order)')) {
-                image = "/Content/images/flag-xxl.png";
-                url = "/Order";
+                image = data.AspNetUser1.AvatarImage;
+                url = "/PlaceOwner/Order";
             } else if (data.Type == parseInt('@((int)NotificationType.Invitation)')) {
                 image = data.AspNetUser1.AvatarImage;
                 url = "/Invitation";
@@ -712,6 +712,21 @@
             } else if (data.Type == parseInt('@((int)NotificationType.GroupPost)')) {
                 image = data.AspNetUser1.AvatarImage;
                 url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.ApprovePlaceOwner)')) {
+                image = "/Content/images/flag-xxl.png";
+                url = "/PlaceOwner/Place";
+            } else if (data.Type == parseInt('@((int)NotificationType.UnApprovePlaceOwner)')) {
+                image = "/Content/images/flag-xxl.png";
+                url = "javascript:void(0)";
+            } else if (data.Type == parseInt('@((int)NotificationType.ShareFrdWall)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Profile/Index?UserId=" + data.AspNetUser.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.ShareGroup)')) {
+                image = data.AspNetUser1.AvatarImage;
+                url = "/Group/Index/" + data.Group.Id;
+            } else if (data.Type == parseInt('@((int)NotificationType.OrderAction)')) {
+                image = "/Content/images/flag-xxl.png";
+                url = "/Order";
             } else {
 
             }

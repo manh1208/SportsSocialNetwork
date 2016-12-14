@@ -102,23 +102,23 @@
 <div class="col-md-3">
     <div class="panel" style="text-align:center">
         <header class="panel-heading" style="background-color:#ff6a00; border-radius:0px;margin-bottom:20px">
-            <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important">Tìm kiếm địa điểm</h3>
+            <h3 class="panel-title" style="font-family:sans-serif;color:#fff!important;padding:20px 0px">Tìm kiếm địa điểm</h3>
         </header>
         <div class="panel-body">
             <div class="form-group">
-                @Html.DropDownListFor(m => m.SportId, selectList, "--Chọn loại thể thao--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "sport" })
+                @Html.DropDownListFor(m => m.SportId, selectList, "--Loại thể thao--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "sport" })
 
             </div>
             <div class="form-group">
-                @Html.DropDownListFor(m => m.Province, provinceList, "--Chọn tỉnh/thành phố--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "province" })
+                @Html.DropDownListFor(m => m.Province, provinceList, "--Tỉnh/Thành phố--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "province" })
             </div>
             <div class="form-group">
-                @Html.DropDownListFor(m => m.District, districtList, "--Chọn quận/huyện--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "district" })
+                @Html.DropDownListFor(m => m.District, districtList, "--Quận/Huyện--", new { @class = "bs-select-hidden form-control input-sm droplist", @id = "district" })
             </div>
-            <p style="color:gray;font-size:13px">——————hoặc——————</p>
+            <p style="color:gray;font-size:13px;text-align:center">———hoặc———</p>
             <div class="form-group">
-                <button type="button" class="btn btn-dark" id="findAround" style="width:90%">
-                    <i class="fa fa-location-arrow" aria-hidden="true"></i> Tìm xung quanh bạn</button>
+                <button type="button" class="btn btn-dark" id="findAround" style="width:90%;font-size:13px">
+                    @*<i class="fa fa-location-arrow" aria-hidden="true"></i>*@Tìm xung quanh</button>
                 <input type="hidden" id="lat" />
                 <input type="hidden" id="lng" />
             </div>
@@ -166,7 +166,7 @@
         })
 
         $("#findAround").click(function () {
-            getCurrentLocation();
+            checkLocation();
         });
 
     function RefreshTable() {
@@ -238,88 +238,93 @@
         RefreshTable();
     });
 
-    function getCurrentLocation() {
-        jQuery.post("https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBeCBfOI5D627T8ZN6GMvHIJrX4G0eMz3E", function (result) {
-            position = {
-                lat: result.location.lat,
-                lng: result.location.lng
-            };
-            var lat = result.location.lat;
-            var lng = result.location.lng;
-            $("#lat").val(lat);
-            $("#lng").val(lng);
-            InitDatatable();
-            RefreshTable();
-        })
-      .fail(function (err) {
-          //alert("API Geolocation error! \n\n" + err);
-      });
-    };
+    //function getCurrentLocation() {
+    //    jQuery.post("https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBeCBfOI5D627T8ZN6GMvHIJrX4G0eMz3E", function (result) {
+    //        position = {
+    //            lat: result.location.lat,
+    //            lng: result.location.lng
+    //        };
+    //        var lat = result.location.lat;
+    //        var lng = result.location.lng;
+    //        $("#lat").val(lat);
+    //        $("#lng").val(lng);
+    //        InitDatatable();
+    //        RefreshTable();
+    //    })
+    //  .fail(function (err) {
+    //      //alert("API Geolocation error! \n\n" + err);
+    //  });
+    //};
 
-    //function checkLocation() {
-    //    if (navigator.geolocation) {
-    //        navigator.geolocation.getCurrentPosition(showPosition, showError);
-    //    } else {
-    //        sweetAlert("Oops...", "Vị trí không hỗ trợ trên trình duyệt này.", "error")
+    function checkLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            sweetAlert("Oops...", "Vị trí không hỗ trợ trên trình duyệt này.", "error")
 
-    //    }
-    //}
+        }
+    }
 
-    //function showError(error) {
-    //    switch (error.code) {
-    //        case error.PERMISSION_DENIED:
-    //            swal({
-    //                title: "Oops...",
-    //                text: "Bạn chưa mở GPS hả!",
-    //                type: "error",
-    //                confirmButtonText: "Ờ"
-    //            }, function () {
-    //                location.reload();
-    //            });
+    function showError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                //swal({
+                //    title: "Oops...",
+                //    text: "Bạn chưa mở GPS hả!",
+                //    type: "error",
+                //    confirmButtonText: "Ờ"
+                //}, function () {
+                //    location.reload();
+                //});
+                var lat = 10.853016799999999;
+                var lng = 106.6295761;
+                $("#lat").val(lat);
+                $("#lng").val(lng);
+                InitDatatable();
+                RefreshTable();
+                break;
+            case error.POSITION_UNAVAILABLE:
+                swal({
+                    title: "Oops...",
+                    text: "Thông tin vị trí không chính xác!",
+                    type: "error",
+                    confirmButtonText: "Ờ"
+                }, function () {
+                    location.reload();
+                });
 
-    //            break;
-    //        case error.POSITION_UNAVAILABLE:
-    //            swal({
-    //                title: "Oops...",
-    //                text: "Thông tin vị trí không chính xác!",
-    //                type: "error",
-    //                confirmButtonText: "Ờ"
-    //            }, function () {
-    //                location.reload();
-    //            });
+                break;
+            case error.TIMEOUT:
+                swal({
+                    title: "Oops...",
+                    text: "Vượt quá thời gian. Xin thử tải lại trang!",
+                    type: "error",
+                    confirmButtonText: "Ờ"
+                }, function () {
+                    location.reload();
+                });
 
-    //            break;
-    //        case error.TIMEOUT:
-    //            swal({
-    //                title: "Oops...",
-    //                text: "Vượt quá thời gian. Xin thử tải lại trang!",
-    //                type: "error",
-    //                confirmButtonText: "Ờ"
-    //            }, function () {
-    //                location.reload();
-    //            });
-
-    //            break;
-    //        case error.UNKNOWN_ERROR:
-    //            swal({
-    //                title: "Oops...",
-    //                text: "Lỗi là gì nhỉ. Xin liên hệ BTC!",
-    //                type: "error",
-    //                confirmButtonText: "Ờ"
-    //            }, function () {
-    //                location.reload();
-    //            });
-    //            break;
-    //    }
-    //}
-    //function showPosition(position) {
-    //    var lat = position.coords.latitude;
-    //    var lng = position.coords.longitude;
-    //    $("#lat").val(lat);
-    //    $("#lng").val(lng);
-    //    InitDatatable();
-    //    RefreshTable();
-    //}
+                break;
+            case error.UNKNOWN_ERROR:
+                swal({
+                    title: "Oops...",
+                    text: "Lỗi là gì nhỉ. Xin liên hệ BTC!",
+                    type: "error",
+                    confirmButtonText: "Ờ"
+                }, function () {
+                    location.reload();
+                });
+                break;
+        }
+    }
+    function showPosition(position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        $("#lat").val(lat);
+        $("#lng").val(lng);
+        InitDatatable();
+        RefreshTable();
+    }
 
 
     </script>

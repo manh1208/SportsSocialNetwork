@@ -39,75 +39,84 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
             Order order = _orderService.ChangeOrderStatus(id, status);
             if(order != null)
             {
-                //save noti
-                Notification noti = new Notification();
-                noti.UserId = order.UserId;
-                noti.FromUserId = User.Identity.GetUserId();
-                noti.Title = Utils.GetEnumDescription(NotificationType.Order);
-                noti.Type = (int)NotificationType.Order;
-                noti.CreateDate = DateTime.Now;
-                //send mail
-                string receiverEmail = _userService.FirstOrDefaultActive(u => u.Id.Equals(order.UserId)).Email;
-                string subject = "";
-                string body = "";
-                if (status == (int)OrderStatus.Approved)
+                if (status == (int)OrderStatus.CheckedIn)
                 {
-                    subject = "SSN - Đơn đặt sân được chấp nhận";
-                    body = "<p>Đơn đặt sân <strong>" + order.Field.Name + "</strong> từ <strong>" + order.StartTime.ToString() + "</trong> đến <strong>" + order.EndTime.ToString() + "</strong> đã được chấp nhận</p>"
-                        + "<p>Quý khách vui lòng đến sân <strong>30 phút</strong> trước giờ đặt để xác nhận.</p>"
-                        + "<p>Chúc quý khách có được những giây phút thư giãn vui vẻ!</p>";
-
-                    noti.Message = "Đơn đặt sân " + order.Field.Name + "(" + order.StartTime.ToString() + " - " + order.EndTime.ToString() + ") đã được chấp nhận";
-
+                    return "success";
                 }
-                if (status == (int)OrderStatus.Unapproved)
+                else
                 {
-                    subject = "SSN - Đơn đặt sân đã bị từ chối";
-                    body = "<p>Đơn đặt sân <strong>" + order.Field.Name + "</strong> từ <strong>" + order.StartTime.ToString() + "</trong> đến <strong>" + order.EndTime.ToString() + "</strong> đã bị chủ sân từ chối</p>"
-                        + "<p>Lí do: " + reason + "</p>"
-                        + "<p>Chúng tôi xin lỗi vì sự bất tiện này.</p>"
-                        + "<p>Hẹn gặp lại quý khách lần sau!</p>";
+                    //save noti
+                    Notification noti = new Notification();
+                    noti.UserId = order.UserId;
+                    noti.FromUserId = User.Identity.GetUserId();
+                    noti.Title = Utils.GetEnumDescription(NotificationType.Order);
+                    noti.Type = (int)NotificationType.OrderAction;
+                    noti.CreateDate = DateTime.Now;
+                    //send mail
+                    string receiverEmail = _userService.FirstOrDefaultActive(u => u.Id.Equals(order.UserId)).Email;
+                    string subject = "";
+                    string body = "";
+                    if (status == (int)OrderStatus.Approved)
+                    {
+                        subject = "SSN - Đơn đặt sân được chấp nhận";
+                        body = "<p>Đơn đặt sân <strong>" + order.Field.Name + "</strong> từ <strong>" + order.StartTime.ToString() + "</trong> đến <strong>" + order.EndTime.ToString() + "</strong> đã được chấp nhận</p>"
+                            + "<p>Quý khách vui lòng đến sân <strong>30 phút</strong> trước giờ đặt để xác nhận.</p>"
+                            + "<p>Chúc quý khách có được những giây phút thư giãn vui vẻ!</p>";
 
-                    noti.Message = "Đơn đặt sân " + order.Field.Name + "(" + order.StartTime.ToString() + " - " + order.EndTime.ToString() + ") đã bị từ chối";
+                        noti.Message = "Đơn đặt sân " + order.Field.Name + "(" + order.StartTime.ToString() + " - " + order.EndTime.ToString() + ") đã được chấp nhận";
+
+                    }
+                    if (status == (int)OrderStatus.Unapproved)
+                    {
+                        subject = "SSN - Đơn đặt sân đã bị từ chối";
+                        body = "<p>Đơn đặt sân <strong>" + order.Field.Name + "</strong> từ <strong>" + order.StartTime.ToString() + "</trong> đến <strong>" + order.EndTime.ToString() + "</strong> đã bị chủ sân từ chối</p>"
+                            + "<p>Lí do: " + reason + "</p>"
+                            + "<p>Chúng tôi xin lỗi vì sự bất tiện này.</p>"
+                            + "<p>Hẹn gặp lại quý khách lần sau!</p>";
+
+                        noti.Message = "Đơn đặt sân " + order.Field.Name + "(" + order.StartTime.ToString() + " - " + order.EndTime.ToString() + ") đã bị từ chối";
+                    }
+                    if (status == (int)OrderStatus.Cancel)
+                    {
+                        subject = "SSN - Đơn đặt sân đã bị hủy";
+                        body = "<p>Đơn đặt sân <strong>" + order.Field.Name + "</strong> từ <strong>" + order.StartTime.ToString() + "</trong> đến <strong>" + order.EndTime.ToString() + "</strong> đã bị chủ sân hủy</p>"
+                            + "<p>Lí do: " + reason + "</p>"
+                            + "<p>Chúng tôi xin lỗi vì sự bất tiện này.</p>"
+                            + "<p>Hẹn gặp lại quý khách lần sau!</p>";
+
+                        noti.Message = "Đơn đặt sân " + order.Field.Name + "(" + order.StartTime.ToString() + " - " + order.EndTime.ToString() + ") đã bị hủy";
+                    }
+
+                    EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { receiverEmail, "itspace.quy@gmail.com" }, null, null, subject, body, true);
+                    _notificationService.Create(noti);
+                    _notificationService.Save();
+
+
+                    //Fire base noti
+                    List<string> registrationIds = GetToken(noti.UserId);
+
+                    //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
+
+                    NotificationModel Amodel = Mapper.Map<NotificationModel>(PrepareNotificationCustomViewModel(noti));
+
+                    if (registrationIds != null && registrationIds.Count != 0)
+                    {
+                        Android.Notify(registrationIds, null, Amodel);
+                    }
+
+                    //////////////////////////////////////////////
+                    //signalR noti
+                    NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
+
+                    // Get the context for the Pusher hub
+                    IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
+
+                    // Notify clients in the group
+                    hubContext.Clients.User(notiModel.UserId).send(notiModel);
+
+                    return "success";
                 }
-                if (status == (int)OrderStatus.Cancel)
-                {
-                    subject = "SSN - Đơn đặt sân đã bị hủy";
-                    body = "<p>Đơn đặt sân <strong>" + order.Field.Name + "</strong> từ <strong>" + order.StartTime.ToString() + "</trong> đến <strong>" + order.EndTime.ToString() + "</strong> đã bị chủ sân hủy</p>"
-                        + "<p>Lí do: " + reason + "</p>"
-                        + "<p>Chúng tôi xin lỗi vì sự bất tiện này.</p>"
-                        + "<p>Hẹn gặp lại quý khách lần sau!</p>";
-
-                    noti.Message = "Đơn đặt sân " + order.Field.Name + "(" + order.StartTime.ToString() + " - " + order.EndTime.ToString() + ") đã bị hủy";
-                }
-                EmailSender.Send(Setting.CREDENTIAL_EMAIL, new string[] { receiverEmail, "itspace.quy@gmail.com" }, null, null, subject, body, true);
-                _notificationService.Create(noti);
-                _notificationService.Save();
-
-
-                //Fire base noti
-                List<string> registrationIds = GetToken(noti.UserId);
-
-                //registrationIds.Add("dgizAK4sGBs:APA91bGtyQTwOiAgNHE_mIYCZhP0pIqLCUvDzuf29otcT214jdtN2e9D6iUPg3cbYvljKbbRJj5z7uaTLEn1WeUam3cnFqzU1E74AAZ7V82JUlvUbS77mM42xHZJ5DifojXEv3JPNEXQ");
-
-                NotificationModel Amodel = Mapper.Map<NotificationModel>(PrepareNotificationCustomViewModel(noti));
-
-                if (registrationIds != null && registrationIds.Count != 0)
-                {
-                    Android.Notify(registrationIds, null, Amodel);
-                }
-
-                //////////////////////////////////////////////
-                //signalR noti
-                NotificationFullInfoViewModel notiModel = _notificationService.PrepareNoti(Mapper.Map<NotificationFullInfoViewModel>(noti));
-
-                // Get the context for the Pusher hub
-                IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<RealTimeHub>();
-
-                // Notify clients in the group
-                hubContext.Clients.User(notiModel.UserId).send(notiModel);
-
-                return "success";
+                
             }
             else
             {
@@ -158,6 +167,77 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
                 result.Succeed = false;
             }
 
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult CheckinOrder(string orderCode)
+        {
+            var result = new AjaxOperationResult();
+            if (orderCode != null)
+            {
+                var _orderService = this.Service<IOrderService>();
+                Order order = _orderService.FirstOrDefaultActive(o => o.OrderCode.Equals(orderCode));
+                if (order != null)
+                {
+                    if (_orderService.ChangeOrderStatus(order.Id, (int)OrderStatus.CheckedIn) != null)
+                    {
+                        result.Succeed = true;
+                    }
+                    else
+                    {
+                        result.Succeed = false;
+                        result.AddError("Update", "Đã có lỗi xảy ra");
+                    }
+                }
+                else
+                {
+                    result.Succeed = false;
+                    result.AddError("Update", "Không tìm thấy đơn đặt sân");
+                }
+            }
+            else
+            {
+                result.Succeed = false;
+                result.AddError("Update", "Đã có lỗi trong lúc truyền dữ liệu");
+            }
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult ConfirmPaid(int id)
+        {
+            var result = new AjaxOperationResult();
+            if (id != 0)
+            {
+                var _orderService = this.Service<IOrderService>();
+                Order order = _orderService.FirstOrDefaultActive(o => o.Id == id);
+                if (order != null)
+                {
+                    if (order.PaidType != (int)OrderPaidType.PaidByCash || order.PaidType != (int)OrderPaidType.PaidOnline)
+                    {
+                        order.PaidType = order.PaidType == (int)OrderPaidType.ChosePayByCash ? (int)OrderPaidType.PaidByCash : (int)OrderPaidType.PaidOnline;
+                        _orderService.Update(order);
+                        _orderService.Save();
+                        result.Succeed = true;
+                    }
+                    else
+                    {
+                        result.Succeed = false;
+                        result.AddError("Update", "Thông tin đơn đặt sân không phù hợp");
+                    }
+                }
+                else
+                {
+                    result.Succeed = false;
+                    result.AddError("Update", "Không tìm thấy đơn đặt sân");
+                }
+            }
+            else
+            {
+                result.Succeed = false;
+                result.AddError("Update", "Đã có lỗi trong lúc truyền dữ liệu");
+            }
             return Json(result);
         }
 
@@ -279,7 +359,17 @@ namespace SportsSocialNetwork.Areas.PlaceOwner.Controllers
 
             result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
 
-            result.Avatar = noti.AspNetUser1.AvatarImage;
+            var _userService = this.Service<IAspNetUserService>();
+            AspNetUser us = _userService.FirstOrDefaultActive(u => u.Id.Equals(noti.FromUserId));
+            if(us != null)
+            {
+                result.Avatar = us.AvatarImage;
+            }
+            else
+            {
+                result.Avatar = "";
+            }
+            
 
             return result;
 

@@ -45,12 +45,17 @@ namespace SportsSocialNetwork.Controllers
             ViewBag.Sport = sports;
             var _userService = this.Service<IAspNetUserService>();
             var userId = User.Identity.GetUserId();
-            var curUser = _userService.FirstOrDefaultActive(p => p.Id == userId);
+            AspNetUser curUser = _userService.FirstOrDefaultActive(p => p.Id == userId);
             if (curUser == null)
             {
                 return RedirectToAction("PageNotFound", "Errors");
             }
-            ViewBag.User = curUser;
+            else
+            {
+                AspNetUserFullInfoViewModel cu = Mapper.Map<AspNetUserFullInfoViewModel>(curUser);
+                this.PrepareUserInfo(cu);
+                ViewBag.User = cu;
+            }
 
             //suggest news
             var _newsService = this.Service<INewsService>();
@@ -157,6 +162,30 @@ namespace SportsSocialNetwork.Controllers
             return View();
         }
 
+        public void PrepareUserInfo(AspNetUserFullInfoViewModel p)
+        {
+            var _followService = this.Service<IFollowService>();
+            var _postService = this.Service<IPostService>();
+
+            //number that this person following
+            p.FollowCount = _followService.GetFollowingCount(p.Id);
+            //number of people that follow this person
+            p.FollowedCount = _followService.GetFollowerCount(p.Id);
+
+            p.Followed = _followService.CheckFollowOrNot(p.Id, User.Identity.GetUserId());
+
+            if (User.Identity.GetUserId().Equals(p.Id))
+            {
+                p.isOwner = true;
+            }
+            else
+            {
+                p.isOwner = false;
+            }
+
+            p.PostCount = _postService.GetPostCountOfUser(p.Id);
+        }
+
         public ActionResult PostDetail(int postId)
         {
             var _sportService = this.Service<ISportService>();
@@ -219,6 +248,7 @@ namespace SportsSocialNetwork.Controllers
             DateTime today = DateTime.Now;
             var orderList = orderService.GetActive(p => p.Field.FieldType.SportId == sportId && p.UserId == userId &&
             p.Status != (int)OrderStatus.Cancel && p.Status != (int)OrderStatus.Unapproved && p.StartTime > today).OrderByDescending(p => p.CreateDate).ToList();
+            orderService.AutoCancelOrder(orderList);
             List<OrderSimpleViewModel> resultList = Mapper.Map<List<OrderSimpleViewModel>>(orderList);
             foreach(var item in resultList)
             {
@@ -250,7 +280,6 @@ namespace SportsSocialNetwork.Controllers
 
             var users = userService.GetActive(p => p.Id != userId && p.AspNetRoles.Where(k =>
             k.Name != "Quản trị viên" && k.Name != "Moderator").ToList().Count > 0 &&
-            p.Follows.Where(f => f.Active == true && (f.FollowerId == userId)).ToList().Count == 0 &&
             p.Hobbies.Where(m => m.SportId == sportId).ToList().Count > 0).ToList();
             foreach (var user in users)
             {

@@ -719,9 +719,20 @@ namespace SportsSocialNetwork.Controllers
         {
             var result = new AjaxOperationResult();
             var _groupService = this.Service<IGroupService>();
+            var _groupMemberService = this.Service<IGroupMemberService>();
 
             if (_groupService.DeleteGroup(groupId))
             {
+                List<GroupMember> gmL = _groupMemberService.GetActive(g => g.GroupId == groupId).ToList();
+
+                foreach (var item in gmL)
+                {
+                    if(_groupMemberService.LeaveGroup(groupId,item.UserId))
+                    {
+                        result.Succeed = true;
+                    }
+
+                }
                 result.Succeed = true;
             }
             else
@@ -977,6 +988,7 @@ namespace SportsSocialNetwork.Controllers
         public ActionResult SendChallengeRequest(int fromGroup, int toGroup, string description)
         {
             var _challengeService = this.Service<IChallengeService>();
+            var _groupService = this.Service<IGroupService>();
             var result = new AjaxOperationResult();
             Challenge cha = _challengeService.CreateChallengeRequest(fromGroup, toGroup, description);
             string curUser = User.Identity.GetUserId();
@@ -987,13 +999,15 @@ namespace SportsSocialNetwork.Controllers
                 var _groupMemberService = this.Service<IGroupMemberService>();
 
                 GroupMember gm = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == toGroup && g.Admin == true && g.Status == (int)GroupMemberStatus.Approved);
+                Group gu = _groupService.FirstOrDefaultActive(g => g.Id == toGroup);
                 GroupMember fgm = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == fromGroup && g.Admin == true && g.Status == (int)GroupMemberStatus.Approved);
+                Group fgu = _groupService.FirstOrDefaultActive(g => g.Id == fromGroup);
                 //save noti
                 string title = Utils.GetEnumDescription(NotificationType.GroupChallengeInvitation);
                 int type = (int)NotificationType.GroupChallengeInvitation;
-                string message = fgm.Group.Name + " đã gửi một lời mời thách đấu cho nhóm " + gm.Group.Name + " của bạn";
+                string message = fgu.Name + " đã gửi một lời mời thách đấu cho nhóm " + gu.Name + " của bạn";
 
-                Notification noti = _notificationService.CreateNoti(gm.UserId, curUser, title, message, type, null, null, null, gm.GroupId);
+                Notification noti = _notificationService.CreateNoti(gm.UserId, curUser, title, message, type, null, null, null, fgm.GroupId);
 
                 //////////////////////////////////////////////
                 //signalR noti
@@ -1045,7 +1059,7 @@ namespace SportsSocialNetwork.Controllers
                 switch (status)
                 {
                     case (int)ChallengeStatus.NotOperate:
-                        GroupMember gm = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == cha.Group1.Id && g.Admin == true && g.Status == (int)GroupMemberStatus.Approved);
+                        GroupMember gm = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == cha.Group.Id && g.Admin == true && g.Status == (int)GroupMemberStatus.Approved);
                         //save noti
                         title = Utils.GetEnumDescription(NotificationType.GroupChallengeInvitation);
                         type = (int)NotificationType.GroupChallengeInvitation;
@@ -1064,7 +1078,7 @@ namespace SportsSocialNetwork.Controllers
                         break;
 
                     case (int)ChallengeStatus.NotAvailable:
-                        GroupMember gm1 = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == cha.Group1.Id && g.Admin == true && g.Status == (int)GroupMemberStatus.Approved);
+                        GroupMember gm1 = _groupMemberService.FirstOrDefaultActive(g => g.GroupId == cha.Group.Id && g.Admin == true && g.Status == (int)GroupMemberStatus.Approved);
                         //save noti
                         title = Utils.GetEnumDescription(NotificationType.GroupChallengeInvitation);
                         type = (int)NotificationType.GroupChallengeInvitation;

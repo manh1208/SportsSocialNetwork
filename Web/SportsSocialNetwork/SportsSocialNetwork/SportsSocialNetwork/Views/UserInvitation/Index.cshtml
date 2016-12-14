@@ -129,6 +129,7 @@
             -o-transition: all 0.5s ease;
             transition: all 0.5s ease;
         }
+        
     </style>
 }
 
@@ -272,7 +273,7 @@
                         <div class="col-sm-8 padding-0">
                             <input name="orderInfo" id="orderInfo" style="resize:none" type="text" class="form-control input-cmnt" readonly placeholder="Mã đơn đặt sân">
                         </div>
-                        <button type="button" id="chooseOrder" class="btn btn-primary col-sm-4">Chọn đơn đặt sân</button>
+                        <button style="font-size:12px" type="button" id="chooseOrder" class="btn btn-primary col-sm-4">Chọn đơn đặt sân</button>
                     </div>
                 </div>
                 <div class="col-sm-12 margin-top-15 padding-right-0 padding-left-0">
@@ -453,6 +454,15 @@
             resetForm();
         })
 
+        function sleep(milliseconds) {
+            var start = new Date().getTime();
+            for (var i = 0; i < 1e7; i++) {
+                if ((new Date().getTime() - start) > milliseconds){
+                    break;
+                }
+            }
+        }
+
         $('#invite-form').submit(function (e) {
             e.preventDefault();
             var content = $("#inviteContent").val();
@@ -480,6 +490,7 @@
                             var data = result.AdditionalData;
                             window.friendlyChat = new FriendlyChat(data.SenderId, data.Id, data.Host, data.InvitationContent);
                             $("#submitForm").click();
+                            sleep(2000);
                             swal({
                                 title: "Hoàn tất",
                                 text: "Gửi lời mời thành công",
@@ -515,6 +526,12 @@
         function changeSize1(){
             var x = $("#containerFollowingUser").width();
             var y = $("#contentFollowingUser").width();
+            var x1 = $("#containerNearByUser").width();
+            var y1 = $("#contentNearByUser").width();
+            if(x1 > x){
+                x = x1;
+                y = y1;
+            }
             $("#containerNearByUser").width(x);
             $("#contentNearByUser").width(y);
         }
@@ -522,6 +539,12 @@
         function changeSize2(){
             var x = $("#containerNearByUser").width();
             var y = $("#contentNearByUser").width();
+            var x1 = $("#containerFollowingUser").width();
+            var y1 = $("#contentFollowingUser").width();
+            if(x1 > x){
+                x = x1;
+                y = y1;
+            }
             $("#containerFollowingUser").width(x);
             $("#contentFollowingUser").width(y);
         }

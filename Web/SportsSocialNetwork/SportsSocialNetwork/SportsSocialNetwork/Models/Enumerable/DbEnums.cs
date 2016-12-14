@@ -83,7 +83,7 @@ namespace SportsSocialNetwork.Models.Enumerable
     {
         [Description("Sửa chữa")]
         Repair = 1,
-        [Description("Đã được đặt")]
+        [Description("Thuê sân")]
         Booked = 2,
         [Description("Sự kiện")]
         Event = 3,
@@ -132,7 +132,13 @@ namespace SportsSocialNetwork.Models.Enumerable
         [Description("ApprovePlaceOwner")]
         ApprovePlaceOwner = 9,
         [Description("UnApprovePlaceOwner")]
-        UnApprovePlaceOwner = 10
+        UnApprovePlaceOwner = 10,
+        [Description("ShareFriendWall")]
+        ShareFrdWall = 11,
+        [Description("ShareToGroup")]
+        ShareGroup = 12,
+        [Description("OrderAction")]
+        OrderAction = 13,
     }
 
     public enum ContentPostType

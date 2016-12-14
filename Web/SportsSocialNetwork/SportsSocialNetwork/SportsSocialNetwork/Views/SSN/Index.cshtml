@@ -7,6 +7,7 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_SSNLayout.cshtml";
     var sport = ViewBag.Sport as IEnumerable<SelectListItem>;
+    AspNetUserFullInfoViewModel cu = ViewBag.User;
 }
 @section Styles{
     <link rel="stylesheet" href="~/Content/assets/vendor/asscrollable/asScrollable.css">
@@ -232,6 +233,21 @@
                     </a>
                     <div class="profile-user"><a style="color:#37474f;font-weight:bold" href="@Url.Action("Index","Profile", new { userId = ViewBag.User.Id })">@ViewBag.User.FullName</a></div>
                     <div class="profile-job">@ViewBag.User.Email</div>
+                    @{
+                        string hbs = "";
+                        for (int i = 0; i < cu.Hobbies.Count; i++)
+                        {
+                            if (i == (cu.Hobbies.Count - 1))
+                            {
+                                hbs += cu.Hobbies[i].SportName;
+                            }
+                            else
+                            {
+                                hbs += cu.Hobbies[i].SportName + ", ";
+                            }
+                        }
+                        <p>@hbs</p>
+                    }
                 </div>
             </div>
             <div class="widget-footer">
@@ -488,6 +504,7 @@
                     </div>
                     <div class="form-group form-material floating">
                         <select name="GroupSport" id="GroupSport" class="form-control input-lg">
+                            <option>&nbsp;</option>
                             @{
                                 foreach (var item in sport)
                                 {
@@ -501,345 +518,384 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                    <input type="submit" class="btn btn-success" value="Tạo nhóm" />
+                    <input type="submit" id="CGSubmitBtn" class="btn btn-success" value="Tạo nhóm" />
                 </div>
             </div>
         </form>
     </div>
 </div>
 
-        @section scripts{
-            <script src="~/Content/assets/js/plugins/jquery.sticky-kit.min.js"></script>
-            <script src="~/Content/assets/vendor/magnific-popup/jquery.magnific-popup.js"></script>
-            <script src="~/Content/assets/js/components/magnific-popup.js"></script>
-            <script src="~/Content/js/post-script.js"></script>
-            <script src="~/Content/js/custom-script.js"></script>
-            <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
-            <script>
-                $(document).on("submit", "#post-formEdit", function (e) {
-                    e.preventDefault();
-                    var _updatePostActionName = '@Url.Action("UpdatePost", "Post")';
-                    var _loadSavedPostActionName = '@Url.Action("LoadSavedPost", "Post")';
-                    var _userId = '@User.Identity.GetUserId()';
-                    var _postId = $("#postEditId").val();
-                    UpdatePost(_updatePostActionName, _loadSavedPostActionName, _userId, _postId);
-                });
-
-
-                $(document).on("submit", ".comment-form", function (e) {
-                    e.preventDefault();
-                    var _id = $(this).attr('id');
-                    var _commentActionName = '@Url.Action("Comment","PostComment")';
-                    var _loadSavedCommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
-                    var _userId = '@User.Identity.GetUserId()';
-                    createComment(_commentActionName, _loadSavedCommentActionName, _userId, _id);
-                });
-
-                $(document).on("submit", ".comment-formEdit", function (e) {
-                    e.preventDefault();
-                    var _id = $(this).attr('id');
-                    var _updateCommentActionName = '@Url.Action("UpdateComment", "PostComment")';
-                    var _loadSavedCommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
-                    updateComment(_updateCommentActionName, _loadSavedCommentActionName, _id);
-                });
-
-                
-
-                var _userId = '@User.Identity.GetUserId()';
-                var _firstSkip = 0;
-                var _skip = 10;
-                var _firstTake = 10;
-                var _take = 5;
-                var _actionName = '@Url.Action("GetNewFeedPost")';
-                var _loadMoreCmtActionName = '@Url.Action("getMoreCmtByPostId")';
-                var _deletePostActionName = '@Url.Action("DeletePost","Post")';
-                var _loadAPostActionName = '@Url.Action("LoadSavedPost", "Post")';
-                var _deleteCommentActionName = '@Url.Action("DeleteComment", "PostComment")';
-                var _loadACommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
-                var _likeUnlikePostActionName = '@Url.Action("LikeUnlikePost","Like")';
-                $(document).ready(function () {
-                    loadNewFeedPost(_userId, _firstSkip, _firstTake, _actionName, _loadMoreCmtActionName,_deletePostActionName, _loadAPostActionName,_deleteCommentActionName,_loadACommentActionName,_likeUnlikePostActionName);
-                })
-
-                $(window).scroll(function () {
-                    if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-                        loadNewFeedPost(_userId, _skip, _take, _actionName, _loadMoreCmtActionName,_deletePostActionName, _loadAPostActionName,_deleteCommentActionName,_loadACommentActionName,_likeUnlikePostActionName);
-                        _skip = _skip + _take;
-                    }
-                });
-
-                @*var pageSize = 10;
-        var pageIndex = 0;
-
-        $(document).ready(function () {
-            GetData();
+@section scripts{
+    <script src="~/Content/assets/js/plugins/jquery.sticky-kit.min.js"></script>
+    <script src="~/Content/assets/vendor/magnific-popup/jquery.magnific-popup.js"></script>
+    <script src="~/Content/assets/js/components/magnific-popup.js"></script>
+    <script src="~/Content/js/post-script.js"></script>
+    <script src="~/Content/js/custom-script.js"></script>
+    <script src="~/Content/js/sweetAlert/sweetalert.min.js"></script>
+    <script src="~/Content/assets/js/components/material.js"></script>
+    <script>
+        $(document).on("submit", "#post-formEdit", function (e) {
+            e.preventDefault();
+            var _updatePostActionName = '@Url.Action("UpdatePost", "Post")';
+            var _loadSavedPostActionName = '@Url.Action("LoadSavedPost", "Post")';
+            var _userId = '@User.Identity.GetUserId()';
+            var _postId = $("#postEditId").val();
+            UpdatePost(_updatePostActionName, _loadSavedPostActionName, _userId, _postId);
         });
 
 
-        function GetData() {
+        $(document).on("submit", ".comment-form", function (e) {
+            e.preventDefault();
+            var _id = $(this).attr('id');
+            var _commentActionName = '@Url.Action("Comment","PostComment")';
+            var _loadSavedCommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
+            var _userId = '@User.Identity.GetUserId()';
+            createComment(_commentActionName, _loadSavedCommentActionName, _userId, _id);
+        });
+
+        $(document).on("submit", ".comment-formEdit", function (e) {
+            e.preventDefault();
+            var _id = $(this).attr('id');
+            var _updateCommentActionName = '@Url.Action("UpdateComment", "PostComment")';
+            var _loadSavedCommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
+            updateComment(_updateCommentActionName, _loadSavedCommentActionName, _id);
+        });
+
+        (function (document, window, $) {
+            $(document).ready(function ($) {
+                Site.run();
+            });
+        })(document, window, jQuery);
+
+        var _userId = '@User.Identity.GetUserId()';
+        var _firstSkip = 0;
+        var _skip = 10;
+        var _firstTake = 10;
+        var _take = 5;
+        var _actionName = '@Url.Action("GetNewFeedPost")';
+        var _loadMoreCmtActionName = '@Url.Action("getMoreCmtByPostId")';
+        var _deletePostActionName = '@Url.Action("DeletePost","Post")';
+        var _loadAPostActionName = '@Url.Action("LoadSavedPost", "Post")';
+        var _deleteCommentActionName = '@Url.Action("DeleteComment", "PostComment")';
+        var _loadACommentActionName = '@Url.Action("LoadSavedComment", "PostComment")';
+        var _likeUnlikePostActionName = '@Url.Action("LikeUnlikePost","Like")';
+        $(document).ready(function () {
+            loadNewFeedPost(_userId, _firstSkip, _firstTake, _actionName, _loadMoreCmtActionName,_deletePostActionName, _loadAPostActionName,_deleteCommentActionName,_loadACommentActionName,_likeUnlikePostActionName);
+        })
+
+        $(window).scroll(function () {
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                loadNewFeedPost(_userId, _skip, _take, _actionName, _loadMoreCmtActionName,_deletePostActionName, _loadAPostActionName,_deleteCommentActionName,_loadACommentActionName,_likeUnlikePostActionName);
+                _skip = _skip + _take;
+            }
+        });
+
+        @*var pageSize = 10;
+var pageIndex = 0;
+
+$(document).ready(function () {
+    GetData();
+});
+
+
+function GetData() {
+    $.ajax({
+        type: 'GET',
+        url: '@Url.Action("GetSuggestFollow","SSN")',
+        data:{"pageIndex":pageIndex,"pageSize":pageSize},
+        dataType: 'json',
+        success: function (data) {
+            if (data != null) {
+                for (var i = 0; i < data.length; i++) {
+                    $("#container").append("<div class='comment media'><div class='media-left'>"+
+                            "<a class='avatar avatar-lg' href='javascript:void(0)'>"+
+                                "<img style='height:50px;width:50px' src='"+data[i].AvatarImage+"' alt='...'>"+
+                            "</a></div>"+
+                        "<div class='comment-body media-body'>"+
+                            "<a class='comment-author' href='javascript:void(0)'>"+data[i].UserName+"</a>"+
+                            "<div class='comment-content'><p>Có chung "+data[i].sameSport+" sở thích</p></div><button class='btn-xs btn-success'><i class='fa fa-rss' aria-hidden='true'></i> Đăng ký theo dõi</button></div></div>");
+                }
+                pageIndex++;
+            }
+        },
+        beforeSend : function () {
+            $("#progress").show();
+        },
+        complete : function () {
+            $("#progress").hide();
+        },
+        error: function () {
+            alert("Error while retrieving data!");
+        }
+
+    });
+}*@
+
+
+        function follow(id){
+            var update = false;
             $.ajax({
-                type: 'GET',
-                url: '@Url.Action("GetSuggestFollow","SSN")',
-                data:{"pageIndex":pageIndex,"pageSize":pageSize},
+                type: 'POST',
+                url: '@Url.Action("FollowUnfollowUser", "Follow")',
+                data:{"userId":id,"followerId":'@User.Identity.GetUserId()'},
                 dataType: 'json',
                 success: function (data) {
-                    if (data != null) {
-                        for (var i = 0; i < data.length; i++) {
-                            $("#container").append("<div class='comment media'><div class='media-left'>"+
-                                    "<a class='avatar avatar-lg' href='javascript:void(0)'>"+
-                                        "<img style='height:50px;width:50px' src='"+data[i].AvatarImage+"' alt='...'>"+
-                                    "</a></div>"+
-                                "<div class='comment-body media-body'>"+
-                                    "<a class='comment-author' href='javascript:void(0)'>"+data[i].UserName+"</a>"+
-                                    "<div class='comment-content'><p>Có chung "+data[i].sameSport+" sở thích</p></div><button class='btn-xs btn-success'><i class='fa fa-rss' aria-hidden='true'></i> Đăng ký theo dõi</button></div></div>");
+                    if(data.Succeed && data.Message == "Đã theo dõi"){
+                        update = true;
+                        $('#'+id).hide('slow', function(){ $('#'+id).remove(); });
+                        $(".check").resize();
+                        var $item = $(".suggestion");
+                        if($item.length == 2){
+                            $("#check").removeClass("height-250").addClass("height-150");
                         }
-                        pageIndex++;
+                        if($item.length == 1){
+                            $('#suggest-follow-panel').hide('slow', function(){ $('#suggest-follow-panel').remove(); });
+                        }
+                    }else{
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                     }
                 },
-                beforeSend : function () {
-                    $("#progress").show();
+                error: function (data) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
                 },
-                complete : function () {
-                    $("#progress").hide();
-                },
-                error: function () {
-                    alert("Error while retrieving data!");
-                }
-
             });
-        }*@
-
-
-                function follow(id){
-                    var update = false;
-                    $.ajax({
-                        type: 'POST',
-                        url: '@Url.Action("FollowUnfollowUser", "Follow")',
-                        data:{"userId":id,"followerId":'@User.Identity.GetUserId()'},
-                        dataType: 'json',
-                        success: function (data) {
-                            if(data.Succeed && data.Message == "Đã theo dõi"){
-                                update = true;
-                                $('#'+id).hide('slow', function(){ $('#'+id).remove(); });
-                                $(".check").resize();
-                                var $item = $(".suggestion");
-                                if($item.length == 2){
-                                    $("#check").removeClass("height-250").addClass("height-150");
-                                }
-                                if($item.length == 1){
-                                    $('#suggest-follow-panel').hide('slow', function(){ $('#suggest-follow-panel').remove(); });
-                                }
-                            }else{
-                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                            }
-                        },
-                        error: function (data) {
-                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                        },
-                    });
-                }
-
-                function addImage() {
-                    $("#selectImage").click();
-                }
-                var storedFiles = [];
-
-                function handleFileSelect(e) {
-                    var files = e.target.files;
-                    if(files.length>0){
-                        $("#previewImage").show();
-                    }else{
-                        $("#previewImage").hide();
-                    }
-                    var filesArr = Array.prototype.slice.call(files);
-                    var output = document.getElementById("result");
-                    filesArr.forEach(function(f) {
-
-                        if(!f.type.match("image.*")) {
-                            return;
-                        }
-                        storedFiles.push(f);
-
-                        var reader = new FileReader();
-                        reader.onload = function (e) {
-                            var li = document.createElement("li");
-                            li.innerHTML = "<img class='loadImage' src='" + e.target.result + "'" +
-                                        "title='" + f.name + "'/> <a href='javascript:void(0)' data-file='"+f.name+"' onclick='removeFile(this)' class='fa fa-times' style='position:absolute'></a>";
-                            output.insertBefore(li,null);
-
-                        }
-                        reader.readAsDataURL(f);
-                    });
-
-                }
-
-
-
-                function removeFile(e){
-                    var file = $(e).data("file");
-                    for(var i=0;i<storedFiles.length;i++) {
-                        if(storedFiles[i].name === file) {
-                            storedFiles.splice(i,1);
-                            break;
-                        }
-                    }
-                    $("#selectImage").val("");
-                    if(storedFiles.length>0){
-                        $("#previewImage").show("slow");
-                    }else{
-                        $("#previewImage").hide("slow");
-                    }
-                    $(e).parent().hide('slow', function(){ $(e).parent().remove(); });
-                }
-
-                document.getElementById('selectImage').addEventListener('change', handleFileSelect, false);
-
-                var array = @Html.Raw(Json.Encode(
-                 ((IEnumerable<SelectListItem>)sport).Select(m => new
-                 {
-                     id = m.Value,
-                     text = m.Text
-                 })
-                ));
-
-                $('#sportSelectShare').select2({
-                    class: 'form-control',
-                    width: '100%',
-                    multiple: true,
-                    maximumSelectionSize: 1,
-                    placeholder: "Chọn môn thể thao của bài viết",
-                    data: array
-                });
-
-
-                $('#sportSelect').select2({
-                    class: 'form-control',
-                    width: '100%',
-                    multiple: true,
-                    maximumSelectionSize: 1,
-                    placeholder: "Chọn môn thể thao của bài viết",
-                    data: array
-                });
-
-                
-
-                $('#commentForm').submit(function (e) {
-                    e.preventDefault();
-                    var formData = new FormData(document.getElementById('commentForm'));
-                    $.ajax({
-                        type: 'POST',
-                        url: '@Url.Action("CreateComment","PostComment")',
-                        data: formData,
-                        async: false,
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        success: function (result) {
-                            if (result.Succeed) {
-                                showMessage("Cập nhật thành công.", "success", "OK");
-                            } else {
-                                showErrors(result.Errors);
-                                showMessage("Không thể cập nhật.", "error", "OK");
-
-                            }
-                        },
-                        error: function (result) {
-                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                        },
-                    });
-                });
-
-                $('#post-form').submit(function (e) {
-                    e.preventDefault();
-                    var postId = "-1";
-                    var postContent = $("#PostContent").val().trim();
-                    if(storedFiles.length!=0 || postContent){
-                        var formData = new FormData(document.getElementById('post-form'));
-                        for(var i=0, len=storedFiles.length; i<len; i++) {
-                            formData.append('uploadImages', storedFiles[i]);
-                        }
-                        $.ajax({
-                            type: 'POST',
-                            url: '@Url.Action("CreatePost","Post")',
-                            async: false,
-                            data: formData,
-                            cache: false,
-                            contentType: false,
-                            processData: false,
-                            success: function (result) {
-                                if (result.Succeed) {
-                                    $("#PostContent").val("");
-                                    $('#select-sport').empty();
-                                    $('#select-sport').append("<input id='sportSelect' type='text' name='sportSelect' placeholder='Tags' />");
-                                    $('#sportSelect').select2({
-                                        width: '100%',
-                                        multiple: true,
-                                        maximumSelectionSize: 1,
-                                        placeholder: "Chọn môn thể thao của bạn",
-                                        data: array
-                                    });
-                                    storedFiles = [];
-                                    $("#result").empty();
-                                    $("#previewImage").hide();
-                                    postId = result.AdditionalData.Id;
-                                } else {
-                                    showErrors(result.Errors);
-                                    showMessage("Không thể cập nhật.", "error", "OK");
-
-                                }
-                            },
-                            error: function (result) {
-                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                            },
-                        });
-
-                        $.ajax({
-                            type: 'POST',
-                            url: '@Url.Action("LoadSavedPost", "Post")',
-                            async: false,
-                            data: {"postId" : postId},
-                            success: function (result) {
-                                if (result.Succeed) {
-                                    prependPost(result.AdditionalData);
-                                } else {
-                                    showErrors(result.Errors);
-                                    showMessage("Không thể cập nhật.", "error", "OK");
-
-                                }
-                            },
-                            error: function (result) {
-                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                            },
-                        });
-                    }
-                });
-                function showCreateGroupModal() {
-                    $("#createGroupModal").modal('show');
-                }
-                $("#createGroup-form").submit(function (e) {
-                    e.preventDefault();
-                    var formData = new FormData(document.getElementById('createGroup-form'));
-                    $.ajax({
-                        type: 'POST',
-                        url: '@Url.Action("CreateGroup", "Group")',
-                        async: false,
-                        data: formData,
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        success: function (result) {
-                            if (result.Succeed) {
-                                location.href = '/Group/Index/' + result.AdditionalData.Id;
-                            } else {
-                                //showErrors(result.Errors);
-                                showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                            }
-                        },
-                        error: function (result) {
-                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
-                        },
-                    });
-                });
-
-            </script>
         }
+
+        function addImage() {
+            $("#selectImage").click();
+        }
+        var storedFiles = [];
+
+        function handleFileSelect(e) {
+            var files = e.target.files;
+            if(files.length>0){
+                $("#previewImage").show();
+            }else{
+                $("#previewImage").hide();
+            }
+            var filesArr = Array.prototype.slice.call(files);
+            var output = document.getElementById("result");
+            filesArr.forEach(function(f) {
+
+                if(!f.type.match("image.*")) {
+                    return;
+                }
+                storedFiles.push(f);
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var li = document.createElement("li");
+                    li.innerHTML = "<img class='loadImage' src='" + e.target.result + "'" +
+                                "title='" + f.name + "'/> <a href='javascript:void(0)' data-file='"+f.name+"' onclick='removeFile(this)' class='fa fa-times' style='position:absolute'></a>";
+                    output.insertBefore(li,null);
+
+                }
+                reader.readAsDataURL(f);
+            });
+
+        }
+
+
+
+        function removeFile(e){
+            var file = $(e).data("file");
+            for(var i=0;i<storedFiles.length;i++) {
+                if(storedFiles[i].name === file) {
+                    storedFiles.splice(i,1);
+                    break;
+                }
+            }
+            $("#selectImage").val("");
+            if(storedFiles.length>0){
+                $("#previewImage").show("slow");
+            }else{
+                $("#previewImage").hide("slow");
+            }
+            $(e).parent().hide('slow', function(){ $(e).parent().remove(); });
+        }
+
+        document.getElementById('selectImage').addEventListener('change', handleFileSelect, false);
+
+        var array = @Html.Raw(Json.Encode(
+            ((IEnumerable<SelectListItem>)sport).Select(m => new
+            {
+                id = m.Value,
+                text = m.Text
+            })
+        ));
+
+        $('#sportSelectShare').select2({
+            class: 'form-control',
+            width: '100%',
+            multiple: true,
+            maximumSelectionSize: 1,
+            placeholder: "Chọn môn thể thao của bài viết",
+            data: array
+        });
+
+
+        $('#sportSelect').select2({
+            class: 'form-control',
+            width: '100%',
+            multiple: true,
+            maximumSelectionSize: 1,
+            placeholder: "Chọn môn thể thao của bài viết",
+            data: array
+        });
+
+
+
+        $('#commentForm').submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(document.getElementById('commentForm'));
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateComment","PostComment")',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result.Succeed) {
+                        showMessage("Cập nhật thành công.", "success", "OK");
+                    } else {
+                        showErrors(result.Errors);
+                        showMessage("Không thể cập nhật.", "error", "OK");
+
+                    }
+                },
+                error: function (result) {
+                    showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                },
+            });
+        });
+
+        $('#post-form').submit(function (e) {
+            e.preventDefault();
+            var postId = "-1";
+            var postContent = $("#PostContent").val().trim();
+            if(storedFiles.length!=0 || postContent){
+                var formData = new FormData(document.getElementById('post-form'));
+                for(var i=0, len=storedFiles.length; i<len; i++) {
+                    formData.append('uploadImages', storedFiles[i]);
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CreatePost","Post")',
+                    async: false,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            $("#PostContent").val("");
+                            $('#select-sport').empty();
+                            $('#select-sport').append("<input id='sportSelect' type='text' name='sportSelect' placeholder='Tags' />");
+                            $('#sportSelect').select2({
+                                width: '100%',
+                                multiple: true,
+                                maximumSelectionSize: 1,
+                                placeholder: "Chọn môn thể thao của bạn",
+                                data: array
+                            });
+                            storedFiles = [];
+                            $("#result").empty();
+                            $("#previewImage").hide();
+                            postId = result.AdditionalData.Id;
+                        } else {
+                            showErrors(result.Errors);
+                            showMessage("Không thể cập nhật.", "error", "OK");
+
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("LoadSavedPost", "Post")',
+                    async: false,
+                    data: {"postId" : postId},
+                    success: function (result) {
+                        if (result.Succeed) {
+                            prependPost(result.AdditionalData);
+                        } else {
+                            showErrors(result.Errors);
+                            showMessage("Không thể cập nhật.", "error", "OK");
+
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+            }
+        });
+        function showCreateGroupModal() {
+            $("#createGroupModal").modal('show');
+        };
+
+        (function () {
+            $('#createGroup-form').formValidation({
+                framework: "bootstrap",
+                button: {
+                    selector: '#CGSubmitBtn',
+                    disabled: 'disabled'
+                },
+                icon: null,
+                fields: {
+                    GroupName: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Vui lòng nhập tên nhóm'
+                            }
+                        }
+                    },
+                    GroupDescription: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Vui lòng nhập mô tả nhóm'
+                            }
+                        }
+                    },
+                    GroupSport: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Vui lòng chọn môn thể thao'
+                            },
+                        }
+                    }
+
+                }
+            }).on('success.form.fv', function (e) {
+                e.preventDefault();
+                var formData = new FormData(document.getElementById('createGroup-form'));
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CreateGroup", "Group")',
+                    async: false,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.Succeed) {
+                            location.href = '/Group/Index/' + result.AdditionalData.Id;
+                        } else {
+                            //showErrors(result.Errors);
+                            showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                        }
+                    },
+                    error: function (result) {
+                        showMessage("Có lỗi xảy ra. Vui lòng thử lại sau.", "error", "OK");
+                    },
+                });
+            });
+        })();
+
+    </script>
+}

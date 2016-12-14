@@ -438,6 +438,29 @@ namespace SportsSocialNetwork.Areas.API.Controllers
             return Json(response);
         }
 
+        [HttpPost]
+        public ActionResult ConfirmPayment(int id)
+        {
+            var service = this.Service<IOrderService>();
+
+            ResponseModel<OrderSimpleViewModel> response = null;
+
+            try {
+                Order order = service.ConfirmPayment(id);
+
+                OrderSimpleViewModel result = PrepareOrderSimpleViewModel(order);
+
+                response = new ResponseModel<OrderSimpleViewModel>(true, "Đơn đặt sân đã được thanh toán",null, result);
+
+            } catch (Exception)
+            {
+                response = ResponseModel<OrderSimpleViewModel>.CreateErrorResponse("Đơn đặt sân chưa được thanh toán", systemError);
+            
+            }
+
+            return Json(response);
+        }
+
         private OrderSimpleViewModel PrepareOrderSimpleViewModel(Order order)
         {
             OrderSimpleViewModel result = Mapper.Map<OrderSimpleViewModel>(order);
@@ -543,7 +566,16 @@ namespace SportsSocialNetwork.Areas.API.Controllers
 
             result.CreateDateString = result.CreateDate.ToString("dd/MM/yyyy HH:mm:ss");
 
-            result.Avatar = noti.AspNetUser1.AvatarImage;
+            var _userService = this.Service<IAspNetUserService>();
+            AspNetUser us = _userService.FirstOrDefaultActive(u => u.Id.Equals(noti.FromUserId));
+            if (us != null)
+            {
+                result.Avatar = us.AvatarImage;
+            }
+            else
+            {
+                result.Avatar = "";
+            }
 
             return result;
 

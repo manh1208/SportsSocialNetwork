@@ -146,9 +146,11 @@
         <activity
             android:name=".activity.InvitationChatActivity"
             android:label="@string/title_activity_invitation_chat"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:label="@string/title_activity_register"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
